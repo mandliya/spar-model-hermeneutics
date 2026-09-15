@@ -90,6 +90,8 @@ def main() -> None:
                 "layers": bundle.layers,
                 "threshold": bundle.threshold,
                 "coef_dim": int(bundle.probes[bundle.layers[0]].coef.size),
+                "has_dataset_mean": bundle.probes[bundle.layers[0]].dataset_mean is not None,
+                "has_dataset_std": bundle.probes[bundle.layers[0]].dataset_std is not None,
             },
         )
         print(f"Loaded official DYL probe layer={bundle.layers} -> {path}")
@@ -119,38 +121,63 @@ def main() -> None:
         max_length=cfg.max_sequence_length,
     )
     y = np.array([c.label for c in convs], dtype=np.int64)
+    yn_all = np.array([(-1 if p is None else p) for p in parsed], dtype=np.int64)
     # DYL: drop honest examples that falsely confess.
     keep = []
-    for i, (label, yn) in enumerate(zip(y, parsed)):
+    for i, (label, yn) in enumerate(zip(y, yn_all)):
         if label == 0 and yn == 1:
             continue
         keep.append(i)
     keep = np.array(keep, dtype=np.int64)
-    acts, y = acts[keep], y[keep]
+    acts, y, yn_all = acts[keep], y[keep], yn_all[keep]
+    answers = [answers[i] for i in keep]
     convs = [convs[i] for i in keep]
     print(f"After dropping honest false confessions: {len(y)} examples")
+    print("label x self-report (1=yes I lied, 0=no, -1=unparsed):")
+    for lab, lab_name in ((0, "honest"), (1, "deceptive")):
+        for yn, yn_name in ((0, "no"), (1, "yes"), (-1, "unparsed")):
+            n = int(((y == lab) & (yn_all == yn)).sum())
+            if n:
+                print(f"  {lab_name:10s} said {yn_name:8s}: {n}")
+
+    # Held-out split. The previous 1.0 AUC was train-set interpolation (CE ~ 1e-7).
+    rng = np.random.default_rng(0)
+    hon_idx = np.where(y == 0)[0]
+    dec_idx = np.where(y == 1)[0]
+    rng.shuffle(hon_idx)
+    rng.shuffle(dec_idx)
+    n_val_each = min(40, len(hon_idx) // 5, len(dec_idx) // 5)
+    val_idx = np.concatenate([hon_idx[:n_val_each], dec_idx[:n_val_each]])
+    train_idx = np.concatenate([hon_idx[n_val_each:], dec_idx[n_val_each:]])
+    rng.shuffle(train_idx)
+    rng.shuffle(val_idx)
 
     bundle = train_dyl_bundle(
-        acts,
-        y,
+        acts[train_idx],
+        y[train_idx],
         layer=layer,
         C=cfg.dyl.C,
         followup_user=cfg.dyl.followup_user,
         model_name=cfg.model_name,
     )
     save_bundle(bundle, cfg.results_dir / "dyl_trained_probe.json")
-    metrics = summarize(y, bundle.score({layer: acts}))
-    write_json(
-        cfg.results_dir / "dyl_train_metrics.json",
-        {
-            "in_domain": metrics,
-            "n": int(len(y)),
-            "layer": layer,
-            "train_ce": bundle.probes[layer].train_ce,
-            "answers_head": answers[:8],
-        },
-    )
-    print(json.dumps(metrics, indent=2))
+    train_metrics = summarize(y[train_idx], bundle.score({layer: acts[train_idx]}))
+    val_metrics = summarize(y[val_idx], bundle.score({layer: acts[val_idx]}))
+    self_report = yn_all[val_idx].astype(np.float64)
+    self_report[self_report < 0] = 0.5
+    self_report_metrics = summarize(y[val_idx], self_report)
+    payload = {
+        "train": train_metrics,
+        "val": val_metrics,
+        "self_report_val": self_report_metrics,
+        "n_train": int(len(train_idx)),
+        "n_val": int(len(val_idx)),
+        "layer": layer,
+        "train_ce": bundle.probes[layer].train_ce,
+        "answers_head": answers[:8],
+    }
+    write_json(cfg.results_dir / "dyl_train_metrics.json", payload)
+    print(json.dumps(payload, indent=2))
 
 
 if __name__ == "__main__":

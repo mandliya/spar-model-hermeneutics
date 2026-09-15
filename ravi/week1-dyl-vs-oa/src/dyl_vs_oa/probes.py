@@ -14,9 +14,17 @@ class LayerProbe:
     intercept: float
     C: float
     train_ce: float
+    dataset_mean: np.ndarray | None = None
+    dataset_std: np.ndarray | None = None
+
+    def standardize(self, x: np.ndarray) -> np.ndarray:
+        x = np.asarray(x, dtype=np.float64)
+        if self.dataset_mean is None or self.dataset_std is None:
+            return x
+        return (x - self.dataset_mean) / self.dataset_std
 
     def logits(self, x: np.ndarray) -> np.ndarray:
-        return x @ self.coef + self.intercept
+        return self.standardize(x) @ self.coef + self.intercept
 
     def predict_proba(self, x: np.ndarray) -> np.ndarray:
         z = np.clip(self.logits(x), -30, 30)
@@ -38,6 +46,10 @@ class ProbeBundle:
     extraction: str  # "prefill" | "generate"
     model_name: str
     threshold: float | None = None
+
+    def logits(self, acts_by_layer: dict[int, np.ndarray]) -> np.ndarray:
+        outs = [self.probes[layer].logits(acts_by_layer[layer]) for layer in self.layers]
+        return np.mean(np.stack(outs, axis=0), axis=0)
 
     def score(self, acts_by_layer: dict[int, np.ndarray]) -> np.ndarray:
         probs = []
@@ -139,6 +151,8 @@ def save_bundle(bundle: ProbeBundle, path) -> None:
                 "intercept": p.intercept,
                 "C": p.C,
                 "train_ce": p.train_ce,
+                "dataset_mean": None if p.dataset_mean is None else p.dataset_mean.tolist(),
+                "dataset_std": None if p.dataset_std is None else p.dataset_std.tolist(),
             }
             for layer, p in bundle.probes.items()
         },
@@ -151,16 +165,19 @@ def load_bundle(path) -> ProbeBundle:
     from pathlib import Path
 
     payload = json.loads(Path(path).read_text())
-    probes = {
-        int(k): LayerProbe(
+    probes = {}
+    for k, v in payload["probes"].items():
+        mean = v.get("dataset_mean")
+        std = v.get("dataset_std")
+        probes[int(k)] = LayerProbe(
             layer=int(v["layer"]),
             coef=np.array(v["coef"], dtype=np.float64),
             intercept=float(v["intercept"]),
             C=float(v["C"]),
             train_ce=float(v["train_ce"]),
+            dataset_mean=None if mean is None else np.array(mean, dtype=np.float64),
+            dataset_std=None if std is None else np.array(std, dtype=np.float64),
         )
-        for k, v in payload["probes"].items()
-    }
     return ProbeBundle(
         method=payload["method"],
         layers=[int(x) for x in payload["layers"]],

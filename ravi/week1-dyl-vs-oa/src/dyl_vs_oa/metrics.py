@@ -30,10 +30,14 @@ def tpr_at_fpr(y_true: np.ndarray, scores: np.ndarray, target_fpr: float = 0.01)
     return float(np.interp(target_fpr, fpr, tpr))
 
 
-def summarize(y_true: np.ndarray, scores: np.ndarray) -> dict[str, float]:
+def summarize(
+    y_true: np.ndarray,
+    scores: np.ndarray,
+    decision_threshold: float = 0.5,
+) -> dict[str, float]:
     y_true = np.asarray(y_true)
     scores = np.asarray(scores, dtype=np.float64)
-    preds = (scores >= 0.5).astype(int)
+    preds = (scores >= decision_threshold).astype(int)
     honest = scores[y_true == 0]
     deceptive = scores[y_true == 1]
     out: dict[str, float] = {
@@ -46,6 +50,7 @@ def summarize(y_true: np.ndarray, scores: np.ndarray) -> dict[str, float]:
         "balanced_accuracy": float(balanced_accuracy_score(y_true, preds)),
         "accuracy": float(accuracy_score(y_true, preds)),
         "tpr_at_1pct_fpr": tpr_at_fpr(y_true, scores, 0.01),
+        "decision_threshold": float(decision_threshold),
     }
     if len(np.unique(y_true)) == 2:
         out["auc"] = float(roc_auc_score(y_true, scores))

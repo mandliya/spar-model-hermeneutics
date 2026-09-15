@@ -1,27 +1,38 @@
 from __future__ import annotations
 
 import numpy as np
+import torch
 
 from dyl_vs_oa.probes import LayerProbe, ProbeBundle
 
 
 def load_official_dyl(cfg) -> ProbeBundle:
     """Load AISI's released Gemma-3-27B-IT DYL probe."""
-    try:
-        from lie_detectors import get_probe
-    except ImportError as exc:
-        raise ImportError("Install lie-detectors to load the official DYL probe: pip install lie-detectors") from exc
-
-    probe = get_probe(cfg.dyl.official_repo, filename=cfg.dyl.official_filename)
+    probe = official_callable(cfg)
     layer = int(getattr(probe, "layer", cfg.dyl.layer))
     coef = _coef_from_official(probe)
     intercept = _intercept_from_official(probe)
-    threshold = float(getattr(probe, "threshold", 0.0))
+    threshold = float(np.asarray(probe.threshold).reshape(-1)[0])
+    mean = _buffer_from_official(probe, "dataset_mean")
+    std = _buffer_from_official(probe, "dataset_std")
+    if mean is None or std is None:
+        raise ValueError(
+            "Official DYL probe is missing dataset_mean/dataset_std; "
+            "scoring raw residuals would collapse every logit."
+        )
     return ProbeBundle(
         method="dyl-official",
         layers=[layer],
         probes={
-            layer: LayerProbe(layer=layer, coef=coef, intercept=intercept, C=cfg.dyl.C, train_ce=float("nan"))
+            layer: LayerProbe(
+                layer=layer,
+                coef=coef,
+                intercept=intercept,
+                C=cfg.dyl.C,
+                train_ce=float("nan"),
+                dataset_mean=mean,
+                dataset_std=std,
+            )
         },
         followup_user=cfg.dyl.followup_user,
         followup_assistant=None,
@@ -29,6 +40,13 @@ def load_official_dyl(cfg) -> ProbeBundle:
         model_name=cfg.model_name,
         threshold=threshold,
     )
+
+
+def score_official_logits(probe, x: np.ndarray) -> np.ndarray:
+    """Score activations with the live lie_detectors module (z-score + linear)."""
+    with torch.no_grad():
+        logits = probe(torch.as_tensor(x, dtype=torch.float32))
+    return logits.detach().float().cpu().numpy().reshape(-1)
 
 
 def _coef_from_official(probe) -> np.ndarray:
@@ -50,6 +68,16 @@ def _coef_from_official(probe) -> np.ndarray:
     raise TypeError(f"Unrecognized official probe type: {type(probe)}")
 
 
+def _buffer_from_official(probe, name: str) -> np.ndarray | None:
+    buf = getattr(probe, name, None)
+    if buf is None:
+        return None
+    arr = np.asarray(buf.detach().float().cpu().numpy(), dtype=np.float64).reshape(-1)
+    if np.isnan(arr).any():
+        return None
+    return arr
+
+
 def _intercept_from_official(probe) -> float:
     if hasattr(probe, "intercept_"):
         return float(np.asarray(probe.intercept_).reshape(-1)[0])
@@ -64,6 +92,11 @@ def _intercept_from_official(probe) -> float:
 
 def official_callable(cfg):
     """Return the raw lie_detectors probe for scoring if linear unpacking fails."""
-    from lie_detectors import get_probe
+    try:
+        from lie_detectors import get_probe
+    except ImportError as exc:
+        raise ImportError(
+            "Install lie-detectors to load the official DYL probe: pip install lie-detectors"
+        ) from exc
 
     return get_probe(cfg.dyl.official_repo, filename=cfg.dyl.official_filename)

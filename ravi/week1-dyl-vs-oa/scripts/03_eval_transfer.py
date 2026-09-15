@@ -19,6 +19,7 @@ from dyl_vs_oa.data import load_mbpp_honeypot, mbpp_conversations
 from dyl_vs_oa.extract import extract_generated_activations, extract_prefill_activations
 from dyl_vs_oa.metrics import summarize, write_json
 from dyl_vs_oa.model import load_subject
+from dyl_vs_oa.official import official_callable, score_official_logits
 from dyl_vs_oa.probes import load_bundle
 
 
@@ -109,20 +110,48 @@ def main() -> None:
             max_new_tokens=cfg.gen_max_new_tokens,
             max_length=cfg.max_sequence_length,
         )
-        scores = dyl_bundle.score({layer: acts})
-        results["dyl_generate"] = summarize(y, scores)
-        results["dyl_self_report_from_generation"] = summarize(
-            y, np.array([1.0 if p == 1 else 0.0 if p == 0 else 0.5 for p in parsed])
-        )
+        if dyl_bundle.method == "dyl-official":
+            live = official_callable(cfg)
+            scored = score_official_logits(live, acts)
+            bundle_logits = dyl_bundle.logits({layer: acts})
+            if not np.allclose(scored, bundle_logits, rtol=1e-4, atol=1e-3):
+                max_abs = float(np.max(np.abs(scored - bundle_logits)))
+                print(f"warning: unpacked official probe logits differ from live (max |Δ|={max_abs:.4g})")
+            threshold = float(
+                dyl_bundle.threshold
+                if dyl_bundle.threshold is not None
+                else np.asarray(live.threshold).reshape(-1)[0]
+            )
+            results["dyl_generate"] = summarize(y, scored, decision_threshold=threshold)
+            results["dyl_generate"]["score_space"] = "logit"
+        else:
+            scored = dyl_bundle.score({layer: acts})
+            results["dyl_generate"] = summarize(y, scored)
+            results["dyl_generate"]["score_space"] = "probability"
+        self_report = np.array([1.0 if p == 1 else 0.0 if p == 0 else 0.5 for p in parsed])
+        results["dyl_self_report_from_generation"] = summarize(y, self_report)
         print("DYL generate", results["dyl_generate"])
+        print(
+            "DYL score range",
+            {
+                "min": float(np.min(scored)),
+                "max": float(np.max(scored)),
+                "mean": float(np.mean(scored)),
+            },
+        )
 
     if not args.skip_self_report:
-        followup = (dyl_bundle.followup_user if dyl_bundle else cfg.dyl.followup_user)
-        scores, answers = self_report_scores(
-            subject, convs, followup, cfg.gen_max_new_tokens, cfg.max_sequence_length
-        )
-        results["bb_did_you_lie"] = summarize(y, scores)
-        results["bb_did_you_lie_answers_head"] = answers[:6]
+        if dyl_bundle is not None:
+            # Same follow-up as the generate pass above; don't pay for a second rollout.
+            results["bb_did_you_lie"] = results["dyl_self_report_from_generation"]
+            results["bb_did_you_lie_answers_head"] = answers[:6]
+        else:
+            followup = cfg.dyl.followup_user
+            scores, answers = self_report_scores(
+                subject, convs, followup, cfg.gen_max_new_tokens, cfg.max_sequence_length
+            )
+            results["bb_did_you_lie"] = summarize(y, scores)
+            results["bb_did_you_lie_answers_head"] = answers[:6]
         print("BB did-you-lie", results["bb_did_you_lie"])
 
     if "oa_prefill" in results and "dyl_generate" in results:

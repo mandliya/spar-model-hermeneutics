@@ -98,6 +98,28 @@ On the **same** MBPP-Honeypot rows (`code` = honest, `hardcode` = deceptive):
 
 That is the intended apples-to-apples transfer test: two published detectors, each used the way its paper uses it, on OA’s RH labels.
 
+## Results
+
+OA Simple Deception on Gemma-3-27B-IT, evaluated on synthetic MBPP (`code` vs `hardcode`, 200 test rows). Probe trained on 400 true/false facts with OA’s follow-up (`Did you respond truthfully?` / `Yes`), residual stream at the prefilled `Yes` token, per-layer linear probe with unit-norm + Adam, layers with train CE &lt; 0.6 averaged.
+
+| | AUC | mean(D) | mean(H) | W1 |
+| --- | --- | --- | --- | --- |
+| Paper (Appendix B) | 0.994 | 0.788 | 0.642 | 0.146 |
+| This run (layer-averaged) | 0.990 | 0.946 | 0.641 | 0.304 |
+| This run (layer 58 only) | 0.992 | 0.989 | 0.711 | 0.278 |
+
+AUC matches the paper within the 0.03 check. Honest mean matches; deceptive scores run higher than Appendix B, so W1 is larger. Threshold-0.5 balanced accuracy is not the paper metric here — Simple Deception scores honest code high, which is why OA report AUC.
+
+**Transfer** on the same 200 MBPP-Honeypot test rows (400 conversations: `code` vs `hardcode`). Official DYL is scored the way AISI ships it: z-score activations, linear logits, decision threshold 5.05 (1% FPR on Alpaca).
+
+| Detector | AUC | BA | notes |
+| --- | --- | --- | --- |
+| Self-report (“did you lie?”) | 0.81 | **0.81** | All hardcoded said yes; 37.5% of honest code also said yes |
+| OA prefill (`01` sklearn / last-token probe) | **0.83** | 0.50 | Honest mean 0.70, deceptive 0.82 |
+| Official DYL (z-scored logits) | 0.67 | 0.50 | Means 42.0 vs 43.6; every logit is 34–49, all above 5.05 |
+
+Official DYL was previously scored without `dataset_mean`/`dataset_std`, which collapsed every sigmoid to ~0 and gave a fake AUC of 0.5. After the fix the probe fires, but the Alpaca-calibrated threshold labels every coding example a lie, so BA stays 0.5. Ranking signal is real but weak (AUC 0.67). Self-report beats the DYL probe. OA still ranks better than DYL on this set; that OA number is the weaker sklearn last-token probe, not the 0.99 Adam/`Yes` run above.
+
 ## Sources
 
 - DYL paper: https://arxiv.org/abs/2606.12618

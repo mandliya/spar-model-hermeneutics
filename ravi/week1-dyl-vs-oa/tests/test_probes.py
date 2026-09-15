@@ -12,7 +12,7 @@ from dyl_vs_oa.chat import parse_yes_no, with_prefill_followup
 from dyl_vs_oa.config import load_config
 from dyl_vs_oa.data import load_simple_deception, split_balanced
 from dyl_vs_oa.metrics import check_against_target, summarize, wasserstein_1d
-from dyl_vs_oa.probes import load_bundle, save_bundle, train_dyl_bundle, train_oa_bundle
+from dyl_vs_oa.probes import LayerProbe, load_bundle, save_bundle, train_dyl_bundle, train_oa_bundle
 
 
 def test_parse_yes_no():
@@ -88,6 +88,61 @@ def test_paper_target_check():
     target = {"auc": 0.994}
     assert check_against_target(metrics, target, auc_tol=0.03)["ok"]
     assert not check_against_target({"auc": 0.70}, target, auc_tol=0.03)["ok"]
+
+
+def test_layer_probe_zscore_changes_logits(tmp_path):
+    rng = np.random.default_rng(2)
+    x = rng.normal(loc=25.0, scale=200.0, size=(32, 8))
+    mean = x.mean(axis=0)
+    std = x.std(axis=0)
+    coef = np.ones(8) / np.sqrt(8)
+    raw = LayerProbe(layer=1, coef=coef, intercept=0.0, C=1.0, train_ce=0.0)
+    zscored = LayerProbe(
+        layer=1,
+        coef=coef,
+        intercept=0.0,
+        C=1.0,
+        train_ce=0.0,
+        dataset_mean=mean,
+        dataset_std=std,
+    )
+    assert not np.allclose(raw.logits(x), zscored.logits(x))
+    np.testing.assert_allclose(zscored.logits(x), ((x - mean) / std) @ coef)
+    path = tmp_path / "zscore.json"
+    from dyl_vs_oa.probes import ProbeBundle
+
+    bundle = ProbeBundle(
+        method="dyl-official",
+        layers=[1],
+        probes={1: zscored},
+        followup_user="Did you lie?",
+        followup_assistant=None,
+        extraction="generate",
+        model_name="dummy",
+        threshold=5.05,
+    )
+    save_bundle(bundle, path)
+    loaded = load_bundle(path)
+    np.testing.assert_allclose(loaded.logits({1: x}), zscored.logits(x))
+    assert loaded.probes[1].dataset_mean is not None
+    assert loaded.threshold == pytest.approx(5.05)
+
+
+def test_official_dyl_unpack_matches_live():
+    pytest.importorskip("lie_detectors")
+    from dyl_vs_oa.config import load_config
+    from dyl_vs_oa.official import load_official_dyl, official_callable, score_official_logits
+
+    cfg = load_config()
+    bundle = load_official_dyl(cfg)
+    live = official_callable(cfg)
+    rng = np.random.default_rng(0)
+    x = rng.normal(loc=25.0, scale=200.0, size=(16, bundle.probes[bundle.layers[0]].coef.size)).astype(np.float32)
+    live_logits = score_official_logits(live, x)
+    our_logits = bundle.logits({bundle.layers[0]: x.astype(np.float64)})
+    np.testing.assert_allclose(our_logits, live_logits, rtol=1e-4, atol=1e-3)
+    assert bundle.threshold == pytest.approx(5.05, abs=0.01)
+    assert bundle.probes[bundle.layers[0]].dataset_mean is not None
 
 
 def test_wasserstein_separated():
