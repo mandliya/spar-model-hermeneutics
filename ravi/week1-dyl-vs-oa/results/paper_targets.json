@@ -1,0 +1,36 @@
+{
+  "model": "google/gemma-3-27b-it",
+  "oa_simple_deception_on_mbpp_synth": {
+    "source": "OA Appendix B",
+    "auc": 0.994,
+    "mean_deceptive": 0.788,
+    "mean_honest": 0.642,
+    "w1": 0.146
+  },
+  "oa_diverse_deception_on_mbpp_synth": {
+    "source": "OA Appendix B",
+    "auc": 0.995,
+    "mean_deceptive": 0.729,
+    "mean_honest": 0.302,
+    "w1": 0.427
+  },
+  "oa_mbpp_probe_on_mbpp_synth": {
+    "source": "OA Appendix B",
+    "auc": 1.0,
+    "mean_deceptive": 0.775,
+    "mean_honest": 0.221,
+    "w1": 0.554
+  },
+  "dyl_varied_deception_balanced_accuracy": {
+    "source": "DYL Table 3 / Appendix J",
+    "balanced_accuracy": 0.78,
+    "note": "Full Varied Deception eval is a stretch goal. Released probe sweep val BA is 0.927 on their tuning split."
+  },
+  "dyl_official_probe": {
+    "repo": "ai-safety-institute/dyl-google-gemma-3-27b-it",
+    "filename": "l_58_lm_0_01_ar_lr.pt",
+    "layer": 58,
+    "sweep_balanced_accuracy": 0.927,
+    "sweep_auroc": 0.97256
+  }
+}

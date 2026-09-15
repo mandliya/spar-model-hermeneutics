@@ -1,0 +1,173 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import log_loss
+
+
+@dataclass
+class LayerProbe:
+    layer: int
+    coef: np.ndarray
+    intercept: float
+    C: float
+    train_ce: float
+
+    def logits(self, x: np.ndarray) -> np.ndarray:
+        return x @ self.coef + self.intercept
+
+    def predict_proba(self, x: np.ndarray) -> np.ndarray:
+        z = np.clip(self.logits(x), -30, 30)
+        return 1.0 / (1.0 + np.exp(-z))
+
+
+@dataclass
+class ProbeBundle:
+    """OA-style: one logistic probe per kept layer, score = mean sigmoid.
+
+    DYL-style: a single layer (len(layers) == 1).
+    """
+
+    method: str
+    layers: list[int]
+    probes: dict[int, LayerProbe]
+    followup_user: str
+    followup_assistant: str | None
+    extraction: str  # "prefill" | "generate"
+    model_name: str
+    threshold: float | None = None
+
+    def score(self, acts_by_layer: dict[int, np.ndarray]) -> np.ndarray:
+        probs = []
+        for layer in self.layers:
+            probs.append(self.probes[layer].predict_proba(acts_by_layer[layer]))
+        return np.mean(np.stack(probs, axis=0), axis=0)
+
+
+def train_layer_probe(x: np.ndarray, y: np.ndarray, layer: int, C: float) -> LayerProbe:
+    clf = LogisticRegression(
+        C=C,
+        max_iter=1000,
+        class_weight="balanced",
+        solver="lbfgs",
+    )
+    clf.fit(x, y)
+    proba = clf.predict_proba(x)[:, 1]
+    ce = float(log_loss(y, proba, labels=[0, 1]))
+    return LayerProbe(
+        layer=layer,
+        coef=clf.coef_[0].astype(np.float64),
+        intercept=float(clf.intercept_[0]),
+        C=C,
+        train_ce=ce,
+    )
+
+
+def train_oa_bundle(
+    acts_by_layer: dict[int, np.ndarray],
+    y: np.ndarray,
+    *,
+    C: float,
+    ce_keep_below: float,
+    followup_user: str,
+    followup_assistant: str,
+    model_name: str,
+) -> ProbeBundle:
+    probes: dict[int, LayerProbe] = {}
+    kept: list[int] = []
+    for layer in sorted(acts_by_layer):
+        probe = train_layer_probe(acts_by_layer[layer], y, layer, C)
+        probes[layer] = probe
+        if probe.train_ce < ce_keep_below:
+            kept.append(layer)
+    if not kept:
+        # Fall back to the lowest-CE half of layers rather than failing silently.
+        ranked = sorted(probes.values(), key=lambda p: p.train_ce)
+        kept = [p.layer for p in ranked[: max(1, len(ranked) // 2)]]
+    return ProbeBundle(
+        method="oa",
+        layers=kept,
+        probes={k: probes[k] for k in kept},
+        followup_user=followup_user,
+        followup_assistant=followup_assistant,
+        extraction="prefill",
+        model_name=model_name,
+    )
+
+
+def train_dyl_bundle(
+    x: np.ndarray,
+    y: np.ndarray,
+    *,
+    layer: int,
+    C: float,
+    followup_user: str,
+    model_name: str,
+) -> ProbeBundle:
+    probe = train_layer_probe(x, y, layer, C)
+    return ProbeBundle(
+        method="dyl",
+        layers=[layer],
+        probes={layer: probe},
+        followup_user=followup_user,
+        followup_assistant=None,
+        extraction="generate",
+        model_name=model_name,
+    )
+
+
+def save_bundle(bundle: ProbeBundle, path) -> None:
+    import json
+    from pathlib import Path
+
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "method": bundle.method,
+        "layers": bundle.layers,
+        "followup_user": bundle.followup_user,
+        "followup_assistant": bundle.followup_assistant,
+        "extraction": bundle.extraction,
+        "model_name": bundle.model_name,
+        "threshold": bundle.threshold,
+        "probes": {
+            str(layer): {
+                "layer": p.layer,
+                "coef": p.coef.tolist(),
+                "intercept": p.intercept,
+                "C": p.C,
+                "train_ce": p.train_ce,
+            }
+            for layer, p in bundle.probes.items()
+        },
+    }
+    path.write_text(json.dumps(payload))
+
+
+def load_bundle(path) -> ProbeBundle:
+    import json
+    from pathlib import Path
+
+    payload = json.loads(Path(path).read_text())
+    probes = {
+        int(k): LayerProbe(
+            layer=int(v["layer"]),
+            coef=np.array(v["coef"], dtype=np.float64),
+            intercept=float(v["intercept"]),
+            C=float(v["C"]),
+            train_ce=float(v["train_ce"]),
+        )
+        for k, v in payload["probes"].items()
+    }
+    return ProbeBundle(
+        method=payload["method"],
+        layers=[int(x) for x in payload["layers"]],
+        probes=probes,
+        followup_user=payload["followup_user"],
+        followup_assistant=payload.get("followup_assistant"),
+        extraction=payload["extraction"],
+        model_name=payload["model_name"],
+        threshold=payload.get("threshold"),
+    )
