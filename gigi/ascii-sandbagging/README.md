@@ -71,6 +71,31 @@ config; `01_explore.py --list` shows them all.
 | doubling down | P(denies \| lied) |
 | false confession | P(admits \| truthful) — the control. Without it, a model that always answers "B" scores 100% doubling-down and means nothing. |
 
+## Activation tensors
+
+`00_ascii_activations.py` (the local-GPU run) also saves one `.pt` file per
+row — every layer's hidden state at the last prompt token, for both capture
+points. Those stay **out of this git repo** (see `.gitignore`: `activations/`,
+`*.pt` — a repo-wide rule, not specific to this folder) since 415MB of tensors
+would bloat every collaborator's clone. They're versioned separately instead,
+as a private HF dataset:
+
+```
+https://huggingface.co/datasets/ggrazianoknapp/gigi-ascii-sandbagging-activations
+```
+
+Download what you need with `huggingface_hub`, e.g.:
+
+```python
+from huggingface_hub import hf_hub_download
+hf_hub_download("ggrazianoknapp/gigi-ascii-sandbagging-activations",
+                 "conv_20250718_ascii_mc_medical_5.pt", repo_type="dataset")
+```
+
+or `snapshot_download(..., repo_type="dataset")` for the whole 415MB set.
+`results/ascii_results.csv`'s `activations_file` column gives the per-row
+filename. Ask for repo access if you don't have it yet — it's private.
+
 ## Other task groups
 
 ASCII sandbagging needs no judge because the ground truth is external — gemma
