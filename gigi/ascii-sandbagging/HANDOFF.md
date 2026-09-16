@@ -208,6 +208,18 @@ up separately, summary here:
 | offpolicy | imported DolusChat / TruthIsUniversal, not gemma's behaviour | — | not part of a replication |
 | unanswerable | nowhere — it is the residual bucket | — | not a lie type; never compute a rate from it |
 
+**The "Reliability" column above is the paper's judge-vs-human agreement rate
+on its own labels — not a statement about the released `did_lie` column.**
+We checked `did_lie` directly across every `google-gemma-3-27b-it` config:
+it's `True` in 8 rows out of ~38,600 total (all 8 in mask-factual, and even
+those lack a recorded assistant turn to justify the label). `sycophancy` is
+`False` in every one of its 498 rows despite its 100% figure above. Every
+trace we checked ends at the system prompt — no config in this release ships
+a completed conversation with a graded final answer. So "truth lives in the
+model's neutral answer, run twice, compare" is right, but *both* runs have to
+be live (same as ascii-sandbagging's Part 0 capability proof) — there's no
+dataset-side answer to compare against, in any category, for this model.
+
 Best second category: **sycophancy**. Best labels in the dataset, and it shares
 the two-pass mechanism with mask-factual, so building it once gets both.
 

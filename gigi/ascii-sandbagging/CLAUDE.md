@@ -114,6 +114,22 @@ Label stability by task group, from the paper — pick accordingly:
 - mask-factual: 80%
 - self-sycophancy: 46% label instability — avoid
 
+**These percentages are NOT about the released `did_lie` column — verify before
+trusting it for any new category.** They're the paper's own judge-vs-human
+agreement rate, a different thing entirely. We checked every
+`google-gemma-3-27b-it` config in the released dataset directly: `did_lie` is
+`True` in only 8 rows out of ~38,600 total, all 8 inside `mask-factual`, and
+even those 8 have no recorded assistant turn in their trace to justify the
+label either way. `sycophancy` — despite its 100% figure above — is `False`
+in all 498 of its rows, though the paper reports gemma folding under sycophancy
+pressure up to ~32% of the time. Every trace across every config we checked
+ends at the system prompt; the actual question-and-answer is left in
+`lie_detection_prompt` for whoever replays the dataset to generate fresh. So
+this isn't a sandbagging-specific issue: **assume `did_lie` is unusable for
+every category in this release, and build ground truth the way
+ascii-sandbagging does** — a live, independently-verifiable check (capability
+proof, neutral-vs-pressured rerun, etc.), never the dataset's own label.
+
 ## House rules
 - Never delete or overwrite anything in `results/`. Those files cost money.
   Every script appends to JSONL and skips work already done — keep it that way.
