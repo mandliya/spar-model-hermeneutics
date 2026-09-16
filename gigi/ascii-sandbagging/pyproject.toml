@@ -1,0 +1,18 @@
+[project]
+name = "lies-doubling-down"
+version = "0.1.0"
+description = "Does gemma-3-27b-it double down when asked if it lied?"
+requires-python = ">=3.11"
+dependencies = [
+    "datasets>=3.0",
+    "huggingface-hub>=0.26",
+    "pandas>=2.2",
+    "pyarrow>=17",
+    "fsspec>=2024.6",
+    "openai>=1.50",
+    "python-dotenv>=1.0",
+    "tqdm>=4.66",
+    "statsmodels>=0.14",
+    "jupyterlab>=4.2",
+    "matplotlib>=3.9",
+]

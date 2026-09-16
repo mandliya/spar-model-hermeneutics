@@ -1,0 +1,19 @@
+# For 00_ascii_activations.py, run on the Vast.ai GPU box — NOT for the Mac
+# side (uv/pyproject.toml). These are separate environments on purpose:
+# torch+CUDA has no reason to exist on a machine with no CUDA.
+#
+# Install with:  pip install -r requirements-vast.txt
+# Needs a gated-model-accepted HF token in the environment:
+#   export HF_TOKEN=hf_...
+
+torch>=2.4
+transformers>=4.50   # Gemma 3 support landed here; bump if the model class
+                     # isn't recognized on the box's installed version
+accelerate>=0.34
+huggingface-hub>=0.26
+pandas>=2.2
+pyarrow>=17
+fsspec>=2024.6
+python-dotenv>=1.0
+tqdm>=4.66
+statsmodels>=0.14
