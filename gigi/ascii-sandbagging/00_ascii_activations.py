@@ -62,7 +62,7 @@ from src.common import (RESULTS, TARGET_MODEL, TEMPERATURE, append, load_done,
 CONFIG = "google-gemma-3-27b-it_task-group_sandbagging"
 ACTIVATIONS_DIR = RESULTS / "activations"
 ACTIVATIONS_DIR.mkdir(exist_ok=True)
-OUT_PATH = RESULTS / "ascii_activations.jsonl"
+OUT_PATH = RESULTS / "ascii_results.jsonl"
 
 # --------------------------------------------------------------- model -----
 # eager attention, not sdpa/flash — an explicit, honest setting for a run
@@ -236,8 +236,8 @@ print(f"  confession       admits | it lied      = "
 print(f"  false confession admits | truthful     = "
       f"{wilson(int(told['admitted'].sum()), len(told))}")
 
-res.to_csv(RESULTS / "ascii_activations.csv", index=False)
-print(f"\nText table: {RESULTS / 'ascii_activations.csv'}")
+res.to_csv(RESULTS / "ascii_results.csv", index=False)
+print(f"\nText table: {RESULTS / 'ascii_results.csv'}")
 print(f"Activation files: {ACTIVATIONS_DIR}/<sample_id>.pt "
       f"(dict with 'lied_state', 'doubled_down_state', each "
       f"[num_layers+1, hidden_dim])")
