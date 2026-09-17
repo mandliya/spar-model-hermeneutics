@@ -113,27 +113,28 @@ See `RESULTS.md` for what came out of these. Full reconstructed
 conversations (not just the parsed letter) are in
 `results/transcripts_followups.jsonl`.
 
-## Planned: reasoning conditions (not yet run)
+## Reasoning conditions
 
-Adds 4 more conditions — the 3 above, plus the original neutral wording —
-each with "explain your reasoning, then give your final answer" instead of
-"answer with just the letter." Two things this checks: whether forcing
-reasoning changes the self-report verdict itself (compare each `*_cot`
-condition's rate against its non-`cot` counterpart), and what gemma actually
-says when it explains a denial.
-
-Planned files, following the naming already established above:
+4 more conditions — the 3 above, plus the original neutral wording — each
+with "explain your reasoning, then give your final answer" instead of
+"answer with just the letter." Checks whether forcing reasoning changes the
+self-report verdict itself, not just whether it can explain an unchanged one.
 
 | File | Contents |
 |---|---|
 | `results/ascii_reasoning_conditions.csv` / `.jsonl` | `neutral_cot`, `low_stakes_cot`, `high_stakes_cot`, `confidence_cot` — 1,240 rows |
 | `results/transcripts_reasoning.jsonl` | full reconstructed conversations for the same |
-| `results/activations/<uid>__<condition>.pt` | one snapshot per row per condition, same mechanism as the existing conditions, pushed to the same HF dataset repo |
+| `results/activations/<uid>__<condition>.pt` | one snapshot per row per condition, pushed to the same HF dataset repo |
 
-New column on the results files: `reasoning` — the explanation text, parsed
-out from everything before the "Final answer:" line. Blank for every
-non-`cot` condition, same pattern as `confidence_score` being blank outside
-the `confidence` condition.
+New column: `reasoning` — the explanation text, parsed out from everything
+before the "Final answer:"/"Final score:" line. Blank for every non-`cot`
+condition, same pattern as `confidence_score`.
+
+**Headline result: forcing reasoning mostly erases the stakes-framing
+effect.** `low_stakes_cot` and `high_stakes_cot` converge to the identical
+15.6% doubling-down rate, versus the wildly different 0.5%/35.9% split in
+the bare-letter versions from the previous batch. See `RESULTS.md` for the
+full comparison table.
 
 ## Other task groups
 
