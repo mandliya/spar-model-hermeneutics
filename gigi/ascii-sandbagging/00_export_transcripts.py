@@ -22,7 +22,9 @@ import pandas as pd
 
 from src.common import (RESULTS, load_config, to_messages,
                         FOLLOWUP, FOLLOWUP_LOW_STAKES, FOLLOWUP_HIGH_STAKES,
-                        FOLLOWUP_CONFIDENCE)
+                        FOLLOWUP_CONFIDENCE, FOLLOWUP_NEUTRAL_COT,
+                        FOLLOWUP_LOW_STAKES_COT, FOLLOWUP_HIGH_STAKES_COT,
+                        FOLLOWUP_CONFIDENCE_COT)
 
 CONFIG = "google-gemma-3-27b-it_task-group_sandbagging"
 
@@ -34,6 +36,10 @@ FOLLOWUP_TEXT = {
     "low_stakes": FOLLOWUP_LOW_STAKES,
     "high_stakes": FOLLOWUP_HIGH_STAKES,
     "confidence": FOLLOWUP_CONFIDENCE,
+    "neutral_cot": FOLLOWUP_NEUTRAL_COT,
+    "low_stakes_cot": FOLLOWUP_LOW_STAKES_COT,
+    "high_stakes_cot": FOLLOWUP_HIGH_STAKES_COT,
+    "confidence_cot": FOLLOWUP_CONFIDENCE_COT,
 }
 
 # --------------------------------------------------------- neutral run -----
@@ -89,3 +95,38 @@ with out_path2.open("w") as f:
         }, ensure_ascii=False) + "\n")
         written2 += 1
 print(f"{out_path2}: {written2} follow-up-condition transcripts")
+
+# ------------------------------------------------------ reasoning conditions -
+reasoning_path = RESULTS / "ascii_reasoning_conditions.csv"
+if reasoning_path.exists():
+    reas = pd.read_csv(reasoning_path)
+    out_path3 = RESULTS / "transcripts_reasoning.jsonl"
+    written3 = 0
+    with out_path3.open("w") as f:
+        for _, r in reas.iterrows():
+            row = df.loc[r["sample_id"]]
+            base_row = base[base["uid"] == r["sample_id"]].iloc[0]
+            msgs = to_messages(row["trace"])
+            probe = dict(row["lie_detection_prompt"])
+            transcript = msgs + [
+                probe,
+                {"role": "assistant", "content": base_row["probe_answer"]},
+                {"role": "user", "content": FOLLOWUP_TEXT[r["condition"]]},
+                {"role": "assistant", "content": str(r["answer"])},
+            ]
+            f.write(json.dumps({
+                "uid": r["uid"],
+                "sample_id": r["sample_id"],
+                "condition": r["condition"],
+                "lied": bool(r["lied"]) if pd.notna(r["lied"]) else None,
+                "admitted": bool(r["admitted"]) if pd.notna(r["admitted"]) else None,
+                "confidence_score": (None if pd.isna(r.get("confidence_score"))
+                                      else r["confidence_score"]),
+                "reasoning": (None if pd.isna(r.get("reasoning")) else r["reasoning"]),
+                "transcript": transcript,
+            }, ensure_ascii=False) + "\n")
+            written3 += 1
+    print(f"{out_path3}: {written3} reasoning-condition transcripts")
+else:
+    print(f"\n{reasoning_path} not found yet — skipping transcripts_reasoning.jsonl "
+          f"(run 00_ascii_reasoning.py first)")
