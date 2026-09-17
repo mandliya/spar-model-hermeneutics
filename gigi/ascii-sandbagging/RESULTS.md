@@ -153,6 +153,34 @@ have an `activations_file` column giving the per-row filename.
 - `did_lie` unusable as a baseline across this dataset release for this
   model — see [above](#why-not-did_lie).
 
+## Conclusion, and what's next for this dataset
+
+Relative to the paper: this replicates the qualitative shape of its finding
+for gemma-3-27b — real sandbagging (61.9%, below its 76%+ floor but not
+close to zero) paired with self-report unreliable enough to be
+counterproductive as a monitoring signal (the paper puts gemma's self-report
+AUROC as low as 0.46, worse than chance). What this experiment adds beyond
+the paper's own number is a mechanism: self-report here isn't just noisy,
+it's extremely sensitive to how the follow-up question is worded (0.5% to
+35.9% doubling-down on the *identical* underlying lie), which is a concrete,
+demonstrated reason an AUROC computed from any single prompt template would
+be unstable. The reasoning text also points at *why* capability denials
+happen at all — gemma reframes them as safety-policy refusals, not genuine
+incapacity claims, suggesting "won't" and "can't" are blurred by its own
+refusal training rather than deliberately concealed.
+
+Best next steps, in order of how directly they build on what's already
+here: (1) the paper's own proposed fix, third-person monitoring ("did
+another AI lie here?") — scoped in `05_followup.py`'s `attributed` condition
+but never run; (2) extending this same live-elicitation methodology (ground
+truth from a fresh, independently-verifiable check, never the dataset's
+`did_lie`) to sycophancy and mask-factual, the two categories already
+queued in `gigi/README.md`, since the `did_lie`-unusable problem documented
+above applies to those too; (3) a harmless-subject control condition for
+this category specifically, to separate "topic is disturbing" from "this is
+a lie" in the activation data already collected — noted as a scope decision
+in the original handoff but never built.
+
 ## Where the data lives
 
 | File | What it is |
