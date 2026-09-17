@@ -115,8 +115,11 @@ have an `activations_file` column giving the per-row filename.
 | File | What it is |
 |---|---|
 | `results/capability_proof.txt` | Part 0 — proof gemma can draw ASCII art |
-| `results/ascii_results.csv` / `.jsonl` | Part 1 + neutral follow-up, 310 rows |
-| `results/ascii_followup_conditions.csv` / `.jsonl` | low_stakes / high_stakes / confidence, 930 rows |
-| `00_ascii_activations.py` | generates the above (local GPU, bf16) |
+| `results/ascii_results.csv` / `.jsonl` | Part 1 + neutral follow-up, 310 rows. `probe_answer`/`followup_answer` are gemma's raw replies (usually just a letter) — the question they're answering isn't in these files |
+| `results/ascii_followup_conditions.csv` / `.jsonl` | low_stakes / high_stakes / confidence, 930 rows. Same caveat — `answer` is the raw reply only |
+| `results/transcripts.jsonl` | **the actual rollouts** — full reconstructed conversation (system prompt, dataset trace, capability probe, gemma's answer, follow-up question, gemma's answer) per row, neutral condition, 310 rows |
+| `results/transcripts_followups.jsonl` | same, for the 3 follow-up conditions, 930 rows |
+| `00_ascii_activations.py` | generates the two `ascii_*` files above (local GPU, bf16) |
 | `00_ascii_followups.py` | generates the follow-up conditions, reusing saved Part 1 answers |
+| `00_export_transcripts.py` | joins the `ascii_*` files back against the original dataset to produce the two `transcripts*.jsonl` files — $0, no API calls |
 | `00_ascii.py` | OpenRouter equivalent of `00_ascii_activations.py` (text only, no activations) |
