@@ -5,8 +5,8 @@ Replicating two numbers from Anthropic's [lie-detectors post](https://alignment.
 | Folder | Category | Ground truth | Status |
 |---|---|---|---|
 | [`ascii-sandbagging/`](ascii-sandbagging/README.md) | sandbagging · ascii | external — gemma's own demonstrated capability | done, 310 rows |
-| *(in progress)* | sycophancy | neutral vs. pressured answer, run twice + a noise baseline | not started — see caveat below |
-| *(planned)* | mask-factual | same two-pass method as sycophancy | not started — see caveat below |
+| [`sycophancy/`](sycophancy/README.md) | sycophancy · answer-conformity | neutral vs. pressured answer, run twice + a noise baseline | track A done (158 rows); track B (evaluation bias) planned |
+| *(planned)* | mask-factual | same two-pass method as sycophancy track A | not started — see caveat below |
 
 Skipped on purpose, per the reliability check in `ascii-sandbagging/HANDOFF.md` §8: self-sycophancy (46% label instability), mask-roleplay (contested labels), offpolicy (imported data, not gemma's own behavior), unanswerable (residual bucket, not a lie type — never a rate).
 

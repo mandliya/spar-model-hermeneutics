@@ -1,0 +1,18 @@
+# NEVER commit your API key.
+.env
+
+# Environments and caches — rebuildable, keep them out.
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Downloaded dataset slices. Re-downloadable from HuggingFace in seconds,
+# and they bloat a shared repo.
+data/
+
+# results/ is deliberately NOT ignored. Those files cost money to produce and
+# your collaborators should not have to re-pay to look at them.
+# If results/*.jsonl grows past ~50 MB, keep the raw jsonl out and commit only
+# the derived .csv:
+#   results/*.jsonl
