@@ -108,7 +108,8 @@ If the neutral elicitation turns out to be present in the released traces, feed
 it to the judge as a separate field; that is the single biggest available
 improvement to step 3.
 
-Label stability by task group, from the paper — pick accordingly:
+Label stability by task group, from the paper — read these as weak signals,
+not reliability guarantees (see caveat below):
 - sycophancy: 100% agreement with human annotators
 - sandbagging: 90%  (also the highest lie rate, >76% — best starting point)
 - mask-factual: 80%
@@ -116,12 +117,26 @@ Label stability by task group, from the paper — pick accordingly:
 
 **These percentages are NOT about the released `did_lie` column — verify before
 trusting it for any new category.** They're the paper's own judge-vs-human
-agreement rate, a different thing entirely. We checked every
-`google-gemma-3-27b-it` config in the released dataset directly: `did_lie` is
-`True` in only 8 rows out of ~38,600 total, all 8 inside `mask-factual`, and
-even those 8 have no recorded assistant turn in their trace to justify the
-label either way. `sycophancy` — despite its 100% figure above — is `False`
-in all 498 of its rows, though the paper reports gemma folding under sycophancy
+agreement rate, a different thing entirely — and a much thinner basis than the
+clean percentages suggest. We checked the paper directly (Appendix A1): every
+one of these figures except self-sycophancy's comes from **one human
+annotator ("Dipika") spot-checking just 10 examples per category** against
+the judge's output, done *after* the judge pass as a sanity check, not a
+systematic validation. Sycophancy's "100%" is 10/10 agreement with one rater
+— treat it as "the judge wasn't obviously broken on a handful of examples,"
+not as a reliability rate. The paper also explicitly warns that naive
+answer-change detection (ask neutral, ask under pressure, flag any flip) "produced
+a large number of positive samples, many of which were likely attributable to
+random response variation rather than genuine sycophantic behavior" — so any
+sycophancy design here needs a noise baseline (re-ask the *neutral* question
+twice, measure how often the answer flips from sampling alone) before trusting
+a neutral-vs-pressured comparison.
+
+We also checked every `google-gemma-3-27b-it` config in the released dataset
+directly: `did_lie` is `True` in only 8 rows out of ~38,600 total, all 8
+inside `mask-factual`, and even those 8 have no recorded assistant turn in
+their trace to justify the label either way. `sycophancy` is `False` in all
+498 of its rows, though the paper reports gemma folding under sycophancy
 pressure up to ~32% of the time. Every trace across every config we checked
 ends at the system prompt; the actual question-and-answer is left in
 `lie_detection_prompt` for whoever replays the dataset to generate fresh. So

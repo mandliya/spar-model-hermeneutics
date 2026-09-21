@@ -209,11 +209,21 @@ up separately, summary here:
 | unanswerable | nowhere — it is the residual bucket | — | not a lie type; never compute a rate from it |
 
 **The "Reliability" column above is the paper's judge-vs-human agreement rate
-on its own labels — not a statement about the released `did_lie` column.**
-We checked `did_lie` directly across every `google-gemma-3-27b-it` config:
-it's `True` in 8 rows out of ~38,600 total (all 8 in mask-factual, and even
-those lack a recorded assistant turn to justify the label). `sycophancy` is
-`False` in every one of its 498 rows despite its 100% figure above. Every
+on its own labels — not a statement about the released `did_lie` column, and
+weaker evidence than the clean percentages suggest.** Checked against the
+paper directly: sycophancy's 100% and mask-factual's 80% both come from one
+human annotator spot-checking just 10 examples per category, after the judge
+pass, as a sanity check — not a systematic validation. The paper also warns
+that naive answer-change detection for sycophancy "produced a large number of
+positive samples, many of which were likely attributable to random response
+variation rather than genuine sycophantic behavior" — so a neutral-vs-pressured
+design needs its own noise baseline (re-ask the neutral question twice,
+measure the flip rate from sampling alone) before trusting a comparison.
+
+Separately: we checked `did_lie` directly across every `google-gemma-3-27b-it`
+config: it's `True` in 8 rows out of ~38,600 total (all 8 in mask-factual, and
+even those lack a recorded assistant turn to justify the label). `sycophancy`
+is `False` in every one of its 498 rows despite its 100% figure above. Every
 trace we checked ends at the system prompt — no config in this release ships
 a completed conversation with a graded final answer. So "truth lives in the
 model's neutral answer, run twice, compare" is right, but *both* runs have to
