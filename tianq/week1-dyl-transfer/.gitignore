@@ -1,0 +1,29 @@
+# Credentials. Never commit.
+.env
+
+# Environments and caches — rebuildable.
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Downloaded dataset slices — re-downloadable from HuggingFace.
+data/
+
+# Activation scratch. HuggingFace is the source of truth for these,
+# not git. See README "Storage".
+scratch/
+*.npy
+*.npz
+
+# Results live on HuggingFace, which is the single source of truth for
+# anything this pipeline produces — per-row records, activations, the
+# in-domain validation set and the summary. Local copies here are a cache
+# that a rerun refills, so tracking them in git would only create a second
+# place for the numbers to disagree with each other.
+#
+#   https://huggingface.co/datasets/model-hermeneutics/spar-dyl-ascii-transfer
+scratch/
+
+# Project-named virtualenvs.
+.venv-*/

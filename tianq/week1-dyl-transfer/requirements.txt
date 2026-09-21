@@ -1,0 +1,12 @@
+# Ravi's pipeline is imported wholesale, so his pins are the base and the only
+# ones that matter for the model/probe path.
+-r ../../ravi/week1-dyl-vs-oa/requirements.txt
+
+# Upper bound added after this bit us on a live GPU box. Ravi pins
+# `transformers>=4.51` with no ceiling, and pip happily installed 5.17.0, which
+# requires torch>=2.5. Against the torch 2.4.0 in the pinned cu124 image,
+# transformers then *silently disables the PyTorch backend* — it prints a note
+# and carries on, so AutoModelForCausalLM is simply absent and the failure only
+# surfaces when you try to load the model. Worth telling Ravi, since his own
+# requirements have the same hole.
+transformers>=4.51,<5

@@ -1,0 +1,8 @@
+# CPU-only deps, enough to run the whole preflight (tests, probe unpack,
+# tokenizer check, HF round-trip) on a laptop with no GPU and no torch.
+# The GPU box installs requirements.txt instead, which is a superset.
+numpy>=1.26
+pytest>=8.0
+pyyaml>=6.0
+scikit-learn>=1.5
+huggingface_hub>=0.26
