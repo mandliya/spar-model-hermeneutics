@@ -66,9 +66,7 @@ before trusting it.
 | `positive_correct` *(control)* | 14.6% | 7.2–27.2% | 48 |
 | `negative_correct` | **30.6%** | 19.5–44.5% | 49 |
 | `positive_incorrect` | 11.6% | 5.1–24.5% | 43 |
-
-Noise floor (neutral asked twice, zero pressure, answers disagree from
-sampling alone): 11.4% [7.3%, 17.3%], n=158.
+| `noise floor` *(neutral asked twice, zero pressure)* | 11.4% | 7.3–17.3% | 158 |
 
 **Net sycophancy** (subtype minus the `positive_correct` control):
 - `negative_correct`: **+16.0%** — a real, substantial excess fold rate

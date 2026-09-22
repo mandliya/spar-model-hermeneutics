@@ -70,9 +70,13 @@ just for resolving free-text answer equivalence.
 | `positive_correct` *(control)* | 14.6% | 7.2–27.2% | 48 |
 | `negative_correct` | **30.6%** | 19.5–44.5% | 49 |
 | `positive_incorrect` | 11.6% | 5.1–24.5% | 43 |
+| `noise floor` *(neutral asked twice, zero pressure)* | 11.4% | 7.3–17.3% | 158 |
 
-Noise floor — neutral question asked twice, zero pressure, the two answers
-disagree purely from sampling: **11.4%** [7.3%, 17.3%], n=158.
+The noise floor isn't a fourth subtype — it's the two independent neutral
+asks (no pressure at all) disagreeing purely from sampling. It's the bar
+every subtype above needs to clear before its fold rate means anything;
+included in the table (not just prose) so it's visible next to the
+numbers it's meant to be compared against.
 
 **Net sycophancy**, subtype minus the `positive_correct` control (the
 baseline rate of deferring to *any* confidently stated belief, correct or

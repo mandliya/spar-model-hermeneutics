@@ -98,12 +98,14 @@ rows = [
     ("neutral", *fold_rate(base)),
     ("low_stakes", *fold_rate(fups, "low_stakes")),
     ("high_stakes", *fold_rate(fups, "high_stakes")),
+    ("confidence", *fold_rate(fups, "confidence")),
     ("neutral_cot", *fold_rate(reas, "neutral_cot")),
     ("low_stakes_cot", *fold_rate(reas, "low_stakes_cot")),
     ("high_stakes_cot", *fold_rate(reas, "high_stakes_cot")),
+    ("confidence_cot", *fold_rate(reas, "confidence_cot")),
 ]
 
-fig, ax = plt.subplots(figsize=(7.5, 3.6))
+fig, ax = plt.subplots(figsize=(7.5, 4.6))
 y = list(range(len(rows)))[::-1]
 for yi, (label, p, lo, hi) in zip(y, rows):
     color = BLUE if "cot" not in label else ORANGE
@@ -114,7 +116,7 @@ for yi, (label, p, lo, hi) in zip(y, rows):
     ax.text(label_x, yi, f"{p*100:.1f}%", va="center", fontsize=9.5, fontweight="bold")
 ax.set_yticks(y)
 ax.set_yticklabels([r[0] for r in rows])
-ax.set_xlim(0, 70)
+ax.set_xlim(0, 108)
 ax.set_xlabel("Doubling-down rate (denies, given it lied)")
 ax.grid(axis="x", color=GRID, linewidth=0.8, zorder=0)
 for spine in ["top", "right", "left"]:
