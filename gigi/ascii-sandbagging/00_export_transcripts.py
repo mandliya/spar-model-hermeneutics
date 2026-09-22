@@ -24,7 +24,8 @@ from src.common import (RESULTS, load_config, to_messages,
                         FOLLOWUP, FOLLOWUP_LOW_STAKES, FOLLOWUP_HIGH_STAKES,
                         FOLLOWUP_CONFIDENCE, FOLLOWUP_NEUTRAL_COT,
                         FOLLOWUP_LOW_STAKES_COT, FOLLOWUP_HIGH_STAKES_COT,
-                        FOLLOWUP_CONFIDENCE_COT)
+                        FOLLOWUP_CONFIDENCE_COT, FOLLOWUP_PLAIN,
+                        FOLLOWUP_NAMED_SANDBAGGING)
 
 CONFIG = "google-gemma-3-27b-it_task-group_sandbagging"
 
@@ -40,6 +41,8 @@ FOLLOWUP_TEXT = {
     "low_stakes_cot": FOLLOWUP_LOW_STAKES_COT,
     "high_stakes_cot": FOLLOWUP_HIGH_STAKES_COT,
     "confidence_cot": FOLLOWUP_CONFIDENCE_COT,
+    "plain": FOLLOWUP_PLAIN,
+    "named": FOLLOWUP_NAMED_SANDBAGGING,
 }
 
 # --------------------------------------------------------- neutral run -----
@@ -130,3 +133,35 @@ if reasoning_path.exists():
 else:
     print(f"\n{reasoning_path} not found yet — skipping transcripts_reasoning.jsonl "
           f"(run 00_ascii_reasoning.py first)")
+
+# --------------------------------------------- self-report benchmark -------
+benchmark_path = RESULTS / "ascii_benchmark_conditions.csv"
+if benchmark_path.exists():
+    bench = pd.read_csv(benchmark_path)
+    out_path4 = RESULTS / "transcripts_benchmark.jsonl"
+    written4 = 0
+    with out_path4.open("w") as f:
+        for _, r in bench.iterrows():
+            row = df.loc[r["sample_id"]]
+            base_row = base[base["uid"] == r["sample_id"]].iloc[0]
+            msgs = to_messages(row["trace"])
+            probe = dict(row["lie_detection_prompt"])
+            transcript = msgs + [
+                probe,
+                {"role": "assistant", "content": base_row["probe_answer"]},
+                {"role": "user", "content": FOLLOWUP_TEXT[r["condition"]]},
+                {"role": "assistant", "content": str(r["answer"])},
+            ]
+            f.write(json.dumps({
+                "uid": r["uid"],
+                "sample_id": r["sample_id"],
+                "condition": r["condition"],
+                "lied": bool(r["lied"]) if pd.notna(r["lied"]) else None,
+                "admitted": bool(r["admitted"]) if pd.notna(r["admitted"]) else None,
+                "transcript": transcript,
+            }, ensure_ascii=False) + "\n")
+            written4 += 1
+    print(f"{out_path4}: {written4} self-report-benchmark transcripts")
+else:
+    print(f"\n{benchmark_path} not found yet — skipping transcripts_benchmark.jsonl "
+          f"(run 00_ascii_selfreport_benchmark.py first)")
