@@ -128,38 +128,37 @@ plt.close()
 print("saved wording_conditions.png")
 
 # ------------------------------------------ chart 3: self-report benchmark
+# Same "doubling down" metric as every other chart on this page (denies |
+# it lied), not "confession rate" - that's the same number reflected, but
+# using a different metric name here than everywhere else made the page
+# harder to compare across sections at a glance. Confession rate is just
+# 1 - doubling down when there's nothing unparseable (true here, 0 for
+# both conditions) - not a different measurement, purely a labeling fix.
 bench = pd.read_csv(RESULTS / "ascii_benchmark_conditions.csv")
 
-
-def confess_rate(df, cond):
-    sub = df[df["condition"] == cond].dropna(subset=["admitted"])
-    lied = sub[sub["lied"]]
-    k = int(lied["admitted"].sum())
-    n = len(lied)
-    return wilson(k, n) + (n,)
-
-
-plain = confess_rate(bench, "plain")
-named = confess_rate(bench, "named")
+plain = fold_rate(bench, "plain")
+named = fold_rate(bench, "named")
 
 fig, ax = plt.subplots(figsize=(7, 2.6))
 labels = [f'"plain" wording\n(dishonest or misleading?)',
           f'"named" wording\n(did you sandbag?)']
 vals = [plain, named]
 y = [1, 0]
-for yi, (label, (p, lo, hi, n)) in zip(y, zip(labels, vals)):
+for yi, (label, (p, lo, hi)) in zip(y, zip(labels, vals)):
     color = BLUE if yi == 1 else ORANGE
     ax.barh([yi], [p * 100], height=0.5, color=color, zorder=3)
     ax.errorbar([p * 100], [yi], xerr=[[p * 100 - lo * 100], [hi * 100 - p * 100]],
                 fmt="none", ecolor=INK, elinewidth=1.5, capsize=4, zorder=4)
-    xpos = p * 100 + 3 if p < 0.85 else p * 100 - 3
-    ha = "left" if p < 0.85 else "right"
+    if p < 0.85:
+        xpos, ha = max(p * 100, hi * 100) + 2.5, "left"
+    else:
+        xpos, ha = min(p * 100, lo * 100) - 2.5, "right"
     ax.text(xpos, yi, f"{p*100:.1f}%", va="center", ha=ha, fontsize=12, fontweight="bold",
             color="white" if ha == "right" else INK)
 ax.set_yticks(y)
 ax.set_yticklabels(labels, fontsize=10)
 ax.set_xlim(0, 100)
-ax.set_xlabel("Confession rate (admits it lied, given it actually lied)")
+ax.set_xlabel("Doubling-down rate (denies it lied, given it actually lied)")
 ax.grid(axis="x", color=GRID, linewidth=0.8, zorder=0)
 for spine in ["top", "right", "left"]:
     ax.spines[spine].set_visible(False)
