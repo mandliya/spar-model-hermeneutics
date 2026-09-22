@@ -82,31 +82,41 @@ excess sycophancy when someone confidently asserts something *wrong* beyond
 that same baseline rate. Sycophancy here looks more like "caves to doubt"
 than "caves to confidence."
 
-## Track B: evaluation bias (not yet built)
+## Track B: evaluation bias (built)
 
 `sycophancy_feedback_user_wrote`/`user_likes`/`user_dislikes`/`user_did_not_write`
 — "comment on this argument," with framing about who wrote it or how they
 feel about it. No fact in dispute; the question is whether gemma's
 *evaluation* shifts based on the social cue alone, holding the argument's
-actual content fixed. 105 of 123 distinct arguments are reused across 2-4
-framings in the dataset itself — a genuine paired design, not something to
-construct. Needs a judge model to score critique favorability, since
-sentiment isn't a letter to parse. See chat history for the fuller design
-discussion before building this.
+actual content fixed. 124 distinct arguments are reused across 2-4 framings
+in the dataset itself — a genuine paired design, not something constructed
+here. Judge-scored critique favorability (1-10), since sentiment isn't a
+letter to parse — see `RESULTS.md` for the full methodology and results.
+
+**Headline result**: `user_likes` shifts critique favorability +3.28 points
+(1-10 scale) versus the same argument's neutral baseline; `user_dislikes`
+shifts it -2.41; both well clear of the ±0.42 noise floor (two independent
+neutral reruns of the same argument). Real evaluation-bias sycophancy, in
+both directions.
 
 ## Where the data lives
 
 | File | What it is |
 |---|---|
 | `results/sycophancy_answer_conditions.csv` / `.jsonl` | Track A, 158 rows. `neutral_1`/`neutral_2`/`pressured` are gemma's raw replies |
+| `results/sycophancy_feedback_conditions.csv` / `.jsonl` | Track B, 449 rows. `critique` is the raw text, `sentiment_score` the judge's 1-10 rating |
 | `results/transcripts_sycophancy_answers.jsonl` | **the actual rollouts** — full reconstructed conversations, 474 rows (158 x 3 independent conditions each) |
-| `00_sycophancy_answers.py` | generates the above (local GPU, bf16, with activations) |
-| `00_export_transcripts_sycophancy.py` | joins the results back against the original dataset for full transcripts — $0, no API calls |
+| `results/transcripts_sycophancy_feedback.jsonl` | same, for Track B, 449 rows |
+| `charts/sycophancy_feedback_shift.png` | Track B's headline chart, regenerate with `06_charts_sycophancy.py` |
+| `00_sycophancy_answers.py` | generates Track A (local GPU, bf16, with activations) |
+| `00_sycophancy_feedback.py` | generates Track B, same mechanism |
+| `00_export_transcripts_sycophancy.py` | joins both tracks' results back against the original dataset for full transcripts — $0, no API calls |
 
 Activation tensors (one snapshot per condition, every layer, last prompt
 token) are pushed to the same private HF dataset repo as ascii-sandbagging's:
 `ggrazianoknapp/gigi-ascii-sandbagging-activations`, filenames
-`<uid>__neutral_1.pt` / `__neutral_2.pt` / `__pressured.pt`.
+`<uid>__neutral_1.pt` / `__neutral_2.pt` / `__pressured.pt` (Track A) and
+`<uid>__main.pt` / `__noise_rerun.pt` (Track B).
 
 ## Caveats
 

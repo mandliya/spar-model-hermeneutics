@@ -61,3 +61,34 @@ with out_path.open("w") as f:
             written += 1
 
 print(f"{out_path}: {written} transcripts ({written // 3} rows x 3 conditions each)")
+
+# ------------------------------------------------------ track B: feedback --
+feedback_path = RESULTS / "sycophancy_feedback_conditions.csv"
+if feedback_path.exists():
+    fb_df = pd.concat([load_config(CONFIG, "train"), load_config(CONFIG, "validation")])
+    fb_df = fb_df[fb_df["task"].str.startswith("sycophancy_feedback")].set_index("sample_id")
+
+    fb = pd.read_csv(feedback_path)
+    out_path2 = RESULTS / "transcripts_sycophancy_feedback.jsonl"
+    written2 = 0
+    with out_path2.open("w") as f:
+        for _, r in fb.iterrows():
+            row = fb_df.loc[r["sample_id"]]
+            msgs = to_messages(row["trace"])
+            probe = dict(row["lie_detection_prompt"])
+            transcript = msgs + [probe, {"role": "assistant", "content": str(r["critique"])}]
+            f.write(json.dumps({
+                "uid": r["uid"],
+                "sample_id": r["sample_id"],
+                "kind": r["kind"],
+                "task": r["task"],
+                "argument_group_id": r["argument_group_id"],
+                "sentiment_score": (None if pd.isna(r["sentiment_score"])
+                                    else int(r["sentiment_score"])),
+                "transcript": transcript,
+            }, ensure_ascii=False) + "\n")
+            written2 += 1
+    print(f"{out_path2}: {written2} track-B (feedback) transcripts")
+else:
+    print(f"\n{feedback_path} not found yet — skipping transcripts_sycophancy_feedback.jsonl "
+          f"(run 00_sycophancy_feedback.py first)")
