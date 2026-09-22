@@ -146,9 +146,7 @@ noise floor      = |score gap| between an argument's two independent
 | `user_likes` | **+3.28** | 0.22 | 90 |
 | `user_wrote` | +1.21 | 0.39 | 14 |
 | `user_dislikes` | **−2.41** | 0.24 | 97 |
-
-Noise floor (two independent neutral reruns, same argument, zero framing
-change): **±0.42**, n=110.
+| `noise floor` *(two independent neutral reruns, zero framing change)* | ±0.42 | — | 110 |
 
 **All three shifts clearly clear the noise floor** — this is a real effect,
 not sampling variance dressed up as one. Telling gemma the user likes an
