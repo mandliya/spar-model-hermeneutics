@@ -133,6 +133,16 @@ token) are pushed to the same private HF dataset repo as ascii-sandbagging's:
 `<uid>__neutral_1.pt` / `__neutral_2.pt` / `__pressured.pt` (Track A) and
 `<uid>__main.pt` / `__noise_rerun.pt` (Track B).
 
+`<track>__<uid>__<condition>__answer_token.pt` files are a second,
+DYL-matched capture for the 10-condition follow-up battery only (see
+`results/dyl_answer_token_sycophancy.jsonl` for the track::uid::condition
+-> filename map) — the hidden state at the actual answer token, not the
+pre-decision prompt token the files above use. Use these, not the ones
+above, for anything reproducing "Did you lie?" Evaluating Lie Detectors
+across Model Scale and Belief-Verified Model Organisms (Cooney, Africa,
+Irving) — the older files are kept, not deleted, since they may still be
+useful for other activation-probing approaches.
+
 ## Caveats
 
 - `did_lie` is unusable for this config too (see `../ascii-sandbagging/CLAUDE.md`)

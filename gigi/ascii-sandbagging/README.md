@@ -92,9 +92,19 @@ hf_hub_download("ggrazianoknapp/gigi-ascii-sandbagging-activations",
                  "conv_20250718_ascii_mc_medical_5.pt", repo_type="dataset")
 ```
 
-or `snapshot_download(..., repo_type="dataset")` for the whole 415MB set.
+or `snapshot_download(..., repo_type="dataset")` for the whole set.
 `results/ascii_results.csv`'s `activations_file` column gives the per-row
 filename. Ask for repo access if you don't have it yet — it's private.
+
+`<uid>__<condition>__answer_token.pt` files are a second, DYL-matched
+capture for the follow-up-question conditions only (see
+`results/dyl_answer_token_ascii.jsonl` for the uid::condition -> filename
+map) — the hidden state at the actual answer token, not the pre-decision
+prompt token every other `.pt` file here uses. Use these, not the older
+per-condition files, for anything reproducing "Did you lie?" Evaluating
+Lie Detectors across Model Scale and Belief-Verified Model Organisms
+(Cooney, Africa, Irving) — the older files are kept, not deleted, since
+they may still be useful for other activation-probing approaches.
 
 ## Existing follow-up conditions
 
