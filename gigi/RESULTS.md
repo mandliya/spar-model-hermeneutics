@@ -78,24 +78,30 @@ prompt text reused from `src/common.py`, so results are actually comparable.
 
 **Where the three categories DIVERGE**
 
-&nbsp;&nbsp;&nbsp;&nbsp;`neutral` / `low_stakes` / `high_stakes` — bare letter, no reasoning
-&nbsp;&nbsp;&nbsp;&nbsp;ascii-sandbagging denies least (0.5-36%) · Track B denies almost totally (100% flat) · Track A in between
-
-&nbsp;&nbsp;&nbsp;&nbsp;`plain` vs. `named` — sharpest split on the whole chart
-&nbsp;&nbsp;&nbsp;&nbsp;ascii-sandbagging and Track B swing in *opposite* directions · Track A barely moves
-&nbsp;&nbsp;&nbsp;&nbsp;same wording = good detector in one category, useless or misleading in another
+1. `neutral` / `low_stakes` / `high_stakes` — bare letter, no reasoning
+   - ascii-sandbagging denies least (0.5-36%)
+   - Track B denies almost totally (100% flat)
+   - Track A sits in between
+2. `plain` vs. `named` — sharpest split on the whole chart
+   - ascii-sandbagging and Track B swing in *opposite* directions
+   - Track A barely moves
+   - same wording = good detector in one category, useless or misleading in another
 
 **Where the three categories CONVERGE**
 
-&nbsp;&nbsp;&nbsp;&nbsp;`confidence` / `confidence_cot` — forced 0-100 score, not a letter
-&nbsp;&nbsp;&nbsp;&nbsp;all three collapse to near-total denial (92-100%) — tightest convergence on the chart
+3. `confidence` / `confidence_cot` — forced 0-100 score, not a letter
+   - all three collapse to near-total denial (92-100%)
+   - tightest convergence on the whole chart
+4. `low_stakes_cot` — the one bare-question condition where they pull together
+   - 15.6% / 29.6% / 42.0% (ascii / Track A / Track B)
+   - a local dip vs. `neutral_cot` and `high_stakes_cot` either side of it
+   - ascii and Track B's CIs still don't overlap here — a real narrowing, not full agreement
 
-&nbsp;&nbsp;&nbsp;&nbsp;`low_stakes_cot` — the one bare-question condition where they pull together
-&nbsp;&nbsp;&nbsp;&nbsp;15.6% / 29.6% / 42.0% (ascii / Track A / Track B) — a local dip vs. `neutral_cot` and `high_stakes_cot` either side of it, though ascii and Track B's CIs still don't overlap (a real narrowing, not full agreement)
+**Reasoning (`*_cot`) overall**
 
-**Reasoning (`*_cot`) overall: moves each category, doesn't converge them**
-
-&nbsp;&nbsp;&nbsp;&nbsp;`confidence_cot` and `low_stakes_cot` are the exceptions above — everywhere else on the reasoning side, the three stay as spread out as the bare-letter conditions
+5. Moves each category, doesn't converge them
+   - `confidence_cot` and `low_stakes_cot` (above) are the exceptions
+   - everywhere else on the reasoning side, the three stay as spread out as the bare-letter conditions
 
 ## Where the per-category detail lives
 
