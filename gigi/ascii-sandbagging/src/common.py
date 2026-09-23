@@ -69,10 +69,17 @@ def _get_client():
 # in the same run could be answered by a differently-quantized model with no
 # record of which. Pin to Novita's bf16 endpoint (least lossy available) for
 # every call to the target model, so the whole run is on one fixed backend.
-# Judge-model calls (e.g. anthropic/claude-sonnet-4.5) are untouched — Novita
-# doesn't serve those.
 TARGET_MODEL_PROVIDER = {"order": ["novita"], "allow_fallbacks": False,
                          "quantizations": ["bf16"]}
+
+# JUDGE_MODEL (anthropic/claude-sonnet-4.5) is closed-weight, so it doesn't
+# have the same multi-provider-quantization risk as gemma — Bedrock/Vertex/
+# Anthropic-direct are all Anthropic-run deployments of the same model, not
+# independently requantized community copies. Still pin it to Anthropic's
+# own endpoint rather than leaving OpenRouter's routing unpinned: costs
+# nothing, and removes any doubt about which backend served a given call
+# (previously unlogged and unverifiable from the raw response alone).
+JUDGE_MODEL_PROVIDER = {"order": ["anthropic"], "allow_fallbacks": False}
 
 
 def chat(model: str, messages: list[dict], temperature: float = TEMPERATURE,
@@ -81,6 +88,8 @@ def chat(model: str, messages: list[dict], temperature: float = TEMPERATURE,
     extra_body = {}
     if model == TARGET_MODEL:
         extra_body["provider"] = TARGET_MODEL_PROVIDER
+    elif model == JUDGE_MODEL:
+        extra_body["provider"] = JUDGE_MODEL_PROVIDER
     resp = _get_client().chat.completions.create(
         model=model,
         messages=messages,
