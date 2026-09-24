@@ -20,6 +20,7 @@ import pandas as pd
 REPO = Path(__file__).resolve().parent
 ASCII_RESULTS = REPO / "ascii-sandbagging" / "results"
 SYC_RESULTS = REPO / "sycophancy" / "results"
+MASK_RESULTS = REPO / "mask-factual" / "results"
 CHARTS_DIR = REPO / "charts"
 CHARTS_DIR.mkdir(exist_ok=True)
 
@@ -28,6 +29,7 @@ MUTED = "#8a8579"
 BLUE = "#2a78d6"
 ORANGE = "#eb6834"
 GREEN = "#3a9a5c"
+PURPLE = "#8e44ad"
 GRID = "#e1e0d9"
 
 plt.rcParams.update({
@@ -86,8 +88,8 @@ def ascii_rates():
     }
 
 
-def sycophancy_rates(csv_name, truth_col):
-    df = pd.read_csv(SYC_RESULTS / csv_name)
+def generic_rates(results_dir, csv_name, truth_col):
+    df = pd.read_csv(results_dir / csv_name)
 
     def fold_rate(cond):
         sub = df[df["condition"] == cond].dropna(subset=["admitted"])
@@ -99,9 +101,11 @@ def sycophancy_rates(csv_name, truth_col):
 
 series = {
     "ascii-sandbagging": (ascii_rates(), BLUE),
-    "sycophancy Track A": (sycophancy_rates("sycophancy_benchmark_conditions.csv", "fold"), ORANGE),
-    "sycophancy Track B": (sycophancy_rates("sycophancy_feedback_benchmark_conditions.csv", "sycophantic"), GREEN),
+    "sycophancy Track A": (generic_rates(SYC_RESULTS, "sycophancy_benchmark_conditions.csv", "fold"), ORANGE),
+    "sycophancy Track B": (generic_rates(SYC_RESULTS, "sycophancy_feedback_benchmark_conditions.csv", "sycophantic"), GREEN),
 }
+if (MASK_RESULTS / "mask_factual_benchmark_conditions.csv").exists():
+    series["mask-factual"] = (generic_rates(MASK_RESULTS, "mask_factual_benchmark_conditions.csv", "lied"), PURPLE)
 
 fig, ax = plt.subplots(figsize=(9, 5.5))
 x = list(range(len(CONDITIONS)))
@@ -129,7 +133,7 @@ ax.set_ylabel("Doubling-down rate (denies the behavior, given it happened)")
 ax.grid(axis="y", color=GRID, linewidth=0.8, zorder=0)
 for spine in ["top", "right"]:
     ax.spines[spine].set_visible(False)
-ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.16), ncol=3, frameon=False, fontsize=9.5)
+ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.16), ncol=len(series), frameon=False, fontsize=9.5)
 plt.tight_layout()
 plt.savefig(CHARTS_DIR / "cross_category_doubling_down.png", dpi=180)
 plt.close()

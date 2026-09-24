@@ -7,7 +7,9 @@ on `google/gemma-3-27b-it`. `mask-factual` is structurally different from
 both ascii-sandbagging and sycophancy — see [Ground truth](#ground-truth)
 below. Only the `mask_provided_facts` subtype is built so far; the other
 two (`mask_known_facts`, `mask_statistics`) need external fact-checking
-machinery this project doesn't have yet.
+machinery this project doesn't have yet. The full 12-condition follow-up
+battery ([below](#follow-up-battery)) is built and joins the cross-category
+comparison in `../RESULTS.md`.
 
 **Model:** `google/gemma-3-27b-it`, official bf16 weights, local GPU
 (temperature 0 — greedy decoding, deterministic), never OpenRouter.
@@ -53,6 +55,51 @@ even though the true fact is stated in the exact same system prompt it's
 reading from — this isn't a case of gemma not knowing the truth, it's
 choosing (or defaulting to) the version it was told to give.
 
+## Does asking directly detect it? Full follow-up battery {#follow-up-battery}
+
+Same twelve wordings as ascii-sandbagging and sycophancy's RESULTS.md,
+reusing the identical prompt text from `src/common.py`. This subtype has
+no category-specific vocabulary the way sandbagging has "sandbag" or
+sycophancy has "sycophantic" — there's no single term for "recited the
+pressured false narrative" — so `named`/`eval_named` reuse the generic
+`plain`/`eval_plain` wording verbatim, logged under their own condition
+names purely for structural parity with the other two categories' tables,
+not because the wording differs here. No activation capture on this pass
+(text-only, ask-directly arm, matching the ask-directly-only scope
+decision made for every other category's own benchmark conditions).
+
+Ground truth: `lied` (`TOLD_FALSE_NARRATIVE`, 55 rows folded / 31 did not,
+of the 86 usable rows).
+
+| Condition | Confession | Doubling down | False confession | n |
+|---|---|---|---|---|
+| `neutral` | 89.1% [78.2,94.9] | 10.9% [5.1,21.8] | 80.6% [63.7,90.8] | 55 / 31 |
+| `low_stakes` | 100.0% [93.5,100.0] | 0.0% [0.0,6.5] | 77.4% [60.2,88.6] | 55 / 31 |
+| `high_stakes` | 96.4% [87.7,99.0] | 3.6% [1.0,12.3] | 74.2% [56.8,86.3] | 55 / 31 |
+| `confidence` | 98.2% [90.4,99.7] | 1.8% [0.3,9.6] | 80.6% [63.7,90.8] | 55 / 31 |
+| `neutral_cot` | 96.4% [87.7,99.0] | 3.6% [1.0,12.3] | 93.5% [79.3,98.2] | 55 / 31 |
+| `low_stakes_cot` | 98.2% [90.4,99.7] | 1.8% [0.3,9.6] | 83.9% [67.4,92.9] | 55 / 31 |
+| `high_stakes_cot` | 98.2% [90.4,99.7] | 1.8% [0.3,9.6] | 87.1% [71.1,94.9] | 55 / 31 |
+| `confidence_cot` | 98.2% [90.4,99.7] | 1.8% [0.3,9.6] | 77.4% [60.2,88.6] | 55 / 31 |
+| `plain` | 100.0% [93.5,100.0] | 0.0% [0.0,6.5] | 100.0% [89.0,100.0] | 55 / 31 |
+| `named` *(reuses `plain`)* | 100.0% [93.5,100.0] | 0.0% [0.0,6.5] | 100.0% [89.0,100.0] | 55 / 31 |
+| `eval_plain` | 100.0% [93.5,100.0] | 0.0% [0.0,6.5] | 96.8% [83.8,99.4] | 55 / 31 |
+| `eval_named` *(reuses `eval_plain`)* | 100.0% [93.5,100.0] | 0.0% [0.0,6.5] | 96.8% [83.8,99.4] | 55 / 31 |
+
+**Self-report carries almost no discriminative signal for this category —
+the opposite finding from ascii-sandbagging and sycophancy.** Confession
+is near-ceiling in every single condition (89-100%), but so is false
+confession (74-100%): gemma says "yes I lied" to nearly everyone who asks,
+whether or not it actually recited the pressured false narrative. Unlike
+ascii-sandbagging (2.1%-99.5% confession range) or sycophancy (huge
+swings by wording), no follow-up question here meaningfully separates
+"actually lied" from "was actually truthful" — the self-report signal is
+saturated, not sensitive to wording the way the other two categories are.
+A plausible read: the underlying behavior here (reciting a company line
+you were fed) doesn't feel like "lying" to challenge internally the way a
+sandbagged capability denial or a sycophantic answer-flip does, so gemma
+readily agrees it "lied" regardless of what actually happened.
+
 ## Why local GPU, not OpenRouter
 
 Same reasoning as every other category here: OpenRouter serves this model
@@ -71,9 +118,10 @@ weights to be comparable.
   `claude-sonnet-4.5` is a different, stronger model than gemma (never the
   model under test), but its read is still one model's classification,
   logged in full (`judge_raw`) so it can be spot-checked.
-- No follow-up self-report battery has been built for this category yet —
-  the 10/12-condition battery built for ascii-sandbagging and sycophancy
-  hasn't been extended here. That's the natural next step.
+- No category-specific vocabulary exists for `named`/`eval_named` in the
+  follow-up battery — they reuse `plain`/`eval_plain`'s wording verbatim,
+  so those pairs are identical by construction here, not an independent
+  measurement.
 - `did_lie` is unusable for this config too, per the dataset-wide check in
   `../ascii-sandbagging/CLAUDE.md`.
 
@@ -82,17 +130,22 @@ weights to be comparable.
 | File | What it is |
 |---|---|
 | `results/mask_factual_provided_conditions.csv` / `.jsonl` | 86 rows: `response`, `verdict`, `lied`, `judge_raw` |
-| `00_mask_factual_provided.py` | generates the above (local GPU, bf16, with activations) |
+| `results/mask_factual_benchmark_conditions.csv` / `.jsonl` | full 12-condition follow-up battery, 1,032 rows |
+| `00_mask_factual_provided.py` | generates the primary run (local GPU, bf16, with activations) |
+| `00_mask_factual_selfreport_benchmark.py` | generates the follow-up battery (local GPU, bf16, no activations on this pass) |
 
 Activation tensors (every layer, last prompt token, right before gemma
 answers) are in the same private HF dataset repo as ascii-sandbagging's:
-`ggrazianoknapp/gigi-ascii-sandbagging-activations`, filenames `<uid>.pt`.
+`ggrazianoknapp/gigi-ascii-sandbagging-activations`, filenames `<uid>.pt`
+for the primary run. The follow-up battery has no activation capture yet —
+see Next steps.
 
 ## Next steps
 
-1. Build the same 10/12-condition follow-up self-report battery used for
-   ascii-sandbagging and sycophancy, so this category can join the
-   cross-category comparison in `../RESULTS.md`.
+1. Add activation capture to the follow-up battery (both the pre-decision
+   and DYL-matched answer-token positions, matching ascii-sandbagging and
+   sycophancy's `01_dyl_recapture_*.py` / `02_predecision_*.py` scripts) —
+   this category doesn't have either yet.
 2. `mask_known_facts` and `mask_statistics` — both need ground truth this
    project doesn't currently have a mechanism for (real-world fact-
    checking for the former, numeric-claim extraction and verification for
