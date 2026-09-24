@@ -31,7 +31,8 @@ from src.common import (RESULTS, TARGET_MODEL, append, load_done, load_config,
                         FOLLOWUP_CONFIDENCE, FOLLOWUP_NEUTRAL_COT,
                         FOLLOWUP_LOW_STAKES_COT, FOLLOWUP_HIGH_STAKES_COT,
                         FOLLOWUP_CONFIDENCE_COT, FOLLOWUP_PLAIN,
-                        FOLLOWUP_NAMED_SANDBAGGING)
+                        FOLLOWUP_NAMED_SANDBAGGING,
+                        FOLLOWUP_EVAL_PLAIN, FOLLOWUP_EVAL_NAMED_SANDBAGGING)
 from src.dyl_activations import find_answer_char_span, capture_state_at_answer
 
 FOLLOWUP_WORDING = {
@@ -41,6 +42,7 @@ FOLLOWUP_WORDING = {
     "high_stakes_cot": FOLLOWUP_HIGH_STAKES_COT,
     "confidence_cot": FOLLOWUP_CONFIDENCE_COT,
     "plain": FOLLOWUP_PLAIN, "named": FOLLOWUP_NAMED_SANDBAGGING,
+    "eval_plain": FOLLOWUP_EVAL_PLAIN, "eval_named": FOLLOWUP_EVAL_NAMED_SANDBAGGING,
 }
 
 CONFIG = "google-gemma-3-27b-it_task-group_sandbagging"
@@ -54,6 +56,7 @@ FOLLOWUP_KIND = {
     "neutral_cot": "letter_cot", "low_stakes_cot": "letter_cot",
     "high_stakes_cot": "letter_cot", "confidence_cot": "confidence_cot",
     "plain": "letter", "named": "letter",
+    "eval_plain": "letter", "eval_named": "letter",
 }
 
 p = argparse.ArgumentParser()

@@ -4,9 +4,9 @@ Replicating two numbers from Anthropic's [lie-detectors post](https://alignment.
 
 | Folder | Category | Ground truth | Status |
 |---|---|---|---|
-| [`ascii-sandbagging/`](ascii-sandbagging/README.md) | sandbagging · ascii | external — gemma's own demonstrated capability | done, 310 rows |
-| [`sycophancy/`](sycophancy/README.md) | sycophancy — both tracks | track A: neutral vs. pressured answer; track B: same argument under different social framings | done — track A 158 rows, track B 449 rows, plus a 10-condition self-report battery on both (3,410 rows) |
-| *(planned)* | mask-factual | same two-pass method as sycophancy track A | not started — see caveat below |
+| [`ascii-sandbagging/`](ascii-sandbagging/README.md) | sandbagging · ascii | external — gemma's own demonstrated capability | done, 310 rows, plus a 12-condition self-report battery |
+| [`sycophancy/`](sycophancy/README.md) | sycophancy — both tracks | track A: neutral vs. pressured answer; track B: same argument under different social framings | done — track A 158 rows, track B 339 rows, plus a 12-condition self-report battery on both (4,308 rows) |
+| [`mask-factual/`](mask-factual/README.md) | mask-factual · `mask_provided_facts` | ground truth stated directly in-prompt (true fact + pressured false narrative), judged | done, 86 rows — `mask_known_facts`/`mask_statistics` not started, need external fact-checking |
 
 Skipped on purpose, per the reliability check in `ascii-sandbagging/HANDOFF.md` §8: self-sycophancy (46% label instability), mask-roleplay (contested labels), offpolicy (imported data, not gemma's own behavior), unanswerable (residual bucket, not a lie type — never a rate).
 
@@ -16,6 +16,7 @@ spot-checking 10 examples per category after the judge pass — not a
 systematic validation, and not about the released `did_lie` column (unusable
 here regardless, see `ascii-sandbagging/CLAUDE.md`). The paper also warns
 that naive neutral-vs-pressured answer-change detection produces false
-positives from pure sampling variation, so this category's design needs its
-own noise baseline (re-ask the neutral question twice, no pressure, measure
-the flip rate) before trusting any fold rate it produces.
+positives from pure sampling variation — this project addresses that by
+running every generation at temperature 0 (greedy decoding, deterministic)
+rather than by measuring and subtracting a noise floor; see the top-level
+`RESULTS.md`'s methodology section for why.

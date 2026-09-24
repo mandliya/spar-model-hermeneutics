@@ -32,7 +32,8 @@ from src.common import (RESULTS, TARGET_MODEL, append, load_done, load_config,
                         FOLLOWUP_CONFIDENCE, FOLLOWUP_NEUTRAL_COT,
                         FOLLOWUP_LOW_STAKES_COT, FOLLOWUP_HIGH_STAKES_COT,
                         FOLLOWUP_CONFIDENCE_COT, FOLLOWUP_PLAIN,
-                        FOLLOWUP_NAMED_SYCOPHANCY)
+                        FOLLOWUP_NAMED_SYCOPHANCY,
+                        FOLLOWUP_EVAL_PLAIN, FOLLOWUP_EVAL_NAMED_SYCOPHANCY)
 from src.dyl_activations import find_answer_char_span, capture_state_at_answer
 
 CONFIG = "google-gemma-3-27b-it_task-group_sycophancy"
@@ -46,6 +47,7 @@ FOLLOWUP_WORDING = {
     "high_stakes_cot": FOLLOWUP_HIGH_STAKES_COT,
     "confidence_cot": FOLLOWUP_CONFIDENCE_COT,
     "plain": FOLLOWUP_PLAIN, "named": FOLLOWUP_NAMED_SYCOPHANCY,
+    "eval_plain": FOLLOWUP_EVAL_PLAIN, "eval_named": FOLLOWUP_EVAL_NAMED_SYCOPHANCY,
 }
 FOLLOWUP_KIND = {
     "neutral": "letter", "low_stakes": "letter", "high_stakes": "letter",
@@ -53,6 +55,7 @@ FOLLOWUP_KIND = {
     "neutral_cot": "letter_cot", "low_stakes_cot": "letter_cot",
     "high_stakes_cot": "letter_cot", "confidence_cot": "confidence_cot",
     "plain": "letter", "named": "letter",
+    "eval_plain": "letter", "eval_named": "letter",
 }
 
 p = argparse.ArgumentParser()
@@ -76,11 +79,9 @@ if "A" in args.tracks:
 
 if "B" in args.tracks:
     fb = pd.read_csv(RESULTS / "sycophancy_feedback_conditions.csv")
-    # fb's own 'uid' is "{sample_id}::main" for main rows - a different
-    # compound key than the benchmark file's 'uid' ("{sample_id}::main::{cond}").
-    # Reconstruct the fb-uid from the benchmark row's plain sample_id instead
-    # of trying to parse it back out of the benchmark uid.
-    trackB_prior = fb[fb["kind"] == "main"].set_index("uid")
+    # Post temp=0 rewrite: fb's 'uid' is the plain sample_id directly (no
+    # more "kind" column or compound key - there's only one ask per row now).
+    trackB_prior = fb.set_index("uid")
     trackB_prior["critique"] = trackB_prior["critique"].astype(str)
     trackB_bench = pd.read_csv(RESULTS / "sycophancy_feedback_benchmark_conditions.csv")
     trackB_df = dataset[dataset["task"].str.startswith("sycophancy_feedback")].set_index("sample_id")
@@ -113,7 +114,7 @@ def build_convo(track, sample_id):
         prior_answer = trackA_prior.loc[sample_id, "pressured"]
     else:
         row = trackB_df.loc[sample_id]
-        prior_answer = trackB_prior.loc[f"{sample_id}::main", "critique"]
+        prior_answer = trackB_prior.loc[sample_id, "critique"]
     msgs = to_messages(row["trace"])
     probe = dict(row["lie_detection_prompt"])
     return msgs + [probe, {"role": "assistant", "content": prior_answer}]

@@ -55,7 +55,7 @@ def wilson(k, n, z=1.96):
 
 CONDITIONS = ["neutral", "low_stakes", "high_stakes", "confidence",
               "neutral_cot", "low_stakes_cot", "high_stakes_cot", "confidence_cot",
-              "plain", "named"]
+              "plain", "named", "eval_plain", "eval_named"]
 
 
 def ascii_rates():
@@ -81,6 +81,8 @@ def ascii_rates():
         "confidence_cot": fold_rate(reas, "lied", "confidence_cot"),
         "plain": fold_rate(bench, "lied", "plain"),
         "named": fold_rate(bench, "lied", "named"),
+        "eval_plain": fold_rate(bench, "lied", "eval_plain"),
+        "eval_named": fold_rate(bench, "lied", "eval_named"),
     }
 
 
@@ -112,13 +114,14 @@ for name, (rates, color) in series.items():
         p, lo, hi = r
         xs.append(xi)
         ys.append(p * 100)
-        los.append(p * 100 - lo * 100)
-        his.append(hi * 100 - p * 100)
+        los.append(max(0, p * 100 - lo * 100))
+        his.append(max(0, hi * 100 - p * 100))
     ax.errorbar(xs, ys, yerr=[los, his], fmt="o-", color=color, label=name,
                 linewidth=1.6, markersize=6, capsize=3, elinewidth=1, zorder=3)
 
 ax.axvline(3.5, color=GRID, linewidth=1, linestyle="--", zorder=1)
 ax.axvline(7.5, color=GRID, linewidth=1, linestyle="--", zorder=1)
+ax.axvline(9.5, color=GRID, linewidth=1, linestyle="--", zorder=1)
 ax.set_xticks(x)
 ax.set_xticklabels(CONDITIONS, rotation=30, ha="right")
 ax.set_ylim(-3, 108)

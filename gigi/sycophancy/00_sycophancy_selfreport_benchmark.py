@@ -7,10 +7,8 @@ row (the one that may have folded to match the user's stated belief) — this
 script does NOT redo that. It reuses the exact saved pressured answer and
 only varies the FOLLOW-UP question, so all ten conditions are directly
 comparable: same behavior, same context, only the follow-up wording
-differs. Ground truth is Track A's own `fold` column (pressured answer flipped
-to match the user's stated belief, on rows where the two independent neutral
-asks agreed with each other first) — NaN/unstable rows are excluded, same
-exclusion as the fold-rate analysis itself.
+differs. Ground truth is Track A's own `fold` column (pressured answer
+flipped to match the user's stated belief, vs. the single neutral ask).
 
 Ten conditions, reusing the exact same prompt text as every other category
 in this project (src/common.py) for true cross-category comparability —
@@ -38,8 +36,8 @@ Run:
     python 00_sycophancy_selfreport_benchmark.py --conditions plain named
     python 00_sycophancy_selfreport_benchmark.py --limit 12   # smoke test
 
-Cost: no per-token API cost (local GPU). 10 conditions x 140 stable rows =
-1,400 generate calls, no activation capture.
+Cost: no per-token API cost (local GPU). 10 conditions x 158 rows = 1,580
+generate calls, no activation capture.
 """
 
 import argparse
@@ -57,7 +55,8 @@ from src.common import (RESULTS, TARGET_MODEL, TEMPERATURE, append, load_done,
                         FOLLOWUP_CONFIDENCE, FOLLOWUP_NEUTRAL_COT,
                         FOLLOWUP_LOW_STAKES_COT, FOLLOWUP_HIGH_STAKES_COT,
                         FOLLOWUP_CONFIDENCE_COT, FOLLOWUP_PLAIN,
-                        FOLLOWUP_NAMED_SYCOPHANCY)
+                        FOLLOWUP_NAMED_SYCOPHANCY,
+                        FOLLOWUP_EVAL_PLAIN, FOLLOWUP_EVAL_NAMED_SYCOPHANCY)
 
 OUT_PATH = RESULTS / "sycophancy_benchmark_conditions.jsonl"
 CONFIG = "google-gemma-3-27b-it_task-group_sycophancy"
@@ -73,6 +72,8 @@ CONDITIONS = {
     "confidence_cot":  dict(prompt=FOLLOWUP_CONFIDENCE_COT,  kind="confidence_cot"),
     "plain":           dict(prompt=FOLLOWUP_PLAIN,           kind="ab"),
     "named":           dict(prompt=FOLLOWUP_NAMED_SYCOPHANCY, kind="ab"),
+    "eval_plain":      dict(prompt=FOLLOWUP_EVAL_PLAIN,      kind="ab"),
+    "eval_named":      dict(prompt=FOLLOWUP_EVAL_NAMED_SYCOPHANCY, kind="ab"),
 }
 
 p = argparse.ArgumentParser()
@@ -90,12 +91,12 @@ prior = pd.read_csv(RESULTS / "sycophancy_answer_conditions.csv")
 if prior.empty:
     raise SystemExit("results/sycophancy_answer_conditions.csv is empty — "
                       "run 00_sycophancy_answers.py first.")
-prior = prior.dropna(subset=["fold"]).set_index("uid")
+prior = prior.set_index("uid")
 # CSV round-trip loses bool dtype (comes back as object holding Python
 # True/False) — `~` on that bitwise-negates the ints True/False are
 # subtypes of, giving nonsense like -2 instead of False. Cast explicitly.
 prior["fold"] = prior["fold"].astype(bool)
-print(f"{len(prior)} rows with a stable fold verdict to build on "
+print(f"{len(prior)} rows to build on "
       f"({int(prior['fold'].sum())} folded, {int((~prior['fold']).sum())} did not)")
 
 df = pd.concat([load_config(CONFIG, "train"), load_config(CONFIG, "validation")])

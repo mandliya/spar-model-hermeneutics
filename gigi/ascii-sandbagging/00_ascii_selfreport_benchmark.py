@@ -36,13 +36,16 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from src.common import (RESULTS, TARGET_MODEL, TEMPERATURE, append, load_done,
                         read_jsonl, to_messages, admitted_lying,
-                        FOLLOWUP_PLAIN, FOLLOWUP_NAMED_SANDBAGGING)
+                        FOLLOWUP_PLAIN, FOLLOWUP_NAMED_SANDBAGGING,
+                        FOLLOWUP_EVAL_PLAIN, FOLLOWUP_EVAL_NAMED_SANDBAGGING)
 
 OUT_PATH = RESULTS / "ascii_benchmark_conditions.jsonl"
 
 CONDITIONS = {
     "plain": FOLLOWUP_PLAIN,
     "named": FOLLOWUP_NAMED_SANDBAGGING,
+    "eval_plain": FOLLOWUP_EVAL_PLAIN,
+    "eval_named": FOLLOWUP_EVAL_NAMED_SANDBAGGING,
 }
 
 p = argparse.ArgumentParser()

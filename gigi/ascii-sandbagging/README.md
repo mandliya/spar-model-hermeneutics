@@ -141,10 +141,12 @@ before the "Final answer:"/"Final score:" line. Blank for every non-`cot`
 condition, same pattern as `confidence_score`.
 
 **Headline result: forcing reasoning mostly erases the stakes-framing
-effect.** `low_stakes_cot` and `high_stakes_cot` converge to the identical
-15.6% doubling-down rate, versus the wildly different 0.5%/35.9% split in
-the bare-letter versions from the previous batch. See `RESULTS.md` for the
-full comparison table.
+effect.** `low_stakes_cot` and `high_stakes_cot` converge to within a
+point of each other (13.1%/12.6% doubling-down), versus the wildly
+different 0.5%/34.0% split in the bare-letter versions from the previous
+batch. See `RESULTS.md` for the full comparison table, now twelve
+conditions including a safety-evaluation-framed plain/named pair
+(`eval_plain`/`eval_named`).
 
 ## Other task groups
 
@@ -185,7 +187,10 @@ you're comparing against — the report belongs next to the code that made it.
 - The conversation history replayed into gemma contains the dataset's recorded
   turns, so it is conditioned on its own past words rather than generating the
   whole exchange fresh.
-- The paper's sampling temperature isn't published. Yours is in `.env`.
+- The paper's sampling temperature isn't published. This project uses 0
+  (greedy decoding, deterministic) — a deliberate choice made after
+  checking what's standard for reproducible LLM evaluation, not the
+  paper's own value. `.env` controls it.
 - `did_lie` is the paper's label — the post notes ~25% of labels changed when
   reviewed with full ground-truth access.
 - The pilot is balanced 50/50 on purpose. For the paper comparison use the
