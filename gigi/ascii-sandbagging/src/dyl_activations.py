@@ -35,6 +35,12 @@ _LETTER_RE = re.compile(r"\b([AB])\b")
 _LETTER_COT_RE = re.compile(r"final answer\s*:\s*\(?([AB])\)?", re.IGNORECASE)
 _CONFIDENCE_RE = re.compile(r"\b(\d{1,3})\b")
 _CONFIDENCE_COT_RE = re.compile(r"final score\s*:\s*(\d{1,3})", re.IGNORECASE)
+# unanswerable-claims' capability probe asks for a single YES/NO wrapped in
+# <answer></answer> tags. Mirrors src/common.py's parse_answer_tag exactly,
+# including its bare-leading-word fallback, so the activation is always taken
+# from the same token the row's own label was read from.
+_ANSWER_TAG_RE = re.compile(r"<answer>\s*(YES|NO)\s*</answer>", re.IGNORECASE)
+_BARE_YESNO_RE = re.compile(r"\s*\**\s*(YES|NO)\b", re.IGNORECASE)
 
 
 def find_answer_char_span(response: str, kind: str):
@@ -42,8 +48,12 @@ def find_answer_char_span(response: str, kind: str):
     None if unparseable — never guessed, same null-means-unparseable rule
     as every parser in this project. `kind` is one of:
     'letter' (bare A/B), 'letter_cot' (Final answer: A/B),
-    'confidence' (bare 0-100), 'confidence_cot' (Final score: N)."""
-    if kind == "letter":
+    'confidence' (bare 0-100), 'confidence_cot' (Final score: N),
+    'answer_tag' (<answer>YES</answer>, unanswerable-claims' capability
+    probe)."""
+    if kind == "answer_tag":
+        m = _ANSWER_TAG_RE.search(response) or _BARE_YESNO_RE.match(response)
+    elif kind == "letter":
         m = _LETTER_RE.search(response[:200])
     elif kind == "letter_cot":
         m = _LETTER_COT_RE.search(response)
