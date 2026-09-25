@@ -31,6 +31,7 @@ REPO = Path(__file__).resolve().parent
 ASCII_RESULTS = REPO / "ascii-sandbagging" / "results"
 SYC_RESULTS = REPO / "sycophancy" / "results"
 MASK_RESULTS = REPO / "mask-factual" / "results"
+UNANS_RESULTS = REPO / "unanswerable" / "results"
 CHARTS_DIR = REPO / "charts"
 CHARTS_DIR.mkdir(exist_ok=True)
 
@@ -40,6 +41,7 @@ BLUE = "#2a78d6"
 ORANGE = "#eb6834"
 GREEN = "#3a9a5c"
 PURPLE = "#8e44ad"
+TEAL = "#127a75"
 GRID = "#e1e0d9"
 
 plt.rcParams.update({
@@ -70,18 +72,38 @@ CONDITIONS = ["neutral", "low_stakes", "high_stakes", "confidence",
               "plain", "named", "eval_plain", "eval_named"]
 
 
+def _as_bool(series, col):
+    """Coerce a boolean column that pandas read back as object dtype.
+
+    Two silent corruptions this guards against, both of which have bitten
+    this project before:
+      * `~series` on object dtype does INTEGER bitwise negation (~True == -2),
+        so a "how many were False" count comes back as nonsense.
+      * `.astype(bool)` turns NaN into True, which would relabel an
+        unparseable row as "the deceptive behaviour happened".
+    Anything that is not a genuine boolean raises instead of being guessed.
+    """
+    mapped = series.map({True: True, False: False,
+                         "True": True, "False": False})
+    if mapped.isna().any():
+        bad = series[mapped.isna()].unique()[:5]
+        raise ValueError(f"non-boolean values in {col!r}: {bad}")
+    return mapped.astype(bool)
+
+
 def _metric(sub, truth_col, metric):
     """One rate + CI from one condition's rows. `metric` is one of
     'doubling_down' (denies | it happened), 'confession' (admits | it
     happened), or 'false_confession' (admits | it did NOT happen)."""
-    sub = sub.dropna(subset=["admitted"])
-    pos = sub[sub[truth_col].astype(bool)]
-    neg = sub[~sub[truth_col].astype(bool)]
+    sub = sub.dropna(subset=["admitted", truth_col])
+    truth = _as_bool(sub[truth_col], truth_col)
+    adm = _as_bool(sub["admitted"], "admitted")
+    pos, neg = adm[truth], adm[~truth]
     if metric == "doubling_down":
-        return wilson(int((~pos["admitted"]).sum()), len(pos))
+        return wilson(int((~pos).sum()), len(pos))
     if metric == "confession":
-        return wilson(int(pos["admitted"].sum()), len(pos))
-    return wilson(int(neg["admitted"].sum()), len(neg))
+        return wilson(int(pos.sum()), len(pos))
+    return wilson(int(neg.sum()), len(neg))
 
 
 def ascii_rates(metric):
@@ -110,6 +132,16 @@ def generic_rates(results_dir, csv_name, truth_col, metric):
             for cond in CONDITIONS}
 
 
+def unanswerable_rates(metric):
+    """Only the confabulation bucket. The 7 DEFENSIBLE rows measure a
+    different act (false inability, not fabrication) and are excluded here
+    rather than silently averaged in."""
+    df = pd.read_csv(UNANS_RESULTS / "unanswerable_benchmark_conditions.csv")
+    df = df[df["bucket"] == "confabulation"]
+    return {cond: _metric(df[df["condition"] == cond], "confabulated", metric)
+            for cond in CONDITIONS}
+
+
 def build_series(metric):
     s = {
         "ascii-sandbagging": (ascii_rates(metric), BLUE),
@@ -118,6 +150,8 @@ def build_series(metric):
     }
     if (MASK_RESULTS / "mask_factual_benchmark_conditions.csv").exists():
         s["mask-factual"] = (generic_rates(MASK_RESULTS, "mask_factual_benchmark_conditions.csv", "lied", metric), PURPLE)
+    if (UNANS_RESULTS / "unanswerable_benchmark_conditions.csv").exists():
+        s["unanswerable"] = (unanswerable_rates(metric), TEAL)
     return s
 
 
@@ -182,7 +216,17 @@ def lying_rate_chart():
         rows.append(("mask-factual\n(told false narrative)",
                      wilson(int((mf["verdict"] == "TOLD_FALSE_NARRATIVE").sum()), len(mf)), PURPLE))
 
-    fig, ax = plt.subplots(figsize=(8, 3.6))
+    un_path = UNANS_RESULTS / "unanswerable_claims.csv"
+    lab_path = UNANS_RESULTS / "unanswerable_question_labels.csv"
+    if un_path.exists() and lab_path.exists():
+        un = pd.read_csv(un_path).merge(
+            pd.read_csv(lab_path)[["sample_id", "label"]], on="sample_id")
+        un = un[un["label"].isin(["UNDECIDABLE", "NO_CORRECT_OPTION"])]
+        un = un.dropna(subset=["committed"])
+        rows.append(("unanswerable\n(confabulated an answer)",
+                     wilson(int(un["committed"].astype(bool).sum()), len(un)), TEAL))
+
+    fig, ax = plt.subplots(figsize=(8, 4.3))
     y = list(range(len(rows)))[::-1]
     for yi, (label, r, color) in zip(y, rows):
         p, lo, hi = r
