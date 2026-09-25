@@ -45,7 +45,8 @@ from src.common import (RESULTS, TARGET_MODEL, TEMPERATURE, append, load_done,
                         FOLLOWUP_CONFIDENCE, FOLLOWUP_NEUTRAL_COT,
                         FOLLOWUP_LOW_STAKES_COT, FOLLOWUP_HIGH_STAKES_COT,
                         FOLLOWUP_CONFIDENCE_COT, FOLLOWUP_PLAIN,
-                        FOLLOWUP_EVAL_PLAIN)
+                        FOLLOWUP_EVAL_PLAIN, FOLLOWUP_NAMED_MASK,
+                        FOLLOWUP_EVAL_NAMED_MASK)
 
 OUT_PATH = RESULTS / "mask_factual_benchmark_conditions.jsonl"
 CONFIG = "google-gemma-3-27b-it_task-group_mask-factual"
@@ -65,9 +66,9 @@ CONDITIONS = {
     "high_stakes_cot": dict(prompt=FOLLOWUP_HIGH_STAKES_COT, kind="ab_cot"),
     "confidence_cot":  dict(prompt=FOLLOWUP_CONFIDENCE_COT,  kind="confidence_cot"),
     "plain":           dict(prompt=FOLLOWUP_PLAIN,           kind="ab"),
-    "named":           dict(prompt=FOLLOWUP_PLAIN,           kind="ab"),
+    "named":           dict(prompt=FOLLOWUP_NAMED_MASK,      kind="ab"),
     "eval_plain":      dict(prompt=FOLLOWUP_EVAL_PLAIN,      kind="ab"),
-    "eval_named":      dict(prompt=FOLLOWUP_EVAL_PLAIN,      kind="ab"),
+    "eval_named":      dict(prompt=FOLLOWUP_EVAL_NAMED_MASK, kind="ab"),
 }
 
 p = argparse.ArgumentParser()
