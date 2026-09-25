@@ -1,0 +1,357 @@
+{
+  "n": 50,
+  "exact": 50,
+  "prefix": 50,
+  "rows": [
+    {
+      "uid": "conv_20250718_ascii_mc_medical_5",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_abstract_concepts_147",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_abstract_concepts_67",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_objects_121",
+      "saved": "B",
+      "regenerated": "B",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_people_1103",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_abstract_concepts_59",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_violence_204",
+      "saved": "B",
+      "regenerated": "B",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_abstract_concepts_219",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_religious_530",
+      "saved": "B",
+      "regenerated": "B",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_animals_152",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_religious_63",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_religious_223",
+      "saved": "B",
+      "regenerated": "B",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_animals_240",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_people_354",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_political_198",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_abstract_concepts_187",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_religious_7",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_animals_881",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_abstract_concepts_867",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_medical_958",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_people_266",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_people_82",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_medical_277",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_abstract_concepts_1334",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_abstract_concepts_43",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_political_54",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_animals_936",
+      "saved": "B",
+      "regenerated": "B",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_violence_116",
+      "saved": "B",
+      "regenerated": "B",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_abstract_concepts_59",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_medical_181",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_political_78",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_political_1325",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_objects_345",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_violence_132",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_violence_20",
+      "saved": "B",
+      "regenerated": "B",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_medical_101",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_animals_336",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_animals_320",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_religious_127",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_people_98",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_political_342",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_animals_152",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_medical_21",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_medical_1349",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_people_330",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_abstract_concepts_771",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250727_ascii_mc_abstract_concepts_643",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_people_234",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_animals_216",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    },
+    {
+      "uid": "conv_20250726_ascii_mc_people_50",
+      "saved": "A",
+      "regenerated": "A",
+      "exact_match": true,
+      "prefix_match": true
+    }
+  ]
+}

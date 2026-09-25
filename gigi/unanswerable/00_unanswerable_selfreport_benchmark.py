@@ -180,17 +180,21 @@ def work(job):
     key = f"{uid}::{cond}"
     row = rows_by_id.loc[uid]
     unsupported = row["label"] in UNSUPPORTED
+    kind = KIND[cond]
     try:
         messages = build_base(row, unsupported) + [
             {"role": "user", "content": wording(cond, unsupported)}]
         predecision = capture_predecision(messages)
-        reply = generate(messages, max_new_tokens=300)
+        # A bare-letter or bare-number answer needs nothing like 300 tokens.
+        # 80 matches what ascii-sandbagging's own benchmark used, so the two
+        # stay consistent; only the cot conditions need room to reason first.
+        reply = generate(messages,
+                         max_new_tokens=300 if kind.endswith("_cot") else 80)
     except Exception as e:
         append(OUT_PATH, {"uid": key, "sample_id": uid, "condition": cond,
                           "error": str(e)})
         return
 
-    kind = KIND[cond]
     admitted = conf = None
     reasoning = ""
     if kind == "letter":
