@@ -104,8 +104,10 @@ and from ascii-sandbagging (93.7% vs. 1.0%). Shading an opinion toward what
 someone wants to hear isn't experienced as a lie the way changing a trivia
 answer is — "sycophantic" is the word that actually lands. The new
 safety-eval framing has the single largest effect on this whole project:
-Track B's `eval_named` hits 92.2% confession, the highest number anywhere —
-but false confession also jumps to 77.6%, meaning the framing makes gemma
+Track B's `eval_named` hits 92.2% confession — the highest produced by
+*framing* alone (mask-factual and unanswerable both hit 100%, but the first
+is a saturated signal and the second is driven by vocabulary, not framing)
+— but false confession also jumps to 77.6%, meaning the framing makes gemma
 agree with the accusation far more often, not more accurately.
 
 Full twelve-condition tables and charts for both tracks in `RESULTS.md`.

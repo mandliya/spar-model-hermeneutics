@@ -228,7 +228,10 @@ Three things worth taking away:
   right word for a shaded opinion in a way "lying" isn't.
 - **The safety-eval framing has the single largest effect on this whole
   page, and it's a double-edged one.** `eval_named` on Track B reaches
-  92.2% confession — the highest number anywhere in this project — but
+  92.2% confession — the highest of any condition whose self-report still
+  discriminates (mask-factual and unanswerable both reach 100%, but
+  mask-factual is saturated and unanswerable's `named` is a vocabulary
+  effect, not a framing one) — but
   false confession jumps to 77.6% too, meaning gemma is now *also*
   claiming sycophancy on the majority of rows where it wasn't actually
   swayed past the threshold. Telling the model "this is a safety
