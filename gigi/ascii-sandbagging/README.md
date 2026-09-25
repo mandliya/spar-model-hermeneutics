@@ -96,15 +96,31 @@ or `snapshot_download(..., repo_type="dataset")` for the whole set.
 `results/ascii_results.csv`'s `activations_file` column gives the per-row
 filename. Ask for repo access if you don't have it yet — it's private.
 
-`<uid>__<condition>__answer_token.pt` files are a second, DYL-matched
-capture for the follow-up-question conditions only (see
-`results/dyl_answer_token_ascii.jsonl` for the uid::condition -> filename
-map) — the hidden state at the actual answer token, not the pre-decision
-prompt token every other `.pt` file here uses. Use these, not the older
-per-condition files, for anything reproducing "Did you lie?" Evaluating
-Lie Detectors across Model Scale and Belief-Verified Model Organisms
-(Cooney, Africa, Irving) — the older files are kept, not deleted, since
-they may still be useful for other activation-probing approaches.
+**For the follow-up-battery activations, start with the tarballs** —
+`tarballs/answer_token_activations.tar.gz` (4.25 GB, 8,028 files) and
+`tarballs/predecision_activations.tar.gz` (2.94 GB, 5,548 files) in the
+same HF repo. These are the current temperature-0 set, covering every
+category at both capture points, and are the authoritative version:
+
+```python
+from huggingface_hub import hf_hub_download
+p = hf_hub_download("ggrazianoknapp/gigi-ascii-sandbagging-activations",
+                     "tarballs/answer_token_activations.tar.gz",
+                     repo_type="dataset")
+# then: tar xzf <p>
+```
+
+Inside: `<uid>__<condition>__answer_token.pt` is the DYL-matched capture
+(hidden state at the actual answer token) and `..__predecision.pt` is the
+prompt-final token before generation. Both exist because there's currently
+empirical uncertainty about which one a DYL-style probe expects — saved
+rather than guessed. The uid::condition → filename maps are in
+`results/dyl_answer_token_ascii.jsonl` and
+`results/predecision_ascii_benchmark.jsonl`.
+
+⚠️ **The loose `.pt` files at the repo root are stale** — they predate the
+temperature-0 rebuild and are kept only because this project doesn't delete
+paid-for artifacts. Don't mix them with the tarball contents.
 
 ## Existing follow-up conditions
 

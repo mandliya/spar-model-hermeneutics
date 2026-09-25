@@ -140,6 +140,16 @@ answers) are in the same private HF dataset repo as ascii-sandbagging's:
 for the primary run. The follow-up battery has no activation capture yet —
 see Next steps.
 
+The other categories' temperature-0 follow-up-battery activations live in
+that repo as two tarballs — `tarballs/answer_token_activations.tar.gz`
+(4.25 GB, 8,028 files) and `tarballs/predecision_activations.tar.gz`
+(2.94 GB, 5,548 files). Tarballs rather than loose files because HF caps
+commits at 256/hour and 13,576 individual uploads would have needed ~800.
+When mask-factual's battery capture lands, it goes into the same two
+bundles. The loose `.pt` files at that repo's root other than this
+category's `<uid>.pt` primaries are stale pre-temperature-0 leftovers,
+kept only because this project doesn't delete paid-for artifacts.
+
 ## Next steps
 
 1. Add activation capture to the follow-up battery (both the pre-decision

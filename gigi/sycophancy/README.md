@@ -130,14 +130,31 @@ Full twelve-condition tables and charts for both tracks in `RESULTS.md`.
 | `00_export_transcripts_sycophancy.py` | joins both tracks' results back against the original dataset for full transcripts — $0, no API calls |
 
 Activation tensors are in the same private HF dataset repo as
-ascii-sandbagging's: `ggrazianoknapp/gigi-ascii-sandbagging-activations`,
-filenames `<uid>__neutral.pt` / `__pressured.pt` (Track A primary) and
-`<uid>.pt` (Track B primary). Follow-up-battery conditions have two capture
-points each, since there's currently empirical uncertainty about which one
-a DYL-style probe actually expects — both saved rather than guessing:
-`<track>__<uid>__<condition>__answer_token.pt` (DYL-matched, the actual
-answer token) and `<track>__<uid>__<condition>__predecision.pt`
-(pre-decision, the prompt-final token before generation).
+ascii-sandbagging's: `ggrazianoknapp/gigi-ascii-sandbagging-activations`.
+
+**Start with the tarballs** — `tarballs/answer_token_activations.tar.gz`
+(4.25 GB, 8,028 files) and `tarballs/predecision_activations.tar.gz`
+(2.94 GB, 5,548 files). These hold the current temperature-0
+follow-up-battery activations for every category, at both capture points,
+and are the authoritative set:
+
+```python
+from huggingface_hub import hf_hub_download
+p = hf_hub_download("ggrazianoknapp/gigi-ascii-sandbagging-activations",
+                     "tarballs/answer_token_activations.tar.gz",
+                     repo_type="dataset")
+# then: tar xzf <p>
+```
+
+Inside, filenames are `<track>__<uid>__<condition>__answer_token.pt`
+(DYL-matched, the actual answer token) and
+`..__predecision.pt` (the prompt-final token before generation). Both are
+provided because there's currently empirical uncertainty about which one a
+DYL-style probe actually expects — saved rather than guessed.
+
+⚠️ **The loose `.pt` files at the repo root are stale** — they predate the
+temperature-0 rebuild and are kept only because this project doesn't delete
+paid-for artifacts. Don't mix them with the tarball contents.
 
 ## Caveats
 
