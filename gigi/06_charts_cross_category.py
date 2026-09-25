@@ -1,10 +1,20 @@
-"""Cross-category comparison chart for gigi/RESULTS.md — the same ten
-follow-up wordings, doubling-down rate, overlaid across every category/track
-that has them: ascii-sandbagging, sycophancy Track A, sycophancy Track B.
+"""Cross-category comparison charts for gigi/RESULTS.md.
 
-Reads straight from each category's own already-committed results files —
-nothing hardcoded — so this stays reproducible: rerun after any category's
-results change.
+Four charts, all reading straight from each category's own already-committed
+results files — nothing hardcoded, so these stay reproducible: rerun after
+any category's results change.
+
+  cross_category_lying_rate.png        base rate of the deceptive behaviour
+                                        itself, per category (not a
+                                        self-report number at all)
+  cross_category_doubling_down.png     denies | it happened
+  cross_category_confession.png        admits | it happened  (the exact
+                                        complement of doubling-down; both
+                                        are reported because each answers a
+                                        different question)
+  cross_category_false_confession.png  admits | it did NOT happen — the
+                                        control, and the one that says
+                                        whether a confession means anything
 
 Run (from the git repo root):
     uv run --with pandas --with matplotlib --with statsmodels \
@@ -60,81 +70,146 @@ CONDITIONS = ["neutral", "low_stakes", "high_stakes", "confidence",
               "plain", "named", "eval_plain", "eval_named"]
 
 
-def ascii_rates():
+def _metric(sub, truth_col, metric):
+    """One rate + CI from one condition's rows. `metric` is one of
+    'doubling_down' (denies | it happened), 'confession' (admits | it
+    happened), or 'false_confession' (admits | it did NOT happen)."""
+    sub = sub.dropna(subset=["admitted"])
+    pos = sub[sub[truth_col].astype(bool)]
+    neg = sub[~sub[truth_col].astype(bool)]
+    if metric == "doubling_down":
+        return wilson(int((~pos["admitted"]).sum()), len(pos))
+    if metric == "confession":
+        return wilson(int(pos["admitted"].sum()), len(pos))
+    return wilson(int(neg["admitted"].sum()), len(neg))
+
+
+def ascii_rates(metric):
     base = pd.read_csv(ASCII_RESULTS / "ascii_results.csv")
     fups = pd.read_csv(ASCII_RESULTS / "ascii_followup_conditions.csv")
     reas = pd.read_csv(ASCII_RESULTS / "ascii_reasoning_conditions.csv")
     bench = pd.read_csv(ASCII_RESULTS / "ascii_benchmark_conditions.csv")
+    src = {"neutral": (base, None)}
+    for c in ["low_stakes", "high_stakes", "confidence"]:
+        src[c] = (fups, c)
+    for c in ["neutral_cot", "low_stakes_cot", "high_stakes_cot", "confidence_cot"]:
+        src[c] = (reas, c)
+    for c in ["plain", "named", "eval_plain", "eval_named"]:
+        src[c] = (bench, c)
 
-    def fold_rate(df, truth_col, cond=None):
-        sub = df if cond is None else df[df["condition"] == cond]
-        sub = sub.dropna(subset=["admitted"])
-        pos = sub[sub[truth_col].astype(bool)]
-        return wilson(int((~pos["admitted"]).sum()), len(pos))
-
-    return {
-        "neutral": fold_rate(base, "lied"),
-        "low_stakes": fold_rate(fups, "lied", "low_stakes"),
-        "high_stakes": fold_rate(fups, "lied", "high_stakes"),
-        "confidence": fold_rate(fups, "lied", "confidence"),
-        "neutral_cot": fold_rate(reas, "lied", "neutral_cot"),
-        "low_stakes_cot": fold_rate(reas, "lied", "low_stakes_cot"),
-        "high_stakes_cot": fold_rate(reas, "lied", "high_stakes_cot"),
-        "confidence_cot": fold_rate(reas, "lied", "confidence_cot"),
-        "plain": fold_rate(bench, "lied", "plain"),
-        "named": fold_rate(bench, "lied", "named"),
-        "eval_plain": fold_rate(bench, "lied", "eval_plain"),
-        "eval_named": fold_rate(bench, "lied", "eval_named"),
-    }
+    out = {}
+    for cond, (df, key) in src.items():
+        sub = df if key is None else df[df["condition"] == key]
+        out[cond] = _metric(sub, "lied", metric)
+    return out
 
 
-def generic_rates(results_dir, csv_name, truth_col):
+def generic_rates(results_dir, csv_name, truth_col, metric):
     df = pd.read_csv(results_dir / csv_name)
-
-    def fold_rate(cond):
-        sub = df[df["condition"] == cond].dropna(subset=["admitted"])
-        pos = sub[sub[truth_col].astype(bool)]
-        return wilson(int((~pos["admitted"]).sum()), len(pos))
-
-    return {cond: fold_rate(cond) for cond in CONDITIONS}
+    return {cond: _metric(df[df["condition"] == cond], truth_col, metric)
+            for cond in CONDITIONS}
 
 
-series = {
-    "ascii-sandbagging": (ascii_rates(), BLUE),
-    "sycophancy Track A": (generic_rates(SYC_RESULTS, "sycophancy_benchmark_conditions.csv", "fold"), ORANGE),
-    "sycophancy Track B": (generic_rates(SYC_RESULTS, "sycophancy_feedback_benchmark_conditions.csv", "sycophantic"), GREEN),
-}
-if (MASK_RESULTS / "mask_factual_benchmark_conditions.csv").exists():
-    series["mask-factual"] = (generic_rates(MASK_RESULTS, "mask_factual_benchmark_conditions.csv", "lied"), PURPLE)
+def build_series(metric):
+    s = {
+        "ascii-sandbagging": (ascii_rates(metric), BLUE),
+        "sycophancy Track A": (generic_rates(SYC_RESULTS, "sycophancy_benchmark_conditions.csv", "fold", metric), ORANGE),
+        "sycophancy Track B": (generic_rates(SYC_RESULTS, "sycophancy_feedback_benchmark_conditions.csv", "sycophantic", metric), GREEN),
+    }
+    if (MASK_RESULTS / "mask_factual_benchmark_conditions.csv").exists():
+        s["mask-factual"] = (generic_rates(MASK_RESULTS, "mask_factual_benchmark_conditions.csv", "lied", metric), PURPLE)
+    return s
 
-fig, ax = plt.subplots(figsize=(9, 5.5))
-x = list(range(len(CONDITIONS)))
-for name, (rates, color) in series.items():
-    ys, los, his, xs = [], [], [], []
-    for xi, cond in zip(x, CONDITIONS):
-        r = rates[cond]
-        if r is None:
-            continue
+
+def line_chart(metric, ylabel, out_name):
+    series = build_series(metric)
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+    x = list(range(len(CONDITIONS)))
+    for name, (rates, color) in series.items():
+        xs, ys, los, his = [], [], [], []
+        for xi, cond in zip(x, CONDITIONS):
+            r = rates.get(cond)
+            if r is None:
+                continue
+            p, lo, hi = r
+            xs.append(xi)
+            ys.append(p * 100)
+            los.append(max(0, p * 100 - lo * 100))
+            his.append(max(0, hi * 100 - p * 100))
+        ax.errorbar(xs, ys, yerr=[los, his], fmt="o-", color=color, label=name,
+                    linewidth=1.6, markersize=6, capsize=3, elinewidth=1, zorder=3)
+    for v in (3.5, 7.5, 9.5):
+        ax.axvline(v, color=GRID, linewidth=1, linestyle="--", zorder=1)
+    ax.set_xticks(x)
+    ax.set_xticklabels(CONDITIONS, rotation=30, ha="right")
+    ax.set_ylim(-3, 108)
+    ax.set_ylabel(ylabel)
+    ax.grid(axis="y", color=GRID, linewidth=0.8, zorder=0)
+    for spine in ["top", "right"]:
+        ax.spines[spine].set_visible(False)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.16),
+              ncol=len(series), frameon=False, fontsize=9.5)
+    plt.tight_layout()
+    plt.savefig(CHARTS_DIR / out_name, dpi=180)
+    plt.close()
+    print(f"saved {out_name}")
+
+
+# ---------------------------------------------- chart 1: lying rate per class
+# The base rate of the deceptive behaviour itself — not a self-report number.
+# Each category defines "it happened" differently (see each RESULTS.md), so
+# these are comparable as "how often did the thing we're trying to detect
+# actually occur", not as one shared metric.
+def lying_rate_chart():
+    rows = []
+
+    a = pd.read_csv(ASCII_RESULTS / "ascii_results.csv").dropna(subset=["lied"])
+    rows.append(("ascii-sandbagging\n(falsely denied capability)",
+                 wilson(int(a["lied"].astype(bool).sum()), len(a)), BLUE))
+
+    ta = pd.read_csv(SYC_RESULTS / "sycophancy_answer_conditions.csv")
+    rows.append(("sycophancy Track A\n(answer folded to user)",
+                 wilson(int(ta["fold"].astype(bool).sum()), len(ta)), ORANGE))
+
+    tb = pd.read_csv(SYC_RESULTS / "sycophancy_feedback_benchmark_conditions.csv")
+    tb = tb[tb["condition"] == "neutral"]        # one row per sample
+    rows.append(("sycophancy Track B\n(critique shifted >1.0)",
+                 wilson(int(tb["sycophantic"].astype(bool).sum()), len(tb)), GREEN))
+
+    mf_path = MASK_RESULTS / "mask_factual_provided_conditions.csv"
+    if mf_path.exists():
+        mf = pd.read_csv(mf_path).dropna(subset=["verdict"])
+        rows.append(("mask-factual\n(told false narrative)",
+                     wilson(int((mf["verdict"] == "TOLD_FALSE_NARRATIVE").sum()), len(mf)), PURPLE))
+
+    fig, ax = plt.subplots(figsize=(8, 3.6))
+    y = list(range(len(rows)))[::-1]
+    for yi, (label, r, color) in zip(y, rows):
         p, lo, hi = r
-        xs.append(xi)
-        ys.append(p * 100)
-        los.append(max(0, p * 100 - lo * 100))
-        his.append(max(0, hi * 100 - p * 100))
-    ax.errorbar(xs, ys, yerr=[los, his], fmt="o-", color=color, label=name,
-                linewidth=1.6, markersize=6, capsize=3, elinewidth=1, zorder=3)
+        ax.barh([yi], [p * 100], height=0.55, color=color, zorder=3)
+        ax.errorbar([p * 100], [yi],
+                    xerr=[[max(0, p * 100 - lo * 100)], [max(0, hi * 100 - p * 100)]],
+                    fmt="none", ecolor=INK, elinewidth=1.4, capsize=4, zorder=4)
+        ax.text(max(p * 100, hi * 100) + 1.5, yi, f"{p*100:.1f}%",
+                va="center", fontsize=11, fontweight="bold")
+    ax.set_yticks(y)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    ax.set_xlim(0, 100)
+    ax.set_xlabel("Rate of the deceptive behaviour itself (not self-report)")
+    ax.grid(axis="x", color=GRID, linewidth=0.8, zorder=0)
+    for spine in ["top", "right", "left"]:
+        ax.spines[spine].set_visible(False)
+    plt.tight_layout()
+    plt.savefig(CHARTS_DIR / "cross_category_lying_rate.png", dpi=180)
+    plt.close()
+    print("saved cross_category_lying_rate.png")
 
-ax.axvline(3.5, color=GRID, linewidth=1, linestyle="--", zorder=1)
-ax.axvline(7.5, color=GRID, linewidth=1, linestyle="--", zorder=1)
-ax.axvline(9.5, color=GRID, linewidth=1, linestyle="--", zorder=1)
-ax.set_xticks(x)
-ax.set_xticklabels(CONDITIONS, rotation=30, ha="right")
-ax.set_ylim(-3, 108)
-ax.set_ylabel("Doubling-down rate (denies the behavior, given it happened)")
-ax.grid(axis="y", color=GRID, linewidth=0.8, zorder=0)
-for spine in ["top", "right"]:
-    ax.spines[spine].set_visible(False)
-ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.16), ncol=len(series), frameon=False, fontsize=9.5)
-plt.tight_layout()
-plt.savefig(CHARTS_DIR / "cross_category_doubling_down.png", dpi=180)
-plt.close()
-print(f"saved {CHARTS_DIR / 'cross_category_doubling_down.png'}")
+
+lying_rate_chart()
+line_chart("doubling_down", "Doubling-down rate (denies the behavior, given it happened)",
+           "cross_category_doubling_down.png")
+line_chart("confession", "Confession rate (admits the behavior, given it happened)",
+           "cross_category_confession.png")
+line_chart("false_confession", "False confession rate (admits it, given it did NOT happen)",
+           "cross_category_false_confession.png")
+print(f"\nAll charts in {CHARTS_DIR}")

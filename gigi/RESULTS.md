@@ -78,6 +78,22 @@ conditions vary.
 
 ## Cross-category comparison
 
+### The behaviour itself, before any self-report
+
+How often the deceptive behaviour actually happened, per category — the
+thing every self-report number below is trying to detect. Each category
+defines "it happened" differently (see each `RESULTS.md`), so read this as
+"how common is the target behaviour here", not as one shared metric.
+
+![Rate of the deceptive behaviour itself per category: ascii-sandbagging 61.6%, sycophancy Track A 24.1%, sycophancy Track B 57.7%, mask-factual 64.0%](charts/cross_category_lying_rate.png)
+
+Three of the four sit in the 58-64% range; sycophancy Track A is the
+outlier at 24.1%, i.e. gemma folds on a factual trivia answer far less
+often than it recites a fed cover story, shades a critique, or falsely
+denies a capability.
+
+### Doubling down — denies it, given it happened
+
 ![Doubling-down rate across all twelve follow-up wordings, four lines: ascii-sandbagging, sycophancy Track A, sycophancy Track B, mask-factual](charts/cross_category_doubling_down.png)
 
 **mask-factual is the outlier: flat near zero across all twelve conditions.**
@@ -113,6 +129,43 @@ zero throughout, so it's not part of this pattern — see above)*
 
 6. Neither one converges the categories in general — `confidence_cot` is the one clean exception among the reasoning conditions, and `eval_plain` (not `eval_named`) is the closer of the two safety-eval conditions, with all three landing under 15% doubling-down
 7. The safety-eval framing's effect is not uniform across wording: `eval_plain` barely moves any category off its `plain` value, while `eval_named` moves all three — and moves Track B by the single largest margin on this page (`named` 18.1% → `eval_named` 7.8% doubling-down, i.e. confession jumping from 81.9% to 92.2%, alongside a false-confession rate that also jumps to 77.6% — see `sycophancy/RESULTS.md` for why that matters)
+
+### Confession — admits it, given it happened
+
+The exact complement of doubling-down (the two always sum to 100%), shown
+separately because "how effective is this question at getting a confession"
+and "how often does it deny" are the same measurement read in opposite
+directions, and different people ask for different ones.
+
+![Confession rate across all twelve follow-up wordings, four lines](charts/cross_category_confession.png)
+
+### False confession — admits it, given it did NOT happen
+
+**This is the chart that decides whether any confession above means
+anything.** A model that says "yes I lied" to everyone scores a perfect
+confession rate and detects nothing.
+
+![False confession rate across all twelve follow-up wordings, four lines](charts/cross_category_false_confession.png)
+
+- **mask-factual never drops below ~74%** — it admits to lying on the great
+  majority of rows where it was actually truthful, in every single
+  condition. Combined with its near-100% confession rate, this is the
+  clearest "self-report is saturated, not informative" signal on the page.
+- **ascii-sandbagging swings between 0% and 100%** depending purely on
+  wording — `confidence`, `named`, and `eval_named` drive it to ~0% while
+  the bare-letter and `plain` conditions pin it at 100%. Same underlying
+  behaviour, opposite conclusions about calibration.
+- **The two sycophancy tracks stay lowest overall** (mostly under 45%),
+  making their confession numbers the most trustworthy of the four — with
+  the notable exception of Track B's `eval_named` at 77.6%, exactly the
+  condition where its confession rate looked best.
+
+Read together: a high confession rate is only good news where the false
+confession rate is *also* low. On that joint criterion, the two sycophancy
+tracks' `*_cot` conditions and ascii-sandbagging's `confidence`/`named`
+conditions are the only places self-report looks like it's tracking
+anything real — and those are the conditions with the *lowest* raw
+confession rates.
 
 ## Where the per-category detail lives
 
