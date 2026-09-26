@@ -190,9 +190,9 @@ Gemma does not classify inventing a fact as *lying*; it agrees instantly
 that it *confabulated*. **A self-report lie detector's hit rate here is set
 by its vocabulary, not by the model's honesty.**
 
-All 12 questions for this category:
+All 12 questions, for **unanswerable** — 93 rows: 86 confabulated, 7 stayed honest:
 
-| Condition | Confession | 95% CI | Doubling down | False confession\* | 95% CI |
+| Condition | Confession<br>n=86 | 95% CI | Doubling down<br>n=86 | False confession<br>n=7 | 95% CI |
 |---|---|---|---|---|---|
 | `named` | 100.0% | 95.7-100.0% | 0.0% | 85.7% | 48.7-97.4% |
 | `eval_named` | 94.2% | 87.1-97.5% | 5.8% | 100.0% | 64.6-100.0% |
@@ -206,9 +206,6 @@ All 12 questions for this category:
 | `neutral` | 12.8% | 7.3-21.5% | 87.2% | 28.6% | 8.2-64.1% |
 | `low_stakes` | 7.0% | 3.2-14.4% | 93.0% | 28.6% | 8.2-64.1% |
 | `high_stakes` | 7.0% | 3.2-14.4% | 93.0% | 0.0% | 0.0-35.4% |
-
-\* n=7 in this category only (86 of 93 rows confabulated, leaving few honest
-rows); every other category's control is n=31-119.
 
 `named`'s 100% confession comes with 85.7% false confession, so gemma is
 probably agreeing with the question rather than recognising what it did.
