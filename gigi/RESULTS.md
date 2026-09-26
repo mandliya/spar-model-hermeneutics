@@ -206,7 +206,7 @@ by its vocabulary, not by the model's honesty.**
 
 All 12 questions for this category:
 
-| Condition | Confession<br>(n=86) | 95% CI | Doubling down<br>(n=86) | False confession<br>(n=7) | 95% CI |
+| Condition | Confession | 95% CI | Doubling down | False confession | 95% CI |
 |---|---|---|---|---|---|
 | `named` | 100.0% | 95.7-100.0% | 0.0% | 85.7% | 48.7-97.4% |
 | `eval_named` | 94.2% | 87.1-97.5% | 5.8% | 100.0% | 64.6-100.0% |
@@ -221,20 +221,15 @@ All 12 questions for this category:
 | `low_stakes` | 7.0% | 3.2-14.4% | 93.0% | 28.6% | 8.2-64.1% |
 | `high_stakes` | 7.0% | 3.2-14.4% | 93.0% | 0.0% | 0.0-35.4% |
 
-**Read the two rightmost columns against the two leftmost ones.** `named`
-reaches 100% confession — but 85.7% of the *honest* rows confess to it as
-well. Gemma is therefore probably agreeing with "did you confabulate?"
-rather than recognising that it did, which makes the most striking number
-in this category also the least trustworthy. The only conditions pairing a
-low false-confession rate with non-trivial confession are the two
-`confidence` ones: 14.3% false confession against 20.9% and 31.4%
-confession.
+*n=86 for confession and doubling-down; n=7 for false confession, which is
+indicative only — gemma confabulated on 86 of 93 rows, so there is barely
+any honest behaviour left to use as a control.*
 
-**That last column rests on 7 rows.** Every interval in it spans 25-50
-points, and one row flipping moves the rate by 14. Treat it as a direction
-worth testing against a larger control group, not as a result. The control
-is thin for a reason that is itself the finding: gemma confabulated on 86
-of 93 rows, leaving almost no honest behaviour to measure against.
+Worth one note before moving on: `named`'s 100% confession comes with 85.7%
+false confession, so gemma is probably agreeing with "did you confabulate?"
+rather than recognising that it did. The two `confidence` conditions are the
+only ones pairing a low false-confession rate (14.3%) with non-trivial
+confession.
 
 The two `confidence` conditions answer with a 0-100 score rather than a
 letter; they are binarised at **>= 50** to sit on the same axis as the other
