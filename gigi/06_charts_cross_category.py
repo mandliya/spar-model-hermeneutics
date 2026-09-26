@@ -191,7 +191,7 @@ def build_series(metric):
 
 def line_chart(metric, ylabel, out_name):
     series = build_series(metric)
-    fig, ax = plt.subplots(figsize=(9, 5.5))
+    fig, ax = plt.subplots(figsize=(10, 6.2))
     x = list(range(len(CONDITIONS)))
     for name, (rates, color) in series.items():
         xs, ys, los, his = [], [], [], []
@@ -215,8 +215,11 @@ def line_chart(metric, ylabel, out_name):
     ax.grid(axis="y", color=GRID, linewidth=0.8, zorder=0)
     for spine in ["top", "right"]:
         ax.spines[spine].set_visible(False)
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.16),
-              ncol=len(series), frameon=False, fontsize=9.5)
+    # Two rows once there are more than four series - six in a single row
+    # runs off both edges of the figure.
+    ncol = len(series) if len(series) <= 4 else 3
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.20),
+              ncol=ncol, frameon=False, fontsize=9.5)
     plt.tight_layout()
     plt.savefig(CHARTS_DIR / out_name, dpi=180)
     plt.close()
