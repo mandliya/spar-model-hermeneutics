@@ -132,7 +132,7 @@ Full twelve-condition tables and charts for both tracks in `RESULTS.md`.
 | `00_export_transcripts_sycophancy.py` | joins both tracks' results back against the original dataset for full transcripts — $0, no API calls |
 
 Activation tensors are in the same private HF dataset repo as
-ascii-sandbagging's: `ggrazianoknapp/gigi-ascii-sandbagging-activations`.
+ascii-sandbagging's: `model-hermeneutics/gigi-lie-detection-activations`.
 
 **Start with the tarballs** — `tarballs/answer_token_activations.tar.gz`
 (4.25 GB, 8,028 files) and `tarballs/predecision_activations.tar.gz`
@@ -142,7 +142,7 @@ and are the authoritative set:
 
 ```python
 from huggingface_hub import hf_hub_download
-p = hf_hub_download("ggrazianoknapp/gigi-ascii-sandbagging-activations",
+p = hf_hub_download("model-hermeneutics/gigi-lie-detection-activations",
                      "tarballs/answer_token_activations.tar.gz",
                      repo_type="dataset")
 # then: tar xzf <p>

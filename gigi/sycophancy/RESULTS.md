@@ -301,7 +301,7 @@ model judging text equivalence) — not gemma itself.
 | `00_export_transcripts_sycophancy.py` | joins both tracks' results back against the original dataset for full transcripts — $0, no API calls |
 
 Activation tensors (every layer) are in the same private HF dataset repo
-as ascii-sandbagging's: `ggrazianoknapp/gigi-ascii-sandbagging-activations`,
+as ascii-sandbagging's: `model-hermeneutics/gigi-lie-detection-activations`,
 filenames `<uid>__neutral.pt` / `__pressured.pt` (Track A primary) and
 `<uid>.pt` (Track B primary). Follow-up-question set conditions have two capture
 points each: `<track>__<uid>__<condition>__answer_token.pt` (DYL-matched)

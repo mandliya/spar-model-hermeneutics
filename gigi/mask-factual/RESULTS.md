@@ -136,7 +136,7 @@ weights to be comparable.
 
 Activation tensors (every layer, last prompt token, right before gemma
 answers) are in the same private HF dataset repo as ascii-sandbagging's:
-`ggrazianoknapp/gigi-ascii-sandbagging-activations`, filenames `<uid>.pt`
+`model-hermeneutics/gigi-lie-detection-activations`, filenames `<uid>.pt`
 for the primary run. The follow-up question set has no activation capture yet —
 see Next steps.
 

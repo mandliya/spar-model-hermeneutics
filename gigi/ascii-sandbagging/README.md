@@ -81,14 +81,14 @@ would bloat every collaborator's clone. They're versioned separately instead,
 as a private HF dataset:
 
 ```
-https://huggingface.co/datasets/ggrazianoknapp/gigi-ascii-sandbagging-activations
+https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations
 ```
 
 Download what you need with `huggingface_hub`, e.g.:
 
 ```python
 from huggingface_hub import hf_hub_download
-hf_hub_download("ggrazianoknapp/gigi-ascii-sandbagging-activations",
+hf_hub_download("model-hermeneutics/gigi-lie-detection-activations",
                  "conv_20250718_ascii_mc_medical_5.pt", repo_type="dataset")
 ```
 
@@ -104,7 +104,7 @@ category at both capture points, and are the authoritative version:
 
 ```python
 from huggingface_hub import hf_hub_download
-p = hf_hub_download("ggrazianoknapp/gigi-ascii-sandbagging-activations",
+p = hf_hub_download("model-hermeneutics/gigi-lie-detection-activations",
                      "tarballs/answer_token_activations.tar.gz",
                      repo_type="dataset")
 # then: tar xzf <p>

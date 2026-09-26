@@ -11,20 +11,17 @@ Kept in git so they survive a lost session. Delete a line when it's done.
       `bash upload_activations.sh capture_secret 'conv_*__capture__*'`
       (adjust the glob to match the actual filenames).
 
-## HF repo move — do in this order
+## HF repo
 
-- [ ] 1. Finish uploading every category's activations as tarballs.
-- [ ] 2. Rename `ggrazianoknapp/gigi-ascii-sandbagging-activations` ->
-      `gigi-lie-detection-activations` (the ascii name is a historical
-      accident; the repo holds every category).
-- [ ] 3. Transfer owner to the **`model-hermeneutics`** org — this is the
-      shared team repo and where it belongs.
-      Both are server-side operations: seconds, no re-upload of the ~9 GB.
-      `HfApi().move_repo(from_id, to_id, repo_type="dataset")`
-- [ ] 4. Fix the repo URL in every doc that references it, in one commit:
-      `gigi/RESULTS.md`, `ascii-sandbagging/README.md`,
-      `sycophancy/README.md`, `mask-factual/README.md` and `RESULTS.md`,
-      `unanswerable/README.md`.
+DONE — the repo now lives at **`model-hermeneutics/gigi-lie-detection-activations`**
+(renamed and transferred to the org). The old
+`ggrazianoknapp/gigi-ascii-sandbagging-activations` still resolves as a
+redirect, which is why uploads addressed to it kept working; all docs now
+name the canonical id.
+
+- [x] Rename + transfer to the org
+- [x] Point every doc at the canonical id
+- [ ] Upload capture-the-secret's activations once its run finishes
 
 ## capture-the-secret, in flight
 

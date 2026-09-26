@@ -183,7 +183,7 @@ rather than the self-contained ground truth `mask_provided_facts` has.
 
 Activation tensors (every layer, one snapshot per condition) aren't in
 this repo — too many `.pt` files would bloat every clone. Versioned
-separately: `https://huggingface.co/datasets/ggrazianoknapp/gigi-ascii-sandbagging-activations`.
+separately: `https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations`.
 Two capture points exist per follow-up condition — the pre-decision
 prompt token (`<uid>__<condition>.pt` or `<uid>.pt`'s `doubled_down_state`)
 and the DYL-matched answer token (`<uid>__<condition>__answer_token.pt`,
