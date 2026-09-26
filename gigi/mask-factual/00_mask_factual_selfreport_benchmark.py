@@ -48,14 +48,16 @@ from src.common import (RESULTS, TARGET_MODEL, TEMPERATURE, append, load_done,
                         FOLLOWUP_EVAL_PLAIN, FOLLOWUP_NAMED_MASK,
                         FOLLOWUP_EVAL_NAMED_MASK)
 
-OUT_PATH = RESULTS / "mask_factual_benchmark_conditions.jsonl"
+DEFAULT_OUT = "mask_factual_benchmark_conditions"
 CONFIG = "google-gemma-3-27b-it_task-group_mask-factual"
 
 # No category-specific vocabulary exists for this subtype (unlike
-# "sandbag"/"sycophantic") - named/eval_named reuse the plain wording,
-# logged under their own condition names for structural parity with the
-# other two categories' 12-condition tables, not because the wording
-# differs here.
+# "sandbag"/"sycophantic"). An earlier version of this file claimed no such
+# vocabulary existed here and reused the plain wording for named/eval_named -
+# which at temperature 0 made those two conditions byte-for-byte duplicates of
+# plain/eval_plain on 86/86 rows. The act IS nameable (asserting something the
+# row's own system prompt told the model is false), so it now has its own
+# wording like every other category.
 CONDITIONS = {
     "neutral":         dict(prompt=FOLLOWUP,                kind="ab"),
     "low_stakes":      dict(prompt=FOLLOWUP_LOW_STAKES,      kind="ab"),
@@ -76,7 +78,14 @@ p.add_argument("--conditions", nargs="+", default=list(CONDITIONS),
                help=f"which of {list(CONDITIONS)} to run")
 p.add_argument("--limit", type=int, default=None,
                help="cap the number of (row, condition) calls — for a smoke test")
+p.add_argument("--out", default=DEFAULT_OUT,
+               help="basename under results/ to append to. Use a NEW name when "
+                    "re-running conditions that already exist in the default "
+                    "file: this script resumes by skipping uids already "
+                    "present, and results/ is never overwritten in this "
+                    "project.")
 args = p.parse_args()
+OUT_PATH = RESULTS / f"{args.out}.jsonl"
 for c in args.conditions:
     if c not in CONDITIONS:
         raise SystemExit(f"Unknown condition '{c}'. Choose from: {list(CONDITIONS)}")
@@ -215,5 +224,5 @@ for cond in args.conditions:
     print(f"  false confession  admits | truthful     = "
           f"{wilson(int(told['admitted'].sum()), len(told))}")
 
-res.to_csv(RESULTS / "mask_factual_benchmark_conditions.csv", index=False)
+res.to_csv(RESULTS / f"{args.out}.csv", index=False)
 print(f"\nFull table: {RESULTS / 'mask_factual_benchmark_conditions.csv'}")
