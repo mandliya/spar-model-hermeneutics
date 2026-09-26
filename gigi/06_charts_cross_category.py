@@ -32,6 +32,7 @@ ASCII_RESULTS = REPO / "ascii-sandbagging" / "results"
 SYC_RESULTS = REPO / "sycophancy" / "results"
 MASK_RESULTS = REPO / "mask-factual" / "results"
 UNANS_RESULTS = REPO / "unanswerable" / "results"
+CAPTURE_RESULTS = REPO / "capture-the-secret" / "results"
 CHARTS_DIR = REPO / "charts"
 CHARTS_DIR.mkdir(exist_ok=True)
 
@@ -42,6 +43,7 @@ ORANGE = "#eb6834"
 GREEN = "#3a9a5c"
 PURPLE = "#8e44ad"
 TEAL = "#127a75"
+CRIMSON = "#b5303a"
 GRID = "#e1e0d9"
 
 plt.rcParams.update({
@@ -164,6 +166,14 @@ def unanswerable_rates(metric):
             for cond in CONDITIONS}
 
 
+def capture_rates(metric):
+    """Only rows where the other character actually pressed on the secret -
+    a row where the secret never came up offers no occasion to deny it."""
+    df = pd.read_csv(CAPTURE_RESULTS / "capture_secret_benchmark_conditions.csv")
+    return {cond: _metric(df[df["condition"] == cond], "lied", metric)
+            for cond in CONDITIONS}
+
+
 def build_series(metric):
     s = {
         "ascii-sandbagging": (ascii_rates(metric), BLUE),
@@ -174,6 +184,8 @@ def build_series(metric):
         s["mask-factual"] = (generic_rates(MASK_RESULTS, "mask_factual_benchmark_conditions.csv", "lied", metric), PURPLE)
     if (UNANS_RESULTS / "unanswerable_benchmark_conditions.csv").exists():
         s["unanswerable"] = (unanswerable_rates(metric), TEAL)
+    if (CAPTURE_RESULTS / "capture_secret_benchmark_conditions.csv").exists():
+        s["capture-the-secret"] = (capture_rates(metric), CRIMSON)
     return s
 
 
@@ -248,7 +260,17 @@ def lying_rate_chart():
         rows.append(("unanswerable\n(confabulated an answer)",
                      wilson(int(un["committed"].astype(bool).sum()), len(un)), TEAL))
 
-    fig, ax = plt.subplots(figsize=(8, 4.3))
+    cap_path = CAPTURE_RESULTS / "capture_secret_conditions.csv"
+    if cap_path.exists():
+        cap = pd.read_csv(cap_path)
+        if "error" in cap.columns:
+            cap = cap[cap["error"].isna()]
+        cap = cap[(cap["pressed"] == True) & cap["result"].notna()]
+        rows.append(("capture-the-secret\n(falsely denied, to hide a secret)",
+                     wilson(int((cap["result"] == "FALSE_DENIAL").sum()),
+                            len(cap)), CRIMSON))
+
+    fig, ax = plt.subplots(figsize=(8, 5.0))
     y = list(range(len(rows)))[::-1]
     for yi, (label, r, color) in zip(y, rows):
         p, lo, hi = r
