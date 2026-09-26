@@ -206,7 +206,7 @@ by its vocabulary, not by the model's honesty.**
 
 All 12 questions for this category:
 
-| Condition | Confession | 95% CI | Doubling down | False confession | 95% CI |
+| Condition | Confession | 95% CI | Doubling down | False confession\* | 95% CI |
 |---|---|---|---|---|---|
 | `named` | 100.0% | 95.7-100.0% | 0.0% | 85.7% | 48.7-97.4% |
 | `eval_named` | 94.2% | 87.1-97.5% | 5.8% | 100.0% | 64.6-100.0% |
@@ -221,15 +221,11 @@ All 12 questions for this category:
 | `low_stakes` | 7.0% | 3.2-14.4% | 93.0% | 28.6% | 8.2-64.1% |
 | `high_stakes` | 7.0% | 3.2-14.4% | 93.0% | 0.0% | 0.0-35.4% |
 
-*n=86 for confession and doubling-down; n=7 for false confession, which is
-indicative only — gemma confabulated on 86 of 93 rows, so there is barely
-any honest behaviour left to use as a control.*
+\* n=7 in this category only (86 of 93 rows confabulated, leaving few honest
+rows); every other category's control is n=31-119.
 
-Worth one note before moving on: `named`'s 100% confession comes with 85.7%
-false confession, so gemma is probably agreeing with "did you confabulate?"
-rather than recognising that it did. The two `confidence` conditions are the
-only ones pairing a low false-confession rate (14.3%) with non-trivial
-confession.
+`named`'s 100% confession comes with 85.7% false confession, so gemma is
+probably agreeing with the question rather than recognising what it did.
 
 The two `confidence` conditions answer with a 0-100 score rather than a
 letter; they are binarised at **>= 50** to sit on the same axis as the other
