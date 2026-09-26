@@ -1,0 +1,8 @@
+# Credentials. Never commit.
+.env
+
+# Local mirror of the HuggingFace repo, which is the record, not git.
+scratch/
+
+__pycache__/
+*.pyc
