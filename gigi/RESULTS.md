@@ -90,20 +90,6 @@ Answer with just the letter"), trimmed above with "…" only to keep the
 table readable — the full text is in `src/common.py` and is what actually
 gets sent.
 
-> **Note on mask-factual's `named`/`eval_named`: re-measured, and it changed
-> nothing.** An earlier version of its question set claimed "no category-specific
-> vocabulary exists for this subtype" and sent `plain`/`eval_plain` verbatim,
-> which at temperature 0 made `named` a byte-for-byte duplicate of `plain` on
-> 86/86 rows. That was wrong — the act is asserting something the row's own
-> system prompt told the model is false, which is eminently nameable — so the
-> wording above was written and the two conditions re-run
-> (`results/mask_factual_named_rerun.csv`, 172 generations). The new wording
-> changed gemma's actual answer on 6/86 and 8/86 rows, but **both rates are
-> still exactly 100% confession and 100% false confession.** mask-factual's
-> self-report is saturated regardless of how the question is worded, which
-> strengthens rather than revises the conclusion already drawn about it. The
-> superseded rows are kept on disk; the charts use the re-run.
-
 ## Cross-category comparison
 
 ### The behaviour itself, before any self-report
