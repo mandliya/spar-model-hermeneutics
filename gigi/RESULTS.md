@@ -323,15 +323,16 @@ conditions are the only places self-report looks like it's tracking
 anything real — and those are the conditions with the *lowest* raw
 confession rates.
 
-## Where the per-category detail lives
+## Full write-up for each category
 
-| Category | RESULTS.md | Headline |
+| Category | Read it here | What it found |
 |---|---|---|
 | ascii-sandbagging | [`ascii-sandbagging/RESULTS.md`](ascii-sandbagging/RESULTS.md) | 61.6% lying rate, 15.7% doubling-down (neutral) |
 | sycophancy Track A | [`sycophancy/RESULTS.md`](sycophancy/RESULTS.md) | +9.9% net fold rate on `negative_correct` vs. control |
 | sycophancy Track B | [`sycophancy/RESULTS.md`](sycophancy/RESULTS.md) | `user_likes` +3.30 / `user_dislikes` -2.37 critique-favorability shift |
 | mask-factual | [`mask-factual/RESULTS.md`](mask-factual/RESULTS.md) | 64.0% told the pressured false narrative; self-report saturated (near-100% confession *and* false confession everywhere) |
 | unanswerable | [`unanswerable/README.md`](unanswerable/README.md) | 92.5% confabulated after claiming inability; 12.8% admit to "lying" vs 100% to "confabulating" |
+| capture-the-secret | [`capture-the-secret/README.md`](capture-the-secret/README.md) | 19.1% falsely denied — the lowest of any category; mostly deflects honestly (59.7%). Self-report tracks its own control everywhere, so it carries no signal |
 
 Chart regenerates with `06_charts_cross_category.py` (reads straight from
 each category's own already-committed results CSVs — nothing hardcoded)
