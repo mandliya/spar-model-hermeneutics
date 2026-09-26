@@ -48,7 +48,7 @@ def wilson(k, n, z=1.96):
 
 CONDITIONS = ["neutral", "low_stakes", "high_stakes", "confidence",
               "neutral_cot", "low_stakes_cot", "high_stakes_cot", "confidence_cot",
-              "plain", "named"]
+              "plain", "named", "eval_plain", "eval_named"]
 
 
 def make_chart(csv_path, truth_col, title, out_name):
@@ -61,17 +61,21 @@ def make_chart(csv_path, truth_col, title, out_name):
         n = len(pos)
         rows.append((cond, *wilson(k, n)))
 
-    fig, ax = plt.subplots(figsize=(7.5, 5.2))
+    fig, ax = plt.subplots(figsize=(7.5, 6.2))
     y = list(range(len(rows)))[::-1]
     for yi, (label, p, lo, hi) in zip(y, rows):
-        if label in ("plain", "named"):
+        if label in ("plain", "named", "eval_plain", "eval_named"):
             color = GREEN
         elif "cot" in label:
             color = ORANGE
         else:
             color = BLUE
         ax.barh([yi], [p * 100], height=0.55, color=color, zorder=3)
-        ax.errorbar([p * 100], [yi], xerr=[[p * 100 - lo * 100], [hi * 100 - p * 100]],
+        # max(0, ...) guards against floating-point epsilon going negative
+        # right at the 0%/100% boundary - real at temp=0, where several
+        # conditions land on an exact, fully deterministic 0% or 100%.
+        ax.errorbar([p * 100], [yi], xerr=[[max(0, p * 100 - lo * 100)],
+                                            [max(0, hi * 100 - p * 100)]],
                     fmt="none", ecolor=INK, elinewidth=1.2, capsize=3, zorder=4)
         label_x = max(p * 100, hi * 100) + 1.5
         ax.text(label_x, yi, f"{p*100:.1f}%", va="center", fontsize=9.5, fontweight="bold")

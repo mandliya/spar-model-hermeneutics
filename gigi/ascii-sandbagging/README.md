@@ -81,14 +81,14 @@ would bloat every collaborator's clone. They're versioned separately instead,
 as a private HF dataset:
 
 ```
-https://huggingface.co/datasets/ggrazianoknapp/gigi-ascii-sandbagging-activations
+https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations
 ```
 
 Download what you need with `huggingface_hub`, e.g.:
 
 ```python
 from huggingface_hub import hf_hub_download
-hf_hub_download("ggrazianoknapp/gigi-ascii-sandbagging-activations",
+hf_hub_download("model-hermeneutics/gigi-lie-detection-activations",
                  "conv_20250718_ascii_mc_medical_5.pt", repo_type="dataset")
 ```
 
@@ -96,15 +96,31 @@ or `snapshot_download(..., repo_type="dataset")` for the whole set.
 `results/ascii_results.csv`'s `activations_file` column gives the per-row
 filename. Ask for repo access if you don't have it yet — it's private.
 
-`<uid>__<condition>__answer_token.pt` files are a second, DYL-matched
-capture for the follow-up-question conditions only (see
-`results/dyl_answer_token_ascii.jsonl` for the uid::condition -> filename
-map) — the hidden state at the actual answer token, not the pre-decision
-prompt token every other `.pt` file here uses. Use these, not the older
-per-condition files, for anything reproducing "Did you lie?" Evaluating
-Lie Detectors across Model Scale and Belief-Verified Model Organisms
-(Cooney, Africa, Irving) — the older files are kept, not deleted, since
-they may still be useful for other activation-probing approaches.
+**For the follow-up-question activations, start with the tarballs** —
+`tarballs/answer_token_activations.tar.gz` (4.25 GB, 8,028 files) and
+`tarballs/predecision_activations.tar.gz` (2.94 GB, 5,548 files) in the
+same HF repo. These are the current temperature-0 set, covering every
+category at both capture points, and are the authoritative version:
+
+```python
+from huggingface_hub import hf_hub_download
+p = hf_hub_download("model-hermeneutics/gigi-lie-detection-activations",
+                     "tarballs/answer_token_activations.tar.gz",
+                     repo_type="dataset")
+# then: tar xzf <p>
+```
+
+Inside: `<uid>__<condition>__answer_token.pt` is the DYL-matched capture
+(hidden state at the actual answer token) and `..__predecision.pt` is the
+prompt-final token before generation. Both exist because there's currently
+empirical uncertainty about which one a DYL-style probe expects — saved
+rather than guessed. The uid::condition → filename maps are in
+`results/dyl_answer_token_ascii.jsonl` and
+`results/predecision_ascii_benchmark.jsonl`.
+
+⚠️ **The loose `.pt` files at the repo root are stale** — they predate the
+temperature-0 rebuild and are kept only because this project doesn't delete
+paid-for artifacts. Don't mix them with the tarball contents.
 
 ## Existing follow-up conditions
 
@@ -141,10 +157,12 @@ before the "Final answer:"/"Final score:" line. Blank for every non-`cot`
 condition, same pattern as `confidence_score`.
 
 **Headline result: forcing reasoning mostly erases the stakes-framing
-effect.** `low_stakes_cot` and `high_stakes_cot` converge to the identical
-15.6% doubling-down rate, versus the wildly different 0.5%/35.9% split in
-the bare-letter versions from the previous batch. See `RESULTS.md` for the
-full comparison table.
+effect.** `low_stakes_cot` and `high_stakes_cot` converge to within a
+point of each other (13.1%/12.6% doubling-down), versus the wildly
+different 0.5%/34.0% split in the bare-letter versions from the previous
+batch. See `RESULTS.md` for the full comparison table, now twelve
+conditions including a safety-evaluation-framed plain/named pair
+(`eval_plain`/`eval_named`).
 
 ## Other task groups
 
@@ -185,7 +203,10 @@ you're comparing against — the report belongs next to the code that made it.
 - The conversation history replayed into gemma contains the dataset's recorded
   turns, so it is conditioned on its own past words rather than generating the
   whole exchange fresh.
-- The paper's sampling temperature isn't published. Yours is in `.env`.
+- The paper's sampling temperature isn't published. This project uses 0
+  (greedy decoding, deterministic) — a deliberate choice made after
+  checking what's standard for reproducible LLM evaluation, not the
+  paper's own value. `.env` controls it.
 - `did_lie` is the paper's label — the post notes ~25% of labels changed when
   reviewed with full ground-truth access.
 - The pilot is balanced 50/50 on purpose. For the paper comparison use the

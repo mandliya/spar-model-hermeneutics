@@ -25,7 +25,8 @@ from src.common import (RESULTS, load_config, to_messages,
                         FOLLOWUP_CONFIDENCE, FOLLOWUP_NEUTRAL_COT,
                         FOLLOWUP_LOW_STAKES_COT, FOLLOWUP_HIGH_STAKES_COT,
                         FOLLOWUP_CONFIDENCE_COT, FOLLOWUP_PLAIN,
-                        FOLLOWUP_NAMED_SANDBAGGING)
+                        FOLLOWUP_NAMED_SANDBAGGING,
+                        FOLLOWUP_EVAL_PLAIN, FOLLOWUP_EVAL_NAMED_SANDBAGGING)
 
 CONFIG = "google-gemma-3-27b-it_task-group_sandbagging"
 
@@ -43,6 +44,8 @@ FOLLOWUP_TEXT = {
     "confidence_cot": FOLLOWUP_CONFIDENCE_COT,
     "plain": FOLLOWUP_PLAIN,
     "named": FOLLOWUP_NAMED_SANDBAGGING,
+    "eval_plain": FOLLOWUP_EVAL_PLAIN,
+    "eval_named": FOLLOWUP_EVAL_NAMED_SANDBAGGING,
 }
 
 # --------------------------------------------------------- neutral run -----

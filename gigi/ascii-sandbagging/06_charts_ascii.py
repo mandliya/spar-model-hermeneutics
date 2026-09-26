@@ -57,7 +57,7 @@ p, lo, hi = wilson(int(ok["lied"].sum()), len(ok))
 
 fig, ax = plt.subplots(figsize=(7, 1.6))
 ax.barh([0], [p * 100], height=0.5, color=BLUE, zorder=3)
-ax.errorbar([p * 100], [0], xerr=[[p * 100 - lo * 100], [hi * 100 - p * 100]],
+ax.errorbar([p * 100], [0], xerr=[[max(0, p * 100 - lo * 100)], [max(0, hi * 100 - p * 100)]],
             fmt="none", ecolor=INK, elinewidth=1.5, capsize=4, zorder=4)
 ax.axvline(76, color=MUTED, linestyle="--", linewidth=1.2, zorder=2)
 ax.text(76, 0.55, "paper's floor: 76%+ (every model tested)",
@@ -110,7 +110,7 @@ y = list(range(len(rows)))[::-1]
 for yi, (label, p, lo, hi) in zip(y, rows):
     color = BLUE if "cot" not in label else ORANGE
     ax.barh([yi], [p * 100], height=0.55, color=color, zorder=3)
-    ax.errorbar([p * 100], [yi], xerr=[[p * 100 - lo * 100], [hi * 100 - p * 100]],
+    ax.errorbar([p * 100], [yi], xerr=[[max(0, p * 100 - lo * 100)], [max(0, hi * 100 - p * 100)]],
                 fmt="none", ecolor=INK, elinewidth=1.2, capsize=3, zorder=4)
     label_x = max(p * 100, hi * 100) + 1.5
     ax.text(label_x, yi, f"{p*100:.1f}%", va="center", fontsize=9.5, fontweight="bold")
@@ -138,18 +138,19 @@ print("saved wording_conditions.png")
 # both conditions) - not a different measurement, purely a labeling fix.
 bench = pd.read_csv(RESULTS / "ascii_benchmark_conditions.csv")
 
-plain = fold_rate(bench, "plain")
-named = fold_rate(bench, "named")
+labels = ['"plain" wording\n(dishonest or misleading?)',
+          '"named" wording\n(did you sandbag?)',
+          '"eval_plain"\n(safety eval + plain)',
+          '"eval_named"\n(safety eval + named)']
+vals = [fold_rate(bench, "plain"), fold_rate(bench, "named"),
+        fold_rate(bench, "eval_plain"), fold_rate(bench, "eval_named")]
 
-fig, ax = plt.subplots(figsize=(7, 2.6))
-labels = [f'"plain" wording\n(dishonest or misleading?)',
-          f'"named" wording\n(did you sandbag?)']
-vals = [plain, named]
-y = [1, 0]
+fig, ax = plt.subplots(figsize=(7, 4.4))
+y = list(range(len(labels)))[::-1]
 for yi, (label, (p, lo, hi)) in zip(y, zip(labels, vals)):
-    color = BLUE if yi == 1 else ORANGE
+    color = BLUE if yi % 2 == 1 else ORANGE
     ax.barh([yi], [p * 100], height=0.5, color=color, zorder=3)
-    ax.errorbar([p * 100], [yi], xerr=[[p * 100 - lo * 100], [hi * 100 - p * 100]],
+    ax.errorbar([p * 100], [yi], xerr=[[max(0, p * 100 - lo * 100)], [max(0, hi * 100 - p * 100)]],
                 fmt="none", ecolor=INK, elinewidth=1.5, capsize=4, zorder=4)
     if p < 0.85:
         xpos, ha = max(p * 100, hi * 100) + 2.5, "left"

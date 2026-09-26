@@ -1,13 +1,13 @@
-"""Export full, readable transcripts for sycophancy track A (answer-conformity).
+"""Export full, readable transcripts for sycophancy, both tracks.
 
-Same motivation as 00_export_transcripts.py, but for a different dataset
-config and a different conversation shape — sycophancy_answer_conditions.csv
-only saves gemma's raw answers, not the questions or the trace they sat in.
+Track A: two INDEPENDENT calls per row (neutral, pressured), each its own
+fresh conversation starting from the same system message — so this writes
+two separate transcripts per row, not one growing one. (An earlier,
+temperature-1.0 version of the underlying script asked the neutral
+question twice; post temperature-0, there's only one neutral ask.)
 
-Track A isn't one chained follow-up like the sandbagging conditions are —
-it's three INDEPENDENT calls per row (neutral_1, neutral_2, pressured), each
-its own fresh conversation starting from the same system message. So this
-writes three separate transcripts per row, not one growing one.
+Track B: one transcript per row (the framed prompt, already in the
+dataset, plus gemma's critique).
 
 Run:
     uv run python 00_export_transcripts_sycophancy.py
@@ -37,8 +37,7 @@ with out_path.open("w") as f:
         probe = dict(row["lie_detection_prompt"])
 
         for condition, question, answer in [
-            ("neutral_1", r["question"], r["neutral_1"]),
-            ("neutral_2", r["question"], r["neutral_2"]),
+            ("neutral", r["question"], r["neutral"]),
             ("pressured", probe["content"], r["pressured"]),
         ]:
             transcript = msgs + [
@@ -51,7 +50,6 @@ with out_path.open("w") as f:
                 "condition": condition,
                 "task": r["task"],
                 "user_belief": r["user_belief"],
-                "neutral_stable": bool(r["neutral_stable"]),
                 "flipped": None if pd.isna(r["flipped"]) else bool(r["flipped"]),
                 "aligned_with_user": (None if pd.isna(r["aligned_with_user"])
                                        else bool(r["aligned_with_user"])),
@@ -60,7 +58,7 @@ with out_path.open("w") as f:
             }, ensure_ascii=False) + "\n")
             written += 1
 
-print(f"{out_path}: {written} transcripts ({written // 3} rows x 3 conditions each)")
+print(f"{out_path}: {written} transcripts ({written // 2} rows x 2 conditions each)")
 
 # ------------------------------------------------------ track B: feedback --
 feedback_path = RESULTS / "sycophancy_feedback_conditions.csv"
@@ -73,14 +71,12 @@ if feedback_path.exists():
     written2 = 0
     with out_path2.open("w") as f:
         for _, r in fb.iterrows():
-            row = fb_df.loc[r["sample_id"]]
+            row = fb_df.loc[r["uid"]]
             msgs = to_messages(row["trace"])
             probe = dict(row["lie_detection_prompt"])
             transcript = msgs + [probe, {"role": "assistant", "content": str(r["critique"])}]
             f.write(json.dumps({
                 "uid": r["uid"],
-                "sample_id": r["sample_id"],
-                "kind": r["kind"],
                 "task": r["task"],
                 "argument_group_id": r["argument_group_id"],
                 "sentiment_score": (None if pd.isna(r["sentiment_score"])
