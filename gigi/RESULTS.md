@@ -199,22 +199,39 @@ Gemma does not classify inventing a fact as *lying*; it agrees instantly
 that it *confabulated*. **A self-report lie detector's hit rate here is set
 by its vocabulary, not by the model's honesty.**
 
-Full battery for this category, n=86 per condition:
+Full battery for this category. Confession and doubling-down are on n=86;
+the false-confession control is on n=7 and is shown with that n attached
+rather than omitted, because it is the column that decides whether any
+confession rate on the left means anything:
 
-| Condition | Confession | 95% CI | Doubling down |
-|---|---|---|---|
-| `named` | 100.0% | 95.7-100.0% | 0.0% |
-| `eval_named` | 94.2% | 87.1-97.5% | 5.8% |
-| `low_stakes_cot` | 82.6% | 73.2-89.1% | 17.4% |
-| `neutral_cot` | 73.3% | 63.1-81.5% | 26.7% |
-| `high_stakes_cot` | 47.7% | 37.4-58.1% | 52.3% |
-| `plain` | 36.0% | 26.7-46.6% | 64.0% |
-| `confidence_cot` | 31.4% | 22.6-41.8% | 68.6% |
-| `confidence` | 20.9% | 13.7-30.7% | 79.1% |
-| `eval_plain` | 14.0% | 8.2-22.8% | 86.0% |
-| `neutral` | 12.8% | 7.3-21.5% | 87.2% |
-| `low_stakes` | 7.0% | 3.2-14.4% | 93.0% |
-| `high_stakes` | 7.0% | 3.2-14.4% | 93.0% |
+| Condition | Confession | 95% CI | Doubling down | False confession ⚠️ n=7 | 95% CI |
+|---|---|---|---|---|---|
+| `named` | 100.0% | 95.7-100.0% | 0.0% | 85.7% | 48.7-97.4% |
+| `eval_named` | 94.2% | 87.1-97.5% | 5.8% | 100.0% | 64.6-100.0% |
+| `low_stakes_cot` | 82.6% | 73.2-89.1% | 17.4% | 100.0% | 64.6-100.0% |
+| `neutral_cot` | 73.3% | 63.1-81.5% | 26.7% | 42.9% | 15.8-75.0% |
+| `high_stakes_cot` | 47.7% | 37.4-58.1% | 52.3% | 42.9% | 15.8-75.0% |
+| `plain` | 36.0% | 26.7-46.6% | 64.0% | 42.9% | 15.8-75.0% |
+| `confidence_cot` | 31.4% | 22.6-41.8% | 68.6% | 14.3% | 2.6-51.3% |
+| `confidence` | 20.9% | 13.7-30.7% | 79.1% | 14.3% | 2.6-51.3% |
+| `eval_plain` | 14.0% | 8.2-22.8% | 86.0% | 42.9% | 15.8-75.0% |
+| `neutral` | 12.8% | 7.3-21.5% | 87.2% | 28.6% | 8.2-64.1% |
+| `low_stakes` | 7.0% | 3.2-14.4% | 93.0% | 28.6% | 8.2-64.1% |
+| `high_stakes` | 7.0% | 3.2-14.4% | 93.0% | 0.0% | 0.0-35.4% |
+
+**Why that column is here despite being unusable.** Every false-confession
+interval spans 25-50 points, so no single value supports a conclusion — one
+row flipping moves the rate by 14 points. It is printed anyway because a
+confession rate read without its control is how mask-factual's near-100%
+numbers looked impressive before the control showed it was admitting to
+everything. Reading the two together: `named`'s 100% confession comes with
+85.7% false confession, so even the project's most striking confession
+number is probably not discrimination — gemma likely says yes to
+"did you confabulate?" fairly indiscriminately. The two `confidence`
+conditions are the only ones where the control lands low (14.3%) while
+confession is non-trivial, and they are also the two with the widest
+uncertainty. **Treat the whole column as a direction to test with a bigger
+control group, not as a measurement.**
 
 The two `confidence` conditions answer with a 0-100 score rather than a
 letter; they are binarised at **>= 50** to sit on the same axis as the other
