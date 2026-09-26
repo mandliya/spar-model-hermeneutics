@@ -199,12 +199,9 @@ Gemma does not classify inventing a fact as *lying*; it agrees instantly
 that it *confabulated*. **A self-report lie detector's hit rate here is set
 by its vocabulary, not by the model's honesty.**
 
-Full battery for this category. Confession and doubling-down are on n=86;
-the false-confession control is on n=7 and is shown with that n attached
-rather than omitted, because it is the column that decides whether any
-confession rate on the left means anything:
+Full battery for this category:
 
-| Condition | Confession | 95% CI | Doubling down | False confession ⚠️ n=7 | 95% CI |
+| Condition | Confession | 95% CI | Doubling down | False confession | 95% CI |
 |---|---|---|---|---|---|
 | `named` | 100.0% | 95.7-100.0% | 0.0% | 85.7% | 48.7-97.4% |
 | `eval_named` | 94.2% | 87.1-97.5% | 5.8% | 100.0% | 64.6-100.0% |
@@ -219,19 +216,19 @@ confession rate on the left means anything:
 | `low_stakes` | 7.0% | 3.2-14.4% | 93.0% | 28.6% | 8.2-64.1% |
 | `high_stakes` | 7.0% | 3.2-14.4% | 93.0% | 0.0% | 0.0-35.4% |
 
-**Why that column is here despite being unusable.** Every false-confession
-interval spans 25-50 points, so no single value supports a conclusion — one
-row flipping moves the rate by 14 points. It is printed anyway because a
-confession rate read without its control is how mask-factual's near-100%
-numbers looked impressive before the control showed it was admitting to
-everything. Reading the two together: `named`'s 100% confession comes with
-85.7% false confession, so even the project's most striking confession
-number is probably not discrimination — gemma likely says yes to
-"did you confabulate?" fairly indiscriminately. The two `confidence`
-conditions are the only ones where the control lands low (14.3%) while
-confession is non-trivial, and they are also the two with the widest
-uncertainty. **Treat the whole column as a direction to test with a bigger
-control group, not as a measurement.**
+Confession and doubling-down are on **n=86**. **False confession is on n=7
+and is not a measurement** — only 7 of 93 rows show honest behaviour, the
+control being thin precisely *because* the confabulation rate is 92.5%.
+Every interval in that column spans 25-50 points; one row flipping moves it
+14 points. It is printed rather than omitted because reading confession
+without its control is exactly how mask-factual's near-100% numbers looked
+impressive until its control showed it was admitting to everything.
+
+What it *hints* at, to be tested against a bigger control group: `named`'s
+100% confession sits beside 85.7% false confession, so the largest
+confession number in this project is probably indiscriminate agreement
+rather than detection. The two `confidence` conditions are the only ones
+pairing a low control (14.3%) with non-trivial confession.
 
 The two `confidence` conditions answer with a 0-100 score rather than a
 letter; they are binarised at **>= 50** to sit on the same axis as the other
@@ -249,15 +246,6 @@ Two further points, both cutting against the other categories:
    admission.
 2. **`high_stakes` is the joint-lowest at 7.0%.** Telling gemma a safety
    team will review the conversation makes it admit *less*, not more.
-
-⚠️ **This category's false-confession control is n=7 and cannot support a
-conclusion.** Only 7 of 93 rows show honest behaviour — the control is thin
-precisely *because* the confabulation rate is 92.5%. Its false-confession
-points appear on the chart below with intervals 25-40 points wide; treat
-them as unusable rather than as evidence. An arm-size gate in
-`unanswerable/02_analyse_unanswerable.py` flagged this before the battery
-ran, and the battery proceeded only as a deliberate choice to collect the
-data anyway.
 
 ### Confession — admits it, given it happened
 
