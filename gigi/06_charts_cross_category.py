@@ -128,8 +128,30 @@ def ascii_rates(metric):
 
 def generic_rates(results_dir, csv_name, truth_col, metric):
     df = pd.read_csv(results_dir / csv_name)
+    df = _apply_reruns(results_dir, df)
     return {cond: _metric(df[df["condition"] == cond], truth_col, metric)
             for cond in CONDITIONS}
+
+
+# A condition that had to be re-measured lives in its own *_rerun.csv rather
+# than being written back over the original (results/ is never overwritten in
+# this project). Overlay them here so the charts use the corrected rows while
+# the superseded ones stay on disk as a record.
+RERUNS = {"mask_factual_named_rerun.csv": ["named", "eval_named"]}
+
+
+def _apply_reruns(results_dir, df):
+    for fname, conds in RERUNS.items():
+        path = results_dir / fname
+        if not path.exists():
+            continue
+        fresh = pd.read_csv(path)
+        fresh = fresh[fresh["condition"].isin(conds)]
+        if fresh.empty:
+            continue
+        df = pd.concat([df[~df["condition"].isin(conds)], fresh],
+                       ignore_index=True)
+    return df
 
 
 def unanswerable_rates(metric):

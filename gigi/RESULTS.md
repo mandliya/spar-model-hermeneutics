@@ -85,19 +85,19 @@ Answer with just the letter"), trimmed above with "…" only to keep the
 table readable — the full text is in `src/common.py` and is what actually
 gets sent.
 
-> ⚠️ **Known gap, being fixed: mask-factual's `named` data on the charts is
-> stale.** The battery that produced its current numbers claimed "no
-> category-specific vocabulary exists for this subtype" and sent
-> `plain`/`eval_plain` verbatim instead. That was wrong — the act here is
-> asserting something the model was explicitly told is false, which is
-> eminently nameable — and it had a real consequence: at temperature 0 the
-> identical prompt produced **identical answers on 86/86 rows**, so
-> mask-factual's `named` is currently a byte-for-byte duplicate of `plain`
-> and its `eval_named` differs from `eval_plain` on only 6 rows. The
-> wording above is now in `src/common.py` and wired into
-> `00_mask_factual_selfreport_benchmark.py`; those two conditions need
-> re-running (172 generations) before mask-factual's `named`/`eval_named`
-> points mean anything. Treat them as not-yet-measured until then.
+> **Note on mask-factual's `named`/`eval_named`: re-measured, and it changed
+> nothing.** An earlier version of its battery claimed "no category-specific
+> vocabulary exists for this subtype" and sent `plain`/`eval_plain` verbatim,
+> which at temperature 0 made `named` a byte-for-byte duplicate of `plain` on
+> 86/86 rows. That was wrong — the act is asserting something the row's own
+> system prompt told the model is false, which is eminently nameable — so the
+> wording above was written and the two conditions re-run
+> (`results/mask_factual_named_rerun.csv`, 172 generations). The new wording
+> changed gemma's actual answer on 6/86 and 8/86 rows, but **both rates are
+> still exactly 100% confession and 100% false confession.** mask-factual's
+> self-report is saturated regardless of how the question is worded, which
+> strengthens rather than revises the conclusion already drawn about it. The
+> superseded rows are kept on disk; the charts use the re-run.
 
 ## Cross-category comparison
 
