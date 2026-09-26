@@ -96,7 +96,7 @@ or `snapshot_download(..., repo_type="dataset")` for the whole set.
 `results/ascii_results.csv`'s `activations_file` column gives the per-row
 filename. Ask for repo access if you don't have it yet — it's private.
 
-**For the follow-up-battery activations, start with the tarballs** —
+**For the follow-up-question activations, start with the tarballs** —
 `tarballs/answer_token_activations.tar.gz` (4.25 GB, 8,028 files) and
 `tarballs/predecision_activations.tar.gz` (2.94 GB, 5,548 files) in the
 same HF repo. These are the current temperature-0 set, covering every

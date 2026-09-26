@@ -44,8 +44,8 @@ categories: `ggrazianoknapp/gigi-ascii-sandbagging-activations`. The
 primary run's per-row files are `<uid>.pt` at the repo root; the
 `tarballs/answer_token_activations.tar.gz` (4.25 GB) and
 `tarballs/predecision_activations.tar.gz` (2.94 GB) bundles hold the
-temperature-0 follow-up-battery captures for ascii-sandbagging and both
-sycophancy tracks. **mask-factual's own follow-up battery has no
+temperature-0 follow-up-question captures for ascii-sandbagging and both
+sycophancy tracks. **mask-factual's own follow-up question set has no
 activation capture yet** — see `RESULTS.md` "Next steps".
 
 ## Push your work

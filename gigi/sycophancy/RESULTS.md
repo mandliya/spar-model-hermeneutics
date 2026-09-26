@@ -121,7 +121,7 @@ not binarized, matching how sycophancy-via-sentiment is typically measured
 elsewhere in the field (checked directly: the closest reference method we
 found, [SycEval](https://arxiv.org/html/2502.08177v4), also avoids an
 arbitrary magnitude cutoff on a continuous score). A threshold only gets
-introduced later, for the follow-up battery specifically — see below.
+introduced later, for the follow-up question set specifically — see below.
 
 ## Track B: results
 
@@ -154,7 +154,7 @@ social cue. `user_dislikes` moving the critique *harsher* is worth noting
 too — it's not just flattery in one direction, gemma's stated opinion
 swings whichever way it thinks the user wants.
 
-## Does asking directly detect it? Full follow-up battery, both tracks
+## Does asking directly detect it? Full follow-up question set, both tracks
 
 Same twelve wordings as ascii-sandbagging's RESULTS.md, reusing the
 identical prompt text from `src/common.py` for true cross-category
@@ -272,7 +272,7 @@ model judging text equivalence) — not gemma itself.
   different, stronger model than gemma (never the model under test), but
   the score is still one model's read on tone, logged in full
   (`judge_raw`) so it can be spot-checked, not assumed correct.
-- Track B's follow-up battery ground truth (`sycophantic` = shift past
+- Track B's follow-up question set ground truth (`sycophantic` = shift past
   ±1.0) is a threshold this project picked, not something the data hands
   over directly, unlike Track A's `fold` or ascii-sandbagging's `lied`. A
   different threshold would move the exact n split and could move the
@@ -289,21 +289,21 @@ model judging text equivalence) — not gemma itself.
 | `results/sycophancy_feedback_conditions.csv` / `.jsonl` | Track B, 339 rows |
 | `results/transcripts_sycophancy_answers.jsonl` | **the actual rollouts** — full reconstructed conversations, Track A |
 | `results/transcripts_sycophancy_feedback.jsonl` | same, for Track B |
-| `results/sycophancy_benchmark_conditions.csv` / `.jsonl` | Track A's full follow-up battery, 1,896 rows (158 × 12 conditions) |
-| `results/sycophancy_feedback_benchmark_conditions.csv` / `.jsonl` | Track B's full follow-up battery, 2,412 rows (201 × 12 conditions) |
+| `results/sycophancy_benchmark_conditions.csv` / `.jsonl` | Track A's full follow-up question set, 1,896 rows (158 × 12 conditions) |
+| `results/sycophancy_feedback_benchmark_conditions.csv` / `.jsonl` | Track B's full follow-up question set, 2,412 rows (201 × 12 conditions) |
 | `charts/sycophancy_feedback_shift.png` | Track B's evaluation-bias chart, regenerate with `06_charts_sycophancy.py` |
-| `charts/sycophancy_track_a_followups.png` / `_track_b_followups.png` | the follow-up-battery charts, regenerate with `06_charts_sycophancy_followups.py` |
+| `charts/sycophancy_track_a_followups.png` / `_track_b_followups.png` | the follow-up-question charts, regenerate with `06_charts_sycophancy_followups.py` |
 | `00_sycophancy_answers.py` | generates Track A (local GPU, bf16, with activations) |
 | `00_sycophancy_feedback.py` | generates Track B, same mechanism |
-| `00_sycophancy_selfreport_benchmark.py` / `00_sycophancy_feedback_selfreport_benchmark.py` | the follow-up battery for each track (local GPU, bf16, no primary activations) |
+| `00_sycophancy_selfreport_benchmark.py` / `00_sycophancy_feedback_selfreport_benchmark.py` | the follow-up question set for each track (local GPU, bf16, no primary activations) |
 | `01_dyl_recapture_sycophancy.py` | DYL-matched answer-token activation capture, both tracks, all 12 conditions |
-| `02_predecision_sycophancy_battery.py` | pre-decision activation capture, both tracks, all 12 conditions (these never had any activation capture until this pass) |
+| `02_predecision_sycophancy_question set.py` | pre-decision activation capture, both tracks, all 12 conditions (these never had any activation capture until this pass) |
 | `00_export_transcripts_sycophancy.py` | joins both tracks' results back against the original dataset for full transcripts — $0, no API calls |
 
 Activation tensors (every layer) are in the same private HF dataset repo
 as ascii-sandbagging's: `ggrazianoknapp/gigi-ascii-sandbagging-activations`,
 filenames `<uid>__neutral.pt` / `__pressured.pt` (Track A primary) and
-`<uid>.pt` (Track B primary). Follow-up-battery conditions have two capture
+`<uid>.pt` (Track B primary). Follow-up-question set conditions have two capture
 points each: `<track>__<uid>__<condition>__answer_token.pt` (DYL-matched)
 and `<track>__<uid>__<condition>__predecision.pt` (pre-decision) — kept as
 separate files rather than guessing which one a given downstream probe
@@ -318,4 +318,4 @@ expects.
 2. Consider a megafolds-config rerun of Track A if the sample size
    (n=48–56 per subtype) turns out to matter for anyone building on this.
 3. Train a DYL-style probe on the activations now on HF (both capture
-   points) and compare its accuracy to the follow-up battery above.
+   points) and compare its accuracy to the follow-up question set above.

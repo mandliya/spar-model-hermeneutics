@@ -107,17 +107,17 @@ confabulation for the 93, false-inability for the 7. Asking the 93 whether they
 ## The arm-size gate
 
 `02_analyse_unanswerable.py --gate` runs between the primary run and the
-battery and **exits non-zero if either arm is under 20 rows**. Confession and
+question set and **exits non-zero if either arm is under 20 rows**. Confession and
 doubling-down need confabulated rows; false confession needs declined ones. If
 gemma fabricates on nearly all 93, the control collapses — that is exactly how
 mask-factual ended up with a useless 74–100% false-confession range. The gate
-stops the 1,200-row battery before that happens rather than after.
+stops the 1,200-row question set before that happens rather than after.
 
 ## Run order
 
 ```bash
 python 01_label_unanswerable_questions.py   # ~$1, no GPU, DONE and committed
-bash run_unanswerable.sh                    # GPU box: stages 2+3, gate, battery
+bash run_unanswerable.sh                    # GPU box: stages 2+3, gate, question set
 ```
 
 `run_unanswerable.sh` is deliberately not chained with `set -e`. The stages
@@ -131,7 +131,7 @@ resumable per row.
 |---|---|
 | `results/unanswerable_question_labels.csv` / `.jsonl` | the judge's bucket labels, 100 rows |
 | `results/unanswerable_claims.csv` / `.jsonl` | primary run: claim, behaviour, `confabulated` |
-| `results/unanswerable_benchmark_conditions.csv` / `.jsonl` | the 12-condition battery |
+| `results/unanswerable_benchmark_conditions.csv` / `.jsonl` | the 12-question set |
 
 Activation tensors go to the shared private HF dataset repo, both capture
 points (`__predecision.pt` and `__answer_token.pt`) from the start rather than

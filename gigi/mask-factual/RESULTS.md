@@ -8,7 +8,7 @@ both ascii-sandbagging and sycophancy — see [Ground truth](#ground-truth)
 below. Only the `mask_provided_facts` subtype is built so far; the other
 two (`mask_known_facts`, `mask_statistics`) need external fact-checking
 machinery this project doesn't have yet. The full 12-condition follow-up
-battery ([below](#follow-up-battery)) is built and joins the cross-category
+question set ([below](#follow-up-question)) is built and joins the cross-category
 comparison in `../RESULTS.md`.
 
 **Model:** `google/gemma-3-27b-it`, official bf16 weights, local GPU
@@ -55,7 +55,7 @@ even though the true fact is stated in the exact same system prompt it's
 reading from — this isn't a case of gemma not knowing the truth, it's
 choosing (or defaulting to) the version it was told to give.
 
-## Does asking directly detect it? Full follow-up battery {#follow-up-battery}
+## Does asking directly detect it? Full follow-up question set {#follow-up-question}
 
 Same twelve wordings as ascii-sandbagging and sycophancy's RESULTS.md,
 reusing the identical prompt text from `src/common.py`. This subtype has
@@ -119,7 +119,7 @@ weights to be comparable.
   model under test), but its read is still one model's classification,
   logged in full (`judge_raw`) so it can be spot-checked.
 - No category-specific vocabulary exists for `named`/`eval_named` in the
-  follow-up battery — they reuse `plain`/`eval_plain`'s wording verbatim,
+  follow-up question set — they reuse `plain`/`eval_plain`'s wording verbatim,
   so those pairs are identical by construction here, not an independent
   measurement.
 - `did_lie` is unusable for this config too, per the dataset-wide check in
@@ -130,29 +130,29 @@ weights to be comparable.
 | File | What it is |
 |---|---|
 | `results/mask_factual_provided_conditions.csv` / `.jsonl` | 86 rows: `response`, `verdict`, `lied`, `judge_raw` |
-| `results/mask_factual_benchmark_conditions.csv` / `.jsonl` | full 12-condition follow-up battery, 1,032 rows |
+| `results/mask_factual_benchmark_conditions.csv` / `.jsonl` | full 12-condition follow-up question set, 1,032 rows |
 | `00_mask_factual_provided.py` | generates the primary run (local GPU, bf16, with activations) |
-| `00_mask_factual_selfreport_benchmark.py` | generates the follow-up battery (local GPU, bf16, no activations on this pass) |
+| `00_mask_factual_selfreport_benchmark.py` | generates the follow-up question set (local GPU, bf16, no activations on this pass) |
 
 Activation tensors (every layer, last prompt token, right before gemma
 answers) are in the same private HF dataset repo as ascii-sandbagging's:
 `ggrazianoknapp/gigi-ascii-sandbagging-activations`, filenames `<uid>.pt`
-for the primary run. The follow-up battery has no activation capture yet —
+for the primary run. The follow-up question set has no activation capture yet —
 see Next steps.
 
-The other categories' temperature-0 follow-up-battery activations live in
+The other categories' temperature-0 follow-up-question activations live in
 that repo as two tarballs — `tarballs/answer_token_activations.tar.gz`
 (4.25 GB, 8,028 files) and `tarballs/predecision_activations.tar.gz`
 (2.94 GB, 5,548 files). Tarballs rather than loose files because HF caps
 commits at 256/hour and 13,576 individual uploads would have needed ~800.
-When mask-factual's battery capture lands, it goes into the same two
+When mask-factual's question set capture lands, it goes into the same two
 bundles. The loose `.pt` files at that repo's root other than this
 category's `<uid>.pt` primaries are stale pre-temperature-0 leftovers,
 kept only because this project doesn't delete paid-for artifacts.
 
 ## Next steps
 
-1. Add activation capture to the follow-up battery (both the pre-decision
+1. Add activation capture to the follow-up question set (both the pre-decision
    and DYL-matched answer-token positions, matching ascii-sandbagging and
    sycophancy's `01_dyl_recapture_*.py` / `02_predecision_*.py` scripts) —
    this category doesn't have either yet.

@@ -120,15 +120,15 @@ Full twelve-condition tables and charts for both tracks in `RESULTS.md`.
 | `results/sycophancy_feedback_conditions.csv` / `.jsonl` | Track B, 339 rows |
 | `results/transcripts_sycophancy_answers.jsonl` | **the actual rollouts** — full reconstructed conversations, Track A |
 | `results/transcripts_sycophancy_feedback.jsonl` | same, for Track B |
-| `results/sycophancy_benchmark_conditions.csv` / `.jsonl` | Track A's full follow-up battery, 1,896 rows |
-| `results/sycophancy_feedback_benchmark_conditions.csv` / `.jsonl` | Track B's full follow-up battery, 2,412 rows |
+| `results/sycophancy_benchmark_conditions.csv` / `.jsonl` | Track A's full follow-up question set, 1,896 rows |
+| `results/sycophancy_feedback_benchmark_conditions.csv` / `.jsonl` | Track B's full follow-up question set, 2,412 rows |
 | `charts/sycophancy_feedback_shift.png` | Track B's evaluation-bias chart, regenerate with `06_charts_sycophancy.py` |
-| `charts/sycophancy_track_a_followups.png` / `_track_b_followups.png` | the follow-up-battery charts, regenerate with `06_charts_sycophancy_followups.py` |
+| `charts/sycophancy_track_a_followups.png` / `_track_b_followups.png` | the follow-up-question charts, regenerate with `06_charts_sycophancy_followups.py` |
 | `00_sycophancy_answers.py` | generates Track A (local GPU, bf16, with activations) |
 | `00_sycophancy_feedback.py` | generates Track B, same mechanism |
-| `00_sycophancy_selfreport_benchmark.py` / `00_sycophancy_feedback_selfreport_benchmark.py` | the follow-up battery for each track (local GPU, bf16, no primary activations) |
+| `00_sycophancy_selfreport_benchmark.py` / `00_sycophancy_feedback_selfreport_benchmark.py` | the follow-up question set for each track (local GPU, bf16, no primary activations) |
 | `01_dyl_recapture_sycophancy.py` | DYL-matched answer-token activation capture, both tracks, all 12 conditions |
-| `02_predecision_sycophancy_battery.py` | pre-decision activation capture, both tracks, all 12 conditions |
+| `02_predecision_sycophancy_question set.py` | pre-decision activation capture, both tracks, all 12 conditions |
 | `00_export_transcripts_sycophancy.py` | joins both tracks' results back against the original dataset for full transcripts — $0, no API calls |
 
 Activation tensors are in the same private HF dataset repo as
@@ -137,7 +137,7 @@ ascii-sandbagging's: `ggrazianoknapp/gigi-ascii-sandbagging-activations`.
 **Start with the tarballs** — `tarballs/answer_token_activations.tar.gz`
 (4.25 GB, 8,028 files) and `tarballs/predecision_activations.tar.gz`
 (2.94 GB, 5,548 files). These hold the current temperature-0
-follow-up-battery activations for every category, at both capture points,
+follow-up-question activations for every category, at both capture points,
 and are the authoritative set:
 
 ```python
@@ -169,6 +169,6 @@ paid-for artifacts. Don't mix them with the tarball contents.
 - Answer matching for ambiguous cases relies on a model call (`JUDGE_MODEL`
   via OpenRouter) — not gemma judging itself, but still a modeling choice,
   logged per-row (`match_method`/`align_method`) so it can be audited.
-- Track B's follow-up-battery `sycophantic` label uses a deliberately-
+- Track B's follow-up-question `sycophantic` label uses a deliberately-
   chosen fixed threshold (`|shift| > 1.0`), not a discovered fact — see
   `RESULTS.md` for the reasoning.
