@@ -192,7 +192,7 @@ by its vocabulary, not by the model's honesty.**
 
 All 12 questions, for **unanswerable** — 93 rows: 86 confabulated, 7 stayed honest:
 
-| Condition | Confession<br>n=86 | 95% CI | Doubling down<br>n=86 | False confession<br>n=7 | 95% CI |
+| Condition | Confession | 95% CI | Doubling down | False confession | 95% CI |
 |---|---|---|---|---|---|
 | `named` | 100.0% | 95.7-100.0% | 0.0% | 85.7% | 48.7-97.4% |
 | `eval_named` | 94.2% | 87.1-97.5% | 5.8% | 100.0% | 64.6-100.0% |
