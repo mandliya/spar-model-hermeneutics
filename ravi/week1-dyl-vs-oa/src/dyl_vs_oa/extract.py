@@ -82,7 +82,13 @@ def extract_prefill_activations(
 
 
 def _yes_no_token_offset(tokenizer, generated_ids: list[int]) -> int | None:
-    """Index into generated_ids of the first yes/no token, else last generated token."""
+    """Index into generated_ids of the first yes/no token, else last generated token.
+
+    Official DYL scoring must read one token earlier than this (the last prompt
+    token). That path lives in dyl-probe-repro/ (copied from Tianq;
+    core/prefill.py `prompt_last`). Do not use this extractor for official-probe
+    transfer.
+    """
     for i in range(len(generated_ids)):
         piece = tokenizer.decode(generated_ids[i : i + 1], skip_special_tokens=True).strip().lower()
         if piece in {"yes", "no", "y", "n"}:

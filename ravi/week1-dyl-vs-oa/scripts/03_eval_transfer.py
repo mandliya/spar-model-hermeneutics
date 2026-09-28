@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Compare OA probe, DYL probe, and black-box self-report on OA MBPP-Honeypot."""
+"""Compare OA probe, DYL probe, and black-box self-report on OA MBPP-Honeypot.
+
+The DYL half of this script reads the generated yes/no token. The official
+checkpoint was trained one token earlier; rerun transfer through
+`dyl-probe-repro` (`oa_mbpp`) instead of this file. The OA prefill path here
+is unchanged.
+"""
 
 from __future__ import annotations
 

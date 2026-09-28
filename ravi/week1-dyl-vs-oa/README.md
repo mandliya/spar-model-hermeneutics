@@ -47,10 +47,7 @@ We will not fully rebuild Varied Deception in week 1. DYL validation is: (1) loa
 
 1. **OA light repro.** Prefill-train a Simple Deception probe. Eval on held-out synthetic MBPP (`code` vs `hardcode`). Target AUC ≈ 0.994.
 2. **DYL light repro.** Load the released Gemma-3-27B-IT probe, or generate city-country rollouts and train our own. Target: in-domain AUROC ≫ 0.5 and the probe actually fires on generated yes/no tokens.
-3. **Transfer.** Score OA MBPP-Honeypot with:
-   - OA probe (prefill suffix)
-   - DYL probe (generated suffix)
-   - Black-box “did you lie?” self-report
+3. **Transfer.** Official DYL on OA MBPP-Honeypot, through `dyl-probe-repro` (a copy of Tianq's pipeline plus dataset `oa_mbpp`): residual stream at the token *before* the yes/no, AISI follow-up labels (admit-after-lie = honest; false confessions dropped), plus the original code-vs-hardcode labels. Also score OA's prefill probe and black-box self-report on the same rows.
 4. **Controlled ablation (if time).** Same training pairs, prefill vs generate. Isolates the data-collection difference the mentor flagged.
 
 ## Setup
@@ -79,10 +76,18 @@ python scripts/01_train_oa_probe.py --max-train 400 --max-eval 200
 python scripts/02_train_dyl_probe.py --load-official
 # python scripts/02_train_dyl_probe.py --train --n-cities 80 --max-rollouts 400
 
-# 3. Transfer both probes + self-report baseline onto OA RH
-python scripts/03_eval_transfer.py --max-eval 200
+# 3. Official DYL transfer onto OA RH (Tianq's extractor + labels, in this folder)
+# Do not use scripts/03_eval_transfer.py for the official checkpoint:
+# it reads the yes/no token; the probe was trained one token earlier.
+cd dyl-probe-repro
+cp .env.example .env   # HF_TOKEN, HF_DATASET_REPO=model-hermeneutics/dyl-probe-repro
+pip install -r requirements.txt
+./run.sh extract --dataset oa_mbpp --followup dyl --limit 8   # smoke
+./run_oa_mbpp.sh   # default: dyl dyl_truthful dyl_cheat dyl_falsify
+# FOLLOWUPS=all ./run_oa_mbpp.sh   # full wording sweep
 
 # 4. Optional: same Simple Deception data, prefill vs generate
+cd ..
 python scripts/04_ablation_prefill_vs_generate.py --max-train 200 --max-eval 100
 ```
 
@@ -90,13 +95,14 @@ Outputs land in `results/`.
 
 ## Fair comparison
 
-On the **same** MBPP-Honeypot rows (`code` = honest, `hardcode` = deceptive):
+On the **same** MBPP-Honeypot test tasks (`code` = honest, `hardcode` = deceptive):
 
-- OA probe is applied with OA’s prefill follow-up.
-- DYL probe is applied with DYL’s generated follow-up.
-- Self-report uses the DYL question and the model’s yes/no text (no activations).
+- OA probe is applied with OA’s prefill follow-up (this folder, `01` / `03` OA path).
+- Official DYL is applied with this folder's `dyl-probe-repro` copy of Tianq's pipeline (dataset `oa_mbpp`): `prompt_last`, not the answer token, at `hidden_states[59]`.
+- Self-report is the model’s parsed yes/no to the same follow-up (Tianq’s “just asking”).
+- Report both label schemes: original reward-hack labels, and AISI’s follow-up-lie labels (lied-then-admitted = honest; false confessions excluded).
 
-That is the intended apples-to-apples transfer test: two published detectors, each used the way its paper uses it, on OA’s RH labels.
+`scripts/03_eval_transfer.py` still runs the OA prefill path. Its DYL path is the week-1 answer-token bug and is not a valid official-probe result.
 
 ## Results
 
@@ -110,15 +116,13 @@ OA Simple Deception on Gemma-3-27B-IT, evaluated on synthetic MBPP (`code` vs `h
 
 AUC matches the paper within the 0.03 check. Honest mean matches; deceptive scores run higher than Appendix B, so W1 is larger. Threshold-0.5 balanced accuracy is not the paper metric here — Simple Deception scores honest code high, which is why OA report AUC.
 
-**Transfer** on the same 200 MBPP-Honeypot test rows (400 conversations: `code` vs `hardcode`). Official DYL is scored the way AISI ships it: z-score activations, linear logits, decision threshold 5.05 (1% FPR on Alpaca).
+**Transfer (superseded for DYL).** The table below scored official DYL at the *answer token*. Tianq showed that position mismatches the checkpoint’s stored `dataset_mean` (rel err 0.33 vs 0.0027 one token earlier) and collapses in-domain AUROC (0.72 vs 0.99). Do not cite the DYL row. OA prefill and the self-report numbers are unaffected. Re-run DYL via `oa_mbpp`.
 
 | Detector | AUC | BA | notes |
 | --- | --- | --- | --- |
 | Self-report (“did you lie?”) | 0.81 | **0.81** | All hardcoded said yes; 37.5% of honest code also said yes |
 | OA prefill (`01` sklearn / last-token probe) | **0.83** | 0.50 | Honest mean 0.70, deceptive 0.82 |
-| Official DYL (z-scored logits) | 0.67 | 0.50 | Means 42.0 vs 43.6; every logit is 34–49, all above 5.05 |
-
-Official DYL was previously scored without `dataset_mean`/`dataset_std`, which collapsed every sigmoid to ~0 and gave a fake AUC of 0.5. After the fix the probe fires, but the Alpaca-calibrated threshold labels every coding example a lie, so BA stays 0.5. Ranking signal is real but weak (AUC 0.67). Self-report beats the DYL probe. OA still ranks better than DYL on this set; that OA number is the weaker sklearn last-token probe, not the 0.99 Adam/`Yes` run above.
+| Official DYL (answer token, **invalid**) | 0.67 | 0.50 | Logits 34–49, all above threshold 5.05 |
 
 ## Sources
 
