@@ -121,13 +121,15 @@ Gigi’s ascii table already agrees: the probe’s held-out winner is `dyl_truth
 
 ## Follow-ups (ranked)
 
-1. **Format-aware scoring (CPU, Hub already has the logits).** Treat undeduced `prompt_last` AUROC as first-class whenever the follow-up is not DYL yes/no. Invert only when admit vs deny dominates the residual. The table above is that analysis for OA; it does not need a new extract.
-2. **Tiny held-out adapter.** Logistic on `(score, admitted)` → original lie, fit on 50% of OA tasks, test on the rest. Asks whether a two-feature adapter recovers the 0.94 A/B residual under a no-leak split.
-3. **OA prefill probe on these same 1000 tasks.** Still the missing half of week 1 (`scripts/01` / `03` OA path only — not the official-DYL answer-token path). GPU. This is the comparison someone already claimed OA wins.
-4. **Layer-wise undeduced `dyl` vs `neutral`.** Hidden states for all layers are already on disk/Hub. Tests whether the A/B original-hack direction is specific to layer 58.
+1. **Format-aware scoring (CPU, Hub already has the logits).** Treat undeduced `prompt_last` AUROC as first-class whenever the follow-up is not DYL yes/no. Invert only when admit vs deny dominates the residual. Done: [`NOTES.md`](NOTES.md), [`followup_analyses.json`](followup_analyses.json).
+2. **Tiny held-out adapter.** Logistic on `(score, admitted)` → original lie, 50% of OA tasks. Recovers A/B (`neutral` 0.957 vs deduced 0.371). Done.
+3. **OA prefill probe on these same 1000 tasks.** Layer 58 AUROC **0.920**; all-layer mean 0.826. Probe JSON in gitignored `../results/`. Eval: [`oa_prefill_eval.json`](oa_prefill_eval.json).
+4. **Layer-wise undeduced `dyl` vs `neutral`.** A/B original-hack is in the late residual (peak 0.960 at `hs[51]`, 0.944 at layer 58), not layer-58-only. Done.
 5. **Do not** re-extract Gigi, upgrade transformers to 5.x, or run `../scripts/03_eval_transfer.py` for the official checkpoint.
 
 Optional later: token-identity control is already close (`dyl` vs `neutral` is the same question, yes/no vs A/B). Recalibrating the 5.05 threshold on OA honest is a detection-operating-point question, not AUROC. CoT wordings stay out of scope (the read position is no longer the token before the answer).
+
+Personal digest (every dataset, adapter, layer sweep): [`NOTES.md`](NOTES.md). Machine numbers: [`followup_analyses.json`](followup_analyses.json).
 
 ## Files
 
