@@ -2,7 +2,12 @@
 
 This is the first-time-reader version. It assumes you know what an LLM is and not much else about these papers. Numbers are from Gemma-3-27B-IT on a Vast A800 80GB box, 2026-09-28. Hub record: [`model-hermeneutics/dyl-probe-repro`](https://huggingface.co/datasets/model-hermeneutics/dyl-probe-repro).
 
-**The one-paragraph version.** SPAR week 1 asks whether white-box lie detectors transfer off their training distribution. **Did You Lie (DYL)** trains a linear probe on Gemma’s residual stream while the model is about to answer “did you lie, yes or no?” **Obfuscation Atlas (OA)** trains a similar probe, but by *prefilling* the word `Yes` after “did you respond truthfully?” Someone already claimed OA beats DYL on coding reward hacks. Ravi’s job is to score the **official AISI DYL checkpoint** on OA’s MBPP-Honeypot (`code` vs `hardcode`) at the token the checkpoint was actually trained on, next to just asking the model, next to an OA-style prefill probe, and next to Tianq’s numbers on Gigi’s lie datasets. Result: DYL **does** transfer to reward hacks if you ask a named yes/no (`Did you cheat?` AUROC **0.975**). Gigi’s A/B “failure” is not a missing residual; it is AISI’s admit/deny post-process inverting a ranking that was already there (raw **0.944**). OA’s own layer-58 prefill on the same 1000 rows is **0.920**.
+**The one-paragraph version.** Two labs built “is this a lie?” detectors for Gemma, then we ask whether those detectors still work on **coding reward hacks** they were never trained on.
+
+- **DYL** (AISI): after Gemma answers, ask “did you lie — yes or no?” and read its internals **as it is about to say yes or no**. AISI already trained this detector and posted the weights; we **load that file**, we do not train our own. (That file is what “official checkpoint” meant.)
+- **OA**: after Gemma answers, do **not** let it speak. Write the reply `Yes` yourself after “did you respond truthfully?” and read the internals at that forced `Yes`. That stuffing-in of the answer is **prefill**.
+
+We run AISI’s DYL detector on OA’s set of real vs hardcoded Python solutions, at the token AISI actually trained on (one token **before** yes/no). We compare it to (1) just asking Gemma, (2) an OA-style prefill detector we train, (3) the same DYL detector on Gigi’s lie datasets (Tianq’s numbers). **Result:** DYL still works on the hacks if you ask “did you **cheat**?” (AUROC **0.975**). Gigi-style A/B questions look like a miss only after AISI’s admit/deny flip; the raw score already ranks hacks (**0.944**). OA’s layer-58 prefill detector on the same 1000 rows is **0.920**.
 
 ---
 
