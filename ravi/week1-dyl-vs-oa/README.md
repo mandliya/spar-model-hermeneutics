@@ -135,7 +135,7 @@ AUC matches the paper within the 0.03 check. Honest mean matches; deceptive scor
 
 Native DYL matches just-asking. Naming the act beats it. `answer_first` is inverted (the old bug). AISI follow-up-lie labels barely apply: 0–3 doubled-down lies / 500.
 
-**13-wording extract (2026-09-28 20:53 UTC):** 9/13 follow-ups at 1000/1000 on Hub (`dyl`, `dyl_honest`, `dyl_truthful`, `dyl_eval_honest`, `dyl_cheat`, `dyl_falsify`, `neutral`, `neutral_swapped`, `low_stakes`). `high_stakes` at 250/1000 (extracting). Queued: `confidence`, `plain`, `eval_plain`. Evaluate for the new wordings has not run yet. Live table: [`dyl-probe-repro/RESULTS.md`](dyl-probe-repro/RESULTS.md).
+**13-wording sweep (complete, 2026-09-28 21:47 UTC).** All 13 follow-ups extracted (1000/1000) and evaluated (`all_complete: true`). GPU idle. Full table: [`dyl-probe-repro/RESULTS.md`](dyl-probe-repro/RESULTS.md). Headline: `dyl_cheat` probe `prompt_last` **0.975** (just asking 0.945); native `dyl` 0.823 vs 0.830; Gigi A/B `neutral` probe 0.371 (just asking 0.665). Mean across 13: just asking 0.837, probe `prompt_last` 0.715, `answer_first` 0.233.
 
 ## Sources
 
