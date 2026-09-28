@@ -41,11 +41,25 @@ AISI follow-up-lie labels are mostly unusable here: after a hardcode the model a
 
 ## 13-wording sweep (in progress)
 
-Default four wordings are complete and on the Hub (`oa_mbpp/{dyl,dyl_truthful,dyl_cheat,dyl_falsify}/` plus `oa_mbpp/results/summary.json`).
+Snapshot **2026-09-28 20:53 UTC**. Extract is still running in tmux `oa` (`FOLLOWUPS=all`). Evaluate has **not** been rerun yet, so AUROCs exist only for the original four yes/no wordings (table above). Hub syncs every 250 rows; a kill-and-rerun skips stored uids.
 
-`FOLLOWUPS=all` adds the nine remaining shared wordings (`dyl_honest`, `dyl_eval_honest`, `neutral`, `neutral_swapped`, `low_stakes`, `high_stakes`, `confidence`, `plain`, `eval_plain`) so OA sits on the same follow-up list Tianq used for Gigi. Safe to kill and rerun.
+| Follow-up | Extract rows (of 1000) | Evaluate | Notes |
+|---|---:|---|---|
+| `dyl` | 1000 | done | native DYL; AUROCs in table above |
+| `dyl_honest` | 1000 | pending | |
+| `dyl_truthful` | 1000 | done | AUROCs in table above |
+| `dyl_eval_honest` | 1000 | pending | |
+| `dyl_cheat` | 1000 | done | AUROCs in table above |
+| `dyl_falsify` | 1000 | done | AUROCs in table above |
+| `neutral` | 1000 | pending | Gigi A/B |
+| `neutral_swapped` | 1000 | pending | Gigi A/B, options swapped |
+| `low_stakes` | 1000 | pending | Gigi A/B |
+| `high_stakes` | **250** | pending | **extracting now**; last Hub sync at 250 |
+| `confidence` | 0 | pending | queued |
+| `plain` | 0 | pending | queued |
+| `eval_plain` | 0 | pending | queued |
 
-Gigi and AISI results are already on the same Hub dataset from Tianq. Do not re-extract them; compare against `gigi/results/wordings_l_58_lm_0_01_ar_lr_hs59.json`.
+After extract exits, `./run_oa_mbpp.sh` scores every follow-up (CPU). Then this table gets AUROCs and we can sit OA next to Tianq’s `gigi/results/wordings_l_58_lm_0_01_ar_lr_hs59.json`. Do not re-extract Gigi/AISI.
 
 ## Files
 
