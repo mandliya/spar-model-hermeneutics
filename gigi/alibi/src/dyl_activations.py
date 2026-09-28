@@ -68,7 +68,8 @@ def find_answer_char_span(response: str, kind: str):
 
 @torch.inference_mode()
 def capture_state_at_answer(tokenizer, model, messages: list[dict],
-                            response: str, answer_span: tuple[int, int]):
+                            response: str, answer_span: tuple[int, int],
+                            out_dtype=None):
     """Every layer's hidden state at the answer token, teacher-forced from
     the already-saved `response` text (no new sampling). `answer_span` is
     a (start, end) char offset into `response`, from find_answer_char_span.
@@ -101,4 +102,8 @@ def capture_state_at_answer(tokenizer, model, messages: list[dict],
     enc = {k: v.to(model.device) for k, v in enc.items()}
     out = model(**enc, output_hidden_states=True, use_cache=False)
     state = torch.stack([h[0, token_idx, :] for h in out.hidden_states])
-    return state.to(torch.float16).cpu()
+    # float16 by default for backwards compatibility with every tensor already
+    # shipped. Pass out_dtype=torch.float32 for a lossless copy of the model's
+    # bf16 state: bf16 -> float16 can overflow above 65,504, bf16 -> float32
+    # cannot.
+    return state.to(out_dtype or torch.float16).cpu()
