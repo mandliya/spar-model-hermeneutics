@@ -46,6 +46,10 @@ JOBS = [
     ("sycophancy/results/sycophancy_feedback_benchmark_conditions.csv",
      ["sycophancy/results/dyl_answer_token_sycophancy.jsonl",
       "sycophancy/results/predecision_sycophancy_battery.jsonl"]),
+    ("mask-factual/results/mask_factual_benchmark_conditions.csv",
+     ["mask-factual/results/mask_factual_activations.jsonl"]),
+    ("mask-factual/results/mask_factual_named_rerun.csv",
+     ["mask-factual/results/mask_factual_activations.jsonl"]),
 ]
 
 COLS = ["answer_token_activations_file", "predecision_activations_file"]
@@ -101,6 +105,16 @@ for rel_csv, rel_maps in JOBS:
     if "activations_file" in df.columns:
         blank = df["predecision_activations_file"].isna()
         df.loc[blank, "predecision_activations_file"] = df.loc[blank, "activations_file"]
+
+    # mask-factual's original benchmark file still holds the superseded
+    # named/eval_named rows, which sent the `plain` wording by mistake. Their
+    # tensors were captured from the RE-RUN answers (the real vocabulary), so
+    # attaching them here would pair a label with a tensor from a different
+    # prompt. Those two conditions live authoritatively in
+    # mask_factual_named_rerun.csv; blank them here.
+    if rel_csv.endswith("mask_factual_benchmark_conditions.csv"):
+        superseded = df["condition"].isin(["named", "eval_named"])
+        df.loc[superseded, COLS] = None
 
     df.to_csv(csv, index=False)
     at = int(df["answer_token_activations_file"].notna().sum())
