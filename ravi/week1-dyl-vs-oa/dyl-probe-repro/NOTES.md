@@ -1,13 +1,19 @@
 # Week 1 notes — can a “did you lie?” probe catch coding reward hacks?
 
-This is the first-time-reader version. It assumes you know what an LLM is and not much else about these papers. Numbers are from Gemma-3-27B-IT on a Vast A800 80GB box, 2026-09-28. Hub record: [`model-hermeneutics/dyl-probe-repro`](https://huggingface.co/datasets/model-hermeneutics/dyl-probe-repro).
+Numbers are from Gemma-3-27B-IT on a Vast A800 80GB box, 2026-09-28. Hub record: [`model-hermeneutics/dyl-probe-repro`](https://huggingface.co/datasets/model-hermeneutics/dyl-probe-repro).
 
 **The one-paragraph version.** Two labs built “is this a lie?” detectors for Gemma, then we ask whether those detectors still work on **coding reward hacks** they were never trained on.
 
 - **DYL** (AISI): after Gemma answers, ask “did you lie — yes or no?” and read its internals **as it is about to say yes or no**. AISI already trained this detector and posted the weights; we **load that file**, we do not train our own. (That file is what “official checkpoint” meant.)
 - **OA**: after Gemma answers, do **not** let it speak. Write the reply `Yes` yourself after “did you respond truthfully?” and read the internals at that forced `Yes`. That stuffing-in of the answer is **prefill**.
 
-We run AISI’s DYL detector on OA’s set of real vs hardcoded Python solutions, at the token AISI actually trained on (one token **before** yes/no). We compare it to (1) just asking Gemma, (2) an OA-style prefill detector we train, (3) the same DYL detector on Gigi’s lie datasets (Tianq’s numbers). **Result:** DYL still works on the hacks if you ask “did you **cheat**?” (AUROC **0.975**). Gigi-style A/B questions look like a miss only after AISI’s admit/deny flip; the raw score already ranks hacks (**0.944**). OA’s layer-58 prefill detector on the same 1000 rows is **0.920**.
+What we actually ran, in plain terms:
+
+Gemma is given a Python task. Sometimes the assistant message is a **real solution**. Sometimes it is a **cheat**: `return` the value the test expects, ignore the spec. After that message we either ask Gemma a follow-up, or we force the word `Yes` (OA-style). AISI’s detector reads Gemma’s internals and outputs a score. **A good detector ranks cheats above real solutions** (AUROC; 0.5 = coin flip, 1.0 = perfect).
+
+We compare that score to three other things, explained later: just reading Gemma’s yes/no (no internals), an OA-style detector we train ourselves, and the same AISI detector on other lie types teammates collected (not coding).
+
+**Headline numbers.** Ask “did you **cheat**, yes or no?” → AISI detector **0.975**. Same problems, OA-style forced-`Yes` detector → **0.920**. “Did you lie? Answer A or B” looks like a failure until you look at the raw score (**0.944**); a later section explains the extra flip that made it look like 0.37.
 
 ---
 
