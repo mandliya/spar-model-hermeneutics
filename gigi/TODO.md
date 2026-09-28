@@ -91,7 +91,7 @@ are kept as the built-in control group.
 
 - [x] 500-row subset drawn, seed 0, stratified by scenario x innocence
       (results/alibi_subset.csv - never redraw)
-- [ ] Guilt labels: running locally, ~$1.86 total ->
+- [x] Guilt labels DONE (500/500, $1.81): 331 FALSE_ALIBI / 169 TRUE_ALIBI ->
       results/alibi_guilt_labels.{jsonl,csv}. Commit when done.
 - [ ] New box 118.163.199.123:18333: setup_box.sh installs packages and
       downloads gemma once HF_TOKEN is in /workspace/lies-experiment/.env,
