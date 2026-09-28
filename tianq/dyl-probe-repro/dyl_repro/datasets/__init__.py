@@ -1,8 +1,11 @@
 """Dataset-specific code, one sub-package per data source. Everything outside
 this folder (core/, cli/) works on any dataset.
 
-    aisi/               AISI's released transcripts: training fingerprint, validation, calibration
-    ascii_sandbagging/  Gigi's ASCII rows with swappable follow-ups: does the probe transfer?
+    aisi/           AISI's released transcripts: training fingerprint, validation, calibration
+    gigi/           Gigi's categories, one sub-package each: does the probe transfer?
+
+    followups.json  the master list of follow-up questions every dataset draws from
+    followups.py    loads and verifies it
 
 Each dataset module exposes:
 
@@ -12,9 +15,10 @@ Each dataset module exposes:
         they are for (fingerprint, benchmark, calibration, transfer), so the
         check lives with the dataset rather than in one generic scorer.
 
-A dataset whose follow-up can be swapped also sets FOLLOWUPS_AVAILABLE; both
-functions then take the follow-up name as a last argument, and each follow-up
-is stored and scored separately under "<dataset>/<follow-up>".
+A dataset whose follow-up can be swapped also sets FOLLOWUPS_AVAILABLE (the
+entries of followups.json it asks); both functions then take the follow-up
+name as a last argument, and each follow-up is stored and scored separately
+under "<dataset>/<follow-up>".
 
 Every dataset is stored at both positions in core.prefill.POSITIONS, and every
 evaluate reports its full results at both, side by side.
@@ -32,7 +36,12 @@ MODULES = {
     "aisi_city_train": "dyl_repro.datasets.aisi.city_train",
     "aisi_varied_deception": "dyl_repro.datasets.aisi.varied_deception",
     "aisi_alpaca": "dyl_repro.datasets.aisi.alpaca",
-    "ascii_sandbagging": "dyl_repro.datasets.ascii_sandbagging",
+    "ascii_sandbagging": "dyl_repro.datasets.gigi.ascii_sandbagging",
+    "sycophancy_answer": "dyl_repro.datasets.gigi.sycophancy.answer",
+    "sycophancy_feedback": "dyl_repro.datasets.gigi.sycophancy.feedback",
+    "mask_factual": "dyl_repro.datasets.gigi.mask_factual",
+    "unanswerable": "dyl_repro.datasets.gigi.unanswerable",
+    "capture_the_secret": "dyl_repro.datasets.gigi.capture_the_secret",
 }
 NAMES = tuple(MODULES)
 

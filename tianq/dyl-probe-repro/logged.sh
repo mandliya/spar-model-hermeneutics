@@ -8,12 +8,14 @@
 #   ./logged.sh 'tmux new -d -s extract "./run.sh extract --dataset aisi_city_train"'
 #
 # The command is one string, logged verbatim and run with `bash -c`.
-# DYL_SESSION_LOG overrides the log path; the laptop side uses it for the
-# orchestration log (vastai, scp). Logs reach the Hub via dyl_repro/logs.py.
+# The log is named after the host, so each rented box keeps its own file on the
+# Hub instead of overwriting the last box's. DYL_SESSION_LOG overrides the path;
+# the laptop side uses it for the orchestration log (vastai, ssh). Logs reach the
+# Hub via dyl_repro/core/logs.py.
 set -uo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOG="${DYL_SESSION_LOG:-$HERE/scratch/logs/session.log}"
+LOG="${DYL_SESSION_LOG:-$HERE/scratch/logs/session_$(hostname).log}"
 mkdir -p "$(dirname "$LOG")"
 
 command="${1:?usage: ./logged.sh '<command>'}"

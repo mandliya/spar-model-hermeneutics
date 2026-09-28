@@ -6,6 +6,7 @@
 #   ./run.sh evaluate --dataset aisi_city_train               # CPU: layer fingerprint
 #   ./run.sh evaluate --dataset aisi_varied_deception
 #   ./run.sh extract  --dataset ascii_sandbagging --followup all
+#   ./run.sh compare_wordings                                 # CPU: just asking vs the probe, best wording each
 #
 # Every invocation writes its own raw log to scratch/logs/run_<utc>_<command>.log:
 # the exact argv, the environment (python, nvidia-smi, pip freeze), the complete
@@ -29,11 +30,11 @@ set -a
 source <(tr -d '\r' < .env)
 set +a
 
-command="${1:?usage: ./run.sh <extract|evaluate> [args]}"
+command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings> [args]}"
 shift
 case "$command" in
-  extract | evaluate) ;;
-  *) echo "unknown command: $command (expected extract or evaluate)" >&2; exit 1 ;;
+  extract | evaluate | compare_wordings) ;;
+  *) echo "unknown command: $command (expected extract, evaluate or compare_wordings)" >&2; exit 1 ;;
 esac
 
 if [[ -z "${TMUX:-}" ]] && command -v tmux >/dev/null 2>&1; then

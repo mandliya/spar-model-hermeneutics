@@ -17,3 +17,5 @@ tqdm==4.67.1
 python-dotenv==1.1.1
 fsspec==2025.9.0
 pandas==2.3.2
+# For the chart of the two tables (datasets/gigi/wording_charts.py).
+matplotlib==3.10.6

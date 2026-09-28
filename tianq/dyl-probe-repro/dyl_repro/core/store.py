@@ -7,6 +7,7 @@ Layout, identical in the Hub repo and under the local scratch directory:
     <dataset>/hidden_states/<uid>.safetensors   "hidden_states": (positions, n_layers + 1,
                                                 d_model), bfloat16
     <dataset>/results/<name>.json               evaluation outputs, per-row scores included
+    <dataset>/charts/<name>.png                 charts drawn from a result
     logs/<name>.log                             raw execution logs (see core/logs.py)
 
 bfloat16 on disk because the model computes in bfloat16: saving the tensor as
@@ -30,7 +31,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
-from huggingface_hub import CommitOperationAdd, HfApi, snapshot_download
+from huggingface_hub import CommitOperationAdd, HfApi, hf_hub_download, snapshot_download
 from safetensors import safe_open
 from safetensors.torch import save_file
 
@@ -108,6 +109,13 @@ class RowStore:
         self._pending.append(path)
         self.sync()
 
+    def put_chart(self, name: str, figure) -> None:
+        """A matplotlib figure, pushed with the next sync."""
+        path = f"{self.dataset}/charts/{name}.png"
+        (self.scratch / path).parent.mkdir(parents=True, exist_ok=True)
+        figure.savefig(self.scratch / path, dpi=150)
+        self._pending.append(path)
+
     def sync(self) -> None:
         """Push everything written since the last sync, plus the current logs, as one commit."""
         if not self._pending:
@@ -127,6 +135,15 @@ class RowStore:
             what="commit",
         )
         self._pending.clear()
+
+    def result(self, name: str) -> dict:
+        """One stored result, fetched into scratch at its current version on the Hub
+        (re-downloaded when the Hub copy changed, e.g. after a re-evaluation)."""
+        path = hf_hub_download(
+            self.repo_id, f"{self.dataset}/results/{name}.json", repo_type="dataset",
+            local_dir=self.scratch, token=self.token,
+        )
+        return json.loads(Path(path).read_text(encoding="utf-8"))
 
     def pull(self) -> None:
         """Download this dataset's rows and hidden states that are missing locally.

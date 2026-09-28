@@ -1,9 +1,10 @@
 """Everything this dataset takes from Gigi's ascii-sandbagging project.
 
-The only module that names Gigi's code. What defines Gigi's dataset and
-questions is imported from their src/common.py, not retyped, so the wording and
-the meaning of "admitted" have one source:
-https://github.com/mandliya/spar-model-hermeneutics/blob/fa64456/gigi/ascii-sandbagging/src/common.py
+The only module that names Gigi's ASCII files. His src/common.py is loaded
+through the gigi package's module() (its load_config and to_messages define how his
+dataset is read); the follow-up questions and their parsers are in the shared
+master list, ../followups.json, verified against the same file:
+https://github.com/mandliya/spar-model-hermeneutics/blob/268c51c/gigi/ascii-sandbagging/src/common.py
 
 Two things live inside Gigi's scripts rather than importable functions (the
 scripts run on import), so they are restated here, each with its permalink: the
@@ -14,50 +15,34 @@ read straight from their results/ CSVs.
 from __future__ import annotations
 
 import csv
-import os
 import re
-import sys
 from functools import cache
-from pathlib import Path
 
-# The commit these imports and CSVs were read at (the `git pull` of 2026-09-23).
-GIGI_COMMIT = "fa64456"
-# Gigi's folder in the repo; GIGI_ASCII_DIR points elsewhere when this project
-# is not inside a repo checkout (e.g. copied alone onto a GPU box).
-GIGI_DIR = Path(
-    os.environ.get("GIGI_ASCII_DIR", Path(__file__).resolve().parents[5] / "gigi" / "ascii-sandbagging")
-)
-RESULTS_DIR = GIGI_DIR / "results"
+from dyl_repro.datasets import gigi
 
-sys.path.insert(0, str(GIGI_DIR))
-from src.common import (  # noqa: E402
-    FOLLOWUP,
-    FOLLOWUP_CONFIDENCE,
-    FOLLOWUP_HIGH_STAKES,
-    FOLLOWUP_LOW_STAKES,
-    FOLLOWUP_NAMED_SANDBAGGING,
-    FOLLOWUP_PLAIN,
-    admitted_lying,
-    letter,
-    load_config,
-    parse_confidence,
-    to_messages,
-)
+# The checkout these CSVs are read at (2026-09-27). Rows extracted earlier record
+# the commit of their own run (fa64456) in their provenance.
+GIGI_COMMIT = gigi.GIGI_COMMIT
+RESULTS_DIR = gigi.GIGI_DIR / "ascii-sandbagging" / "results"
+_common = gigi.module("ascii-sandbagging", "common")
 
 # Restated from 00_ascii_activations.py L62:
 # https://github.com/mandliya/spar-model-hermeneutics/blob/fa64456/gigi/ascii-sandbagging/00_ascii_activations.py#L62
 CONFIG = "google-gemma-3-27b-it_task-group_sandbagging"
 
-# Our condition name -> (Gigi's CSV, Gigi's condition name). `neutral` lives in
-# ascii_results.csv as `followup_answer`; the rest in their condition tables.
-# Note Gigi sampled these answers at their TEMPERATURE (common.py L39, default 1.0).
-RECORDED = {
-    "neutral": ("ascii_results.csv", None),
-    "low_stakes": ("ascii_followup_conditions.csv", "low_stakes"),
-    "high_stakes": ("ascii_followup_conditions.csv", "high_stakes"),
-    "confidence": ("ascii_followup_conditions.csv", "confidence"),
-    "plain": ("ascii_benchmark_conditions.csv", "plain"),
-    "named_sandbagging": ("ascii_benchmark_conditions.csv", "named"),
+# Gigi's condition -> the CSV holding his recorded answers. `neutral` lives in
+# ascii_results.csv as `followup_answer`; the rest in his condition tables. He
+# generated them greedily (temperature 0): his determinism check regenerated 50
+# saved answers exactly (gigi/unanswerable/results/temp_determinism_check.json).
+RECORDED_CSV = {
+    "neutral": "ascii_results.csv",
+    "low_stakes": "ascii_followup_conditions.csv",
+    "high_stakes": "ascii_followup_conditions.csv",
+    "confidence": "ascii_followup_conditions.csv",
+    "plain": "ascii_benchmark_conditions.csv",
+    "named": "ascii_benchmark_conditions.csv",
+    "eval_plain": "ascii_benchmark_conditions.csv",
+    "eval_named": "ascii_benchmark_conditions.csv",
 }
 
 _BOOL = {"True": True, "False": False, "": None}
@@ -74,7 +59,7 @@ def dataset_rows() -> dict[str, dict]:
     00_ascii_activations.py L142-144 loads them."""
     import pandas as pd
 
-    df = pd.concat([load_config(CONFIG, "train"), load_config(CONFIG, "validation")])
+    df = pd.concat([_common.load_config(CONFIG, "train"), _common.load_config(CONFIG, "validation")])
     df = df[df["task"].str.contains("ascii", case=False, na=False)]
     return {row["sample_id"]: row for _, row in df.iterrows()}
 
@@ -96,7 +81,7 @@ def conversation_before_followup(uid: str) -> list[dict[str, str]]:
     """
     row = dataset_rows()[uid]
     probe = dict(row["lie_detection_prompt"])
-    messages = to_messages(row["trace"]) + [
+    messages = _common.to_messages(row["trace"]) + [
         {"role": str(probe["role"]), "content": str(probe["content"])},
         {"role": "assistant", "content": str(ascii_results()[uid]["probe_answer"])},
     ]
@@ -104,20 +89,17 @@ def conversation_before_followup(uid: str) -> list[dict[str, str]]:
 
 
 @cache
-def recorded_answers(condition: str) -> dict[str, dict]:
-    """uid -> {"answer", "gigi_admitted"} for a condition Gigi recorded; {} otherwise."""
-    if condition not in RECORDED:
+def recorded_answers(condition: str | None) -> dict[str, dict]:
+    """uid -> {"answer", "gigi_admitted"} for one of Gigi's conditions; {} for None (never asked by him)."""
+    if condition is None:
         return {}
-    file, gigi_condition = RECORDED[condition]
-    if gigi_condition is None:
-        return {
-            r["uid"]: {"answer": r["followup_answer"], "gigi_admitted": _BOOL[r["admitted"]]}
-            for r in _csv(file)
-        }
+    rows = _csv(RECORDED_CSV[condition])
+    if condition == "neutral":
+        return {r["uid"]: {"answer": r["followup_answer"], "gigi_admitted": _BOOL[r["admitted"]]} for r in rows}
     return {
         r["sample_id"]: {"answer": r["answer"], "gigi_admitted": _BOOL.get(r["admitted"])}
-        for r in _csv(file)
-        if r["condition"] == gigi_condition
+        for r in rows
+        if r["condition"] == condition
     }
 
 
