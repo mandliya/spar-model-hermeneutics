@@ -135,7 +135,9 @@ AUC matches the paper within the 0.03 check. Honest mean matches; deceptive scor
 
 Native DYL matches just-asking. Naming the act beats it. `answer_first` is inverted (the old bug). AISI follow-up-lie labels barely apply: 0–3 doubled-down lies / 500.
 
-**13-wording sweep (complete, 2026-09-28 21:47 UTC).** All 13 follow-ups extracted (1000/1000) and evaluated (`all_complete: true`). GPU idle. Full table: [`dyl-probe-repro/RESULTS.md`](dyl-probe-repro/RESULTS.md). Headline: `dyl_cheat` probe `prompt_last` **0.975** (just asking 0.945); native `dyl` 0.823 vs 0.830; Gigi A/B `neutral` probe 0.371 (just asking 0.665). Mean across 13: just asking 0.837, probe `prompt_last` 0.715, `answer_first` 0.233.
+**13-wording sweep (complete, 2026-09-28 21:47 UTC).** All 13 follow-ups extracted (1000/1000) and evaluated (`all_complete: true`). GPU idle. Full table: [`dyl-probe-repro/RESULTS.md`](dyl-probe-repro/RESULTS.md). Headline: `dyl_cheat` probe `prompt_last` **0.975** (just asking 0.945); native `dyl` 0.823 vs 0.830. Held-out best wording (same protocol as Gigi): just asking **0.956** (`confidence`), deduced probe **0.973** (`dyl_cheat`).
+
+**Gigi `neutral` A/B is not a failed residual.** Deduced AUROC 0.371 vs just-asking 0.665. Undeduced `prompt_last` AUROC on the original hack is **0.944** (0.939 among admissions). AISI’s admit/deny mirror assumes a yes/no follow-up-lie axis; on A/B the residual already tracks the original hack, so deduction inverts it. Gigi ascii’s own probe winner is `dyl_truthful` yes/no (0.99), not A/B. OA vs Gigi vs AISI table, raw-vs-deduced numbers, and ranked follow-ups: [`dyl-probe-repro/RESULTS.md`](dyl-probe-repro/RESULTS.md).
 
 ## Sources
 
