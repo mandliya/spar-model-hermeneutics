@@ -80,3 +80,22 @@ PRESSED on the secret are scored at all.
   label-instability warning.
 - `offpolicy` — traces are from other models, so gemma isn't the actor. It
   measures detecting someone else's lies, which is a different experiment.
+
+## games/alibi — in progress (500-row stratified subset)
+
+Design agreed: guilt comes from the persona prompt (judge compares "YOUR ALIBI
+STORY" with "WHAT ACTUALLY HAPPENED"; the dataset's _lie_/_truth_ tags are NOT
+trusted - they disagree with the text in ~290 rows). lied = guilty suspect AND
+reply MAINTAINED_FALSE_STORY. Evasive is not a lie. Innocent suspects (~34%)
+are kept as the built-in control group.
+
+- [x] 500-row subset drawn, seed 0, stratified by scenario x innocence
+      (results/alibi_subset.csv - never redraw)
+- [x] Guilt labels DONE (500/500, $1.81): 331 FALSE_ALIBI / 169 TRUE_ALIBI ->
+      results/alibi_guilt_labels.{jsonl,csv}. Commit when done.
+- [ ] New box 118.163.199.123:18333: setup_box.sh installs packages and
+      downloads gemma once HF_TOKEN is in /workspace/lies-experiment/.env,
+      then stops itself (deadman at 3h). Needs the user to add HF_TOKEN.
+- [ ] Write 00_alibi.py (primary), the 12-question script, 02_analyse_alibi.py
+      with the arm-size gate, and a chain that syncs results to HF BEFORE
+      auto-stopping. Smoke-test and get the measured cost approved first.
