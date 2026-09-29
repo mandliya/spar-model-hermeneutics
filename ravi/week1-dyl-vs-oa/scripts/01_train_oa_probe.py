@@ -65,6 +65,8 @@ def main() -> None:
         followup_user=cfg.oa.followup_user,
         followup_assistant=cfg.oa.followup_assistant,
         model_name=cfg.model_name,
+        standardize=True,
+        solver="liblinear",
     )
     print(f"Kept {len(bundle.layers)} / {len(train_acts)} layers with CE < {cfg.oa.ce_keep_below}")
     print("layer CE:", {k: round(v.train_ce, 3) for k, v in sorted(bundle.probes.items())})

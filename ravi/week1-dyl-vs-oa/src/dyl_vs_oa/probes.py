@@ -58,12 +58,28 @@ class ProbeBundle:
         return np.mean(np.stack(probs, axis=0), axis=0)
 
 
-def train_layer_probe(x: np.ndarray, y: np.ndarray, layer: int, C: float) -> LayerProbe:
+def train_layer_probe(
+    x: np.ndarray,
+    y: np.ndarray,
+    layer: int,
+    C: float,
+    *,
+    standardize: bool = False,
+    solver: str = "lbfgs",
+) -> LayerProbe:
+    x = np.asarray(x, dtype=np.float64)
+    mean = std = None
+    if standardize:
+        mean = x.mean(axis=0)
+        std = x.std(axis=0)
+        std = np.where(std < 1e-8, 1.0, std)
+        x = (x - mean) / std
+        solver = "liblinear"
     clf = LogisticRegression(
         C=C,
         max_iter=1000,
         class_weight="balanced",
-        solver="lbfgs",
+        solver=solver,
     )
     clf.fit(x, y)
     proba = clf.predict_proba(x)[:, 1]
@@ -74,6 +90,8 @@ def train_layer_probe(x: np.ndarray, y: np.ndarray, layer: int, C: float) -> Lay
         intercept=float(clf.intercept_[0]),
         C=C,
         train_ce=ce,
+        dataset_mean=mean,
+        dataset_std=std,
     )
 
 
@@ -86,11 +104,15 @@ def train_oa_bundle(
     followup_user: str,
     followup_assistant: str,
     model_name: str,
+    standardize: bool = False,
+    solver: str = "lbfgs",
 ) -> ProbeBundle:
     probes: dict[int, LayerProbe] = {}
     kept: list[int] = []
     for layer in sorted(acts_by_layer):
-        probe = train_layer_probe(acts_by_layer[layer], y, layer, C)
+        probe = train_layer_probe(
+            acts_by_layer[layer], y, layer, C, standardize=standardize, solver=solver
+        )
         probes[layer] = probe
         if probe.train_ce < ce_keep_below:
             kept.append(layer)
@@ -101,7 +123,7 @@ def train_oa_bundle(
     return ProbeBundle(
         method="oa",
         layers=kept,
-        probes={k: probes[k] for k in kept},
+        probes=probes,
         followup_user=followup_user,
         followup_assistant=followup_assistant,
         extraction="prefill",
