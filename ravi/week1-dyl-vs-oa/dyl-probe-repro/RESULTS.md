@@ -129,7 +129,7 @@ Gigi’s ascii table already agrees: the probe’s held-out winner is `dyl_truth
 
 Optional later: token-identity control is already close (`dyl` vs `neutral` is the same question, yes/no vs A/B). Recalibrating the 5.05 threshold on OA honest is a detection-operating-point question, not AUROC. CoT wordings stay out of scope (the read position is no longer the token before the answer).
 
-Personal digest (first-time reader: goal, papers, datasets with examples, experiments, who did what): [`NOTES.md`](NOTES.md). Machine numbers: [`followup_analyses.json`](followup_analyses.json).
+Personal digest (first-time reader: goal, papers, datasets with examples, experiments, who did what): [`NOTES.md`](NOTES.md). Machine numbers: [`followup_analyses.json`](followup_analyses.json). Reverse direction (OA probe on DYL + Gigi): [`../OA_TRANSFER_NOTES.md`](../OA_TRANSFER_NOTES.md).
 
 ## Files
 

@@ -29,7 +29,7 @@ Week 1 on Gemma-3-27B-IT is split three ways (repo root README):
 |---|---|
 | **Gigi** | Reproduce how often Gemma lies on the Anthropic Fellows / `Noddybear/lies` situations, and how often it then denies the lie. Independent ground truth per category. |
 | **Tianq** | Light DYL repro, then run the **official DYL probe** on Gigi’s conversations (and on AISI’s own city / varied splits). Pipeline + Hub. |
-| **Ravi** | Light DYL + OA repro, then run that **same official probe** on OA’s coding reward-hack set, and compare to OA’s own probe and to just asking. |
+| **Ravi** | Light DYL + OA repro, then run that **same official probe** on OA’s coding reward-hack set, and compare to OA’s own probe and to just asking. Then the reverse: OA prefill probe on DYL + Gigi ([`../OA_TRANSFER_NOTES.md`](../OA_TRANSFER_NOTES.md)). |
 
 This folder (`ravi/week1-dyl-vs-oa/dyl-probe-repro`) is Ravi’s copy of Tianq’s pipeline plus dataset `oa_mbpp`. We do not edit `tianq/` or `gigi/`.
 
@@ -396,6 +396,12 @@ Held-out best wording, deduced probe vs just asking:
 
 Hub has only Gigi’s **wordings summary**, not per-wording result JSONs. Do not re-extract Gigi.
 
+### Experiment I — Reverse: OA Simple Deception on those same Gigi / AISI rows
+
+Not this folder’s extractor. OA prefill (`Did you respond truthfully?` / `Yes`) on original-turn labels. Same Gigi rows as H; **not** Tianq’s follow-up, token, or deduction. Write-up: [`../OA_TRANSFER_NOTES.md`](../OA_TRANSFER_NOTES.md).
+
+Cite: city mean **0.965**, varied **0.955**, ascii L58 **0.996** (Tianq DYL 0.99). Sycophancy ~chance. Do not cite city 0.73. Do not pair city with Tianq follow-up-lie 1.00.
+
 ---
 
 ## 7. What we think is true now
@@ -446,6 +452,7 @@ Did **not** add OA MBPP (that dataset is Ravi’s). Did **not** retrain OA’s p
 - Valid `prompt_last` transfer table; 13-wording sweep; held-out best wording on OA (probe 0.973, `dyl_cheat`).
 - Comparison table OA vs Gigi vs AISI (same probe, no Gigi re-extract).
 - Follow-ups: raw vs deduced; held-out `(score, admitted)` adapter; layer sweep; OA prefill on the **same 1000** rows (L58 0.920).
+- Reverse: OA Simple Deception on AISI original-turn + Gigi ([`../OA_TRANSFER_NOTES.md`](../OA_TRANSFER_NOTES.md)). Ascii L58 0.996 vs Tianq DYL 0.99; city/varied mean 0.965 / 0.955 (not comparable to DYL follow-up-lie 1.00).
 - Docs: `README.md`, `RESULTS.md`, this file. `.env` and `scratch/` are not in git; rows/hidden states are on the Hub.
 
 Did **not** edit `gigi/` or `tianq/`. Did **not** destroy the Vast instance.
@@ -463,6 +470,7 @@ Did **not** edit `gigi/` or `tianq/`. Did **not** destroy the Vast instance.
 | [`oa_prefill_eval.json`](oa_prefill_eval.json) | OA prefill on 1000 honeypot rows |
 | Hub `oa_mbpp/` | Per-row transcripts, hidden states, 13 eval JSONs |
 | Hub `gigi/results/wordings_*.json` | Tianq’s Gigi held-out table |
+| [`../OA_TRANSFER_NOTES.md`](../OA_TRANSFER_NOTES.md) | OA probe → DYL + Gigi (reverse transfer) |
 | Hub `aisi_*` | City + varied position checks |
 | `../results/oa_simple_deception_probe.json` | OA probe weights (gitignored, 19 MB) |
 

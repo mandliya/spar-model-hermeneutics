@@ -48,7 +48,8 @@ We will not fully rebuild Varied Deception in week 1. DYL validation is: (1) loa
 1. **OA light repro.** Prefill-train a Simple Deception probe. Eval on held-out synthetic MBPP (`code` vs `hardcode`). Target AUC ≈ 0.994.
 2. **DYL light repro.** Load the released Gemma-3-27B-IT probe, or generate city-country rollouts and train our own. Target: in-domain AUROC ≫ 0.5 and the probe actually fires on generated yes/no tokens.
 3. **Transfer.** Official DYL on OA MBPP-Honeypot, through `dyl-probe-repro` (a copy of Tianq's pipeline plus dataset `oa_mbpp`): residual stream at the token *before* the yes/no, AISI follow-up labels (admit-after-lie = honest; false confessions dropped), plus the original code-vs-hardcode labels. Also score OA's prefill probe and black-box self-report on the same rows.
-4. **Controlled ablation (if time).** Same training pairs, prefill vs generate. Isolates the data-collection difference the mentor flagged.
+4. **Reverse transfer.** Freeze the OA Simple Deception prefill probe and score it on AISI city/varied (original-turn labels) and Gigi's categories. Same Gigi rows as Tianq; OA protocol, not DYL. Write-up: [`OA_TRANSFER_NOTES.md`](OA_TRANSFER_NOTES.md), tables: [`OA_TRANSFER_RESULTS.md`](OA_TRANSFER_RESULTS.md).
+5. **Controlled ablation (if time).** Same training pairs, prefill vs generate. Isolates the data-collection difference the mentor flagged. Mentor follow-up if OA has no headroom on Gigi: “did you lie” vs “did you sandbag” wording.
 
 ## Setup
 
@@ -140,6 +141,8 @@ Native DYL matches just-asking. Naming the act beats it. `answer_first` is inver
 **Gigi `neutral` A/B is not a failed residual.** Deduced AUROC 0.371 vs just-asking 0.665. Undeduced `prompt_last` AUROC on the original hack is **0.944** (0.939 among admissions). AISI’s admit/deny mirror assumes a yes/no follow-up-lie axis; on A/B the residual already tracks the original hack, so deduction inverts it. Gigi ascii’s own probe winner is `dyl_truthful` yes/no (0.99), not A/B. OA vs Gigi vs AISI table: [`dyl-probe-repro/RESULTS.md`](dyl-probe-repro/RESULTS.md). Full first-time-reader write-up (goal, papers, datasets with examples, experiments, who did what): [`dyl-probe-repro/NOTES.md`](dyl-probe-repro/NOTES.md).
 
 **OA prefill on the same 1000 honeypot rows.** Simple Deception probe, prefill `Did you respond truthfully?` / `Yes`. Layer 58 AUROC **0.920**; mean of all 62 layers **0.826** (train CE ~0 on every layer, so the CE filter kept everyone). Same-task DYL `dyl_cheat` deduced is **0.975**. Not a matched suffix.
+
+**Reverse transfer (OA probe on DYL + Gigi).** Original-turn labels. City mean-kept **0.965**, varied **0.955**, ascii L58 **0.996** (Tianq DYL 0.99). Sycophancy near chance. Do not cite city 0.73 (ambiguous-as-honest). Do not pair city/varied with Tianq’s follow-up-lie 1.00. Full write-up: [`OA_TRANSFER_NOTES.md`](OA_TRANSFER_NOTES.md).
 
 ## Sources
 
