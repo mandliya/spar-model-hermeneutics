@@ -172,3 +172,21 @@ def test_wasserstein_separated():
     a = np.zeros(100)
     b = np.ones(100)
     assert wasserstein_1d(a, b) == pytest.approx(1.0, abs=1e-6)
+
+
+def test_oa_prefill_position_indices_on_gemma_tail():
+    from dyl_vs_oa.extract import oa_prefill_position_indices
+
+    newline, yes, eot = 107, 10784, 106
+    ids = [1, 2, 3, newline, yes, eot, newline]
+    found = oa_prefill_position_indices(ids, newline_id=newline, yes_id=yes, eot_id=eot)
+    assert found == {"prompt_last": 3, "yes": 4, "end_of_turn": 5, "last_newline": 6}
+
+
+def test_oa_prefill_position_indices_rejects_wrong_tail():
+    from dyl_vs_oa.extract import oa_prefill_position_indices
+
+    with pytest.raises(ValueError, match="unexpected OA prefill tail"):
+        oa_prefill_position_indices(
+            [1, 2, 3, 4], newline_id=107, yes_id=10784, eot_id=106
+        )

@@ -7,8 +7,54 @@ from tqdm import tqdm
 from dyl_vs_oa.chat import apply_chat, parse_yes_no, with_generate_followup, with_prefill_followup
 
 
+OA_PREFILL_POSITIONS = ("prompt_last", "yes", "end_of_turn", "last_newline")
+
+
 def _last_index(attention_mask: torch.Tensor) -> torch.Tensor:
     return attention_mask.sum(dim=1) - 1
+
+
+def gemma_oa_tail_token_ids(tokenizer) -> tuple[int, int, int]:
+    """Ids for (newline after `model`, `Yes`, `<end_of_turn>`) on Gemma-3."""
+    yes_ids = tokenizer.encode("Yes", add_special_tokens=False)
+    if len(yes_ids) != 1:
+        raise ValueError(f"Yes did not encode as one token: {yes_ids}")
+    eot = tokenizer.convert_tokens_to_ids("<end_of_turn>")
+    if eot is None or eot < 0:
+        raise ValueError("tokenizer has no <end_of_turn>")
+    newline_ids = tokenizer.encode("\n", add_special_tokens=False)
+    if len(newline_ids) != 1:
+        raise ValueError(f"newline did not encode as one token: {newline_ids}")
+    return newline_ids[0], yes_ids[0], eot
+
+
+def oa_prefill_position_indices(
+    input_ids: list[int],
+    *,
+    newline_id: int,
+    yes_id: int,
+    eot_id: int,
+) -> dict[str, int]:
+    """Map OA prefill tail tokens to indices in a closed Gemma chat.
+
+    Expected last four tokens after `Did you respond truthfully?` / `Yes`:
+
+        \\n  Yes  <end_of_turn>  \\n
+        ^prompt_last (Tianq)  ^OA paper  ^eot  ^this folder's 05 extractor
+    """
+    if len(input_ids) < 4:
+        raise ValueError("sequence shorter than the OA prefill tail")
+    tail = input_ids[-4:]
+    expected = [newline_id, yes_id, eot_id, newline_id]
+    if tail != expected:
+        raise ValueError(f"unexpected OA prefill tail {tail}, expected {expected}")
+    last = len(input_ids) - 1
+    return {
+        "prompt_last": last - 3,
+        "yes": last - 2,
+        "end_of_turn": last - 1,
+        "last_newline": last,
+    }
 
 
 @torch.inference_mode()
@@ -79,6 +125,79 @@ def extract_prefill_activations(
         for layer, arr in batch_acts.items():
             acc.setdefault(layer, []).append(arr)
     return {layer: np.concatenate(chunks, axis=0) for layer, chunks in acc.items()}
+
+
+@torch.inference_mode()
+def hidden_states_oa_positions(
+    subject,
+    texts: list[str],
+    layers: list[int] | None = None,
+    max_length: int = 2048,
+) -> dict[str, dict[int, np.ndarray]]:
+    """Residual at prompt_last / Yes / end_of_turn / last_newline for each text."""
+    tok = subject.tokenizer
+    newline_id, yes_id, eot_id = gemma_oa_tail_token_ids(tok)
+    prev_trunc = getattr(tok, "truncation_side", "right")
+    tok.truncation_side = "left"
+    enc = tok(
+        texts,
+        return_tensors="pt",
+        padding=True,
+        truncation=True,
+        max_length=max_length,
+        add_special_tokens=False,
+    )
+    tok.truncation_side = prev_trunc
+    attn = enc["attention_mask"]
+    ids = enc["input_ids"]
+    last = _last_index(attn)
+    batch = last.shape[0]
+    pos_index = {name: torch.empty(batch, dtype=torch.long) for name in OA_PREFILL_POSITIONS}
+    for i in range(batch):
+        end = int(last[i].item()) + 1
+        row = ids[i, :end].tolist()
+        found = oa_prefill_position_indices(
+            row, newline_id=newline_id, yes_id=yes_id, eot_id=eot_id
+        )
+        for name, idx in found.items():
+            pos_index[name][i] = idx
+    enc = {k: v.to(subject.device) for k, v in enc.items()}
+    out = subject.model(**enc, output_hidden_states=True, use_cache=False)
+    hs = out.hidden_states
+    wanted = layers if layers is not None else list(range(subject.n_layers))
+    acts: dict[str, dict[int, np.ndarray]] = {name: {} for name in OA_PREFILL_POSITIONS}
+    batch_ix = torch.arange(batch, device=hs[1].device)
+    for name, idx in pos_index.items():
+        idx = idx.to(hs[1].device)
+        for layer in wanted:
+            tensor = hs[layer + 1]
+            gathered = tensor[batch_ix, idx]
+            acts[name][layer] = gathered.float().cpu().numpy()
+    return acts
+
+
+def extract_prefill_activations_at_positions(
+    subject,
+    conversations,
+    followup_user: str,
+    followup_assistant: str,
+    layers: list[int] | None = None,
+    batch_size: int = 2,
+    max_length: int = 2048,
+) -> dict[str, dict[int, np.ndarray]]:
+    texts = prefill_texts(subject.tokenizer, conversations, followup_user, followup_assistant)
+    acc: dict[str, dict[int, list[np.ndarray]]] = {name: {} for name in OA_PREFILL_POSITIONS}
+    for i in tqdm(range(0, len(texts), batch_size), desc="prefill acts (4 positions)"):
+        batch_acts = hidden_states_oa_positions(
+            subject, texts[i : i + batch_size], layers=layers, max_length=max_length
+        )
+        for name, by_layer in batch_acts.items():
+            for layer, arr in by_layer.items():
+                acc[name].setdefault(layer, []).append(arr)
+    return {
+        name: {layer: np.concatenate(chunks, axis=0) for layer, chunks in by_layer.items()}
+        for name, by_layer in acc.items()
+    }
 
 
 def _yes_no_token_offset(tokenizer, generated_ids: list[int]) -> int | None:

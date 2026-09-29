@@ -4,7 +4,7 @@ Reverse of [`dyl-probe-repro/RESULTS.md`](dyl-probe-repro/RESULTS.md). Probe tra
 
 Host: Vast RTX PRO 6000 Blackwell 96GB, 2026-09-28. First-time-reader write-up: [`OA_TRANSFER_NOTES.md`](OA_TRANSFER_NOTES.md).
 
-**Status 2026-09-28: all listed sets scored.** Capture L58 0.429 (below chance).
+**Status 2026-09-29: four-position ablation scored.** OA’s claimed `Yes` is not better than `05` last-newline. Sycophancy/capture stay near chance at every token.
 
 ## How to resume
 
@@ -52,9 +52,31 @@ OA prefills after the **first** assistant turn. Labels from AISI `lie_reason`; u
 - **Sycophancy:** both white-box methods sit near chance-to-0.66. This is where “did you lie” vs “did you sandbag” (named-act) ablations belong.
 - **Mask:** possible OA headroom over DYL, small n. Not a wording-ablation substitute for sycophancy.
 
+## Token position (`07`, 2026-09-29)
+
+New probe per index, same 400 Simple Deception facts. City n=800 original-turn subsample; OA MBPP 200 tasks (400 convs). Full protocol: NOTES §5.
+
+Layer 58 AUROC:
+
+| Set | `prompt_last` | `Yes` | `<end_of_turn>` | last `\n` (`05`) | Tianq DYL (same rows, different detector) |
+|---|---:|---:|---:|---:|---:|
+| ascii | 0.762 | 0.061 | **1.000** | 0.996 | 0.99 |
+| sycophancy A | **0.622** | 0.487 | 0.588 | 0.555 | 0.66 |
+| sycophancy B | 0.464 | 0.510 | 0.481 | 0.445 | 0.64 |
+| mask | 0.490 | **0.670** | 0.524 | 0.659 | 0.52 |
+| capture | 0.482 | 0.487 | **0.518** | 0.441 | 0.61 |
+| city (n=800) | 0.191 | 0.495 | 0.442 | **0.860** | — (follow-up-lie, skip) |
+| OA MBPP (n=400) | 0.064 | 0.806 | 0.175 | **0.907** | **0.973** (`dyl_cheat`) |
+
+`05` last-newline is the transfer winner. OA `Yes` inverts ascii. Tianq `prompt_last` inverts this OA probe on city/MBPP. No token closes sycophancy or capture.
+
+```bash
+PYTHONPATH=src:dyl-probe-repro python -u scripts/07_oa_token_positions.py
+```
+
 ## Protocol reminders
 
-- Token = last non-pad of the closed Gemma chat (`Yes` `<end_of_turn>` `\n`), not OA’s `Yes` and not Tianq `prompt_last`. Internally consistent.
+- `05` token = last non-pad of the closed Gemma chat (`Yes` `<end_of_turn>` `\n`). Train/eval agree. `07` shows that OA’s `Yes` and Tianq `prompt_last` are **worse** for this probe, not better.
 - No AISI deduction. OA score is already original-lie.
 - Transformers pinned `<5` (4.57.6). Do not use `scripts/03_eval_transfer.py` for official DYL.
 
@@ -62,6 +84,7 @@ OA prefills after the **first** assistant turn. Labels from AISI `lie_reason`; u
 
 | Path | What |
 |---|---|
-| `results/oa_transfer_eval.json` | numbers above (in git) |
-| `results/oa_simple_deception_probe.json` | weights, gitignored |
+| `results/oa_transfer_eval.json` | `05` numbers above (in git) |
+| `results/oa_token_position_eval.json` | `07` four-position table (in git) |
+| `results/oa_simple_deception_probe.json` | last-newline weights, gitignored |
 | `results/oa_transfer_cache/*.npz` | activations, gitignored |

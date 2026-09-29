@@ -452,7 +452,7 @@ Did **not** add OA MBPP (that dataset is Ravi’s). Did **not** retrain OA’s p
 - Valid `prompt_last` transfer table; 13-wording sweep; held-out best wording on OA (probe 0.973, `dyl_cheat`).
 - Comparison table OA vs Gigi vs AISI (same probe, no Gigi re-extract).
 - Follow-ups: raw vs deduced; held-out `(score, admitted)` adapter; layer sweep; OA prefill on the **same 1000** rows (L58 0.920).
-- Reverse: OA Simple Deception on AISI original-turn + Gigi ([`../OA_TRANSFER_NOTES.md`](../OA_TRANSFER_NOTES.md)). Ascii L58 0.996 vs Tianq DYL 0.99; city/varied mean 0.965 / 0.955 (not comparable to DYL follow-up-lie 1.00).
+- Reverse: OA Simple Deception on AISI original-turn + Gigi ([`../OA_TRANSFER_NOTES.md`](../OA_TRANSFER_NOTES.md)). Ascii L58 0.996 vs Tianq DYL 0.99; city/varied mean 0.965 / 0.955 (not comparable to DYL follow-up-lie 1.00). Four-token ablation (`07`): OA’s claimed `Yes` inverts ascii (0.061); Tianq `prompt_last` inverts this OA probe on city/MBPP; `05` last-newline remains the transfer winner; syc/capture stay near chance at every index.
 - Docs: `README.md`, `RESULTS.md`, this file. `.env` and `scratch/` are not in git; rows/hidden states are on the Hub.
 
 Did **not** edit `gigi/` or `tianq/`. Did **not** destroy the Vast instance.
