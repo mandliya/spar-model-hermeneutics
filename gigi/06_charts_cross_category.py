@@ -33,6 +33,7 @@ SYC_RESULTS = REPO / "sycophancy" / "results"
 MASK_RESULTS = REPO / "mask-factual" / "results"
 UNANS_RESULTS = REPO / "unanswerable" / "results"
 CAPTURE_RESULTS = REPO / "capture-the-secret" / "results"
+ALIBI_RESULTS = REPO / "alibi" / "results"
 CHARTS_DIR = REPO / "charts"
 CHARTS_DIR.mkdir(exist_ok=True)
 
@@ -44,6 +45,7 @@ GREEN = "#3a9a5c"
 PURPLE = "#8e44ad"
 TEAL = "#127a75"
 CRIMSON = "#b5303a"
+OCHRE = "#b8860b"
 GRID = "#e1e0d9"
 
 plt.rcParams.update({
@@ -174,6 +176,12 @@ def capture_rates(metric):
             for cond in CONDITIONS}
 
 
+def alibi_rates(metric):
+    df = pd.read_csv(ALIBI_RESULTS / "alibi_benchmark_conditions.csv", low_memory=False)
+    return {cond: _metric(df[df["condition"] == cond], "lied", metric)
+            for cond in CONDITIONS}
+
+
 def build_series(metric):
     s = {
         "ascii-sandbagging": (ascii_rates(metric), BLUE),
@@ -186,6 +194,8 @@ def build_series(metric):
         s["unanswerable"] = (unanswerable_rates(metric), TEAL)
     if (CAPTURE_RESULTS / "capture_secret_benchmark_conditions.csv").exists():
         s["capture-the-secret"] = (capture_rates(metric), CRIMSON)
+    if (ALIBI_RESULTS / "alibi_benchmark_conditions.csv").exists():
+        s["alibi"] = (alibi_rates(metric), OCHRE)
     return s
 
 
@@ -273,7 +283,14 @@ def lying_rate_chart():
                      wilson(int((cap["result"] == "FALSE_DENIAL").sum()),
                             len(cap)), CRIMSON))
 
-    fig, ax = plt.subplots(figsize=(8, 5.0))
+    al_path = ALIBI_RESULTS / "alibi_conditions.csv"
+    if al_path.exists():
+        al = pd.read_csv(al_path)
+        al = al[(al["guilt"] == "FALSE_ALIBI") & al["result"].notna()]
+        rows.append(("alibi\n(maintained a false alibi)",
+                     wilson(int((al["result"] == "MAINTAINED_FALSE_STORY").sum()), len(al)), OCHRE))
+
+    fig, ax = plt.subplots(figsize=(8, 5.6))
     y = list(range(len(rows)))[::-1]
     for yi, (label, r, color) in zip(y, rows):
         p, lo, hi = r
