@@ -5,6 +5,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 cd "$ROOT"
 FILE="ravi/week1-dyl-vs-oa/results/oa_transfer_eval.json"
+export GIT_AUTHOR_NAME="${GIT_AUTHOR_NAME:-Ravi Mandliya}"
+export GIT_AUTHOR_EMAIL="${GIT_AUTHOR_EMAIL:-ravi.mandliya@gmail.com}"
+export GIT_COMMITTER_NAME="${GIT_COMMITTER_NAME:-Ravi Mandliya}"
+export GIT_COMMITTER_EMAIL="${GIT_COMMITTER_EMAIL:-ravi.mandliya@gmail.com}"
 LAST=""
 echo "watching $FILE"
 while true; do
@@ -21,7 +25,7 @@ ravi: checkpoint OA transfer scores ($DATASETS)
 
 EOF
 )"
-        if git push origin HEAD; then
+        if git -c "credential.helper=" -c "credential.helper=!f() { echo username=x-access-token; echo password=\$(gh auth token); }; f" push origin HEAD; then
           echo "pushed $DATASETS"
         else
           echo "commit ok, push failed; will retry next change"
