@@ -73,7 +73,7 @@ def wilson(k, n, z=1.96):
 
 CONDITIONS = ["neutral", "low_stakes", "high_stakes", "confidence",
               "neutral_cot", "low_stakes_cot", "high_stakes_cot", "confidence_cot",
-              "plain", "named", "eval_plain", "eval_named"]
+              "plain", "named", "named_cot", "eval_plain", "eval_named"]
 
 
 def _as_bool(series, col):
@@ -182,6 +182,31 @@ def alibi_rates(metric):
             for cond in CONDITIONS}
 
 
+from named_cot_join import named_cot_frame
+
+MASK_DIR = MASK_RESULTS
+NC_BASE = {  # name -> (loader of a frame holding that category's `named` rows, truth column)
+    "ascii-sandbagging": (lambda: pd.read_csv(ASCII_RESULTS / "ascii_benchmark_conditions.csv"), "lied"),
+    "sycophancy Track A": (lambda: pd.read_csv(SYC_RESULTS / "sycophancy_benchmark_conditions.csv"), "fold"),
+    "sycophancy Track B": (lambda: pd.read_csv(SYC_RESULTS / "sycophancy_feedback_benchmark_conditions.csv"), "sycophantic"),
+    "mask-factual": (lambda: pd.read_csv(MASK_DIR / "mask_factual_named_rerun.csv"), "lied"),
+    "unanswerable": (lambda: (lambda d: d[d["bucket"] == "confabulation"])(
+        pd.read_csv(UNANS_RESULTS / "unanswerable_benchmark_conditions.csv")), "confabulated"),
+    "capture-the-secret": (lambda: pd.read_csv(CAPTURE_RESULTS / "capture_secret_benchmark_conditions.csv", low_memory=False), "lied"),
+    "alibi": (lambda: pd.read_csv(ALIBI_RESULTS / "alibi_benchmark_conditions.csv", low_memory=False), "lied"),
+}
+
+
+def add_named_cot(series, metric):
+    for name, (rates, _color) in series.items():
+        if name in NC_BASE:
+            load, truth = NC_BASE[name]
+            nc = named_cot_frame(name, load(), truth)
+            if len(nc):
+                rates["named_cot"] = _metric(nc, truth, metric)
+    return series
+
+
 def build_series(metric):
     s = {
         "ascii-sandbagging": (ascii_rates(metric), BLUE),
@@ -196,7 +221,7 @@ def build_series(metric):
         s["capture-the-secret"] = (capture_rates(metric), CRIMSON)
     if (ALIBI_RESULTS / "alibi_benchmark_conditions.csv").exists():
         s["alibi"] = (alibi_rates(metric), OCHRE)
-    return s
+    return add_named_cot(s, metric)
 
 
 def line_chart(metric, ylabel, out_name):
@@ -216,7 +241,7 @@ def line_chart(metric, ylabel, out_name):
             his.append(max(0, hi * 100 - p * 100))
         ax.errorbar(xs, ys, yerr=[los, his], fmt="o-", color=color, label=name,
                     linewidth=1.6, markersize=6, capsize=3, elinewidth=1, zorder=3)
-    for v in (3.5, 7.5, 9.5):
+    for v in (3.5, 7.5, 10.5):
         ax.axvline(v, color=GRID, linewidth=1, linestyle="--", zorder=1)
     ax.set_xticks(x)
     ax.set_xticklabels(CONDITIONS, rotation=30, ha="right")

@@ -13,13 +13,14 @@ import pathlib
 import re
 
 import pandas as pd
+from named_cot_join import named_cot_frame
 from statsmodels.stats.proportion import proportion_confint
 
 G = pathlib.Path(__file__).resolve().parent
 START, END = "<!-- CONDITION-TABLES:START -->", "<!-- CONDITION-TABLES:END -->"
 ORDER = ["neutral", "low_stakes", "high_stakes", "confidence",
          "neutral_cot", "low_stakes_cot", "high_stakes_cot", "confidence_cot",
-         "plain", "named", "eval_plain", "eval_named"]
+         "plain", "named", "named_cot", "eval_plain", "eval_named"]
 B = lambda s: s.map({True: True, False: False, "True": True, "False": False})
 
 
@@ -74,6 +75,7 @@ blocks = []
 BAL = {}
 for name, act, load in CATS:
     df, truth = load()
+    df = pd.concat([df, named_cot_frame(name, df, truth)], ignore_index=True)
     df = df.drop_duplicates(subset=["sample_id", "condition"])
     df = df[df["admitted"].notna() & df[truth].notna()]
     t, a = B(df[truth]).astype(bool), B(df["admitted"]).astype(bool)
@@ -101,7 +103,7 @@ for name, act, load in CATS:
 
 section = "\n".join([
     START,
-    "### Every category, all 12 follow-up questions",
+    "### Every category, all 13 follow-up questions",
     "",
     "Every wording, every category. Measures are defined in Methodology §4.",
     "",
