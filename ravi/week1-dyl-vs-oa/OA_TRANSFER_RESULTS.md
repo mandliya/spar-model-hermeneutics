@@ -4,7 +4,7 @@ Reverse of [`dyl-probe-repro/RESULTS.md`](dyl-probe-repro/RESULTS.md). Probe tra
 
 Host: Vast RTX PRO 6000 Blackwell 96GB, 2026-09-28. First-time-reader write-up: [`OA_TRANSFER_NOTES.md`](OA_TRANSFER_NOTES.md).
 
-**Status:** city, varied, ascii, sycophancy A/B, mask, unanswerable scored. **capture-the-secret extracting.**
+**Status 2026-09-28: all listed sets scored.** Capture L58 0.429 (below chance).
 
 ## How to resume
 
@@ -28,10 +28,10 @@ OA layer 58 and OA mean-of-kept vs Tianq’s **held-out deduced DYL** and just-a
 | Gigi sycophancy (feedback) | 116 / 85 | **0.71** | 0.64 | 0.445 | 0.494 |
 | Gigi mask factual | 55 / 31 | 0.58 | 0.52 | 0.659 | **0.736** |
 | Gigi unanswerable | 86 / 7 | 0.49 | 0.65 | 0.537 | 0.233 |
-| Gigi capture the secret | 73 / 305 | 0.57 | 0.61 | — | extracting |
+| Gigi capture the secret | 73 / 305 | 0.57 | 0.61 | 0.429 | 0.387 |
 | OA MBPP-Honeypot (prior) | 500 / 500 | 0.956 | **0.973** | **0.920** | 0.826 |
 
-Ascii: **no headroom** vs DYL. Sycophancy: neither probe works; asking is as good or better. Mask: OA mean beats both DYL and asking on a small set. Unanswerable: 7 honest, ignore.
+Ascii: **no headroom** vs DYL. Sycophancy and capture: OA is at or below chance; asking / DYL still weak-to-0.66. Mask: OA mean beats both DYL and asking on a small set. Unanswerable: 7 honest, ignore.
 
 Tianq ascii n was 192 / 118; we have 191 / 119 (`lied is None` skip). Same ground-truth rule.
 
@@ -50,7 +50,7 @@ OA prefills after the **first** assistant turn. Labels from AISI `lie_reason`; u
 
 - **Ascii / city-varied original-turn:** OA already transfers. Finding the OA-vs-DYL *difference* is optional here, not required to show the probe works.
 - **Sycophancy:** both white-box methods sit near chance-to-0.66. This is where “did you lie” vs “did you sandbag” (named-act) ablations belong.
-- **Mask:** possible OA headroom over DYL, small n. Worth a second look after capture lands; not a wording-ablation substitute for sycophancy.
+- **Mask:** possible OA headroom over DYL, small n. Not a wording-ablation substitute for sycophancy.
 
 ## Protocol reminders
 

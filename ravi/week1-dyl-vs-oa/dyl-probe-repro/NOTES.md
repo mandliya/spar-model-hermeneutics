@@ -400,7 +400,7 @@ Hub has only Gigi’s **wordings summary**, not per-wording result JSONs. Do not
 
 Not this folder’s extractor. OA prefill (`Did you respond truthfully?` / `Yes`) on original-turn labels. Same Gigi rows as H; **not** Tianq’s follow-up, token, or deduction. Write-up: [`../OA_TRANSFER_NOTES.md`](../OA_TRANSFER_NOTES.md).
 
-Cite: city mean **0.965**, varied **0.955**, ascii L58 **0.996** (Tianq DYL 0.99). Sycophancy ~chance. Do not cite city 0.73. Do not pair city with Tianq follow-up-lie 1.00.
+Cite: city mean **0.965**, varied **0.955**, ascii L58 **0.996** (Tianq DYL 0.99). Sycophancy / capture ~chance (capture L58 0.43). Do not cite city 0.73. Do not pair city with Tianq follow-up-lie 1.00.
 
 ---
 

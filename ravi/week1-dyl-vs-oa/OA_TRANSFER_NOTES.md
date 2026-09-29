@@ -22,7 +22,7 @@ and read the residual at the end of that forced `Yes` turn. A linear probe, trai
 
 On ascii, OA layer 58 matches Tianq’s official DYL (0.99). On city/varied, **do not** put those OA numbers next to Tianq’s 1.00 / 0.99 — those DYL numbers are **follow-up-lie**, a different question (see §4).
 
-Sycophancy, unanswerable, and (so far) capture stay near chance — same qualitative picture as Tianq’s DYL table. Mask is weak but OA ranks it better than DYL did (mean 0.74 vs DYL 0.52; n = 55 / 31).
+Sycophancy, capture, and unanswerable stay near chance — same qualitative picture as Tianq’s DYL table. Capture is actually inverted (L58 0.43). Mask is weak but OA ranks it better than DYL did (mean 0.74 vs DYL 0.52; n = 55 / 31).
 
 ---
 
@@ -142,13 +142,13 @@ Do not use `scripts/03_eval_transfer.py` for official DYL. That path still reads
 
 1. **OA Simple Deception transfers to original-turn AISI city/varied** (mean-kept **0.965** / **0.955**). Layer 58 alone is a bit weaker (0.879 / 0.909). That is the OA recipe paying off: average layers.
 2. **OA transfers to Gigi ascii** as well as official DYL does (L58 **0.996** vs Tianq **0.99**). No headroom there. Closest Gigi act to “I just said something false.”
-3. **OA does not transfer** (or we cannot tell) on Gigi sycophancy A/B. L58 0.55 / 0.45. Tianq DYL was also ~0.66 / 0.64, just-asking ~0.68 / 0.71. Same qualitative miss; OA is not *better* here, so the mentor’s wording ablation still applies to sycophancy, not to ascii.
+3. **OA does not transfer** on Gigi sycophancy A/B (L58 0.55 / 0.45) or **capture** (L58 0.43, inverted). Tianq DYL was also weak there (~0.66 / 0.64 / 0.61). Mentor wording ablations belong on these acts, not on ascii.
 4. **Mask** is the one Gigi set where OA currently **beats** Tianq DYL (mean 0.74 vs 0.52) and just-asking (0.58). Small n (55 / 31). Treat as a hint, not a headline.
 5. **Unanswerable** is underpowered (86 / **7**). L58 0.54 is noise. Gigi already does not treat this as the same kind of lie.
 6. **The 0.73 city number was a label bug**, not a dead probe. Dropped.
 7. **Protocol is OA-shaped, not Tianq-shaped.** Same Gigi rows; different follow-up, different token, no deduction, no wording sweep.
 
-Still open: capture-the-secret (extracting). Matched-position re-extract. “Did you lie” vs “did you sandbag” wording ablations — justified on sycophancy / mask, not on ascii.
+Still open: matched-position re-extract. “Did you lie” vs “did you sandbag” wording ablations — justified on sycophancy / capture / mask, not on ascii.
 
 ---
 
