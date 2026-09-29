@@ -155,6 +155,12 @@ def main() -> None:
         "datasets": {},
         "comparison": {},
     }
+    if out_path.exists():
+        prev = json.loads(out_path.read_text())
+        payload["datasets"] = dict(prev.get("datasets") or {})
+        payload["comparison"] = dict(prev.get("comparison") or {})
+        if prev.get("label"):
+            payload["label"] = prev["label"]
 
     for name in names:
         cached = _load_acts(cache_dir, name)
