@@ -124,6 +124,10 @@ pytest tests -q
 
 Keep a `tmux` or `screen` session so SSH drops do not kill the job.
 
+**This rental’s job** is official DYL → OA. Follow [`dyl-probe-repro/AGENTS.md`](dyl-probe-repro/AGENTS.md). Do **not** run `scripts/03_eval_transfer.py` for the official checkpoint (wrong token).
+
+OA Simple Deception repro (optional; already matched the paper) still lives in this folder:
+
 ```bash
 tmux new -s probes
 source /workspace/spar-model-hermeneutics/ravi/week1-dyl-vs-oa/.venv/bin/activate
@@ -131,8 +135,6 @@ cd /workspace/spar-model-hermeneutics/ravi/week1-dyl-vs-oa
 export PYTHONPATH=src HF_HOME=/workspace/hf_cache
 
 python scripts/01_train_oa_probe.py --max-train 400 --max-eval 200
-python scripts/02_train_dyl_probe.py --load-official
-python scripts/03_eval_transfer.py --max-eval 200
 ```
 
 First Gemma download is tens of GB. If it OOMs, drop `--max-eval` and/or `--activation-batch-size` is already 2 in `configs/default.yaml`.
