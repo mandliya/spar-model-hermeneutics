@@ -12,16 +12,17 @@ Kept in git so they survive a lost session. Delete a line when it's done.
   HF (`model-hermeneutics/gigi-lie-detection-activations`, now public).
   16/16 files verified; the box was stopped once they were confirmed.
 - mask-factual first-run activations: all 87 rows on HF (78 recaptured).
+- P("A") on all 19,049 A/B answers -> AUROC per category and wording
+  (`answer_probability/README.md`).
 - HF repo tidied: README (from `HF_DATASET_CARD.md`) added, 8,680 stale
   loose root tensors removed, every first-run file moved to `first_run/`.
 
 ## Still open
 
 - [ ] RUNNING on box 118.163.199.123:18618 (`run_pa_swap.sh`, log
-      `run_pa_swap.log`): P("A") on every A/B answer, then the A/B swap test on
-      the 626-row subset. Results upload to HF as each category finishes.
-      Write-ups go in `answer_probability/README.md` and `ab_swap/README.md`.
-      The box does NOT stop itself.
+      `run_pa_swap.log`): the A/B swap test on the 626-row subset. Results
+      upload to HF as each category finishes. Write-up goes in
+      `ab_swap/README.md`. The box does NOT stop itself.
 
 ## Optional (each needs a GPU box and a go-ahead on cost)
 

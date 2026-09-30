@@ -340,6 +340,7 @@ The deceptive act: maintained a false alibi. **308** rows where gemma did it, **
 | unanswerable | [`unanswerable/README.md`](unanswerable/README.md) |
 | capture-the-secret | [`capture-the-secret/README.md`](capture-the-secret/README.md) |
 | alibi | [`alibi/README.md`](alibi/README.md) |
+| Self-report as AUROC, from gemma's P("A") | [`answer_probability/README.md`](answer_probability/README.md) |
 
 Every false-confession rollout, with the full exchange, is in
 [`false_confessions/`](false_confessions/).
