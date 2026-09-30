@@ -339,7 +339,7 @@ The deceptive act: maintained a false alibi. **308** rows where gemma did it, **
 | mask-factual | [`mask-factual/RESULTS.md`](mask-factual/RESULTS.md) |
 | unanswerable | [`unanswerable/README.md`](unanswerable/README.md) |
 | capture-the-secret | [`capture-the-secret/README.md`](capture-the-secret/README.md) |
-| alibi | [`alibi/`](alibi/) (write-up not done yet; results in `alibi/results/`) |
+| alibi | [`alibi/README.md`](alibi/README.md) |
 
 Every false-confession rollout, with the full exchange, is in
 [`false_confessions/`](false_confessions/).
