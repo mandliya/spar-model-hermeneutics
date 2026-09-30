@@ -184,6 +184,44 @@ Balanced accuracy for every wording and category. 50 is a coin flip; **bold** is
 - **Adding reasoning to `named` usually makes it worse**: `named_cot` is below
   `named` in four of seven categories.
 
+### Reading gemma's confidence instead of its letter
+
+For every A/B answer, we also read gemma's probability of "A" (yes) at the
+moment it answered, and score that as an AUROC, the paper's measure
+([details](answer_probability/README.md)).
+
+![Balanced accuracy from the letter vs AUROC from P("A"), every cell](charts/pa_letters_vs_probability.png)
+
+Most cells sit above the diagonal: the probability carries signal the letter
+hides. Sycophancy B's `neutral` answer is "No" on every row, yet its P("A")
+still ranks lies higher (AUROC 0.70). 27 of 91 cells reach 0.70, against 8
+on balanced accuracy.
+
+![AUROC from P("A"), every wording and category](charts/pa_auroc_heatmap.png)
+
+Alibi and mask-factual are blue almost everywhere. ascii-sandbagging has the
+deepest red: on `neutral` (0.12) and `confidence_cot` (0.06), gemma is more
+sure it lied when it told the truth.
+
+### Does gemma answer the question or the letter?
+
+A always meant "yes, I lied". On 626 rows, every A/B wording was asked again
+with the options swapped ([details](ab_swap/README.md)).
+
+![Yes rate with yes at A vs yes at B](charts/swap_question_or_letter.png)
+
+Points on the dashed diagonal give the same verdict either way: gemma is
+answering the question. Points toward the dotted line are choosing a letter.
+Reason-first wordings (▲) lean toward "always A"; `named` wordings (■) lean
+toward "always B". ascii `named`, bottom-left to top-left, flips from 1% to
+92% "yes".
+
+![AUROC with yes at A vs yes at B, per category](charts/swap_auroc_robustness.png)
+
+Alibi's self-report holds when the options are swapped (0.86 → 0.89), and so
+does mask-factual's (0.73 → 0.72). ascii's collapses (0.50 → 0.21): its
+probabilities follow the letter A, not the lie.
+
 ### Confession and false confession by wording
 
 Confession alone looks good wherever gemma says "yes" to everything; it has to be
@@ -363,4 +401,7 @@ committed results files:
 ```bash
 uv run --with pandas --with statsmodels python gigi/make_condition_tables.py
 uv run --with pandas --with matplotlib --with statsmodels python gigi/06_charts_cross_category.py
+uv run --with pandas --with numpy python gigi/answer_probability/02_analyse_pa.py
+uv run --with pandas --with numpy python gigi/ab_swap/02_analyse_swap.py
+uv run --with pandas --with matplotlib python gigi/07_charts_pa_swap.py
 ```
