@@ -300,10 +300,11 @@ model judging text equivalence) — not gemma itself.
 | `02_predecision_sycophancy_question set.py` | pre-decision activation capture, both tracks, all 12 conditions (these never had any activation capture until this pass) |
 | `00_export_transcripts_sycophancy.py` | joins both tracks' results back against the original dataset for full transcripts — $0, no API calls |
 
-Activation tensors (every layer) are in the same private HF dataset repo
-as ascii-sandbagging's: `model-hermeneutics/gigi-lie-detection-activations`,
-filenames `<uid>__neutral.pt` / `__pressured.pt` (Track A primary) and
-`<uid>.pt` (Track B primary). Follow-up-question set conditions have two capture
+Activation tensors (every layer) are on Hugging Face,
+`model-hermeneutics/gigi-lie-detection-activations`. Primary-run files are
+in `first_run/sycophancy/`: `<uid>__neutral.pt` / `__pressured.pt` for
+Track A, and `<uid>__main.pt` for Track B (called `<uid>.pt` in the results
+files). The follow-up tensors are in `tarballs/fp32/`. Follow-up-question set conditions have two capture
 points each: `<track>__<uid>__<condition>__answer_token.pt` (DYL-matched)
 and `<track>__<uid>__<condition>__predecision.pt` (pre-decision) — kept as
 separate files rather than guessing which one a given downstream probe

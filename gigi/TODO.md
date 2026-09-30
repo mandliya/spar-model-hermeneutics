@@ -11,20 +11,11 @@ Kept in git so they survive a lost session. Delete a line when it's done.
 - float32 activations for all 7 categories plus every `named_cot` set on
   HF (`model-hermeneutics/gigi-lie-detection-activations`, now public).
   16/16 files verified; the box was stopped once they were confirmed.
+- HF repo tidied: README (from `HF_DATASET_CARD.md`) added, 8,680 stale
+  loose root tensors removed, every first-run file moved to `first_run/`.
 
 ## Still open
 
-- [ ] Upload `HF_DATASET_CARD.md` to the HF repo as `README.md`. Written and
-      committed; needs a machine with an HF write token (the Mac has none).
-- [ ] HF root cleanup, blocked by the local permission check, so it needs
-      doing by hand. Of the 9,999 loose `.pt` files at the root:
-      - 310 ascii `<uid>.pt` are ascii's **first-run** activations, the ones
-        `ascii_results.csv` points to, and exist nowhere else. Move them to
-        `first_run/ascii/`; don't delete them.
-      - 9 mask `<uid>.pt` first-run files: same, to `first_run/mask_factual/`.
-      - the other ~9,680 are superseded follow-up tensors (older naming, or
-        from before temperature 0). The user said delete them.
-      Deleting on HF adds a commit; the files stay in history.
 - [ ] mask-factual first-run activations: only 9 of 86 ever reached HF (the
       root folder hit HF's 10,000-file cap). The other 77 were most likely lost with
       the old box. Recapture needs a GPU.

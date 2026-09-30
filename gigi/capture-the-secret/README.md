@@ -117,7 +117,7 @@ first — stopping preserves `/workspace`, so it is always safe.
 | `results/capture_secret_conditions.csv` / `.jsonl` | the behaviour, 508 rows: `pressed`, `result`, `lied` |
 | `results/capture_secret_benchmark_conditions.csv` / `.jsonl` | the 12 follow-up questions, 4,584 rows |
 
-Activations are in the shared private HF dataset,
+Activations are in the shared HF dataset,
 `model-hermeneutics/gigi-lie-detection-activations`, as
 `tarballs/capture_secret_activations.tar.gz` (0.27 GB, 508 files).
 

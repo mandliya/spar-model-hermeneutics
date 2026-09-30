@@ -134,28 +134,19 @@ weights to be comparable.
 | `00_mask_factual_provided.py` | generates the primary run (local GPU, bf16, with activations) |
 | `00_mask_factual_selfreport_benchmark.py` | generates the follow-up question set (local GPU, bf16, no activations on this pass) |
 
-Activation tensors (every layer, last prompt token, right before gemma
-answers) are in the same private HF dataset repo as ascii-sandbagging's:
-`model-hermeneutics/gigi-lie-detection-activations`, filenames `<uid>.pt`
-for the primary run. The follow-up question set has no activation capture yet —
-see Next steps.
+Activation tensors are on Hugging Face, [`model-hermeneutics/gigi-lie-detection-activations`](https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations); its README says which file is
+which. For this category:
 
-The other categories' temperature-0 follow-up-question activations live in
-that repo as two tarballs — `tarballs/answer_token_activations.tar.gz`
-(4.25 GB, 8,028 files) and `tarballs/predecision_activations.tar.gz`
-(2.94 GB, 5,548 files). Tarballs rather than loose files because HF caps
-commits at 256/hour and 13,576 individual uploads would have needed ~800.
-When mask-factual's question set capture lands, it goes into the same two
-bundles. The loose `.pt` files at that repo's root other than this
-category's `<uid>.pt` primaries are stale pre-temperature-0 leftovers,
-kept only because this project doesn't delete paid-for artifacts.
+- **Follow-up questions:** `tarballs/fp32/mask_factual_fp32.tar.gz`, float32,
+  both capture points (pre-decision and answer token) for every condition.
+- **Primary run:** only 9 of the 86 rows' `<uid>.pt` files ever reached
+  Hugging Face; they are in `first_run/mask_factual/`. The rest were most
+  likely lost with the old GPU box.
 
 ## Next steps
 
-1. Add activation capture to the follow-up question set (both the pre-decision
-   and DYL-matched answer-token positions, matching ascii-sandbagging and
-   sycophancy's `01_dyl_recapture_*.py` / `02_predecision_*.py` scripts) —
-   this category doesn't have either yet.
+1. Recapture the primary-run activations for the 77 rows missing from
+   Hugging Face (needs a GPU).
 2. `mask_known_facts` and `mask_statistics` — both need ground truth this
    project doesn't currently have a mechanism for (real-world fact-
    checking for the former, numeric-claim extraction and verification for

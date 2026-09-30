@@ -133,7 +133,7 @@ resumable per row.
 | `results/unanswerable_claims.csv` / `.jsonl` | primary run: claim, behaviour, `confabulated` |
 | `results/unanswerable_benchmark_conditions.csv` / `.jsonl` | the 12-question set |
 
-Activation tensors go to the shared private HF dataset repo, both capture
+Activation tensors go to the shared HF dataset repo, both capture
 points (`__predecision.pt` and `__answer_token.pt`) from the start rather than
 retrofitted.
 

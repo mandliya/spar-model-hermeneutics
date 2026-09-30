@@ -78,7 +78,7 @@ row — every layer's hidden state at the last prompt token, for both capture
 points. Those stay **out of this git repo** (see `.gitignore`: `activations/`,
 `*.pt` — a repo-wide rule, not specific to this folder) since 415MB of tensors
 would bloat every collaborator's clone. They're versioned separately instead,
-as a private HF dataset:
+as an HF dataset:
 
 ```
 https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations
@@ -89,38 +89,19 @@ Download what you need with `huggingface_hub`, e.g.:
 ```python
 from huggingface_hub import hf_hub_download
 hf_hub_download("model-hermeneutics/gigi-lie-detection-activations",
-                 "conv_20250718_ascii_mc_medical_5.pt", repo_type="dataset")
+                 "first_run/ascii/conv_20250718_ascii_mc_medical_5.pt", repo_type="dataset")
 ```
 
 or `snapshot_download(..., repo_type="dataset")` for the whole set.
 `results/ascii_results.csv`'s `activations_file` column gives the per-row
-filename. Ask for repo access if you don't have it yet — it's private.
+filename; on Hugging Face these files are under `first_run/ascii/`.
 
-**For the follow-up-question activations, start with the tarballs** —
-`tarballs/answer_token_activations.tar.gz` (4.25 GB, 8,028 files) and
-`tarballs/predecision_activations.tar.gz` (2.94 GB, 5,548 files) in the
-same HF repo. These are the current temperature-0 set, covering every
-category at both capture points, and are the authoritative version:
-
-```python
-from huggingface_hub import hf_hub_download
-p = hf_hub_download("model-hermeneutics/gigi-lie-detection-activations",
-                     "tarballs/answer_token_activations.tar.gz",
-                     repo_type="dataset")
-# then: tar xzf <p>
-```
-
-Inside: `<uid>__<condition>__answer_token.pt` is the DYL-matched capture
-(hidden state at the actual answer token) and `..__predecision.pt` is the
-prompt-final token before generation. Both exist because there's currently
-empirical uncertainty about which one a DYL-style probe expects — saved
-rather than guessed. The uid::condition → filename maps are in
-`results/dyl_answer_token_ascii.jsonl` and
-`results/predecision_ascii_benchmark.jsonl`.
-
-⚠️ **The loose `.pt` files at the repo root are stale** — they predate the
-temperature-0 rebuild and are kept only because this project doesn't delete
-paid-for artifacts. Don't mix them with the tarball contents.
+**For the follow-up-question activations, use
+`tarballs/fp32/ascii_fp32.tar.gz`** (float32, both capture points, every
+condition), plus `tarballs/fp32/named_cot_ascii_fp32.tar.gz` for `named_cot`.
+`maps/fp32/fp32_map_ascii.jsonl` maps each `<uid>__<condition>` to its
+files. The float16 tarballs next to them are superseded. The repo's README
+covers every file.
 
 ## Existing follow-up conditions
 

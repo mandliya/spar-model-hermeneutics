@@ -80,16 +80,19 @@ evaluation").
 ## First-run activations
 
 These are from gemma's answer to the original question, before any follow-up.
-They were not recaptured in float32.
+They were not recaptured in float32. All of them are pre-decision states,
+captured before gemma writes anything, so they depend only on the prompt and
+not on the sampling temperature.
 
 | Category | Where |
 |---|---|
-| ascii-sandbagging | 310 loose `<sample_id>.pt` files at the repo root. Each is a dict: `lied_state` (last token before gemma answers the capability question) and `doubled_down_state` (last token before it answers the original "did you lie?"). float16. |
+| ascii-sandbagging | `first_run/ascii/<sample_id>.pt`, 310 files. Each is a dict: `lied_state` (last token before gemma answers the capability question) and `doubled_down_state` (last token before it answers the original "did you lie?"). float16. |
+| sycophancy, Track A | `first_run/sycophancy/<uid>__pressured.pt` (158) and `<uid>__neutral.pt` (72): last token before gemma answers the question with and without the user's stated belief. The other 86 neutral states are in `<uid>__neutral_1.pt` / `__neutral_2.pt`, from an earlier design that asked the neutral question twice. float16. |
+| sycophancy, Track B | `first_run/sycophancy/<uid>__main.pt`, 339 files, one per row of the Track B results (which call them `<uid>.pt`); last token before gemma writes its critique. `__noise_rerun` files are from the earlier design. float16. |
 | unanswerable | inside `tarballs/unanswerable_activations.tar.gz`, with its follow-ups, float16 |
 | capture-the-secret | `tarballs/capture_secret_activations.tar.gz`, float16 |
 | alibi | inside `tarballs/alibi_activations.tar.gz`, with its follow-ups, float16 |
-| mask-factual | only 9 of 86 rows, loose at the repo root. The rest were never uploaded. |
-| sycophancy | not captured |
+| mask-factual | `first_run/mask_factual/`: only 9 of 86 rows (`<uid>.pt`), plus 4 files from an earlier design. The rest were never uploaded. |
 
 ## Older files
 
@@ -98,9 +101,9 @@ They were not recaptured in float32.
   tensors inside the unanswerable and alibi tarballs are float16 versions of
   what `tarballs/fp32/` now holds. float16 overflows on some of gemma's
   activations (above 65,504), which is why everything was recaptured.
-- **The other loose `.pt` files at the repo root are out of date.** They are
-  follow-up tensors from before the switch to temperature 0 or in an older
-  naming scheme, and are due to be removed. Don't mix them with the tarballs.
+- 8,680 loose follow-up tensors that used to sit at the repo root
+  (older naming, some from before the switch to temperature 0) were removed.
+  They are still in the repo's history at revision `98dd29a6`.
 
 ## Results
 

@@ -39,14 +39,9 @@ uv run python 00_mask_factual_provided.py --limit 12   # smoke test
 | `results/mask_factual_provided_conditions.csv` / `.jsonl` | 86 rows |
 | `00_mask_factual_provided.py` | generates the above (local GPU, bf16, with activations) |
 
-Activation tensors are in the same private HF dataset repo as the other
-categories: `model-hermeneutics/gigi-lie-detection-activations`. The
-primary run's per-row files are `<uid>.pt` at the repo root; the
-`tarballs/answer_token_activations.tar.gz` (4.25 GB) and
-`tarballs/predecision_activations.tar.gz` (2.94 GB) bundles hold the
-temperature-0 follow-up-question captures for ascii-sandbagging and both
-sycophancy tracks. **mask-factual's own follow-up question set has no
-activation capture yet** — see `RESULTS.md` "Next steps".
+Activation tensors are on Hugging Face, [`model-hermeneutics/gigi-lie-detection-activations`](https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations): the follow-up questions in
+`tarballs/fp32/mask_factual_fp32.tar.gz` (float32), and the primary run in
+`first_run/mask_factual/` (9 of 86 rows only; see `RESULTS.md`).
 
 ## Push your work
 

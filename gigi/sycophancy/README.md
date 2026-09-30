@@ -131,32 +131,16 @@ Full twelve-condition tables and charts for both tracks in `RESULTS.md`.
 | `02_predecision_sycophancy_question set.py` | pre-decision activation capture, both tracks, all 12 conditions |
 | `00_export_transcripts_sycophancy.py` | joins both tracks' results back against the original dataset for full transcripts — $0, no API calls |
 
-Activation tensors are in the same private HF dataset repo as
-ascii-sandbagging's: `model-hermeneutics/gigi-lie-detection-activations`.
-
-**Start with the tarballs** — `tarballs/answer_token_activations.tar.gz`
-(4.25 GB, 8,028 files) and `tarballs/predecision_activations.tar.gz`
-(2.94 GB, 5,548 files). These hold the current temperature-0
-follow-up-question activations for every category, at both capture points,
-and are the authoritative set:
-
-```python
-from huggingface_hub import hf_hub_download
-p = hf_hub_download("model-hermeneutics/gigi-lie-detection-activations",
-                     "tarballs/answer_token_activations.tar.gz",
-                     repo_type="dataset")
-# then: tar xzf <p>
-```
-
-Inside, filenames are `<track>__<uid>__<condition>__answer_token.pt`
-(DYL-matched, the actual answer token) and
-`..__predecision.pt` (the prompt-final token before generation). Both are
-provided because there's currently empirical uncertainty about which one a
-DYL-style probe actually expects — saved rather than guessed.
-
-⚠️ **The loose `.pt` files at the repo root are stale** — they predate the
-temperature-0 rebuild and are kept only because this project doesn't delete
-paid-for artifacts. Don't mix them with the tarball contents.
+Activation tensors are on Hugging Face, [`model-hermeneutics/gigi-lie-detection-activations`](https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations). Use
+`tarballs/fp32/sycophancy_a_fp32.tar.gz` and
+`tarballs/fp32/sycophancy_b_fp32.tar.gz` (float32, both capture points,
+every condition), plus the matching `named_cot_*` tarballs.
+`maps/fp32/fp32_map_sycophancy_{a,b}.jsonl` map each row and condition to
+its files. The float16 tarballs are superseded. Filenames are
+`<track>__<uid>__<condition>__{predecision,answer_token}.pt`. Both capture
+points are saved because it is still uncertain which one a DYL-style probe
+expects. First-run (pre-decision) activations for both tracks are in
+`first_run/sycophancy/`; the repo's README explains the filenames.
 
 ## Caveats
 
