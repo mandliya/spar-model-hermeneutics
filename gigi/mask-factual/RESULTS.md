@@ -139,15 +139,16 @@ which. For this category:
 
 - **Follow-up questions:** `tarballs/fp32/mask_factual_fp32.tar.gz`, float32,
   both capture points (pre-decision and answer token) for every condition.
-- **Primary run:** only 9 of the 86 rows' `<uid>.pt` files ever reached
-  Hugging Face; they are in `first_run/mask_factual/`. The rest were most
-  likely lost with the old GPU box.
+- **Primary run:** all 87 rows in `first_run/mask_factual/` (float16,
+  `<uid>.pt`) and `first_run/mask_factual/fp32/` (float32, use these: the
+  float16 files contain `inf` where values exceed 65,504). Only 9 of the
+  original files ever reached Hugging Face; the other 78 were recaptured with
+  `08_mask_first_run_recapture.py`, and the recapture matches the 9
+  originals (cosine ≥ 0.9999).
 
 ## Next steps
 
-1. Recapture the primary-run activations for the 77 rows missing from
-   Hugging Face (needs a GPU).
-2. `mask_known_facts` and `mask_statistics` — both need ground truth this
+1. `mask_known_facts` and `mask_statistics` — both need ground truth this
    project doesn't currently have a mechanism for (real-world fact-
    checking for the former, numeric-claim extraction and verification for
    the latter). Scoped, not started.

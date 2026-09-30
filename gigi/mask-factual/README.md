@@ -41,7 +41,7 @@ uv run python 00_mask_factual_provided.py --limit 12   # smoke test
 
 Activation tensors are on Hugging Face, [`model-hermeneutics/gigi-lie-detection-activations`](https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations): the follow-up questions in
 `tarballs/fp32/mask_factual_fp32.tar.gz` (float32), and the primary run in
-`first_run/mask_factual/` (9 of 86 rows only; see `RESULTS.md`).
+`first_run/mask_factual/fp32/` (float32, all 87 rows; see `RESULTS.md`).
 
 ## Push your work
 

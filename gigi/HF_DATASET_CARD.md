@@ -80,7 +80,9 @@ evaluation").
 ## First-run activations
 
 These are from gemma's answer to the original question, before any follow-up.
-They were not recaptured in float32. All of them are pre-decision states,
+Apart from mask-factual they are float16 only, and float16 files contain
+`inf` wherever a value exceeds 65,504 (typically 7-17 values per tensor).
+All of them are pre-decision states,
 captured before gemma writes anything, so they depend only on the prompt and
 not on the sampling temperature.
 
@@ -92,7 +94,7 @@ not on the sampling temperature.
 | unanswerable | inside `tarballs/unanswerable_activations.tar.gz`, with its follow-ups, float16 |
 | capture-the-secret | `tarballs/capture_secret_activations.tar.gz`, float16 |
 | alibi | inside `tarballs/alibi_activations.tar.gz`, with its follow-ups, float16 |
-| mask-factual | `first_run/mask_factual/`: only 9 of 86 rows (`<uid>.pt`), plus 4 files from an earlier design. The rest were never uploaded. |
+| mask-factual | `first_run/mask_factual/<uid>.pt` (float16) and `first_run/mask_factual/fp32/<uid>.pt` (float32), all 87 rows. 78 of them were recaptured on 30 Sep 2026; the recapture matches the 9 originals (cosine ≥ 0.9999). Also 4 `__pressured_1/2` files from an earlier design. |
 
 ## Older files
 
