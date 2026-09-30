@@ -16,12 +16,21 @@ for each category are in its own write-up, linked at the bottom.
 3. **Six of those eight are alibi.** It is the only category where
    self-report works across several wordings, up to 86% with `named`. Why alibi
    and not the others is an open question.
-4. **Wording moves gemma's default answer far more than its accuracy.** On
-   unanswerable, "did you *lie*?" gets a 12.8% admission rate and "did you
-   *confabulate*?" gets 100%, on identical rows. On ascii-sandbagging, `neutral`
-   gets "yes" on 280 of 310 rows and `named` gets "no" on 308 of 310. Both
-   swings leave balanced accuracy near 50%.
-5. **Asking gemma to reason before answering the `named` question
+4. **Wording moves gemma's default answer far more than its accuracy, and
+   part of that is the letter.** On unanswerable, "did you *lie*?" gets a
+   12.8% admission rate and "did you *confabulate*?" gets 100%, on identical
+   rows. On ascii-sandbagging, `neutral` gets "yes" on 280 of 310 rows and
+   `named` gets "no" on 308 of 310, but reversing the options shows `named`
+   there is mostly gemma picking the letter B
+   ([A/B swap test](ab_swap/README.md)). Both swings leave balanced accuracy
+   near 50%.
+5. **Scored on gemma's probability instead of its letter, self-report looks
+   better but only alibi's result is robust.** AUROC from P("A") reaches 0.70
+   in 27 of 91 cells, against 8 of 91 for balanced accuracy
+   ([details](answer_probability/README.md)). Under the swap test, alibi keeps
+   AUROC around 0.9 whichever letter means yes; ascii's falls from 0.50 to
+   0.21, and its one cell above 70 balanced accuracy drops to 42.
+6. **Asking gemma to reason before answering the `named` question
    (`named_cot`) does not help.** It lowers balanced accuracy in four of seven
    categories (ascii 51 → 37, sycophancy B 71 → 51, unanswerable 57 → 40,
    alibi 86 → 79), raises it in two (sycophancy A 47 → 55, capture-the-secret
@@ -341,6 +350,7 @@ The deceptive act: maintained a false alibi. **308** rows where gemma did it, **
 | capture-the-secret | [`capture-the-secret/README.md`](capture-the-secret/README.md) |
 | alibi | [`alibi/README.md`](alibi/README.md) |
 | Self-report as AUROC, from gemma's P("A") | [`answer_probability/README.md`](answer_probability/README.md) |
+| A/B swap test (letter vs meaning) | [`ab_swap/README.md`](ab_swap/README.md) |
 
 Every false-confession rollout, with the full exchange, is in
 [`false_confessions/`](false_confessions/).

@@ -93,9 +93,11 @@ Intervals and row counts for every cell are in `results/pa_auroc.csv`.
   between 0.1 and 0.9. AUROC only needs the ranking, so it picks up
   differences like 0.9999 vs 0.99999. A working detector would have to
   threshold in that range, and whether that holds up on new data is untested.
-- **Letter bias is not separated out yet.** A always means "yes" here, so a
-  preference for the letter A shifts every p_yes. The A/B swap test
-  ([`../ab_swap/`](../ab_swap/)) measures this on a 626-row subset.
+- **Letter preference.** A always means "yes" here. The A/B swap test
+  ([`../ab_swap/`](../ab_swap/)) reverses the options on a 626-row subset:
+  mask-factual's and alibi's AUROCs hold (0.73 → 0.72, 0.86 → 0.89), but
+  ascii's falls from 0.50 to 0.21, so its probabilities follow the letter
+  rather than the lie.
 - **Re-scoring vs generation.** For 102 answers (0.5%), the letter gemma
   originally wrote is not its top choice when the answer is re-scored. These
   are near-ties that flip under small numerical differences between
