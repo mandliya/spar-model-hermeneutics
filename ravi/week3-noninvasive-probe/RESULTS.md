@@ -2,7 +2,7 @@
 
 Protocol and literature (positions / pooling / instructed pairs): [`NOTES.md`](NOTES.md).
 
-**Status: code ready; GPU numbers not in git yet.** Run on the Vast box (Gemma-3-27B-IT, transformers &lt; 5). Do not train on Gigi or OA honeypot.
+**Status: code ready; GPU numbers not in git yet.** Run on the Vast box (Gemma-3-27B-IT, transformers &lt; 5). Train is Simple Deception / instructed pairs only. Gigi / OA / AISI are eval, never fitted.
 
 ## How to run
 
@@ -10,27 +10,30 @@ Protocol and literature (positions / pooling / instructed pairs): [`NOTES.md`](N
 cd ravi/week3-noninvasive-probe
 # HF_TOKEN in ../week1-dyl-vs-oa/dyl-probe-repro/.env or /workspace/.env
 
+# 1. Fit the generic probe (no eval rows).
 python -u scripts/08_train_noninvasive_probe.py
-# optional smoke:
-# python -u scripts/08_train_noninvasive_probe.py --max-train 40 --datasets ascii_sandbagging --max-per-dataset 16 --positions last_content,mean_excl_last_5
+# smoke:
+# python -u scripts/08_train_noninvasive_probe.py --max-train 40 --positions last_content,mean_excl_last_5
 
-python -u scripts/09_eval_noninvasive.py
-# HTC only (CPU if caches exist):
-# python -u scripts/09_eval_noninvasive.py --skip-invasive
+# 2. Score frozen probes on transfer sets (still no fit).
+python -u scripts/08_train_noninvasive_probe.py --eval-only
+# python -u scripts/08_train_noninvasive_probe.py --eval-only --datasets ascii_sandbagging --max-per-dataset 16 --positions last_content,mean_excl_last_5
+
+python -u scripts/09_eval_noninvasive.py --skip-invasive
 ```
 
 `--reuse-probes` skips retraining. Caches: `results/noninvasive_cache/` (gitignored). Scores: `results/noninvasive_eval.json`, `noninvasive_htc.json`, `noninvasive_invasive.json`.
 
-City / varied are large; add them explicitly:
+City / varied are large; score them after the probe is frozen:
 
 ```bash
-python -u scripts/08_train_noninvasive_probe.py --datasets dyl_city,dyl_varied --max-per-dataset 800 --reuse-probes
+python -u scripts/08_train_noninvasive_probe.py --eval-only --datasets dyl_city,dyl_varied --max-per-dataset 800
 ```
 
-LAT (RepE) on instructed pairs only:
+LAT (RepE) on instructed pairs only (still not eval sets):
 
 ```bash
-python -u scripts/08_train_noninvasive_probe.py --recipes intent --heads logistic,mean_diff,lat --reuse-probes
+python -u scripts/08_train_noninvasive_probe.py --recipes intent --heads logistic,mean_diff,lat
 ```
 
 ## Original-turn AUROC (fill after 08)

@@ -8,7 +8,7 @@ Do **not** edit `tianq/` or `gigi/`. Work only in this directory:
 ravi/week3-noninvasive-probe
 ```
 
-Week 1 (`../week1-dyl-vs-oa`) is DYL vs OA only. Reuse its `src/`, `data/`, and `dyl-probe-repro/` loaders. Do not train on Gigi or OA honeypot.
+Week 1 (`../week1-dyl-vs-oa`) is DYL vs OA only. Reuse its `src/`, `data/`, and `dyl-probe-repro/` loaders. Fit only Simple Deception / instructed pairs. Gigi / OA / AISI are eval.
 
 ## Setup
 
@@ -27,10 +27,11 @@ python -m pytest tests/ -q
 
 ```bash
 python -u scripts/08_train_noninvasive_probe.py
-python -u scripts/09_eval_noninvasive.py
+python -u scripts/08_train_noninvasive_probe.py --eval-only
+python -u scripts/09_eval_noninvasive.py --skip-invasive
 ```
 
-Smoke: `--max-train 40 --datasets ascii_sandbagging --max-per-dataset 16 --positions last_content,mean_excl_last_5`.
+Smoke train: `--max-train 40 --positions last_content,mean_excl_last_5`. Then `--eval-only --datasets ascii_sandbagging --max-per-dataset 16` with the same positions. Delete `results/noninvasive_cache/` after a smoke before a full eval.
 
 Scores land in `results/`. Caches in `results/noninvasive_cache/` (gitignored). Protocol: [`NOTES.md`](NOTES.md).
 

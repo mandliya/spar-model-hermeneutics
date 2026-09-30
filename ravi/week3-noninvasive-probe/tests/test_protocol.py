@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dyl_vs_oa.data import LabeledConversation
 from noninvasive_probe.protocol import comparison_row, followup_text, htc_mask
-from noninvasive_probe.sets import admitted_from_reason
+from noninvasive_probe.sets import EVAL_SETS, TRAIN_SOURCES, admitted_from_reason, assert_generic_train
 
 
 def test_htc_mask_keeps_denials_only():
@@ -33,6 +33,28 @@ def test_comparison_row_includes_week1_oa_baselines():
     city = comparison_row("dyl_city")
     assert city["oa_mean"] == 0.965
     assert city["dyl_probe"] is None
+
+
+def test_train_sources_are_disjoint_from_eval_sets():
+    assert TRAIN_SOURCES.isdisjoint(EVAL_SETS)
+    from dyl_vs_oa.data import load_simple_deception
+    from noninvasive_probe.config import load_config
+    from noninvasive_probe.data_intent import load_instructed_pairs
+
+    cfg = load_config()
+    assert_generic_train(load_simple_deception(cfg, max_n=8))
+    assert_generic_train(load_instructed_pairs(cfg, max_n=4))
+    leak = LabeledConversation(
+        messages=[{"role": "user", "content": "x"}, {"role": "assistant", "content": "y"}],
+        label=1,
+        meta={"source": "ascii_sandbagging"},
+    )
+    try:
+        assert_generic_train([leak])
+    except ValueError as err:
+        assert "ascii_sandbagging" in str(err)
+    else:
+        raise AssertionError("eval row must not be allowed into training")
 
 
 def test_labeled_conversation_roundtrip_meta():

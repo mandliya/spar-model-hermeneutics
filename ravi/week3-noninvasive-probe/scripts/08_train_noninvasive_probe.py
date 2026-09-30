@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-"""Train noninvasive probes (no follow-up) at each original-turn pool; score eval sets.
+"""Train a generic noninvasive probe. Eval sets are never in the fit.
 
-Recipes:
-  truth   Simple Deception facts as the assistant turn (Geometry of Truth)
-  intent  instructed honest vs lie system prompt, same statement (Goldowsky-Dill)
-
-Heads: logistic (OA-style), mean_diff, and LAT on intent pairs.
-
-Does not train on Gigi or OA honeypot. See NOTES.md.
+Default: train only on Simple Deception facts (`truth`) and instructed pairs
+(`intent`). Pass `--eval` / `--eval-only` to score frozen weights on Gigi / AISI
+/ OA honeypot. See NOTES.md §3.
 """
 
 from __future__ import annotations
@@ -36,7 +32,7 @@ from noninvasive_probe.data_intent import load_instructed_pairs
 from noninvasive_probe.extract import ORIGINAL_TURN_POSITIONS, extract_original_turn_activations_at_positions
 from noninvasive_probe.heads import train_lat_bundle, train_mean_diff_bundle
 from noninvasive_probe.protocol import comparison_row
-from noninvasive_probe.sets import EVAL_SETS, load_eval_set
+from noninvasive_probe.sets import EVAL_SETS, assert_generic_train, load_eval_set
 
 DEFAULT_DATASETS = (
     "ascii_sandbagging,sycophancy_answer,sycophancy_feedback,"
@@ -69,14 +65,19 @@ def _score(bundle, acts: dict[int, np.ndarray], y: np.ndarray) -> dict:
 
 
 def _train_examples(cfg, recipe: str, max_train: int):
+    if recipe in EVAL_SETS:
+        raise SystemExit(f"{recipe!r} is an eval set; it is never used to train")
     if recipe == "truth":
         examples = load_simple_deception(cfg, max_n=max_train + 80)
         train, _ = split_balanced(examples, eval_n=min(80, max(20, max_train // 10)))
-        return train[:max_train]
-    if recipe == "intent":
+        train = train[:max_train]
+    elif recipe == "intent":
         pairs = load_instructed_pairs(cfg, max_n=max_train)
-        return pairs[:max_train] if max_train % 2 == 0 else pairs[: max_train - 1]
-    raise KeyError(recipe)
+        train = pairs[:max_train] if max_train % 2 == 0 else pairs[: max_train - 1]
+    else:
+        raise KeyError(recipe)
+    assert_generic_train(train)
+    return train
 
 
 def _fit(recipe, position, head, acts, y, cfg, model_name):
@@ -135,82 +136,17 @@ def _load_eval_cache(cache_dir: Path, dataset: str, position: str):
     return acts, y, uids
 
 
-def main() -> None:
-    _load_env()
-    p = argparse.ArgumentParser()
-    p.add_argument("--config", default=None)
-    p.add_argument("--max-train", type=int, default=400)
-    p.add_argument("--recipes", default="truth,intent")
-    p.add_argument("--heads", default="logistic,mean_diff")
-    p.add_argument("--positions", default=",".join(ORIGINAL_TURN_POSITIONS))
-    p.add_argument("--datasets", default=DEFAULT_DATASETS)
-    p.add_argument("--max-per-dataset", type=int, default=None)
-    p.add_argument("--max-length", type=int, default=4096)
-    p.add_argument("--batch-size", type=int, default=2)
-    p.add_argument("--reuse-probes", action="store_true")
-    args = p.parse_args()
+def _need_eval_extract(cache_dir: Path, names: list[str], positions: tuple[str, ...]) -> bool:
+    return any(_load_eval_cache(cache_dir, name, pos) is None for name in names for pos in positions)
 
-    if not os.environ.get("HF_TOKEN") and not os.environ.get("HUGGING_FACE_HUB_TOKEN"):
-        raise SystemExit("HF_TOKEN is not set (Gemma-3 is gated).")
 
-    cfg = load_config(args.config)
-    recipes = [x.strip() for x in args.recipes.split(",") if x.strip()]
-    heads = [x.strip() for x in args.heads.split(",") if x.strip()]
-    positions = tuple(x.strip() for x in args.positions.split(",") if x.strip())
-    names = [x.strip() for x in args.datasets.split(",") if x.strip()]
-    unknown = [n for n in names if n not in EVAL_SETS]
-    if unknown:
-        raise SystemExit(f"unknown datasets: {unknown}")
-
-    probe_dir = cfg.results_dir / "noninvasive_probes"
+def _score_eval_sets(*, cfg, names, positions, bundles, args, subject) -> None:
     cache_dir = cfg.results_dir / "noninvasive_cache"
     out_path = cfg.results_dir / "noninvasive_eval.json"
-    probe_dir.mkdir(parents=True, exist_ok=True)
-
-    subject = load_subject(
-        cfg.model_name,
-        dtype=cfg.dtype,
-        device_map=cfg.device_map,
-        attn_implementation=cfg.attn_implementation,
-    )
-    print(f"Model {subject.name}: {subject.n_layers} layers, d={subject.hidden_size}", flush=True)
-
-    bundles = {}
-    for recipe in recipes:
-        train = _train_examples(cfg, recipe, args.max_train)
-        y_train = np.array([ex.label for ex in train], dtype=np.int64)
-        print(f"train {recipe}: {len(train)} rows", flush=True)
-        train_by_pos = None
-        for position in positions:
-            for head in heads:
-                if head == "lat" and recipe != "intent":
-                    continue
-                key = f"{recipe}__{position}__{head}"
-                path = probe_dir / f"{key}.json"
-                if args.reuse_probes and path.exists():
-                    bundles[key] = load_bundle(path)
-                    print(f"loaded {path}", flush=True)
-                    continue
-                if train_by_pos is None:
-                    train_by_pos = extract_original_turn_activations_at_positions(
-                        subject,
-                        train,
-                        layers=None,
-                        batch_size=args.batch_size,
-                        max_length=args.max_length,
-                        positions=positions,
-                    )
-                bundle = _fit(recipe, position, head, train_by_pos[position], y_train, cfg, cfg.model_name)
-                save_bundle(bundle, path)
-                bundles[key] = bundle
-                print(f"wrote {path} kept={len(bundle.layers)}", flush=True)
-        train_by_pos = None
-
     payload = {
         "protocol": "original_turn_no_followup",
+        "train": "simple_deception_and_instructed_pairs_only",
         "positions": list(positions),
-        "recipes": recipes,
-        "heads": heads,
         "datasets": {},
         "comparison": {},
     }
@@ -225,7 +161,9 @@ def main() -> None:
         uids = [str(c.meta.get("uid", i)) for i, c in enumerate(convs)]
         missing = [pos for pos in positions if _load_eval_cache(cache_dir, name, pos) is None]
         if missing:
-            print(f"{name}: extracting {len(convs)} at {missing}", flush=True)
+            if subject is None:
+                raise SystemExit(f"{name}: missing cache {missing}; need the model to extract")
+            print(f"{name}: extracting {len(convs)} at {missing} (eval only; not training)", flush=True)
             extracted = extract_original_turn_activations_at_positions(
                 subject,
                 convs,
@@ -262,6 +200,116 @@ def main() -> None:
         print(f"{name}: wrote scores -> {out_path}", flush=True)
 
     print(f"Wrote {out_path}", flush=True)
+
+
+def _load_subject(cfg):
+    return load_subject(
+        cfg.model_name,
+        dtype=cfg.dtype,
+        device_map=cfg.device_map,
+        attn_implementation=cfg.attn_implementation,
+    )
+
+
+def main() -> None:
+    _load_env()
+    p = argparse.ArgumentParser()
+    p.add_argument("--config", default=None)
+    p.add_argument("--max-train", type=int, default=400)
+    p.add_argument("--recipes", default="truth,intent")
+    p.add_argument("--heads", default="logistic,mean_diff")
+    p.add_argument("--positions", default=",".join(ORIGINAL_TURN_POSITIONS))
+    p.add_argument("--datasets", default=DEFAULT_DATASETS, help="eval sets only; never fitted")
+    p.add_argument("--max-per-dataset", type=int, default=None)
+    p.add_argument("--max-length", type=int, default=4096)
+    p.add_argument("--batch-size", type=int, default=2)
+    p.add_argument("--reuse-probes", action="store_true")
+    p.add_argument("--eval", action="store_true", help="after training, score frozen probes on --datasets")
+    p.add_argument("--eval-only", action="store_true", help="do not train; score saved probes on --datasets")
+    args = p.parse_args()
+
+    do_train = not args.eval_only
+    do_eval = args.eval or args.eval_only
+
+    cfg = load_config(args.config)
+    recipes = [x.strip() for x in args.recipes.split(",") if x.strip()]
+    heads = [x.strip() for x in args.heads.split(",") if x.strip()]
+    positions = tuple(x.strip() for x in args.positions.split(",") if x.strip())
+    names = [x.strip() for x in args.datasets.split(",") if x.strip()]
+    unknown = [n for n in names if n not in EVAL_SETS]
+    if unknown:
+        raise SystemExit(f"unknown eval datasets: {unknown}; known: {list(EVAL_SETS)}")
+    overlap = [r for r in recipes if r in EVAL_SETS]
+    if overlap:
+        raise SystemExit(f"cannot train on eval sets: {overlap}")
+
+    probe_dir = cfg.results_dir / "noninvasive_probes"
+    cache_dir = cfg.results_dir / "noninvasive_cache"
+    probe_dir.mkdir(parents=True, exist_ok=True)
+
+    need_model = do_train or (do_eval and _need_eval_extract(cache_dir, names, positions))
+    if need_model and not os.environ.get("HF_TOKEN") and not os.environ.get("HUGGING_FACE_HUB_TOKEN"):
+        raise SystemExit("HF_TOKEN is not set (Gemma-3 is gated).")
+
+    subject = None
+    if need_model:
+        subject = _load_subject(cfg)
+        print(f"Model {subject.name}: {subject.n_layers} layers, d={subject.hidden_size}", flush=True)
+
+    bundles = {}
+    if do_train:
+        for recipe in recipes:
+            train = _train_examples(cfg, recipe, args.max_train)
+            y_train = np.array([ex.label for ex in train], dtype=np.int64)
+            print(
+                f"train {recipe}: {len(train)} rows from {sorted({ex.meta['source'] for ex in train})} "
+                "(eval sets not used)",
+                flush=True,
+            )
+            train_by_pos = None
+            for position in positions:
+                for head in heads:
+                    if head == "lat" and recipe != "intent":
+                        continue
+                    key = f"{recipe}__{position}__{head}"
+                    path = probe_dir / f"{key}.json"
+                    if args.reuse_probes and path.exists():
+                        bundles[key] = load_bundle(path)
+                        print(f"loaded {path}", flush=True)
+                        continue
+                    if train_by_pos is None:
+                        train_by_pos = extract_original_turn_activations_at_positions(
+                            subject,
+                            train,
+                            layers=None,
+                            batch_size=args.batch_size,
+                            max_length=args.max_length,
+                            positions=positions,
+                        )
+                    bundle = _fit(recipe, position, head, train_by_pos[position], y_train, cfg, cfg.model_name)
+                    save_bundle(bundle, path)
+                    bundles[key] = bundle
+                    print(f"wrote {path} kept={len(bundle.layers)}", flush=True)
+            train_by_pos = None
+        print(f"trained generic probes -> {probe_dir}", flush=True)
+    else:
+        for path in sorted(probe_dir.glob("*.json")):
+            bundles[path.stem] = load_bundle(path)
+        if not bundles:
+            raise SystemExit(f"no probes in {probe_dir}; train first without --eval-only")
+        print(f"loaded {len(bundles)} frozen probes (no training)", flush=True)
+
+    if do_eval:
+        _score_eval_sets(
+            cfg=cfg,
+            names=names,
+            positions=positions,
+            bundles=bundles,
+            args=args,
+            subject=subject,
+        )
+    elif do_train:
+        print("skipping eval (pass --eval to score Gigi/OA/AISI on frozen probes)", flush=True)
 
 
 if __name__ == "__main__":

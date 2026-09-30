@@ -1,4 +1,4 @@
-"""Eval loaders. Week 1 TRANSFER_SETS plus OA MBPP. Never used for training."""
+"""Train vs eval split. Eval loaders are never a training source."""
 
 from __future__ import annotations
 
@@ -9,7 +9,24 @@ bootstrap()
 from dyl_vs_oa.data import LabeledConversation, load_mbpp_honeypot, mbpp_conversations
 from dyl_vs_oa.oa_transfer import TRANSFER_SETS, load_transfer_set
 
+# Frozen transfer sets. Do not fit on these.
 EVAL_SETS = TRANSFER_SETS + ("oa_mbpp",)
+
+# Only these meta["source"] values may enter `_fit`.
+TRAIN_SOURCES = frozenset({"simple_deception", "instructed_pairs"})
+
+
+def assert_generic_train(examples) -> None:
+    """Refuse to fit if a row came from an eval set or an unknown source."""
+    sources = {ex.meta.get("source") for ex in examples}
+    if not sources:
+        raise ValueError("empty training set")
+    bad = sources - TRAIN_SOURCES
+    if bad:
+        raise ValueError(
+            f"refusing to train on {sorted(bad)}; generic probe uses {sorted(TRAIN_SOURCES)}, "
+            f"never {list(EVAL_SETS)}"
+        )
 
 ADMITTED_FROM_REASON = {
     "Model denied deception (hiding it).": False,

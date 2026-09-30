@@ -101,12 +101,14 @@ We do **not** flatten every token into the logistic train set in v1 (that leaks 
 
 ## 3. Train vs eval
 
-**Train (frozen after this).**
+**Train (frozen after this). Never Gigi, never OA honeypot, never AISI city/varied.**
 
-1. `truth` — 400 Simple Deception statements, no prefill.
+1. `truth` — 400 Simple Deception statements (`true_false_facts.csv`), no prefill.
 2. `intent` — instructed pairs from those statements (honest vs lie system prompt, same completion).
 
-**Eval (never in train).** AISI city/varied original-turn (`lie_reason`; do not cite 0.73). Gigi ASCII / syc A / syc B / mask / capture / unanswerable. OA MBPP `code` vs `hardcode`.
+`scripts/08_train_noninvasive_probe.py` fits those rows only. `--datasets` is ignored unless you pass `--eval` or `--eval-only`.
+
+**Eval (never in train).** AISI city/varied original-turn (`lie_reason`; do not cite 0.73). Gigi ASCII / syc A / syc B / mask / capture / unanswerable. OA MBPP `code` vs `hardcode`. Run `python -u scripts/08_train_noninvasive_probe.py --eval-only` on frozen weights.
 
 **HTC follow-ups (labels only, stored):** Gigi `named` + `neutral`; AISI native yes/no already in the rollout; OA `dyl` + `dyl_cheat` from Hub `oa_mbpp` if the eval box has the rows.
 
