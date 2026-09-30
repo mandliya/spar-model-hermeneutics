@@ -107,12 +107,24 @@ are kept as the built-in control group.
       `named_cot/results/`, added as the 13th condition to every table, the
       balanced-accuracy grid and all charts in `RESULTS.md`.
 - [x] HF repo made public (the org hit its 100 GB private-storage limit).
-- [ ] Waiting on the box: float32 for alibi + the retried uploads
-      (capture-the-secret float32, named_cot activations for sycophancy A/B
-      and unanswerable). `stop_when_done.sh` stops the box only once all 16
-      expected files are verified on HF; otherwise it leaves it running.
-      Check `/workspace/lies-experiment/stop_when_done.log`.
+- [x] float32 complete for all 7 categories; every named_cot activation set on
+      HF (16/16 verified). Box stopped by the watcher once everything checked out.
 - [ ] Write-up for alibi (`alibi/README.md`), still missing.
 - [ ] Optional: record P("A") at the answer token for a continuous AUROC,
       comparable with the paper's numbers (not approved yet).
 - [ ] Optional: float32 for the first-run (pre-follow-up) activations - ask TQ.
+
+## Still open (as of this session)
+
+- [ ] Write-up for alibi (`alibi/README.md`).
+- [ ] Dataset card (README) for the now-public HF repo, so outside readers know
+      what's in it and which files are current (float32) vs superseded.
+- [ ] Tell TQ: float32 for all categories under `tarballs/fp32/`, the
+      `dyl_is_lie` column, and named_cot.
+- [ ] Letter-bias check: rerun a slice with A/B swapped ("A: No / B: Yes").
+- [ ] Optional: P("A") at the answer token -> continuous AUROC, like the paper.
+- [ ] Optional: float32 for first-run (pre-follow-up) activations - ask TQ.
+- [ ] Optional: remaining 781 alibi rows.
+- [ ] HF tidy-up: 7 GB of stale loose .pt files at the repo root.
+- [ ] Rotate the HF token (the current one was pasted in chat).
+- [ ] Not started: mask_known_facts, mask_statistics (need fact-checking).
