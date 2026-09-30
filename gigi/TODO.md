@@ -14,17 +14,20 @@ Kept in git so they survive a lost session. Delete a line when it's done.
 
 ## Still open
 
-- [ ] Write-up for alibi (`alibi/README.md`). The links table in
-      `RESULTS.md` says "write-up not done yet".
-- [ ] Dataset card (README) for the now-public HF repo, saying what's in it
-      and which files are current (float32) vs superseded.
-- [ ] Tell TQ: float32 for every category under `tarballs/fp32/`, the
-      `dyl_is_lie` column, and named_cot.
-- [ ] Rotate the HF token (the current one was pasted in chat).
-- [ ] HF tidy-up: ~10,000 stale loose `.pt` files at the repo root predate
-      the temperature-0 rebuild. Kept, not deleted, because this project
-      doesn't delete paid-for artifacts, but they shouldn't be mixed with
-      the tarballs. Now that the repo is public, anyone can see them.
+- [ ] Upload `HF_DATASET_CARD.md` to the HF repo as `README.md`. Written and
+      committed; needs a machine with an HF write token (the Mac has none).
+- [ ] HF root cleanup, blocked by the local permission check, so it needs
+      doing by hand. Of the 9,999 loose `.pt` files at the root:
+      - 310 ascii `<uid>.pt` are ascii's **first-run** activations, the ones
+        `ascii_results.csv` points to, and exist nowhere else. Move them to
+        `first_run/ascii/`; don't delete them.
+      - 9 mask `<uid>.pt` first-run files: same, to `first_run/mask_factual/`.
+      - the other ~9,680 are superseded follow-up tensors (older naming, or
+        from before temperature 0). The user said delete them.
+      Deleting on HF adds a commit; the files stay in history.
+- [ ] mask-factual first-run activations: only 9 of 86 ever reached HF (the
+      root folder hit HF's 10,000-file cap). The other 77 are gone with the old
+      box. Recapture needs a GPU.
 
 ## Optional (each needs a GPU box and a go-ahead on cost)
 
