@@ -213,8 +213,8 @@ with the options swapped ([details](ab_swap/README.md)).
 Points on the dashed diagonal give the same verdict either way: gemma is
 answering the question. Points toward the dotted line are choosing a letter.
 Reason-first wordings (▲) lean toward "always A"; `named` wordings (■) lean
-toward "always B". ascii `named`, bottom-left to top-left, flips from 1% to
-92% "yes".
+toward "always B". ascii `named` sits in the top-left corner: 1% "yes" when
+yes is A, 92% when yes is B.
 
 ![AUROC with yes at A vs yes at B, per category](charts/swap_auroc_robustness.png)
 
