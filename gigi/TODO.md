@@ -26,15 +26,14 @@ Kept in git so they survive a lost session. Delete a line when it's done.
         from before temperature 0). The user said delete them.
       Deleting on HF adds a commit; the files stay in history.
 - [ ] mask-factual first-run activations: only 9 of 86 ever reached HF (the
-      root folder hit HF's 10,000-file cap). The other 77 are gone with the old
-      box. Recapture needs a GPU.
+      root folder hit HF's 10,000-file cap). The other 77 were most likely lost with
+      the old box. Recapture needs a GPU.
 
 ## Optional (each needs a GPU box and a go-ahead on cost)
 
 - [ ] Letter-bias check: rerun a slice with A/B swapped ("A: No / B: Yes").
 - [ ] P("A") at the answer token -> continuous AUROC, like the paper's.
 - [ ] float32 for first-run (pre-follow-up) activations. Ask TQ first.
-- [ ] mask-factual follow-up activations (see `mask-factual/RESULTS.md`).
 - [ ] The remaining 781 alibi rows (1,281 total, 500 run).
 - [ ] `mask_known_facts`, `mask_statistics`: scoped, not started (need
       fact-checking).
