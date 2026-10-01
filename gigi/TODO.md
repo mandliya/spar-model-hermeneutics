@@ -5,7 +5,8 @@ Kept in git so they survive a lost session. Delete a line when it's done.
 ## Done
 
 - All 7 categories run end to end: ascii-sandbagging, sycophancy A/B,
-  mask-factual, unanswerable, capture-the-secret, alibi (500-row subset).
+  mask-factual, unanswerable, capture-the-secret, alibi (all 1,281 rows since
+  1 Oct 2026: 784 lies, 92.7% of guilty suspects).
 - 13 follow-up questions per category, including `named_cot` (1,732 rows),
   all in `RESULTS.md` tables, the balanced-accuracy grid and the charts.
 - float32 activations for all 7 categories plus every `named_cot` set on
@@ -27,14 +28,15 @@ Kept in git so they survive a lost session. Delete a line when it's done.
 
 ## Still open
 
-- [ ] Next deception categories, with the four questions only.
+- [ ] Next: the rest of the MASK family (`mask_known_facts` 71, `mask_statistics`
+      62, `mask_continuations` 90, `mask_disinformation` 76), four questions only.
+      Ground truth idea: ask gemma the plain question without pressure (its
+      belief), then under pressure; a lie = contradicting its own belief. First
+      check whether the original MASK release has the belief prompts.
 
 ## Optional (each needs a GPU box and a go-ahead on cost)
 
 - [ ] float32 for first-run (pre-follow-up) activations. Ask TQ first.
-- [ ] The remaining 781 alibi rows (1,281 total, 500 run).
-- [ ] `mask_known_facts`, `mask_statistics`: scoped, not started (need
-      fact-checking).
 
 ## Ruled out, with reasons
 

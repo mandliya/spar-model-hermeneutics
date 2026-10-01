@@ -15,7 +15,7 @@ below 0.5 means the ranking points the wrong way.
 
 - **Rows:** every row in every category that has follow-up answers, for the
   project's four follow-up questions (`neutral`, `neutral_cot`, `named`,
-  `named_cot`): 6,927 answers.
+  `named_cot`): 10,039 answers.
 - **No new text.** Each conversation is rebuilt exactly as gemma saw it (the
   same builder the float32 activations used), gemma's saved answer is fed back
   in, and one forward pass reads its next-token distribution at the position
@@ -32,13 +32,13 @@ below 0.5 means the ranking points the wrong way.
 
 1. **Probabilities carry more signal than letters.** 8 of 28 cells reach
    AUROC 0.70, against 3 of 28 for balanced accuracy. In 21 of 28 cells, AUROC
-   beats balanced accuracy (mean 0.60 vs 0.54).
+   beats balanced accuracy (mean 0.59 vs 0.54).
 2. **The gain is largest where gemma gives the same letter almost every
    time.** mask-factual says "yes" to nearly everything, so its letters score
    50–54, but it is more sure when it really lied: AUROC 0.61–0.77. Sycophancy
    B's `neutral` answer is "No" on every row (balanced accuracy 50), yet AUROC
    is 0.70.
-3. **Alibi is strongest again**: 0.66–0.94, with `named` at **0.94**.
+3. **Alibi is strongest again**: 0.65–0.94, with `named` at **0.94**.
 4. **Some cells point firmly the wrong way.** ascii `neutral` is **0.12**:
    gemma is more confident it lied on the rows where it told the truth. Two
    cells have their whole interval below 0.5 (ascii `neutral`,
@@ -56,10 +56,10 @@ Bold is 0.70 or above. Compare with the balanced-accuracy grid in
 <!-- AUROC-GRID:START -->
 | Question | ascii | syc A | syc B | mask | unans. | capture | alibi |
 |---|---|---|---|---|---|---|---|
-| `neutral` | 0.12 | 0.61 | **0.70** | **0.75** | 0.50 | 0.45 | 0.66 |
-| `neutral_cot` | 0.48 | 0.64 | 0.61 | **0.75** | 0.68 | 0.57 | **0.77** |
+| `neutral` | 0.12 | 0.61 | **0.70** | **0.75** | 0.50 | 0.45 | 0.65 |
+| `neutral_cot` | 0.48 | 0.64 | 0.61 | **0.75** | 0.68 | 0.57 | **0.75** |
 | `named` | 0.45 | 0.44 | **0.77** | 0.61 | 0.60 | 0.41 | **0.94** |
-| `named_cot` | 0.47 | 0.52 | 0.66 | **0.77** | 0.31 | 0.52 | **0.91** |
+| `named_cot` | 0.47 | 0.52 | 0.66 | **0.77** | 0.31 | 0.52 | **0.90** |
 <!-- AUROC-GRID:END -->
 
 Intervals and row counts for every cell are in `results/pa_auroc.csv`, which
@@ -78,7 +78,7 @@ also keeps the nine retired questions.
 ## Caveats
 
 - **The signal lives in small probability differences.** gemma is nearly
-  certain in almost every answer: only 175 of 6,927 (2.5%) have P(yes)
+  certain in almost every answer: only 232 of 10,039 (2.3%) have P(yes)
   between 0.1 and 0.9. AUROC only needs the ranking, so it picks up
   differences like 0.9999 vs 0.99999. A working detector would have to
   threshold in that range, and whether that holds up on new data is untested.
@@ -88,7 +88,7 @@ also keeps the nine retired questions.
   sycophancy B's weaken but stay above chance (0.75 → 0.67, 0.70 → 0.68), and
   ascii's falls from 0.45 to 0.13, so its probabilities follow the letter
   rather than the lie.
-- **Re-scoring vs generation.** For 36 answers (0.5%), the letter gemma
+- **Re-scoring vs generation.** For 39 answers (0.4%), the letter gemma
   originally wrote is not its top choice when the answer is re-scored. These
   are near-ties that flip under small numerical differences between
   generating and re-scoring. They are kept. 5 answers (capture-the-secret)

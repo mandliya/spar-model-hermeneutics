@@ -106,7 +106,7 @@ only on the prompt.
 | mask-factual | `first_run/mask_factual/fp32/<uid>.pt` | all 87 rows, float32 (float16 copies one level up) |
 | unanswerable | `first_run/unanswerable/` | `__claim__predecision.pt` and `__claim__answer_token.pt`, when gemma says whether it could answer; float16 |
 | capture-the-secret | `first_run/capture_secret/` | `__capture__predecision.pt`, before the reply; float16 |
-| alibi | `first_run/alibi/` | `__alibi__predecision.pt`, before the reply to the detective; float16 |
+| alibi | `first_run/alibi/` | `__alibi__predecision.pt`, before the reply to the detective, all 1,281 rows; float16 for the first 500, float32 for the other 781 |
 
 float16 files contain `inf` wherever a value exceeds 65,504 (typically 7–17
 values per tensor).
