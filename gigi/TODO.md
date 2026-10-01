@@ -16,6 +16,9 @@ Kept in git so they survive a lost session. Delete a line when it's done.
   `neutral_cot`, `named`, `named_cot`). The other nine are archived in
   `archive/2026-10-01_all_13_wordings/`; RESULTS.md, every category doc,
   the charts and the false-confession files now cover the four.
+- HF repo reorganised the same way: `activations/<category>.tar.gz` (four
+  questions, float32), `first_run/` for every category, retired files under
+  `archive/` (28 files moved, copies checksum-verified), new README.
 - P("A") on all 19,049 A/B answers -> AUROC per category and wording
   (`answer_probability/README.md`).
 - A/B swap test on 626 rows x 11 wordings (`ab_swap/README.md`).
@@ -24,11 +27,6 @@ Kept in git so they survive a lost session. Delete a line when it's done.
 
 ## Still open
 
-- [ ] RUNNING on box 118.163.199.123:18618 (`09_repackage_core4.py`, log
-      `repackage.log`): new `activations/<category>.tar.gz` with only the four
-      kept questions, plus first-run activations for unanswerable, capture and
-      alibi pulled into `first_run/`. Then: move the old tarballs on HF into
-      `archive/` and upload the new dataset card.
 - [ ] Next deception categories, with the four questions only.
 
 ## Optional (each needs a GPU box and a go-ahead on cost)
