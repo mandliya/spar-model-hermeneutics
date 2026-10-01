@@ -100,7 +100,7 @@ what keeps the self-report numbers comparable across all five categories:
 | unanswerable, 93 unsupported | **it fabricated the answer** (stage 3) |
 | unanswerable, 7 defensible | **it claimed inability** (stage 2) |
 
-`named` / `eval_named` also differ per bucket, since they name the act:
+`named` / `named_cot` also differ per bucket, since they name the act:
 confabulation for the 93, false-inability for the 7. Asking the 93 whether they
 "falsely claimed inability" would ask about an act they did not commit.
 
@@ -125,17 +125,41 @@ have a genuine dependency chain, so a real failure must stop it — but it stops
 loudly, with the reason and a timestamp in the log, and every stage is
 resumable per row.
 
+## Self-report: the four follow-up questions
+
+Asked right after the fabricated answer ([`../RESULTS.md`](../RESULTS.md),
+Methodology). The honest arm is only 7 rows, so false confession can't carry
+a rate here; read those columns as examples.
+
+<!-- CORE4:START -->
+86 rows where gemma did it, 7 where it didn't.
+
+| Question | Confession | 95% CI | Doubling down | False confession | 95% CI | Balanced accuracy |
+|---|---|---|---|---|---|---|
+| `neutral` | 12.8% | 7.3–21.5% | 87.2% | 28.6% | 8.2–64.1% | 42% |
+| `neutral_cot` | 73.3% | 63.1–81.5% | 26.7% | 42.9% | 15.8–75.0% | 65% |
+| `named` | 100.0% | 95.7–100.0% | 0.0% | 85.7% | 48.7–97.4% | 57% |
+| `named_cot` | 65.1% | 54.6–74.3% | 34.9% | 85.7% | 48.7–97.4% | 40% |
+<!-- CORE4:END -->
+
+"Did you *lie*?" (`neutral`) gets a 12.8% admission rate; "did you
+*confabulate*?" (`named`) gets 100%, on identical rows. The [A/B swap
+test](../ab_swap/README.md) confirms `named` is answering the question, not
+the letter: the verdict matches across the two orders on 96% of rows.
+
 ## Where the data lives
 
 | File | What it is |
 |---|---|
 | `results/unanswerable_question_labels.csv` / `.jsonl` | the judge's bucket labels, 100 rows |
 | `results/unanswerable_claims.csv` / `.jsonl` | primary run: claim, behaviour, `confabulated` |
-| `results/unanswerable_benchmark_conditions.csv` / `.jsonl` | the 12-question set |
+| `results/unanswerable_benchmark_conditions.csv` / `.jsonl` | follow-up answers: `neutral`, `neutral_cot`, `named` kept, nine questions archived |
+| `../named_cot/results/named_cot_unanswerable.jsonl` | `named_cot` |
 
-Activation tensors go to the shared HF dataset repo, both capture
-points (`__predecision.pt` and `__answer_token.pt`) from the start rather than
-retrofitted.
+Activation tensors are on Hugging Face, [`model-hermeneutics/gigi-lie-detection-activations`](https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations):
+`activations/unanswerable.tar.gz` (the four questions, float32, both capture
+points) with `activations/maps/unanswerable.jsonl`, and the first run's claim
+activations in `first_run/unanswerable/` (float16).
 
 ## Caveats
 

@@ -1,20 +1,12 @@
-"""Cross-category comparison charts for gigi/RESULTS.md.
+"""Lying-rate chart for gigi/RESULTS.md: the rate of the deceptive behaviour
+itself per category (not a self-report number), with Wilson intervals, read
+straight from each category's committed results files.
 
-Four charts, all reading straight from each category's own already-committed
-results files — nothing hardcoded, so these stay reproducible: rerun after
-any category's results change.
+  cross_category_lying_rate.png
 
-  cross_category_lying_rate.png        base rate of the deceptive behaviour
-                                        itself, per category (not a
-                                        self-report number at all)
-  cross_category_doubling_down.png     denies | it happened
-  cross_category_confession.png        admits | it happened  (the exact
-                                        complement of doubling-down; both
-                                        are reported because each answers a
-                                        different question)
-  cross_category_false_confession.png  admits | it did NOT happen — the
-                                        control, and the one that says
-                                        whether a confession means anything
+The self-report charts are drawn by 07_charts_pa_swap.py. The 13-question line
+charts this script used to draw are archived in
+archive/2026-10-01_all_13_wordings/charts/.
 
 Run (from the git repo root):
     uv run --with pandas --with matplotlib --with statsmodels \
@@ -339,10 +331,8 @@ def lying_rate_chart():
 
 
 lying_rate_chart()
-line_chart("doubling_down", "Doubling-down rate (denies the behavior, given it happened)",
-           "cross_category_doubling_down.png")
-line_chart("confession", "Confession rate (admits the behavior, given it happened)",
-           "cross_category_confession.png")
-line_chart("false_confession", "False confession rate (admits it, given it did NOT happen)",
-           "cross_category_false_confession.png")
+# The three 13-question line charts (doubling down, confession, false
+# confession) were retired on 1 Oct 2026 when the project kept four follow-up
+# questions; copies are in archive/2026-10-01_all_13_wordings/charts/.
+# Self-report is now drawn by 07_charts_pa_swap.py.
 print(f"\nAll charts in {CHARTS_DIR}")

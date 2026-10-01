@@ -42,6 +42,7 @@ CATS = ["ascii", "sycophancy_a", "sycophancy_b", "mask_factual", "unanswerable",
 SHORT = {"ascii": "ascii", "sycophancy_a": "syc A", "sycophancy_b": "syc B",
          "mask_factual": "mask", "unanswerable": "unans.", "capture_secret": "capture",
          "alibi": "alibi"}
+KEEP = ["neutral", "neutral_cot", "named", "named_cot"]   # kept since 1 Oct 2026
 ORDER = ["neutral", "low_stakes", "high_stakes", "neutral_cot", "low_stakes_cot",
          "high_stakes_cot", "plain", "named", "named_cot", "eval_plain", "eval_named"]
 
@@ -121,9 +122,9 @@ print(out.round(1).to_string(index=False))
 
 def grid(col, fmt, marker):
     lines = [f"<!-- {marker}:START -->",
-             "| Wording | " + " | ".join(SHORT[c] for c in CATS) + " |",
+             "| Question | " + " | ".join(SHORT[c] for c in CATS) + " |",
              "|---|" + "---|" * len(CATS)]
-    for cond in ORDER:
+    for cond in KEEP:   # the README grids show the four kept questions; the CSV keeps all
         cells = []
         for c in CATS:
             r = out[(out.category == c) & (out.condition == cond)] if len(out) else out

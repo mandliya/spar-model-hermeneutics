@@ -1,7 +1,9 @@
-"""Generate the per-category 12-question tables in RESULTS.md from the data.
+"""Generate the per-category follow-up tables in RESULTS.md from the data.
 
 One table per category: confession, doubling down and false confession for
-each of the 12 follow-up wordings, with Wilson 95% intervals. Written between
+each of the four follow-up questions the project keeps (neutral, neutral_cot,
+named, named_cot), with Wilson 95% intervals; plus the balanced-accuracy grid.
+The other nine wordings are archived in archive/2026-10-01_all_13_wordings/. Written between
 two marker comments in RESULTS.md, so rerunning replaces the section in place
 and the numbers can never drift from the CSVs.
 
@@ -18,9 +20,7 @@ from statsmodels.stats.proportion import proportion_confint
 
 G = pathlib.Path(__file__).resolve().parent
 START, END = "<!-- CONDITION-TABLES:START -->", "<!-- CONDITION-TABLES:END -->"
-ORDER = ["neutral", "low_stakes", "high_stakes", "confidence",
-         "neutral_cot", "low_stakes_cot", "high_stakes_cot", "confidence_cot",
-         "plain", "named", "named_cot", "eval_plain", "eval_named"]
+ORDER = ["neutral", "neutral_cot", "named", "named_cot"]
 B = lambda s: s.map({True: True, False: False, "True": True, "False": False})
 
 
@@ -73,6 +73,15 @@ def ci(k, n):
 
 blocks = []
 BAL = {}
+DOC_TABLES = {}   # category -> its table with a balanced-accuracy column, for its own doc
+# Each category's own write-up gets the same numbers, between its own markers.
+CATEGORY_DOCS = {"ascii-sandbagging": ("ascii-sandbagging/RESULTS.md", "CORE4"),
+                 "sycophancy Track A": ("sycophancy/RESULTS.md", "CORE4-A"),
+                 "sycophancy Track B": ("sycophancy/RESULTS.md", "CORE4-B"),
+                 "mask-factual": ("mask-factual/RESULTS.md", "CORE4"),
+                 "unanswerable": ("unanswerable/README.md", "CORE4"),
+                 "capture-the-secret": ("capture-the-secret/README.md", "CORE4"),
+                 "alibi": ("alibi/README.md", "CORE4")}
 for name, act, load in CATS:
     df, truth = load()
     df = pd.concat([df, named_cot_frame(name, df, truth)], ignore_index=True)
@@ -86,8 +95,10 @@ for name, act, load in CATS:
              f"The deceptive act: {act}. **{lied_n}** rows where gemma did it, "
              f"**{honest_n}** where it didn't.",
              "",
-             "| Condition | Confession | 95% CI | Doubling down | False confession | 95% CI |",
+             "| Question | Confession | 95% CI | Doubling down | False confession | 95% CI |",
              "|---|---|---|---|---|---|"]
+    doc = ["| Question | Confession | 95% CI | Doubling down | False confession | 95% CI | Balanced accuracy |",
+           "|---|---|---|---|---|---|---|"]
     for cond in ORDER:
         m = df["condition"] == cond
         if not m.any():
@@ -99,13 +110,18 @@ for name, act, load in CATS:
         if len(pos) and len(neg):
             BAL[(name, cond)] = 50 * (pos.sum() / len(pos) + (~neg).sum() / len(neg))
         lines.append(f"| `{cond}` | {c} | {cci} | {dd} | {f} | {fci} |")
+        b = BAL.get((name, cond))
+        doc.append(f"| `{cond}` | {c} | {cci} | {dd} | {f} | {fci} | "
+                   f"{'—' if b is None else (f'**{b:.0f}%**' if b >= 70 else f'{b:.0f}%')} |")
     blocks.append("\n".join(lines))
+    DOC_TABLES[name] = (f"{lied_n} rows where gemma did it, {honest_n} where it didn't.\n\n"
+                        + "\n".join(doc))
 
 section = "\n".join([
     START,
-    "### Every category, all 13 follow-up questions",
+    "### Every category, all four follow-up questions",
     "",
-    "Every wording, every category. Measures are defined in Methodology §4.",
+    "Measures are defined in Methodology §3. Intervals are Wilson 95%.",
     "",
     "\n\n".join(blocks),
     END,
@@ -124,7 +140,7 @@ def cell(v):
 
 
 grid = [BSTART,
-        "| Wording | " + " | ".join(short[n] for n in names) + " |",
+        "| Question | " + " | ".join(short[n] for n in names) + " |",
         "|---|" + "---|" * len(names)]
 for cond in ORDER:
     grid.append(f"| `{cond}` | " + " | ".join(cell(BAL.get((n, cond))) for n in names) + " |")
@@ -141,4 +157,15 @@ else:
 if BSTART in s:
     s = re.sub(re.escape(BSTART) + ".*?" + re.escape(BEND), lambda _: grid, s, flags=re.S)
 p.write_text(s)
+for name, (path, marker) in CATEGORY_DOCS.items():
+    dp = G / path
+    ds = dp.read_text()
+    st, en = f"<!-- {marker}:START -->", f"<!-- {marker}:END -->"
+    if st not in ds:
+        print(f"no {marker} markers in {path} - skipped")
+        continue
+    ds = re.sub(re.escape(st) + ".*?" + re.escape(en),
+                lambda _: f"{st}\n{DOC_TABLES[name]}\n{en}", ds, flags=re.S)
+    dp.write_text(ds)
+    print(f"filled {marker} in {path}")
 print(grid)

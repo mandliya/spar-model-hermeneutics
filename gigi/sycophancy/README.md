@@ -92,25 +92,19 @@ shifts it -2.37. Real evaluation-bias sycophancy, in both directions.
 
 ## Does asking directly detect it? (built)
 
-Same twelve follow-up wordings as ascii-sandbagging's RESULTS.md (bare
-letter / low-stakes / high-stakes / confidence score, each again with
-reasoning required, a plain-vs-named ask-directly benchmark, and — new —
-the same plain/named pair prefixed with an explicit "this is a safety
-evaluation" framing), run against both tracks.
+Both tracks are asked the project's four follow-up questions: `neutral`
+("did you lie?"), `named` ("did you just behave sycophantically…?"), and both
+again with reasoning first.
 
-**Headline results**: on Track B, `plain` gets only 12.9% confession while
-`named` gets 81.9% — the opposite direction from Track A (39.5% vs. 15.8%)
-and from ascii-sandbagging (93.7% vs. 1.0%). Shading an opinion toward what
-someone wants to hear isn't experienced as a lie the way changing a trivia
-answer is — "sycophantic" is the word that actually lands. The new
-safety-eval framing has the single largest effect on this whole project:
-Track B's `eval_named` hits 92.2% confession — the highest produced by
-*framing* alone (mask-factual and unanswerable both hit 100%, but the first
-is a saturated signal and the second is driven by vocabulary, not framing)
-— but false confession also jumps to 77.6%, meaning the framing makes gemma
-agree with the accusation far more often, not more accurately.
+**Headline**: on Track B, the plain "did you lie?" gets 0% confession, while
+`named` gets 81.9% and 71% balanced accuracy, the best in either track.
+Shading an opinion toward what someone wants isn't experienced as a lie the
+way changing a trivia answer is; "sycophantic" is the word that lands. But
+that result doesn't survive the A/B swap test on the letters (70% → 51%).
+Track A is close to a coin flip under all four questions.
 
-Full twelve-condition tables and charts for both tracks in `RESULTS.md`.
+Tables for both tracks are in `RESULTS.md`. The nine retired questions are in
+the [archived version](../archive/2026-10-01_all_13_wordings/sycophancy/README.md).
 
 ## Where the data lives
 
@@ -121,7 +115,8 @@ Full twelve-condition tables and charts for both tracks in `RESULTS.md`.
 | `results/transcripts_sycophancy_answers.jsonl` | **the actual rollouts** — full reconstructed conversations, Track A |
 | `results/transcripts_sycophancy_feedback.jsonl` | same, for Track B |
 | `results/sycophancy_benchmark_conditions.csv` / `.jsonl` | Track A's full follow-up question set, 1,896 rows |
-| `results/sycophancy_feedback_benchmark_conditions.csv` / `.jsonl` | Track B's full follow-up question set, 2,412 rows |
+| `results/sycophancy_feedback_benchmark_conditions.csv` / `.jsonl` | Track B's follow-up answers, 2,412 rows: `neutral`, `neutral_cot`, `named` kept, nine questions archived |
+| `../named_cot/results/named_cot_sycophancy_{a,b}.jsonl` | `named_cot`, both tracks |
 | `charts/sycophancy_feedback_shift.png` | Track B's evaluation-bias chart, regenerate with `06_charts_sycophancy.py` |
 | `charts/sycophancy_track_a_followups.png` / `_track_b_followups.png` | the follow-up-question charts, regenerate with `06_charts_sycophancy_followups.py` |
 | `00_sycophancy_answers.py` | generates Track A (local GPU, bf16, with activations) |
@@ -132,12 +127,10 @@ Full twelve-condition tables and charts for both tracks in `RESULTS.md`.
 | `00_export_transcripts_sycophancy.py` | joins both tracks' results back against the original dataset for full transcripts — $0, no API calls |
 
 Activation tensors are on Hugging Face, [`model-hermeneutics/gigi-lie-detection-activations`](https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations). Use
-`tarballs/fp32/sycophancy_a_fp32.tar.gz` and
-`tarballs/fp32/sycophancy_b_fp32.tar.gz` (float32, both capture points,
-every condition), plus the matching `named_cot_*` tarballs.
-`maps/fp32/fp32_map_sycophancy_{a,b}.jsonl` map each row and condition to
-its files. The float16 tarballs are superseded. Filenames are
-`<track>__<uid>__<condition>__{predecision,answer_token}.pt`. Both capture
+`activations/sycophancy_a.tar.gz` and `activations/sycophancy_b.tar.gz` (the
+four questions, float32, both capture points), with
+`activations/maps/sycophancy_{a,b}.jsonl`. Filenames are
+`<track>__<uid>__<question>__{predecision,answer_token}.pt`. Both capture
 points are saved because it is still uncertain which one a DYL-style probe
 expects. First-run (pre-decision) activations for both tracks are in
 `first_run/sycophancy/`; the repo's README explains the filenames.

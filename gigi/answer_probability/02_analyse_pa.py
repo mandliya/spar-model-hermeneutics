@@ -41,6 +41,7 @@ SHORT = {"ascii": "ascii", "sycophancy_a": "syc A", "sycophancy_b": "syc B",
 ORDER = ["neutral", "low_stakes", "high_stakes", "confidence", "neutral_cot",
          "low_stakes_cot", "high_stakes_cot", "confidence_cot", "plain", "named",
          "named_cot", "eval_plain", "eval_named"]
+KEEP = ["neutral", "neutral_cot", "named", "named_cot"]   # kept since 1 Oct 2026
 B = lambda s: s.map({True: True, False: False, "True": True, "False": False})
 
 p = argparse.ArgumentParser()
@@ -139,9 +140,9 @@ def cell(cat, cond):
 
 
 grid = ["<!-- AUROC-GRID:START -->",
-        "| Wording | " + " | ".join(SHORT[c] for c in CATS) + " |",
+        "| Question | " + " | ".join(SHORT[c] for c in CATS) + " |",
         "|---|" + "---|" * len(CATS)]
-for cond in ORDER:
+for cond in KEEP:   # the README grid shows the four kept questions; the CSV keeps all
     grid.append(f"| `{cond}` | " + " | ".join(cell(c, cond) for c in CATS) + " |")
 grid.append("<!-- AUROC-GRID:END -->")
 grid = "\n".join(grid)
