@@ -184,43 +184,30 @@ Balanced accuracy for every wording and category. 50 is a coin flip; **bold** is
 - **Adding reasoning to `named` usually makes it worse**: `named_cot` is below
   `named` in four of seven categories.
 
-### Reading gemma's confidence instead of its letter
+### Scoring gemma's confidence instead of its yes/no
 
-For every A/B answer, we also read gemma's probability of "A" (yes) at the
-moment it answered, and score that as an AUROC, the paper's measure
-([details](answer_probability/README.md)).
+The tables on this page score the letter gemma wrote. Here the score is
+gemma's probability of answering "yes, I lied", reported as AUROC, the
+paper's measure: how often a lie gets a higher P(yes) than an honest answer,
+where 0.5 is a coin flip ([details](answer_probability/README.md)).
 
-![Balanced accuracy from the letter vs AUROC from P("A"), every cell](charts/pa_letters_vs_probability.png)
+![Self-report AUROC per category](charts/selfreport_auroc.png)
 
-Most cells sit above the diagonal: the probability carries signal the letter
-hides. Sycophancy B's `neutral` answer is "No" on every row, yet its P("A")
-still ranks lies higher (AUROC 0.70). 27 of 91 cells reach 0.70, against 8
-on balanced accuracy.
+Only alibi and mask-factual are clearly above chance: alibi above the top of
+the paper's range for gemma, and mask-factual near it. Elsewhere the median is
+close to a coin flip, and the wording matters a lot: ascii runs from 0.06 to
+0.81 depending on how it is asked.
 
-![AUROC from P("A"), every wording and category](charts/pa_auroc_heatmap.png)
+Every wording put "yes" at option A, so 626 rows were asked again with "yes"
+at option B ([details](ab_swap/README.md)). A real signal shouldn't care which
+letter means yes.
 
-Alibi and mask-factual are blue almost everywhere. ascii-sandbagging has the
-deepest red: on `neutral` (0.12) and `confidence_cot` (0.06), gemma is more
-sure it lied when it told the truth.
+![Self-report AUROC with yes at A vs yes at B](charts/selfreport_swap.png)
 
-### Does gemma answer the question or the letter?
-
-A always meant "yes, I lied". On 626 rows, every A/B wording was asked again
-with the options swapped ([details](ab_swap/README.md)).
-
-![Yes rate with yes at A vs yes at B](charts/swap_question_or_letter.png)
-
-Points on the dashed diagonal give the same verdict either way: gemma is
-answering the question. Points toward the dotted line are choosing a letter.
-Reason-first wordings (▲) lean toward "always A"; `named` wordings (■) lean
-toward "always B". ascii `named` sits in the top-left corner: 1% "yes" when
-yes is A, 92% when yes is B.
-
-![AUROC with yes at A vs yes at B, per category](charts/swap_auroc_robustness.png)
-
-Alibi's self-report holds when the options are swapped (0.86 → 0.89), and so
-does mask-factual's (0.73 → 0.72). ascii's collapses (0.50 → 0.21): its
-probabilities follow the letter A, not the lie.
+Alibi and mask-factual hold, so their signal is real. ascii-sandbagging
+drops to 0.09: its P(yes) was tracking the letter A, not the lie. (This chart
+uses the 626-row subset, so its starting values differ slightly from the one
+above.)
 
 ### Confession and false confession by wording
 
