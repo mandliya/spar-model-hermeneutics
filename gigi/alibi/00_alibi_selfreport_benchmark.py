@@ -1,4 +1,12 @@
-"""The 12 follow-up questions for games/alibi.
+"""The follow-up questions for games/alibi.
+
+Since 1 Oct 2026 the project keeps four questions: neutral, neutral_cot, named
+and named_cot. This script asks the first three; named_cot is asked by
+05_named_cot.py, which picks up every row that has a `named` answer. The first
+500 rows were also asked the nine retired questions (archived). Both
+activation capture points are saved in float32.
+
+What follows is the original description.
 
 Same twelve wordings as every other category, sent verbatim from
 src/common.py. Category-specific, as always, are only:
@@ -57,7 +65,7 @@ KIND = {
     "plain": "letter", "named": "letter",
     "eval_plain": "letter", "eval_named": "letter",
 }
-CONDITIONS = list(WORDING)
+CONDITIONS = ["neutral", "neutral_cot", "named"]   # the kept questions (named_cot: 05_named_cot.py)
 
 p = argparse.ArgumentParser()
 p.add_argument("--limit", type=int, default=None)
@@ -128,8 +136,7 @@ def generate(messages, max_new_tokens) -> str:
 def capture_predecision(messages) -> torch.Tensor:
     enc = build_ids(messages)
     out = model(**enc, output_hidden_states=True, use_cache=False)
-    return torch.stack([h[0, -1, :] for h in out.hidden_states]
-                       ).to(torch.float16).cpu()
+    return torch.stack([h[0, -1, :] for h in out.hidden_states]).float().cpu()
 
 
 def work(job):
@@ -178,7 +185,8 @@ def work(job):
     fn_at = None
     span = find_answer_char_span(reply, kind)
     if span is not None:
-        state = capture_state_at_answer(tokenizer, model, messages, reply, span)
+        state = capture_state_at_answer(tokenizer, model, messages, reply, span,
+                                        out_dtype=torch.float32)
         if state is not None:
             fn_at = f"{uid}__{cond}__answer_token.pt"
             torch.save(state, ACTIVATIONS_DIR / fn_at)

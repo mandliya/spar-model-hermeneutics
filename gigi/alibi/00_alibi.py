@@ -65,7 +65,9 @@ guilt = pd.read_csv(RESULTS / "alibi_guilt_labels.csv")[["sample_id", "guilt"]]
 
 df = pd.concat([load_config(CONFIG, "train"), load_config(CONFIG, "validation")])
 df = df.drop_duplicates(subset=["sample_id"])
-df = df[df["sample_id"].isin(subset["sample_id"])].merge(guilt, on="sample_id")
+# every row with a guilt label: the 500-row subset, plus the other 781 once
+# 01_label_alibi.py --rest has labelled them (1 Oct 2026)
+df = df[df["sample_id"].isin(guilt["sample_id"])].merge(guilt, on="sample_id")
 df = df[df["guilt"].notna()].reset_index(drop=True)
 df["system_prompt"] = df["trace"].apply(
     lambda t: next((c for r, c in zip(t["role"], t["content"])
@@ -75,13 +77,13 @@ df["claim"], df["truth"] = pairs.str[0], pairs.str[1]
 df["probe"] = df["lie_detection_prompt"].apply(lambda p: dict(p)["content"])
 df["scenario"] = df["task"].str.replace(r"^alibi(-multi)?_", "", regex=True)
 
-if args.limit:
-    df = df.head(args.limit)
 print(f"{len(df)} rows  ({(df.guilt == 'FALSE_ALIBI').sum()} guilty, "
       f"{(df.guilt == 'TRUE_ALIBI').sum()} innocent)")
 
 done = load_done(OUT_PATH, key="sample_id")
 todo = df[~df["sample_id"].isin(done)]
+if args.limit:      # after the done-filter, so a smoke test always hits new rows
+    todo = todo.head(args.limit)
 print(f"{len(done)} already done, {len(todo)} to go")
 
 # ----------------------------------------------------------------- model ---
@@ -120,8 +122,9 @@ def generate(messages, max_new_tokens=400) -> str:
 def capture_predecision(messages) -> torch.Tensor:
     enc = build_ids(messages)
     out = model(**enc, output_hidden_states=True, use_cache=False)
-    return torch.stack([h[0, -1, :] for h in out.hidden_states]
-                       ).to(torch.float16).cpu()
+    # float32: lossless from the model's bf16 (float16 overflows above 65,504).
+    # The first 500 rows were saved in float16, before this was changed.
+    return torch.stack([h[0, -1, :] for h in out.hidden_states]).float().cpu()
 
 
 def work(row):

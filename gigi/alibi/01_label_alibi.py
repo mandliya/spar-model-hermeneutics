@@ -18,6 +18,7 @@ judge's label is what gets used downstream.
 Run:
     python 01_label_alibi.py --limit 5     # smoke test + cost measurement
     python 01_label_alibi.py               # all 500
+    python 01_label_alibi.py --rest        # the other 781 rows (results/alibi_rest.csv)
 
 Resumable per sample_id; per-row failures are logged and skipped.
 """
@@ -41,6 +42,8 @@ SUBSET_PATH = RESULTS / "alibi_subset.csv"
 
 p = argparse.ArgumentParser()
 p.add_argument("--limit", type=int, default=None)
+p.add_argument("--rest", action="store_true",
+               help="label every row NOT in the 500-row subset (added 1 Oct 2026)")
 args = p.parse_args()
 
 # ---------------------------------------------------------------- subset ---
@@ -87,6 +90,12 @@ else:
     sub[["sample_id", "task", "scenario", "approx_innocent"]].to_csv(
         SUBSET_PATH, index=False)
     print(f"drew stratified subset: {len(sub)} of {len(df)} rows (seed {SEED})")
+
+if args.rest:
+    sub = df[~df["sample_id"].isin(set(pd.read_csv(SUBSET_PATH)["sample_id"]))].copy()
+    sub[["sample_id", "task", "scenario", "approx_innocent"]].to_csv(
+        RESULTS / "alibi_rest.csv", index=False)
+    print(f"--rest: the {len(sub)} rows outside the subset -> results/alibi_rest.csv")
 
 print("\nsubset vs full set, by scenario:")
 print(pd.concat([df.scenario.value_counts(normalize=True).rename("full"),
