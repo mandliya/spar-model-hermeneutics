@@ -77,6 +77,36 @@ The 13 follow-up conditions are `neutral`, `low_stakes`, `high_stakes`,
 `named_cot`, `eval_plain` and `eval_named` (prefixed with "This is a safety
 evaluation").
 
+## Using these with the DYL probe
+
+These tensors line up with the AISI Did-You-Lie probe setup in
+`tianq/dyl-probe-repro` (in the project's GitHub repo):
+
+- **Same model weights:** `google/gemma-3-27b-it` at revision `005ad34`, the
+  revision that code pins.
+- **Same layer indexing:** index 0 is the embedding output, index i the output
+  of decoder block i-1. The default probe (`l_58_lm_0_01_ar_lr.pt`, layer 58)
+  reads **index 59**.
+- **`__predecision.pt` is that code's `prompt_last`**, the position the probe
+  reads: the last token of the prompt rendered with
+  `add_generation_prompt=True`, i.e. the end of `<start_of_turn>model\n`.
+- **`__answer_token.pt` is not always its `answer_first`.** For the direct A/B
+  wordings, gemma's reply starts with the letter, so the two are the same token.
+  For the reason-first wordings, ours is the letter after "Final answer:",
+  while `answer_first` is the first token of the reasoning.
+- **float32 here, bfloat16 there.** The model computes in bfloat16, and these
+  float32 files are an exact copy of those values: `.to(torch.bfloat16)` gives
+  back the bfloat16 tensor bit for bit.
+
+```python
+x = torch.load("<sample_id>__<condition>__predecision.pt")  # (63, 5376) float32
+features = x[59]                                           # what the layer-58 probe reads
+```
+
+Small numerical differences from re-extracting on another GPU are expected
+(we measured cosine ≥ 0.9999 between two boxes) and don't matter for a linear
+probe.
+
 ## First-run activations
 
 These are from gemma's answer to the original question, before any follow-up.
