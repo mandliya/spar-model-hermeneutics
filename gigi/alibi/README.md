@@ -162,7 +162,7 @@ Activation tensors are on Hugging Face in
 |---|---|
 | `activations/alibi.tar.gz` | the four questions, float32, both capture points |
 | `activations/maps/alibi.jsonl` | `<sample_id>__<question>` to filenames |
-| `first_run/alibi/` | the first run's pre-decision state, one file per row: float16 for the first 500, float32 for the other 781 |
+| `first_run/alibi/` | the first run's pre-decision state, one file per row, float32 (all 1,281) |
 
 ## Run order
 

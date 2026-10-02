@@ -126,12 +126,10 @@ which. For this category:
 - **Follow-up questions:** `activations/mask_factual.tar.gz`, the four
   questions in float32, both capture points (pre-decision and answer token),
   with `activations/maps/mask_factual.jsonl`.
-- **Primary run:** all 87 rows in `first_run/mask_factual/` (float16,
-  `<uid>.pt`) and `first_run/mask_factual/fp32/` (float32, use these: the
-  float16 files contain `inf` where values exceed 65,504). Only 9 of the
-  original files ever reached Hugging Face; the other 78 were recaptured with
-  `08_mask_first_run_recapture.py`, and the recapture matches the 9
-  originals (cosine ≥ 0.9999).
+- **Primary run:** all 87 rows in `first_run/mask_factual/<uid>.pt`, float32.
+  Only 9 of the original files ever reached Hugging Face; the other 78 were
+  recaptured with `08_mask_first_run_recapture.py`, and the recapture matches
+  the 9 originals (cosine ≥ 0.9999).
 
 ## Next steps
 

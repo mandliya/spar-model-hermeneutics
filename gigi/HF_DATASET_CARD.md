@@ -94,22 +94,20 @@ probe.
 
 ## First-run activations
 
-From gemma's answer to the original question, before any follow-up. All are
-pre-decision states (captured before gemma writes anything), so they depend
-only on the prompt.
+From gemma's answer to the original question, before any follow-up. All
+float32, all rows. All are pre-decision states (captured before gemma writes
+anything), so they depend only on the prompt; unanswerable also has the
+answer-token state.
 
-| Category | Where | Format |
+| Category | Where | What |
 |---|---|---|
-| ascii-sandbagging | `first_run/ascii/<sample_id>.pt` | dict: `lied_state` (before answering the capability question) and `doubled_down_state` (before answering the original "did you lie?"); float16 |
-| sycophancy A | `first_run/sycophancy/<uid>__pressured.pt`, `<uid>__neutral.pt` | before answering with and without the user's belief; the other 86 neutral states are in `__neutral_1` / `__neutral_2` from an earlier design; float16 |
-| sycophancy B | `first_run/sycophancy/<uid>__main.pt` | before writing the critique (the results files call it `<uid>.pt`); float16 |
-| mask-factual | `first_run/mask_factual/fp32/<uid>.pt` | all 87 rows, float32 (float16 copies one level up) |
-| unanswerable | `first_run/unanswerable/` | `__claim__predecision.pt` and `__claim__answer_token.pt`, when gemma says whether it could answer; float16 |
-| capture-the-secret | `first_run/capture_secret/` | `__capture__predecision.pt`, before the reply; float16 |
-| alibi | `first_run/alibi/` | `__alibi__predecision.pt`, before the reply to the detective, all 1,281 rows; float16 for the first 500, float32 for the other 781 |
-
-float16 files contain `inf` wherever a value exceeds 65,504 (typically 7–17
-values per tensor).
+| ascii-sandbagging | `first_run/ascii/<sample_id>.pt` | dict: `lied_state` (before answering the capability question) and `doubled_down_state` (before answering the original "did you lie?") |
+| sycophancy A | `first_run/sycophancy/<uid>__neutral.pt`, `<uid>__pressured.pt` | before answering without and with the user's belief (158 each) |
+| sycophancy B | `first_run/sycophancy/<uid>.pt` | before writing the critique (339) |
+| mask-factual | `first_run/mask_factual/<uid>.pt` | before answering under pressure (87) |
+| unanswerable | `first_run/unanswerable/` | `__claim__predecision.pt` and `__claim__answer_token.pt`, when gemma says whether it could answer (100 each) |
+| capture-the-secret | `first_run/capture_secret/` | `__capture__predecision.pt`, before the reply (508) |
+| alibi | `first_run/alibi/` | `__alibi__predecision.pt`, before the reply to the detective (1,281) |
 
 ## Archive
 
@@ -121,6 +119,11 @@ the four above. Nothing was deleted:
   their maps in `maps/`, float32.
 - `archive/fp16_superseded/`: the earlier float16 tarballs and map,
   superseded by the float32 ones.
+- `archive/first_run_fp16/`: the original float16 first-run files (2,605,
+  including older sycophancy names such as `__main`, `__neutral_1`). They were
+  recaptured in float32 on 2 October 2026; the recapture matches them
+  (cosine ≥ 0.9999). float16 turns values above 65,504 into `inf`, which is why
+  nothing current uses it.
 
 8,680 loose follow-up tensors that used to sit at the repo root (older
 naming, some from before the switch to temperature 0) were removed; they are

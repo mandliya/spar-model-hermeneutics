@@ -159,7 +159,7 @@ the letter: the verdict matches across the two orders on 96% of rows.
 Activation tensors are on Hugging Face, [`model-hermeneutics/gigi-lie-detection-activations`](https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations):
 `activations/unanswerable.tar.gz` (the four questions, float32, both capture
 points) with `activations/maps/unanswerable.jsonl`, and the first run's claim
-activations in `first_run/unanswerable/` (float16).
+activations in `first_run/unanswerable/` (float32).
 
 ## Caveats
 

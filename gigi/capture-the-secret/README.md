@@ -125,7 +125,7 @@ first — stopping preserves `/workspace`, so it is always safe.
 Activations are on Hugging Face, [`model-hermeneutics/gigi-lie-detection-activations`](https://huggingface.co/datasets/model-hermeneutics/gigi-lie-detection-activations):
 `activations/capture_secret.tar.gz` (the four questions, float32, both capture
 points) with `activations/maps/capture_secret.jsonl`, and the first run's
-pre-decision state in `first_run/capture_secret/` (508 files, float16).
+pre-decision state in `first_run/capture_secret/` (508 files, float32).
 
 ## Caveats
 

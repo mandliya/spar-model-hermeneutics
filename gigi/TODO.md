@@ -25,6 +25,9 @@ Kept in git so they survive a lost session. Delete a line when it's done.
 - A/B swap test on 626 rows x 11 wordings (`ab_swap/README.md`).
 - HF repo tidied: README (from `HF_DATASET_CARD.md`) added, 8,680 stale
   loose root tensors removed, every first-run file moved to `first_run/`.
+- 2 Oct 2026: every first-run activation recaptured in float32 (2,173 files,
+  cosine >= 0.9999 against the float16 originals, which are in
+  `archive/first_run_fp16/` on HF). Every activation on HF is now float32.
 
 ## Still open
 
@@ -36,7 +39,6 @@ Kept in git so they survive a lost session. Delete a line when it's done.
 
 ## Optional (each needs a GPU box and a go-ahead on cost)
 
-- [ ] float32 for first-run (pre-follow-up) activations. Ask TQ first.
 
 ## Ruled out, with reasons
 

@@ -284,9 +284,8 @@ model judging text equivalence) — not gemma itself.
 
 Activation tensors (every layer) are on Hugging Face,
 `model-hermeneutics/gigi-lie-detection-activations`. Primary-run files are
-in `first_run/sycophancy/`: `<uid>__neutral.pt` / `__pressured.pt` for
-Track A, and `<uid>__main.pt` for Track B (called `<uid>.pt` in the results
-files). The follow-up tensors are `activations/sycophancy_{a,b}.tar.gz` (the four questions, float32). Each question has two capture
+in `first_run/sycophancy/`, float32: `<uid>__neutral.pt` / `<uid>__pressured.pt`
+for Track A (158 each), and `<uid>.pt` for Track B (339). The follow-up tensors are `activations/sycophancy_{a,b}.tar.gz` (the four questions, float32). Each question has two capture
 points each: `<track>__<uid>__<condition>__answer_token.pt` (DYL-matched)
 and `<track>__<uid>__<condition>__predecision.pt` (pre-decision) — kept as
 separate files rather than guessing which one a given downstream probe
