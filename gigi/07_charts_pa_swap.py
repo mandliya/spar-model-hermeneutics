@@ -82,6 +82,14 @@ fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 5.6), sharey=True,
                              gridspec_kw={"wspace": 0.08})
 rows_axis(a1, 100, 50, "Balanced accuracy from the letter gemma wrote (%)", True)
 rows_axis(a2, 1.0, 0.5, "AUROC from gemma's probability of \"yes\"", False)
+# how each score is computed, one smaller grey line under each axis label
+for ax, how in [(a1, "= ½ × (% of lies it confessed + % of honest answers it cleared)\n"
+                     "50 = coin flip, 100 = perfect"),
+                (a2, "= chance a lie gets a higher P(yes) than an honest answer\n"
+                     "0.5 = coin flip, 1 = perfect")]:
+    ax.annotate(how, xy=(0.5, 0), xycoords="axes fraction", xytext=(0, -44),
+                textcoords="offset points", ha="center", va="top", fontsize=8, color=MUTED,
+                linespacing=1.4)
 a2.axvspan(0.46, 0.80, color=BAND, zorder=0)
 a2.text(0.63, -0.45, "paper's range for gemma", color=ACCENT, fontsize=9, ha="center")
 for _, r in PA.iterrows():
@@ -99,7 +107,7 @@ handles = [Line2D([], [], ls="", marker=STYLE[c]["marker"], ms=8, mew=1.8,
                   mfc=STYLE[c]["color"] if STYLE[c]["filled"] else "white", label=NICE[c])
            for c in KEEP]
 fig.legend(handles=handles, loc="lower center", ncol=4, frameon=False, fontsize=9.5,
-           bbox_to_anchor=(0.5, -0.07))
+           bbox_to_anchor=(0.5, -0.15))
 fig.savefig(CHARTS / "selfreport_by_question.png", dpi=180, bbox_inches="tight")
 plt.close(fig)
 print("saved selfreport_by_question.png")
