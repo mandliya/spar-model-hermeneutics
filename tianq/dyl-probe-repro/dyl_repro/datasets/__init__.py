@@ -10,15 +10,18 @@ this folder (core/, cli/) works on any dataset.
 Each dataset module exposes:
 
     conversations() -> list[Conversation]
+    labels(cache: ActivationCache) -> list[int | None]
+        Was each stored row's follow-up answer a lie (1), honest (0), or
+        excluded (None)? What a probe trained on the dataset learns.
     evaluate(cache: ActivationCache, probe: DylProbe) -> dict
         That dataset's own check, printed and returned. Datasets differ in what
         they are for (fingerprint, benchmark, calibration, transfer), so the
         check lives with the dataset rather than in one generic scorer.
 
 A dataset whose follow-up can be swapped also sets FOLLOWUPS_AVAILABLE (the
-entries of followups.json it asks); both functions then take the follow-up
-name as a last argument, and each follow-up is stored and scored separately
-under "<dataset>/<follow-up>".
+entries of followups.json it asks); all three functions then take the
+follow-up name as a last argument, and each follow-up is stored and scored
+separately under the key "<dataset>/<follow-up>".
 
 Every dataset is stored at both positions in core.prefill.POSITIONS, and every
 evaluate reports its full results at both, side by side.
@@ -42,6 +45,11 @@ MODULES = {
     "mask_factual": "dyl_repro.datasets.gigi.mask_factual",
     "unanswerable": "dyl_repro.datasets.gigi.unanswerable",
     "capture_the_secret": "dyl_repro.datasets.gigi.capture_the_secret",
+    "alibi": "dyl_repro.datasets.gigi.alibi",
+    "mask_known_facts": "dyl_repro.datasets.gigi.mask_belief.known_facts",
+    "mask_statistics": "dyl_repro.datasets.gigi.mask_belief.statistics",
+    "mask_continuations": "dyl_repro.datasets.gigi.mask_belief.continuations",
+    "mask_disinformation": "dyl_repro.datasets.gigi.mask_belief.disinformation",
 }
 NAMES = tuple(MODULES)
 
@@ -68,9 +76,21 @@ def runs(name: str, followups: list[str] | None) -> list[tuple[str, str | None]]
     return [(f"{name}/{f}", f) for f in chosen]
 
 
+def run(key: str) -> tuple[str, str | None]:
+    """(dataset, follow-up) for one storage key: "<dataset>" or "<dataset>/<follow-up>"."""
+    name, _, followup = key.partition("/")
+    [(_, chosen)] = runs(name, [followup] if followup else None)
+    return name, chosen
+
+
 def conversations(name: str, followup: str | None):
     module = get(name)
     return module.conversations() if followup is None else module.conversations(followup)
+
+
+def labels(name: str, cache, followup: str | None) -> list[int | None]:
+    module = get(name)
+    return module.labels(cache) if followup is None else module.labels(cache, followup)
 
 
 def evaluate(name: str, cache, probe, followup: str | None) -> dict:

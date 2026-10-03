@@ -3,8 +3,8 @@
     python -m dyl_repro.cli.compare_wordings
 
 Reads the result evaluate stored for every follow-up of every Gigi dataset (the
-current version on the Hub), builds the two tables (datasets/gigi/wordings.py)
-and their chart (datasets/gigi/wording_charts.py), prints the tables and stores
+current version on the Hub), builds the two tables (datasets/gigi/analyses/wordings.py)
+and their chart (datasets/gigi/analyses/wording_charts.py), prints the tables and stores
 them as gigi/results/wordings_<result>.json, the chart as
 gigi/charts/wordings_<result>.png. No model and no activations: the stored
 per-row scores are enough.
@@ -17,7 +17,7 @@ import os
 from dyl_repro import datasets
 from dyl_repro.core.probe import DylProbe
 from dyl_repro.core.store import SCRATCH, RowStore
-from dyl_repro.datasets.gigi import wording_charts, wordings
+from dyl_repro.datasets.gigi.analyses import wording_charts, wordings
 
 GIGI_DATASETS = tuple(n for n in datasets.NAMES if datasets.MODULES[n].startswith("dyl_repro.datasets.gigi."))
 

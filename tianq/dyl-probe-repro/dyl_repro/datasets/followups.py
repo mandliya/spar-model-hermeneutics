@@ -4,12 +4,16 @@ One entry per question: its exact text, how an answer is read (answer_format,
 and which answer admits the lie), which datasets ask it, and for Gigi's
 questions his constant and condition name. A dataset asks every entry whose
 `datasets` holds its name or "all"; entries with an empty list are recorded but
-not asked (each says why in its `note`).
+not asked (each says why in its `note`). Only questions answered on-policy say
+"all": one of Gigi's lists exactly the datasets that have his recorded answer,
+since a dataset keeps only rows answered for every Gigi question it asks.
 
 Gigi's texts are verified against his own src/common.py on every load, in every
-category copy that defines the constant, so the list can never drift from the
-wording his recorded answers were given to. `dyl` is verified against the
-probe's own question.
+category copy that defines the constant (read statically, gigi.string_constants),
+so the list can never drift from the wording his recorded answers were given to.
+A text that is not one of his constants (gigi_constant null) is verified against
+the question his CSV recorded beside each answer, when a conversation is built
+(gigi.conversations). `dyl` is verified against the probe's own question.
 
 Yes/no parsing is generic (core/followup.py); the A/B and 0-100 parsers are
 Gigi's own, because they define what "admitted" means for his questions.
@@ -71,11 +75,11 @@ def verify(entry: dict) -> None:
         raise ValueError("dyl no longer matches the probe's own question (core/probe.py)")
     if constant is None:
         return
-    copies = [c for c in gigi.CATEGORIES if hasattr(gigi.module(c, "common"), constant)]
+    copies = [c for c in (*gigi.CATEGORIES, *gigi.BORROWED) if constant in gigi.string_constants(c)]
     if not copies:
         raise ValueError(f"{entry['name']}: no Gigi category defines {constant}")
     for category in copies:
-        expected = getattr(gigi.module(category, "common"), constant)
+        expected = gigi.string_constants(category)[constant]
         if entry.get("options_swapped"):
             if SWAP[0] not in expected:
                 raise ValueError(f"{entry['name']}: {category}'s {constant} no longer has the block it swaps")
@@ -110,6 +114,14 @@ def for_dataset(dataset: str) -> dict[str, FollowUp]:
 def gigi_condition(name: str) -> str | None:
     """Gigi's condition name for this follow-up: where his recorded answers are. None if he never asked it."""
     return next(e["gigi_condition"] for e in entries() if e["name"] == name)
+
+
+def named(dataset: str) -> str:
+    """The follow-up that names this dataset's own act: the one it asks under Gigi's `named` condition."""
+    matches = [name for name in for_dataset(dataset) if gigi_condition(name) == "named"]
+    if len(matches) != 1:
+        raise ValueError(f"{dataset} asks {len(matches)} follow-ups under Gigi's named condition, expected 1: {matches}")
+    return matches[0]
 
 
 def gigi_conditions(dataset: str) -> list[str]:

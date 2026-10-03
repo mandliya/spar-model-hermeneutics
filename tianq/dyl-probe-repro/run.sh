@@ -7,6 +7,10 @@
 #   ./run.sh evaluate --dataset aisi_varied_deception
 #   ./run.sh extract  --dataset ascii_sandbagging --followup all
 #   ./run.sh compare_wordings                                 # CPU: just asking vs the probe, best wording each
+#   ./run.sh train_probe --train ascii_sandbagging/dyl --test sycophancy_answer/dyl aisi_varied_deception
+#                                                             # CPU: train a probe on one dataset, test on others
+#   ./run.sh compare_generalization                           # CPU: does a probe trained on one kind of lie catch the others?
+#   ./run.sh compare_outcome_flags                            # CPU: what the released probe flags on each answer group
 #
 # Every invocation writes its own raw log to scratch/logs/run_<utc>_<command>.log:
 # the exact argv, the environment (python, nvidia-smi, pip freeze), the complete
@@ -30,11 +34,12 @@ set -a
 source <(tr -d '\r' < .env)
 set +a
 
-command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings> [args]}"
+command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags> [args]}"
 shift
 case "$command" in
-  extract | evaluate | compare_wordings) ;;
-  *) echo "unknown command: $command (expected extract, evaluate or compare_wordings)" >&2; exit 1 ;;
+  extract | evaluate | compare_wordings | train_probe | compare_generalization | compare_outcome_flags) ;;
+  *) echo "unknown command: $command (expected extract, evaluate, compare_wordings, train_probe," \
+          "compare_generalization or compare_outcome_flags)" >&2; exit 1 ;;
 esac
 
 if [[ -z "${TMUX:-}" ]] && command -v tmux >/dev/null 2>&1; then

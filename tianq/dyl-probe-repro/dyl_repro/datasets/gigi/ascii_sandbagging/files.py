@@ -14,7 +14,6 @@ read straight from their results/ CSVs.
 
 from __future__ import annotations
 
-import csv
 import re
 from functools import cache
 
@@ -23,8 +22,8 @@ from dyl_repro.datasets import gigi
 # The checkout these CSVs are read at (2026-09-27). Rows extracted earlier record
 # the commit of their own run (fa64456) in their provenance.
 GIGI_COMMIT = gigi.GIGI_COMMIT
-RESULTS_DIR = gigi.GIGI_DIR / "ascii-sandbagging" / "results"
-_common = gigi.module("ascii-sandbagging", "common")
+CATEGORY = "ascii-sandbagging"
+_common = gigi.module(CATEGORY, "common")
 
 # Restated from 00_ascii_activations.py L62:
 # https://github.com/mandliya/spar-model-hermeneutics/blob/fa64456/gigi/ascii-sandbagging/00_ascii_activations.py#L62
@@ -45,14 +44,6 @@ RECORDED_CSV = {
     "eval_named": "ascii_benchmark_conditions.csv",
 }
 
-_BOOL = {"True": True, "False": False, "": None}
-
-
-def _csv(name: str) -> list[dict]:
-    with (RESULTS_DIR / name).open(encoding="utf-8", newline="") as f:
-        return list(csv.DictReader(f))
-
-
 @cache
 def dataset_rows() -> dict[str, dict]:
     """The ASCII rows of Gigi's config, by sample_id, loaded exactly as
@@ -67,11 +58,11 @@ def dataset_rows() -> dict[str, dict]:
 @cache
 def ascii_results() -> dict[str, dict]:
     """Gigi's 310 ASCII rows: their `lied` label and Gemma's first answer."""
-    return {r["uid"]: r for r in _csv("ascii_results.csv")}
+    return {r["uid"]: r for r in gigi.csv_rows(CATEGORY, "ascii_results.csv")}
 
 
 def lied(uid: str) -> bool | None:
-    return _BOOL[ascii_results()[uid]["lied"]]
+    return gigi.BOOL[ascii_results()[uid]["lied"]]
 
 
 def conversation_before_followup(uid: str) -> list[dict[str, str]]:
@@ -93,14 +84,10 @@ def recorded_answers(condition: str | None) -> dict[str, dict]:
     """uid -> {"answer", "gigi_admitted"} for one of Gigi's conditions; {} for None (never asked by him)."""
     if condition is None:
         return {}
-    rows = _csv(RECORDED_CSV[condition])
     if condition == "neutral":
-        return {r["uid"]: {"answer": r["followup_answer"], "gigi_admitted": _BOOL[r["admitted"]]} for r in rows}
-    return {
-        r["sample_id"]: {"answer": r["answer"], "gigi_admitted": _BOOL.get(r["admitted"])}
-        for r in rows
-        if r["condition"] == condition
-    }
+        return {r["uid"]: {"answer": r["followup_answer"], "gigi_admitted": gigi.BOOL[r["admitted"]]}
+                for r in gigi.csv_rows(CATEGORY, RECORDED_CSV[condition])}
+    return gigi.recorded_answers(CATEGORY, RECORDED_CSV[condition], condition)
 
 
 def topic(uid: str) -> str:

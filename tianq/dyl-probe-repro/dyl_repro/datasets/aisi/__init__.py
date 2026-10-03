@@ -21,6 +21,7 @@ from huggingface_hub import hf_hub_download
 
 from dyl_repro.core.conversation import Conversation
 from dyl_repro.core.probe import FOLLOWUP_QUESTION
+from dyl_repro.core.store import ActivationCache
 
 ROLLOUTS_REPO = "ai-safety-institute/lie-detection-rollouts"
 # Pinned: a re-rolled split would otherwise change every number silently.
@@ -68,3 +69,8 @@ def load_split(split: str) -> list[Conversation]:
             )
         )
     return conversations
+
+
+def stored_labels(cache: ActivationCache) -> list[int | None]:
+    """AISI's own label (LABELS), stored on every row at extraction."""
+    return [record["label"] for record in cache.records]

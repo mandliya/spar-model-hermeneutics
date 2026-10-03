@@ -56,6 +56,10 @@ def conversations(followup: str) -> list[Conversation]:
     return gigi.conversations(rows(), followup, FOLLOWUPS[followup], followups.gigi_condition(followup))
 
 
+def labels(cache: ActivationCache, followup: str) -> list[int | None]:
+    return transfer.labels(cache, FOLLOWUPS[followup])
+
+
 def evaluate(cache: ActivationCache, probe: DylProbe, followup: str) -> dict:
     return transfer.evaluate(cache, probe, followup, FOLLOWUPS, dataset=DATASET, group_key=GROUP_KEY,
                              extra={"gigi_commit": gigi.GIGI_COMMIT})

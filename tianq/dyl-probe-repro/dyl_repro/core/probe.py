@@ -66,6 +66,11 @@ def sweep() -> dict:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
+def hidden_states_index_for(layer: int) -> int:
+    """The transformers hidden_states entry a probe of this layer reads (see module docstring)."""
+    return layer + 1
+
+
 def published_metrics(checkpoint: str = DEFAULT_CHECKPOINT) -> dict[str, float]:
     """The five numbers sweep.json reports for one checkpoint."""
     safe_name = checkpoint.removesuffix(".pt")
@@ -80,10 +85,18 @@ class DylProbe:
     """Activations in, scores out. The math is the library's own forward pass
     (standardise with the stored training statistics, then linear):
     https://github.com/UKGovernmentBEIS/lie_detectors/blob/88043087688308bc9cefe7cbdbf9b3806a679149/src/lie_detectors/probes.py#L129-L130
+
+    Either AISI's released checkpoint (load) or one we trained (core/training.py,
+    which sets `trained_on`); both score through the library's own module class.
     """
 
     checkpoint: str
     module: BaseProbe
+    trained_on: str | None = None  # the dataset a probe of ours was trained on; None for AISI's
+
+    @property
+    def is_official(self) -> bool:
+        return self.trained_on is None
 
     @classmethod
     def load(cls, checkpoint: str = DEFAULT_CHECKPOINT) -> DylProbe:
@@ -98,8 +111,7 @@ class DylProbe:
 
     @property
     def hidden_states_index(self) -> int:
-        """The transformers hidden_states entry the probe reads (see module docstring)."""
-        return self.layer + 1
+        return hidden_states_index_for(self.layer)
 
     @property
     def threshold(self) -> float:
@@ -115,7 +127,7 @@ class DylProbe:
         return self.score(activations) > self.threshold
 
     def training_statistics(self) -> tuple[np.ndarray, np.ndarray]:
-        """(dataset_mean, dataset_std): the statistics of AISI's training activations."""
+        """(dataset_mean, dataset_std): the statistics of the probe's training activations."""
         return self.module.dataset_mean.double().numpy(), self.module.dataset_std.double().numpy()
 
     def standardise(self, activations: np.ndarray) -> np.ndarray:

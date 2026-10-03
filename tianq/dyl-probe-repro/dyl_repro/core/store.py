@@ -8,6 +8,7 @@ Layout, identical in the Hub repo and under the local scratch directory:
                                                 d_model), bfloat16
     <dataset>/results/<name>.json               evaluation outputs, per-row scores included
     <dataset>/charts/<name>.png                 charts drawn from a result
+    <dataset>/probes/<name>.pt                  probes trained on this dataset (core/training.py)
     logs/<name>.log                             raw execution logs (see core/logs.py)
 
 bfloat16 on disk because the model computes in bfloat16: saving the tensor as
@@ -25,23 +26,49 @@ first, then the run resumes from the gap.
 from __future__ import annotations
 
 import json
+import time
 from collections.abc import Iterator
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
+import requests
 import torch
 from huggingface_hub import CommitOperationAdd, HfApi, hf_hub_download, snapshot_download
+from huggingface_hub import constants as hf_constants
+from huggingface_hub.errors import HfHubHTTPError, LocalEntryNotFoundError
+from lie_detectors import load_probe
 from safetensors import safe_open
 from safetensors.torch import save_file
 
 from dyl_repro.core.logs import log_operations, with_retries
 from dyl_repro.core.prefill import POSITIONS
+from dyl_repro.core.probe import DylProbe
 
 SCRATCH = Path(__file__).resolve().parents[2] / "scratch"
 LOG_DIR = SCRATCH / "logs"
 SYNC_EVERY = 250
 TENSOR_KEY = "hidden_states"
+# The Hub's rate-limit window: a 429 clears once it has passed.
+RATE_LIMIT_WAIT_SECONDS = 300
+CONNECTION_WAIT_SECONDS = 60
+MAX_IDLE_ROUNDS = 5
+
+
+@contextmanager
+def _without_xet() -> Iterator[None]:
+    """Download over the plain /resolve/ route instead of Xet (see RowStore.pull).
+
+    HF_HUB_DISABLE_XET is huggingface_hub's own switch, read at call time
+    (file_download.py L1722 checks is_xet_available(), which returns False when
+    it is set). Flipped only for the duration, so uploads are unaffected."""
+    previous = hf_constants.HF_HUB_DISABLE_XET
+    hf_constants.HF_HUB_DISABLE_XET = True
+    try:
+        yield
+    finally:
+        hf_constants.HF_HUB_DISABLE_XET = previous
 
 
 @dataclass
@@ -109,6 +136,31 @@ class RowStore:
         self._pending.append(path)
         self.sync()
 
+    def put_probe(self, probe: DylProbe) -> None:
+        """A probe we trained, as {"state_dict", "hyperparams"}: the layout
+        of AISI's released checkpoints, so lie_detectors.load_probe reads it back
+        (loading.py L48-L55):
+        https://github.com/UKGovernmentBEIS/lie_detectors/blob/88043087688308bc9cefe7cbdbf9b3806a679149/src/lie_detectors/loading.py#L48-L55
+        """
+        path = f"{self.dataset}/probes/{probe.checkpoint}.pt"
+        (self.scratch / path).parent.mkdir(parents=True, exist_ok=True)
+        torch.save(
+            {"state_dict": probe.module.state_dict(), "hyperparams": probe.module.hyperparams.model_dump(mode="json")},
+            self.scratch / path,
+        )
+        self._pending.append(path)
+
+    def probe(self, name: str) -> DylProbe:
+        """A probe stored by put_probe, loaded back through the library's own loader."""
+        path = hf_hub_download(self.repo_id, f"{self.dataset}/probes/{name}.pt", repo_type="dataset",
+                               local_dir=self.scratch, token=self.token)
+        module = load_probe(path)
+        return DylProbe(name, module, trained_on=module.hyperparams.train_dataset)
+
+    def stored(self) -> set[str]:
+        """Every path in the Hub repo, from one listing call."""
+        return set(self.api.list_repo_files(self.repo_id, repo_type="dataset"))
+
     def put_chart(self, name: str, figure) -> None:
         """A matplotlib figure, pushed with the next sync."""
         path = f"{self.dataset}/charts/{name}.png"
@@ -152,22 +204,56 @@ class RowStore:
         file instead (a plain snapshot_download over a scratch the run itself
         wrote) spends one request per file, and 10k files trips the Hub's
         12k-requests-per-5-minutes limit even when nothing needs downloading.
+
+        Downloads skip Xet storage. A Xet download first asks the Hub API for a
+        read token, one call per file, and the API bucket allows 2,500 calls per
+        5 minutes on a PRO account; a 5000-row dataset is 10k files. The plain
+        route (`/resolve/` URLs) counts against the Resolvers bucket instead,
+        12,000 per 5 minutes on PRO (https://huggingface.co/docs/hub/rate-limits).
+        Only downloads here: uploads (sync) keep the default path.
+
+        If a pull still hits a 429, it waits out the window and resumes from what
+        reached disk. A dropped connection (the CDN resets some long pulls; the
+        library then fails the file lookup with LocalEntryNotFoundError) or a
+        response that arrives corrupted (ContentDecodingError, seen once on the
+        listing itself) waits a minute and resumes the same way. MAX_IDLE_ROUNDS rounds in a row that get
+        nothing through raise, so an outage fails loudly instead of looping.
         """
         wanted = (f"{self.dataset}/rows/", f"{self.dataset}/hidden_states/")
-        missing = [
-            f
-            for f in self.api.list_repo_files(self.repo_id, repo_type="dataset")
-            if f.startswith(wanted) and not (self.scratch / f).exists()
-        ]
-        print(f"    pull: {len(missing)} files missing locally", flush=True)
-        if missing:
-            snapshot_download(
-                self.repo_id,
-                repo_type="dataset",
-                allow_patterns=missing,
-                local_dir=self.scratch,
-                token=self.token,
-            )
+        before, idle = None, 0
+        while True:
+            try:
+                missing = [
+                    f
+                    for f in self.api.list_repo_files(self.repo_id, repo_type="dataset")
+                    if f.startswith(wanted) and not (self.scratch / f).exists()
+                ]
+                print(f"    pull: {len(missing)} files missing locally", flush=True)
+                idle = idle + 1 if before is not None and len(missing) >= before else 0
+                if idle >= MAX_IDLE_ROUNDS:
+                    raise RuntimeError(f"pull made no progress in {idle} rounds ({len(missing)} files still missing)")
+                before = len(missing)
+                if missing:
+                    with _without_xet():
+                        snapshot_download(
+                            self.repo_id,
+                            repo_type="dataset",
+                            allow_patterns=missing,
+                            local_dir=self.scratch,
+                            token=self.token,
+                        )
+                return
+            except HfHubHTTPError as exc:
+                if exc.response is None or exc.response.status_code != 429:
+                    raise
+                print(f"    pull: rate-limited by the Hub; waiting {RATE_LIMIT_WAIT_SECONDS}s, then resuming",
+                      flush=True)
+                time.sleep(RATE_LIMIT_WAIT_SECONDS)
+            except (LocalEntryNotFoundError, requests.exceptions.ConnectionError, requests.exceptions.Timeout,
+                    requests.exceptions.ContentDecodingError) as exc:
+                print(f"    pull: connection dropped ({type(exc).__name__}); waiting {CONNECTION_WAIT_SECONDS}s,"
+                      " then resuming", flush=True)
+                time.sleep(CONNECTION_WAIT_SECONDS)
 
 
 class ActivationCache:

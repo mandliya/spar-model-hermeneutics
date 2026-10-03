@@ -34,6 +34,9 @@ A dataset supplies its follow-ups and records whose provenance carries
 `turn_lie` (Gigi's label), `answer_source`, `gigi_admitted`, and optionally one
 grouping field (ASCII: `topic`) for the group-only baseline: how predictable the
 label is without any activations.
+
+The follow-up label is also what a probe trained on these datasets learns
+(labels(), read by cli/train_probe.py through datasets.labels).
 """
 
 from __future__ import annotations
@@ -93,6 +96,12 @@ def label_rows(cache: ActivationCache, spec: FollowUp, group_key: str | None) ->
             "answer_first_logprob": record["fidelity"]["answer_first_logprob"],
         })
     return rows, agreement
+
+
+def labels(cache: ActivationCache, spec: FollowUp) -> list[int | None]:
+    """Was the follow-up answer a lie? Per stored row, in the cache's order."""
+    rows, _ = label_rows(cache, spec, None)
+    return [r["label"] for r in rows]
 
 
 def group_only_auroc(groups: list[str], y: np.ndarray) -> float | None:

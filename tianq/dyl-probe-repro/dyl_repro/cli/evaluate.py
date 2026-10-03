@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import os
+from dataclasses import dataclass
 
 from dyl_repro import datasets
 from dyl_repro.core.probe import DEFAULT_CHECKPOINT, DylProbe
@@ -27,20 +28,41 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def evaluate_run(args, probe: DylProbe, key: str, followup: str | None) -> dict:
+@dataclass(frozen=True)
+class StoredRun:
+    """One dataset run's rows, pulled from the Hub, and whether all of them are there."""
+
+    dataset: str
+    key: str
+    followup: str | None
+    store: RowStore
+    cache: ActivationCache
+    rows_expected: int
+
+    @property
+    def complete(self) -> bool:
+        return len(self.cache.records) == self.rows_expected
+
+
+def pull_run(dataset: str, key: str, followup: str | None) -> StoredRun:
     store = RowStore(os.environ["HF_DATASET_REPO"], os.environ["HF_TOKEN"], SCRATCH, key)
     store.pull()
-    cache = ActivationCache(SCRATCH, key)
-    expected = len(datasets.conversations(args.dataset, followup))
-    complete = len(cache.records) == expected
-    if not complete:
-        print(f"\n*** INCOMPLETE {key}: {len(cache.records)} of {expected} rows stored. Not a real result. ***")
+    run = StoredRun(dataset, key, followup, store, ActivationCache(SCRATCH, key),
+                    len(datasets.conversations(dataset, followup)))
+    if not run.complete:
+        print(f"\n*** INCOMPLETE {key}: {len(run.cache.records)} of {run.rows_expected} rows stored."
+              " Not a real result. ***")
+    return run
 
-    result = datasets.evaluate(args.dataset, cache, probe, followup)
-    result |= {"checkpoint": args.checkpoint, "rows_stored": len(cache.records), "rows_expected": expected, "complete": complete}
+
+def evaluate_run(run: StoredRun, probe: DylProbe) -> dict:
+    """The dataset's own check of `probe`, stored as <checkpoint>_hs<index> next to the rows."""
+    result = datasets.evaluate(run.dataset, run.cache, probe, run.followup)
+    result |= {"checkpoint": probe.checkpoint, "trained_on": probe.trained_on, "rows_stored": len(run.cache.records),
+               "rows_expected": run.rows_expected, "complete": run.complete}
     index = result.get("hidden_states_index")
-    name = args.checkpoint.removesuffix(".pt") + ("" if index is None else f"_hs{index}")
-    store.put_result(name if complete else f"{name}_INCOMPLETE", result)
+    name = probe.checkpoint.removesuffix(".pt") + ("" if index is None else f"_hs{index}")
+    run.store.put_result(name if run.complete else f"{name}_INCOMPLETE", result)
     return result
 
 
@@ -48,7 +70,7 @@ def main() -> None:
     args = parse_args()
     probe = DylProbe.load(args.checkpoint)
     results = {
-        followup or key: evaluate_run(args, probe, key, followup)
+        followup or key: evaluate_run(pull_run(args.dataset, key, followup), probe)
         for key, followup in datasets.runs(args.dataset, args.followup)
     }
     summarize = getattr(datasets.get(args.dataset), "summarize", None)

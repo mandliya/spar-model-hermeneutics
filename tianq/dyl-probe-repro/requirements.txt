@@ -17,5 +17,8 @@ tqdm==4.67.1
 python-dotenv==1.1.1
 fsspec==2025.9.0
 pandas==2.3.2
-# For the chart of the two tables (datasets/gigi/wording_charts.py).
+# For the charts of the analyses (datasets/gigi/analyses/*_charts.py).
 matplotlib==3.10.6
+# The probe trainer's optimiser (core/training.py). 1.16 is the newest that
+# still installs on the GPU image's Python 3.11.
+scipy==1.16.3

@@ -19,7 +19,7 @@ from dyl_repro.core.conversation import Conversation
 from dyl_repro.core.prefill import POSITIONS
 from dyl_repro.core.probe import DylProbe
 from dyl_repro.core.store import ActivationCache
-from dyl_repro.datasets.aisi import load_split
+from dyl_repro.datasets.aisi import load_split, stored_labels
 
 SPLIT = "dyl_train_city_countries"
 SHOW = 10
@@ -27,6 +27,10 @@ SHOW = 10
 
 def conversations() -> list[Conversation]:
     return load_split(SPLIT)
+
+
+def labels(cache: ActivationCache) -> list[int | None]:
+    return stored_labels(cache)
 
 
 def _statistics(cache: ActivationCache, probe: DylProbe):

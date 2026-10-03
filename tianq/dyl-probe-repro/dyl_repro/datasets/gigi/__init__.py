@@ -5,15 +5,18 @@
     mask_factual/        recites the cover story it was given
     unanswerable/        confabulates after claiming inability
     capture_the_secret/  asserts a falsehood to protect a secret
+    alibi/               keeps up a false alibi under questioning
+    mask_belief/         says what it believes is false under a role (four MASK subtypes)
     transfer.py          the scoring all of them share: the probe next to just asking
-    wordings.py          just asking vs the probe, each with its best wording, and the hard-to-catch lies
-    wording_charts.py    those two tables, drawn as one figure
+    analyses/            tables and charts across the categories (see its __init__)
 
 Each category folder in the repo's own gigi/ directory carries its own
 src/common.py (copies that agree on the shared parts), so each is loaded from
 its own file under its own module name: `import src.common` would hand every
 category whichever copy was imported first. Loading one runs its top level,
 which creates an empty data/ folder beside it (empty, so git never sees it).
+Categories added later borrow an identical copy instead (BORROWED), so nothing
+new is ever created in Gigi's tree.
 
 A dataset built here is the conversation Gigi's follow-up run sent, up to the
 tested reply, plus a follow-up from followups.json. For follow-ups Gigi asked,
@@ -25,8 +28,10 @@ are dropped loudly, never mixed with on-policy answers.
 
 from __future__ import annotations
 
+import ast
 import csv
 import importlib.util
+import json
 import os
 from dataclasses import dataclass
 from functools import cache
@@ -36,19 +41,67 @@ from types import ModuleType
 from dyl_repro.core.conversation import Conversation
 from dyl_repro.core.followup import FollowUp
 
-# The checkout these imports and CSVs are read at (2026-09-27).
-GIGI_COMMIT = "268c51c"
+# The checkout these imports and CSVs are read at (2026-10-03). Rows stored
+# earlier record 268c51c; at 0df3751 every earlier category builds the same
+# conversations except ASCII's seven rebuilt rows (see ascii_sandbagging/).
+GIGI_COMMIT = "0df3751"
 # The repo's gigi/ folder; GIGI_DIR points elsewhere when this project is not
 # inside a repo checkout.
 GIGI_DIR = Path(os.environ.get("GIGI_DIR", Path(__file__).resolve().parents[5] / "gigi"))
 CATEGORIES = ("ascii-sandbagging", "sycophancy", "mask-factual", "unanswerable", "capture-the-secret")
+# Categories whose own common.py is never run, because running it would create a
+# data/ folder in Gigi's tree that the existing categories' checkouts already
+# have. Only the helpers below are used from it, so it borrows the copy of a
+# category on the same configs; module() checks the two are identical first.
+BORROWED = {"alibi": "capture-the-secret", "mask-belief": "mask-factual"}
+BORROWED_HELPERS = ("load_config", "to_messages")
 
 BOOL = {"True": True, "False": False, "": None}
 
 
+def _function_sources(path: Path, names: tuple[str, ...]) -> dict[str, str | None]:
+    """The source text of top-level functions in a file, read without running it."""
+    text = path.read_text(encoding="utf-8")
+    found = {n.name: ast.get_source_segment(text, n) for n in ast.parse(text).body if isinstance(n, ast.FunctionDef)}
+    return {name: found.get(name) for name in names}
+
+
+@cache
+def string_constants(category: str) -> dict[str, str]:
+    """The module-level string constants of gigi/<category>/src/common.py, read
+    without running it: literals, `+` and names of earlier constants, the only
+    forms his follow-up texts take."""
+    def value(node: ast.expr, known: dict[str, str]) -> str | None:
+        if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            return node.value
+        if isinstance(node, ast.Name):
+            return known.get(node.id)
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+            left, right = value(node.left, known), value(node.right, known)
+            return None if left is None or right is None else left + right
+        return None
+
+    known: dict[str, str] = {}
+    for node in ast.parse((GIGI_DIR / category / "src" / "common.py").read_text(encoding="utf-8")).body:
+        if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+            text = value(node.value, known)
+            if text is not None:
+                known[node.targets[0].id] = text
+    return known
+
+
 @cache
 def module(category: str, name: str) -> ModuleType:
-    """gigi/<category>/src/<name>.py, loaded from its own file."""
+    """gigi/<category>/src/<name>.py, loaded from its own file; for a BORROWED
+    category, the common.py it borrows, once its helpers are checked identical."""
+    if category in BORROWED:
+        lender = BORROWED[category]
+        own, lent = (_function_sources(GIGI_DIR / c / "src" / "common.py", BORROWED_HELPERS) for c in (category, lender))
+        differ = [f for f in BORROWED_HELPERS if own[f] is None or own[f] != lent[f]]
+        if name != "common" or differ:
+            raise ValueError(f"gigi/{category}: cannot borrow {lender}'s {name}.py"
+                             + (f" ({', '.join(differ)} differ)" if differ else ""))
+        return module(lender, name)
     path = GIGI_DIR / category / "src" / f"{name}.py"
     spec = importlib.util.spec_from_file_location(f"gigi_{category.replace('-', '_')}_{name}", path)
     loaded = importlib.util.module_from_spec(spec)
@@ -59,6 +112,11 @@ def module(category: str, name: str) -> ModuleType:
 def csv_rows(category: str, name: str) -> list[dict]:
     with (GIGI_DIR / category / "results" / name).open(encoding="utf-8", newline="") as f:
         return list(csv.DictReader(f))
+
+
+def jsonl_rows(category: str, name: str) -> list[dict]:
+    with (GIGI_DIR / category / "results" / name).open(encoding="utf-8") as f:
+        return [json.loads(line) for line in f if line.strip()]
 
 
 @cache
@@ -86,14 +144,15 @@ def trace_messages(category: str, row) -> list[dict[str, str]]:
 
 
 def recorded_answers(category: str, csv_name: str, condition: str) -> dict[str, dict]:
-    """sample_id -> {"answer", "gigi_admitted"} for one of Gigi's conditions."""
+    """sample_id -> {"answer", "gigi_admitted", "question"} for one of Gigi's
+    conditions; "question" is the text he sent, where his CSV records it (else None)."""
     out = {}
     for r in csv_rows(category, csv_name):
         if r["condition"] != condition:
             continue
         if r["sample_id"] in out:
             raise ValueError(f"{csv_name}: {r['sample_id']} recorded twice for {condition}")
-        out[r["sample_id"]] = {"answer": r["answer"], "gigi_admitted": BOOL[r["admitted"]]}
+        out[r["sample_id"]] = {"answer": r["answer"], "gigi_admitted": BOOL[r["admitted"]], "question": r.get("question")}
     return out
 
 
@@ -112,7 +171,6 @@ def per_uid(rows: list[dict], column: str) -> dict[str, bool | None]:
 class GigiRows:
     """One dataset's fixed rows, shared by all its follow-ups."""
 
-    dataset: str
     category: str
     config: str
     group_key: str | None
@@ -136,7 +194,7 @@ def gigi_rows(dataset: str, category: str, config: str, group_key: str | None,
     print(f"{dataset}: {len(keep)} rows; {len(dropped)} dropped for a missing turn label or recorded answer"
           + (f": {dropped}" if dropped else ""), flush=True)
     return GigiRows(
-        dataset, category, config, group_key,
+        category, config, group_key,
         prefixes={uid: prefixes[uid] for uid in keep},
         turn_lie={uid: bool(turn_lie[uid]) for uid in keep},
         groups={uid: groups[uid] for uid in keep} if group_key else {},
@@ -148,6 +206,10 @@ def conversations(rows: GigiRows, followup: str, spec: FollowUp, condition: str 
     """One Conversation per row: the tested exchange, the follow-up, and Gigi's
     recorded answer to it when `condition` names one (otherwise answered on-policy)."""
     recorded = rows.recorded[condition] if condition else None
+    if recorded:
+        asked = {a["question"] for a in recorded.values() if a["question"] is not None}
+        if asked - {spec.text}:
+            raise ValueError(f"{followup}: Gigi's recorded answers were given to a different question: {sorted(asked)[:2]}")
     out = []
     for uid, prefix in rows.prefixes.items():
         messages = prefix + [{"role": "user", "content": spec.text}]

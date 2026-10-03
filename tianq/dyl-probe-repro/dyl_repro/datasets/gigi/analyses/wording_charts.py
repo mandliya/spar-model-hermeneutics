@@ -13,7 +13,8 @@ from matplotlib import rc_context
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
 
-from dyl_repro.datasets.gigi.wordings import CONFOUNDED, SPLITS
+from dyl_repro.datasets.gigi.analyses.chart_style import AXIS, GRID, INK, MUTED, SECONDARY, STYLE, SURFACE
+from dyl_repro.datasets.gigi.analyses.wordings import CONFOUNDED, SPLITS
 
 CATEGORIES = {
     "ascii_sandbagging": "ASCII sandbagging",
@@ -30,20 +31,7 @@ CAPTION_WIDTH = 82  # characters per line under each panel, so nothing crosses t
 KEY_WIDTH = 88  # characters per line in each of the key's two columns, one under each panel
 LINE_INCHES = 0.16
 
-SURFACE, INK, SECONDARY, MUTED, GRID, AXIS = "#fcfcfb", "#0b0b0b", "#52514e", "#898781", "#e1e0d9", "#c3c2b7"
 PROBE, ASKING = "#2a78d6", "#eb6834"
-STYLE = {
-    "font.family": "sans-serif",
-    "font.size": 9,
-    "text.color": INK,
-    "axes.edgecolor": AXIS,
-    "axes.labelcolor": SECONDARY,
-    "axes.titlesize": 10,
-    "xtick.color": MUTED,
-    "xtick.labelcolor": SECONDARY,
-    "ytick.color": MUTED,
-    "ytick.labelcolor": INK,
-}
 
 
 def wording_ids(per_dataset: dict[str, dict]) -> dict[str, int]:

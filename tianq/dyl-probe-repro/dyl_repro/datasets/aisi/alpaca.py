@@ -17,7 +17,7 @@ from dyl_repro.core.metrics import labelled, per_row
 from dyl_repro.core.prefill import POSITIONS
 from dyl_repro.core.probe import CALIBRATION_FPR, PROBE_POSITION, DylProbe
 from dyl_repro.core.store import ActivationCache
-from dyl_repro.datasets.aisi import load_split
+from dyl_repro.datasets.aisi import load_split, stored_labels
 
 SPLIT = "dyl_alpaca_validate"
 
@@ -26,10 +26,24 @@ def conversations() -> list[Conversation]:
     return load_split(SPLIT)
 
 
+def labels(cache: ActivationCache) -> list[int | None]:
+    return stored_labels(cache)
+
+
+def honest_activations(cache: ActivationCache, hidden_states_index: int) -> np.ndarray:
+    """The rows a threshold is calibrated on, at the probe's read position: the
+    honest ones. False confessions are left out, as from the FPR below."""
+    _, row_labels, activations = cache.matrix(PROBE_POSITION, hidden_states_index)
+    mask, y = labelled(row_labels)
+    if (y != 0).any():
+        raise ValueError(f"{SPLIT} should hold only honest labelled rows")
+    return activations[mask]
+
+
 def _score_at(cache: ActivationCache, probe: DylProbe, position: str) -> dict:
-    uids, labels, activations = cache.matrix(position, probe.hidden_states_index)
+    uids, row_labels, activations = cache.matrix(position, probe.hidden_states_index)
     scores = probe.score(activations)
-    mask, y = labelled(labels)
+    mask, y = labelled(row_labels)
     if (y != 0).any():
         raise ValueError(f"{SPLIT} should hold only honest labelled rows")
     honest, confessions = scores[mask], scores[~mask]
@@ -40,7 +54,7 @@ def _score_at(cache: ActivationCache, probe: DylProbe, position: str) -> dict:
         "logit_p99": float(np.quantile(honest, 0.99)),
         "n_false_confessions": int(len(confessions)),
         "false_confessions_flagged": float((confessions > probe.threshold).mean()),
-        "rows": per_row(uids, labels, scores, probe.threshold),
+        "rows": per_row(uids, row_labels, scores, probe.threshold),
     }
 
 
