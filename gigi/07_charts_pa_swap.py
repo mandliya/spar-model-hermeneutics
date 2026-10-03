@@ -36,7 +36,9 @@ ORANGE = "#eb6834"
 LABEL = {"alibi": "alibi", "mask_factual": "mask-factual",
          "sycophancy_b": "sycophancy B", "sycophancy_a": "sycophancy A",
          "capture_secret": "capture-the-secret", "unanswerable": "unanswerable",
-         "ascii": "ascii-sandbagging"}
+         "ascii": "ascii-sandbagging", "mask_known_facts": "MASK known facts",
+         "mask_statistics": "MASK statistics", "mask_continuations": "MASK continuations",
+         "mask_disinformation": "MASK disinformation"}
 # colour = which question (generic vs names the act); hollow = reason first
 STYLE = {"neutral": dict(marker="o", color=ORANGE, filled=True),
          "neutral_cot": dict(marker="o", color=ORANGE, filled=False),
@@ -57,14 +59,16 @@ ORDER = list(PA.groupby("category").auroc.median().sort_values(ascending=False).
 Y = {c: len(ORDER) - 1 - i for i, c in enumerate(ORDER)}
 
 
-def rows_axis(ax, xmax, mid, xlabel, show_labels):
+def rows_axis(ax, xmax, mid, xlabel, show_labels, order=None):
+    order = order or ORDER
+    Y = {c: len(order) - 1 - i for i, c in enumerate(order)}
     ax.axvline(mid, color=MUTED, lw=1, ls="--", zorder=1)
-    ax.text(mid, len(ORDER) - 0.4, "coin flip", color=MUTED, fontsize=9, ha="center")
-    ax.set_yticks([Y[c] for c in ORDER])
-    ax.set_yticklabels([LABEL[c] for c in ORDER])
+    ax.text(mid, len(order) - 0.4, "coin flip", color=MUTED, fontsize=9, ha="center")
+    ax.set_yticks([Y[c] for c in order])
+    ax.set_yticklabels([LABEL[c] for c in order])
     ax.tick_params(axis="y", length=0, labelleft=show_labels)
     ax.set_xlim(0, xmax)
-    ax.set_ylim(-0.6, len(ORDER) - 0.1)
+    ax.set_ylim(-0.6, len(order) - 0.1)
     ax.set_xlabel(xlabel, fontsize=10)
     for sp in ("top", "right", "left"):
         ax.spines[sp].set_visible(False)
@@ -78,7 +82,7 @@ def dot(ax, x, y, cond, size=70):
 
 
 # 1. self-report by question -------------------------------------------------
-fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 5.6), sharey=True,
+fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 7.4), sharey=True,
                              gridspec_kw={"wspace": 0.08})
 rows_axis(a1, 100, 50, "Balanced accuracy from the letter gemma wrote (%)", True)
 rows_axis(a2, 1.0, 0.5, "AUROC from gemma's probability of \"yes\"", False)
@@ -97,7 +101,7 @@ for _, r in PA.iterrows():
     dot(a2, r.auroc, Y[r.category], r.condition)
 a1.set_title("Scored on the letter (A = yes, B = no)", fontsize=10.5, loc="left", color=INK)
 a2.set_title("Scored on the probability of \"yes\"", fontsize=10.5, loc="left", color=INK)
-fig.suptitle("Asking gemma \"did you lie?\" clearly works only for alibi",
+fig.suptitle("Asking gemma \"did you lie?\" clearly works only for alibi and MASK disinformation",
              x=0.125, y=1.04, ha="left", fontsize=13, fontweight="bold")
 fig.text(0.125, 0.975, "Each marker is one of the four follow-up questions. "
          "Right of the dashed line = catches lies; left = points the wrong way.",
@@ -114,9 +118,11 @@ print("saved selfreport_by_question.png")
 
 # 2. does it survive swapping A and B? ----------------------------------------
 s = SW.groupby("category").agg(a=("auroc_orig", "median"), b=("auroc_swap", "median"))
+SORDER = [c for c in ORDER if c in s.index]          # the swap test covered these
+Y = {c: len(SORDER) - 1 - i for i, c in enumerate(SORDER)}
 fig, ax = plt.subplots(figsize=(9.5, 5.0))
-rows_axis(ax, 1.0, 0.5, "AUROC: how often a lie gets a higher P(yes) than an honest answer", True)
-for c in ORDER:
+rows_axis(ax, 1.0, 0.5, "AUROC: how often a lie gets a higher P(yes) than an honest answer", True, SORDER)
+for c in SORDER:
     a, b = s.loc[c, "a"], s.loc[c, "b"]
     ax.annotate("", xy=(b, Y[c]), xytext=(a, Y[c]), zorder=2,
                 arrowprops=dict(arrowstyle="-|>", color=ACCENT, lw=1.6,

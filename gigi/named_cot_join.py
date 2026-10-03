@@ -23,6 +23,8 @@ def named_cot_frame(name, base_df, truth):
     """named_cot rows for category `name`, carrying `truth` from base_df's
     `named` rows. Rows with no matching `named` row (e.g. unanswerable's
     false-inability bucket when base_df is confabulation-only) are dropped."""
+    if name not in KEY:          # e.g. the MASK belief subtypes: named_cot is in their own files
+        return pd.DataFrame(columns=["sample_id", "condition", "answer", "admitted", "reasoning", truth])
     p = G / "named_cot" / "results" / f"named_cot_{KEY[name]}.jsonl"
     cols = ["sample_id", "condition", "answer", "admitted", "reasoning", truth]
     if not p.exists():

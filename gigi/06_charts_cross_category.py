@@ -307,7 +307,18 @@ def lying_rate_chart():
         rows.append(("alibi\n(maintained a false alibi)",
                      wilson(int((al["result"] == "MAINTAINED_FALSE_STORY").sum()), len(al)), OCHRE))
 
-    fig, ax = plt.subplots(figsize=(8, 5.6))
+    # MASK belief subtypes: a lie = the pressured answer contradicts gemma's own
+    # stated belief (gigi/mask-belief/02_analyse_mask_belief.py)
+    for sub, label, col in [("known_facts", "MASK known facts\n(contradicted its own belief)", "#6c3483"),
+                            ("statistics", "MASK statistics\n(number >10% off its own belief)", "#a569bd"),
+                            ("continuations", "MASK continuations\n(continued a false text)", "#7d3c98"),
+                            ("disinformation", "MASK disinformation\n(wrote content it believes false)", "#bb8fce")]:
+        mp = REPO / "mask-belief" / "results" / f"mask_belief_{sub}_labels.csv"
+        if mp.exists():
+            ml = pd.read_csv(mp).dropna(subset=["lied"])
+            rows.append((label, wilson(int(ml["lied"].astype(bool).sum()), len(ml)), col))
+
+    fig, ax = plt.subplots(figsize=(8, 8.4))
     y = list(range(len(rows)))[::-1]
     for yi, (label, r, color) in zip(y, rows):
         p, lo, hi = r

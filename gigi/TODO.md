@@ -28,14 +28,14 @@ Kept in git so they survive a lost session. Delete a line when it's done.
 - 2 Oct 2026: every first-run activation recaptured in float32 (2,173 files,
   cosine >= 0.9999 against the float16 originals, which are in
   `archive/first_run_fp16/` on HF). Every activation on HF is now float32.
+- 2-3 Oct 2026: MASK known facts / statistics / continuations / disinformation
+  (299 rows, `mask-belief/`): ground truth from gemma's own belief (softened MASK
+  belief questions), statistics cutoff 10%. In RESULTS.md, charts and AUROC.
 
 ## Still open
 
-- [ ] Next: the rest of the MASK family (`mask_known_facts` 71, `mask_statistics`
-      62, `mask_continuations` 90, `mask_disinformation` 76), four questions only.
-      Ground truth idea: ask gemma the plain question without pressure (its
-      belief), then under pressure; a lie = contradicting its own belief. First
-      check whether the original MASK release has the belief prompts.
+- [ ] Next category: to be chosen (every gemma config with usable rows is now covered;
+      remaining: n-truths-and-a-lie has only 2 rows).
 
 ## Optional (each needs a GPU box and a go-ahead on cost)
 

@@ -34,10 +34,12 @@ G = HERE.parent
 RES = HERE / "results"
 REPO = "model-hermeneutics/gigi-lie-detection-activations"
 CATS = ["ascii", "sycophancy_a", "sycophancy_b", "mask_factual", "unanswerable",
-        "capture_secret", "alibi"]
+        "capture_secret", "alibi", "mask_known_facts", "mask_statistics", "mask_continuations",
+        "mask_disinformation"]
 SHORT = {"ascii": "ascii", "sycophancy_a": "syc A", "sycophancy_b": "syc B",
          "mask_factual": "mask", "unanswerable": "unans.", "capture_secret": "capture",
-         "alibi": "alibi"}
+         "alibi": "alibi", "mask_known_facts": "M facts", "mask_statistics": "M stats",
+         "mask_continuations": "M cont.", "mask_disinformation": "M disinfo"}
 ORDER = ["neutral", "low_stakes", "high_stakes", "confidence", "neutral_cot",
          "low_stakes_cot", "high_stakes_cot", "confidence_cot", "plain", "named",
          "named_cot", "eval_plain", "eval_named"]
@@ -62,6 +64,9 @@ if args.pull:
 
 def truth_and_conf(cat):
     """sample_id -> truth, and the saved confidence scores (sample_id, condition, score)."""
+    if cat.startswith("mask_") and cat != "mask_factual":
+        lab = pd.read_csv(G / "mask-belief/results" / f"mask_belief_{cat[5:]}_labels.csv").dropna(subset=["lied"])
+        return dict(zip(lab.sample_id, B(lab.lied).astype(bool))), pd.DataFrame(columns=["sample_id", "condition", "confidence_score"])
     if cat == "ascii":
         r = G / "ascii-sandbagging/results"
         t = pd.read_csv(r / "ascii_results.csv").rename(columns={"uid": "sample_id"})
@@ -109,13 +114,13 @@ for cat in CATS:
         if cond.startswith("confidence"):
             c = conf[conf.condition == cond].drop_duplicates("sample_id")
             c = c[c.sample_id.isin(truth) & c.confidence_score.notna()]
-            score, t = c.confidence_score.astype(float).to_numpy(), np.array([truth[s] for s in c.sample_id])
+            score, t = c.confidence_score.astype(float).to_numpy(), np.array([truth[s] for s in c.sample_id], dtype=bool)
             letter_ba = None
         else:
             if not len(pa):
                 continue
             x = pa[(pa.condition == cond) & pa.sample_id.isin(truth) & pa.p_A_norm.notna()]
-            score, t = x.p_A_norm.astype(float).to_numpy(), np.array([truth[s] for s in x.sample_id])
+            score, t = x.p_A_norm.astype(float).to_numpy(), np.array([truth[s] for s in x.sample_id], dtype=bool)
             said_yes = (x.letter == "A").to_numpy()
             letter_ba = 50 * (said_yes[t].mean() + (~said_yes[~t]).mean()) if t.any() and (~t).any() else None
         pos, neg = score[t], score[~t]

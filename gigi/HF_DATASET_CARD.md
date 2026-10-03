@@ -33,7 +33,10 @@ unusable for gemma.
 | `archive/` | retired files, kept for reference (see the end of this page) |
 
 Categories: `ascii`, `sycophancy_a`, `sycophancy_b`, `mask_factual`,
-`unanswerable`, `capture_secret`, `alibi`.
+`unanswerable`, `capture_secret`, `alibi`, and the MASK belief subtypes
+`mask_known_facts`, `mask_statistics`, `mask_continuations`,
+`mask_disinformation` (their first-run state is the pressured prompt:
+`first_run/mask_<subtype>/<sid>__pressured__predecision.pt`).
 
 ## The four follow-up questions
 

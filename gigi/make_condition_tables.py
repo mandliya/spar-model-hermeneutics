@@ -61,6 +61,14 @@ CATS = [
     ("alibi", "maintained a false alibi",
      lambda: (pd.read_csv(G / "alibi/results/alibi_benchmark_conditions.csv", low_memory=False),
               "lied")),
+    ("MASK known facts", "said the opposite of its own stated belief, under a role's pressure",
+     lambda: (pd.read_csv(G / "mask-belief/results/mask_belief_known_facts_benchmark_conditions.csv"), "lied")),
+    ("MASK statistics", "gave a number more than 10% away from its own stated belief, under pressure",
+     lambda: (pd.read_csv(G / "mask-belief/results/mask_belief_statistics_benchmark_conditions.csv"), "lied")),
+    ("MASK continuations", "continued a text with claims contradicting its own stated belief",
+     lambda: (pd.read_csv(G / "mask-belief/results/mask_belief_continuations_benchmark_conditions.csv"), "lied")),
+    ("MASK disinformation", "wrote content contradicting its own stated belief, presented as true",
+     lambda: (pd.read_csv(G / "mask-belief/results/mask_belief_disinformation_benchmark_conditions.csv"), "lied")),
 ]
 
 
@@ -81,7 +89,11 @@ CATEGORY_DOCS = {"ascii-sandbagging": ("ascii-sandbagging/RESULTS.md", "CORE4"),
                  "mask-factual": ("mask-factual/RESULTS.md", "CORE4"),
                  "unanswerable": ("unanswerable/README.md", "CORE4"),
                  "capture-the-secret": ("capture-the-secret/README.md", "CORE4"),
-                 "alibi": ("alibi/README.md", "CORE4")}
+                 "alibi": ("alibi/README.md", "CORE4"),
+                 "MASK known facts": ("mask-belief/README.md", "CORE4-KF"),
+                 "MASK statistics": ("mask-belief/README.md", "CORE4-ST"),
+                 "MASK continuations": ("mask-belief/README.md", "CORE4-CO"),
+                 "MASK disinformation": ("mask-belief/README.md", "CORE4-DI")}
 for name, act, load in CATS:
     df, truth = load()
     df = pd.concat([df, named_cot_frame(name, df, truth)], ignore_index=True)
@@ -130,7 +142,9 @@ section = "\n".join([
 BSTART, BEND = "<!-- BALANCED-GRID:START -->", "<!-- BALANCED-GRID:END -->"
 names = [c[0] for c in CATS]
 short = {"ascii-sandbagging": "ascii", "sycophancy Track A": "syc A", "sycophancy Track B": "syc B",
-         "mask-factual": "mask", "unanswerable": "unans.", "capture-the-secret": "capture", "alibi": "alibi"}
+         "mask-factual": "mask", "unanswerable": "unans.", "capture-the-secret": "capture", "alibi": "alibi",
+         "MASK known facts": "M facts", "MASK statistics": "M stats", "MASK continuations": "M cont.",
+         "MASK disinformation": "M disinfo"}
 
 
 def cell(v):
