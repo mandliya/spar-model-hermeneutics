@@ -39,9 +39,11 @@ from dyl_repro import datasets
 from dyl_repro.cli.evaluate import StoredRun, evaluate_run, pull_run
 from dyl_repro.core import training
 from dyl_repro.core.metrics import labelled
+from dyl_repro.core.prefill import POSITIONS, REPLY_POSITIONS
 from dyl_repro.core.probe import CALIBRATION_FPR, PROBE_POSITION, DylProbe, hidden_states_index_for
 from dyl_repro.core.store import SCRATCH, RowStore
 from dyl_repro.datasets.aisi import alpaca
+from dyl_repro.datasets.followups import NO_FOLLOWUP
 
 CALIBRATION_KEY = "aisi_alpaca"
 
@@ -52,6 +54,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--test", nargs="+", required=True, help="storage keys to test on")
     parser.add_argument("--layer", type=int, default=training.DEFAULT_LAYER)
     parser.add_argument("--l2-lambda", type=float, default=training.DEFAULT_L2_LAMBDA)
+    parser.add_argument("--position", default=PROBE_POSITION, choices=sorted({*POSITIONS, *REPLY_POSITIONS}),
+                        help="stored position to read; the reply positions exist for follow-up 'none' runs")
     args = parser.parse_args()
     if args.train in args.test:
         parser.error(f"{args.train} is the training data; its in-distribution score is the cross-validated one")
@@ -70,9 +74,10 @@ def pull_all(keys: list[str]) -> dict[str, StoredRun]:
     return runs
 
 
-def training_rows(run: StoredRun, hidden_states_index: int) -> tuple[np.ndarray, np.ndarray, list[dict], int]:
+def training_rows(run: StoredRun, hidden_states_index: int,
+                  position: str) -> tuple[np.ndarray, np.ndarray, list[dict], int]:
     """(activations, labels, records) of the labelled rows at the probe's read position, and how many were excluded."""
-    _, _, activations = run.cache.matrix(PROBE_POSITION, hidden_states_index)
+    _, _, activations = run.cache.matrix(position, hidden_states_index)
     mask, y = labelled(datasets.labels(run.dataset, run.cache, run.followup))
     records = [r for r, keep in zip(run.cache.records, mask) if keep]
     return activations[mask], y, records, int((~mask).sum())
@@ -92,53 +97,64 @@ def out_of_fold(name: str, train_key: str, x: np.ndarray, y: np.ndarray, records
     }
 
 
-def train_and_describe(train: StoredRun, calibration: StoredRun, name: str, layer: int,
-                       l2_lambda: float) -> tuple[DylProbe | None, dict, dict | None]:
-    """The calibrated probe, its training result and its out-of-fold rows; no probe (and no
-    rows) when a class is too small to train on."""
+def calibrated(followup: str | None, position: str) -> bool:
+    """AISI's threshold recipe (1% of honest Alpaca rows) applies to a probe read where
+    theirs is, after a follow-up question. A probe on the reply itself has no Alpaca
+    counterpart, so it is left uncalibrated: the AUROCs it is judged by need no threshold."""
+    return position == PROBE_POSITION and followup != NO_FOLLOWUP
+
+
+def train_and_describe(train: StoredRun, calibration: StoredRun | None, name: str, layer: int, l2_lambda: float,
+                       position: str) -> tuple[DylProbe | None, dict, dict | None]:
+    """The probe (calibrated when `calibration` is given), its training result and its
+    out-of-fold rows; no probe (and no rows) when a class is too small to train on."""
     index = hidden_states_index_for(layer)
-    x, y, records, n_excluded = training_rows(train, index)
+    x, y, records, n_excluded = training_rows(train, index, position)
     counts = {"probe": name, "trained_on": train.key, "layer": layer, "hidden_states_index": index,
-              "position": PROBE_POSITION, "l2_lambda": l2_lambda,
+              "position": position, "l2_lambda": l2_lambda,
               "n_lie": int((y == 1).sum()), "n_honest": int((y == 0).sum()), "n_excluded": n_excluded}
     if min(counts["n_lie"], counts["n_honest"]) < training.MIN_ROWS_PER_CLASS:
         return None, counts | {"skipped": f"fewer than {training.MIN_ROWS_PER_CLASS} rows in a class"}, None
-    probe = training.train(x, y, layer=layer, l2_lambda=l2_lambda, trained_on=train.key)
-    threshold = training.calibrate(probe, alpaca.honest_activations(calibration.cache, index))
-    released = DylProbe.load()
+    probe = training.train(x, y, layer=layer, l2_lambda=l2_lambda, trained_on=train.key, position=position)
     weight = probe.module.linear.weight.detach().double().numpy().ravel()
     rows = out_of_fold(name, train.key, x, y, records, l2_lambda)
-    return probe, counts | {
-        "threshold": threshold,
+    described = counts | {"cross_validated": rows["cross_validated"], "weight_norm": float(np.linalg.norm(weight)),
+                          "bias": float(probe.module.linear.bias)}
+    if calibration is None:
+        return probe, described | {"threshold": None, "calibrated_on": None}, rows
+    released = DylProbe.load()
+    return probe, described | {
+        "threshold": training.calibrate(probe, alpaca.honest_activations(calibration.cache, index)),
         "calibrated_on": calibration.key,
         "calibration_fpr": CALIBRATION_FPR,
-        "cross_validated": rows["cross_validated"],
-        "weight_norm": float(np.linalg.norm(weight)),
-        "bias": float(probe.module.linear.bias),
         # Weights are comparable only between probes of the same layer.
         "released_probe": released.checkpoint,
         "weight_cosine_with_released": training.weight_cosine(probe, released) if layer == released.layer else None,
-    }
+    }, rows
 
 
 def report(description: dict) -> None:
     print(f"\nTRAINED {description['probe']}")
     print(f"  {description['n_lie']} lie / {description['n_honest']} honest ({description['n_excluded']} excluded)"
-          f" at {PROBE_POSITION}, hidden_states[{description['hidden_states_index']}]")
+          f" at {description['position']}, hidden_states[{description['hidden_states_index']}]")
     if "skipped" in description:
         print(f"  not trained: {description['skipped']}")
         return
     cv = description["cross_validated"]
     print(f"  in-distribution AUROC ({cv['folds']}-fold cross-validated): {cv['auroc']:.4f}")
+    print(f"  |w| {description['weight_norm']:.4f}, bias {description['bias']:.4f}")
+    if description["threshold"] is None:
+        print("  not calibrated: AISI's Alpaca threshold is set after its follow-up question; this probe reads"
+              " a run without one (its AUROCs need no threshold)")
+        return
     print(f"  threshold {description['threshold']:.4f} (flags {CALIBRATION_FPR:.0%} of {CALIBRATION_KEY}'s honest rows)")
     cosine = description["weight_cosine_with_released"]
-    print(f"  |w| {description['weight_norm']:.4f}, bias {description['bias']:.4f}; weight cosine with"
-          f" {description['released_probe']}: " + ("other layer" if cosine is None else f"{cosine:.4f}"))
+    print(f"  weight cosine with {description['released_probe']}: " + ("other layer" if cosine is None else f"{cosine:.4f}"))
 
 
 def main() -> None:
     args = parse_args()
-    name = training.probe_name(args.train, args.layer, args.l2_lambda)
+    name = training.probe_name(args.train, args.layer, args.l2_lambda, args.position)
     index = hidden_states_index_for(args.layer)
     training_result, rows_result = f"{name}_hs{index}_training", f"{name}_hs{index}_out_of_fold"
     store = RowStore(os.environ["HF_DATASET_REPO"], os.environ["HF_TOKEN"], SCRATCH, args.train)
@@ -158,16 +174,17 @@ def main() -> None:
         runs = pull_all(([args.train] if missing_rows else []) + pending)
         probe = store.probe(name)
         if missing_rows:
-            x, y, records, _ = training_rows(runs[args.train], index)
+            x, y, records, _ = training_rows(runs[args.train], index, args.position)
             rows = out_of_fold(name, args.train, x, y, records, args.l2_lambda)
             stored_auroc, now = description["cross_validated"]["auroc"], rows["cross_validated"]["auroc"]
             if not np.isclose(stored_auroc, now, rtol=0, atol=1e-9):
                 raise SystemExit(f"out-of-fold AUROC {now} does not reproduce the stored {stored_auroc}")
             store.put_result(rows_result, rows)
     else:
-        runs = pull_all([args.train, CALIBRATION_KEY, *pending])
-        probe, description, rows = train_and_describe(runs[args.train], runs[CALIBRATION_KEY], name, args.layer,
-                                                      args.l2_lambda)
+        calibrate = calibrated(datasets.run(args.train)[1], args.position)
+        runs = pull_all([args.train, *([CALIBRATION_KEY] if calibrate else []), *pending])
+        probe, description, rows = train_and_describe(runs[args.train], runs[CALIBRATION_KEY] if calibrate else None,
+                                                      name, args.layer, args.l2_lambda, args.position)
         if probe is not None:
             store.put_probe(probe)
             store.put_result(rows_result, rows)

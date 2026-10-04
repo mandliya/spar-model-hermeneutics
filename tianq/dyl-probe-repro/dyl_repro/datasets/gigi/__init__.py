@@ -202,6 +202,22 @@ def gigi_rows(dataset: str, category: str, config: str, group_key: str | None,
     )
 
 
+def with_followup(prefix: list[dict[str, str]], spec: FollowUp, recorded_answer: str | None,
+                  turn_lie: bool) -> tuple[list[dict[str, str]], int | None, str]:
+    """(messages, label, answer source) for one row under one follow-up.
+
+    With the follow-up "none" (spec.text None) the conversation ends at the tested
+    reply and carries Gigi's label for it; otherwise the follow-up is appended,
+    with his recorded answer when there is one, and the label is derived at
+    scoring time from that answer (transfer.py)."""
+    if spec.text is None:
+        return prefix, int(turn_lie), "prefilled: Gigi's recorded reply, no follow-up"
+    messages = prefix + [{"role": "user", "content": spec.text}]
+    if recorded_answer is None:
+        return messages, None, "on_policy"
+    return messages + [{"role": "assistant", "content": recorded_answer}], None, "prefilled: Gigi's recorded answer"
+
+
 def conversations(rows: GigiRows, followup: str, spec: FollowUp, condition: str | None) -> list[Conversation]:
     """One Conversation per row: the tested exchange, the follow-up, and Gigi's
     recorded answer to it when `condition` names one (otherwise answered on-policy)."""
@@ -212,9 +228,8 @@ def conversations(rows: GigiRows, followup: str, spec: FollowUp, condition: str 
             raise ValueError(f"{followup}: Gigi's recorded answers were given to a different question: {sorted(asked)[:2]}")
     out = []
     for uid, prefix in rows.prefixes.items():
-        messages = prefix + [{"role": "user", "content": spec.text}]
-        if recorded:
-            messages.append({"role": "assistant", "content": recorded[uid]["answer"]})
+        messages, label, answer_source = with_followup(prefix, spec, recorded[uid]["answer"] if recorded else None,
+                                                       rows.turn_lie[uid])
         provenance = {
             "source": f"gigi/{rows.category}",
             "gigi_commit": GIGI_COMMIT,
@@ -222,10 +237,10 @@ def conversations(rows: GigiRows, followup: str, spec: FollowUp, condition: str 
             "turn_lie": rows.turn_lie[uid],
             "followup": followup,
             "followup_source": spec.source,
-            "answer_source": "prefilled: Gigi's recorded answer" if recorded else "on_policy",
+            "answer_source": answer_source,
             "gigi_admitted": recorded[uid]["gigi_admitted"] if recorded else None,
         }
         if rows.group_key:
             provenance[rows.group_key] = rows.groups[uid]
-        out.append(Conversation(uid=uid, messages=messages, label=None, provenance=provenance))
+        out.append(Conversation(uid=uid, messages=messages, label=label, provenance=provenance))
     return out

@@ -19,7 +19,7 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class FollowUp:
     name: str
-    text: str
+    text: str | None  # None: no follow-up, the conversation ends at the tested reply
     admitted: Callable[[str], bool | None]
     source: str
 

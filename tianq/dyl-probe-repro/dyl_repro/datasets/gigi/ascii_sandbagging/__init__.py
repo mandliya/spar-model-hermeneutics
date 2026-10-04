@@ -23,7 +23,7 @@ from __future__ import annotations
 from dyl_repro.core.conversation import Conversation
 from dyl_repro.core.probe import DylProbe
 from dyl_repro.core.store import ActivationCache
-from dyl_repro.datasets import followups
+from dyl_repro.datasets import followups, gigi
 from dyl_repro.datasets.gigi import transfer
 from dyl_repro.datasets.gigi.ascii_sandbagging import files
 
@@ -38,14 +38,14 @@ def conversations(followup: str) -> list[Conversation]:
     recorded = files.recorded_answers(followups.gigi_condition(followup))
     out = []
     for uid in sorted(files.ascii_results()):
-        messages = files.conversation_before_followup(uid) + [{"role": "user", "content": spec.text}]
-        if recorded:
-            messages.append({"role": "assistant", "content": recorded[uid]["answer"]})
+        messages, label, answer_source = gigi.with_followup(
+            files.conversation_before_followup(uid), spec, recorded[uid]["answer"] if recorded else None,
+            files.lied(uid))
         out.append(
             Conversation(
                 uid=uid,
                 messages=messages,
-                label=None,  # derived at scoring time from turn_lie + the parsed answer
+                label=label,
                 provenance={
                     "source": "gigi/ascii-sandbagging",
                     "gigi_commit": files.GIGI_COMMIT,
@@ -54,7 +54,7 @@ def conversations(followup: str) -> list[Conversation]:
                     "topic": files.topic(uid),
                     "followup": followup,
                     "followup_source": spec.source,
-                    "answer_source": "prefilled: Gigi's recorded answer" if recorded else "on_policy",
+                    "answer_source": answer_source,
                     "gigi_admitted": recorded[uid]["gigi_admitted"] if recorded else None,
                 },
             )

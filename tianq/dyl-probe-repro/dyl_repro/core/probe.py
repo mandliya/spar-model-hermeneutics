@@ -93,6 +93,9 @@ class DylProbe:
     checkpoint: str
     module: BaseProbe
     trained_on: str | None = None  # the dataset a probe of ours was trained on; None for AISI's
+    # The stored position it reads (core/prefill.py): AISI's reads PROBE_POSITION; a probe of
+    # ours trained on a no-follow-up run may read the reply (REPLY_POSITIONS).
+    position: str = PROBE_POSITION
 
     @property
     def is_official(self) -> bool:

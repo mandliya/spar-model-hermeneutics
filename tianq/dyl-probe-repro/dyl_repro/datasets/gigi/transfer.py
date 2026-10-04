@@ -99,7 +99,10 @@ def label_rows(cache: ActivationCache, spec: FollowUp, group_key: str | None) ->
 
 
 def labels(cache: ActivationCache, spec: FollowUp) -> list[int | None]:
-    """Was the follow-up answer a lie? Per stored row, in the cache's order."""
+    """Was the follow-up answer a lie? Per stored row, in the cache's order. With no
+    follow-up, the reply's own label (Gigi's turn_lie), stored on each row at extraction."""
+    if spec.text is None:
+        return [record["label"] for record in cache.records]
     rows, _ = label_rows(cache, spec, None)
     return [r["label"] for r in rows]
 
@@ -222,6 +225,8 @@ def _print(dataset, followup, spec, answer_source, rows, y, mask, agreement, by_
 def evaluate(cache: ActivationCache, probe: DylProbe, followup: str, followups: dict[str, FollowUp], *,
              dataset: str, group_key: str | None, extra: dict) -> dict:
     spec = followups[followup]
+    if spec.text is None:
+        return evaluate_reply(cache, probe, followup, dataset=dataset, group_key=group_key, extra=extra)
     rows, agreement = label_rows(cache, spec, group_key)
     mask = np.array([r["label"] is not None for r in rows])
     y = np.array([r["label"] for r in rows if r["label"] is not None])
@@ -255,6 +260,29 @@ def evaluate(cache: ActivationCache, probe: DylProbe, followup: str, followups: 
     }
     if group_key:
         result["followup_answer"][f"{group_key}_only_auroc"] = group_auroc
+    return result | extra | {"rows": rows}
+
+
+def evaluate_reply(cache: ActivationCache, probe: DylProbe, followup: str, *, dataset: str, group_key: str | None,
+                   extra: dict) -> dict:
+    """No follow-up: the probe on the tested reply itself, at the probe's own read
+    position, against Gigi's label for that reply (lie / truthful). Every row is labelled."""
+    uids, row_labels, activations = cache.matrix(probe.position, probe.hidden_states_index)
+    scores = probe.score(activations)
+    y = np.array(row_labels, dtype=int)
+    groups = [r["provenance"][group_key] for r in cache.records] if group_key else None
+    original = {"auroc": _auroc(y, scores), "n_lie": int((y == 1).sum()), "n_truthful": int((y == 0).sum())}
+    group_auroc = group_only_auroc(groups, y) if group_key else None
+    print(f"\n{dataset}  no follow-up  {probe.checkpoint}  {probe.position}, hidden_states[{probe.hidden_states_index}]")
+    print(f"  was the reply a lie? ({original['n_lie']} lie / {original['n_truthful']} truthful)"
+          f"  probe AUROC {_cell(original['auroc'])}"
+          + (f"   {group_key}-only baseline AUROC {_cell(group_auroc)}" if group_key else ""))
+    rows = [{"uid": u, "turn_lie": bool(label), "score": float(s)} | ({group_key: g} if group_key else {})
+            for u, label, s, g in zip(uids, y, scores, groups or [None] * len(uids))]
+    result = {"dataset": dataset, "followup": followup, "position": probe.position,
+              "hidden_states_index": probe.hidden_states_index, "original_answer": original}
+    if group_key:
+        result[f"{group_key}_only_auroc"] = group_auroc
     return result | extra | {"rows": rows}
 
 

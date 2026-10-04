@@ -5,7 +5,7 @@ Layout, identical in the Hub repo and under the local scratch directory:
     <dataset>/rows/<uid>.json                   full record: transcript, rendered prompt,
                                                 token ids, label, fidelity, versions
     <dataset>/hidden_states/<uid>.safetensors   "hidden_states": (positions, n_layers + 1,
-                                                d_model), bfloat16
+                                                d_model), bfloat16; the record names the positions
     <dataset>/results/<name>.json               evaluation outputs, per-row scores included
     <dataset>/charts/<name>.png                 charts drawn from a result
     <dataset>/probes/<name>.pt                  probes trained on this dataset (core/training.py)
@@ -43,8 +43,7 @@ from safetensors import safe_open
 from safetensors.torch import save_file
 
 from dyl_repro.core.logs import log_operations, with_retries
-from dyl_repro.core.prefill import POSITIONS
-from dyl_repro.core.probe import DylProbe
+from dyl_repro.core.probe import PROBE_POSITION, DylProbe
 
 SCRATCH = Path(__file__).resolve().parents[2] / "scratch"
 LOG_DIR = SCRATCH / "logs"
@@ -116,12 +115,12 @@ class RowStore:
             self.sync()
         return local | remote
 
-    def put(self, uid: str, record: dict, hidden_states: torch.Tensor) -> None:
+    def put(self, uid: str, record: dict, hidden_states: torch.Tensor, positions: tuple[str, ...]) -> None:
         tensor_path, record_path = self._row_paths(uid)
         save_file(
             {TENSOR_KEY: hidden_states.contiguous()},
             self.scratch / tensor_path,
-            metadata={"positions": ",".join(POSITIONS)},
+            metadata={"positions": ",".join(positions)},
         )
         # The record is written last: its presence is what marks the row done.
         (self.scratch / record_path).write_text(json.dumps(record, indent=2), encoding="utf-8")
@@ -155,7 +154,9 @@ class RowStore:
         path = hf_hub_download(self.repo_id, f"{self.dataset}/probes/{name}.pt", repo_type="dataset",
                                local_dir=self.scratch, token=self.token)
         module = load_probe(path)
-        return DylProbe(name, module, trained_on=module.hyperparams.train_dataset)
+        # Probes saved before read positions were recorded all read PROBE_POSITION.
+        position = (module.hyperparams.model_extra or {}).get("position", PROBE_POSITION)
+        return DylProbe(name, module, trained_on=module.hyperparams.train_dataset, position=position)
 
     def stored(self) -> set[str]:
         """Every path in the Hub repo, from one listing call."""
@@ -275,9 +276,10 @@ class ActivationCache:
 
     def matrix(self, position: str, hidden_states_index: int) -> tuple[list[str], list[int | None], np.ndarray]:
         """(uids, labels, activations (N, d_model)) over every stored row, labelled or not."""
-        p = POSITIONS.index(position)
         rows = []
         for record in self.records:
+            # Each row names its stored positions: POSITIONS, or REPLY_POSITIONS for a no-follow-up run.
+            p = record["hidden_states"]["positions"].index(position)
             with safe_open(self._tensor_path(record), framework="pt") as f:
                 rows.append(f.get_slice(TENSOR_KEY)[p, hidden_states_index].float().numpy())
         return [r["uid"] for r in self.records], [r["label"] for r in self.records], np.stack(rows)

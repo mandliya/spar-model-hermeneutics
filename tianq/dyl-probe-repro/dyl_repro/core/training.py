@@ -37,7 +37,7 @@ from scipy.special import expit
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import StratifiedKFold
 
-from dyl_repro.core.probe import CALIBRATION_FPR, DylProbe
+from dyl_repro.core.probe import CALIBRATION_FPR, PROBE_POSITION, DylProbe
 
 # The released checkpoint's own hyperparams (its stored `hyperparams`).
 DEFAULT_LAYER = 58
@@ -51,9 +51,11 @@ CROSS_VALIDATION_FOLDS = 5
 MIN_ROWS_PER_CLASS = 2 * CROSS_VALIDATION_FOLDS
 
 
-def probe_name(train_key: str, layer: int, l2_lambda: float) -> str:
-    """Named like AISI's sweep entries (l_58_lm_0_01_ar_lr), prefixed by its training data."""
-    return f"trained_on_{train_key.replace('/', '-')}_l_{layer}_lm_{str(l2_lambda).replace('.', '_')}_ar_lr"
+def probe_name(train_key: str, layer: int, l2_lambda: float, position: str = PROBE_POSITION) -> str:
+    """Named like AISI's sweep entries (l_58_lm_0_01_ar_lr), prefixed by its training data,
+    and by its read position when that is not AISI's."""
+    at = "" if position == PROBE_POSITION else f"_at_{position}"
+    return f"trained_on_{train_key.replace('/', '-')}{at}_l_{layer}_lm_{str(l2_lambda).replace('.', '_')}_ar_lr"
 
 
 def fit_weights(activations: np.ndarray, labels: np.ndarray,
@@ -84,14 +86,14 @@ def fit_weights(activations: np.ndarray, labels: np.ndarray,
 
 
 def train(activations: np.ndarray, labels: np.ndarray, *, layer: int, l2_lambda: float,
-          trained_on: str) -> DylProbe:
+          trained_on: str, position: str = PROBE_POSITION) -> DylProbe:
     """A logistic-regression DYL probe in the library's own class, threshold not yet set."""
     mean, std, weight, bias = fit_weights(activations, labels, l2_lambda)
     module = LogisticRegressionProbe(
         d_model=len(mean),
         hyperparams=TrainHyperparameters(
             layer=layer, l2_lambda=l2_lambda, train_dataset=trained_on,
-            probe_architecture=ProbeArchitecture.LOGISTIC_REGRESSION,
+            probe_architecture=ProbeArchitecture.LOGISTIC_REGRESSION, position=position,
         ),
     )
     with torch.no_grad():
@@ -100,7 +102,7 @@ def train(activations: np.ndarray, labels: np.ndarray, *, layer: int, l2_lambda:
         module.linear.weight.copy_(torch.as_tensor(weight, dtype=torch.float32)[None])
         module.linear.bias.fill_(bias)
     module.eval()
-    return DylProbe(probe_name(trained_on, layer, l2_lambda), module, trained_on=trained_on)
+    return DylProbe(probe_name(trained_on, layer, l2_lambda, position), module, trained_on=trained_on, position=position)
 
 
 def calibrate(probe: DylProbe, honest_activations: np.ndarray, fpr: float = CALIBRATION_FPR) -> float:

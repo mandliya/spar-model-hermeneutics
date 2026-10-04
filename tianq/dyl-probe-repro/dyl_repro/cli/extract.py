@@ -8,7 +8,9 @@
 A conversation that already ends with its answer is prefilled as is. One that
 ends with the follow-up first gets the model's own answer on-policy (temperature
 0, a separate generate call), then is prefilled the same way. Both positions
-come from that one prefill forward pass, and the full answer is saved.
+come from that one prefill forward pass, and the full answer is saved. With
+the follow-up "none" the conversation ends at the tested reply, which is run in
+full and kept at core.prefill.REPLY_POSITIONS instead.
 
 Safe to kill and rerun: rows already on the Hub or in scratch are skipped.
 """
@@ -27,8 +29,9 @@ from dyl_repro import datasets
 from dyl_repro.core.conversation import Conversation
 from dyl_repro.core.model import MODEL_NAME, MODEL_REVISION, load_model, load_tokenizer
 from dyl_repro.core.onpolicy import MAX_NEW_TOKENS, TEMPERATURE, generate_answer
-from dyl_repro.core.prefill import POSITIONS, PrefillTokens, hidden_states_at, prefill_tokens
+from dyl_repro.core.prefill import POSITIONS, REPLY_POSITIONS, PrefillTokens, hidden_states_at, prefill_tokens
 from dyl_repro.core.store import SCRATCH, RowStore
+from dyl_repro.datasets.followups import NO_FOLLOWUP
 
 INDEX_MEANING = "transformers hidden_states: 0 = embeddings, i = output of block i-1, last = after final norm"
 
@@ -58,7 +61,7 @@ def pending(dataset: str, key: str, followup: str | None, limit: int | None) -> 
     return store, todo
 
 
-def precheck(tokenizer, todo: list[Conversation]) -> dict[str, PrefillTokens]:
+def precheck(tokenizer, todo: list[Conversation], whole_answer: bool) -> dict[str, PrefillTokens]:
     """Tokenize before touching the model, so a bad transcript fails in seconds.
 
     Prefilled answers are tokenized in full; on-policy conversations only have a
@@ -71,11 +74,12 @@ def precheck(tokenizer, todo: list[Conversation]) -> dict[str, PrefillTokens]:
         if c.needs_answer:
             tokenizer.apply_chat_template(c.messages, add_generation_prompt=True, tokenize=True)
         else:
-            prefilled[c.uid] = prefill_tokens(tokenizer, c.messages)
+            prefilled[c.uid] = prefill_tokens(tokenizer, c.messages, whole_answer=whole_answer)
     unusual = [
         (c.uid, c.messages[-1]["content"][:40])
         for c in todo
-        if c.uid in prefilled and c.label is not None and not prefilled[c.uid].answer_first_is_yes_no
+        if not whole_answer and c.uid in prefilled and c.label is not None
+        and not prefilled[c.uid].answer_first_is_yes_no
     ]
     print(f"tokenized {len(todo)} rows; labelled answers not opening with yes/no: {len(unusual)}", flush=True)
     for uid, answer in unusual:
@@ -116,7 +120,7 @@ def row_record(conversation, messages, tokens, answer, hidden_states, fidelity, 
         "answer_first_is_yes_no": tokens.answer_first_is_yes_no,
         "fidelity": fidelity,
         "hidden_states": {
-            "positions": list(POSITIONS),
+            "positions": list(context["positions"]),
             "shape": list(hidden_states.shape),
             "dtype": str(hidden_states.dtype),
             "index_meaning": INDEX_MEANING,
@@ -132,10 +136,10 @@ def extract_rows(model, tokenizer, store: RowStore, todo: list[Conversation], pr
     try:
         for conversation in tqdm(todo, desc=store.dataset):
             messages, tokens, answer = answer_and_tokens(model, tokenizer, conversation, prefilled)
-            hidden_states, fidelity = hidden_states_at(model, tokens)
+            hidden_states, fidelity = hidden_states_at(model, tokens, context["positions"])
             fidelity["top_token_texts"] = [tokenizer.decode([i]) for i in fidelity["top_token_ids"]]
             record = row_record(conversation, messages, tokens, answer, hidden_states, fidelity, context, tokenizer)
-            store.put(conversation.uid, record, hidden_states)
+            store.put(conversation.uid, record, hidden_states, context["positions"])
     finally:
         store.sync()
     print(f"done. {store.dataset}: {len(todo)} rows extracted and synced to {store.repo_id}", flush=True)
@@ -151,7 +155,8 @@ def main() -> None:
         store, todo = pending(args.dataset, key, followup, args.limit)
         if not todo:
             continue
-        prefilled = precheck(tokenizer, todo)
+        whole_answer = followup == NO_FOLLOWUP
+        prefilled = precheck(tokenizer, todo, whole_answer)
         if args.dry_run:
             sent = todo[0].messages[-1 if todo[0].needs_answer else -2]["content"]
             print(f"dry run: follow-up as sent: {sent!r}", flush=True)
@@ -162,6 +167,7 @@ def main() -> None:
             "dataset": args.dataset,
             "followup": followup,
             "run_limit": args.limit,
+            "positions": REPLY_POSITIONS if whole_answer else POSITIONS,
             "model": {"name": MODEL_NAME, "revision": MODEL_REVISION, "class": type(model).__name__},
             "versions": versions,
         }

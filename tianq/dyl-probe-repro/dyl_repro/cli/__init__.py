@@ -8,4 +8,5 @@
     train_probe.py       CPU: train a probe the way AISI did on any dataset, test it on any others
     compare_generalization.py  CPU: probes trained on each Gigi category, tested on the others, three wordings
     compare_outcome_flags.py   CPU: what the released probe flags on each kind of answer to "did you lie?"
+    compare_no_followup.py     CPU: the transfer matrix with no follow-up question, per read position
 """

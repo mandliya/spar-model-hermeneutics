@@ -142,24 +142,27 @@ def _mean(values: list[float]) -> float | None:
     return sum(values) / len(values) if values else None
 
 
-def summary(m: dict) -> dict:
-    """Per wording, over cells with at least FEW of each class: mean in-category and mean
-    transfer AUROC on the denials, the same on AISI's label for comparison, and Varied Deception."""
+def summary(m: dict, measures: tuple[str, ...] = ("denials", "dyl_label")) -> dict:
+    """Over cells with at least FEW of each class, per measure: mean in-category and mean
+    transfer AUROC across the categories, plus Varied Deception (AISI's label) when tested."""
     def collect(measure: str, kind: str) -> list[float]:
-        return [c[measure]["auroc"] for r in m["rows"] for c in r["cells"][:-1] if c["kind"] == kind and _trusted(c[measure])]
+        return [c[measure]["auroc"] for r in m["rows"] for column, c in zip(m["columns"], r["cells"])
+                if column != VARIED_DECEPTION and c["kind"] == kind and _trusted(c[measure])]
 
     out = {"probes_trained": sum(r["trained"] for r in m["rows"])}
-    for measure in ("denials", "dyl_label"):
+    for measure in measures:
         transfer = collect(measure, "transfer")
         out[measure] = {"mean_in_category": _mean(collect(measure, "in_category")), "mean_transfer": _mean(transfer),
                         "transfer_cells": len(transfer), "transfer_cells_at_least_0_7": sum(a >= 0.7 for a in transfer)}
-    out["mean_on_varied_deception"] = _mean([r["cells"][-1]["dyl_label"]["auroc"] for r in m["rows"] if r["trained"]
-                                             and r["cells"][-1]["dyl_label"]])
+    if VARIED_DECEPTION in m["columns"]:
+        at = m["columns"].index(VARIED_DECEPTION)
+        out["mean_on_varied_deception"] = _mean([r["cells"][at]["dyl_label"]["auroc"] for r in m["rows"]
+                                                 if r["trained"] and r["cells"][at]["dyl_label"]])
     return out
 
 
-def markdown(m: dict) -> str:
-    """The denials matrix, with Varied Deception (AISI's label) as the last column."""
+def markdown(m: dict, measure: str = "denials") -> str:
+    """One matrix as a table: `measure` in every category column, AISI's label on Varied Deception."""
     def cell(c: dict, measure: str) -> str:
         numbers = c[measure]
         if c["kind"] == "not_trained":
@@ -170,10 +173,10 @@ def markdown(m: dict) -> str:
         mark = "**" if c["kind"] == "in_category" else ""
         return f"{mark}{numbers['auroc']:.2f}{mark} ({numbers['n_lie']}/{numbers['n_honest']}){few}"
 
-    names = [*CATEGORIES.values(), "Varied Deception (AISI's label)"]
+    names = [CATEGORIES.get(c, "Varied Deception (AISI's label)") for c in m["columns"]]
     lines = ["| trained on \\ tested on | " + " | ".join(names) + " |", "|---" * (len(names) + 1) + "|"]
     for r in m["rows"]:
-        label = CATEGORIES[r["train"]] + ("" if r["trained"] else f" ({r['n_lie']} lies: too few)")
-        cells = [cell(c, "denials") for c in r["cells"][:-1]] + [cell(r["cells"][-1], "dyl_label")]
+        label = CATEGORIES[r["train"]] + ("" if r["trained"] else f" ({r['n_lie']} lies / {r['n_honest']} honest: too few)")
+        cells = [cell(c, "dyl_label" if column == VARIED_DECEPTION else measure) for column, c in zip(m["columns"], r["cells"])]
         lines.append(f"| {label} | " + " | ".join(cells) + " |")
     return "\n".join(lines)
