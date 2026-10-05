@@ -8,8 +8,11 @@ parser fix applies to rows written before it). Unparseable or empty replies
 
 Ground truth and row filters are the ones the self-report AUROC uses
 (answer_probability/02_analyse_pa.py: same files, same columns, same
-unanswerable "confabulation" bucket), so the two are compared on the same
-answers. Intervals: 2,000 bootstrap resamples within the lied and honest arms
+unanswerable "confabulation" bucket), and only answers that also have gemma's
+self-report score (P("A") on the `neutral` question) are counted, so monitor
+and self-report are compared on exactly the same answers. (This drops, e.g.,
+the 13 MASK-statistics answers where gemma gave no number and so was never
+asked a follow-up.) Intervals: 2,000 bootstrap resamples within the lied and honest arms
 separately, seed 0. Also reports balanced accuracy at score >= 50 (the
 monitor's own "more likely than not" line), for comparison with the
 self-report letter.
@@ -90,7 +93,18 @@ def load(monitor):
     return d
 
 
-TRUTH = {c: truth(c) for c in CATS}
+def self_report_rows(cat):
+    """sample_ids with gemma's own P("A") on the `neutral` follow-up."""
+    f = G / "answer_probability/results" / f"pa_{cat}.jsonl"
+    rows = (json.loads(l) for l in f.open() if l.strip())
+    return {x["sample_id"] for x in rows
+            if x.get("condition") == "neutral" and x.get("p_A_norm") is not None and not x.get("error")}
+
+
+TRUTH = {}
+for c in CATS:
+    sr = self_report_rows(c)
+    TRUTH[c] = {s: v for s, v in truth(c).items() if s in sr}
 rows = []
 for m in MONITORS:
     d = load(m)
