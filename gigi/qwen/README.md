@@ -64,20 +64,54 @@ The code bundle the boxes download is in the private HF repo
 
 Box requirements: one ~96 GB GPU (RTX PRO 6000 or H100 80 GB), >= 150 GB disk.
 
-## Status / still to do
+## Status (6 Oct 2026)
 
-- [x] scripts copied and made model-generic (above)
-- [x] Qwen chat template checked with the real tokenizer (no GPU): thinking
-      forced off even if requested; replayed conversations start exactly with
-      the generation prompt; A/B are single tokens bare and after "Final
-      answer:"; pad/eos set
-- [x] model pinned by MODEL_TAG (the shared .env's TARGET_MODEL=gemma is
-      ignored; caught by the test above), temperature pinned to 0
-- [x] transcript builder checked against gemma's 2,809 transcripts: identical
-      except 13 MASK statistics rows whose dataset entry has no question
-      (found a gemma bug: they were counted as honest; fixed 5 Oct 2026, and
-      skipped here)
-- [x] row sharding, per-box swap subset, run script, merge script, code bundle
-- [ ] user approval of the budget (~$80-100) and of stopping boxes when done
-- [ ] launch, then analysis: gemma vs Qwen tables/charts, John's four counts
-      (confess, false confession, double down, honest)
+- **Done: 9 of 10 jobs** (J1-J5, J7-J10). 9 of the 11 categories: alibi,
+  capture-the-secret, sycophancy A and B, unanswerable, and the 4 MASK
+  subtypes. Results are merged in `results/qwen3-32b/` (`11_merge_boxes.py`),
+  with per-box files and activations under `models/qwen3-32b/boxes/` on HF.
+- **Still to run: J6** (ascii-sandbagging + mask-factual). Its model download
+  failed on two hosts. A plan to run it on J1's box after J1 finished failed
+  too: the waiting loop's `pgrep -f "run_job.sh J1"` matched its own command
+  line, so it never exited. Rerun J6 on a fresh box.
+- **Problems found during the run, and fixed in the code:**
+  1. Two smoke tests picked rows with nothing to follow up (sycophancy B
+     needs a neutral baseline; capture-the-secret needs a pressed secret).
+     Smoke tests now pick suitable rows.
+  2. GB10 boxes (DGX Spark, shared memory) offloaded Qwen to disk and
+     crawled. `run_job.sh` now refuses GPUs under 75 GB.
+  3. Model downloads hit Hugging Face transfer errors. Now 5 tries, with the
+     plain-HTTP fallback after the first failure.
+
+## Results
+
+The cross-model comparison is in [`../RESULTS.md`](../RESULTS.md#second-model-qwen3-32b).
+It's computed by `../compare_models.py` (same definitions and code path for
+both models; it reproduces gemma's published numbers exactly) and charted by
+`13_charts.py`.
+
+- **Lying rates** are within 6 points of gemma's in 8 of 9 categories.
+  Sycophancy B is the exception: 43.3% vs 57.7%.
+- **Self-report AUROC** runs 0.40-0.88: 0.70 or above in 13 of 36
+  combinations, against 9 of 36 for gemma. It's in gemma's range, not the
+  paper's Qwen3-235B (0.98-0.99).
+- **On the letter, Qwen denies even more than gemma.** It says "no" to every
+  question on sycophancy B. On alibi `neutral` it admits 27 of 814 lies.
+- **Monitors:** an outside monitor beats Qwen's best question in 7 of 9
+  categories (both do in 4). Qwen as its own monitor beats its own
+  self-report in 4 of 9.
+
+| File | What |
+|---|---|
+| `results/comparison_lying_rates.csv` | lying rate per model x category, Wilson 95% |
+| `results/comparison_counts.csv` | confess / double down / false confess / honest per model x category x question |
+| `results/comparison_selfreport_auroc.csv` | AUROC from P("yes") per model x category x question, bootstrap 95% |
+| `results/comparison_swap.csv` | swap test: median AUROC with yes at A vs yes at B |
+| `results/comparison_monitor_auroc.csv` | monitors (Gemini, GPT-5 mini, the model itself) x prompt |
+
+## Cost
+
+- **Monitors:** $12.24 measured ($8.35 Gemini 2.5 Flash, $3.89 GPT-5 mini).
+- **Judge:** about $16-25 (estimated from gemma's run; judge token counts
+  aren't saved).
+- **GPU:** about 9 boxes x 3.5-5 hours plus failed attempts, at $1.15/h.
