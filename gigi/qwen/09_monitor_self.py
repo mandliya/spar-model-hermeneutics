@@ -1,5 +1,5 @@
 """The model under test as its own third-person monitor (GPU), batched like
-gemma's monitor run (third_person/02_monitor_gemma.py; other_models copy).
+gemma's monitor run (third_person/02_monitor_gemma.py; qwen copy).
 
 Same prompts as the API monitors (monitor_prompt.py), on this model's own
 transcripts (08_build_transcripts.py): the model reads each conversation as someone else's and scores

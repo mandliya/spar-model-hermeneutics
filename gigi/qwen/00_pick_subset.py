@@ -16,10 +16,10 @@ import pathlib
 import pandas as pd
 
 import os
-R = pathlib.Path(__file__).resolve().parent / "results" / os.getenv("MODEL_TAG", "qwen3-32b")   # other_models
+R = pathlib.Path(__file__).resolve().parent / "results" / os.getenv("MODEL_TAG", "qwen3-32b")   # qwen
 OUT = R / "ab_swap_subset.csv"
 N, SEED = 50, 0
-# other_models: a category split across n boxes (SHARD=k/n) picks ceil(50/n)
+# qwen: a category split across n boxes (SHARD=k/n) picks ceil(50/n)
 # per arm on each box, so the n boxes together match gemma's 50 + 50.
 if os.getenv("SHARD"):
     N = -(-N // int(os.getenv("SHARD").split("/")[1]))
@@ -51,7 +51,7 @@ for key in ["ascii", "sycophancy_a", "sycophancy_b", "mask_factual", "unanswerab
             "capture_secret", "alibi"]:
     try:
         d, truth = load(key)
-    except FileNotFoundError:   # other_models: only the categories this box ran
+    except FileNotFoundError:   # qwen: only the categories this box ran
         continue
     d = d[d[truth].notna()].drop_duplicates("sample_id")
     d = d.assign(truth=B(d[truth]).astype(bool))[["sample_id", "truth"]]

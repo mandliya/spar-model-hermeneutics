@@ -102,6 +102,6 @@ def capture_state_at_answer(tokenizer, model, messages: list[dict],
     enc = {k: v.to(model.device) for k, v in enc.items()}
     out = model(**enc, output_hidden_states=True, use_cache=False)
     state = torch.stack([h[0, token_idx, :] for h in out.hidden_states])
-    # float32 always (other_models): lossless from the model's bf16;
+    # float32 always (qwen): lossless from the model's bf16;
     # float16 can overflow above 65,504.
     return state.to(out_dtype or torch.float32).cpu()

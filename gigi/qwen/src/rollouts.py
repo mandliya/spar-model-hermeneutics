@@ -53,7 +53,7 @@ def jobs_ascii():
     rows = [(u, "neutral", str(base.loc[u, "followup_answer"])) for u in base.index]
     for f in ["ascii_followup_conditions.csv", "ascii_reasoning_conditions.csv",
               "ascii_benchmark_conditions.csv"]:
-        if not (R / f).exists():   # other_models: the archived wordings are not run
+        if not (R / f).exists():   # qwen: the archived wordings are not run
             continue
         d = pd.read_csv(R / f).drop_duplicates(subset=["sample_id", "condition"])
         rows += [(r.sample_id, r.condition, str(r.answer)) for r in d.itertuples()]
@@ -91,7 +91,7 @@ def jobs_mask():
         bench = bench[~bench.condition.isin(["named", "eval_named"])]
         rerun = pd.read_csv(R / "mask_factual_named_rerun.csv")
         rerun = rerun[rerun.condition.isin(["named", "eval_named"])]
-    else:                                               # other_models: named asked once, final wording
+    else:                                               # qwen: named asked once, final wording
         rerun = bench.iloc[0:0]
     for r in pd.concat([bench, rerun]).drop_duplicates(subset=["sample_id", "condition"]).itertuples():
         if r.sample_id in ds.index and r.sample_id in prior.index:

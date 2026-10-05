@@ -1,6 +1,6 @@
 """Shared helpers: config, API client, resumable JSONL cache.
 
-other_models/ copy: the gemma pipeline made model-generic. The model under
+qwen/ copy: the gemma pipeline made model-generic. The model under
 test comes from TARGET_MODEL (default Qwen/Qwen3-32B) and every output goes to
 results/<MODEL_TAG>/, so gemma's results are never touched. Open-weight models
 are only ever run locally on the GPU instance: chat() refuses the target.
@@ -55,12 +55,12 @@ CONFIG = os.getenv("CONFIG", "google-gemma-3-27b-it_megafolds_fold_1")
 # --- models -----------------------------------------------------------------
 # The model under test. gemma-3-27b-it is one of the models the paper itself
 # evaluated, so this is a direct replication, not a scale-up.
-# other_models: the model comes ONLY from MODEL_TAG via this table, never from
+# qwen: the model comes ONLY from MODEL_TAG via this table, never from
 # a TARGET_MODEL in .env (the shared .env says gemma, which would silently
 # rerun gemma). Greedy, as for gemma's current results.
 MODELS = {"qwen3-32b": "Qwen/Qwen3-32B"}
 TARGET_MODEL = MODELS[MODEL_TAG]
-assert "gemma" not in TARGET_MODEL.lower(), "other_models is for models other than gemma"
+assert "gemma" not in TARGET_MODEL.lower(), "qwen is for models other than gemma"
 
 
 def load_tokenizer():
@@ -78,7 +78,7 @@ def load_tokenizer():
 # itself (a model grading its own honesty is not a measurement).
 JUDGE_MODEL = os.getenv("JUDGE_MODEL", "anthropic/claude-sonnet-4.5")
 
-TEMPERATURE = 0.0   # other_models: pinned (greedy), not read from .env
+TEMPERATURE = 0.0   # qwen: pinned (greedy), not read from .env
 MAX_WORKERS = int(os.getenv("MAX_WORKERS", "8"))
 
 # --- api client -------------------------------------------------------------

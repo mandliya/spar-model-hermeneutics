@@ -20,7 +20,7 @@ ST = pathlib.Path("/workspace/mask_belief_staging")
 ok = True
 
 
-def size(path):   # other_models: checks the models/<MODEL_TAG>/ copy, never gemma's path
+def size(path):   # qwen: checks the models/<MODEL_TAG>/ copy, never gemma's path
     info = api.get_paths_info(REPO, [remote(path)], repo_type="dataset")
     return info[0].size if info else None
 

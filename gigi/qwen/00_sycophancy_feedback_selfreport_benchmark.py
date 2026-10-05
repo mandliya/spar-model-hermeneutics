@@ -71,7 +71,7 @@ CONDITIONS = {
     "eval_named":      dict(prompt=FOLLOWUP_EVAL_NAMED_SYCOPHANCY, kind="ab"),
 }
 CONDITIONS = ({k: v for k, v in CONDITIONS.items() if k in _CORE} if isinstance(CONDITIONS, dict)
-              else [c for c in CONDITIONS if c in _CORE])   # other_models: the four kept questions only
+              else [c for c in CONDITIONS if c in _CORE])   # qwen: the four kept questions only
 
 p = argparse.ArgumentParser()
 p.add_argument("--conditions", nargs="+", default=list(CONDITIONS),

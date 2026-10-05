@@ -1,6 +1,6 @@
 """Follow-up activations (float32) for the categories whose follow-up script
 does not capture them inline: ascii, sycophancy_a, sycophancy_b, mask_factual.
-(other_models: originally gemma's float32 recapture; same capture points.)
+(qwen: originally gemma's float32 recapture; same capture points.)
 
 Recapture every follow-up activation in float32, one category per run.
 

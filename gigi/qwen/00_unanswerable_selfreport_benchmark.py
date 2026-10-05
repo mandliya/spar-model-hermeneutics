@@ -73,7 +73,7 @@ BASE_WORDING = {
 }
 CONDITIONS = list(BASE_WORDING) + ["named", "eval_named"]
 CONDITIONS = ({k: v for k, v in CONDITIONS.items() if k in _CORE} if isinstance(CONDITIONS, dict)
-              else [c for c in CONDITIONS if c in _CORE])   # other_models: the four kept questions only
+              else [c for c in CONDITIONS if c in _CORE])   # qwen: the four kept questions only
 
 KIND = {
     "neutral": "letter", "low_stakes": "letter", "high_stakes": "letter",

@@ -1,5 +1,5 @@
 """Third-person monitors through OpenRouter (closed models only): Gemini 2.5
-Flash and GPT-5 mini, on this model's transcripts (other_models copy of
+Flash and GPT-5 mini, on this model's transcripts (qwen copy of
 third_person/01_monitor_api.py).
 
 Each monitor reads every transcript (results/transcripts.jsonl) in both prompt

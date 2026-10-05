@@ -84,7 +84,7 @@ if n_nosecret:
           f"not guessing")
     df = df[df["secret"].notna()].copy()
 
-df = df[df["sample_id"].map(_in_shard)]   # other_models: this box's slice (SHARD=k/n)
+df = df[df["sample_id"].map(_in_shard)]   # qwen: this box's slice (SHARD=k/n)
 df = df.reset_index(drop=True)
 if args.limit:
     df = df.head(args.limit)

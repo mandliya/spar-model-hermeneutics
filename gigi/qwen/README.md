@@ -1,4 +1,4 @@
-# other_models: the gemma pipeline, rerun on a second model (Qwen3-32B)
+# qwen: the gemma pipeline, rerun on a second model (Qwen3-32B)
 
 The same experiment as for gemma-3-27b-it, on `Qwen/Qwen3-32B`. Same prompts
 (the dataset's gemma configs), same ground-truth checks, same four follow-up
@@ -58,7 +58,7 @@ follow-ups, named_cot, activations, P("A"), A/B swap, transcripts, the model
 as its own monitor on the GPU + Gemini/GPT-5 mini via API, activations
 tarball). Everything is uploaded to `models/qwen3-32b/boxes/<JOB>/` on HF.
 The code bundle the boxes download is in the private HF repo
-`ggrazianoknapp/gigi-code` (`other_models.tar.gz`). Afterwards,
+`ggrazianoknapp/gigi-code` (`qwen.tar.gz`). Afterwards,
 `11_merge_boxes.py` (no GPU, no API) combines every box's results into
 `results/qwen3-32b/` for the analysis.
 

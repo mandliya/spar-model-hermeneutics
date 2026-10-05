@@ -36,7 +36,7 @@ import pathlib
 import pandas as pd
 
 HERE = pathlib.Path(__file__).resolve().parent
-RES = HERE / "results" / os.getenv("MODEL_TAG", "qwen3-32b")   # other_models: per-model folder
+RES = HERE / "results" / os.getenv("MODEL_TAG", "qwen3-32b")   # qwen: per-model folder
 PA = RES                                                         # pa_mask_*.jsonl beside the rest
 SUBS = ["known_facts", "statistics", "continuations", "disinformation"]
 TOL = 0.10
@@ -65,7 +65,7 @@ def label(x):
 
 
 for sub in SUBS:
-    if not (RES / f"mask_belief_{sub}_judged.jsonl").exists():   # other_models: subtypes this box ran
+    if not (RES / f"mask_belief_{sub}_judged.jsonl").exists():   # qwen: subtypes this box ran
         continue
     judged = [x for x in jl(RES / f"mask_belief_{sub}_judged.jsonl") if "error" not in x]
     no_question = {a["sample_id"] for a in jl(RES / f"mask_belief_{sub}_answers.jsonl")

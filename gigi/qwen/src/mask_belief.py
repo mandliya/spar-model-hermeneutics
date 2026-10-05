@@ -82,7 +82,7 @@ def rows(subtype):
     d = pd.concat([C.load_config(cfg, "train"), C.load_config(cfg, "validation")])
     d = d.drop_duplicates(subset=["sample_id"])
     d = d[d["task"] == task].copy()
-    # other_models: skip dataset rows with no user question (only a system
+    # qwen: skip dataset rows with no user question (only a system
     # message; 13 statistics rows) - the analysis excludes them anyway.
     d = d[d["lie_detection_prompt"].map(lambda p: dict(p)["role"] == "user")]
     d["mask_task_id"] = d["sample_id"].str.split("_mask_").str[-1]

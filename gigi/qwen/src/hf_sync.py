@@ -12,7 +12,7 @@ REPO = "model-hermeneutics/gigi-lie-detection-activations"
 
 
 def remote(path_in_repo):
-    """Every other_models upload lives under models/<MODEL_TAG>/ on HF, so it
+    """Every qwen upload lives under models/<MODEL_TAG>/ on HF, so it
     can never overwrite or move a gemma file."""
     pfx = f"models/{common.MODEL_TAG}/"
     return path_in_repo if path_in_repo.startswith(pfx) else pfx + path_in_repo

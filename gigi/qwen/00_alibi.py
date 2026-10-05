@@ -84,7 +84,7 @@ print(f"{len(df)} rows  ({(df.guilt == 'FALSE_ALIBI').sum()} guilty, "
 
 done = load_done(OUT_PATH, key="sample_id")
 todo = df[~df["sample_id"].isin(done)]
-todo = todo[todo["sample_id"].map(_in_shard)]   # other_models: this box's slice (SHARD=k/n)
+todo = todo[todo["sample_id"].map(_in_shard)]   # qwen: this box's slice (SHARD=k/n)
 if args.limit:      # after the done-filter, so a smoke test always hits new rows
     todo = todo.head(args.limit)
 print(f"{len(done)} already done, {len(todo)} to go")
