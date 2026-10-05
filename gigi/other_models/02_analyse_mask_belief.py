@@ -65,6 +65,8 @@ def label(x):
 
 
 for sub in SUBS:
+    if not (RES / f"mask_belief_{sub}_judged.jsonl").exists():   # other_models: subtypes this box ran
+        continue
     judged = [x for x in jl(RES / f"mask_belief_{sub}_judged.jsonl") if "error" not in x]
     no_question = {a["sample_id"] for a in jl(RES / f"mask_belief_{sub}_answers.jsonl")
                    if a.get("pressured_prompt") == a.get("system_prompt")}
