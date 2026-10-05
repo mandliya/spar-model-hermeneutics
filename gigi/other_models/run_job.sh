@@ -3,7 +3,8 @@
 # model in src/common.py (Qwen3-32B), one conversation at a time.
 #   setup -> model download -> per category: smoke test (gate), first run,
 #   follow-ups, named_cot, activations, P("A") -> A/B swap -> transcripts ->
-#   the model as its own monitor (batched) -> activations packaged.
+#   monitors (the model itself, batched, on the GPU; Gemini + GPT-5 mini via
+#   API at the same time) -> activations packaged.
 # Results go to HF under models/<MODEL_TAG>/boxes/<JOB>/ after every stage.
 # A category that fails is logged and skipped; the other categories still run.
 # The box is NOT stopped unless STOP_WHEN_DONE=1 was set at launch (only on
@@ -138,9 +139,15 @@ if [ -n "$followup_cats" ]; then
   push
 fi
 
-# --- transcripts + the model as its own monitor (batched, as gemma's was) ------
-run python 08_build_transcripts.py --categories $(echo $CATS | tr ' ' ',') \
-  && run python 09_monitor_self.py
+# --- transcripts + monitors: Gemini/GPT via API (closed models) in the
+#     background while the model reads its own transcripts on the GPU ---------
+if run python 08_build_transcripts.py --categories $(echo $CATS | tr ' ' ','); then
+  python 10_monitor_api.py --models all > /workspace/monitor_api_$JOB.log 2>&1 &
+  API=$!
+  run python 09_monitor_self.py
+  wait $API && say "--- API monitors done: $(tail -1 /workspace/monitor_api_$JOB.log)" \
+    || say "!!! API monitors failed (resumable): $(tail -2 /workspace/monitor_api_$JOB.log)"
+fi
 push
 
 # --- activations: one tarball per job ----------------------------------------

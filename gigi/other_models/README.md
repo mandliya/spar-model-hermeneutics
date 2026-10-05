@@ -41,6 +41,29 @@ Model-independent inputs copied from gemma's run into `results/qwen3-32b/`:
 `alibi_guilt_labels.*`, `alibi_subset.csv`, `alibi_rest.csv` (scenario labels),
 `unanswerable_question_labels.*` (labels of the dataset's questions).
 
+## How to run (one box per job)
+
+| Job | Categories | Rows |
+|---|---|---|
+| J1, J2, J3 | alibi, split in 3 (`SHARD=k/3`) | ~425 each |
+| J4, J5 | capture-the-secret, split in 2 | ~254 each |
+| J6 | ascii + mask-factual | 310 + 87 |
+| J7 | sycophancy A + B | 158 + 201 |
+| J8 | unanswerable + MASK known facts + MASK statistics | 100 + 71 + 49 |
+| J9 | MASK continuations | 90 |
+| J10 | MASK disinformation | 76 |
+
+Each box: `run_job.sh <JOB>` (smoke-test gate per category, first run,
+follow-ups, named_cot, activations, P("A"), A/B swap, transcripts, the model
+as its own monitor on the GPU + Gemini/GPT-5 mini via API, activations
+tarball). Everything is uploaded to `models/qwen3-32b/boxes/<JOB>/` on HF.
+The code bundle the boxes download is in the private HF repo
+`ggrazianoknapp/gigi-code` (`other_models.tar.gz`). Afterwards,
+`11_merge_boxes.py` (no GPU, no API) combines every box's results into
+`results/qwen3-32b/` for the analysis.
+
+Box requirements: one ~96 GB GPU (RTX PRO 6000 or H100 80 GB), >= 150 GB disk.
+
 ## Status / still to do
 
 - [x] scripts copied and made model-generic (above)
@@ -50,12 +73,11 @@ Model-independent inputs copied from gemma's run into `results/qwen3-32b/`:
       answer:"; pad/eos set
 - [x] model pinned by MODEL_TAG (the shared .env's TARGET_MODEL=gemma is
       ignored; caught by the test above), temperature pinned to 0
-- [ ] third-person: transcript builder for Qwen + Qwen-as-monitor (batched) +
-      Gemini/GPT monitors
-- [ ] one run script per box (setup, model download, smoke-test gate, the
-      category chains, HF uploads) and a one-line launcher to paste into the
-      Vast web terminal (pulls this repo, so no laptop needed)
-- [ ] measured cost estimate (GPU seconds per row from gemma's saved
-      `gpu_seconds`) -> user approval before any spend
-- [ ] after the runs: tables/charts comparing gemma and Qwen, John's four
-      counts (confess, false confession, double down, honest)
+- [x] transcript builder checked against gemma's 2,809 transcripts: identical
+      except 13 MASK statistics rows whose dataset entry has no question
+      (found a gemma bug: they were counted as honest; fixed 5 Oct 2026, and
+      skipped here)
+- [x] row sharding, per-box swap subset, run script, merge script, code bundle
+- [ ] user approval of the budget (~$80-100) and of stopping boxes when done
+- [ ] launch, then analysis: gemma vs Qwen tables/charts, John's four counts
+      (confess, false confession, double down, honest)
