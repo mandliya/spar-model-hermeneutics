@@ -24,14 +24,17 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
 import requests
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from monitor_prompt import VARIANTS, parse_score, prompt  # noqa: E402
 
-KEY = (dotenv_values(HERE / ".env").get("OPENROUTER_API_KEY")   # on the box
-       or dotenv_values("/Users/gg/Desktop/aisafety/lies-experiment/.env")["OPENROUTER_API_KEY"])
+# key from the environment (cloud sessions), else a gitignored .env: next to
+# this script on the box, or the repo root on a laptop
+load_dotenv(HERE / ".env")
+load_dotenv()
+KEY = os.environ["OPENROUTER_API_KEY"]
 MODELS = {   # short name -> (OpenRouter id, pinned provider, extra params)
     "gemini-2.5-flash": ("google/gemini-2.5-flash", "google-ai-studio", {"temperature": 0}),
     "gpt-5-mini": ("openai/gpt-5-mini", "openai", {}),

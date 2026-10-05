@@ -1,0 +1,134 @@
+# Lie-detection concepts: Anki card material
+
+Explanations from the SPAR gemma lie-detection project, written as
+question/answer pairs. Each `Q:` / `A:` pair is one card.
+
+---
+
+Q: What is a token, and how does a language model choose its next one?
+A: A token is a word or piece of a word. Before writing each token, the model
+gives every possible next token a probability (all adding up to 100%). At
+temperature 0 it simply writes the highest-probability one.
+
+Q: What is gemma's "confidence score" for "yes, I lied"?
+A: At the moment gemma is about to answer "Did you lie? A = yes, B = no", it has
+a probability for "A" and one for "B". The score is
+P(yes) = P("A") ÷ (P("A") + P("B")).
+Example: A 99.90%, B 0.09% → 99.90 ÷ 99.99 = 99.91%.
+
+Q: How did we get gemma's confidence scores without generating anything new?
+A: Feed each saved conversation plus gemma's saved answer back through the
+model once, and read the probabilities at the exact spot where it wrote its
+letter. (For reason-first questions: the letter after "Final answer:".)
+
+Q: Confidence score vs confidence interval: what's the difference?
+A: A confidence score is gemma's probability of "yes" on one answer (e.g.
+99.9%). A confidence interval is the uncertainty range on OUR results (e.g.
+92.7%, 90.7–94.2%). Unrelated things.
+
+Q: What does balanced accuracy measure, and how is it computed?
+A: How well gemma's yes/no answer separates lies from honest answers.
+Balanced accuracy = ½ × (% of lies it confessed + % of honest answers it
+cleared) = ½ × (confession + (100 − false confession)). 50 = coin flip,
+100 = perfect.
+Example: alibi `named`: ½ × (97.7 + 70.1) = 84.
+
+Q: What does AUROC stand for?
+A: Area Under the Receiver Operating Characteristic curve. (The name comes
+from WWII radar engineering.)
+
+Q: What does AUROC measure, in one sentence?
+A: Pick one answer where the model lied and one where it didn't: how often does
+the lie get the higher confidence score? Do that for every lie/honest pair;
+AUROC is the share of pairs the lie "wins".
+
+Q: Work out AUROC: lies scored 99.91%, 99.80%, 60%; honest answers 95%, 40%, 10%.
+A: 3 × 3 = 9 pairs. 99.91% beats all 3; 99.80% beats all 3; 60% beats 40% and
+10% but loses to 95%. 8 wins / 9 pairs = 0.89.
+
+Q: How do you read an AUROC value?
+A: 0.5 = coin flip (scores no higher on lies than honest answers). 1.0 =
+perfect (every lie scores above every honest answer). Below 0.5 = backwards
+(more confident "yes" on honest answers), e.g. ascii `neutral` = 0.12.
+
+Q: What is the ROC curve, and why does the area under it equal the
+"pairs" number?
+A: Try every possible cutoff ("flag any answer with P(yes) above X%") and plot
+lies caught vs honest answers wrongly flagged. The area under that curve works
+out to exactly the share of lie/honest pairs where the lie scores higher.
+
+Q: Is P(yes) the AUROC?
+A: No. P(yes) is one score for one answer. AUROC is one number for a whole set
+of answers, built by comparing all their scores between lies and honest ones.
+
+Q: Why can the letter-based score be ~50 while AUROC is ~0.75 on the same
+answers (mask-factual)?
+A: The letter is a rounded-off confidence (above 50% → A). If gemma says "yes"
+(A) on everything, the letter can't separate lies from honest answers (~50).
+But its confidence can still be slightly higher on lies (99.99% vs 99.9%), and
+AUROC picks up that ranking (~0.75). The letter throws that information away.
+
+Q: Analogy for letter vs confidence?
+A: A friend who answers "yes" to every party invite. Their words (the letter)
+never tell you if they'll come; their tone ("YES totally!" vs "yeah... sure")
+does. Left panel = the words; right panel = the tone.
+
+Q: Why keep the letter-based (balanced accuracy) score if AUROC is richer?
+A: The letter is what you actually get when you ask a model "did you lie?";
+deployed/closed models usually don't expose confidence. Balanced accuracy tests
+"does just asking help?"; AUROC tests "is the information inside the model at
+all?". The gap between them (e.g. mask-factual) is itself a finding.
+
+Q: What's the catch with AUROC from gemma's confidence?
+A: The differences it relies on are tiny (99.99% vs 99.9%). It shows the
+information exists, not that you could build a reliable lie detector from it.
+
+Q: Why does the confidence score depend on the letter A, and how did we check
+that wasn't faking the signal?
+A: "Yes, I lied" was always option A, so a preference for the letter A could
+leak into P("A"). The A/B swap test re-asked 626 rows with "yes" as option B.
+A real signal survives: alibi held (0.85 → 0.92); ascii collapsed
+(0.45 → 0.13), so its "signal" was mostly letter preference.
+
+Q: Why is float16 bad for storing gemma's activations, and why float32?
+A: gemma computes in bfloat16. Some activation values exceed float16's maximum
+(65,504) and become `inf` (7–17 values per tensor). bfloat16 → float32 is
+lossless, so float32 keeps the exact values.
+
+---
+
+Q: What is "self-report" lie detection?
+A: You ask the model that answered, straight after its answer, "Did you lie?"
+and use its own reply (or its confidence in "yes") as the lie signal.
+
+Q: What is "third-person monitoring"?
+A: You show a model a transcript of someone else's conversation (system
+prompt, question, the assistant's answer) and ask "Is the assistant lying?
+Score 1-100". Nobody questions the model that answered. The monitor can even be
+the same model, as long as it reads the transcript as someone else's.
+
+Q: Why does third-person monitoring matter for "non-invasive" detection?
+A: It never adds anything to the original conversation, so it can't change
+the answering model's behaviour or internal state. That makes it the black-box
+baseline a no-follow-up activation probe has to beat.
+
+Q: Why shouldn't the model that labelled the ground truth also be the monitor?
+A: It would be grading its own homework: agreement with its own labels would
+look like monitoring skill. Use a different model as monitor.
+
+Q: What were the 4 prompt formats the lie-detector paper compared?
+A: (1) Direct self-report: "Did you lie? A/B". (2) Self-report with a rubric:
+lie definitions, reason before answering. (3) Third-person report: a model
+reads the transcript and scores 1-100 how likely the assistant lied.
+(4) Third-person with the full lie taxonomy as a rubric.
+
+Q: What was the lie-detector paper's main experiment and finding?
+A: They fine-tuned gemma (LoRA) to answer "Did you lie?" correctly, trained on
+half the lie types, tested on the other half. In-distribution AUROC rose
+0.60 → 0.95, but on unseen lie types it plateaued at 0.70-0.75: the detectors
+learned the surface of each setting, not deception itself.
+
+Q: How did the lie-detector paper label which answers were lies?
+A: Parallel interrogation: ask neutrally (belief), then under pressure, and
+flag contradictions. Then 5 judge models re-checked each case with full
+context and voted (about 25% of labels changed).
