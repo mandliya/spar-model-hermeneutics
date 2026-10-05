@@ -30,7 +30,8 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from monitor_prompt import VARIANTS, parse_score, prompt  # noqa: E402
 
-KEY = dotenv_values("/Users/gg/Desktop/aisafety/lies-experiment/.env")["OPENROUTER_API_KEY"]
+KEY = (dotenv_values(HERE / ".env").get("OPENROUTER_API_KEY")   # on the box
+       or dotenv_values("/Users/gg/Desktop/aisafety/lies-experiment/.env")["OPENROUTER_API_KEY"])
 MODELS = {   # short name -> (OpenRouter id, pinned provider, extra params)
     "gemini-2.5-flash": ("google/gemini-2.5-flash", "google-ai-studio", {"temperature": 0}),
     "gpt-5-mini": ("openai/gpt-5-mini", "openai", {}),
