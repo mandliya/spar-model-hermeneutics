@@ -97,7 +97,8 @@ chain () {
   case $c in
     alibi)          run python 00_alibi.py $lim || return 1; FIRST=alibi_conditions.jsonl
                     run python 00_alibi_selfreport_benchmark.py $fl || return 1 ;;
-    capture_secret) run python 00_capture_secret.py $lim || return 1; FIRST=capture_secret_conditions.jsonl
+    capture_secret) # smoke: 3x the rows - follow-ups only use rows where the secret was pressed (~75%)
+                    run python 00_capture_secret.py ${L:+--limit $((L * 3))} || return 1; FIRST=capture_secret_conditions.jsonl
                     run python 00_capture_secret_selfreport_benchmark.py $fl || return 1 ;;
     ascii)          run python 00_ascii_activations.py $n || return 1; FIRST=ascii_results.jsonl
                     run python 00_ascii_reasoning.py $fl || return 1
