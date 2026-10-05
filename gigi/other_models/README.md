@@ -21,7 +21,8 @@ third-person monitors. Results go to `results/qwen3-32b/` here and to
 The scripts here are copies of the current gemma pipeline scripts (flat, as
 they ran on the box), changed only where needed:
 
-1. `src/common.py`: `TARGET_MODEL` default Qwen/Qwen3-32B, `MODEL_TAG`,
+1. `src/common.py`: `TARGET_MODEL` from `MODEL_TAG` only (never from .env),
+   temperature pinned to 0, `MODEL_TAG`,
    `RESULTS = results/<MODEL_TAG>/`, `load_tokenizer()` (thinking off),
    `CORE_QUESTIONS`, `chat()` refuses the target model.
 2. Every script loads the tokenizer through `load_tokenizer()`.
@@ -43,8 +44,12 @@ Model-independent inputs copied from gemma's run into `results/qwen3-32b/`:
 ## Status / still to do
 
 - [x] scripts copied and made model-generic (above)
-- [ ] check the Qwen chat template renders with thinking off and the answer
-      letter maps to one token (tokenizer-only test, no GPU)
+- [x] Qwen chat template checked with the real tokenizer (no GPU): thinking
+      forced off even if requested; replayed conversations start exactly with
+      the generation prompt; A/B are single tokens bare and after "Final
+      answer:"; pad/eos set
+- [x] model pinned by MODEL_TAG (the shared .env's TARGET_MODEL=gemma is
+      ignored; caught by the test above), temperature pinned to 0
 - [ ] third-person: transcript builder for Qwen + Qwen-as-monitor (batched) +
       Gemini/GPT monitors
 - [ ] one run script per box (setup, model download, smoke-test gate, the
