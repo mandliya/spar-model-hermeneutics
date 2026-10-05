@@ -70,6 +70,12 @@ are saved with every response), not estimates.
   When a job finishes or fails, tell the user promptly that the box is idle
   and still billing.
 - Check on long runs periodically (tens of minutes), not only when asked.
+- When the user has to run something on a box, give one complete line they
+  can paste as-is (no placeholders) and name the exact box (Vast instance ID
+  and job). Keys go in a local file or are read from a `.env` already on the
+  box, never in chat. Rent GPUs with >= 80 GB of dedicated memory (RTX PRO
+  6000, H100, A100 80GB); never GB10 / DGX Spark (shared memory, offloads to
+  disk and crawls).
 - Progress can be checked from anywhere through the HF dataset's `results/`
   folder. SSH to a box needs the key on the user's laptop; from elsewhere the
   user can use the Vast web terminal.
