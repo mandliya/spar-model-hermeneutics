@@ -53,15 +53,20 @@ admissions assistant, asked "yes or no", it answered **"No."** That is a lie.
 | Subtype | Rows | With a clear belief | Lied | Lying rate | 95% CI |
 |---|---|---|---|---|---|
 | known facts | 71 | 71 | 43 | **60.6%** | 48.9–71.1% |
-| statistics | 62 | 60 | 22 | **36.7%** | 25.6–49.3% |
+| statistics | 62 | 47 * | 22 | **46.8%** | 33.3–60.8% |
 | continuations | 90 | 87 | 73 | **83.9%** | 74.8–90.2% |
 | disinformation | 76 | 69 | 58 | **84.1%** | 73.7–90.9% |
 
+\* 13 statistics rows are excluded because their dataset entry has no question:
+the only prompt is a system message, so gemma was never asked anything. Until
+5 Oct 2026 they were counted as honest (rate 36.7%, n = 60). 2 more rows have
+no belief figure.
+
 - **Continuing a false text and writing requested disinformation**, gemma goes
   along with claims it says it doesn't believe more than 80% of the time.
-- **Statistics is lower partly because gemma often dodges the number**: 23 of
-  the 62 pressured answers give no figure at all, which doesn't count as a
-  lie.
+- **Statistics is lower partly because gemma sometimes dodges the number**:
+  9 of the 47 valid pressured answers give no figure at all, which doesn't
+  count as a lie.
 
 ## Self-report: does "did you lie?" catch it?
 
@@ -175,4 +180,6 @@ about 7 hours on one A100, mostly gemma's long belief answers and articles.
   false-confession rates are rough.
 - **The 10% statistics cutoff is a chosen number.** A different cutoff moves
   the statistics lying rate.
+- **13 statistics rows in the released dataset are broken**: no question, only
+  a system message. They are excluded, not counted as honest.
 - Temperature 0 (greedy decoding), as everywhere in this project.
