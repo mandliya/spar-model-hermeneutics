@@ -173,3 +173,26 @@ AUROC = (R − n(n+1)/2) ÷ (lies × honest), where n = number of lies.
 Example: 5, 10, 40, 50, 80, 95 get ranks 1-6. Lies are 40 (3), 80 (5),
 95 (6), so R = 14. (14 − 3×4/2) ÷ 9 = 8/9 = 0.89, the same answer as
 counting pairs, just faster.
+
+Q: Why is AUROC the standard score for lie detectors in AI-safety research?
+A: (1) No cutoff needed: it scores the detector across every possible
+threshold. (2) It doesn't care how common lies are, so settings with 90% lies
+and 20% lies are comparable. (3) It works on any score (probe output, P(yes),
+a monitor's 1-100), so very different detectors share one yardstick.
+(4) It's easy to say: "the chance a random lie looks more suspicious than a
+random honest answer". (5) Everyone uses it, so papers can be compared.
+
+Q: What can a high AUROC hide?
+A: (1) Shortcuts: it can come from a surface cue, not from detecting lying
+(ascii: "NO" = lie; the A/B swap showed letter preference). (2) No
+generalization guarantee: the lie-detector paper got 0.95 on familiar lie
+types and only 0.70-0.75 on new ones. (3) It's only as good as the
+ground-truth labels. (4) It can hide poor performance at the strict cutoffs
+safety needs.
+
+Q: What is "recall at 1% false-positive rate", and why do safety papers
+report it next to AUROC?
+A: Set the cutoff so only 1% of honest answers get flagged, then ask what
+share of lies are still caught. In deployment most answers are honest, so you
+can't afford many false alarms. A detector with a decent AUROC can still catch
+few lies at that strict cutoff.
