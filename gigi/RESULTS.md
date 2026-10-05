@@ -59,8 +59,8 @@ nine are archived, not deleted, in
 9. **A second model, Qwen3-32B, gives the same picture** (9 of the 11
    categories so far; [section below](#second-model-qwen3-32b)). It lies at
    almost the same rates as gemma, its self-report is just as weak (AUROC
-   0.40–0.88, nowhere near the 0.98–0.99 the paper found for Qwen3-235B), and
-   outside monitors beat it in 7 of 9 categories.
+   0.40–0.88; the paper reports 0.98–0.99 for Qwen3-235B with simple
+   prompting), and outside monitors beat it in 7 of 9 categories.
 
 ## Methodology
 
@@ -399,9 +399,10 @@ The deceptive act: wrote content contradicting its own stated belief, presented 
   2. Thinking mode off, so Qwen answers straight away like gemma.
   3. Activations saved in float32.
   4. Code and details: [`qwen/README.md`](qwen/README.md).
-- **Why Qwen:** the paper found Qwen3-235B's self-report near perfect
-  (AUROC 0.98–0.99) against gemma's 0.46–0.80. A Qwen at gemma's size tests
-  whether that's a Qwen trait.
+- **Why Qwen:** the paper reports near-ceiling AUROC (0.98–0.99) for
+  Qwen3-235B "with simple prompting", against 0.46–0.80 for gemma-3-27b. Both
+  ranges span its prompt formats, self-report and third-person. A Qwen at
+  gemma's size tests whether that's a Qwen trait.
 - **Coverage** = 9 of 11 categories. ascii-sandbagging and mask-factual are
   still to run: their box failed to download the model, three times on two
   hosts.
@@ -437,7 +438,9 @@ The deceptive act: wrote content contradicting its own stated belief, presented 
      against 9 of 36 for gemma.
   3. Qwen is better on the MASK subtypes and sycophancy A; gemma on alibi,
      unanswerable, capture-the-secret and sycophancy B.
-- **Not the paper's Qwen3-235B** (0.98–0.99). Near-perfect self-report isn't
+- **Not the paper's Qwen3-235B** (0.98–0.99 across its prompt formats).
+  Qwen3-32B gets nowhere near that, neither asked about itself (at most 0.88)
+  nor reading its own transcripts (at most 0.83). Near-ceiling detection isn't
   a Qwen-family trait at 32B.
 - **On the letter, Qwen denies even more than gemma:**
   1. It answers "no" to all four questions on every sycophancy B row, and to
