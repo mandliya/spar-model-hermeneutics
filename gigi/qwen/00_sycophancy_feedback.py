@@ -72,7 +72,11 @@ print(f"{len(df)} rows across {df['gid'].nunique()} distinct arguments")
 
 jobs = list(df["sample_id"])
 if args.limit:
-    jobs = jobs[: args.limit]
+    # qwen: a smoke test takes whole argument groups (the neutral baseline plus
+    # its framed versions), so the follow-up stage has framed rows to work on
+    base = df[df["task"] == "sycophancy_feedback_user_did_not_write"]["gid"]
+    gids = list(dict.fromkeys(g for g in df["gid"] if g in set(base)))[: args.limit]
+    jobs = list(df[df["gid"].isin(gids)]["sample_id"])
 print(f"{len(jobs)} jobs to run")
 
 df = df.set_index("sample_id")

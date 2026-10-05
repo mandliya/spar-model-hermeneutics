@@ -200,6 +200,8 @@ for job in tqdm(jobs):
     work(job)
 
 # --------------------------------------------------------------- results ---
+if not OUT_PATH.exists():   # qwen: no framed rows with a baseline yet - nothing to summarise
+    raise SystemExit("no follow-up rows yet (no framed row has a baseline)")
 res = pd.DataFrame([r for r in read_jsonl(OUT_PATH) if "error" not in r])
 
 
