@@ -53,6 +53,13 @@ for attempt in range(4):
         print("PUSHED results", flush=True); break
     except Exception as e:
         print("push failed:", repr(e)[:200], flush=True)
+log = f"/workspace/job_{job}.log"   # the run log, so progress is visible from anywhere
+if os.path.exists(log):
+    try:
+        HfApi(token=os.environ["HF_TOKEN"]).upload_file(path_or_fileobj=log, path_in_repo=remote(f"boxes/{job}/job.log"),
+                                                       repo_id=REPO, repo_type="dataset", commit_message=f"{job}: log")
+    except Exception as e:
+        print("log push failed:", repr(e)[:200], flush=True)
 PY
 }
 ok_rows () {   # ok_rows <jsonl> -> number of rows without an "error" field
@@ -78,59 +85,64 @@ done
 python -c "from huggingface_hub import snapshot_download; snapshot_download('$MODEL', local_files_only=True)" \
   || { say "!!! model download failed 3 times - nothing run (box left running)"; exit 1; }
 
-# --- one category, start to finish -------------------------------------------
+# --- one category, start to finish ------------------------------------------
+# chain <category> <L>: every stage for one category. L="" = all rows; L=2 =
+# the smoke test (2 rows/jobs through every stage). All stages resume, so the
+# full run continues from the smoke rows.
 followup_cats=""   # categories with the standard follow-ups (for swap + transcripts)
-category () {
-  local c=$1
+chain () {
+  local c=$1 L=$2 lim n fl
+  lim=${L:+--limit $L}; n=${L:+--n $L}
+  fl=${L:+--limit $((L * 4))}   # follow-up jobs are row x question: cover every question for the smoke rows
   case $c in
-    alibi)
-      run python 00_alibi.py --limit 2 && gate $R/alibi_conditions.jsonl 2 "alibi first run" || return 1
-      run python 00_alibi.py || return 1; push
-      run python 00_alibi_selfreport_benchmark.py || return 1 ;;
-    capture_secret)
-      run python 00_capture_secret.py --limit 2 && gate $R/capture_secret_conditions.jsonl 2 "capture first run" || return 1
-      run python 00_capture_secret.py || return 1; push
-      run python 00_capture_secret_selfreport_benchmark.py || return 1 ;;
-    ascii)
-      run python 00_ascii_activations.py --n 2 && gate $R/ascii_results.jsonl 2 "ascii first run" || return 1
-      run python 00_ascii_activations.py || return 1; push
-      run python 00_ascii_reasoning.py || return 1
-      run python 00_ascii_selfreport_benchmark.py || return 1 ;;
-    sycophancy_a)
-      run python 00_sycophancy_answers.py --limit 2 && gate $R/sycophancy_answer_conditions.jsonl 2 "sycophancy A first run" || return 1
-      run python 00_sycophancy_answers.py || return 1; push
-      run python 00_sycophancy_selfreport_benchmark.py || return 1 ;;
-    sycophancy_b)
-      run python 00_sycophancy_feedback.py --limit 2 && gate $R/sycophancy_feedback_conditions.jsonl 2 "sycophancy B first run" || return 1
-      run python 00_sycophancy_feedback.py || return 1; push
-      run python 00_sycophancy_feedback_selfreport_benchmark.py || return 1 ;;
-    mask_factual)
-      run python 00_mask_factual_provided.py --limit 2 && gate $R/mask_factual_provided_conditions.jsonl 2 "mask-factual first run" || return 1
-      run python 00_mask_factual_provided.py || return 1; push
-      run python 00_mask_factual_selfreport_benchmark.py || return 1 ;;
-    unanswerable)
-      run python 00_unanswerable_claims.py --limit 2 && gate $R/unanswerable_claims.jsonl 2 "unanswerable first run" || return 1
-      run python 00_unanswerable_claims.py || return 1; push
-      run python 00_unanswerable_selfreport_benchmark.py || return 1 ;;
-    mask_*)
-      local sub=${c#mask_}
-      run python 12_mask_belief_generate.py --subtypes $sub --limit 2 && gate $R/mask_belief_${sub}_answers.jsonl 2 "MASK $sub first run" || return 1
-      run python 12_mask_belief_generate.py --subtypes $sub || return 1
-      run python 13_mask_belief_judge.py --subtypes $sub || return 1; push
-      run python 14_mask_belief_followups.py --subtypes $sub || return 1
-      run python 02_analyse_mask_belief.py || return 1
-      push; return 0 ;;   # MASK: four questions + P("A") come from 14; no swap test (as for gemma)
+    alibi)          run python 00_alibi.py $lim || return 1; FIRST=alibi_conditions.jsonl
+                    run python 00_alibi_selfreport_benchmark.py $fl || return 1 ;;
+    capture_secret) run python 00_capture_secret.py $lim || return 1; FIRST=capture_secret_conditions.jsonl
+                    run python 00_capture_secret_selfreport_benchmark.py $fl || return 1 ;;
+    ascii)          run python 00_ascii_activations.py $n || return 1; FIRST=ascii_results.jsonl
+                    run python 00_ascii_reasoning.py $fl || return 1
+                    run python 00_ascii_selfreport_benchmark.py $fl || return 1 ;;
+    sycophancy_a)   run python 00_sycophancy_answers.py $lim || return 1; FIRST=sycophancy_answer_conditions.jsonl
+                    run python 00_sycophancy_selfreport_benchmark.py $fl || return 1 ;;
+    sycophancy_b)   run python 00_sycophancy_feedback.py $lim || return 1; FIRST=sycophancy_feedback_conditions.jsonl
+                    run python 00_sycophancy_feedback_selfreport_benchmark.py $fl || return 1 ;;
+    mask_factual)   run python 00_mask_factual_provided.py $lim || return 1; FIRST=mask_factual_provided_conditions.jsonl
+                    run python 00_mask_factual_selfreport_benchmark.py $fl || return 1 ;;
+    unanswerable)   run python 00_unanswerable_claims.py $lim || return 1; FIRST=unanswerable_claims.jsonl
+                    run python 00_unanswerable_selfreport_benchmark.py $fl || return 1 ;;
+    mask_*)         local sub=${c#mask_}
+                    run python 12_mask_belief_generate.py --subtypes $sub $lim || return 1; FIRST=mask_belief_${sub}_answers.jsonl
+                    run python 13_mask_belief_judge.py --subtypes $sub $lim || return 1
+                    run python 14_mask_belief_followups.py --subtypes $sub $fl || return 1
+                    run python 02_analyse_mask_belief.py || return 1
+                    return 0 ;;   # MASK: the four questions + P("A") come from 14; no swap test (as for gemma)
   esac
-  push
-  run python 05_named_cot.py --category $c || return 1
-  case $c in ascii|sycophancy_a|sycophancy_b|mask_factual) run python 04_recapture_fp32.py --category $c ;; esac
-  run python 06_answer_probability.py --categories $c
-  followup_cats="$followup_cats $c"
-  push
+  run python 05_named_cot.py --category $c $lim || return 1
+  case $c in ascii|sycophancy_a|sycophancy_b|mask_factual) run python 04_recapture_fp32.py --category $c $lim || return 1 ;; esac
+  run python 06_answer_probability.py --categories $c ${L:+--limit 5} || return 1
 }
 
+# smoke test: every category, every stage, 2 rows. Any failure aborts the job
+# before the long run (box left running, unless STOP_WHEN_DONE=1).
 for c in $CATS; do
-  category $c && say "--- $c done" || say "!!! $c stopped early (see above); continuing with the rest"
+  say "##### SMOKE TEST: $c"
+  if chain $c 2 && gate $R/$FIRST 2 "$c first run"; then :; else
+    say "!!! SMOKE TEST FAILED for $c - aborting this job before the full run"; push
+    [ "${STOP_WHEN_DONE:-0}" = 1 ] && vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
+    exit 1
+  fi
+done
+say "##### SMOKE TEST PASSED for every category: $CATS"; push
+
+for c in $CATS; do
+  say "##### FULL RUN: $c"
+  if chain $c ""; then
+    case $c in mask_*) ;; *) followup_cats="$followup_cats $c" ;; esac
+    say "--- $c done"
+  else
+    say "!!! $c stopped early (see above); continuing with the rest"
+  fi
+  push
 done
 
 # --- A/B swap on this box's categories (MASK excluded, as for gemma) ----------
