@@ -76,6 +76,15 @@ are saved with every response), not estimates.
 
 ## Experiment rules
 
+- **No open-weight model is ever run through an API.** Every open-weight run
+  (the model under test, an open-weight monitor, anything) happens locally on
+  the rented GPU instance with Hugging Face transformers. OpenRouter is only
+  for closed models (the Claude judge, Gemini, GPT). The model under test
+  generates greedy, **one conversation at a time** (no batching). Every current
+  gemma result, ascii included, was made this way (temperature-0 rebuild, 24
+  Sept 2026); scripts that call it via OpenRouter (e.g.
+  `ascii-sandbagging/00_ascii.py`) are leftovers. Before saying how a result
+  was produced, check which script writes that results file.
 - Ground truth comes from a live, independently verifiable check per category
   (capability proof, neutral-vs-pressured rerun, belief elicitation...), never
   from the dataset's `did_lie`.
