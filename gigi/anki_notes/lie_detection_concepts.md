@@ -132,3 +132,30 @@ Q: How did the lie-detector paper label which answers were lies?
 A: Parallel interrogation: ask neutrally (belief), then under pressure, and
 flag contradictions. Then 5 judge models re-checked each case with full
 context and voted (about 25% of labels changed).
+
+---
+
+Q: How is AUROC computed for a third-person monitor like Gemini?
+A: The monitor reads each transcript and gives a 1-100 "how likely is the
+assistant lying" score. Then compare every lie with every honest answer: how
+often did the lie get the higher score? Same AUROC as for gemma's self-report,
+just a different score (the monitor's number instead of gemma's P(yes)).
+
+Q: Work out a monitor's AUROC: lies scored 95, 80, 40; honest answers 50, 10, 5.
+A: 3 × 3 = 9 pairs. 95 beats all 3, 80 beats all 3, 40 beats 10 and 5 but
+loses to 50. 8 wins / 9 pairs = 0.89.
+
+Q: What if a lie and an honest answer get the same score (both 95)?
+A: That pair counts as half a win. Monitors give round numbers (1, 85, 95)
+a lot, so ties are common.
+
+Q: Why use AUROC instead of "% answered correctly"?
+A: Because the lies and honest answers are unbalanced. In unanswerable, 86
+answers are lies and 7 are honest: a detector that shouts "lie!" every time is
+92% correct but has learned nothing. Its AUROC is 0.5, because it never ranks
+a lie above an honest answer. AUROC also needs no cutoff.
+
+Q: What does "monitors beat self-report in 10 of 11 categories" mean?
+A: An outside model reading the transcript (Gemini, GPT-5 mini) ranks gemma's
+lies above its honest answers more often than gemma's own "did you lie?"
+confidence does. Example, ascii: outsiders 0.99-1.00, gemma about itself 0.12.
