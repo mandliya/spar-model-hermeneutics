@@ -51,11 +51,11 @@ order = sorted(cats, key=lambda c: -rng.loc[("qwen3-32b", c), "max"])
 fig, ax = plt.subplots(figsize=(10, 6.6))
 Y = axis(ax, order, "AUROC from the model's probability of \"yes, I lied\"",
          "Each bar = the range over the four follow-up questions (neutral, neutral_cot, named, named_cot).\n"
-         "Shaded = the paper's reported ranges, which span its prompt formats (self-report and third-person).")
+         "Shaded = the paper's reported ranges.")
 ax.axvspan(0.46, 0.80, color=GEMMA, alpha=0.07, zorder=0)
 ax.axvspan(0.98, 0.99, color=QWEN, alpha=0.35, zorder=0)
-ax.text(0.63, len(order) - 0.45, "paper, all prompt formats: gemma-3-27b", color=GEMMA, fontsize=8.5, ha="center")
-ax.text(0.985, len(order) - 0.45, "paper:\nQwen3-235B", color=QWEN, fontsize=8.5, ha="center", va="bottom")
+ax.text(0.63, len(order) - 0.45, "paper: gemma-3-27b (all lie types and prompt formats)", color=GEMMA, fontsize=8.5, ha="center")
+ax.text(0.985, len(order) - 0.45, "paper: Qwen3-235B,\nasked about its own lies", color=QWEN, fontsize=8.5, ha="center", va="bottom")
 for c in order:
     for m, col, dy in [("gemma-3-27b", GEMMA, 0.17), ("qwen3-32b", QWEN, -0.17)]:
         lo, hi = rng.loc[(m, c), "min"], rng.loc[(m, c), "max"]

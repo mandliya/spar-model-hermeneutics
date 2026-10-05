@@ -59,8 +59,8 @@ nine are archived, not deleted, in
 9. **A second model, Qwen3-32B, gives the same picture** (9 of the 11
    categories so far; [section below](#second-model-qwen3-32b)). It lies at
    almost the same rates as gemma, its self-report is just as weak (AUROC
-   0.40–0.88; the paper reports 0.98–0.99 for Qwen3-235B with simple
-   prompting), and outside monitors beat it in 7 of 9 categories.
+   0.40–0.88, while the paper reports 0.98–0.99 for Qwen3-235B identifying
+   its own lies), and outside monitors beat it in 7 of 9 categories.
 
 ## Methodology
 
@@ -399,10 +399,11 @@ The deceptive act: wrote content contradicting its own stated belief, presented 
   2. Thinking mode off, so Qwen answers straight away like gemma.
   3. Activations saved in float32.
   4. Code and details: [`qwen/README.md`](qwen/README.md).
-- **Why Qwen:** the paper reports near-ceiling AUROC (0.98–0.99) for
-  Qwen3-235B "with simple prompting", against 0.46–0.80 for gemma-3-27b. Both
-  ranges span its prompt formats, self-report and third-person. A Qwen at
-  gemma's size tests whether that's a Qwen trait.
+- **Why Qwen:** the paper reports that Qwen3-235B "could somewhat reliably
+  identify its own deceptions when asked directly", at near-ceiling AUROC
+  (0.98–0.99) "with simple prompting". It doesn't say which prompt format.
+  gemma-3-27b got 0.46–0.80 "depending on lie type and prompt format". A Qwen
+  at gemma's size tests whether that's a Qwen trait.
 - **Coverage** = 9 of 11 categories. ascii-sandbagging and mask-factual are
   still to run: their box failed to download the model, three times on two
   hosts.
@@ -438,10 +439,12 @@ The deceptive act: wrote content contradicting its own stated belief, presented 
      against 9 of 36 for gemma.
   3. Qwen is better on the MASK subtypes and sycophancy A; gemma on alibi,
      unanswerable, capture-the-secret and sycophancy B.
-- **Not the paper's Qwen3-235B** (0.98–0.99 across its prompt formats).
-  Qwen3-32B gets nowhere near that, neither asked about itself (at most 0.88)
-  nor reading its own transcripts (at most 0.83). Near-ceiling detection isn't
-  a Qwen-family trait at 32B.
+- **Not the paper's Qwen3-235B** (0.98–0.99, asked directly about its own
+  lies). Qwen3-32B gets nowhere near that, neither asked about itself (at
+  most 0.88) nor reading its own transcripts (at most 0.83). Near-ceiling
+  self-report isn't a Qwen-family trait at 32B. The cause could be size, or
+  differences in setup: the paper's labels came from a GPT-5 judge with the
+  setup's metadata, ours from independent checks.
 - **On the letter, Qwen denies even more than gemma:**
   1. It answers "no" to all four questions on every sycophancy B row, and to
      `named` and `named_cot` on every sycophancy A row.

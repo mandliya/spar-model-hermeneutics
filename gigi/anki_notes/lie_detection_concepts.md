@@ -219,3 +219,10 @@ lie?" about its own transcripts, trained on half of 12 lie types and tested
 on the other half. Familiar lie types: AUROC 0.60 -> 0.95. New lie types:
 stuck at 0.70-0.75, barely above just prompting. It's transfer across lie
 types within one model, not from small models to big ones.
+
+Q: Is Qwen3-235B's self-report near perfect in the lie-detector paper? Is ours?
+A: In the paper, yes: it "could somewhat reliably identify its own deceptions
+when asked directly", AUROC 0.98-0.99 with simple prompting (gemma-3-27b:
+0.46-0.80). Ours is no: Qwen3-32B reaches at most 0.88 asked about itself,
+in gemma's range. Possible reasons: size (235B vs 32B), or the paper's
+labels (GPT-5 judge with metadata) vs ours (independent checks).
