@@ -45,6 +45,7 @@ import torch
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from src.common import in_shard as _in_shard
 from src.common import load_tokenizer as _load_tokenizer
 from src.common import (RESULTS, TARGET_MODEL, TEMPERATURE, load_config,
                         load_done, append, read_jsonl, to_messages,
@@ -83,6 +84,7 @@ print(f"{len(df)} rows  ({(df.guilt == 'FALSE_ALIBI').sum()} guilty, "
 
 done = load_done(OUT_PATH, key="sample_id")
 todo = df[~df["sample_id"].isin(done)]
+todo = todo[todo["sample_id"].map(_in_shard)]   # other_models: this box's slice (SHARD=k/n)
 if args.limit:      # after the done-filter, so a smoke test always hits new rows
     todo = todo.head(args.limit)
 print(f"{len(done)} already done, {len(todo)} to go")

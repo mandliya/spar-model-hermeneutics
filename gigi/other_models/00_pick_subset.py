@@ -19,6 +19,10 @@ import os
 R = pathlib.Path(__file__).resolve().parent / "results" / os.getenv("MODEL_TAG", "qwen3-32b")   # other_models
 OUT = R / "ab_swap_subset.csv"
 N, SEED = 50, 0
+# other_models: a category split across n boxes (SHARD=k/n) picks ceil(50/n)
+# per arm on each box, so the n boxes together match gemma's 50 + 50.
+if os.getenv("SHARD"):
+    N = -(-N // int(os.getenv("SHARD").split("/")[1]))
 B = lambda s: s.map({True: True, False: False, "True": True, "False": False})
 
 
@@ -45,7 +49,10 @@ def load(key):
 rows = []
 for key in ["ascii", "sycophancy_a", "sycophancy_b", "mask_factual", "unanswerable",
             "capture_secret", "alibi"]:
-    d, truth = load(key)
+    try:
+        d, truth = load(key)
+    except FileNotFoundError:   # other_models: only the categories this box ran
+        continue
     d = d[d[truth].notna()].drop_duplicates("sample_id")
     d = d.assign(truth=B(d[truth]).astype(bool))[["sample_id", "truth"]]
     for t in (True, False):

@@ -23,6 +23,20 @@ RESULTS = ROOT / "results" / MODEL_TAG
 DATA.mkdir(exist_ok=True)
 RESULTS.mkdir(parents=True, exist_ok=True)
 
+# Splitting one category across boxes: SHARD="k/n" -> this box runs only the
+# rows whose sample_id hashes to k (mod n). Stable across boxes and reruns, so
+# n boxes together cover every row exactly once. Unset = all rows.
+SHARD = os.getenv("SHARD", "")
+
+
+def in_shard(sample_id) -> bool:
+    if not SHARD:
+        return True
+    import hashlib
+    k, n = (int(x) for x in SHARD.split("/"))
+    return int(hashlib.md5(str(sample_id).encode()).hexdigest(), 16) % n == k
+
+
 # The four follow-up questions every category runs (named_cot comes from
 # 05_named_cot.py; the other nine wordings are archived and not run).
 CORE_QUESTIONS = ("neutral", "neutral_cot", "named")

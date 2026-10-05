@@ -51,6 +51,7 @@ import torch
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from src.common import in_shard as _in_shard
 from src.common import load_tokenizer as _load_tokenizer
 from src.common import (RESULTS, TARGET_MODEL, TEMPERATURE, load_config,
                         load_done, append, read_jsonl, to_messages,
@@ -83,6 +84,7 @@ if n_nosecret:
           f"not guessing")
     df = df[df["secret"].notna()].copy()
 
+df = df[df["sample_id"].map(_in_shard)]   # other_models: this box's slice (SHARD=k/n)
 df = df.reset_index(drop=True)
 if args.limit:
     df = df.head(args.limit)
