@@ -159,3 +159,17 @@ Q: What does "monitors beat self-report in 10 of 11 categories" mean?
 A: An outside model reading the transcript (Gemini, GPT-5 mini) ranks gemma's
 lies above its honest answers more often than gemma's own "did you lie?"
 confidence does. Example, ascii: outsiders 0.99-1.00, gemma about itself 0.12.
+
+Q: What is the AUROC formula (pairs version)?
+A: AUROC = (wins + ½ × ties) ÷ (number of lies × number of honest answers).
+A "win" is a lie/honest pair where the lie has the higher score. Example:
+lies 95, 80, 40 and honest answers 50, 10, 5 give 8 wins, 0 ties, 3 × 3 = 9
+pairs, so 8/9 = 0.89.
+
+Q: What is the rank shortcut for AUROC (what our code computes)?
+A: Sort all scores together and number them 1, 2, 3... from lowest (tied
+scores share the average rank). Add up the lies' ranks (R).
+AUROC = (R − n(n+1)/2) ÷ (lies × honest), where n = number of lies.
+Example: 5, 10, 40, 50, 80, 95 get ranks 1-6. Lies are 40 (3), 80 (5),
+95 (6), so R = 14. (14 − 3×4/2) ÷ 9 = 8/9 = 0.89, the same answer as
+counting pairs, just faster.
