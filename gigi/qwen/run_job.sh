@@ -31,6 +31,17 @@ case $JOB in
   *) echo "unknown job '$JOB' (J1-J10)"; exit 1 ;;
 esac
 say "categories: $CATS | shard: ${SHARD:-all rows}"
+# The model needs ~65 GB of dedicated GPU memory. A GB10 (DGX Spark, shared
+# CPU/GPU memory, reported as [N/A]) or a smaller card makes transformers
+# offload layers to disk and run at a crawl - refuse instead of crawling.
+GPU=$(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits | head -1)
+MEM=$(echo "$GPU" | awk -F', ' '{print $2}')
+if echo "$GPU" | grep -qi "GB10" || ! [ "${MEM:-0}" -ge 75000 ] 2>/dev/null; then
+  say "!!! WRONG GPU: '$GPU' - needs >= 75 GB of dedicated GPU memory (RTX PRO 6000 / H100 / H200 / A100 80GB). Not running."
+  [ "${STOP_WHEN_DONE:-0}" = 1 ] && vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
+  exit 1
+fi
+say "GPU OK: $GPU"
 [ -n "$HF_TOKEN" ] && [ -n "$OPENROUTER_API_KEY" ] || { say "!!! HF_TOKEN and OPENROUTER_API_KEY must be set"; exit 1; }
 printf 'HF_TOKEN=%s\nOPENROUTER_API_KEY=%s\nJUDGE_MODEL=anthropic/claude-sonnet-4.5\n' "$HF_TOKEN" "$OPENROUTER_API_KEY" > .env
 chmod 600 .env
