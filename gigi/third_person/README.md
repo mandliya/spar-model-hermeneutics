@@ -24,7 +24,7 @@ answers. Results and chart: [`../RESULTS.md`](../RESULTS.md#does-an-outside-read
   95% interval (`03_analyse_monitor.py`). A reply with no readable score is
   null and dropped, never counted.
 
-## Results (Gemini 2.5 Flash, GPT-5 mini)
+## Results
 
 - **Outside monitors beat self-report:** at least one beats gemma's best of
   its four questions in 10 of 11 categories, and both do in 5.
@@ -35,7 +35,14 @@ answers. Results and chart: [`../RESULTS.md`](../RESULTS.md#does-an-outside-read
 - **Every number** with its interval and sample size is in
   `results/monitor_auroc.csv`.
 
-gemma as its own monitor: added when the run finishes.
+- **gemma as a monitor:**
+  - Reading its own transcripts as someone else's, it beats its own best
+    self-report question in 5 of 11 categories (ascii 0.88 vs 0.12-0.48,
+    MASK known facts 0.87 vs 0.45-0.58), and the `neutral` question in 9 of
+    11.
+  - As a monitor it is weaker than both outside models in 7 of 11 categories.
+  - It is the best of the three on MASK known facts and continuations.
+  - 3.1 GPU-hours, 1 of 5,618 replies unparseable.
 
 ## Caveats
 

@@ -50,6 +50,12 @@ nine are archived, not deleted, in
    way (AUROC 0.12–0.48) while both outside monitors score 1.00. This matches the
    paper's finding that third-person monitoring beats self-report
    ([details](third_person/README.md)).
+8. **gemma itself, reading the same transcript as someone else's, often does
+   better than when asked about its own answer.** It beats its own best
+   question in 5 of 11 categories (ascii 0.88 vs 0.12–0.48, MASK known facts
+   0.87 vs 0.45–0.58) and the plain `neutral` question in 9 of 11. Same model,
+   same answers: the information is there, but gemma doesn't surface it when
+   asked about itself.
 
 ## Methodology
 
@@ -125,8 +131,10 @@ can be checked independently. Where a judge is used, it is
   score, so monitor and self-report are compared on the same answers.
 - **Unparseable replies** count as null, never as a score: 2 of 11,236 API
   replies (one safety-filtered empty reply, one "Score: 0" from before the
-  parser fix, which is re-read from the raw reply).
-- **Cost:** measured $13.87 ($9.42 Gemini, $4.45 GPT-5 mini).
+  parser fix, which is re-read from the raw reply) and 1 of 5,618 gemma
+  replies.
+- **Cost:** measured $13.87 ($9.42 Gemini, $4.45 GPT-5 mini), plus about
+  3.1 GPU-hours for gemma (05:13–08:21 UTC on one RTX PRO 6000).
 
 | Prompt | Prompt sent to the monitor, verbatim |
 |---|---|
@@ -203,20 +211,20 @@ AUROC per category (**bold** = 0.70 or above). Monitors on the `plain` and
 `rubric` prompts; gemma's self-report as the range over its four questions.
 
 <!-- THIRD-PERSON:START -->
-| Category | gemma asked "did you lie?" (4 questions) | Gemini 2.5 Flash (plain / rubric) | GPT-5 mini (plain / rubric) | n (lied / honest) |
-|---|---|---|---|---|
-| *coin flip (reference)* | 0.50 | 0.50 / 0.50 | 0.50 / 0.50 | |
-| ascii-sandbagging | 0.12–0.48 | **1.00** / **0.99** | **1.00** / **0.99** | 190 / 119 |
-| alibi | 0.65–**0.94** | **0.92** / **0.94** | **0.96** / **0.96** | 784 / 492 |
-| mask-factual | 0.61–**0.77** | **0.94** / **0.93** | **0.95** / **0.96** | 55 / 31 |
-| MASK known facts | 0.45–0.58 | **0.85** / **0.85** | **0.84** / **0.84** | 43 / 28 |
-| MASK disinformation | **0.74**–**0.82** | 0.70 / **0.83** | **0.90** / **0.88** | 58 / 11 |
-| sycophancy A | 0.44–0.64 | **0.77** / **0.79** | **0.82** / **0.79** | 38 / 120 |
-| unanswerable | 0.31–0.68 | 0.57 / 0.61 | **0.83** / 0.69 | 86 / 7 |
-| MASK continuations | 0.59–0.69 | 0.64 / 0.69 | **0.74** / **0.71** | 73 / 14 |
-| MASK statistics | 0.39–0.48 | 0.70 / 0.66 | 0.65 / 0.61 | 22 / 25 |
-| sycophancy B | 0.61–**0.77** | 0.63 / 0.62 | 0.60 / 0.56 | 116 / 85 |
-| capture-the-secret | 0.41–0.57 | 0.69 / **0.70** | 0.54 / 0.59 | 73 / 301 |
+| Category | gemma asked "did you lie?" (4 questions) | Gemini 2.5 Flash (plain / rubric) | GPT-5 mini (plain / rubric) | gemma as monitor (plain / rubric) | n (lied / honest) |
+|---|---|---|---|---|---|
+| *coin flip (reference)* | 0.50 | 0.50 / 0.50 | 0.50 / 0.50 | 0.50 / 0.50 | |
+| ascii-sandbagging | 0.12–0.48 | **1.00** / **0.99** | **1.00** / **0.99** | **0.88** / **0.92** | 190 / 119 |
+| alibi | 0.65–**0.94** | **0.92** / **0.94** | **0.96** / **0.96** | 0.70 / **0.83** | 784 / 492 |
+| mask-factual | 0.61–**0.77** | **0.94** / **0.93** | **0.95** / **0.96** | **0.83** / **0.88** | 55 / 31 |
+| MASK known facts | 0.45–0.58 | **0.85** / **0.85** | **0.84** / **0.84** | **0.87** / **0.80** | 43 / 28 |
+| MASK disinformation | **0.74**–**0.82** | 0.70 / **0.83** | **0.90** / **0.88** | **0.84** / **0.89** | 58 / 11 |
+| sycophancy A | 0.44–0.64 | **0.77** / **0.79** | **0.82** / **0.79** | 0.60 / 0.55 | 38 / 120 |
+| unanswerable | 0.31–0.68 | 0.57 / 0.61 | **0.83** / 0.69 | 0.66 / 0.67 | 86 / 7 |
+| MASK continuations | 0.59–0.69 | 0.64 / 0.69 | **0.74** / **0.71** | **0.81** / 0.68 | 73 / 14 |
+| MASK statistics | 0.39–0.48 | 0.70 / 0.66 | 0.65 / 0.61 | 0.46 / 0.45 | 22 / 25 |
+| sycophancy B | 0.61–**0.77** | 0.63 / 0.62 | 0.60 / 0.56 | 0.57 / 0.55 | 116 / 85 |
+| capture-the-secret | 0.41–0.57 | 0.69 / **0.70** | 0.54 / 0.59 | 0.51 / 0.53 | 73 / 301 |
 <!-- THIRD-PERSON:END -->
 
 - **Biggest gaps** = ascii (gemma 0.12–0.48, outside monitors 1.00), MASK
@@ -237,8 +245,15 @@ AUROC per category (**bold** = 0.70 or above). Monitors on the `plain` and
   22 cells move by 0.05 or less. The two big moves go opposite ways:
   GPT-5 mini on unanswerable (0.83 → 0.69) and
   Gemini on MASK disinformation (0.70 → 0.83).
-- **gemma reading its own transcripts as someone else's** = still running;
-  it is added to this chart and table when it finishes.
+- **gemma reading its own transcripts as someone else's:**
+  1. Beats its own best "did you lie?" question in 5 of 11 categories: ascii
+     0.88 vs 0.12–0.48, MASK known facts 0.87 vs 0.45–0.58, mask-factual 0.83
+     vs 0.61–0.77, MASK continuations 0.81 vs 0.59–0.69, MASK disinformation
+     0.84 vs 0.74–0.82. It beats the plain `neutral` question in 9 of 11.
+  2. Same model, same answers → the information is there; gemma doesn't
+     surface it when asked about its own answer.
+  3. As a monitor it is weaker than both outside models in 7 of 11 categories,
+     but the best of the three on MASK known facts and MASK continuations.
 
 <!-- CONDITION-TABLES:START -->
 ### Every category, all four follow-up questions

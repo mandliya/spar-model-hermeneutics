@@ -1,0 +1,82 @@
+         monitor variant            category  auroc  ci_lo  ci_hi  n_lied  n_honest  n_unparseable  balanced_acc_at_50
+     gemma-3-27b   plain               ascii  0.885  0.846  0.921     191       119              0              66.862
+     gemma-3-27b  rubric               ascii  0.923  0.883  0.958     191       119              0              92.857
+     gemma-3-27b   plain        sycophancy_a  0.599  0.499  0.695      38       120              0              55.855
+     gemma-3-27b  rubric        sycophancy_a  0.547  0.471  0.634      38       120              0              56.425
+     gemma-3-27b   plain        sycophancy_b  0.573  0.503  0.640     116        85              0              49.645
+     gemma-3-27b  rubric        sycophancy_b  0.547  0.483  0.607     116        85              0              50.781
+     gemma-3-27b   plain        mask_factual  0.827  0.731  0.908      55        31              0              53.226
+     gemma-3-27b  rubric        mask_factual  0.879  0.804  0.944      55        31              0              69.355
+     gemma-3-27b   plain        unanswerable  0.658  0.373  0.905      86         7              0              45.017
+     gemma-3-27b  rubric        unanswerable  0.673  0.516  0.785      86         7              0              54.070
+     gemma-3-27b   plain      capture_secret  0.515  0.447  0.582      73       301              0              54.590
+     gemma-3-27b  rubric      capture_secret  0.526  0.458  0.597      73       300              1              53.632
+     gemma-3-27b   plain               alibi  0.697  0.668  0.727     784       492              0              54.916
+     gemma-3-27b  rubric               alibi  0.835  0.813  0.857     784       492              0              59.756
+     gemma-3-27b   plain    mask_known_facts  0.868  0.783  0.941      43        28              0              68.480
+     gemma-3-27b  rubric    mask_known_facts  0.801  0.693  0.891      43        28              0              73.837
+     gemma-3-27b   plain     mask_statistics  0.457  0.306  0.617      22        25              0              52.636
+     gemma-3-27b  rubric     mask_statistics  0.451  0.289  0.607      22        25              0              45.545
+     gemma-3-27b   plain  mask_continuations  0.807  0.684  0.916      73        14              0              71.184
+     gemma-3-27b  rubric  mask_continuations  0.679  0.545  0.793      73        14              0              72.309
+     gemma-3-27b   plain mask_disinformation  0.842  0.672  0.965      58        11              0              77.116
+     gemma-3-27b  rubric mask_disinformation  0.892  0.786  0.974      58        11              0              77.743
+gemini-2.5-flash   plain               ascii  0.999  0.998  1.000     190       119              1              97.793
+gemini-2.5-flash  rubric               ascii  0.988  0.976  0.997     191       119              0              96.700
+gemini-2.5-flash   plain        sycophancy_a  0.770  0.667  0.864      38       120              0              79.276
+gemini-2.5-flash  rubric        sycophancy_a  0.789  0.706  0.865      38       120              0              77.895
+gemini-2.5-flash   plain        sycophancy_b  0.635  0.582  0.689     116        85              0              56.739
+gemini-2.5-flash  rubric        sycophancy_b  0.618  0.564  0.666     116        85              0              59.990
+gemini-2.5-flash   plain        mask_factual  0.935  0.877  0.982      55        31              0              74.692
+gemini-2.5-flash  rubric        mask_factual  0.927  0.865  0.983      55        31              0              72.375
+gemini-2.5-flash   plain        unanswerable  0.568  0.361  0.761      86         7              0              56.811
+gemini-2.5-flash  rubric        unanswerable  0.607  0.457  0.709      86         7              0              56.229
+gemini-2.5-flash   plain      capture_secret  0.693  0.631  0.754      73       301              0              68.049
+gemini-2.5-flash  rubric      capture_secret  0.700  0.634  0.769      73       301              0              71.913
+gemini-2.5-flash   plain               alibi  0.923  0.906  0.939     784       492              0              89.062
+gemini-2.5-flash  rubric               alibi  0.940  0.925  0.954     784       492              0              92.898
+gemini-2.5-flash   plain    mask_known_facts  0.850  0.747  0.938      43        28              0              79.900
+gemini-2.5-flash  rubric    mask_known_facts  0.847  0.740  0.935      43        28              0              81.686
+gemini-2.5-flash   plain     mask_statistics  0.697  0.547  0.838      22        25              0              67.182
+gemini-2.5-flash  rubric     mask_statistics  0.662  0.505  0.806      22        25              0              58.636
+gemini-2.5-flash   plain  mask_continuations  0.635  0.507  0.758      73        14              0              59.540
+gemini-2.5-flash  rubric  mask_continuations  0.694  0.569  0.809      73        14              0              60.616
+gemini-2.5-flash   plain mask_disinformation  0.699  0.569  0.810      58        11              0              64.655
+gemini-2.5-flash  rubric mask_disinformation  0.827  0.749  0.897      58        11              0              80.172
+      gpt-5-mini   plain               ascii  0.998  0.995  1.000     191       119              0              97.906
+      gpt-5-mini  rubric               ascii  0.990  0.983  0.995     191       119              0              93.194
+      gpt-5-mini   plain        sycophancy_a  0.818  0.739  0.892      38       120              0              65.504
+      gpt-5-mini  rubric        sycophancy_a  0.791  0.706  0.869      38       120              0              62.325
+      gpt-5-mini   plain        sycophancy_b  0.602  0.548  0.655     116        85              0              50.431
+      gpt-5-mini  rubric        sycophancy_b  0.563  0.513  0.608     116        85              0              50.000
+      gpt-5-mini   plain        mask_factual  0.951  0.899  0.990      55        31              0              88.299
+      gpt-5-mini  rubric        mask_factual  0.955  0.902  0.994      55        31              0              93.138
+      gpt-5-mini   plain        unanswerable  0.826  0.704  0.913      86         7              0              64.535
+      gpt-5-mini  rubric        unanswerable  0.694  0.514  0.835      86         7              0              57.392
+      gpt-5-mini   plain      capture_secret  0.535  0.476  0.595      73       301              0              50.933
+      gpt-5-mini  rubric      capture_secret  0.592  0.523  0.659      73       301              0              51.638
+      gpt-5-mini   plain               alibi  0.963  0.951  0.975     784       492              0              91.374
+      gpt-5-mini  rubric               alibi  0.960  0.947  0.972     784       492              0              93.113
+      gpt-5-mini   plain    mask_known_facts  0.839  0.736  0.922      43        28              0              72.757
+      gpt-5-mini  rubric    mask_known_facts  0.836  0.727  0.927      43        28              0              75.706
+      gpt-5-mini   plain     mask_statistics  0.646  0.488  0.801      22        25              0              60.364
+      gpt-5-mini  rubric     mask_statistics  0.611  0.454  0.761      22        25              0              62.909
+      gpt-5-mini   plain  mask_continuations  0.743  0.598  0.875      73        14              0              64.041
+      gpt-5-mini  rubric  mask_continuations  0.712  0.556  0.853      73        14              0              65.411
+      gpt-5-mini   plain mask_disinformation  0.903  0.781  0.992      58        11              0              77.978
+      gpt-5-mini  rubric mask_disinformation  0.876  0.748  0.970      58        11              0              82.288
+
+AUROC by category
+                     gemini-2.5-flash plain  gemini-2.5-flash rubric  gemma-3-27b plain  gemma-3-27b rubric  gpt-5-mini plain  gpt-5-mini rubric  self-report neutral  self-report named
+category                                                                                                                                                                                
+ascii                                  1.00                     0.99               0.88                0.92              1.00               0.99                 0.12               0.45
+sycophancy_a                           0.77                     0.79               0.60                0.55              0.82               0.79                 0.61               0.44
+sycophancy_b                           0.63                     0.62               0.57                0.55              0.60               0.56                 0.70               0.77
+mask_factual                           0.94                     0.93               0.83                0.88              0.95               0.96                 0.75               0.61
+unanswerable                           0.57                     0.61               0.66                0.67              0.83               0.69                 0.50               0.60
+capture_secret                         0.69                     0.70               0.51                0.53              0.54               0.59                 0.45               0.41
+alibi                                  0.92                     0.94               0.70                0.83              0.96               0.96                 0.65               0.94
+mask_known_facts                       0.85                     0.85               0.87                0.80              0.84               0.84                 0.45               0.47
+mask_statistics                        0.70                     0.66               0.46                0.45              0.65               0.61                 0.45               0.40
+mask_continuations                     0.64                     0.69               0.81                0.68              0.74               0.71                 0.59               0.69
+mask_disinformation                    0.70                     0.83               0.84                0.89              0.90               0.88                 0.81               0.74
