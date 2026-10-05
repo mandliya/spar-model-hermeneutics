@@ -89,12 +89,19 @@ pip install -q "transformers==5.17.0" accelerate pandas pyarrow fsspec huggingfa
 python -c 'import transformers, torch; print("transformers", transformers.__version__, "| torch", torch.__version__, "| cuda", torch.cuda.is_available())'
 MODEL=$(python -c "from src import common as C; print(C.TARGET_MODEL)")
 say "=== setup: $MODEL"
-for attempt in 1 2 3; do
+for attempt in 1 2 3 4 5; do
+  # from attempt 2: plain HTTP instead of HF's xet transfer (J6 hit xet "CAS Client
+  # Error ... error decoding response body" three times in a row)
+  [ $attempt -ge 2 ] && export HF_HUB_DISABLE_XET=1
   python -c "from huggingface_hub import snapshot_download; print('DOWNLOADED', snapshot_download('$MODEL'))" && break
-  say "download attempt $attempt failed, retrying"; sleep 20
+  say "download attempt $attempt failed, retrying"; sleep 30
 done
-python -c "from huggingface_hub import snapshot_download; snapshot_download('$MODEL', local_files_only=True)" \
-  || { say "!!! model download failed 3 times - nothing run (box left running)"; exit 1; }
+if ! python -c "from huggingface_hub import snapshot_download; snapshot_download('$MODEL', local_files_only=True)"; then
+  say "!!! model download failed 5 times - nothing run"
+  push
+  [ "${STOP_WHEN_DONE:-0}" = 1 ] && { say "stopping the box (STOP_WHEN_DONE=1)"; vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"; }
+  exit 1
+fi
 
 # --- one category, start to finish ------------------------------------------
 # chain <category> <L>: every stage for one category. L="" = all rows; L=2 =
