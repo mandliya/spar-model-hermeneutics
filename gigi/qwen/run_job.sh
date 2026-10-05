@@ -30,7 +30,7 @@ case $JOB in
   J10) CATS="mask_disinformation" ;;
   *) echo "unknown job '$JOB' (J1-J10)"; exit 1 ;;
 esac
-say "categories: $CATS | shard: ${SHARD:-all rows}"
+say "categories: $CATS | shard: ${SHARD:-all rows} | Vast instance: ${CONTAINER_ID:-unknown}"
 # The model needs ~65 GB of dedicated GPU memory. A GB10 (DGX Spark, shared
 # CPU/GPU memory, reported as [N/A]) or a smaller card makes transformers
 # offload layers to disk and run at a crawl - refuse instead of crawling.

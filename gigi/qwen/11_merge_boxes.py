@@ -17,18 +17,24 @@ import os
 import pathlib
 
 import pandas as pd
-from huggingface_hub import snapshot_download
+from huggingface_hub import HfApi, hf_hub_download
 
 from src import common as C
 from src.hf_sync import REPO, remote
 
 pfx = remote("boxes/")
-local = pathlib.Path(snapshot_download(REPO, repo_type="dataset", allow_patterns=[pfx + "*/results/*"],
-                                       token=os.environ.get("HF_TOKEN")))
+# one listing of the boxes folder, then one small download per file (a bulk
+# snapshot_download of this large repo hung for 35 min on 5 Oct)
+api = HfApi(token=os.environ.get("HF_TOKEN"))
+paths = [e.path for e in api.list_repo_tree(REPO, path_in_repo=pfx.rstrip("/"), repo_type="dataset", recursive=True)
+         if "/results/" in getattr(e, "path", "") and hasattr(e, "size")]
 files = collections.defaultdict(list)
-for p in sorted((local / pfx).glob("*/results/*")):
-    files[p.name].append(p)
-print(f"{len(files)} distinct files from {len({p.parent.parent.name for v in files.values() for p in v})} boxes")
+for i, rp in enumerate(sorted(paths)):
+    p = pathlib.Path(hf_hub_download(REPO, rp, repo_type="dataset", token=os.environ.get("HF_TOKEN")))
+    files[pathlib.Path(rp).name].append(p)
+    if i % 25 == 0:
+        print(f"downloaded {i + 1}/{len(paths)}", flush=True)
+print(f"{len(files)} distinct files from {len({rp.split('/')[3] for rp in paths})} boxes")
 
 for name, paths in sorted(files.items()):
     out = C.RESULTS / name
