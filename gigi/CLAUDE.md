@@ -82,6 +82,15 @@ are saved with every response), not estimates.
 
 ## Experiment rules
 
+- **Use the paper's exact text.** Before writing any prompt, rubric,
+  template or procedure borrowed from the paper, read the whole paper,
+  appendices included. Download the page and search it; a summary isn't
+  enough. Use its wording, transcript format and output format verbatim.
+  The paper publishes all four lie-report prompts ("Four Prompts to Report
+  Lies") and the full rubric (Appendix A2). Never claim something is
+  unpublished without reading to the end. Mark every deliberate deviation in
+  the docs.
+
 - **No open-weight model is ever run through an API.** Every open-weight run
   (the model under test, an open-weight monitor, anything) happens locally on
   the rented GPU instance with Hugging Face transformers. OpenRouter is only

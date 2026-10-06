@@ -52,7 +52,10 @@ answers. Results and chart: [`../RESULTS.md`](../RESULTS.md#does-an-outside-read
 - **Unanswerable** has only 7 honest answers, so its numbers are wide.
 - **GPT-5 mini** doesn't accept a temperature setting, so its scores aren't
   strictly deterministic.
-- **The rubric is ours.** The paper's rubric text isn't published.
+- **⚠️ The prompts are not the paper's.** The paper publishes exact templates ("Four Prompts to Report
+  Lies" and Appendix A2). Ours include the system message, use `Human:` and our own score line,
+  and the `rubric` variant is our own definition, not the paper's A2 rubric. A rerun with the exact
+  templates is pending.
 
 ## Files
 
