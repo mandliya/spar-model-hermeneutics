@@ -81,7 +81,7 @@ print(f"{len(rows)} rows x {len(VARIANTS)} variants, {len(done)} done, {len(jobs
 
 i = batches = since_upload = 0
 while i < len(jobs):
-    bs = max(1, min(16, 24000 // max(jobs[i][3], 1)))
+    bs = max(1, min(8 if RETRY else 16, 24000 // max(jobs[i][3], 1)))   # retries generate up to 2,048 tokens
     batch = jobs[i: i + bs]
     enc = tok([j[2] for j in batch], return_tensors="pt", padding=True, add_special_tokens=False).to(model.device)
     with torch.inference_mode():
