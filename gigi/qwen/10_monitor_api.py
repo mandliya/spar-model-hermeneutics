@@ -84,7 +84,7 @@ def call(model, text):
 
 
 for model in models:
-    out = RES / f"monitor_{model}.jsonl"
+    out = RES / f"monitor_{model}{'_' + os.getenv('MONITOR_TAG') if os.getenv('MONITOR_TAG') else ''}.jsonl"   # MONITOR_TAG=paper -> separate file
     done = set()
     if out.exists():
         done = {json.loads(l)["key"] for l in open(out) if l.strip()}

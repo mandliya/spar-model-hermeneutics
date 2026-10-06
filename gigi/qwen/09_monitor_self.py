@@ -29,7 +29,7 @@ from src import common as C
 from src.hf_sync import upload as hf_upload
 
 RES = C.RESULTS
-OUT = RES / f"monitor_{C.MODEL_TAG}.jsonl"
+OUT = RES / f"monitor_{C.MODEL_TAG}{'_' + os.getenv('MONITOR_TAG') if os.getenv('MONITOR_TAG') else ''}.jsonl"   # MONITOR_TAG=paper -> separate file
 MODEL = C.TARGET_MODEL
 
 

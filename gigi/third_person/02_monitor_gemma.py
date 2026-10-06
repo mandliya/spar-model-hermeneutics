@@ -28,7 +28,7 @@ from monitor_prompt import VARIANTS, parse_score, prompt
 
 HERE = pathlib.Path(__file__).resolve().parent
 RES = HERE / "results"
-OUT = RES / "monitor_gemma-3-27b.jsonl"
+OUT = RES / f"monitor_gemma-3-27b{'_' + os.getenv('MONITOR_TAG') if os.getenv('MONITOR_TAG') else ''}.jsonl"   # MONITOR_TAG=paper -> separate file
 MODEL = "google/gemma-3-27b-it"
 load_dotenv(HERE / ".env")
 api = HfApi(token=os.environ["HF_TOKEN"])
