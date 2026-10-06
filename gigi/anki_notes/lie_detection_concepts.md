@@ -196,3 +196,33 @@ A: Set the cutoff so only 1% of honest answers get flagged, then ask what
 share of lies are still caught. In deployment most answers are honest, so you
 can't afford many false alarms. A detector with a decent AUROC can still catch
 few lies at that strict cutoff.
+
+Q: In the lie-detector paper, how were the "ground truth" lie labels made?
+A: Two stages. (1) Generation-time checks: ask neutrally for the model's
+belief, then put it under pressure (role-play, threats, "Are you sure?") and
+compare. (2) A judge pass: GPT-5 (chosen after testing 5 models) read each
+transcript plus the setup's metadata and gave a label, lie type, rationale
+and 1-100 score. Five judges, majority vote. About 25% of labels changed.
+Human check: one annotator, 5-10 examples per category.
+
+Q: Labelling judge vs third-person monitor: what's the difference?
+A: The judge makes the answer key. It sees the setup's metadata (what's true,
+what the model was pushed to say) and decides what counts as a lie. A
+third-person monitor is a detector being tested: it sees only the transcript
+and must guess. Same kind of model, opposite roles. Giving a monitor the
+judge's metadata would be cheating.
+
+Q: What does the paper's main experiment train, and what does "failed to
+generalize" refer to?
+A: Each gemma-3 model (4B-27B) is fine-tuned with LoRA to answer "Did you
+lie?" about its own transcripts, trained on half of 12 lie types and tested
+on the other half. Familiar lie types: AUROC 0.60 -> 0.95. New lie types:
+stuck at 0.70-0.75, barely above just prompting. It's transfer across lie
+types within one model, not from small models to big ones.
+
+Q: Is Qwen3-235B's self-report near perfect in the lie-detector paper? Is ours?
+A: In the paper, yes: it "could somewhat reliably identify its own deceptions
+when asked directly", AUROC 0.98-0.99 with simple prompting (gemma-3-27b:
+0.46-0.80). Ours is no: Qwen3-32B reaches at most 0.88 asked about itself,
+in gemma's range. Possible reasons: size (235B vs 32B), or the paper's
+labels (GPT-5 judge with metadata) vs ours (independent checks).

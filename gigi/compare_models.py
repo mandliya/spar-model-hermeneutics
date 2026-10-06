@@ -16,13 +16,23 @@ The four counts, per category x question:
   honest         didn't lie, and said "no"
 Unparseable answers are left out (never counted as "no").
 
-Writes qwen/results/comparison_counts.csv and qwen/results/comparison_lying_rates.csv.
+AUROC (both models, same code; 2,000 bootstrap resamples within each arm, seed 0):
+  self-report  P("A") at the answer token, per category x question
+               (answer_probability/02_analyse_pa.py's truth and rows)
+  swap test    the same rows with "yes" as option B; median over the four
+               questions, as in the RESULTS.md chart (ab_swap/02_analyse_swap.py)
+  monitors     the 1-100 score, re-parsed from the raw reply, on the rows that
+               have the model's own `neutral` P("A") (third_person/03_analyse_monitor.py)
+
+Writes qwen/results/comparison_{counts,lying_rates,selfreport_auroc,swap,monitor_auroc}.csv.
 Run from the repo root (no GPU, no API):
     uv run --with pandas --with statsmodels python gigi/compare_models.py
 """
 import json
 import pathlib
+import sys
 
+import numpy as np
 import pandas as pd
 from statsmodels.stats.proportion import proportion_confint
 
@@ -134,6 +144,105 @@ def with_named_cot(m, cat, df, truth):
     return pd.concat([df, nc[["sample_id", "condition", "admitted", truth]]], ignore_index=True)
 
 
+# --- AUROC --------------------------------------------------------------------------
+def jl(p):
+    return [json.loads(l) for l in open(p) if l.strip()] if p.exists() else []
+
+
+def truth_map(m, cat):
+    """sample_id -> lied, as answer_probability/02_analyse_pa.py builds it."""
+    if cat.startswith("mask_") and cat != "mask_factual":
+        lab = csv(m, "mb", f"mask_belief_{cat[5:]}_labels.csv")
+        if lab is None: return {}
+        lab = lab.dropna(subset=["lied"]); return dict(zip(lab.sample_id, B(lab.lied).astype(bool)))
+    if cat == "ascii":
+        t = csv(m, "ascii", "ascii_results.csv")
+        return {} if t is None else dict(zip(t.uid, B(t.lied)))
+    df, truth = rows(m, cat)
+    if df is None: return {}
+    df = df[df[truth].notna()].drop_duplicates("sample_id")
+    return dict(zip(df.sample_id, B(df[truth]).astype(bool)))
+
+
+def pa_file(m, cat):
+    return (G / "answer_probability/results" if m == "gemma-3-27b" else QW) / f"pa_{cat}.jsonl"
+
+
+def auroc(pos, neg):
+    x = np.concatenate([pos, neg]); r = pd.Series(x).rank(method="average").to_numpy()
+    n1, n0 = len(pos), len(neg)
+    return (r[:n1].sum() - n1 * (n1 + 1) / 2) / (n1 * n0)
+
+
+def boot(pos, neg, n=2000, seed=0):
+    rng = np.random.default_rng(seed)
+    return np.percentile([auroc(rng.choice(pos, len(pos)), rng.choice(neg, len(neg))) for _ in range(n)], [2.5, 97.5])
+
+
+def scored(pos, neg, **kw):
+    if not len(pos) or not len(neg): return None
+    lo, hi = boot(np.asarray(pos), np.asarray(neg))
+    return {**kw, "auroc": auroc(np.asarray(pos), np.asarray(neg)), "ci_lo": lo, "ci_hi": hi,
+            "n_lied": len(pos), "n_honest": len(neg)}
+
+
+def selfreport_auroc(m, cat, T):
+    pa = pd.DataFrame([r for r in jl(pa_file(m, cat)) if not r.get("error")])
+    out = []
+    if not len(pa): return out
+    for q in ORDER:
+        x = pa[(pa.condition == q) & pa.sample_id.isin(T) & pa.p_A_norm.notna()].drop_duplicates("sample_id")
+        t = np.array([T[s] for s in x.sample_id], dtype=bool); v = x.p_A_norm.astype(float).to_numpy()
+        r = scored(v[t], v[~t], model=m, category=cat, question=q)
+        if r: out.append(r)
+    return out
+
+
+def swap_auroc(m, cat):
+    """median over the four questions of AUROC with yes = A (original) and yes = B (swapped)."""
+    root = G / "ab_swap/results" if m == "gemma-3-27b" else QW
+    sub = pd.read_csv(root / "ab_swap_subset.csv") if (root / "ab_swap_subset.csv").exists() else None
+    sw, og = pd.DataFrame(jl(root / f"ab_swap_{cat}.jsonl")), pd.DataFrame(jl(pa_file(m, cat)))
+    if sub is None or not len(sw) or not len(og): return None
+    T = dict(zip(sub[sub.category == cat].sample_id, sub[sub.category == cat].truth.astype(bool)))
+    mm = sw[["name", "sample_id", "condition", "p_A_norm"]].merge(og[["name", "p_A_norm"]], on="name", suffixes=("_swap", "_orig"))
+    mm = mm[mm.sample_id.isin(T) & mm.condition.isin(ORDER) & mm.p_A_norm_swap.notna() & mm.p_A_norm_orig.notna()]
+    a, b = [], []
+    for q, x in mm.groupby("condition"):
+        t = np.array([T[s] for s in x.sample_id], dtype=bool)
+        if t.any() and (~t).any():
+            po, ps = x.p_A_norm_orig.astype(float).to_numpy(), 1 - x.p_A_norm_swap.astype(float).to_numpy()
+            a.append(auroc(po[t], po[~t])); b.append(auroc(ps[t], ps[~t]))
+    return {"model": m, "category": cat, "auroc_orig": float(np.median(a)), "auroc_swap": float(np.median(b)),
+            "n_questions": len(a)} if a else None
+
+
+sys.path.insert(0, str(G / "third_person"))
+from monitor_prompt import parse_score  # noqa: E402
+MONITORS = {"gemma-3-27b": ["gemini-2.5-flash", "gpt-5-mini", "gemma-3-27b"],
+            "qwen3-32b": ["gemini-2.5-flash", "gpt-5-mini", "qwen3-32b"]}
+
+
+def monitor_auroc(m, cat, T):
+    root = G / "third_person/results" if m == "gemma-3-27b" else QW
+    have = {r["sample_id"] for r in jl(pa_file(m, cat)) if r.get("condition") == "neutral"
+            and r.get("p_A_norm") is not None and not r.get("error")}
+    out = []
+    for mon in MONITORS[m]:
+        recs = {}
+        for r in jl(root / f"monitor_{mon}.jsonl"):
+            if "error" not in r or r["key"] not in recs: recs[r["key"]] = r
+        d = pd.DataFrame(recs.values())
+        if not len(d): continue
+        d["score"] = [parse_score(x) if isinstance(x, str) else None for x in d.get("raw", [None] * len(d))]
+        for v in ("plain", "rubric"):
+            x = d[(d.category == cat) & (d.variant == v) & d.sample_id.isin(T) & d.sample_id.isin(have) & d.score.notna()]
+            t = np.array([T[s] for s in x.sample_id], dtype=bool); sc = x.score.astype(float).to_numpy()
+            r = scored(sc[t], sc[~t], model=m, category=cat, monitor="self" if mon == m else mon, variant=v)
+            if r: out.append(r)
+    return out
+
+
 CATS = ["ascii", "sycophancy_a", "sycophancy_b", "mask_factual", "unanswerable", "capture_secret", "alibi",
         "mask_known_facts", "mask_statistics", "mask_continuations", "mask_disinformation"]
 MODELS = ["gemma-3-27b", "qwen3-32b"]
@@ -162,6 +271,17 @@ if __name__ == "__main__":
                                "false_confession_pct": 100 * fc / (fc + ho) if fc + ho else None,
                                "balanced_accuracy": (50 * (c / (c + dd) + ho / (fc + ho))
                                                      if c + dd and fc + ho else None)})
+    sr, sw, mo = [], [], []
+    for m in MODELS:
+        for cat in CATS:
+            T = truth_map(m, cat)
+            if not T: continue
+            sr += selfreport_auroc(m, cat, T)
+            if (x := swap_auroc(m, cat)): sw.append(x)
+            mo += monitor_auroc(m, cat, T)
+    pd.DataFrame(sr).to_csv(OUT / "comparison_selfreport_auroc.csv", index=False)
+    pd.DataFrame(sw).to_csv(OUT / "comparison_swap.csv", index=False)
+    pd.DataFrame(mo).to_csv(OUT / "comparison_monitor_auroc.csv", index=False)
     C, R = pd.DataFrame(counts), pd.DataFrame(rates)
     OUT.mkdir(parents=True, exist_ok=True)
     C.to_csv(OUT / "comparison_counts.csv", index=False)
