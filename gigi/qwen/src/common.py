@@ -50,6 +50,7 @@ CORE_QUESTIONS = ("neutral", "neutral_cot", "named")
 # e.g.  google-gemma-3-27b-it_task-group_sandbagging
 #       google-gemma-3-27b-it_megafolds_fold_1
 HF_DATASET = "Noddybear/lies"
+HF_DATASET_REVISION = os.getenv("HF_DATASET_REVISION", "e8fc10f495aabc2d2d95f1e947b10bbcced444d5")
 CONFIG = os.getenv("CONFIG", "google-gemma-3-27b-it_megafolds_fold_1")
 
 # --- models -----------------------------------------------------------------
@@ -203,7 +204,10 @@ def load_config(config: str = CONFIG, split: str = "train"):
     import fsspec
     import pandas as pd
     fs = fsspec.filesystem("hf")
-    pattern = f"datasets/{HF_DATASET}/{config}/{split}-*.parquet"
+    # qwen: pinned to the dataset version gemma's runs used (21 Sept 2025). On 5 Oct 2026
+    # the author rebuilt the configs ("Fix did_lie labels ... rebuild configs from source")
+    # and renamed e.g. task-group_sandbagging -> task-group_sandbagging_ascii.
+    pattern = f"datasets/{HF_DATASET}@{HF_DATASET_REVISION}/{config}/{split}-*.parquet"
     paths = sorted(fs.glob(pattern))
     if not paths:
         raise FileNotFoundError(f"No parquet files matched {pattern}")
