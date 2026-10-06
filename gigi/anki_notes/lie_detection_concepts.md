@@ -226,3 +226,18 @@ when asked directly", AUROC 0.98-0.99 with simple prompting (gemma-3-27b:
 0.46-0.80). Ours is no: Qwen3-32B reaches at most 0.88 asked about itself,
 in gemma's range. Possible reasons: size (235B vs 32B), or the paper's
 labels (GPT-5 judge with metadata) vs ours (independent checks).
+
+Q: Black-box vs grey-box vs white-box lie detection?
+A: Black box = only what the model outputs (asking "did you lie?", or an
+outside monitor reading the transcript). Grey box = you change the weights
+(fine-tuning) but still read only the model's answer at test time; the
+paper's trained detectors are this. White box = reading the model's
+internals: a probe on its hidden activations, or interpretability features
+and steering.
+
+Q: What experiment tests "the limit of black box vs how far white box goes"?
+A: One train/test split (train on half the lie types, test on the other half)
+and three detectors side by side: prompted baseline -> fine-tuned self-report
+(best black/grey box; the paper plateaus at 0.70-0.75 on unseen lie types) ->
+linear probe on activations (white box). Does the probe beat the plateau on
+unseen lie types?
