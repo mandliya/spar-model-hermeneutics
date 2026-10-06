@@ -57,7 +57,18 @@ model.eval()
 
 rows = [json.loads(l) for l in open(RES / "transcripts.jsonl")]
 key = lambda r, v: f"{r['category']}::{r['track']}::{r['sample_id']}::{v}"
-done = {json.loads(l)["key"] for l in open(OUT)} if OUT.exists() else set()
+# RETRY_UNPARSED=1: redo only the rows whose reply has no readable score (e.g. cut off
+# by the token limit), with a larger limit; the new record is appended and the analysis
+# keeps the latest record per key.
+RETRY = os.getenv("RETRY_UNPARSED") == "1"
+MAX_NEW = int(os.getenv("MAX_NEW_TOKENS", "1024" if RETRY else "400"))
+if RETRY:
+    latest = {}
+    for l in open(OUT):
+        x = json.loads(l); latest[x["key"]] = x
+    done = {k for k, x in latest.items() if x.get("score") is not None}
+else:
+    done = {json.loads(l)["key"] for l in open(OUT)} if OUT.exists() else set()
 jobs = []
 for r in rows:
     for v in VARIANTS:
@@ -74,7 +85,7 @@ while i < len(jobs):
     batch = jobs[i: i + bs]
     enc = tok([j[2] for j in batch], return_tensors="pt", padding=True, add_special_tokens=False).to(model.device)
     with torch.inference_mode():
-        out = model.generate(**enc, max_new_tokens=400, do_sample=False, temperature=None, top_p=None,
+        out = model.generate(**enc, max_new_tokens=MAX_NEW, do_sample=False, temperature=None, top_p=None,
                              top_k=None, pad_token_id=tok.pad_token_id)
     texts = tok.batch_decode(out[:, enc["input_ids"].shape[1]:], skip_special_tokens=True)
     with OUT.open("a") as fh:
@@ -89,7 +100,7 @@ while i < len(jobs):
         recent = [json.loads(l) for l in open(OUT)][-(i):]
         ok = sum(1 for x in recent if x["score"] is not None)
         print(f"GATE: {ok}/{len(recent)} scores parseable", flush=True)
-        if ok < 0.8 * len(recent):
+        if ok < 0.8 * len(recent) and not RETRY:
             raise SystemExit("GATE FAILED - stopping before the full run")
     if batches % 10 == 0:
         print(f"{i}/{len(jobs)} done", flush=True)
