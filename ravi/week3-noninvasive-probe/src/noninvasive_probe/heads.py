@@ -107,3 +107,89 @@ def train_lat_bundle(
         extraction=extraction,
         model_name=model_name,
     )
+
+
+def _unit(vec: np.ndarray) -> np.ndarray:
+    vec = np.asarray(vec, dtype=np.float64)
+    nrm = np.linalg.norm(vec)
+    return vec / nrm if nrm > 0 else vec
+
+
+def direction_cosine(a: np.ndarray, b: np.ndarray) -> float:
+    return float(np.dot(_unit(a), _unit(b)))
+
+
+def orthogonal_component(direction: np.ndarray, remove: np.ndarray) -> np.ndarray:
+    """Part of `direction` orthogonal to `remove`, oriented to agree with `direction`."""
+    d = np.asarray(direction, dtype=np.float64)
+    r = _unit(remove)
+    out = _unit(d - np.dot(d, r) * r)
+    if float(np.dot(out, d)) < 0:
+        out = -out
+    return out
+
+
+def mean_unit_directions(directions: list[np.ndarray]) -> np.ndarray:
+    """Average of unit vectors, each flipped to agree with the first."""
+    acc = None
+    ref = None
+    for direction in directions:
+        unit = _unit(direction)
+        if ref is None:
+            ref = unit
+        elif float(np.dot(unit, ref)) < 0:
+            unit = -unit
+        acc = unit if acc is None else acc + unit
+    if acc is None:
+        raise ValueError("no directions")
+    return _unit(acc)
+
+
+def train_ccs_direction(
+    honest: np.ndarray,
+    deceptive: np.ndarray,
+    *,
+    steps: int = 400,
+    lr: float = 1e-2,
+    seed: int = 0,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Burns et al. CCS. Loss ignores which side is honest.
+
+    Returns (unit direction, dataset mean, dataset std) in the joint z-score
+    space. The direction is then flipped so deceptive minus honest is positive.
+    That flip is the only step that uses the labels.
+    """
+    import torch
+
+    honest = np.asarray(honest, dtype=np.float64)
+    deceptive = np.asarray(deceptive, dtype=np.float64)
+    if len(honest) != len(deceptive) or len(honest) < 2:
+        raise ValueError("CCS needs paired honest and deceptive rows")
+    both = np.vstack([honest, deceptive])
+    mean = both.mean(axis=0)
+    std = both.std(axis=0)
+    std = np.where(std < 1e-8, 1.0, std)
+    h = (honest - mean) / std
+    d = (deceptive - mean) / std
+    rng = np.random.default_rng(seed)
+    swap = rng.random(len(h)) < 0.5
+    left = h.copy()
+    right = d.copy()
+    left[swap], right[swap] = right[swap].copy(), left[swap].copy()
+    tl = torch.tensor(left, dtype=torch.float32)
+    tr = torch.tensor(right, dtype=torch.float32)
+    weight = torch.nn.Parameter(torch.zeros(h.shape[1]))
+    bias = torch.nn.Parameter(torch.zeros(()))
+    opt = torch.optim.Adam([weight, bias], lr=lr)
+    for _ in range(steps):
+        opt.zero_grad()
+        p0 = torch.sigmoid(tl @ weight + bias)
+        p1 = torch.sigmoid(tr @ weight + bias)
+        consistency = (p0 + p1 - 1).pow(2).mean()
+        confidence = torch.minimum(p0, p1).pow(2).mean()
+        (consistency + confidence).backward()
+        opt.step()
+    vec = weight.detach().cpu().numpy().astype(np.float64)
+    if float(np.dot(d.mean(axis=0) - h.mean(axis=0), vec)) < 0:
+        vec = -vec
+    return _unit(vec), mean, std

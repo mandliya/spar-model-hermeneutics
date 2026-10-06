@@ -16,6 +16,68 @@ Work lives in this folder (`ravi/week3-noninvasive-probe`). Week 1 stays DYL vs 
 
 ---
 
+## Meeting summary
+
+What we tried, for an audience that already knows DYL, OA, and Gigi. Numbers are AUROC. 0.5 is chance. 0.0 is the same detector with the sign flipped. Layer 58 is the DYL layer. “Mean” is the average of the probe’s probabilities over all 62 layers. Full tables: [`RESULTS.md`](RESULTS.md).
+
+**The experiment.** Freeze a probe trained only on simple true/false facts. Score Gigi, the OA honeypot, and AISI city/varied on the original assistant turn. The follow-up is never in the prompt. Train and test stay separate: the code refuses to fit on an eval row.
+
+### Techniques
+
+**Where we read.** One forward pass, chat closed on the assistant’s answer. We then pick tokens and average them into one vector.
+
+- *Last content token* — the last token of the answer text. On a true/false sentence this is the period. On ASCII it is often the word Yes or No, so a perfect score there can be “I read the refusal,” which is why the next two positions exist.
+- *Drop the last five answer tokens* — average what remains. The completed fact, or the YES/NO, is left out. A one-word answer has nothing left, so we fall back to the first token. Short hacks like `return "heo"` hit that fallback.
+- *First five answer tokens* — the opening of the reply, before the sentence finishes.
+- *End-of-turn* and the *newline after it* — Gemma’s closing template tokens. Same token every conversation. Week 1’s OA probe transferred best at the newline, so we kept both as controls.
+- *Last user token* — the end of the user’s message, before the assistant has spoken. Used only for the act probes.
+
+**Truth probe.** User says “Tell a truthful fact.” Assistant says either “The moon orbits the Earth” (honest) or “The fastest bird is the penguin” (lie). The label is “the sentence is false.” This can succeed by knowing the fact.
+
+**Intent probe.** The assistant says the same sentence twice. Only the system prompt changes: “answer honestly” versus “treat the following as a lie you chose to tell.” The label is the instruction. If this transfers, it transferred “I was told to deceive,” not “I memorized which facts are false.”
+
+**Logistic regression.** Z-score the 5,376 coordinates, then fit a weight per coordinate so lies score high and honest rows score low. Every layer’s training error was tiny, so we kept all 62.
+
+**Difference of means.** No fitting loop. Average the lie residuals, average the honest residuals, subtract. The score is how far a new residual points along that arrow. On our data this arrow matches logistic regression (cosine 0.91–0.99).
+
+**LAT.** Only on the intent pairs. For each pair, subtract honest residual from lie-prompt residual, so the shared sentence cancels. PCA takes the direction along which those difference arrows spread the most, and we flip the sign so the lie side is positive. Difference-of-means is the average arrow. LAT is the axis the paired moves agree on most.
+
+**CCS.** Same pairs, but the training loss never sees which side is the lie. It only asks that the two sides get opposite scores, and that the probe be confident. The label is used afterwards, once, to flip the sign.
+
+**Hard-to-catch.** Keep only rows whose stored follow-up was a denial (lied-then-denied, and honest-then-denied). Score the original-turn residual. Just asking is 0.5 on this subset, because every remaining row said “no.”
+
+**Act probes.** Truth and intent came out orthogonal (cosine about 0), so we trained on three acts the model wrote itself. Gemma generates both sides. The label is the policy. Pairs with an empty completion were dropped (10 pairs; none were identical).
+
+- *On-policy lie.* Same true claim. One policy says “answer truthfully.” The other says “answer falsely, and do not confess.”
+- *Synthetic sycophancy.* The user asserts a false claim. One policy says “correct them.” The other says “agree even if they are wrong.”
+- *Concealment.* The same fact is in the system prompt. One policy says “state it.” The other says “refuse or deny.” 25 of 72 “withhold” answers still contain the fact, so that label is the policy, not a clean behavioral lie.
+
+We also average the three act directions, and we subtract the truth direction out of that average. Eval prompts still have no follow-up.
+
+**Invasive control.** Same frozen weights, follow-up pasted back in: “did you lie,” the named act (“did you sandbag,” “did you cheat”), and “was that deceptive?” prefilled with No. That run is the cop-pressure test. It is not in the numbers below.
+
+### What to say about the results
+
+We did not find one deception direction. Truth and intent are unrelated. The three act directions are unrelated to each other (cosine 0.02–0.25) and their average is about chance at layer 58 on ASCII, sycophancy, capture, and the honeypot. Removing the truth axis changes nothing, because that average was already orthogonal to truth.
+
+What transfers is a probe trained on the same kind of act, still with no follow-up at eval.
+
+- **ASCII.** Intent at layer 58 is perfectly inverted on the last content token (0.000) and 0.99 once the last five tokens are dropped. So we are not only reading the YES/NO. Averaging layers puts the last token back at 1.00. The concealment probe also reads ASCII (0.93–1.00 at layer 58 on the content pools).
+- **Sycophancy A.** Intent is about 0.68–0.70, even with just asking (0.68) and DYL (0.66), above OA (0.56). The synthetic-agreement probe stays in that same band.
+- **Sycophancy B.** Intent does not transfer. The synthetic-agreement probe does: 0.75 at layer 58 on the trimmed answer, above just asking (0.71), DYL (0.64), and OA (0.45).
+- **Mask.** Intent sits between DYL (0.52) and OA (0.66–0.74). The on-policy lie probe, with the last five tokens dropped, is 0.73 / 0.75, matching OA’s mean and above OA at layer 58.
+- **Capture.** Intent, trimmed answer, mean of layers, is 0.63, above DYL (0.61) and OA (0.43). Concealment does not read capture (about 0.52). Hiding a trivia fact is not the capture direction.
+- **OA honeypot.** Intent logistic stays below 0.5. LAT at the last content token is 0.975 / 0.991, matching DYL’s 0.973, with no follow-up. Truth difference-of-means at the trailing newline, layer 58, is 0.944.
+- **AISI city**, follow-up stripped. Intent at layer 58 is 0.965 on the last content token, matching OA’s all-layer number. The on-policy lie probe is 0.96 there too.
+- **AISI varied.** 777 lie / 23 honest under the cap, so the honest class is thin. Intent is 0.65–0.74, below OA (0.91–0.96).
+- **Hard-to-catch** does not get sharper. ASCII and sycophancy A look like the full-set scores. Sycophancy B and capture stay near chance on the denial subset.
+- **CCS** on the old intent pairs reproduces the supervised ASCII pattern (trimmed answer 1.00, last token 0.00 at layer 58) and does not unlock sycophancy, mask, or capture.
+- **The last user token**, before the assistant speaks, stays near chance on the hard sets. City concealment is the exception (0.87 at layer 58).
+
+One sentence: a generic lie detector is not in these directions. A probe trained on the matching act, read on the original turn, matches or beats the old follow-up probes on city, ASCII, sycophancy B, and the honeypot.
+
+---
+
 ## 1. Protocol
 
 **Noninvasive extract.** Conversation ends on the original assistant turn. `apply_chat(..., add_generation_prompt=False)`. No extra user message.
@@ -137,7 +199,29 @@ Gigi: ground truth, recorded follow-ups, cop-pressure hypothesis, A/B swap. Tian
 
 ---
 
-## 6. Files
+## 6. Act probes (follow-up)
+
+The truth probe and the intent probe are orthogonal. Cosine of their raw directions is about 0 at every position and layer (`results/noninvasive_probes/`, layer 58 and the mean over layers). Logistic and difference-of-means are the same vector (cosine 0.91–0.99). The three answer-content pools are the same vector (cosine about 0.9). So week 3 so far fit two readouts — “the sentence is false” and “the prompt said to lie” — not one generic deception direction.
+
+`scripts/10_train_act_probes.py` keeps Gigi / OA / AISI as eval only and adds three synthetic acts. The model writes both completions. The label is the policy.
+
+| Source | Honest policy | Deceptive policy | Same across the pair |
+|---|---|---|---|
+| `onpolicy` | answer the claim truthfully | answer it falsely, do not confess | the true claim, and the user text |
+| `syc_synth` | correct the user | agree even if they are wrong | a false claim the user asserts |
+| `conceal` | state the private fact | refuse or deny it | the fact, placed in the system prompt |
+
+Pairs whose two completions are empty or identical are dropped. Heads, all noninvasive:
+
+- mixture logistic and difference-of-means
+- per-act difference-of-means (`onpolicy`, `syc_synth`, `conceal`)
+- CCS (Burns et al.) on the act pairs and, separately, on the old instructed pairs. The loss does not see the label. The sign is flipped afterward so the deceptive side is positive.
+- `shared`: mean of the three act directions (raw space, sign-aligned)
+- `orth_truth`: that shared direction with the truth direction removed (Bürger-style axis removal)
+
+New position `last_user`: last content token of the user turn, before the assistant speaks. It is not in the default six positions, so earlier caches stay valid.
+
+## 7. Files
 
 | Path | What |
 |---|---|

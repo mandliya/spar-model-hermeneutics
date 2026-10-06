@@ -33,6 +33,17 @@ def test_mean_excl_last_5_uses_indices_not_token_values():
     assert original_turn_pool_indices(span, "mean_first_5") == [4, 5, 6, 7, 8]
 
 
+def test_last_user_is_the_token_before_the_assistant_turn():
+    # user turn then assistant turn, each <start> role \n content... <eot> \n
+    user = [START, 7, NL, 1, 2, 3, EOT, NL]
+    assistant = [START, 8, NL, 4, 5, 6, 7, 8, 9, EOT, NL]
+    ids = user + assistant
+    span = original_turn_span(ids, start_id=START, eot_id=EOT, newline_id=NL)
+    assert span["last_content"] == len(ids) - 3
+    assert span["last_user"] == 5  # token 3, just before the user's end_of_turn
+    assert original_turn_pool_indices(span, "last_user") == [5]
+
+
 def test_mean_excl_last_5_falls_back_to_first_token_when_short():
     ids = _closed([3, 4, 5, 6, 7])
     span = original_turn_span(ids, start_id=START, eot_id=EOT, newline_id=NL)

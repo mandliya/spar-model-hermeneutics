@@ -175,7 +175,8 @@ def _score_eval_sets(*, cfg, names, positions, bundles, args, subject) -> None:
             for pos, acts in extracted.items():
                 _save_eval_cache(cache_dir, name, pos, acts, y, uids)
 
-        payload["datasets"].setdefault(name, {"n": int(len(y)), "positions": {}})
+        payload["datasets"].setdefault(name, {"positions": {}})
+        payload["datasets"][name]["n"] = int(len(y))
         known = comparison_row(name)
         for position in positions:
             cached = _load_eval_cache(cache_dir, name, position)

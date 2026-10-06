@@ -25,3 +25,5 @@ ravi/week3-noninvasive-probe/results/*
 !ravi/week3-noninvasive-probe/results/noninvasive_eval.json
 !ravi/week3-noninvasive-probe/results/noninvasive_htc.json
 !ravi/week3-noninvasive-probe/results/noninvasive_invasive.json
+!ravi/week3-noninvasive-probe/results/act_probe_eval.json
+!ravi/week3-noninvasive-probe/results/act_rollouts.jsonl

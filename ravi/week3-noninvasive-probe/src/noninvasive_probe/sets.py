@@ -12,8 +12,29 @@ from dyl_vs_oa.oa_transfer import TRANSFER_SETS, load_transfer_set
 # Frozen transfer sets. Do not fit on these.
 EVAL_SETS = TRANSFER_SETS + ("oa_mbpp",)
 
+# Noddybear/lies HEAD was rebuilt on 2026-10-05 (commit 30e1bd15bb) and the new
+# parquet sample_ids no longer match Gigi's recorded uids. This is the parent
+# commit, which still has google-gemma-3-27b-it_task-group_sandbagging and friends.
+LIES_REVISION = "e8fc10f495"
+
+
+def pin_lies_dataset() -> None:
+    """Point Gigi's loaders at the pre-rebuild Hub revision. Do not edit gigi/."""
+    from dyl_repro.datasets import gigi
+
+    pinned = f"Noddybear/lies@{LIES_REVISION}"
+    for category in gigi.CATEGORIES:
+        gigi.module(category, "common").HF_DATASET = pinned
+
 # Only these meta["source"] values may enter `_fit`.
-TRAIN_SOURCES = frozenset({"simple_deception", "instructed_pairs"})
+# Act rollouts are synthetic (this folder only). Never Gigi, OA, or AISI.
+TRAIN_SOURCES = frozenset({
+    "simple_deception",
+    "instructed_pairs",
+    "onpolicy",
+    "syc_synth",
+    "conceal",
+})
 
 
 def assert_generic_train(examples) -> None:
@@ -68,6 +89,7 @@ def load_oa_mbpp(cfg, max_n: int | None = None) -> list[LabeledConversation]:
 
 
 def load_eval_set(name: str, cfg, max_n: int | None = None) -> list[LabeledConversation]:
+    pin_lies_dataset()
     if name == "oa_mbpp":
         return load_oa_mbpp(cfg, max_n=max_n)
     rows = load_transfer_set(name, max_n=max_n)

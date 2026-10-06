@@ -59,6 +59,7 @@ def original_turn_span(
             "last_content": last,
             "end_of_turn": last,
             "last_newline": last,
+            "last_user": 0,
         }
     eot = eot_positions[-1]
     last_content = eot - 1 if eot > 0 else eot
@@ -72,12 +73,20 @@ def original_turn_span(
         content_start = 0
     if content_start > last_content:
         content_start = last_content
+    # Token before the turn that precedes the assistant: the user's last content token.
+    prev_eots = [i for i in eot_positions if starts and i < starts[-1]]
+    if prev_eots:
+        user_eot = prev_eots[-1]
+        last_user = user_eot - 1 if user_eot > 0 else 0
+    else:
+        last_user = 0
     return {
         "content_start": content_start,
         "content_end": last_content,
         "last_content": last_content,
         "end_of_turn": eot,
         "last_newline": last,
+        "last_user": last_user,
     }
 
 
@@ -104,6 +113,8 @@ def original_turn_pool_indices(
         return content[:-exclude_last]
     if name == "mean_first_5":
         return content[: min(first_k, len(content))]
+    if name == "last_user":
+        return [span["last_user"]]
     raise KeyError(f"unknown original-turn position {name!r}")
 
 
