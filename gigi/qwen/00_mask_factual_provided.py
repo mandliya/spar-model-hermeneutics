@@ -53,6 +53,12 @@ args = p.parse_args()
 df = pd.concat([load_config(CONFIG, "train"), load_config(CONFIG, "validation")])
 df = df[df["task"] == "mask_provided_facts"].copy()
 print(f"{len(df)} mask_provided_facts rows")
+# qwen: 12 of the 99 rows have an empty trace (no system prompt, no question), so there
+# is nothing to answer; gemma's run has 87 rows for the same reason. Skip them.
+empty = df["trace"].map(lambda t: len(t["content"]) == 0)
+if empty.any():
+    print(f"!! {int(empty.sum())} rows have an empty trace - skipped, not guessed")
+    df = df[~empty].copy()
 
 jobs = list(df["sample_id"])
 if args.limit:

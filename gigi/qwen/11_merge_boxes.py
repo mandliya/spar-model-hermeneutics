@@ -28,6 +28,9 @@ pfx = remote("boxes/")
 api = HfApi(token=os.environ.get("HF_TOKEN"))
 paths = [e.path for e in api.list_repo_tree(REPO, path_in_repo=pfx.rstrip("/"), repo_type="dataset", recursive=True)
          if "/results/" in getattr(e, "path", "") and hasattr(e, "size")]
+# J6's mask-factual stopped after 34 rows (empty-trace crash); J6b redid it in full,
+# so J6's partial mask-factual files are left out to avoid counting rows twice.
+paths = [rp for rp in paths if not (rp.split("/")[3] == "J6" and "mask_factual" in rp)]
 files = collections.defaultdict(list)
 for i, rp in enumerate(sorted(paths)):
     p = pathlib.Path(hf_hub_download(REPO, rp, repo_type="dataset", token=os.environ.get("HF_TOKEN")))

@@ -28,7 +28,8 @@ case $JOB in
   J8)  CATS="unanswerable mask_known_facts mask_statistics" ;;
   J9)  CATS="mask_continuations" ;;
   J10) CATS="mask_disinformation" ;;
-  *) echo "unknown job '$JOB' (J1-J10)"; exit 1 ;;
+  J6b) CATS="mask_factual" ;;   # mask-factual again: J6 stopped on the empty-trace rows
+  *) echo "unknown job '$JOB' (J1-J10, J6b)"; exit 1 ;;
 esac
 say "categories: $CATS | shard: ${SHARD:-all rows} | Vast instance: ${CONTAINER_ID:-unknown}"
 # The model needs ~65 GB of dedicated GPU memory. A GB10 (DGX Spark, shared
