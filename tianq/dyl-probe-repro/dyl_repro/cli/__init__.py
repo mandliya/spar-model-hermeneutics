@@ -9,4 +9,5 @@
     compare_generalization.py  CPU: probes trained on each Gigi category, tested on the others, three wordings
     compare_outcome_flags.py   CPU: what the released probe flags on each kind of answer to "did you lie?"
     compare_no_followup.py     CPU: the transfer matrix with no follow-up question, per read position
+    compare_diversity.py       CPU: held-out AUROC against the number of categories trained on
 """

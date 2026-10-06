@@ -12,6 +12,7 @@
 #   ./run.sh compare_generalization                           # CPU: does a probe trained on one kind of lie catch the others?
 #   ./run.sh compare_outcome_flags                            # CPU: what the released probe flags on each answer group
 #   ./run.sh compare_no_followup                              # CPU: the transfer matrix with no follow-up question
+#   ./run.sh compare_diversity                                # CPU: does training on more kinds of lie help on unseen ones?
 #
 # Every invocation writes its own raw log to scratch/logs/run_<utc>_<command>.log:
 # the exact argv, the environment (python, nvidia-smi, pip freeze), the complete
@@ -35,12 +36,12 @@ set -a
 source <(tr -d '\r' < .env)
 set +a
 
-command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags|compare_no_followup> [args]}"
+command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags|compare_no_followup|compare_diversity> [args]}"
 shift
 case "$command" in
-  extract | evaluate | compare_wordings | train_probe | compare_generalization | compare_outcome_flags | compare_no_followup) ;;
+  extract | evaluate | compare_wordings | train_probe | compare_generalization | compare_outcome_flags | compare_no_followup | compare_diversity) ;;
   *) echo "unknown command: $command (expected extract, evaluate, compare_wordings, train_probe," \
-          "compare_generalization, compare_outcome_flags or compare_no_followup)" >&2; exit 1 ;;
+          "compare_generalization, compare_outcome_flags, compare_no_followup or compare_diversity)" >&2; exit 1 ;;
 esac
 
 if [[ -z "${TMUX:-}" ]] && command -v tmux >/dev/null 2>&1; then

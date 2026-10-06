@@ -58,23 +58,23 @@ def probe_name(train_key: str, layer: int, l2_lambda: float, position: str = PRO
     return f"trained_on_{train_key.replace('/', '-')}{at}_l_{layer}_lm_{str(l2_lambda).replace('.', '_')}_ar_lr"
 
 
-def fit_weights(activations: np.ndarray, labels: np.ndarray,
-                l2_lambda: float) -> tuple[np.ndarray, np.ndarray, np.ndarray, float]:
-    """(mean, std, weight, bias) minimising mean log-loss + l2_lambda (|w|^2 + b^2)
-    over the activations standardised by their own mean and population std."""
-    x = np.asarray(activations, dtype=np.float64)
+def fit_weights(activations: np.ndarray, labels: np.ndarray, l2_lambda: float,
+                sample_weight: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray, np.ndarray, float]:
+    """(mean, std, weight, bias) minimising mean log-loss + l2_lambda (|w|^2 + b^2) over the activations
+    standardised by their own mean and population std; both means weighted by `sample_weight` if given."""
+    x, p = np.asarray(activations, dtype=np.float64), _normalised(sample_weight)
     y = np.asarray(labels, dtype=np.float64)
     if set(np.unique(y).tolist()) != {0.0, 1.0}:
         raise ValueError(f"training needs both labels, 0 and 1; got {np.unique(y).tolist()}")
-    mean, std = x.mean(0), x.std(0)
+    mean, std = (x.mean(0), x.std(0)) if p is None else _weighted_moments(x, p)
     z = (x - mean) / std
     n, d = z.shape
 
     def objective(theta: np.ndarray) -> tuple[float, np.ndarray]:
         w, b = theta[:d], theta[d]
         logits = z @ w + b
-        residual = (expit(logits) - y) / n
-        value = (np.logaddexp(0, logits) - y * logits).mean() + l2_lambda * (w @ w + b * b)
+        residual = (expit(logits) - y) / n if p is None else (expit(logits) - y) * p
+        value = _mean(np.logaddexp(0, logits) - y * logits, p) + l2_lambda * (w @ w + b * b)
         gradient = np.concatenate([z.T @ residual + 2 * l2_lambda * w, [residual.sum() + 2 * l2_lambda * b]])
         return value, gradient
 
@@ -83,6 +83,26 @@ def fit_weights(activations: np.ndarray, labels: np.ndarray,
     if not fit.success:
         raise RuntimeError(f"probe fit did not converge: {fit.message}")
     return mean, std, fit.x[:d], float(fit.x[d])
+
+
+# Helpers of fit_weights, kept below it so its loss stays at the line the report links to.
+def _normalised(sample_weight: np.ndarray | None) -> np.ndarray | None:
+    """Weights summing to 1, or None for the unweighted fit (left exactly as it was)."""
+    if sample_weight is None:
+        return None
+    p = np.asarray(sample_weight, dtype=np.float64)
+    if (p < 0).any() or p.sum() <= 0:
+        raise ValueError("sample weights must be non-negative and not all zero")
+    return p / p.sum()
+
+
+def _weighted_moments(x: np.ndarray, p: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    mean = p @ x
+    return mean, np.sqrt(p @ (x - mean) ** 2)
+
+
+def _mean(values: np.ndarray, p: np.ndarray | None) -> float:
+    return values.mean() if p is None else p @ values
 
 
 def train(activations: np.ndarray, labels: np.ndarray, *, layer: int, l2_lambda: float,
