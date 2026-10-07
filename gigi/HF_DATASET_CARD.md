@@ -20,7 +20,11 @@ post, built on its released dataset
 
 Each tensor is labelled with independently checked ground truth (did gemma
 actually lie on this row?), not the dataset's own `did_lie` column, which is
-unusable for gemma.
+unusable for gemma in the dataset version used (revision `e8fc10f`; the
+dataset was rebuilt with corrected labels on 5 October 2026).
+
+The same experiment rerun on `Qwen/Qwen3-32B` is under `models/qwen3-32b/`
+([below](#second-model-qwen3-32b)).
 
 ## Layout
 
@@ -30,6 +34,8 @@ unusable for gemma.
 | `activations/maps/<category>.jsonl` | one line per (row, question): sample id, question, filenames |
 | `first_run/<category>/` | activations from gemma's original answer, before any follow-up |
 | `results/` | results files mirrored from the project (alibi, `named_cot`, P("A"), swap test) |
+| `results/third_person/` | third-person monitor replies on gemma's transcripts (Gemini 2.5 Flash, GPT-5 mini, gemma), the paper's templates: `monitor_<model>_paper.jsonl` |
+| `models/qwen3-32b/` | the Qwen3-32B rerun: activations and results per GPU box, and its monitor replies |
 | `archive/` | retired files, kept for reference (see the end of this page) |
 
 Categories: `ascii`, `sycophancy_a`, `sycophancy_b`, `mask_factual`,
@@ -111,6 +117,24 @@ answer-token state.
 | unanswerable | `first_run/unanswerable/` | `__claim__predecision.pt` and `__claim__answer_token.pt`, when gemma says whether it could answer (100 each) |
 | capture-the-secret | `first_run/capture_secret/` | `__capture__predecision.pt`, before the reply (508) |
 | alibi | `first_run/alibi/` | `__alibi__predecision.pt`, before the reply to the detective (1,281) |
+
+## Second model: Qwen3-32B
+
+The same experiment on `Qwen/Qwen3-32B` (thinking off, greedy, float32), split
+across GPU boxes (jobs J1–J10 and J6b; which categories each ran is in the
+project's `gigi/qwen/README.md`).
+
+| Path | What it is |
+|---|---|
+| `models/qwen3-32b/boxes/<JOB>/activations_<JOB>.tar.gz` | that box's follow-up and first-run activations, same filenames and capture points as gemma's |
+| `models/qwen3-32b/boxes/<JOB>/results/` | that box's results, including the `fp32_map_<category>.jsonl` maps |
+| `models/qwen3-32b/boxes/<JOB>/job.log` | that box's log |
+| `models/qwen3-32b/results/third_person/` | monitor replies on Qwen's transcripts, the paper's templates (J6's and J6b's are in their box folders) |
+
+- **Shape `[65, 5120]`**: the embedding output and Qwen's 64 decoder blocks.
+- **mask-factual:** J6's files stop after 34 rows; J6b redid it in full. Use
+  J6b's.
+- The merged results are in the project repo, `gigi/qwen/results/qwen3-32b/`.
 
 ## Archive
 

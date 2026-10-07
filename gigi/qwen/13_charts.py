@@ -19,7 +19,7 @@ G = Path(__file__).resolve().parent.parent
 RES = G / "qwen/results"
 S = pd.read_csv(RES / "comparison_selfreport_auroc.csv")
 M = pd.read_csv(RES / "comparison_monitor_auroc.csv")
-LABEL = {"alibi": "alibi", "sycophancy_b": "sycophancy B", "sycophancy_a": "sycophancy A",
+LABEL = {"alibi": "alibi", "mask_factual": "mask-factual", "ascii": "ascii-sandbagging", "sycophancy_b": "sycophancy B", "sycophancy_a": "sycophancy A",
          "capture_secret": "capture-the-secret", "unanswerable": "unanswerable",
          "mask_known_facts": "MASK known facts", "mask_statistics": "MASK statistics",
          "mask_continuations": "MASK continuations", "mask_disinformation": "MASK disinformation"}
@@ -69,7 +69,7 @@ fig.savefig(G / "charts/qwen_vs_gemma_selfreport.png", dpi=180, bbox_inches="tig
 plt.close(fig)
 
 # 2. Qwen: outside monitors vs self-report --------------------------------------------------
-mp = M[(M.model == "qwen3-32b") & (M.variant == "plain")].pivot_table(index="category", columns="monitor", values="auroc")
+mp = M[(M.model == "qwen3-32b") & (M.variant == "paper_3p_rubric")].pivot_table(index="category", columns="monitor", values="auroc")   # the paper's rubric template
 sr = rng.loc["qwen3-32b"]
 out = ["gemini-2.5-flash", "gpt-5-mini"]
 beat_any = [c for c in cats if any(mp.loc[c, o] > sr.loc[c, "max"] for o in out)]
@@ -79,7 +79,7 @@ COL = {"gemini-2.5-flash": "#2a78d6", "gpt-5-mini": "#1d9e74", "self": QWEN}
 NAME = {"gemini-2.5-flash": "Gemini 2.5 Flash", "gpt-5-mini": "GPT-5 mini", "self": "Qwen as monitor"}
 fig, ax = plt.subplots(figsize=(10, 6.4))
 Y = axis(ax, order, "AUROC: how often a lie looks more suspicious than an honest answer",
-         "Monitors: their 1-100 'is the assistant lying?' score on the transcript (paper's prompt).\n"
+         "Monitors: the paper's 3rd-Person Report with Rubric (full transcript incl. system prompt), 1-100 score.\n"
          "Self-report: Qwen's probability of \"yes, I lied\" when asked afterwards.  0.5 = coin flip, 1 = perfect")
 for c in order:
     ax.plot([sr.loc[c, "min"], sr.loc[c, "max"]], [Y[c], Y[c]], color="#d6d3cb", lw=9, solid_capstyle="round", zorder=2)
@@ -88,7 +88,7 @@ for c in order:
 ax.set_title("For Qwen too, reading the transcript from outside beats asking \"did you lie?\"",
              loc="left", fontsize=13, fontweight="bold", pad=26)
 ax.text(0, 1.015, f"An outside monitor beats Qwen's best question in {len(beat_any)} of {len(cats)} categories; "
-        f"both outside monitors do in {len(beat_all)}.", transform=ax.transAxes, fontsize=9.5, color=MUTED)
+        f"both outside monitors do in {len(beat_all)}. (Paper's rubric template.)", transform=ax.transAxes, fontsize=9.5, color=MUTED)
 fig.legend(handles=[Patch(color="#d6d3cb", label="Qwen asked \"did you lie?\" (range of its 4 questions)")]
            + [Line2D([], [], ls="", marker="o", ms=9, color=COL[k], mec="white", label=NAME[k]) for k in COL],
            loc="lower center", ncol=2, frameon=False, fontsize=9.5, bbox_to_anchor=(0.5, -0.14))

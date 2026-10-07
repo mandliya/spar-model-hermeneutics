@@ -29,8 +29,11 @@ api = HfApi(token=os.environ.get("HF_TOKEN"))
 paths = [e.path for e in api.list_repo_tree(REPO, path_in_repo=pfx.rstrip("/"), repo_type="dataset", recursive=True)
          if "/results/" in getattr(e, "path", "") and hasattr(e, "size")]
 # J6's mask-factual stopped after 34 rows (empty-trace crash); J6b redid it in full,
-# so J6's partial mask-factual files are left out to avoid counting rows twice.
-paths = [rp for rp in paths if not (rp.split("/")[3] == "J6" and "mask_factual" in rp)]
+# so J6's partial mask-factual files are left out to avoid counting rows twice. Their
+# lines still count as known below: an earlier merge left them in the local copies.
+is_partial = lambda rp: rp.split("/")[3] == "J6" and "mask_factual" in rp
+partial = {pathlib.Path(rp).name: rp for rp in paths if is_partial(rp)}
+paths = [rp for rp in paths if not is_partial(rp)]
 files = collections.defaultdict(list)
 for i, rp in enumerate(sorted(paths)):
     p = pathlib.Path(hf_hub_download(REPO, rp, repo_type="dataset", token=os.environ.get("HF_TOKEN")))
@@ -47,7 +50,10 @@ for name, paths in sorted(files.items()):
             for l in p.read_text().splitlines():
                 if l.strip() and l not in seen:
                     seen.add(l); lines.append(l)
-        if out.exists() and not set(l for l in out.read_text().splitlines() if l.strip()) <= seen:
+        known = seen | (set(pathlib.Path(hf_hub_download(REPO, partial[name], repo_type="dataset",
+                                                          token=os.environ.get("HF_TOKEN"))).read_text().splitlines())
+                        if name in partial else set())
+        if out.exists() and not set(l for l in out.read_text().splitlines() if l.strip()) <= known:
             print(f"!! {name}: local file has lines the boxes don't - left alone"); continue
         out.write_text("\n".join(lines) + "\n")
     elif name.endswith(".csv"):

@@ -2,34 +2,22 @@
 
 Kept in git so they survive a lost session. Delete a line when it's done.
 
-## Now (7 Oct 2026, ~07:30 UTC): what's running and what's next
+## Now (7 Oct 2026, ~11:00 UTC): what's done and what's next
 
-Running, laptop-independent: **Qwen-as-monitor retry** on Vast 54417474
-(`qwen/run_retry_monitor.sh`, full 2,801 Qwen transcripts, 2,048 tokens). It redoes
-every Qwen self-monitor reply with no `<score>` (514 left at 07:30) and uploads
-`models/qwen3-32b/results/third_person/monitor_qwen3-32b_paper.jsonl`, then STOPS
-the box (unconditionally, fixed 7 Oct). If it still shows as running in Vast long
-after ~09:30 UTC, stop it.
+Done (all in git; box outputs on HF):
+- Every monitor result with the paper's exact templates, both models. Unscored after
+  reruns: gemma-as-monitor 2 of 5,618, Qwen-as-monitor 12 of 5,602 (repetition loops,
+  no score given), Gemini and GPT-5 mini none. Gemini's last 3 cut-off replies (Qwen
+  ascii) rerun at 4,000 tokens on 7 Oct: $0.0069.
+- Qwen: all 11 categories. `qwen/11_merge_boxes.py` now replaces local files that still
+  held J6's partial mask-factual rows (that had kept J6b's P("A") out of the analysis).
+- RESULTS.md rewritten: the paper's rubric template is the main monitor result, a "what
+  the monitor is shown" chart (`charts/monitor_sees_system_prompt.png`), our templates
+  as a comparison column, Qwen's 11 categories in every gemma-vs-Qwen table. Docs
+  updated: `third_person/README.md`, `qwen/README.md`, `HF_DATASET_CARD.md`.
 
-Done (all on HF and in git):
-- Paper-template monitors (paper_3p = no system prompt; paper_3p_rubric = A2 rubric):
-  gemma transcripts: Gemini, GPT-5 mini, gemma (5,616/5,618 scored; 2 genuinely
-  unscorable: one repetition loop, one answer with no score). Qwen transcripts:
-  Gemini, GPT-5 mini (all scored; 14 Gemini replies redone at 4,000 tokens).
-- Qwen: all 11 categories (J6 ascii, J6b mask-factual); merged by `qwen/11_merge_boxes.py`.
-- First finding: hiding the system prompt (paper_3p) drops outside monitors to chance
-  on alibi (0.52-0.53) and mask-factual (0.47-0.74); with it (rubric) ~0.89-0.94.
-
-Next, no cost (once the Qwen retry has landed):
-1. Pull `monitor_qwen3-32b_paper.jsonl` from HF into `qwen/results/qwen3-32b/`, run
-   `qwen/11_merge_boxes.py`, then `compare_models.py` (reads both our and `_paper`
-   monitor files, all 4 prompts; latest record per key wins) and `qwen/13_charts.py`.
-2. RESULTS.md: paper-template monitors as the main monitor result (gemma chart
-   `third_person/04_report.py` and Qwen chart), a "what the monitor sees" chart
-   (paper_3p vs paper_3p_rubric), our old templates as a comparison column; Qwen's
-   ascii + mask-factual in every gemma-vs-Qwen table.
-3. Docs: `third_person/README.md`, `qwen/README.md`, `HF_DATASET_CARD.md`, and the
-   outdated "did_lie is unusable" claim (dataset rebuilt 5 Oct 2026).
+Gaps (each would need GPU time; not scheduled):
+- Qwen's mask-factual swap test was never run (J6b had no swap step).
 
 Next phase, the training replication (John's ask; agree the details with the user first):
 - Round 0: untrained gemma-3-27b P("A") on the paper's two folds (~0.60 in the paper).
