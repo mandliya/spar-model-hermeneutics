@@ -65,8 +65,11 @@ def exchanges(model, cat):
     C.RESULTS = ROOT[model]
     for mod in ["src.rollouts", "src.answer_probs"]:
         sys.modules.pop(mod, None)
-    from src import rollouts as RO
-    from src.answer_probs import named_cot_jobs, split_name
+    # import_module re-executes the popped modules; `from src import rollouts` would
+    # return the copy cached on the package, still reading the first model's folder
+    RO = importlib.import_module("src.rollouts")
+    AP = importlib.import_module("src.answer_probs")
+    named_cot_jobs, split_name = AP.named_cot_jobs, AP.split_name
     rows = list(RO.BUILDERS[cat]())
     rows += named_cot_jobs(rows, cat)
     for name, base, question, answer, _kind in rows:

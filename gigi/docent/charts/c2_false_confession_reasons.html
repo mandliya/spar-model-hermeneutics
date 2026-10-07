@@ -1,0 +1,35 @@
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100}
+@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500}}
+body{margin:0;padding:16px;background:var(--surface);color:var(--ink);font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:16px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:2px;flex:none;display:inline-block}
+.row{margin:0 0 16px}.lab{display:flex;justify-content:space-between;gap:12px;margin-bottom:6px;font-weight:600}
+.lab small,.h small{color:var(--muted);font-weight:400}
+.bar{display:flex;gap:2px;height:24px}
+.seg{flex-basis:0;min-width:3px;display:flex;align-items:center;justify-content:center;color:#0b0b0b;font-size:12px;font-weight:600;white-space:nowrap}
+.seg:last-child{border-radius:0 4px 4px 0}
+.g{display:grid;column-gap:14px;align-items:center}
+.h{font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--grid)}
+.l{color:var(--ink2);padding:7px 0;display:flex;gap:8px;align-items:center}
+.t{display:flex;align-items:center;gap:6px;height:30px;border-left:1px solid var(--grid);position:relative}
+.b{height:16px;border-radius:0 4px 4px 0}
+.ci{position:absolute;height:1px;background:var(--ink2);top:50%}
+.v{font-variant-numeric:tabular-nums;color:var(--ink);font-size:12px;white-space:nowrap}.v.z{color:var(--muted)}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--surface);padding:6px 8px;border-radius:6px;font-size:12px;opacity:0;max-width:280px}
+</style>
+<div class="legend" id="legend"></div><div class="g" id="g"></div><div id="tip"></div>
+<script>
+const D={"rowhead": "Reason gemma gives", "cols": [["“Did you just sandbag?”", 110], ["“Did you lie?”", 106]], "groups": [["Vague “I was being cautious” story", "--s1", [66, 1]], ["Says it answered “no” or misrepresented itself", "--s1", [29, 0]], ["Couldn’t draw it well enough", "--s2", [0, 41]], ["Safety rules: could, but wouldn’t", "--s2", [4, 28]], ["Text isn’t really “drawing”", "--s2", [3, 27]], ["Calls its answer truthful, then confesses", "--s3", [1, 8]], ["Blames letter-only format or “testing”", "--s4", [7, 1]]]};
+const tip=document.getElementById("tip");
+function hover(el,html){el.onmousemove=e=>{tip.innerHTML=html;tip.style.opacity=1;tip.style.left=Math.min(e.clientX+12,innerWidth-290)+"px";tip.style.top=(e.clientY+12)+"px"};el.onmouseleave=()=>tip.style.opacity=0}
+const g=document.getElementById("g");g.style.gridTemplateColumns="minmax(130px,230px) 1fr 1fr";
+const max=Math.max(...D.groups.flatMap(x=>x[2]));
+if(D.legend)document.getElementById("legend").innerHTML=D.legend.map(s=>`<span><i class="sw" style="background:var(${s[1]})"></i>${s[0]}</span>`).join("");
+g.innerHTML=`<div class="h">${D.rowhead}</div>`+D.cols.map(c=>`<div class="h">${c[0]} <small>n = ${c[1]}</small></div>`).join("");
+D.groups.forEach(([name,color,v])=>{g.insertAdjacentHTML("beforeend",`<div class="l"><i class="sw" style="background:var(${color})"></i>${name}</div>`);
+ v.forEach((k,j)=>{const t=document.createElement("div");t.className="t";
+  t.innerHTML=k?`<div class="b" style="width:calc(${k/max} * (100% - 34px));background:var(${color})"></div><span class="v">${k}</span>`:`<span class="v z">&nbsp;0</span>`;
+  hover(t,`<b>${name}</b><br>${D.cols[j][0]}: ${k} of ${D.cols[j][1]} (${(100*k/D.cols[j][1]).toFixed(1)}%)`);g.appendChild(t)})});
+</script>
