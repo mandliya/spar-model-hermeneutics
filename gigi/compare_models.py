@@ -229,13 +229,14 @@ def monitor_auroc(m, cat, T):
             and r.get("p_A_norm") is not None and not r.get("error")}
     out = []
     for mon in MONITORS[m]:
-        recs = {}
-        for r in jl(root / f"monitor_{mon}.jsonl"):
-            if "error" not in r or r["key"] not in recs: recs[r["key"]] = r
+        recs = {}   # our templates, then the paper's (_paper files); the latest record per key wins
+        for f in (root / f"monitor_{mon}.jsonl", root / f"monitor_{mon}_paper.jsonl"):
+            for r in jl(f):
+                if "error" not in r or r["key"] not in recs: recs[r["key"]] = r
         d = pd.DataFrame(recs.values())
         if not len(d): continue
         d["score"] = [parse_score(x) if isinstance(x, str) else None for x in d.get("raw", [None] * len(d))]
-        for v in ("plain", "rubric"):
+        for v in ("plain", "rubric", "paper_3p", "paper_3p_rubric"):
             x = d[(d.category == cat) & (d.variant == v) & d.sample_id.isin(T) & d.sample_id.isin(have) & d.score.notna()]
             t = np.array([T[s] for s in x.sample_id], dtype=bool); sc = x.score.astype(float).to_numpy()
             r = scored(sc[t], sc[~t], model=m, category=cat, monitor="self" if mon == m else mon, variant=v)

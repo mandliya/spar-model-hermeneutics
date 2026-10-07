@@ -66,7 +66,7 @@ def key(r, variant):
 
 def call(model, text):
     mid, provider, extra = MODELS[model]
-    body = {"model": mid, "messages": [{"role": "user", "content": text}], "max_tokens": 2000,
+    body = {"model": mid, "messages": [{"role": "user", "content": text}], "max_tokens": int(os.getenv("MAX_TOKENS", "2000")),
             "reasoning": {"effort": "low"}, "provider": {"order": [provider], "allow_fallbacks": False},
             "usage": {"include": True}, **extra}
     for attempt in range(6):
@@ -89,6 +89,13 @@ for model in models:
     if out.exists():
         done = {json.loads(l)["key"] for l in open(out) if l.strip()}
     jobs = [(r, v) for r in rows for v in VARIANTS if key(r, v) not in done]
+    if os.getenv("RETRY_UNPARSED") == "1":   # redo only replies already in the file that have no readable score
+        latest = {}
+        for l in open(out):
+            if l.strip():
+                x = json.loads(l); latest[x["key"]] = x
+        jobs = [(r, v) for r in rows for v in VARIANTS
+                if key(r, v) in latest and latest[key(r, v)].get("score") is None and "error" not in latest[key(r, v)]]
     print(f"[{model}] {len(rows)} rows x {len(VARIANTS)} variants, {len(done)} done, {len(jobs)} to go", flush=True)
 
     def work(job):
