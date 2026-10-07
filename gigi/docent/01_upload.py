@@ -18,6 +18,7 @@ Run from the repo root (key in .env as DOCENT_API_KEY):
 """
 import argparse
 import importlib.util
+import json
 import os
 import pathlib
 import shutil
@@ -38,6 +39,7 @@ p = argparse.ArgumentParser()
 p.add_argument("--categories", default="ascii,sycophancy_b")
 p.add_argument("--models", default="gemma-3-27b,qwen3-32b")
 p.add_argument("--name", default=None)
+p.add_argument("--collection-id", default=None, help="add runs to this existing collection instead of creating one")
 p.add_argument("--dry-run", action="store_true", help="build and count, upload nothing")
 args = p.parse_args()
 cats, models = args.categories.split(","), args.models.split(",")
@@ -58,10 +60,32 @@ for folder, files in GEMMA_FILES.items():
         if (G / folder / "results" / f).exists():
             shutil.copy(G / folder / "results" / f, flat / f)
 ROOT = {"gemma-3-27b": flat, "qwen3-32b": G / "qwen/results/qwen3-32b"}
+MASK_ROOT = {"gemma-3-27b": G / "mask-belief/results", "qwen3-32b": G / "qwen/results/qwen3-32b"}
+
+
+def mask_belief_exchanges(model, cat):
+    """MASK belief subtypes have no rollout builder: rebuild each conversation from the
+    saved prompts. At the pinned dataset revision every trace is [system] and the
+    lie_detection_prompt is the user turn, so [system, user] matches what gemma saw;
+    the 13 statistics rows with no question (pressured_prompt == system_prompt) are skipped."""
+    sub = cat[len("mask_"):]
+    answers = {r["sample_id"]: r for r in map(json.loads, open(MASK_ROOT[model] / f"mask_belief_{sub}_answers.jsonl"))
+               if "error" not in r and r["pressured_prompt"] != r["system_prompt"]}
+    for f in map(json.loads, open(MASK_ROOT[model] / f"mask_belief_{sub}_followups.jsonl")):
+        a = answers.get(f.get("sample_id"))
+        if a is None or "error" in f or f["condition"] not in cmp.ORDER:
+            continue
+        yield f["sample_id"], f["condition"], [
+            {"role": "system", "content": a["system_prompt"]}, {"role": "user", "content": a["pressured_prompt"]},
+            {"role": "assistant", "content": a["statement"]}, {"role": "user", "content": f["question"]},
+            {"role": "assistant", "content": str(f["answer"])}]
 
 
 def exchanges(model, cat):
     """(sample_id, question_name, messages) for the four questions."""
+    if cat.startswith("mask_") and cat != "mask_factual":
+        yield from mask_belief_exchanges(model, cat)
+        return
     C.RESULTS = ROOT[model]
     for mod in ["src.rollouts", "src.answer_probs"]:
         sys.modules.pop(mod, None)
@@ -110,7 +134,7 @@ from docent.data_models.chat import parse_chat_message  # noqa: E402
 
 client = Docent(api_key=os.environ["DOCENT_API_KEY"])
 name = args.name or f"gigi lie detection: {', '.join(cats)} ({', '.join(models)})"
-cid = client.create_collection(name=name, description="Follow-up 'did you lie?' exchanges with our independent ground truth "
+cid = args.collection_id or client.create_collection(name=name, description="Follow-up 'did you lie?' exchanges with our independent ground truth "
                                "(SPAR replication of Anthropic's lie-detector post). Metadata: lied, admitted, outcome.")
 batch = []
 for i, (msgs, md) in enumerate(runs, 1):

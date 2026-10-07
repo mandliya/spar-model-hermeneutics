@@ -18,8 +18,8 @@ For all 620 ascii runs with reasoning, a reader recorded what gemma's follow-up 
 
 ::html{title="What gemma says its earlier answer was, vs what it actually was (all 620 runs)" height="330"}
 <style>
-:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100}
-@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500}}
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#4a3aa7}
+@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9}}
 body{margin:0;padding:16px;background:var(--surface);color:var(--ink);font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
 .legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:16px;color:var(--ink2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -52,7 +52,7 @@ D.rows.forEach(([label,sub,v])=>{const n=v.reduce((a,b)=>a+b,0);
   const t=document.createElement("span");t.textContent=`${Math.round(100*k/n)}% (${k})`;s.appendChild(t);
   hover(s,`<b>${D.segs[i][0]}</b><br>${label}: ${k} of ${n} (${(100*k/n).toFixed(1)}%)`);bar.appendChild(s)});
  row.appendChild(bar);document.getElementById("rows").appendChild(row)});
-requestAnimationFrame(()=>document.querySelectorAll(".seg span").forEach(t=>{if(t.offsetWidth+12>t.parentElement.clientWidth)t.style.visibility="hidden"}));
+requestAnimationFrame(()=>document.querySelectorAll(".seg span").forEach(t=>{const s=t.parentElement;if(t.offsetWidth+12>s.clientWidth)t.style.visibility="hidden";const c=getComputedStyle(s).backgroundColor.match(/\d+/g).map(Number);s.style.color=(0.2126*c[0]+0.7152*c[1]+0.0722*c[2])/255<0.45?"#fff":"#0b0b0b"}));
 </script>
 ::
 
@@ -70,8 +70,8 @@ The 216 false confessions, grouped. The two questions produce almost completely 
 
 ::html{title="What gemma says it did wrong, by follow-up question (share of false confessions)" height="250"}
 <style>
-:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100}
-@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500}}
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#4a3aa7}
+@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9}}
 body{margin:0;padding:16px;background:var(--surface);color:var(--ink);font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
 .legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:16px;color:var(--ink2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -104,14 +104,14 @@ D.rows.forEach(([label,sub,v])=>{const n=v.reduce((a,b)=>a+b,0);
   const t=document.createElement("span");t.textContent=`${Math.round(100*k/n)}% (${k})`;s.appendChild(t);
   hover(s,`<b>${D.segs[i][0]}</b><br>${label}: ${k} of ${n} (${(100*k/n).toFixed(1)}%)`);bar.appendChild(s)});
  row.appendChild(bar);document.getElementById("rows").appendChild(row)});
-requestAnimationFrame(()=>document.querySelectorAll(".seg span").forEach(t=>{if(t.offsetWidth+12>t.parentElement.clientWidth)t.style.visibility="hidden"}));
+requestAnimationFrame(()=>document.querySelectorAll(".seg span").forEach(t=>{const s=t.parentElement;if(t.offsetWidth+12>s.clientWidth)t.style.visibility="hidden";const c=getComputedStyle(s).backgroundColor.match(/\d+/g).map(Number);s.style.color=(0.2126*c[0]+0.7152*c[1]+0.0722*c[2])/255<0.45?"#fff":"#0b0b0b"}));
 </script>
 ::
 
 ::html{title="False confessions per reason (count of runs)" height="340"}
 <style>
-:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100}
-@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500}}
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#4a3aa7}
+@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9}}
 body{margin:0;padding:16px;background:var(--surface);color:var(--ink);font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
 .legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:16px;color:var(--ink2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -185,8 +185,8 @@ A reader rated each of the 310 subjects 0–3 for sensitivity. It saw **only the
 
 ::html{title="How often gemma falsely says it can't draw, by subject sensitivity" height="230"}
 <style>
-:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100}
-@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500}}
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#4a3aa7}
+@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9}}
 body{margin:0;padding:16px;background:var(--surface);color:var(--ink);font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
 .legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:16px;color:var(--ink2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -233,8 +233,8 @@ On sycophancy B, gemma critiques an argument after a social cue from the user. A
 
 ::html{title="Sycophancy B false confessions per reason (count of runs)" height="400"}
 <style>
-:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100}
-@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500}}
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#4a3aa7}
+@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9}}
 body{margin:0;padding:16px;background:var(--surface);color:var(--ink);font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
 .legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:16px;color:var(--ink2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}

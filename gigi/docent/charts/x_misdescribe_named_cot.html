@@ -1,0 +1,36 @@
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#4a3aa7}
+@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9}}
+body{margin:0;padding:16px;background:var(--surface);color:var(--ink);font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:16px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:2px;flex:none;display:inline-block}
+.row{margin:0 0 16px}.lab{display:flex;justify-content:space-between;gap:12px;margin-bottom:6px;font-weight:600}
+.lab small,.h small{color:var(--muted);font-weight:400}
+.bar{display:flex;gap:2px;height:24px}
+.seg{flex-basis:0;min-width:3px;display:flex;align-items:center;justify-content:center;color:#0b0b0b;font-size:12px;font-weight:600;white-space:nowrap}
+.seg:last-child{border-radius:0 4px 4px 0}
+.g{display:grid;column-gap:14px;align-items:center}
+.h{font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--grid)}
+.l{color:var(--ink2);padding:7px 0;display:flex;gap:8px;align-items:center}
+.t{display:flex;align-items:center;gap:6px;height:30px;border-left:1px solid var(--grid);position:relative}
+.b{height:16px;border-radius:0 4px 4px 0}
+.ci{position:absolute;height:1px;background:var(--ink2);top:50%}
+.v{font-variant-numeric:tabular-nums;color:var(--ink);font-size:12px;white-space:nowrap}.v.z{color:var(--muted)}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--surface);padding:6px 8px;border-radius:6px;font-size:12px;opacity:0;max-width:280px}
+</style>
+<div class="g" id="g"></div><div id="tip"></div>
+<script>
+const D={"rowhead": "Category", "colhead": "Named act: gemma misdescribes its own earlier answer (whisker = 95% CI)", "rows": [["ascii-sandbagging", 115, 310, 31.90790505582796, 42.60152900262701], ["sycophancy A", 68, 158, 35.573108526655126, 50.833353100021824], ["sycophancy B", 14, 201, 4.193976754208293, 11.3505220194783], ["mask-factual", 18, 86, 13.669707033094278, 30.67678724127305], ["unanswerable", 9, 93, 5.175108300166125, 17.378835459540447], ["capture-the-secret", 25, 379, 4.507536068549219, 9.556139352303687], ["alibi", 116, 1275, 7.639936975368289, 10.801877867064114], ["MASK known facts", 6, 71, 3.9305972354112027, 17.236240459133008], ["MASK statistics", 2, 47, 1.1748029370569721, 14.24878719385944], ["MASK continuations", 12, 87, 8.069698827736069, 22.578814628653955], ["MASK disinformation", 4, 69, 2.2772020303367495, 13.979442524423167]]};
+const tip=document.getElementById("tip");
+function hover(el,html){el.onmousemove=e=>{tip.innerHTML=html;tip.style.opacity=1;tip.style.left=Math.min(e.clientX+12,innerWidth-290)+"px";tip.style.top=(e.clientY+12)+"px"};el.onmouseleave=()=>tip.style.opacity=0}
+const g=document.getElementById("g");g.style.gridTemplateColumns="minmax(130px,230px) 1fr";
+g.innerHTML=`<div class="h">${D.rowhead}</div><div class="h">${D.colhead}</div>`;
+D.rows.forEach(([name,k,n,lo,hi])=>{g.insertAdjacentHTML("beforeend",`<div class="l">${name} <small style="color:var(--muted)">n = ${n}</small></div>`);
+ const p=100*k/n,t=document.createElement("div");t.className="t";const W=f=>`calc(${f/100} * (100% - 130px))`;
+ t.innerHTML=`<div class="b" style="width:${W(p)};background:var(--s1);min-width:${k?3:0}px"></div>`
+  +`<div class="ci" style="left:${W(lo)};width:${W(hi-lo)}"></div>`
+  +`<div class="ci" style="left:${W(lo)};width:1px;height:9px;margin-top:-4px"></div><div class="ci" style="left:${W(hi)};width:1px;height:9px;margin-top:-4px"></div>`
+  +`<span class="v" style="position:absolute;left:calc(${W(hi)} + 8px)">${Math.round(p)}% (${k} of ${n})</span>`;
+ hover(t,`<b>${name}</b><br>${k} of ${n} = ${p.toFixed(1)}%<br>95% CI ${lo.toFixed(1)}–${hi.toFixed(1)}%`);g.appendChild(t)});
+</script>

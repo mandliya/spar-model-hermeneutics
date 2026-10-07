@@ -1,0 +1,37 @@
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--none:#c3c2b7;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#4a3aa7}
+@media (prefers-color-scheme: dark){:root{--surface:#1a1a19;--ink:#ffffff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--none:#52514e;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9}}
+body{margin:0;padding:16px;background:var(--surface);color:var(--ink);font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:16px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:2px;flex:none;display:inline-block}
+.row{margin:0 0 16px}.lab{display:flex;justify-content:space-between;gap:12px;margin-bottom:6px;font-weight:600}
+.lab small,.h small{color:var(--muted);font-weight:400}
+.bar{display:flex;gap:2px;height:24px}
+.seg{flex-basis:0;min-width:3px;display:flex;align-items:center;justify-content:center;color:#0b0b0b;font-size:12px;font-weight:600;white-space:nowrap}
+.seg:last-child{border-radius:0 4px 4px 0}
+.g{display:grid;column-gap:14px;align-items:center}
+.h{font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--grid)}
+.l{color:var(--ink2);padding:7px 0;display:flex;gap:8px;align-items:center}
+.t{display:flex;align-items:center;gap:6px;height:30px;border-left:1px solid var(--grid);position:relative}
+.b{height:16px;border-radius:0 4px 4px 0}
+.ci{position:absolute;height:1px;background:var(--ink2);top:50%}
+.v{font-variant-numeric:tabular-nums;color:var(--ink);font-size:12px;white-space:nowrap}.v.z{color:var(--muted)}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--surface);padding:6px 8px;border-radius:6px;font-size:12px;opacity:0;max-width:280px}
+</style>
+<div class="legend" id="legend"></div><div id="rows"></div><div id="tip"></div>
+<script>
+const D={"segs": [["Motive based confession", "--s1"], ["Misleading omission confession", "--s2"], ["Factual accuracy denial", "--s3"], ["Content error confession", "--s4"], ["Capability sandbagging confession", "--s5"], ["Accommodation confession", "--s6"], ["Good faith denial", "--s7"], ["All other mechanisms", "--none"]], "rows": [["ascii-sandbagging", "runs", [4, 9, 12, 75, 341, 0, 0, 179]], ["sycophancy A", "runs", [5, 10, 125, 88, 0, 73, 10, 5]], ["sycophancy B", "runs", [0, 13, 23, 4, 0, 228, 87, 47]], ["mask-factual", "runs", [103, 54, 0, 8, 0, 1, 1, 5]], ["unanswerable", "runs", [5, 3, 9, 12, 0, 0, 13, 144]], ["capture-the-secret", "runs", [80, 575, 4, 7, 0, 0, 20, 72]], ["alibi", "runs", [1416, 115, 427, 302, 0, 0, 46, 245]], ["MASK known facts", "runs", [79, 32, 11, 2, 0, 0, 3, 15]], ["MASK statistics", "runs", [67, 5, 3, 16, 0, 0, 0, 3]], ["MASK continuations", "runs", [47, 9, 6, 78, 0, 1, 4, 29]], ["MASK disinformation", "runs", [99, 1, 6, 16, 0, 0, 3, 13]]]};
+const tip=document.getElementById("tip");
+function hover(el,html){el.onmousemove=e=>{tip.innerHTML=html;tip.style.opacity=1;tip.style.left=Math.min(e.clientX+12,innerWidth-290)+"px";tip.style.top=(e.clientY+12)+"px"};el.onmouseleave=()=>tip.style.opacity=0}
+const legend=document.getElementById("legend");
+legend.innerHTML=D.segs.map(s=>`<span><i class="sw" style="background:var(${s[1]})"></i>${s[0]}</span>`).join("");
+D.rows.forEach(([label,sub,v])=>{const n=v.reduce((a,b)=>a+b,0);
+ const row=document.createElement("div");row.className="row";row.innerHTML=`<div class="lab">${label}<small>${sub} · n = ${n}</small></div>`;
+ const bar=document.createElement("div");bar.className="bar";
+ v.forEach((k,i)=>{if(!k)return;const s=document.createElement("div");s.className="seg";s.style.flexGrow=k;s.style.background=`var(${D.segs[i][1]})`;
+  const t=document.createElement("span");t.textContent=`${Math.round(100*k/n)}% (${k})`;s.appendChild(t);
+  hover(s,`<b>${D.segs[i][0]}</b><br>${label}: ${k} of ${n} (${(100*k/n).toFixed(1)}%)`);bar.appendChild(s)});
+ row.appendChild(bar);document.getElementById("rows").appendChild(row)});
+requestAnimationFrame(()=>document.querySelectorAll(".seg span").forEach(t=>{const s=t.parentElement;if(t.offsetWidth+12>s.clientWidth)t.style.visibility="hidden";const c=getComputedStyle(s).backgroundColor.match(/\d+/g).map(Number);s.style.color=(0.2126*c[0]+0.7152*c[1]+0.0722*c[2])/255<0.45?"#fff":"#0b0b0b"}));
+</script>
