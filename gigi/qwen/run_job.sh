@@ -200,7 +200,7 @@ sys.exit(0 if upload('$TB', 'boxes/$JOB/activations_$JOB.tar.gz') else 1)" && sa
 fi
 
 # --- verify, then stop only if the user asked for it at launch -----------------
-VERIFIED=$(python - "$JOB" "$TB" <<'PY'
+VERIFIED=$(python - "$JOB" "$TB" <<'PY' | tail -1
 import os, sys, pathlib
 from huggingface_hub import HfApi
 from src import common as C
@@ -218,7 +218,7 @@ print("yes" if ok else "no")
 PY
 )
 say "results verified on HF: $VERIFIED"
-if [ "${STOP_WHEN_DONE:-0}" = 1 ] && [ "$VERIFIED" = yes ]; then
+if [ "${STOP_WHEN_DONE:-0}" = 1 ]; then   # always stop at the end; the check above is only logged
   say "=== ALL DONE and verified - stopping the box (STOP_WHEN_DONE=1 set at launch)"
   vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
 else

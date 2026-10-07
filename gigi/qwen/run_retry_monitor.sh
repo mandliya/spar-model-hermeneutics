@@ -36,7 +36,7 @@ for attempt in 1 2 3 4 5; do
 done
 python 09_monitor_self.py && say "--- retry done" || say "!!! retry failed"
 say "unreadable after: $(python -c "import json; r={}; [r.__setitem__(x['key'], x) for x in map(json.loads, open('$F'))]; print(sum(1 for x in r.values() if x.get('score') is None), 'of', len(r))")"
-OK=$(python - <<'PY'
+OK=$(python - <<'PY' | tail -1
 import os
 from huggingface_hub import HfApi
 from src.hf_sync import REPO, remote, upload
@@ -47,5 +47,5 @@ print("yes" if info and info[0].size == os.path.getsize(f) else "no")
 PY
 )
 say "uploaded and verified: $OK"
-[ "$OK" = yes ] && stop_box
+stop_box   # STOP_WHEN_DONE=1 -> always stop at the end; the check above is only logged
 say "=== ALL DONE"

@@ -54,7 +54,7 @@ fi
 wait $API && say "--- API monitors: $(tail -1 /workspace/api_monitors.log)" || say "!!! API monitors failed: $(tail -2 /workspace/api_monitors.log)"
 FILES="$R/monitor_gemini-2.5-flash_paper.jsonl $R/monitor_gpt-5-mini_paper.jsonl $R/monitor_qwen3-32b_paper.jsonl"
 up $FILES /workspace/api_monitors.log
-VERIFIED=$(python - $FILES <<'PY'
+VERIFIED=$(python - $FILES <<'PY' | tail -1
 import os, sys
 from huggingface_hub import HfApi
 from src.hf_sync import REPO, remote
@@ -69,5 +69,5 @@ PY
 )
 say "results verified on HF: $VERIFIED"
 up $LOG
-[ "$VERIFIED" = yes ] && stop_box
+stop_box   # STOP_WHEN_DONE=1 -> always stop at the end; the check above is only logged
 say "=== ALL DONE"

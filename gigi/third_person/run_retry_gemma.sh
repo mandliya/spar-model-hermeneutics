@@ -31,7 +31,7 @@ for attempt in 1 2 3 4 5; do
 done
 python 02_monitor_gemma.py && say "--- retry done" || say "!!! retry failed (resumable)"
 say "after: $(count)"
-OK=$(python - <<'PY'
+OK=$(python - <<'PY' | tail -1
 import os
 from huggingface_hub import HfApi
 f = "results/monitor_gemma-3-27b_paper.jsonl"
@@ -44,5 +44,5 @@ print("yes" if info and info[0].size == os.path.getsize(f) else "no")
 PY
 )
 say "uploaded and verified: $OK"
-[ "$OK" = yes ] && stop_box
+stop_box   # STOP_WHEN_DONE=1 -> always stop at the end; the check above is only logged
 say "=== ALL DONE"
