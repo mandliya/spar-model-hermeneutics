@@ -76,6 +76,9 @@ are saved with every response), not estimates.
   box, never in chat. Rent GPUs with >= 80 GB of dedicated memory (RTX PRO
   6000, H100, A100 80GB); never GB10 / DGX Spark (shared memory, offloads to
   disk and crawls).
+- Before telling the user to stop or destroy a box, check whether pending GPU
+  work can reuse it (model already downloaded). If so, run it there instead of
+  renting a new box.
 - Progress can be checked from anywhere through the HF dataset's `results/`
   folder. SSH to a box needs the key on the user's laptop; from elsewhere the
   user can use the Vast web terminal.
