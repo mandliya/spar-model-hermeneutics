@@ -8,7 +8,7 @@
 cd "$(dirname "$0")"
 say () { echo "[$(date -u +%H:%M:%SZ)] [retry] $*"; }
 source /venv/main/bin/activate 2>/dev/null || true
-export HF_HOME=/workspace/.hf_home PYTHONUNBUFFERED=1 MONITOR_TAG=paper RETRY_UNPARSED=1
+export HF_HOME=/workspace/.hf_home PYTHONUNBUFFERED=1 MONITOR_TAG=paper RETRY_UNPARSED=1 MAX_NEW_TOKENS=2048
 stop_box () { [ "${STOP_WHEN_DONE:-0}" = 1 ] && { say "stopping the box"; vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"; }; }
 say "Vast instance: ${CONTAINER_ID:-unknown}"
 [ -n "$HF_TOKEN" ] || { say "!!! HF_TOKEN must be set"; exit 1; }
