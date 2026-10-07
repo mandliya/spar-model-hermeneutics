@@ -2,33 +2,34 @@
 
 Kept in git so they survive a lost session. Delete a line when it's done.
 
-## Now (6 Oct 2026, ~09:20 UTC): what's running and what's next
+## Now (7 Oct 2026, ~07:30 UTC): what's running and what's next
 
-Running on rented boxes, laptop-independent; each uploads to HF and stops itself:
-- **M2** (Qwen-as-monitor + Gemini/GPT-5 mini, the paper's EXACT 3rd-person templates,
-  `qwen/run_paper_monitors.sh`) -> `models/qwen3-32b/results/third_person/*_paper.jsonl`.
-- **J6b box**: mask-factual for Qwen done (`models/qwen3-32b/boxes/J6b/`); it waits for
-  M2's final log, then regenerates Qwen-as-monitor replies cut off before `<score>`
-  (2,048 tokens; `qwen/run_retry_monitor.sh`). If it's still running hours after M2,
-  stop it by hand.
-- **gemma retry** (Vast 54459935): regenerates gemma-as-monitor replies cut off before
-  `<score>` (1,595 of 5,618; `third_person/run_retry_gemma.sh`).
-- Already done: Gemini + GPT-5 mini with the paper templates on gemma's transcripts
-  (`results/third_person/monitor_*_paper.jsonl`). First finding: the paper's plain
-  3rd-person format hides the system prompt, and the monitors drop to chance on alibi
-  (0.52-0.53) and mask-factual (0.47-0.74); with it they are at 0.89-0.94.
+Running, laptop-independent: **Qwen-as-monitor retry** on Vast 54417474
+(`qwen/run_retry_monitor.sh`, full 2,801 Qwen transcripts, 2,048 tokens). It redoes
+every Qwen self-monitor reply with no `<score>` (514 left at 07:30) and uploads
+`models/qwen3-32b/results/third_person/monitor_qwen3-32b_paper.jsonl`, then STOPS
+the box (unconditionally, fixed 7 Oct). If it still shows as running in Vast long
+after ~09:30 UTC, stop it.
 
-Next, no cost:
-1. `qwen/11_merge_boxes.py` (now includes J6b; excludes J6's partial mask-factual), then
-   `compare_models.py` + `qwen/13_charts.py`: Qwen 11 of 11 categories in RESULTS.md.
-2. Make the paper-template monitors the main monitor result (read the `_paper` files in
-   `third_person/03_analyse_monitor.py`, `04_report.py`, `compare_models.py`; the
-   analysis keeps the LATEST record per key, so retries replace cut-off rows). Keep our
-   templates as a comparison; write up the system-prompt finding.
-3. Update `third_person/README.md`, `qwen/README.md`, `HF_DATASET_CARD.md` (Qwen files,
-   paper-template monitors), and the claim that `did_lie` is unusable: the dataset was
-   rebuilt on 5 Oct 2026 (labels fixed, transcripts end with the model's answer,
-   training folds `megafolds_fold_1/2`). Qwen code pins the old revision `e8fc10f`.
+Done (all on HF and in git):
+- Paper-template monitors (paper_3p = no system prompt; paper_3p_rubric = A2 rubric):
+  gemma transcripts: Gemini, GPT-5 mini, gemma (5,616/5,618 scored; 2 genuinely
+  unscorable: one repetition loop, one answer with no score). Qwen transcripts:
+  Gemini, GPT-5 mini (all scored; 14 Gemini replies redone at 4,000 tokens).
+- Qwen: all 11 categories (J6 ascii, J6b mask-factual); merged by `qwen/11_merge_boxes.py`.
+- First finding: hiding the system prompt (paper_3p) drops outside monitors to chance
+  on alibi (0.52-0.53) and mask-factual (0.47-0.74); with it (rubric) ~0.89-0.94.
+
+Next, no cost (once the Qwen retry has landed):
+1. Pull `monitor_qwen3-32b_paper.jsonl` from HF into `qwen/results/qwen3-32b/`, run
+   `qwen/11_merge_boxes.py`, then `compare_models.py` (reads both our and `_paper`
+   monitor files, all 4 prompts; latest record per key wins) and `qwen/13_charts.py`.
+2. RESULTS.md: paper-template monitors as the main monitor result (gemma chart
+   `third_person/04_report.py` and Qwen chart), a "what the monitor sees" chart
+   (paper_3p vs paper_3p_rubric), our old templates as a comparison column; Qwen's
+   ascii + mask-factual in every gemma-vs-Qwen table.
+3. Docs: `third_person/README.md`, `qwen/README.md`, `HF_DATASET_CARD.md`, and the
+   outdated "did_lie is unusable" claim (dataset rebuilt 5 Oct 2026).
 
 Next phase, the training replication (John's ask; agree the details with the user first):
 - Round 0: untrained gemma-3-27b P("A") on the paper's two folds (~0.60 in the paper).
