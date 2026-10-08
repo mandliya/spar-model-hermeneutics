@@ -19,18 +19,31 @@ Done (all in git; box outputs on HF):
 Gaps (each would need GPU time; not scheduled):
 - Qwen's mask-factual swap test was never run (J6b had no swap step).
 
-Next phase, the training replication (John's ask; agree the details with the user first):
-- Round 0: untrained gemma-3-27b P("A") on the paper's two folds (~0.60 in the paper).
-- Round 1: LoRA fine-tune with the paper's settings (rank 16, alpha 32, dropout 0.05,
-  final-token CE, 5 epochs, early stopping), fold 1 -> fold 2 and back
-  (paper: ~0.95 in-distribution, 0.70-0.75 unseen lie types).
-- Round 2: linear probes on activations, same split (white box).
-- Round 3: all detectors on OUR independently labelled data.
-- Open choices: ~5,000 (paper) vs ~9,000 training rows per fold; learning rate (research
-  options); gemma-27b only. Free groundwork: label audit (paper's fixed labels vs ours),
-  identify the ~3,300 fold rows not in any task-group file, draft the training code.
-- Then `NEXT_STEPS.md` for John. Later: the missing lie types (self-sycophancy,
-  CoT-unfaithfulness, off-policy, tool/chess sandbagging). Silico idea sent to John.
+## Direction from the 8 Oct 2026 call with John: hermeneutics (training runs shelved)
+
+John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target, reader = substitute).
+- SHELVED: the training-run replication and the paper's two extra datasets ("we can get
+  back to it later if it seems promising").
+- TQ: the probe gap (target white-box probe vs substitute white-box probe).
+- Gigi: the self-report ("resample") gap. Target = Qwen 80B (Qwen3-Next-80B-A3B-Instruct,
+  163 GB bf16 -> needs a 2 x 96 GB GPU box), substitute = gemma-3-27b.
+  1. Qwen-80B answers "did you lie?" / "did you sandbag?" on its own conversations.
+  2. Gemma gets the same conversations with Qwen's answer in its own reply slot, and the
+     same questions. Gap = how differently gemma answers ("benchmark diff of 80B target and
+     gemma 27B substitute", self-report).
+  3. Later: distil Qwen-80B into gemma; does the gap shrink?
+  Wider idea: resampling, e.g. edit a trajectory and see whether the substitute continues it
+  the way the target would (the HF-incident example).
+- Not in either dataset version: Noddybear/lies has no Qwen, so Qwen-80B's conversations
+  must be generated. Coordinate with TQ: one Qwen-80B run could serve both gaps (same
+  conversations; capture its activations for TQ's target probe).
+- Measure answers in both letter orders (the swap-test lesson): Qwen3-32B says "no" to
+  everything on several categories and gemma prefers "B" on named ascii, so a letter-only
+  gap would partly compare letter preferences.
+
+Still open from before (lower priority): Qwen's mask-factual swap test; the lie types not yet
+covered (self-sycophancy, CoT-unfaithfulness, off-policy, tool/chess sandbagging). Silico
+email to send.
 
 Docent: collection `9d681e5d-6093-402c-b1d6-afcb86d5eb3b` (ascii + sycophancy B, gemma +
 Qwen, 4,088 exchanges); uploader `docent/01_upload.py`; Claude Code plugin installed
