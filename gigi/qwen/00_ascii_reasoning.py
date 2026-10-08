@@ -129,7 +129,7 @@ def capture_state(messages: list[dict]) -> torch.Tensor:
     generating anything" snapshot as every other condition."""
     enc = build_ids(messages)
     out = model(**enc, output_hidden_states=True, use_cache=False)
-    last_token = torch.stack([h[0, -1, :] for h in out.hidden_states])
+    last_token = torch.stack([h[0, -1, :].cpu() for h in out.hidden_states])
     return last_token.to(torch.float32).cpu()
 
 

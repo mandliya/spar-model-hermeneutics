@@ -59,7 +59,10 @@ CONFIG = os.getenv("CONFIG", "google-gemma-3-27b-it_megafolds_fold_1")
 # qwen: the model comes ONLY from MODEL_TAG via this table, never from
 # a TARGET_MODEL in .env (the shared .env says gemma, which would silently
 # rerun gemma). Greedy, as for gemma's current results.
-MODELS = {"qwen3-32b": "Qwen/Qwen3-32B"}
+MODELS = {"qwen3-32b": "Qwen/Qwen3-32B",
+          # the hermeneutics target (8 Oct 2026): 80B mixture-of-experts, 3B active per
+          # token, no thinking mode; 163 GB in bf16 -> two 96 GB GPUs
+          "qwen3-next-80b": "Qwen/Qwen3-Next-80B-A3B-Instruct"}
 TARGET_MODEL = MODELS[MODEL_TAG]
 assert "gemma" not in TARGET_MODEL.lower(), "qwen is for models other than gemma"
 

@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 # One box = one job: the full gemma pipeline for this job's categories, on the
-# model in src/common.py (Qwen3-32B), one conversation at a time.
+# model named by MODEL_TAG (src/common.py: qwen3-32b, qwen3-next-80b), one
+# conversation at a time. MODEL_TAG must be set at launch.
 #   setup -> model download -> per category: smoke test (gate), first run,
 #   follow-ups, named_cot, activations, P("A") -> A/B swap -> transcripts ->
-#   monitors (the model itself, batched, on the GPU; Gemini + GPT-5 mini via
-#   API at the same time) -> activations packaged.
+#   monitors only if MONITORS=1 (the model itself, batched, on the GPU; Gemini +
+#   GPT-5 mini via API at the same time) -> activations packaged.
+# SMOKE_ONLY=1: stop after the smoke test (timings for a cost quote); job SMOKE
+# runs the smoke test on every category.
 # Results go to HF under models/<MODEL_TAG>/boxes/<JOB>/ after every stage.
 # A category that fails is logged and skipped; the other categories still run.
 # The box is NOT stopped unless STOP_WHEN_DONE=1 was set at launch (only on
@@ -29,26 +32,36 @@ case $JOB in
   J9)  CATS="mask_continuations" ;;
   J10) CATS="mask_disinformation" ;;
   J6b) CATS="mask_factual" ;;   # mask-factual again: J6 stopped on the empty-trace rows
-  *) echo "unknown job '$JOB' (J1-J10, J6b)"; exit 1 ;;
+  SMOKE) CATS="ascii sycophancy_a sycophancy_b mask_factual unanswerable capture_secret alibi mask_known_facts mask_statistics mask_continuations mask_disinformation"
+         SMOKE_ONLY=1 ;;   # every category's smoke test, then stop: per-category timings
+  *) echo "unknown job '$JOB' (J1-J10, J6b, SMOKE)"; exit 1 ;;
 esac
-say "categories: $CATS | shard: ${SHARD:-all rows} | Vast instance: ${CONTAINER_ID:-unknown}"
-# The model needs ~65 GB of dedicated GPU memory. A GB10 (DGX Spark, shared
-# CPU/GPU memory, reported as [N/A]) or a smaller card makes transformers
-# offload layers to disk and run at a crawl - refuse instead of crawling.
-GPU=$(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits | head -1)
-MEM=$(echo "$GPU" | awk -F', ' '{print $2}')
-if echo "$GPU" | grep -qi "GB10" || ! [ "${MEM:-0}" -ge 75000 ] 2>/dev/null; then
-  say "!!! WRONG GPU: '$GPU' - needs >= 75 GB of dedicated GPU memory (RTX PRO 6000 / H100 / H200 / A100 80GB). Not running."
+# No default model: a launch line without MODEL_TAG would silently rerun the wrong one.
+case "${MODEL_TAG:-}" in
+  qwen3-32b)      MIN_GPU_MIB=75000;  MIN_DISK_GB=150 ;;
+  qwen3-next-80b) MIN_GPU_MIB=170000; MIN_DISK_GB=250 ;;   # 163 GB of weights, spread over the GPUs
+  *) echo "MODEL_TAG must be set at launch (qwen3-32b or qwen3-next-80b), got '${MODEL_TAG:-}'"; exit 1 ;;
+esac
+export MODEL_TAG
+say "model: $MODEL_TAG | categories: $CATS | shard: ${SHARD:-all rows} | Vast instance: ${CONTAINER_ID:-unknown}"
+# Dedicated GPU memory, summed over every GPU (device_map="auto" spreads the model).
+# A GB10 (DGX Spark, shared CPU/GPU memory, reported as [N/A]) or too little memory
+# makes transformers offload layers to disk and run at a crawl - refuse instead.
+GPUS=$(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits)
+MEM=$(echo "$GPUS" | awk -F', ' '{s += $2} END {print s + 0}')
+DISK=$(df -BG --output=avail /workspace 2>/dev/null | tail -1 | awk '{print $NF}' | tr -dc '0-9')
+if echo "$GPUS" | grep -qi "GB10" || ! [ "${MEM:-0}" -ge "$MIN_GPU_MIB" ] 2>/dev/null || ! [ "${DISK:-0}" -ge "$MIN_DISK_GB" ] 2>/dev/null; then
+  say "!!! WRONG BOX: GPUs '$(echo $GPUS | tr '\n' ';')' = $MEM MiB (need >= $MIN_GPU_MIB), disk ${DISK:-?} GB free (need >= $MIN_DISK_GB). Not running."
   [ "${STOP_WHEN_DONE:-0}" = 1 ] && vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
   exit 1
 fi
-say "GPU OK: $GPU"
+say "GPU OK: $(echo "$GPUS" | wc -l | tr -d ' ') x $(echo "$GPUS" | head -1 | cut -d, -f1), $MEM MiB total | disk $DISK GB free"
 [ -n "$HF_TOKEN" ] && [ -n "$OPENROUTER_API_KEY" ] || { say "!!! HF_TOKEN and OPENROUTER_API_KEY must be set"; exit 1; }
 printf 'HF_TOKEN=%s\nOPENROUTER_API_KEY=%s\nJUDGE_MODEL=anthropic/claude-sonnet-4.5\n' "$HF_TOKEN" "$OPENROUTER_API_KEY" > .env
 chmod 600 .env
 
 # --- helpers ------------------------------------------------------------------
-R=results/$(python -c "import os; print(os.getenv('MODEL_TAG', 'qwen3-32b'))" 2>/dev/null || echo qwen3-32b)
+R=results/$MODEL_TAG
 push () {   # every results file (not tensors) -> models/<tag>/boxes/<JOB>/results
   python - "$JOB" <<'PY'
 import os, sys
@@ -87,6 +100,10 @@ run () { say "=== $*"; "$@" || { say "!!! failed: $*"; return 1; }; }
 say "=== setup: packages"
 pip install -q "transformers==5.17.0" accelerate pandas pyarrow fsspec huggingface_hub \
   python-dotenv openai tqdm statsmodels requests && say "--- packages OK"
+# Qwen3-Next's linear-attention layers: fast kernels from flash-linear-attention
+# (Python + Triton, nothing to compile); without it transformers falls back to a
+# slow plain-PyTorch path. Pinned so every box computes the same way.
+[ "$MODEL_TAG" = qwen3-next-80b ] && pip install -q "flash-linear-attention==0.5.2" && say "--- flash-linear-attention OK"
 python -c 'import transformers, torch; print("transformers", transformers.__version__, "| torch", torch.__version__, "| cuda", torch.cuda.is_available())'
 MODEL=$(python -c "from src import common as C; print(C.TARGET_MODEL)")
 say "=== setup: $MODEL"
@@ -144,15 +161,23 @@ chain () {
 
 # smoke test: every category, every stage, 2 rows. Any failure aborts the job
 # before the long run (box left running, unless STOP_WHEN_DONE=1).
+TIMES=""
 for c in $CATS; do
   say "##### SMOKE TEST: $c"
-  if chain $c 2 && gate $R/$FIRST 2 "$c first run"; then :; else
+  T0=$SECONDS
+  if chain $c 2 && gate $R/$FIRST 2 "$c first run"; then TIMES="$TIMES $c=$((SECONDS - T0))s"; else
     say "!!! SMOKE TEST FAILED for $c - aborting this job before the full run"; push
     [ "${STOP_WHEN_DONE:-0}" = 1 ] && vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
     exit 1
   fi
 done
-say "##### SMOKE TEST PASSED for every category: $CATS"; push
+say "##### SMOKE TEST PASSED for every category: $CATS"
+say "smoke-test seconds per category (2 rows, every stage):$TIMES"; push
+if [ "${SMOKE_ONLY:-0}" = 1 ]; then
+  say "=== SMOKE_ONLY: stopping here. Box is IDLE and STILL BILLING unless STOP_WHEN_DONE=1."
+  [ "${STOP_WHEN_DONE:-0}" = 1 ] && vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
+  exit 0
+fi
 
 for c in $CATS; do
   say "##### FULL RUN: $c"
@@ -173,7 +198,8 @@ fi
 
 # --- transcripts + monitors: Gemini/GPT via API (closed models) in the
 #     background while the model reads its own transcripts on the GPU ---------
-if run python 08_build_transcripts.py --categories $(echo $CATS | tr ' ' ','); then
+# (MONITORS=1 only: off by default since the Qwen3-32B run; transcripts are always built)
+if run python 08_build_transcripts.py --categories $(echo $CATS | tr ' ' ',') && [ "${MONITORS:-0}" = 1 ]; then
   python 10_monitor_api.py --models all > /workspace/monitor_api_$JOB.log 2>&1 &
   API=$!
   run python 09_monitor_self.py

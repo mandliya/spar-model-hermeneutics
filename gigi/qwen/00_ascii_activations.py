@@ -129,7 +129,7 @@ def capture_state(messages: list[dict]) -> torch.Tensor:
     out = model(**enc, output_hidden_states=True, use_cache=False)
     # hidden_states: tuple of (num_layers + 1) tensors, each [1, seq_len, hidden_dim]
     # (+1 because index 0 is the embedding output, before any transformer layer)
-    last_token = torch.stack([h[0, -1, :] for h in out.hidden_states])
+    last_token = torch.stack([h[0, -1, :].cpu() for h in out.hidden_states])
     return last_token.to(torch.float32).cpu()
 
 

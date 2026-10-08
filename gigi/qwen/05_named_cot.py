@@ -108,7 +108,7 @@ def generate(messages):
 @torch.inference_mode()
 def predecision(messages):
     out = model(**ids(messages), output_hidden_states=True, use_cache=False)
-    return torch.stack([h[0, -1, :] for h in out.hidden_states]).float().cpu()
+    return torch.stack([h[0, -1, :].cpu() for h in out.hidden_states]).float().cpu()
 
 
 for name, base, question in tqdm(todo):

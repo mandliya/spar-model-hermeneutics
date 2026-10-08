@@ -163,7 +163,7 @@ def generate(messages, max_new_tokens=300) -> str:
 def capture_predecision(messages) -> torch.Tensor:
     enc = build_ids(messages)
     out = model(**enc, output_hidden_states=True, use_cache=False)
-    return torch.stack([h[0, -1, :] for h in out.hidden_states]
+    return torch.stack([h[0, -1, :].cpu() for h in out.hidden_states]
                        ).to(torch.float32).cpu()
 
 
