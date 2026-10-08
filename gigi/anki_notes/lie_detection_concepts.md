@@ -241,3 +241,32 @@ and three detectors side by side: prompted baseline -> fine-tuned self-report
 (best black/grey box; the paper plateaus at 0.70-0.75 on unseen lie types) ->
 linear probe on activations (white box). Does the probe beat the plateau on
 unseen lie types?
+
+Q: What is "model hermeneutics" (John's Sept 2026 post)?
+A: Studying a model whose weights you can't open (the "author", or target)
+through the internals of an open-weight stand-in (the "reader", or
+substitute). You feed the author's conversation into the reader and probe
+the reader's activations. "Hermeneutics is about the interpretation of texts
+whose authors could not be asked directly."
+
+Q: What does "prefill the reader with the author's generation" mean?
+A: The reader doesn't write anything. The author's exact words (system
+prompt, user turn, the author's answer) go into the reader's context, with
+the author's answer in the reader's own assistant slot, as if the reader had
+written it. Then you ask the follow-up ("did you lie?") and record the
+reader's hidden state at that point.
+
+Q: How is the author-reader "faithfulness gap" measured?
+A: author_probe_performance - reader_probe_performance, in AUROC. Train a
+lie probe on the author's own activations (only possible when the author is
+open-weight, which is why you baseline with open models), and another on the
+reader's activations while it reads the same conversations, with the same
+labels. Small gap = the reader's internals reveal the author's lies almost
+as well as the author's own. The activations themselves are never compared
+directly; they have different sizes.
+
+Q: What is "reader interrogation"?
+A: The black-box version of hermeneutics: ask the reader a follow-up question
+about the author's conversation (e.g. "did you lie?") and use its answer,
+instead of probing its activations. In the post, probing beat interrogation
+in about half the settings.
