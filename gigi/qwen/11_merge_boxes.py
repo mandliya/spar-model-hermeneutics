@@ -36,6 +36,8 @@ partial = {pathlib.Path(rp).name: rp for rp in paths if is_partial(rp)}
 paths = [rp for rp in paths if not is_partial(rp)]
 # The SMOKE box's 2-row runs are only for timing; the real jobs redo those rows.
 paths = [rp for rp in paths if rp.split("/")[3] != "SMOKE"]
+# macOS metadata files (._name) that a Mac-built bundle carried onto the boxes
+paths = [rp for rp in paths if not pathlib.Path(rp).name.startswith("._")]
 files = collections.defaultdict(list)
 for i, rp in enumerate(sorted(paths)):
     p = pathlib.Path(hf_hub_download(REPO, rp, repo_type="dataset", token=os.environ.get("HF_TOKEN")))
