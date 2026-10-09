@@ -38,8 +38,8 @@ case $JOB in
 esac
 # No default model: a launch line without MODEL_TAG would silently rerun the wrong one.
 case "${MODEL_TAG:-}" in
-  qwen3-32b)      MIN_GPU_MIB=75000;  MIN_DISK_GB=150 ;;
-  qwen3-next-80b) MIN_GPU_MIB=170000; MIN_DISK_GB=250 ;;   # 163 GB of weights, spread over the GPUs
+  qwen3-32b)      MIN_GPU_MIB=75000;  MIN_DISK_GB=150; MODEL_ID=Qwen/Qwen3-32B; MODEL_GB=60 ;;
+  qwen3-next-80b) MIN_GPU_MIB=170000; MIN_DISK_GB=250; MODEL_ID=Qwen/Qwen3-Next-80B-A3B-Instruct; MODEL_GB=150 ;;   # 163 GB of weights
   *) echo "MODEL_TAG must be set at launch (qwen3-32b or qwen3-next-80b), got '${MODEL_TAG:-}'"; exit 1 ;;
 esac
 export MODEL_TAG
@@ -50,6 +50,11 @@ say "model: $MODEL_TAG | categories: $CATS | shard: ${SHARD:-all rows} | Vast in
 GPUS=$(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits)
 MEM=$(echo "$GPUS" | awk -F', ' '{s += $2} END {print s + 0}')
 DISK=$(df -BG --output=avail /workspace 2>/dev/null | tail -1 | awk '{print $NF}' | tr -dc '0-9')
+# A second job on the same box finds the model already downloaded: then it needs only
+# room for results, not for another copy (9 Oct: J7 and J10 were refused for this and
+# their boxes stopped).
+CACHED=$(du -sBG "$HF_HOME/hub/models--${MODEL_ID//\//--}" 2>/dev/null | cut -f1 | tr -dc '0-9')
+[ "${CACHED:-0}" -ge "$MODEL_GB" ] && MIN_DISK_GB=30
 if echo "$GPUS" | grep -qi "GB10" || ! [ "${MEM:-0}" -ge "$MIN_GPU_MIB" ] 2>/dev/null || ! [ "${DISK:-0}" -ge "$MIN_DISK_GB" ] 2>/dev/null; then
   say "!!! WRONG BOX: GPUs '$(echo $GPUS | tr '\n' ';')' = $MEM MiB (need >= $MIN_GPU_MIB), disk ${DISK:-?} GB free (need >= $MIN_DISK_GB). Not running."
   [ "${STOP_WHEN_DONE:-0}" = 1 ] && vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
