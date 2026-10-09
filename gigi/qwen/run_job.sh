@@ -61,6 +61,36 @@ if echo "$GPUS" | grep -qi "GB10" || ! [ "${MEM:-0}" -ge "$MIN_GPU_MIB" ] 2>/dev
   exit 1
 fi
 say "GPU OK: $(echo "$GPUS" | wc -l | tr -d ' ') x $(echo "$GPUS" | head -1 | cut -d, -f1), $MEM MiB total | disk $DISK GB free"
+# Two boxes (9 Oct) produced garbage text: the model split over two GPUs, with GPU-to-GPU
+# copies silently corrupted on those machines. Copy data between the GPUs and compare
+# before downloading anything. Refuses ONLY on a seen mismatch; if the test itself
+# errors, the job goes on (the smoke test still catches garbage text).
+P2P=$(python - <<'PY' 2>/dev/null | tail -1
+import sys
+try:
+    import torch
+    n = torch.cuda.device_count()
+    if n < 2:
+        print("P2P_SKIP single GPU"); sys.exit(0)
+    g = torch.Generator(device="cuda:0").manual_seed(0)
+    x = torch.randn(32 * 1024 * 1024, device="cuda:0", generator=g)
+    xb = x.to(torch.bfloat16)
+    bad = 0
+    for i in range(1, n):
+        for _ in range(3):
+            bad += int(not torch.equal(x.to(f"cuda:{i}").mul(2).to("cuda:0"), x.mul(2)))
+            bad += int(not torch.equal(xb.to(f"cuda:{i}").to("cuda:0"), xb))
+    print(("P2P_CORRUPT" if bad else "P2P_OK"), f"mismatches={bad} peer_access={torch.cuda.can_device_access_peer(0, 1)}")
+except Exception as e:
+    print("P2P_UNTESTED", repr(e)[:120])
+PY
+)
+say "GPU-to-GPU copy check: ${P2P:-no output}"
+if echo "$P2P" | grep -q "P2P_CORRUPT"; then
+  say "!!! WRONG BOX: copies between this machine's GPUs come back corrupted - the model would write garbage. Not running."
+  [ "${STOP_WHEN_DONE:-0}" = 1 ] && vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
+  exit 1
+fi
 [ -n "$HF_TOKEN" ] && [ -n "$OPENROUTER_API_KEY" ] || { say "!!! HF_TOKEN and OPENROUTER_API_KEY must be set"; exit 1; }
 printf 'HF_TOKEN=%s\nOPENROUTER_API_KEY=%s\nJUDGE_MODEL=anthropic/claude-sonnet-4.5\n' "$HF_TOKEN" "$OPENROUTER_API_KEY" > .env
 chmod 600 .env
