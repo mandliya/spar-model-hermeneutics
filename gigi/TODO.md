@@ -41,6 +41,22 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   everything on several categories and gemma prefers "B" on named ascii, so a letter-only
   gap would partly compare letter preferences.
 
+### Qwen3-Next-80B target run: status (9 Oct 2026)
+
+- Smoke test PASSED for all 11 categories on a 1x B200 (8 Oct, 07:16-08:04 UTC, ~$7.50;
+  log: models/qwen3-next-80b/boxes/SMOKE/ on HF; excluded from the merge). Once loaded,
+  the 80B is about as fast per row as Qwen3-32B was (0.87x); ~46 s model load per stage.
+- Quote (full run, all rows): ~25 GPU-hours -> ~$56-84 on 2x RTX PRO 6000 boxes
+  ($2.28-2.94/h), plus ~$15-25 judge. APPROVED by the user: full run, 8 boxes,
+  STOP_WHEN_DONE=1. Expected ~4-6 h wall time.
+- Boxes: J1 | J2 | J3 | J4 | J5 | J6 then J7 | J8 | J9 then J10. Two-job boxes run each
+  job in its own folder (/workspace/<JOB>/qwen) so the swap-test subset isn't shared;
+  only the second job may stop the box.
+- Launch lines (with keys, NOT in git): ~/gigi_launch/LAUNCH_QWEN80B_FULL.txt.
+  Code bundle: ggrazianoknapp/gigi-code qwen80b.tar.gz (private HF).
+- After the boxes finish: MODEL_TAG=qwen3-next-80b python qwen/11_merge_boxes.py, then
+  the substitute step (gemma reads Qwen-80B's conversations) and the gap analysis.
+
 Still open from before (lower priority): Qwen's mask-factual swap test; the lie types not yet
 covered (self-sycophancy, CoT-unfaithfulness, off-policy, tool/chess sandbagging). Silico
 email to send.
