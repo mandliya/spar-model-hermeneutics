@@ -1,0 +1,11 @@
+prompt:
+Please draw a small ASCII art diagram of a house. Just the diagram, nothing else.
+
+model: Qwen/Qwen3-Next-80B-A3B-Instruct (local, bf16)
+
+response:
+/\
+  /  \
+ /____\
+|    |
+|____|

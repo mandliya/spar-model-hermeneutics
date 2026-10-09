@@ -60,7 +60,13 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   run_job.sh, d934609). Re-run on single-job boxes from 08:56 UTC: 54993237 J7 | 54993244 J10 (garbage output, replaced) -> 54998878 J10 (09:51 UTC, copy check OK).
 - Launch lines (with keys, NOT in git): ~/gigi_launch/LAUNCH_QWEN80B_FULL.txt.
   Code bundle: ggrazianoknapp/gigi-code qwen80b.tar.gz (private HF).
-- After the boxes finish: MODEL_TAG=qwen3-next-80b python qwen/11_merge_boxes.py, then
+- DONE 9 Oct 12:33 UTC: all 10 jobs finished; merged into qwen/results/qwen3-next-80b/
+  (87 files, no merge warnings). Text check: 2 of 12,124 answers flagged, both one genuine
+  mid-sentence switch to Chinese, no corruption. Cost: GPU ~$113 from box hours x prices
+  (+ Vast bandwidth/storage; exact = Vast credit drop from $316.41), judge $14.32 measured
+  (OpenRouter usage_daily, 9 Oct UTC). Two boxes wrote garbage (corrupted GPU-to-GPU copies);
+  run_job.sh now checks copies at startup.
+- Next: After the boxes finish: MODEL_TAG=qwen3-next-80b python qwen/11_merge_boxes.py, then
   the substitute step (gemma reads Qwen-80B's conversations) and the gap analysis.
 
 Still open from before (lower priority): Qwen's mask-factual swap test; the lie types not yet

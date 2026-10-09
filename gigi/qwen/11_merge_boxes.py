@@ -31,7 +31,8 @@ paths = [e.path for e in api.list_repo_tree(REPO, path_in_repo=pfx.rstrip("/"), 
 # J6's mask-factual stopped after 34 rows (empty-trace crash); J6b redid it in full,
 # so J6's partial mask-factual files are left out to avoid counting rows twice. Their
 # lines still count as known below: an earlier merge left them in the local copies.
-is_partial = lambda rp: rp.split("/")[3] == "J6" and "mask_factual" in rp
+# (Qwen3-32B only: for qwen3-next-80b, J6 ran mask-factual in full.)
+is_partial = lambda rp: C.MODEL_TAG == "qwen3-32b" and rp.split("/")[3] == "J6" and "mask_factual" in rp
 partial = {pathlib.Path(rp).name: rp for rp in paths if is_partial(rp)}
 paths = [rp for rp in paths if not is_partial(rp)]
 # The SMOKE box's 2-row runs are only for timing; the real jobs redo those rows.
