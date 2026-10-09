@@ -55,6 +55,9 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
 - LAUNCHED 9 Oct 03:36-03:44 UTC, all 8 passed the box check (2x RTX PRO 6000):
   54966450 J1 (replaced 54959044, garbage output on a desktop Z890 board, ~04:50 UTC) | 54959047 J2 | 54959051 J3 | 54959055 J4 | 54959070 J5 |
   54959093 J6->J7 | 54959107 J8 | 54962686 J9->J10 (replaced 54959418 ~04:15 UTC). Each stops itself when done.
+  J7 and J10 did NOT run on those two-job boxes: the second job's 250 GB free-disk check
+  failed with the model already on disk, and STOP_WHEN_DONE stopped the box (fixed in
+  run_job.sh, d934609). Re-run on single-job boxes from 08:56 UTC: 54993237 J7 | 54993244 J10.
 - Launch lines (with keys, NOT in git): ~/gigi_launch/LAUNCH_QWEN80B_FULL.txt.
   Code bundle: ggrazianoknapp/gigi-code qwen80b.tar.gz (private HF).
 - After the boxes finish: MODEL_TAG=qwen3-next-80b python qwen/11_merge_boxes.py, then
