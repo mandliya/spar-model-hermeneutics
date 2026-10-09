@@ -66,8 +66,8 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   (+ Vast bandwidth/storage; exact = Vast credit drop from $316.41), judge $14.32 measured
   (OpenRouter usage_daily, 9 Oct UTC). Two boxes wrote garbage (corrupted GPU-to-GPU copies);
   run_job.sh now checks copies at startup.
-- Next: After the boxes finish: MODEL_TAG=qwen3-next-80b python qwen/11_merge_boxes.py, then
-  the substitute step (gemma reads Qwen-80B's conversations) and the gap analysis.
+- Next: the substitute step (gemma reads Qwen-80B's conversations, Qwen's answer in its own
+  reply slot, the same four questions in both letter orders) and the gap analysis.
 
 Still open from before (lower priority): Qwen's mask-factual swap test; the lie types not yet
 covered (self-sycophancy, CoT-unfaithfulness, off-policy, tool/chess sandbagging). Silico
