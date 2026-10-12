@@ -318,3 +318,35 @@ nothing is generated, so no GPU. You print a few wrapped conversations and
 read them: is Qwen's answer in the assistant slot, is the system prompt
 there, is the follow-up at the end? Mistakes found here cost nothing; found
 on a rented box they cost GPU hours.
+
+Q: Why would anyone feed one model's conversation into a different model?
+A: The models people worry about most are closed: you get their text, never
+their weights. Open models you can run yourself and look inside. So the
+question is whether an open model, reading the closed model's conversation,
+can tell you if the closed model lied. Analogy: you can't interview the
+author of a letter, so you hand the letter to someone else and ask "if you
+had written this, would it be a lie?"
+
+Q: Our target (Qwen-80B) is open-weight. Why use it, if the point is closed
+models?
+A: To test the method you need the right answer to compare against. With an
+open target you can ask it directly AND ask the stand-in, then see how much
+the stand-in loses. With a truly closed model you could only run the
+stand-in and would never know how far off it is. Qwen-80B plays the closed
+model in a rehearsal where we can still check the answer.
+
+Q: What do gemma's answers about Qwen's conversations tell us?
+A: Whether a stand-in can detect the target's lies from the text alone.
+Three outcomes. Small gap: gemma's answers track Qwen's lies about as well
+as Qwen's own, so a stand-in is usable. Qwen much better: Qwen knows
+something about its own answer that isn't in the text. gemma better: the
+target's own answer is the weak one (e.g. it denies everything), and a
+reader does better than asking it.
+
+Q: How is "gemma answers as if it wrote Qwen's reply" different from a
+third-person monitor?
+A: A monitor is told "here is another model's transcript, did it lie?" and
+gives a 1-100 score. The substitute sees the reply as its own previous turn
+and gets the same "Did you lie?" question Qwen got. Same question on both
+sides makes the comparison fair, and it puts gemma in the state TQ's probe
+reads.
