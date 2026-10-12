@@ -40,10 +40,15 @@ Run:
     MODEL_TAG=qwen3-next-80b python 16_substitute_followups.py --categories all --swap
 
 --limit N = the first N conversations, with all their questions. SHARD=k/n
-splits the rows across boxes. Resumable per answer; a failure on one row is
-logged and skipped, a category that fails is logged and the rest still run.
-The first 5 answers are a gate: fewer than 4 parseable stops the script.
-No API calls.
+splits the rows across boxes. No API calls.
+
+Resumable per answer: a rerun skips every answer already saved and retries the
+rows that errored (their error records stay in the file; the analysis reads the
+record without "error"). A failure on one row is logged and skipped, a category
+that fails is logged and the rest still run. The first 5 answers of a run are a
+gate: fewer than 4 parseable stops the script.
+Exit code: 0 = every job has an answer; 2 = some are missing (run it again);
+3 = the gate failed (do not rerun blindly).
 """
 
 import argparse
@@ -231,12 +236,17 @@ def predecision(messages):
     return torch.stack([h[0, -1, :].cpu() for h in out.hidden_states]).float().cpu()
 
 
-gate_checked = False
+def answered(path):
+    """Names that already have an answer; rows that only errored are tried again."""
+    return {r["name"] for r in C.read_jsonl(path) if "error" not in r} if path.exists() else set()
+
+
+gate_checked, missing = False, 0
 for cat in cats:
     try:
         js = select(cat)
         OUT = OUT_DIR / f"{'ab_swap' if args.swap else 'pa'}_{cat}.jsonl"
-        done = C.load_done(OUT, key="name")
+        done = answered(OUT)
         todo = [j for j in js if j[0] not in done]
         d = STAGE / cat
         if args.activations:
@@ -244,6 +254,7 @@ for cat in cats:
         print(f"[{cat}] {len(js)} answers, {len(done)} done, {len(todo)} to go", flush=True)
     except Exception as e:
         print(f"!!! [{cat}] could not build its jobs: {e!r} - continuing with the rest", flush=True)
+        missing += 1
         continue
 
     for n, (name, base, question, target_answer, kind) in enumerate(tqdm(todo, mininterval=60)):
@@ -281,6 +292,8 @@ for cat in cats:
                 "gpu_seconds": round(time.time() - t0, 3)})
         except Exception as e:
             C.append(OUT, {"name": name, "error": repr(e)[:500]})
+            if torch.cuda.is_available():   # after an out-of-memory error, give the memory back
+                torch.cuda.empty_cache()
 
         if not gate_checked and n == 4:
             recs = C.read_jsonl(OUT)[-5:]
@@ -290,13 +303,22 @@ for cat in cats:
                 print("   ", r.get("name"), repr((r.get("answer") or r.get("error") or ""))[:120],
                       r.get("admitted"), r.get("p_A_norm"), flush=True)
             if ok < 4:
-                raise SystemExit("GATE FAILED - stopping before the full run")
+                print("GATE FAILED - stopping before the full run", flush=True)
+                sys.exit(3)
             gate_checked = True
 
     recs = C.read_jsonl(OUT) if OUT.exists() else []
-    good = [r for r in recs if "error" not in r]
-    print(f"[{cat}] done: {len(good)} ok, {len(recs) - len(good)} errors, "
-          f"{sum(1 for r in good if r.get('admitted') is None)} unparseable, "
-          f"{sum(1 for r in good if r.get('p_A_norm') is None)} without a letter probability", flush=True)
-print(f"16_substitute_followups: ALL CATEGORIES DONE ({'swapped' if args.swap else 'original'} letter order)",
-      flush=True)
+    good = {r["name"]: r for r in recs if "error" not in r}
+    left = sum(1 for j in js if j[0] not in good)
+    missing += left
+    print(f"[{cat}] done: {len(good)} answered, {left} of this run's {len(js)} still missing, "
+          f"{len(recs) - len(good)} error records, "
+          f"{sum(1 for r in good.values() if r.get('admitted') is None)} unparseable, "
+          f"{sum(1 for r in good.values() if r.get('p_A_norm') is None)} without a letter probability",
+          flush=True)
+order = "swapped" if args.swap else "original"
+if missing:
+    print(f"16_substitute_followups: INCOMPLETE ({order} letter order): {missing} answers missing - run again",
+          flush=True)
+    sys.exit(2)
+print(f"16_substitute_followups: ALL CATEGORIES DONE ({order} letter order)", flush=True)

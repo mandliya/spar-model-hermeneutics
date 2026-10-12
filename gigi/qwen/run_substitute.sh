@@ -9,8 +9,11 @@
 # No API calls: only HF_TOKEN is needed.
 # ACTIVATIONS=0: don't save activations (default 1: both capture points, float32).
 # SMOKE_ONLY=1, or job SMOKE: stop after the smoke test (timings for a cost quote).
-# Results go to HF under models/<MODEL_TAG>/substitute/gemma-3-27b/boxes/<JOB>/
-# after every stage and every 20 minutes.
+# Results and the run log go to HF under
+# models/<MODEL_TAG>/substitute/gemma-3-27b/boxes/<JOB>/ after every stage and every
+# 10 minutes, starting before the model download.
+# Nothing here needs a restart of the box: downloads and stages are retried, every
+# stage resumes per answer, and pasting the same launch line again continues the job.
 # The box is NOT stopped unless STOP_WHEN_DONE=1 was set at launch (only on the
 # user's say-so).
 #
@@ -33,6 +36,11 @@ case $JOB in
   SMOKE) CATS=$ALL; SMOKE_ONLY=1 ;;    # every category's smoke test, then stop
   *) echo "unknown job '$JOB' (S1-S4, ALL, SMOKE)"; exit 1 ;;
 esac
+# One copy per box: pasting the launch line twice must not start a second run on the same GPU.
+if command -v flock > /dev/null; then
+  exec 9> /workspace/$JOB.lock
+  flock -n 9 || { say "!!! $JOB is ALREADY RUNNING on this box - not starting a second copy (check: tail -3 /workspace/job_$JOB.log)"; exit 1; }
+fi
 # No default target: a launch line without MODEL_TAG would read the wrong model's conversations.
 [ "${MODEL_TAG:-}" = qwen3-next-80b ] || { echo "MODEL_TAG must be set at launch (qwen3-next-80b), got '${MODEL_TAG:-}'"; exit 1; }
 export MODEL_TAG
@@ -88,50 +96,81 @@ PY
 ok_rows () {   # ok_rows <jsonl> -> number of rows without an "error" field
   python -c "import json,sys; print(sum(1 for l in open(sys.argv[1]) if l.strip() and 'error' not in json.loads(l)))" "$1" 2>/dev/null || echo 0
 }
-run () { say "=== $*"; "$@" || { say "!!! failed: $*"; return 1; }; }
-fail () { say "!!! $* - aborting this job before the full run"; push; stop_box; exit 1; }
+fail () { say "!!! $* - aborting this job before the full run"; kill $PUSHER 2>/dev/null; push; stop_box; exit 1; }
+retry () {   # retry <cmd...>: up to 3 attempts, for steps that only fail on a network hiccup
+  local a
+  for a in 1 2 3; do
+    say "=== $* (attempt $a)"; "$@" && return 0
+    say "!!! failed: $*"; sleep 30
+  done
+  return 1
+}
+stage () {   # stage <label> <args of 16_substitute_followups.py...>
+  # Up to 3 attempts. The script resumes per answer and retries errored rows, so an
+  # attempt that crashed or left rows unanswered (exit 2) carries on where it stopped.
+  # A failed gate (exit 3, unparseable answers) is never retried.
+  local label=$1 a rc; shift
+  for a in 1 2 3; do
+    say "##### $label (attempt $a)"
+    python 16_substitute_followups.py "$@"; rc=$?
+    push
+    [ $rc = 0 ] && { say "--- $label: complete"; return 0; }
+    [ $rc = 3 ] && { say "!!! $label: GATE FAILED - not retried"; return 3; }
+    say "!!! $label: stopped early or left answers missing (exit $rc) - resuming in 60 s"; sleep 60
+  done
+  say "!!! $label: still incomplete after 3 attempts"; return 1
+}
 
 # --- setup --------------------------------------------------------------------
 say "=== setup: packages"
-pip install -q "transformers==5.17.0" accelerate pandas pyarrow fsspec huggingface_hub \
-  python-dotenv tqdm sentencepiece protobuf && say "--- packages OK"
-python -c 'import transformers, torch; print("transformers", transformers.__version__, "| torch", torch.__version__, "| cuda", torch.cuda.is_available())'
+for attempt in 1 2 3; do
+  pip install -q "transformers==5.17.0" accelerate pandas pyarrow fsspec huggingface_hub \
+    python-dotenv tqdm sentencepiece protobuf && say "--- packages OK" && break
+  say "pip attempt $attempt failed, retrying"; sleep 20
+done
+python -c 'import transformers, torch, pandas, pyarrow, fsspec, dotenv, tqdm, accelerate; print("transformers", transformers.__version__, "| torch", torch.__version__, "| cuda", torch.cuda.is_available())' \
+  || fail "packages missing after 3 pip attempts"
+push   # the log is on HF from here on, so the box can be checked without opening it
+( exec 9>&-; while sleep 600; do push > /dev/null 2>&1; done ) &   # 9>&-: the pusher must not hold the lock
+PUSHER=$!
 say "=== setup: $READER_ID"
 for attempt in 1 2 3 4 5; do
-  [ $attempt -ge 2 ] && export HF_HUB_DISABLE_XET=1   # plain HTTP after an xet failure
-  python -c "from huggingface_hub import snapshot_download; print('DOWNLOADED', snapshot_download('$READER_ID'))" && break
-  say "download attempt $attempt failed, retrying"; sleep 30
+  [ $attempt -ge 2 ] && export HF_HUB_DISABLE_XET=1   # plain HTTP after an xet failure or hang
+  # a download that hangs is killed after 40 minutes and retried; finished files are kept
+  timeout 2400 python -c "from huggingface_hub import snapshot_download; print('DOWNLOADED', snapshot_download('$READER_ID'))" && break
+  say "download attempt $attempt failed or hung, retrying"; sleep 30
 done
 python -c "from huggingface_hub import snapshot_download; snapshot_download('$READER_ID', local_files_only=True)" \
   || fail "model download failed 5 times - nothing run"
 
 # --- render check: every job of this box, tokenizer only ----------------------
-run python 16_substitute_followups.py --render 0 --categories $CSV || fail "RENDER CHECK FAILED"
-run python 16_substitute_followups.py --render 0 --categories $CSV --swap || fail "RENDER CHECK FAILED (swapped order)"
+retry python 16_substitute_followups.py --render 0 --categories $CSV || fail "RENDER CHECK FAILED"
+retry python 16_substitute_followups.py --render 0 --categories $CSV --swap || fail "RENDER CHECK FAILED (swapped order)"
 
 # --- smoke test: 2 conversations per category, every question, both letter orders.
 #     All stages resume, so the full run continues from these rows. ------------
 T0=$SECONDS
-run python 16_substitute_followups.py --categories $CSV --limit 2 $ACT || fail "SMOKE TEST FAILED"
+# Aborts on a failed gate (unparseable answers) or a category with fewer than 6 of its 8
+# answers; one row that keeps erroring does not abort the job.
+stage "SMOKE TEST, original letter order" --categories $CSV --limit 2 $ACT
+[ $? = 3 ] && fail "SMOKE TEST FAILED (gate)"
 for c in $CATS; do
   n=$(ok_rows $R/pa_$c.jsonl)
   [ "$n" -ge 6 ] && say "--- smoke test OK: $c ($n of 8 answers)" || fail "SMOKE TEST FAILED: $c ($n of 8 answers)"
 done
-run python 16_substitute_followups.py --categories $CSV --limit 2 --swap || fail "SMOKE TEST FAILED (swapped order)"
+stage "SMOKE TEST, swapped letter order" --categories $CSV --limit 2 --swap
+[ $? = 3 ] && fail "SMOKE TEST FAILED (gate, swapped order)"
 say "##### SMOKE TEST PASSED for every category: $CATS ($((SECONDS - T0))s, model loaded twice)"; push
 if [ "${SMOKE_ONLY:-0}" = 1 ]; then
+  kill $PUSHER 2>/dev/null
   say "=== SMOKE_ONLY: stopping here. Box is IDLE and STILL BILLING unless STOP_WHEN_DONE=1."
   stop_box; exit 0
 fi
 
-# --- full run. Results are pushed every 20 minutes while it runs. The two letter
-#     orders are separate stages: one failing does not stop the other. ----------
-( while sleep 1200; do push > /dev/null 2>&1; done ) &
-PUSHER=$!
-say "##### FULL RUN: original letter order"
-run python 16_substitute_followups.py --categories $CSV $ACT; push
-say "##### FULL RUN: swapped letter order"
-run python 16_substitute_followups.py --categories $CSV --swap; push
+# --- full run. The two letter orders are separate stages: one failing does not
+#     stop the other. ------------------------------------------------------------
+stage "FULL RUN, original letter order" --categories $CSV $ACT; RC_ORIG=$?
+stage "FULL RUN, swapped letter order" --categories $CSV --swap; RC_SWAP=$?
 kill $PUSHER 2>/dev/null
 
 # --- activations: one tarball per job ----------------------------------------
@@ -169,6 +208,8 @@ print("yes" if ok else "no")
 PY
 )
 say "results verified on HF: $VERIFIED"
+[ "$RC_ORIG" = 0 ] && [ "$RC_SWAP" = 0 ] && say "##### JOB COMPLETE: every answer saved, both letter orders" \
+  || say "!!! JOB INCOMPLETE: original order exit $RC_ORIG, swapped order exit $RC_SWAP - paste the launch line again to resume"
 if [ "${STOP_WHEN_DONE:-0}" = 1 ]; then   # always stop at the end; the check above is only logged
   say "=== ALL DONE - stopping the box (STOP_WHEN_DONE=1 set at launch)"
   vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"

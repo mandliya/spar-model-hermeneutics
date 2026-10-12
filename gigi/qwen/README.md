@@ -113,7 +113,27 @@ a 2-conversation smoke test per category as a gate, then the full run.
 | ALL | everything on one box | 2,811 |
 | SMOKE | every category's smoke test, then stop | 22 |
 
-Not run yet (12 Oct 2026): needs a GPU box.
+Built not to need a box restart: downloads are retried (a hung one is killed and
+retried), each stage is tried up to 3 times and resumes per answer, rows that
+errored are retried, and pasting the same launch line again continues the job (a
+second copy refuses to start). Only a failed gate (unparseable answers) stops a
+job. The run log is on HF from the first minutes, then every 10 minutes.
+
+Tested on a laptop before launch (12 Oct 2026): the render check on all rows; the
+run path end to end with a tiny stand-in model (answers, P("A"), float32
+activations, resume, error retry, gate); `run_substitute.sh` on a simulated box
+(crash, missing rows, failed gate, wrong GPU, small disk, failed download,
+`STOP_WHEN_DONE`). Not testable without the GPU: gemma itself, which the smoke test
+covers in each box's first minutes.
+
+`run_swap_mask_factual.sh`: the mask-factual swap test neither Qwen run got
+(`run_job.sh` left it out by mistake). One 2 x 96 GB box for the 80B, nothing else
+rerun; output `ab_swap_mask_factual.jsonl` under `models/<MODEL_TAG>/boxes/J6swap/`,
+where `11_merge_boxes.py` picks it up.
+
+Launched 12 Oct 2026: code bundle `substitute.tar.gz` in the private HF repo
+`ggrazianoknapp/gigi-code`; launch lines (with the key, not in git) in
+`~/gigi_launch/LAUNCH_SUBSTITUTE.txt`.
 
 ## Status (7 Oct 2026)
 

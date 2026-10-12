@@ -73,12 +73,19 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   its own reply slot and answers the same four questions; `--swap` = the other letter
   order on the 80B's swap subset. Render check (tokenizer only, laptop) PASSED for all
   2,811 conversations / 11,244 answers and the 2,428 swapped ones. NOT RUN on a GPU yet.
-- Next: quote + user's yes for a gemma box (one >= 80 GB GPU; ~11 GPU-hours estimated from
-  gemma's measured per-question times, no judge cost) -> SMOKE job -> S1-S4 (or ALL) ->
-  merge -> gap analysis (target AUROC - substitute AUROC per category and question, both
+- LAUNCH, 12 Oct (user: "i need all of this + the 80B stuff that is missing", renting 5 boxes,
+  same-day results). Launch lines: ~/gigi_launch/LAUNCH_SUBSTITUTE.txt (keys, NOT in git);
+  bundle `substitute.tar.gz` on ggrazianoknapp/gigi-code. No STOP_WHEN_DONE: the user stops
+  the boxes. Activations ON (for TQ's substitute probe).
+  S1 alibi 0/2 | S2 alibi 1/2 | S3 capture + ascii | S4 the other 8 categories (1 x >= 80 GB GPU
+  each, `run_substitute.sh`) | J6swap = Qwen-80B's mask-factual swap (2 x 96 GB,
+  `run_swap_mask_factual.sh`). Instance IDs: in each job.log on HF
+  (models/qwen3-next-80b/substitute/gemma-3-27b/boxes/<JOB>/job.log, .../boxes/J6swap/job.log).
+  Estimate: ~15 box-hours of gemma + ~1 h of the 2-GPU box, roughly $20-30.
+- After the boxes finish: tell the user each idle box; merge the substitute results into
+  qwen/results/gemma-3-27b_reads_qwen3-next-80b/ (merge script still to write; 11_merge_boxes.py
+  for J6swap) -> gap analysis (target AUROC - substitute AUROC per category and question, both
   letter orders) -> RESULTS.md.
-- To decide before launch: save gemma's activations for TQ's substitute probe (ACTIVATIONS=1,
-  the default; ask TQ which positions they need); 4 boxes or 1.
 
 Still open from before (lower priority): Qwen's mask-factual swap test; the lie types not yet
 covered (self-sycophancy, CoT-unfaithfulness, off-policy, tool/chess sandbagging). Silico
