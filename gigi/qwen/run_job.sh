@@ -217,7 +217,9 @@ fi
 for c in $CATS; do
   say "##### FULL RUN: $c"
   if chain $c ""; then
-    case $c in mask_*) ;; *) followup_cats="$followup_cats $c" ;; esac
+    # only the four MASK belief categories have no swap test. This was `mask_*`, which
+    # also matched mask_factual: neither Qwen run got a mask-factual swap test.
+    case $c in mask_known_facts|mask_statistics|mask_continuations|mask_disinformation) ;; *) followup_cats="$followup_cats $c" ;; esac
     say "--- $c done"
   else
     say "!!! $c stopped early (see above); continuing with the rest"

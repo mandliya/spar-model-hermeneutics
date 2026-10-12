@@ -65,6 +65,56 @@ The code bundle the boxes download is in the private HF repo
 
 Box requirements: one ~96 GB GPU (RTX PRO 6000 or H100 80 GB), >= 150 GB disk.
 
+## Substitute step (hermeneutics): gemma reads the target's conversations
+
+`16_substitute_followups.py`: gemma-3-27b answers the four follow-up questions
+about another model's conversations, as if they were its own. The target is
+named by `MODEL_TAG` (`qwen3-next-80b`).
+
+- **What gemma sees:** the target's conversation exactly as the target saw it
+  (system prompt, user turns), with the target's answer in the assistant slot,
+  then the same follow-up question word for word. The conversations are rebuilt
+  by the code that built them for the target (`src/rollouts.py`,
+  `src/mask_belief.py`).
+- **What gemma writes:** only the answer to the follow-up. Greedy, one
+  conversation at a time, same token limits and parsers as the target's run.
+- **Saved per answer:** the reply, the letter, `admitted`, P("A") at the answer
+  token; with `--activations`, both capture points in float32.
+- **Both letter orders:** `--swap` reruns the questions with the options
+  reversed, on the target's own swap subset (`ab_swap_subset.csv`).
+- **Output:** `results/gemma-3-27b_reads_<MODEL_TAG>/`, with the target's file
+  names (`pa_<category>.jsonl`, `ab_swap_<category>.jsonl`). The target's folder
+  is only read. On HF: `models/<MODEL_TAG>/substitute/gemma-3-27b/boxes/<JOB>/`.
+- **Rows:** 2,811 conversations x 4 questions = 11,244 answers (11 categories);
+  swapped order on 607 conversations = 2,428 answers (7 categories).
+
+Render check (no GPU, no model, free; run from `gigi/qwen/`):
+
+```
+MODEL_TAG=qwen3-next-80b uv run --with transformers==5.17.0 --with torch --with pandas \
+  --with pyarrow --with fsspec --with huggingface_hub --with python-dotenv --with tqdm \
+  --with sentencepiece --with protobuf python 16_substitute_followups.py --render 1
+```
+
+It renders every job with gemma's chat template and checks that the target's
+answer is the last assistant turn, the follow-up is the last user turn, no
+turn's text is lost, and the job names are exactly the target's. Passed for
+both letter orders on 12 Oct 2026.
+
+On a box: `MODEL_TAG=qwen3-next-80b bash run_substitute.sh <JOB>` (one >= 80 GB
+GPU, >= 150 GB disk; only `HF_TOKEN` needed, no API calls). Render check, then
+a 2-conversation smoke test per category as a gate, then the full run.
+
+| Job | Categories | Conversations |
+|---|---|---|
+| S1, S2 | alibi, split in 2 (`SHARD=k/2`) | ~640 each |
+| S3 | capture-the-secret + ascii | 391 + 310 |
+| S4 | mask-factual, unanswerable, sycophancy A + B, the four MASK belief categories | 831 |
+| ALL | everything on one box | 2,811 |
+| SMOKE | every category's smoke test, then stop | 22 |
+
+Not run yet (12 Oct 2026): needs a GPU box.
+
 ## Status (7 Oct 2026)
 
 - **Done: all 11 categories** (J1-J10, J6b). Results are merged in

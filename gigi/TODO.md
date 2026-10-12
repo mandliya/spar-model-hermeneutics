@@ -17,7 +17,9 @@ Done (all in git; box outputs on HF):
   updated: `third_person/README.md`, `qwen/README.md`, `HF_DATASET_CARD.md`.
 
 Gaps (each would need GPU time; not scheduled):
-- Qwen's mask-factual swap test was never run (J6b had no swap step).
+- Neither Qwen model has a mask-factual swap test. Cause found 12 Oct: run_job.sh left
+  every `mask_*` category out of the swap, which also matched mask_factual (fixed). The
+  80B's would need a 2 x 96 GB box again (62 conversations x 4 questions).
 
 ## Direction from the 8 Oct 2026 call with John: hermeneutics (training runs shelved)
 
@@ -66,8 +68,17 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   (+ Vast bandwidth/storage; exact = Vast credit drop from $316.41), judge $14.32 measured
   (OpenRouter usage_daily, 9 Oct UTC). Two boxes wrote garbage (corrupted GPU-to-GPU copies);
   run_job.sh now checks copies at startup.
-- Next: the substitute step (gemma reads Qwen-80B's conversations, Qwen's answer in its own
-  reply slot, the same four questions in both letter orders) and the gap analysis.
+- Substitute step, 12 Oct: `qwen/16_substitute_followups.py` + `qwen/run_substitute.sh`
+  written (see qwen/README.md). gemma reads Qwen-80B's conversations with Qwen's answer in
+  its own reply slot and answers the same four questions; `--swap` = the other letter
+  order on the 80B's swap subset. Render check (tokenizer only, laptop) PASSED for all
+  2,811 conversations / 11,244 answers and the 2,428 swapped ones. NOT RUN on a GPU yet.
+- Next: quote + user's yes for a gemma box (one >= 80 GB GPU; ~11 GPU-hours estimated from
+  gemma's measured per-question times, no judge cost) -> SMOKE job -> S1-S4 (or ALL) ->
+  merge -> gap analysis (target AUROC - substitute AUROC per category and question, both
+  letter orders) -> RESULTS.md.
+- To decide before launch: save gemma's activations for TQ's substitute probe (ACTIVATIONS=1,
+  the default; ask TQ which positions they need); 4 boxes or 1.
 
 Still open from before (lower priority): Qwen's mask-factual swap test; the lie types not yet
 covered (self-sycophancy, CoT-unfaithfulness, off-policy, tool/chess sandbagging). Silico
