@@ -17,9 +17,9 @@ Done (all in git; box outputs on HF):
   updated: `third_person/README.md`, `qwen/README.md`, `HF_DATASET_CARD.md`.
 
 Gaps (each would need GPU time; not scheduled):
-- Neither Qwen model has a mask-factual swap test. Cause found 12 Oct: run_job.sh left
-  every `mask_*` category out of the swap, which also matched mask_factual (fixed). The
-  80B's would need a 2 x 96 GB box again (62 conversations x 4 questions).
+- Qwen3-32B has no mask-factual swap test (run_job.sh left every `mask_*` category out of
+  the swap, which also matched mask_factual; fixed 12 Oct). The 80B's was run on 12 Oct
+  (run_swap_mask_factual.sh). The 32B's: same script with MODEL_TAG=qwen3-32b, one 96 GB GPU.
 
 ## Direction from the 8 Oct 2026 call with John: hermeneutics (training runs shelved)
 
@@ -85,6 +85,10 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   55521262 S1 ($1.431/h) | 55521287 S2 ($1.490/h) | 55521295 S3 ($1.682/h) | 55521444 S4 ($1.732/h) |
   55522595 J6swap (2x RTX PRO 6000 Max-Q, Threadripper, $2.754/h; its log reaches HF only after
   the 163 GB download). $9.09/h while all five run; estimate ~$27 if each is stopped when done.
+- J6swap DONE 08:4x UTC (box 55522595): Qwen-80B's mask-factual swap test, 248 of 248 answers (62
+  conversations x 4 questions), 0 errors, 0 unparseable; merged into
+  qwen/results/qwen3-next-80b/ab_swap_mask_factual.jsonl. Box idle from then on (user told).
+- 08:36 UTC: all four gemma boxes passed their smoke tests and are in the full run.
 - 08:27 UTC: S2's smoke test passed on the GPU (16 of 16 answers parseable, letter = gemma's top-1
   token every time); it is in its full run. The other three were still downloading gemma.
 - After the boxes finish: tell the user each idle box. Then, from gigi/qwen/:
