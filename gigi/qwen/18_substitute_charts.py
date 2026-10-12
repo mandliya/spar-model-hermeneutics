@@ -85,10 +85,38 @@ for c in order:
     sw = sgn(B.loc[c, 'gap']) if c in B.index else "not run"
     rows.append(f"| {LABEL[c]} | {int(r.n_lied)} / {int(r.n_honest)} | {rng(r.t_lo, r.t_hi)} | {rng(r.s_lo, r.s_hi)} | "
                 f"{sgn(r.gap)} | {int(r.target_better)} / {int(r.substitute_better)} | {sw} | {rng(OWN.loc[c, 'min'], OWN.loc[c, 'max'])} |")
+
+# 3. does gemma give the same answers as Qwen? (between the SUBSTITUTE-ANSWERS markers) -----
+def wilson(k, n, z=1.96):
+    p = k / n
+    c, h = (p + z * z / (2 * n)) / (1 + z * z / n), z * ((p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5) / (1 + z * z / n)
+    return c - h, c + h
+
+
+pct = lambda v: f"{100 * v:.1f}%"
+N = ["both_yes", "both_no", "only_target_yes", "only_substitute_yes"]
+ans = ["| Question | n (answers) | Qwen says \"yes, I lied\" | gemma says yes | Same answer (95% interval) | gemma yes, Qwen no | Qwen yes, gemma no |",
+       "|---|---|---|---|---|---|---|"]
+for q in ["neutral", "neutral_cot", "named", "named_cot", "all four"]:
+    t = (O if q == "all four" else O[O.question == q])[N].sum()
+    n = int(t.sum()); same = int(t.both_yes + t.both_no); lo, hi = wilson(same, n)
+    ans.append(f"| {'**all four**' if q == 'all four' else '`' + q + '`'} | {n:,} | {pct((t.both_yes + t.only_target_yes) / n)} | "
+               f"{pct((t.both_yes + t.only_substitute_yes) / n)} | {pct(same / n)} ({100 * lo:.0f}–{100 * hi:.0f}%) | "
+               f"{int(t.only_substitute_yes):,} | {int(t.only_target_yes):,} |")
+cat = ["| Category | n | `neutral`: Qwen yes | gemma yes | same answer (95% interval) | `named`: Qwen yes | gemma yes | same answer (95% interval) |",
+       "|---|---|---|---|---|---|---|---|"]
+for c in order:
+    row = [LABEL[c], str(int(A.loc[c, "n_lied"] + A.loc[c, "n_honest"]))]
+    for q in ("neutral", "named"):
+        x = O[(O.category == c) & (O.question == q)].iloc[0]
+        row += [pct(x.target_yes), pct(x.substitute_yes), f"{pct(x.agreement)} ({100 * x.agreement_lo:.0f}–{100 * x.agreement_hi:.0f}%)"]
+    cat.append("| " + " | ".join(row) + " |")
+
 res = G / "RESULTS.md"
 s = res.read_text()
-s, k = re.subn(r"<!-- SUBSTITUTE-GAP:START -->.*?<!-- SUBSTITUTE-GAP:END -->",
-               lambda _: "<!-- SUBSTITUTE-GAP:START -->\n" + "\n".join(rows) + "\n<!-- SUBSTITUTE-GAP:END -->", s, flags=re.S)
+for tag, lines in [("SUBSTITUTE-GAP", rows), ("SUBSTITUTE-ANSWERS", ans), ("SUBSTITUTE-ANSWERS-BY-CATEGORY", cat)]:
+    s, k = re.subn(rf"<!-- {tag}:START -->.*?<!-- {tag}:END -->",
+                   lambda _: f"<!-- {tag}:START -->\n" + "\n".join(lines) + f"\n<!-- {tag}:END -->", s, flags=re.S)
+    print(f"RESULTS.md {tag} table updated" if k else f"!! no {tag} markers in RESULTS.md - table not written")
 res.write_text(s)
-print("RESULTS.md substitute table updated" if k else "!! no SUBSTITUTE-GAP markers in RESULTS.md - table not written")
-print("\n".join(rows))
+print("\n".join(ans + [""] + cat))

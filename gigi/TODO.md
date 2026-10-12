@@ -98,6 +98,14 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   finish was noticed late because the last log lines were never pushed (fixed: final_push).
   Cost: four gemma boxes ~$6.34/h from ~08:15 UTC, 80B box $2.754/h from ~08:15 UTC, each until
   the user destroys it (exact = Vast billing; the Vast API key on the laptop is invalid).
+- What John asked for (8 Oct call transcript, pasted by the user into the 8 Oct session): step 1
+  "do the substitution ... Take Gemma 27B. Put it back into where Qwen is right before you ask it
+  'Did you lie? Did you sandbag?' ... see if Gemma answers the same way as Qwen does" (18:06-19:09);
+  "This first step is to measure the gap and the second step is to use distillation to overcome the
+  gap or at least understand the gap" (19:09); "a benchmark diff of 80B target and Gemma 27B
+  substitute", self-report (19:30). Step 1 is DONE (12 Oct). Step 2 (distillation) not started.
+  Two readings of "the gap", both now in RESULTS.md: same answers? (agree on 62.5% of yes/no; gemma
+  says yes 62.7% vs Qwen 32.8%) and benchmark diff (AUROC 0.68 vs 0.62).
 - Result: gap small in most cells (27 of 44 no clear difference; Qwen better 12; gemma better 5);
   big gaps only on ascii and sycophancy A. See RESULTS.md "Hermeneutics".
 - Next ideas (none scheduled, each needs a go-ahead): outside monitors on the 80B's transcripts

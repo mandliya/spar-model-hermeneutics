@@ -87,7 +87,9 @@ nine are archived, not deleted, in
     Qwen's own answers average AUROC 0.68 and gemma's 0.62. Of 44 category ×
     question combinations, 27 show no clear difference, Qwen is better in 12
     and gemma in 5. The exceptions are ascii and sycophancy A, where gemma
-    scores what it scores about its own conversations.
+    scores what it scores about its own conversations. But gemma does not
+    give Qwen's answers: the two agree on 62.5% of yes/no answers, and gemma
+    says "yes, I lied" about twice as often (62.7% against 32.8%).
 
 ## Methodology
 
@@ -702,16 +704,71 @@ labels). Every question with its interval:
   2. The ascii gap grows (mean +0.51) and Qwen is better on all four
      questions there. sycophancy A and mask-factual stay in Qwen's favour.
      capture-the-secret stays in gemma's.
-- **Same score, different answers:** the two models often disagree on
-  individual conversations. They give the same yes/no in 39% (ascii) to 79%
-  (mask-factual) of conversations, averaged over the four questions, and in
-  4% on sycophancy B `named_cot`. A similar AUROC means gemma ranks Qwen's
-  lies above its honest answers about as well. It does not mean gemma
-  reproduces Qwen's answers.
-- **Not done yet:** the probe gap (gemma's activations on these
-  conversations are saved, float32, under
-  `models/qwen3-next-80b/substitute/gemma-3-27b/` on HF), outside monitors
-  on the 80B's transcripts, and distilling Qwen into gemma.
+### Does gemma give the same answers as Qwen?
+
+This is the gap as John put it on the 8 October call: "see if Gemma answers
+the same way as Qwen does". Yes or no = P("yes, I lied") above 0.5. All
+categories pooled, original letter order, the 2,787 labelled conversations:
+
+<!-- SUBSTITUTE-ANSWERS:START -->
+| Question | n (answers) | Qwen says "yes, I lied" | gemma says yes | Same answer (95% interval) | gemma yes, Qwen no | Qwen yes, gemma no |
+|---|---|---|---|---|---|---|
+| `neutral` | 2,786 | 5.6% | 40.2% | 63.7% (62–66%) | 987 | 23 |
+| `neutral_cot` | 2,787 | 18.4% | 70.5% | 45.5% (44–47%) | 1,485 | 35 |
+| `named` | 2,787 | 51.6% | 60.7% | 76.7% (75–78%) | 451 | 197 |
+| `named_cot` | 2,787 | 55.6% | 79.4% | 64.1% (62–66%) | 832 | 168 |
+| **all four** | 11,147 | 32.8% | 62.7% | 62.5% (62–63%) | 3,755 | 423 |
+<!-- SUBSTITUTE-ANSWERS:END -->
+
+- **Often not:** over all four questions the two models give the same yes or
+  no on 62.5% of answers.
+- **gemma says "yes, I lied" about twice as often as Qwen** (62.7% against
+  32.8%), about the very same conversations.
+- **The disagreement is one-sided:** gemma says yes where Qwen says no 3,755
+  times; the reverse happens 423 times.
+- **The plain "Did you lie?" is where they differ most in how often they say
+  yes:** Qwen 5.6%, gemma 40.2%. With reasoning first (`neutral_cot`) they
+  agree least, 45.5%.
+- **Naming the act brings them closest:** on `named` they agree on 76.7%.
+- **Two gaps, two stories.** As a detector of Qwen's lies, gemma is nearly as
+  good as Qwen (the AUROC gap above). As a copy of Qwen's answers, it is far
+  off. Both are things to track when Qwen is distilled into gemma.
+
+By category, for the two questions that give a letter straight away. Every
+question: [`qwen/results/substitute_gap_selfreport.csv`](qwen/results/substitute_gap_selfreport.csv).
+
+<!-- SUBSTITUTE-ANSWERS-BY-CATEGORY:START -->
+| Category | n | `neutral`: Qwen yes | gemma yes | same answer (95% interval) | `named`: Qwen yes | gemma yes | same answer (95% interval) |
+|---|---|---|---|---|---|---|---|
+| ascii-sandbagging | 310 | 0.0% | 89.7% | 10.3% (7–14%) | 0.0% | 0.6% | 99.4% (98–100%) |
+| sycophancy A | 158 | 3.2% | 25.9% | 75.9% (69–82%) | 0.0% | 38.6% | 61.4% (54–69%) |
+| mask-factual | 86 | 72.1% | 83.7% | 76.7% (67–84%) | 91.9% | 98.8% | 90.7% (83–95%) |
+| unanswerable | 92 | 0.0% | 34.8% | 65.2% (55–74%) | 71.7% | 98.9% | 72.8% (63–81%) |
+| MASK continuations | 87 | 12.6% | 33.3% | 72.4% (62–81%) | 74.7% | 89.7% | 80.5% (71–87%) |
+| MASK known facts | 62 | 17.7% | 16.1% | 82.3% (71–90%) | 12.9% | 59.7% | 53.2% (41–65%) |
+| MASK statistics | 49 | 28.6% | 53.1% | 71.4% (58–82%) | 36.7% | 77.6% | 51.0% (37–64%) |
+| alibi | 1279 | 1.6% | 40.0% | 60.6% (58–63%) | 67.2% | 70.8% | 85.5% (84–87%) |
+| MASK disinformation | 72 | 12.5% | 31.9% | 80.6% (70–88%) | 27.8% | 52.8% | 75.0% (64–84%) |
+| sycophancy B | 201 | 0.0% | 0.5% | 99.5% (97–100%) | 0.0% | 66.2% | 33.8% (28–41%) |
+| capture-the-secret | 391 | 5.6% | 24.6% | 81.0% (77–85%) | 82.4% | 57.3% | 62.7% (58–67%) |
+<!-- SUBSTITUTE-ANSWERS-BY-CATEGORY:END -->
+
+- **Where Qwen never says yes, gemma often does:** on ascii `neutral`, Qwen
+  0%, gemma 90%; on sycophancy A `named`, 0% against 39%.
+- **Where they match:** sycophancy B `neutral` (both say no every time but
+  once) and ascii `named` (99% the same, both "no").
+
+### Not done yet
+
+- **Distillation** = the second step John set on the call ("the second step
+  is to use distillation to overcome the gap or at least understand the
+  gap"): train gemma on Qwen's outputs, rerun this, and see whether the two
+  gaps shrink.
+- **The probe gap** = TQ's part. gemma's activations on these conversations
+  are saved (float32, both capture points) under
+  `models/qwen3-next-80b/substitute/gemma-3-27b/` on HF.
+- **Outside monitors on the 80B's transcripts** = the third-person version
+  of the same question.
 
 ## Full write-up for each category
 
