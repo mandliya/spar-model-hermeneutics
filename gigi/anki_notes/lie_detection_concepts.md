@@ -350,3 +350,28 @@ gives a 1-100 score. The substitute sees the reply as its own previous turn
 and gets the same "Did you lie?" question Qwen got. Same question on both
 sides makes the comparison fair, and it puts gemma in the state TQ's probe
 reads.
+
+Q: Probe gap vs self-report gap: are these two different metrics?
+A: No, both are a difference of two AUROCs. AUROC is the grade; what gets
+graded differs. Probe gap (TQ, the post's "faithfulness gap"): the score
+comes from a logistic regression trained on the model's activations.
+Self-report gap (Gigi): the score is the model's own P("A") when asked "did
+you lie?". Think of a 2 x 2 table per category: rows = target (Qwen-80B) and
+substitute (gemma), columns = probe and ask. Each gap is one column, top
+minus bottom.
+
+Q: Is the "probe gap" a comparison of the two probes themselves (their
+weights or the activations)?
+A: No. Each probe is trained and graded separately, on its own model's
+activations, and only the two grades are subtracted. The probes can't be
+compared directly: the models have different hidden sizes, so the weight
+vectors don't even have the same length. The hermeneutics post never
+compares activations across models either.
+
+Q: What did the hermeneutics post find when it distilled the author into
+the reader?
+A: Distilling = training the reader on the author's prompt-response pairs so
+it behaves more like the author. In the post's gender-secret example the
+distilled reader's probe AUROC rose to 0.90, "recovering 75% of the lost
+performance". With small 9B students the gains "varied highly per seed", so
+it is promising but not reliable yet.
