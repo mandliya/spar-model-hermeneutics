@@ -85,10 +85,14 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   55521262 S1 ($1.431/h) | 55521287 S2 ($1.490/h) | 55521295 S3 ($1.682/h) | 55521444 S4 ($1.732/h) |
   55522595 J6swap (2x RTX PRO 6000 Max-Q, Threadripper, $2.754/h; its log reaches HF only after
   the 163 GB download). $9.09/h while all five run; estimate ~$27 if each is stopped when done.
-- After the boxes finish: tell the user each idle box; merge the substitute results into
-  qwen/results/gemma-3-27b_reads_qwen3-next-80b/ (merge script still to write; 11_merge_boxes.py
-  for J6swap) -> gap analysis (target AUROC - substitute AUROC per category and question, both
-  letter orders) -> RESULTS.md.
+- 08:27 UTC: S2's smoke test passed on the GPU (16 of 16 answers parseable, letter = gemma's top-1
+  token every time); it is in its full run. The other three were still downloading gemma.
+- After the boxes finish: tell the user each idle box. Then, from gigi/qwen/:
+  `MODEL_TAG=qwen3-next-80b python 17_merge_substitute.py` (substitute boxes ->
+  results/gemma-3-27b_reads_qwen3-next-80b/) and `MODEL_TAG=qwen3-next-80b python 11_merge_boxes.py`
+  (J6swap's ab_swap_mask_factual.jsonl); from the repo root `python gigi/substitute_gap.py`
+  (target AUROC - substitute AUROC per category and question, both letter orders, paired bootstrap;
+  tested on a fake substitute with a known answer). Then RESULTS.md.
 
 Still open from before (lower priority): Qwen's mask-factual swap test; the lie types not yet
 covered (self-sycophancy, CoT-unfaithfulness, off-policy, tool/chess sandbagging). Silico
