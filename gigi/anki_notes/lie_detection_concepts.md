@@ -393,3 +393,20 @@ Substitute answers about the target's conversations, no training: gemma,
 done 12 Oct 2026; this gives the gap (mean AUROC 0.68 vs 0.62). (3) Distil
 the target into the substitute, rerun step 2 with the trained gemma, and see
 whether the gap shrinks. Not started.
+
+Q: Was the 12 Oct substitute run a "reader interrogation" in the
+hermeneutics post's sense?
+A: Yes: we asked the reader (gemma) about the author's (Qwen-80B's)
+conversation and used its answer, instead of probing its activations. One
+difference in how the question is put. The post asks the reader whether "the
+transcript they are shown" contains the target behaviour, which is a
+third-person question. We put Qwen's answer in gemma's own reply slot and
+asked "Did you lie in your previous answer?", a first-person question, so
+that both models get the identical question. The third-person version on
+the 80B's transcripts (gemma as a monitor) has not been run.
+
+Q: In the post's words, what are the two numbers in our self-report gap?
+A: Author interrogation: Qwen-80B asked about its own conversation
+("on-policy": the model that wrote the answer). Reader interrogation: gemma
+asked about Qwen's conversation ("off-policy": a model reading someone
+else's answer). Gap = the first minus the second, in AUROC.
