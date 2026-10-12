@@ -91,12 +91,20 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
 - 08:36 UTC: all four gemma boxes passed their smoke tests and are in the full run.
 - 08:27 UTC: S2's smoke test passed on the GPU (16 of 16 answers parseable, letter = gemma's top-1
   token every time); it is in its full run. The other three were still downloading gemma.
-- After the boxes finish: tell the user each idle box. Then, from gigi/qwen/:
-  `MODEL_TAG=qwen3-next-80b python 17_merge_substitute.py` (substitute boxes ->
-  results/gemma-3-27b_reads_qwen3-next-80b/) and `MODEL_TAG=qwen3-next-80b python 11_merge_boxes.py`
-  (J6swap's ab_swap_mask_factual.jsonl); from the repo root `python gigi/substitute_gap.py`
-  (target AUROC - substitute AUROC per category and question, both letter orders, paired bootstrap;
-  tested on a fake substitute with a known answer). Then RESULTS.md.
+- DONE 12 Oct 12:00 UTC: all four gemma boxes finished (S2 11:28, S4 11:35, S1 11:53, S3 12:00 UTC),
+  11,244 answers + 2,428 swapped, 0 errors; activations tarballs on HF. Merged
+  (17_merge_substitute.py), gap computed (substitute_gap.py), chart + RESULTS.md section
+  written (18_substitute_charts.py). User told at 12:17 UTC that all five boxes are idle; the
+  finish was noticed late because the last log lines were never pushed (fixed: final_push).
+  Cost: four gemma boxes ~$6.34/h from ~08:15 UTC, 80B box $2.754/h from ~08:15 UTC, each until
+  the user destroys it (exact = Vast billing; the Vast API key on the laptop is invalid).
+- Result: gap small in most cells (27 of 44 no clear difference; Qwen better 12; gemma better 5);
+  big gaps only on ascii and sycophancy A. See RESULTS.md "Hermeneutics".
+- Next ideas (none scheduled, each needs a go-ahead): outside monitors on the 80B's transcripts
+  (transcripts are built: qwen/results/qwen3-next-80b/transcripts); a "prefill" variant where gemma
+  reads Qwen's own follow-up reasoning and only the final letter is scored; TQ's probe gap from
+  the saved activations; distil Qwen into gemma; the 80B's own tables in RESULTS.md
+  (compare_models.py still reads Qwen3-32B only); HF dataset card: add the substitute folder.
 
 Still open from before (lower priority): Qwen's mask-factual swap test; the lie types not yet
 covered (self-sycophancy, CoT-unfaithfulness, off-policy, tool/chess sandbagging). Silico

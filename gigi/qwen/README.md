@@ -131,9 +131,24 @@ covers in each box's first minutes.
 rerun; output `ab_swap_mask_factual.jsonl` under `models/<MODEL_TAG>/boxes/J6swap/`,
 where `11_merge_boxes.py` picks it up.
 
-Launched 12 Oct 2026: code bundle `substitute.tar.gz` in the private HF repo
-`ggrazianoknapp/gigi-code`; launch lines (with the key, not in git) in
-`~/gigi_launch/LAUNCH_SUBSTITUTE.txt`.
+Run on 12 Oct 2026 (four gemma boxes S1-S4, 08:24-12:00 UTC; one 2-GPU box for the
+80B swap): all 11,244 answers and all 2,428 swapped ones, 0 errors, 0 unparseable;
+the 80B's mask-factual swap, 248 of 248. No job needed a restart. Code bundle
+`substitute.tar.gz` in the private HF repo `ggrazianoknapp/gigi-code`; launch lines
+(with the key, not in git) in `~/gigi_launch/LAUNCH_SUBSTITUTE.txt`.
+
+Afterwards (no GPU): `17_merge_substitute.py` (boxes -> `results/gemma-3-27b_reads_<MODEL_TAG>/`),
+`../substitute_gap.py` (target AUROC - substitute AUROC per category and question,
+both letter orders, paired bootstrap -> `results/substitute_gap_*.csv`),
+`18_substitute_charts.py` (the chart and the table in `../RESULTS.md`).
+
+gemma's activations on these conversations (both capture points, float32, original
+letter order): `models/<MODEL_TAG>/substitute/gemma-3-27b/boxes/<JOB>/substitute_activations_<JOB>.tar.gz`
+on HF (S1 3.3 GB, S2 3.3 GB, S3 3.6 GB, S4 4.3 GB); file names are in each answer's
+`predecision_file` / `answer_token_file`.
+
+One thing the run showed: a finished box's last log lines never reached HF, so from
+outside it looked "still running" (fixed: `final_push`).
 
 ## Status (7 Oct 2026)
 

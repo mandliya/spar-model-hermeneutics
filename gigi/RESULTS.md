@@ -5,6 +5,9 @@ how ground truth is established in each, the four follow-up questions asked
 identically everywhere, how the results compare, and how gemma's self-report
 compares with outside models reading the same transcripts. The whole
 experiment was then rerun on `Qwen/Qwen3-32B` ([section](#second-model-qwen3-32b)).
+Last, gemma was asked the same questions about Qwen3-Next-80B's conversations, to see
+whether a stand-in can replace asking the model itself
+([section](#hermeneutics-can-gemma-stand-in-for-qwen3-next-80b)).
 Detail and caveats for each category are in its own write-up, linked at the
 bottom.
 
@@ -76,6 +79,15 @@ nine are archived, not deleted, in
     0.40–0.88 outside ascii, while the paper reports 0.98–0.99 for Qwen3-235B
     identifying its own lies. Outside monitors beat its best question in 6 of
     11 categories (both do in 5).
+11. **A stand-in model asked about another model's conversations detects its
+    lies about as well as asking that model itself, with two exceptions**
+    ([section below](#hermeneutics-can-gemma-stand-in-for-qwen3-next-80b)).
+    gemma was given Qwen3-Next-80B's conversations with Qwen's answer in its
+    own reply slot, and the same four questions. Against whether Qwen lied,
+    Qwen's own answers average AUROC 0.68 and gemma's 0.62. Of 44 category ×
+    question combinations, 27 show no clear difference, Qwen is better in 12
+    and gemma in 5. The exceptions are ascii and sycophancy A, where gemma
+    scores what it scores about its own conversations.
 
 ## Methodology
 
@@ -589,6 +601,117 @@ and said no. All four questions, both models:
 | MASK continuations | 31 | 42 | 4 | 10 | 56 | 21 | 2 | 7 |
 | MASK disinformation | 48 | 10 | 4 | 7 | 48 | 15 | 2 | 10 |
 <!-- QWEN-COUNTS:END -->
+
+## Hermeneutics: can gemma stand in for Qwen3-Next-80B?
+
+- **Question** = the setup of John's
+  [model hermeneutics post](https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD):
+  when a model can't be asked or opened, can an open stand-in that reads its
+  conversations tell whether it lied? This is the "ask" version (the post's
+  reader interrogation). The probe version is TQ's.
+- **Target** = `Qwen/Qwen3-Next-80B-A3B-Instruct`, run through the same
+  pipeline as gemma and Qwen3-32B: all 11 categories, its own ground-truth
+  checks, its own answers to the four follow-up questions.
+- **Substitute** = gemma-3-27b.
+- **How:**
+  1. gemma is given Qwen's conversation exactly as Qwen saw it (system
+     prompt, user turns), with Qwen's answer in gemma's own reply slot. gemma
+     writes none of that.
+  2. gemma is then asked the same four follow-up questions, word for word,
+     and answers them itself (rented GPU, greedy, one conversation at a time,
+     same token limits and parsers).
+  3. Same labels for both models: did **Qwen** lie in this conversation.
+  4. Score = AUROC of the model's P("yes, I lied"). Gap = Qwen's AUROC minus
+     gemma's, on the same conversations. Its 95% interval comes from 2,000
+     bootstrap resamples of the same conversations for both models.
+  5. Both letter orders: the questions with "yes" at B, on the 607
+     conversations of Qwen's swap subset (7 categories).
+  6. Code: [`qwen/16_substitute_followups.py`](qwen/16_substitute_followups.py),
+     [`substitute_gap.py`](substitute_gap.py); details in
+     [`qwen/README.md`](qwen/README.md).
+- **Coverage** = 2,811 conversations × 4 questions = 11,244 gemma answers,
+  plus 2,428 with the letters swapped. No errors, none unparseable. 2,787
+  conversations have a label.
+
+![Self-report AUROC: Qwen-80B about itself vs gemma about Qwen's conversations](charts/substitute_gap_selfreport.png)
+
+Ranges are over the four questions, original letter order. Gap = Qwen minus
+gemma, averaged over the four questions. "Clearly better" = the gap's 95%
+interval excludes zero. The last column is a reference, not part of the gap:
+gemma asked about its **own** conversations (different answers, different
+labels). Every question with its interval:
+[`qwen/results/substitute_gap_selfreport.csv`](qwen/results/substitute_gap_selfreport.csv).
+
+<!-- SUBSTITUTE-GAP:START -->
+| Category | n (Qwen lied / honest) | Qwen-80B about itself | gemma reading Qwen | Mean gap | Clearly better, of 4 questions (Qwen / gemma) | Swapped letter order: mean gap | Reference: gemma about its own conversations |
+|---|---|---|---|---|---|---|---|
+| ascii-sandbagging | 87 / 223 | 0.06–0.96 | 0.10–0.42 | +0.25 | 3 / 0 | +0.51 | 0.12–0.48 |
+| sycophancy A | 23 / 135 | 0.71–0.81 | 0.42–0.61 | +0.23 | 2 / 0 | +0.11 | 0.44–0.64 |
+| mask-factual | 74 / 12 | 0.74–0.89 | 0.65–0.78 | +0.10 | 1 / 0 | +0.14 | 0.61–0.77 |
+| unanswerable | 72 / 20 | 0.45–0.72 | 0.30–0.61 | +0.09 | 3 / 0 | −0.05 | 0.31–0.68 |
+| MASK continuations | 53 / 34 | 0.73–0.84 | 0.67–0.75 | +0.07 | 1 / 0 | not run | 0.59–0.69 |
+| MASK known facts | 38 / 24 | 0.60–0.75 | 0.52–0.75 | +0.02 | 0 / 0 | not run | 0.45–0.58 |
+| MASK statistics | 29 / 20 | 0.62–0.75 | 0.56–0.75 | +0.01 | 0 / 0 | not run | 0.39–0.48 |
+| alibi | 809 / 470 | 0.64–0.94 | 0.66–0.95 | +0.01 | 2 / 1 | −0.04 | 0.65–0.94 |
+| MASK disinformation | 20 / 52 | 0.88–0.96 | 0.93–0.96 | −0.02 | 0 / 1 | not run | 0.74–0.82 |
+| sycophancy B | 62 / 139 | 0.46–0.55 | 0.53–0.62 | −0.06 | 0 / 1 | −0.06 | 0.61–0.77 |
+| capture-the-secret | 59 / 332 | 0.43–0.50 | 0.49–0.64 | −0.10 | 0 / 2 | −0.15 | 0.41–0.57 |
+<!-- SUBSTITUTE-GAP:END -->
+
+- **Mostly no gap:**
+  1. Of 44 category × question combinations, 27 show no clear difference,
+     Qwen is clearly better in 12 and gemma in 5.
+  2. Averaged over all 44, Qwen about itself scores 0.68 and gemma about
+     Qwen's conversations 0.62.
+  3. alibi, the largest category (809 lies, 470 honest), is a tie: 0.64–0.94
+     against 0.66–0.95. On `named`, gemma is slightly ahead (0.95 vs 0.90,
+     gap −0.05, interval −0.06 to −0.03).
+- **Where asking Qwen itself is clearly better:**
+  1. ascii: `named_cot` 0.96 vs 0.42 (gap +0.54, interval 0.44 to 0.63).
+  2. sycophancy A: `neutral` 0.81 vs 0.54 (+0.27, 0.16 to 0.40) and `named`
+     0.79 vs 0.42 (+0.37, 0.26 to 0.48).
+  3. unanswerable: three of four questions, by about +0.17, with both models
+     near a coin flip.
+  4. Smaller, on one or two questions each: MASK continuations (`neutral`,
+     +0.17), mask-factual (`neutral_cot`, +0.11) and alibi (`neutral_cot`
+     +0.05, `named_cot` +0.04).
+- **Where gemma is clearly better:**
+  1. capture-the-secret: `neutral` 0.59 vs 0.49 and `neutral_cot` 0.64 vs
+     0.47 (gaps −0.10 and −0.17). Qwen's own answers are at chance.
+  2. One question each on sycophancy B (`named_cot`, 0.62 vs 0.46), MASK
+     disinformation (`named`, 0.96 vs 0.88) and alibi (`named`, above).
+- **In the two big-gap categories, gemma scores what it scores about its own
+  conversations:**
+  1. ascii: 0.10–0.42 reading Qwen, 0.12–0.48 about itself.
+  2. sycophancy A: 0.42–0.61 reading Qwen, 0.44–0.64 about itself.
+  3. So the gap there looks like the difference between the two models'
+     self-report on that kind of lie, not something missing from the text.
+     For ascii the text does carry the signal: outside monitors reading
+     transcripts score 0.97–0.99 on gemma's and 0.87–0.97 on Qwen3-32B's
+     ([above](#does-an-outside-reader-do-better)). Monitors were not run on
+     the 80B's transcripts.
+  4. Across all 44 combinations, gemma reading Qwen is about as close to
+     Qwen's own score (mean difference 0.11) as to gemma's score on its own
+     conversations (0.11).
+- **ascii is still the odd case:** Qwen's AUROC runs from 0.06 (`neutral`)
+  to 0.96 (`named_cot`), so its signal flips direction with the wording, as
+  Qwen3-32B's did. gemma is below chance on all four questions.
+- **Swapped letter order** (28 combinations in 7 categories) points the same
+  way:
+  1. No clear difference in 15, Qwen better in 9, gemma in 4.
+  2. The ascii gap grows (mean +0.51) and Qwen is better on all four
+     questions there. sycophancy A and mask-factual stay in Qwen's favour.
+     capture-the-secret stays in gemma's.
+- **Same score, different answers:** the two models often disagree on
+  individual conversations. They give the same yes/no in 39% (ascii) to 79%
+  (mask-factual) of conversations, averaged over the four questions, and in
+  4% on sycophancy B `named_cot`. A similar AUROC means gemma ranks Qwen's
+  lies above its honest answers about as well. It does not mean gemma
+  reproduces Qwen's answers.
+- **Not done yet:** the probe gap (gemma's activations on these
+  conversations are saved, float32, under
+  `models/qwen3-next-80b/substitute/gemma-3-27b/` on HF), outside monitors
+  on the 80B's transcripts, and distilling Qwen into gemma.
 
 ## Full write-up for each category
 

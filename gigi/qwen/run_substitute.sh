@@ -97,6 +97,14 @@ ok_rows () {   # ok_rows <jsonl> -> number of rows without an "error" field
   python -c "import json,sys; print(sum(1 for l in open(sys.argv[1]) if l.strip() and 'error' not in json.loads(l)))" "$1" 2>/dev/null || echo 0
 }
 fail () { say "!!! $* - aborting this job before the full run"; kill $PUSHER 2>/dev/null; push; stop_box; exit 1; }
+final_push () {   # the last log lines must reach HF: on 12 Oct finished boxes looked "still running"
+  # from outside for up to 50 minutes. Never holds up the end of the job for more than 5 minutes.
+  push > /dev/null 2>&1 &
+  local p=$! i=0
+  while kill -0 $p 2>/dev/null && [ $i -lt 300 ]; do sleep 1; i=$((i + 1)); done
+  kill $p 2>/dev/null
+  return 0
+}
 retry () {   # retry <cmd...>: up to 3 attempts, for steps that only fail on a network hiccup
   local a
   for a in 1 2 3; do
@@ -164,7 +172,7 @@ say "##### SMOKE TEST PASSED for every category: $CATS ($((SECONDS - T0))s, mode
 if [ "${SMOKE_ONLY:-0}" = 1 ]; then
   kill $PUSHER 2>/dev/null
   say "=== SMOKE_ONLY: stopping here. Box is IDLE and STILL BILLING unless STOP_WHEN_DONE=1."
-  stop_box; exit 0
+  final_push; stop_box; exit 0
 fi
 
 # --- full run. The two letter orders are separate stages: one failing does not
@@ -212,7 +220,9 @@ say "results verified on HF: $VERIFIED"
   || say "!!! JOB INCOMPLETE: original order exit $RC_ORIG, swapped order exit $RC_SWAP - paste the launch line again to resume"
 if [ "${STOP_WHEN_DONE:-0}" = 1 ]; then   # always stop at the end; the check above is only logged
   say "=== ALL DONE - stopping the box (STOP_WHEN_DONE=1 set at launch)"
+  final_push
   vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
 else
   say "=== ALL STAGES FINISHED - box is IDLE and STILL BILLING; stop it by hand"
+  final_push
 fi

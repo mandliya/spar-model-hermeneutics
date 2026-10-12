@@ -92,6 +92,14 @@ for local, dest in ((out, remote(f"boxes/{job}/results/{os.path.basename(out)}")
             print("push failed:", repr(e)[:200], flush=True)
 PY
 }
+final_push () {   # the last log lines must reach HF: on 12 Oct finished boxes looked "still running"
+  # from outside for up to 50 minutes. Never holds up the end of the job for more than 5 minutes.
+  push > /dev/null 2>&1 &
+  local p=$! i=0
+  while kill -0 $p 2>/dev/null && [ $i -lt 300 ]; do sleep 1; i=$((i + 1)); done
+  kill $p 2>/dev/null
+  return 0
+}
 run () { say "=== $*"; "$@" || { say "!!! failed: $*"; return 1; }; }
 
 say "=== setup: packages"
@@ -124,7 +132,9 @@ N=$(python -c "import json,sys; print(sum(1 for l in open(sys.argv[1]) if l.stri
 say "mask-factual swap: $N answers without error (248 expected for qwen3-next-80b)"
 if [ "${STOP_WHEN_DONE:-0}" = 1 ]; then
   say "=== DONE - stopping the box (STOP_WHEN_DONE=1 set at launch)"
+  final_push
   vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
 else
   say "=== ALL STAGES FINISHED - box is IDLE and STILL BILLING; stop it by hand"
+  final_push
 fi
