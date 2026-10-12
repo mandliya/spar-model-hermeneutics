@@ -42,7 +42,6 @@ TARGET, READER = "qwen3-next-80b", "gemma-3-27b"
 TGT = G / "qwen/results" / TARGET
 SUB = G / "qwen/results" / f"{READER}_reads_{TARGET}"
 OUT = G / "qwen/results"
-CM.QW = TGT   # compare_models reads every non-gemma model from QW
 ORDER = CM.ORDER
 
 

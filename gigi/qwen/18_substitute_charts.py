@@ -26,7 +26,7 @@ LABEL = {"alibi": "alibi", "mask_factual": "mask-factual", "ascii": "ascii-sandb
          "mask_known_facts": "MASK known facts", "mask_statistics": "MASK statistics",
          "mask_continuations": "MASK continuations", "mask_disinformation": "MASK disinformation"}
 INK, MUTED, GRID = "#17140f", "#8a8579", "#e1e0d9"
-GEMMA, QWEN = "#2a78d6", "#eb6834"   # the same model colours as every other chart
+GEMMA, QWEN = "#2a78d6", "#1baf7a"   # gemma and Qwen3-Next-80B, the same colours as on every other chart
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 11, "text.color": INK,
                      "axes.edgecolor": GRID, "xtick.color": MUTED, "ytick.color": INK})
 

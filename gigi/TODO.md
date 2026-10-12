@@ -108,11 +108,15 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   says yes 62.7% vs Qwen 32.8%) and benchmark diff (AUROC 0.68 vs 0.62).
 - Result: gap small in most cells (27 of 44 no clear difference; Qwen better 12; gemma better 5);
   big gaps only on ascii and sycophancy A. See RESULTS.md "Hermeneutics".
+- 13 Oct: the 80B's OWN results published in RESULTS.md ("Third model: Qwen3-Next-80B", headline
+  11): lying rates, self-report AUROC per question, swap test, four counts, three-model chart.
+  They had been merged on 9 Oct but never written up (user: "you did not publish the results for
+  the simple run of qwen 80B"). compare_models.py now covers all three models.
 - Next ideas (none scheduled, each needs a go-ahead): outside monitors on the 80B's transcripts
   (transcripts are built: qwen/results/qwen3-next-80b/transcripts); a "prefill" variant where gemma
   reads Qwen's own follow-up reasoning and only the final letter is scored; TQ's probe gap from
-  the saved activations; distil Qwen into gemma; the 80B's own tables in RESULTS.md
-  (compare_models.py still reads Qwen3-32B only); HF dataset card: add the substitute folder.
+  the saved activations; distil Qwen into gemma (John's step 2); HF dataset card: add the 80B and
+  the substitute folder.
 
 Still open from before (lower priority): Qwen's mask-factual swap test; the lie types not yet
 covered (self-sycophancy, CoT-unfaithfulness, off-policy, tool/chess sandbagging). Silico

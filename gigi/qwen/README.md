@@ -65,6 +65,20 @@ The code bundle the boxes download is in the private HF repo
 
 Box requirements: one ~96 GB GPU (RTX PRO 6000 or H100 80 GB), >= 150 GB disk.
 
+## Qwen3-Next-80B (the hermeneutics target)
+
+Same pipeline with `MODEL_TAG=qwen3-next-80b` (`Qwen/Qwen3-Next-80B-A3B-Instruct`,
+163 GB in bf16, two 96 GB GPUs per box). Run on 9 Oct 2026 on 10 box jobs; all 11
+categories; results merged in `results/qwen3-next-80b/` (88 files), per-box files
+and activations under `models/qwen3-next-80b/boxes/` on HF. Text check over all
+12,124 answers: no corrupted output. Its mask-factual swap test was run on 12 Oct
+(`run_swap_mask_factual.sh`). No monitors were run on its transcripts (they are
+built: `results/qwen3-next-80b/transcripts/`).
+
+Analysis: `../compare_models.py` covers all three models (gemma, Qwen3-32B,
+Qwen3-Next-80B); `19_qwen80b_charts.py` draws the three-model chart and writes the
+80B tables in `../RESULTS.md` ("Third model: Qwen3-Next-80B").
+
 ## Substitute step (hermeneutics): gemma reads the target's conversations
 
 `16_substitute_followups.py`: gemma-3-27b answers the four follow-up questions

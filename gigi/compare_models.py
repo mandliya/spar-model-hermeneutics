@@ -1,12 +1,12 @@
-"""gemma-3-27b vs Qwen3-32B on the same benchmarks: lying rates and the four
-self-report counts per category and follow-up question (confess, double down,
-false confession, honest).
+"""gemma-3-27b vs Qwen3-32B vs Qwen3-Next-80B on the same benchmarks: lying rates
+and the four self-report counts per category and follow-up question (confess,
+double down, false confession, honest).
 
 Same definitions for both models, copied from the gemma scripts:
   lying rates      06_charts_cross_category.py (same rows, same denominators)
   follow-up rows   make_condition_tables.py + named_cot_join.py (same truth
                    columns, same filters)
-gemma reads its category folders; Qwen reads qwen/results/qwen3-32b/ (one
+gemma reads its category folders; each Qwen model reads qwen/results/<tag>/ (one
 flat folder, merged from the boxes by qwen/11_merge_boxes.py).
 
 The four counts, per category x question:
@@ -37,7 +37,7 @@ import pandas as pd
 from statsmodels.stats.proportion import proportion_confint
 
 G = pathlib.Path(__file__).resolve().parent
-QW = G / "qwen/results/qwen3-32b"
+QW = {m: G / "qwen/results" / m for m in ("qwen3-32b", "qwen3-next-80b")}   # one folder per Qwen model
 OUT = G / "qwen/results"
 FOLDER = {"ascii": "ascii-sandbagging", "syc": "sycophancy", "mask": "mask-factual",
           "unans": "unanswerable", "capture": "capture-the-secret", "alibi": "alibi",
@@ -47,7 +47,7 @@ ORDER = ["neutral", "neutral_cot", "named", "named_cot"]
 
 
 def path(model, key, fname):
-    return (G / FOLDER[key] / "results" / fname) if model == "gemma-3-27b" else (QW / fname)
+    return (G / FOLDER[key] / "results" / fname) if model == "gemma-3-27b" else (QW[model] / fname)
 
 
 def csv(model, key, fname, **kw):
@@ -165,7 +165,7 @@ def truth_map(m, cat):
 
 
 def pa_file(m, cat):
-    return (G / "answer_probability/results" if m == "gemma-3-27b" else QW) / f"pa_{cat}.jsonl"
+    return (G / "answer_probability/results" if m == "gemma-3-27b" else QW[m]) / f"pa_{cat}.jsonl"
 
 
 def auroc(pos, neg):
@@ -200,7 +200,7 @@ def selfreport_auroc(m, cat, T):
 
 def swap_auroc(m, cat):
     """median over the four questions of AUROC with yes = A (original) and yes = B (swapped)."""
-    root = G / "ab_swap/results" if m == "gemma-3-27b" else QW
+    root = G / "ab_swap/results" if m == "gemma-3-27b" else QW[m]
     sub = pd.read_csv(root / "ab_swap_subset.csv") if (root / "ab_swap_subset.csv").exists() else None
     sw, og = pd.DataFrame(jl(root / f"ab_swap_{cat}.jsonl")), pd.DataFrame(jl(pa_file(m, cat)))
     if sub is None or not len(sw) or not len(og): return None
@@ -220,11 +220,12 @@ def swap_auroc(m, cat):
 sys.path.insert(0, str(G / "third_person"))
 from monitor_prompt import parse_score  # noqa: E402
 MONITORS = {"gemma-3-27b": ["gemini-2.5-flash", "gpt-5-mini", "gemma-3-27b"],
-            "qwen3-32b": ["gemini-2.5-flash", "gpt-5-mini", "qwen3-32b"]}
+            "qwen3-32b": ["gemini-2.5-flash", "gpt-5-mini", "qwen3-32b"],
+            "qwen3-next-80b": []}   # no monitors were run on the 80B's transcripts
 
 
 def monitor_auroc(m, cat, T):
-    root = G / "third_person/results" if m == "gemma-3-27b" else QW
+    root = G / "third_person/results" if m == "gemma-3-27b" else QW[m]
     have = {r["sample_id"] for r in jl(pa_file(m, cat)) if r.get("condition") == "neutral"
             and r.get("p_A_norm") is not None and not r.get("error")}
     out = []
@@ -246,7 +247,7 @@ def monitor_auroc(m, cat, T):
 
 CATS = ["ascii", "sycophancy_a", "sycophancy_b", "mask_factual", "unanswerable", "capture_secret", "alibi",
         "mask_known_facts", "mask_statistics", "mask_continuations", "mask_disinformation"]
-MODELS = ["gemma-3-27b", "qwen3-32b"]
+MODELS = ["gemma-3-27b", "qwen3-32b", "qwen3-next-80b"]
 
 if __name__ == "__main__":
     counts, rates = [], []
