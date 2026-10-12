@@ -81,7 +81,10 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   each, `run_substitute.sh`) | J6swap = Qwen-80B's mask-factual swap (2 x 96 GB,
   `run_swap_mask_factual.sh`). Instance IDs: in each job.log on HF
   (models/qwen3-next-80b/substitute/gemma-3-27b/boxes/<JOB>/job.log, .../boxes/J6swap/job.log).
-  Estimate: ~15 box-hours of gemma + ~1 h of the 2-GPU box, roughly $20-30.
+  STARTED 12 Oct 08:24-08:28 UTC, all four gemma boxes passed the box check (1x RTX PRO 6000):
+  55521262 S1 ($1.431/h) | 55521287 S2 ($1.490/h) | 55521295 S3 ($1.682/h) | 55521444 S4 ($1.732/h) |
+  55522595 J6swap (2x RTX PRO 6000 Max-Q, Threadripper, $2.754/h; its log reaches HF only after
+  the 163 GB download). $9.09/h while all five run; estimate ~$27 if each is stopped when done.
 - After the boxes finish: tell the user each idle box; merge the substitute results into
   qwen/results/gemma-3-27b_reads_qwen3-next-80b/ (merge script still to write; 11_merge_boxes.py
   for J6swap) -> gap analysis (target AUROC - substitute AUROC per category and question, both
