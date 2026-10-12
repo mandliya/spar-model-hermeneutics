@@ -375,3 +375,21 @@ it behaves more like the author. In the post's gender-secret example the
 distilled reader's probe AUROC rose to 0.90, "recovering 75% of the lost
 performance". With small 9B students the gains "varied highly per seed", so
 it is promising but not reliable yet.
+
+Q: Did the substitute run (gemma reading Qwen-80B's conversations) distil
+Qwen into gemma?
+A: No. Nothing was trained: gemma's weights are exactly what Google
+released. gemma only read Qwen's conversations and answered "did you lie?".
+Distilling would mean training gemma on Qwen's prompt-answer pairs so that
+it starts answering the way Qwen does, which changes its weights. Analogy:
+today a stranger read someone's letters and was asked "is this a lie?".
+Distilling is first having that stranger practise writing like the author
+for weeks, then asking again.
+
+Q: What is the order of the three steps in the hermeneutics plan, and which
+are done?
+A: (1) Target answers about itself: Qwen-80B, done 9 Oct 2026. (2)
+Substitute answers about the target's conversations, no training: gemma,
+done 12 Oct 2026; this gives the gap (mean AUROC 0.68 vs 0.62). (3) Distil
+the target into the substitute, rerun step 2 with the trained gemma, and see
+whether the gap shrinks. Not started.
