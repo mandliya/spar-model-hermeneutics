@@ -69,7 +69,9 @@ def prefill_tokens(
     produced it. A recorded answer is tokenized from its text; an on-policy one
     passes the exact ids the model produced as `answer_ids`.
     """
-    prompt_ids = list(tokenizer.apply_chat_template(messages[:-1], add_generation_prompt=True, tokenize=True))
+    # return_dict=False: transformers 5 returns a dict by default; 4.x already returned the ids.
+    prompt_ids = list(tokenizer.apply_chat_template(messages[:-1], add_generation_prompt=True, tokenize=True,
+                                                    return_dict=False))
     if answer_ids is None:
         answer_ids = tokenizer(messages[-1]["content"], add_special_tokens=False)["input_ids"]
     if not answer_ids:
@@ -101,19 +103,23 @@ def hidden_states_at(model: Gemma3ForConditionalGeneration, tokens: PrefillToken
     """
     input_ids = torch.tensor([tokens.input_ids], device=model.device)
     prompt_last = tokens.positions["prompt_last"]
-    # Logits at prompt_last only: they predict the answer's first token.
+    # Logits from prompt_last to the end, by count rather than by index: an index tensor gets moved to
+    # the first GPU of a model spread over several, while the last layer's states sit on another.
+    # Row 0 is prompt_last, whose logits predict the answer's first token.
     out = model(input_ids=input_ids, output_hidden_states=True, use_cache=False,
-                logits_to_keep=torch.tensor([prompt_last], device=model.device))
+                logits_to_keep=len(tokens.input_ids) - prompt_last)
 
-    n_layers = model.config.text_config.num_hidden_layers
+    n_layers = getattr(model.config, "text_config", model.config).num_hidden_layers
     if len(out.hidden_states) != n_layers + 1:
         raise RuntimeError(f"expected {n_layers + 1} hidden states, got {len(out.hidden_states)}")
     start, end = tokens.answer_span
 
+    # Each layer's state moves to the CPU before stacking: a model spread over several GPUs returns
+    # its layers on different devices. The values are unchanged.
     def at(h: torch.Tensor, position: str) -> torch.Tensor:
         if position == "reply_mean":
-            return h[0, start:end].float().mean(0).to(h.dtype)
-        return h[0, tokens.positions[position]]
+            return h[0, start:end].float().mean(0).to(h.dtype).cpu()
+        return h[0, tokens.positions[position]].cpu()
 
     stacked = torch.stack([torch.stack([at(h, p) for p in positions]) for h in out.hidden_states], dim=1)
     if stacked.dtype != torch.bfloat16:

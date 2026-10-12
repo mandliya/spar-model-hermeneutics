@@ -1,0 +1,24 @@
+# Boxes with Blackwell GPUs (RTX PRO 6000, B200) and models other than Gemma (core/model.py).
+#
+# torch is not listed: Blackwell needs a CUDA 12.8+ build, which the image provides
+# (vastai/pytorch, torch 2.14.0+cu130 on 11 Oct 2026). Install with the image's torch held fixed:
+#   pip freeze | grep '^torch==' > /tmp/torch.txt && pip install -c /tmp/torch.txt -r requirements-blackwell.txt
+#
+# transformers 5 for Qwen3-Next, with flash-linear-attention's kernels for its linear-attention
+# layers: the versions Gigi's Qwen3-Next-80B run used (gigi/qwen/run_job.sh; its job.log on the Hub
+# reads "transformers 5.17.0 | torch 2.11.0+cu128"). huggingface-hub comes with transformers.
+transformers==5.17.0
+accelerate
+flash-linear-attention==0.5.2
+lie-detectors==0.1.0
+safetensors
+scikit-learn==1.7.2
+scipy==1.16.3
+pyarrow==21.0.0
+pandas==2.3.2
+fsspec==2025.9.0
+python-dotenv==1.1.1
+tqdm==4.67.1
+# Imported by core/store.py; huggingface-hub 1.x no longer brings it (it moved to httpx).
+requests
+matplotlib==3.10.6

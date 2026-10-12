@@ -72,7 +72,7 @@ def precheck(tokenizer, todo: list[Conversation], whole_answer: bool) -> dict[st
     prefilled = {}
     for c in todo:
         if c.needs_answer:
-            tokenizer.apply_chat_template(c.messages, add_generation_prompt=True, tokenize=True)
+            tokenizer.apply_chat_template(c.messages, add_generation_prompt=True, tokenize=True, return_dict=False)
         else:
             prefilled[c.uid] = prefill_tokens(tokenizer, c.messages, whole_answer=whole_answer)
     unusual = [

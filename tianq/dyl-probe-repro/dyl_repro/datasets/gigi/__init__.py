@@ -40,14 +40,20 @@ from types import ModuleType
 
 from dyl_repro.core.conversation import Conversation
 from dyl_repro.core.followup import FollowUp
+from dyl_repro.core.model import CURRENT
 
-# The checkout these imports and CSVs are read at (2026-10-03). Rows stored
-# earlier record 268c51c; at 0df3751 every earlier category builds the same
-# conversations except ASCII's seven rebuilt rows (see ascii_sandbagging/).
-GIGI_COMMIT = "0df3751"
+# The checkout these imports and CSVs are read at: for Gemma 0df3751 (2026-10-03; rows stored
+# earlier record 268c51c, and at 0df3751 every earlier category builds the same conversations
+# except ASCII's seven rebuilt rows, see ascii_sandbagging/); for another model, the checkout
+# holding Gigi's rollouts of it (core/model.py).
+GIGI_COMMIT = CURRENT.gigi_commit
 # The repo's gigi/ folder; GIGI_DIR points elsewhere when this project is not
 # inside a repo checkout.
 GIGI_DIR = Path(os.environ.get("GIGI_DIR", Path(__file__).resolve().parents[5] / "gigi"))
+# Noddybear/lies as every run so far read it (21 Sept 2025). The 5 Oct 2026 revision renamed its
+# configs (e.g. task-group_sandbagging -> task-group_sandbagging_ascii), which Gigi's unpinned
+# loaders cannot find. Pinned the way Gigi pinned his own (gigi/qwen/src/common.py, HF_DATASET_REVISION).
+NODDYBEAR_REVISION = "e8fc10f495aabc2d2d95f1e947b10bbcced444d5"
 CATEGORIES = ("ascii-sandbagging", "sycophancy", "mask-factual", "unanswerable", "capture-the-secret")
 # Categories whose own common.py is never run, because running it would create a
 # data/ folder in Gigi's tree that the existing categories' checkouts already
@@ -106,16 +112,25 @@ def module(category: str, name: str) -> ModuleType:
     spec = importlib.util.spec_from_file_location(f"gigi_{category.replace('-', '_')}_{name}", path)
     loaded = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(loaded)
+    # His load_config globs datasets/{HF_DATASET}/...: the revision rides in the name, in memory only.
+    if getattr(loaded, "HF_DATASET", None) == "Noddybear/lies":
+        loaded.HF_DATASET = f"Noddybear/lies@{NODDYBEAR_REVISION}"
     return loaded
 
 
+def results_dir(category: str) -> Path:
+    """Where Gigi's results for this category are: his per-category folder for Gemma, his one
+    folder of the model's rollouts otherwise (same file names)."""
+    return GIGI_DIR / category / "results" if CURRENT.gigi_results is None else GIGI_DIR / CURRENT.gigi_results
+
+
 def csv_rows(category: str, name: str) -> list[dict]:
-    with (GIGI_DIR / category / "results" / name).open(encoding="utf-8", newline="") as f:
+    with (results_dir(category) / name).open(encoding="utf-8", newline="") as f:
         return list(csv.DictReader(f))
 
 
 def jsonl_rows(category: str, name: str) -> list[dict]:
-    with (GIGI_DIR / category / "results" / name).open(encoding="utf-8") as f:
+    with (results_dir(category) / name).open(encoding="utf-8") as f:
         return [json.loads(line) for line in f if line.strip()]
 
 

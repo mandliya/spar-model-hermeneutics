@@ -32,13 +32,14 @@ ANT_BAND = (0.70, 0.75)  # Ant's post: cross-fold AUROC "plateaued at 0.70-0.75"
 OFFSET = {"all_rows": -0.14, "size_matched": 0.14}
 
 
-def _panel(ax, variant: str, records: list[dict], summary: dict, reference: float) -> None:
+def _panel(ax, variant: str, records: list[dict], summary: dict, reference: float, show_ant: bool) -> None:
     rng = np.random.default_rng(0)  # jitter only
     ax.axhline(0.5, color=AXIS, linewidth=1.2, zorder=1)
     ax.axhline(reference, color=SECONDARY, linewidth=1, linestyle=(0, (4, 3)), zorder=1)
     ax.text(KS[0] - 0.4, reference + 0.008, f"trained and tested on the same category (5-fold): {reference:.2f}",
             va="bottom", fontsize=7.5, color=SECONDARY)
-    if variant == "none":
+    # Ant's number is for Gemma-3-27B, so it is drawn on Gemma's chart only.
+    if variant == "none" and show_ant:
         ax.axhspan(*ANT_BAND, color=GRID, zorder=0, linewidth=0)
         ax.text(KS[0] - 0.4, sum(ANT_BAND) / 2, "Ant's fine-tuned black-box detector, trained on half its lie types",
                 va="center", fontsize=7.5, color=SECONDARY)
@@ -66,8 +67,10 @@ def _panel(ax, variant: str, records: list[dict], summary: dict, reference: floa
     ax.set_title(TITLES[variant], loc="left", fontsize=9.5, color=INK)
 
 
-def draw(records: list[dict], summaries: dict[str, dict], references: dict[str, float]) -> Figure:
-    """records: every probe of diversity.run, with its variant; summaries: variant -> diversity.summary."""
+def draw(records: list[dict], summaries: dict[str, dict], references: dict[str, float], model, is_default: bool) -> Figure:
+    """records: every probe of diversity.run, with its variant; summaries: variant -> diversity.summary;
+    model: core.model.Model, the model read (its own conversations, its own labels)."""
+    name = model.name.split("/")[-1]
     values = [r["held_out_mean"] for r in records if r.get("held_out_mean") is not None]
     low = min(0.4, min(values) - 0.03)
     high = max(0.85, max(values) + 0.03, *(v + 0.05 for v in references.values()))
@@ -76,15 +79,16 @@ def draw(records: list[dict], summaries: dict[str, dict], references: dict[str, 
         axes = fig.subplots(1, len(summaries), sharey=True)
         for ax, (variant, summary) in zip(axes, summaries.items()):
             ax.set_facecolor(SURFACE)
-            _panel(ax, variant, [r for r in records if r["variant"] == variant], summary, references[variant])
+            _panel(ax, variant, [r for r in records if r["variant"] == variant], summary, references[variant], is_default)
             ax.set_ylim(low, high)
         handles = [axes[0].plot([], [], color=SERIES[line][0], marker=SERIES[line][1], markersize=7, linewidth=2,
                                 label=LABELS[line])[0] for line in LINES]
         fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.06, 0.865), ncols=2, frameon=False, fontsize=8.5)
-        fig.text(0.06, 0.975, "Does training on more kinds of lie help a probe catch a kind it never saw?",
+        fig.text(0.06, 0.975, f"{name}: does training on more kinds of lie help a probe catch a kind it never saw?",
                  ha="left", va="top", fontsize=12, weight="bold", color=INK)
         fig.text(0.06, 0.93, textwrap.fill(
-            "AISI's probe recipe (logistic regression, layer 58), trained on k of Gigi's 11 categories and scored on"
+            f"{name} reading its own conversations, labelled by its own lies. AISI's probe recipe (logistic"
+            f" regression, layer {model.probe_layer}), trained on k of Gigi's 11 categories and scored on"
             " each of the others. Faint marks: one training subset each (all subsets for k = 1 and 10, 20 random"
             " ones otherwise), its AUROC averaged over the held-out categories with at least 10 of each class."
             " Line: the mean over subsets. Gray line: chance (0.5).", 190), ha="left", va="top", fontsize=8, color=SECONDARY, linespacing=1.4)

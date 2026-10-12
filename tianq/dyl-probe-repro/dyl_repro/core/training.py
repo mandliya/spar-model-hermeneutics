@@ -38,9 +38,9 @@ from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import StratifiedKFold
 
 from dyl_repro.core.probe import CALIBRATION_FPR, PROBE_POSITION, DylProbe
-
-# The released checkpoint's own hyperparams (its stored `hyperparams`).
-DEFAULT_LAYER = 58
+from dyl_repro.core.model import CURRENT
+# The released checkpoint's own hyperparams (its stored `hyperparams`); the layer is the model's (58 for Gemma).
+DEFAULT_LAYER = CURRENT.probe_layer
 DEFAULT_L2_LAMBDA = 0.01
 # Fit to convergence, so the probe is the objective's optimum and a refit reproduces it.
 MAX_ITERATIONS = 20_000

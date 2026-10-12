@@ -43,9 +43,17 @@ from safetensors import safe_open
 from safetensors.torch import save_file
 
 from dyl_repro.core.logs import log_operations, with_retries
+from dyl_repro.core.model import CURRENT, IS_DEFAULT
 from dyl_repro.core.probe import PROBE_POSITION, DylProbe
 
 SCRATCH = Path(__file__).resolve().parents[2] / "scratch"
+# Every key of a model other than Gemma lives under that model's tag, locally and on the Hub
+# (core/model.py); Gemma keeps the original layout.
+NAMESPACE = "" if IS_DEFAULT else CURRENT.tag
+
+
+def namespaced(key: str) -> str:
+    return f"{NAMESPACE}/{key}" if NAMESPACE else key
 LOG_DIR = SCRATCH / "logs"
 SYNC_EVERY = 250
 TENSOR_KEY = "hidden_states"
@@ -79,6 +87,7 @@ class RowStore:
     _pending: list[str] = field(default_factory=list, init=False)
 
     def __post_init__(self) -> None:
+        self.dataset = namespaced(self.dataset)
         self.api = HfApi(token=self.token)
         (self.scratch / self.dataset / "rows").mkdir(parents=True, exist_ok=True)
         (self.scratch / self.dataset / "hidden_states").mkdir(parents=True, exist_ok=True)
@@ -245,11 +254,18 @@ class RowStore:
                         )
                 return
             except HfHubHTTPError as exc:
-                if exc.response is None or exc.response.status_code != 429:
+                status = None if exc.response is None else exc.response.status_code
+                if status == 429:
+                    print(f"    pull: rate-limited by the Hub; waiting {RATE_LIMIT_WAIT_SECONDS}s, then resuming",
+                          flush=True)
+                    time.sleep(RATE_LIMIT_WAIT_SECONDS)
+                elif status is not None and 500 <= status < 600:
+                    # Server-side and transient, like a dropped connection (a 504 on the repo listing, 11 Oct 2026).
+                    print(f"    pull: the Hub answered {status}; waiting {CONNECTION_WAIT_SECONDS}s, then resuming",
+                          flush=True)
+                    time.sleep(CONNECTION_WAIT_SECONDS)
+                else:
                     raise
-                print(f"    pull: rate-limited by the Hub; waiting {RATE_LIMIT_WAIT_SECONDS}s, then resuming",
-                      flush=True)
-                time.sleep(RATE_LIMIT_WAIT_SECONDS)
             except (LocalEntryNotFoundError, requests.exceptions.ConnectionError, requests.exceptions.Timeout,
                     requests.exceptions.ContentDecodingError) as exc:
                 print(f"    pull: connection dropped ({type(exc).__name__}); waiting {CONNECTION_WAIT_SECONDS}s,"
@@ -261,7 +277,7 @@ class ActivationCache:
     """Read one dataset's stored rows back, as numpy, for scoring."""
 
     def __init__(self, scratch: Path, dataset: str) -> None:
-        self.root = scratch / dataset
+        self.root = scratch / namespaced(dataset)
         paths = sorted((self.root / "rows").glob("*.json"))
         self.records = [json.loads(p.read_text(encoding="utf-8")) for p in paths]
 

@@ -27,6 +27,7 @@ from functools import cache
 from pathlib import Path
 
 from dyl_repro.core.followup import FollowUp, yes_no
+from dyl_repro.core.model import CURRENT
 from dyl_repro.core.probe import FOLLOWUP_QUESTION
 from dyl_repro.datasets import NAMES, gigi
 
@@ -112,11 +113,15 @@ def entries() -> tuple[dict, ...]:
 
 
 def for_dataset(dataset: str) -> dict[str, FollowUp]:
-    """The follow-ups this dataset asks, in master-list order."""
+    """The follow-ups this dataset asks, in master-list order. For a model Gigi asked only some of
+    his conditions (core/model.py gigi_conditions), his other questions are left out: there is no
+    recorded answer to prefill, and a dataset keeps only rows answered for every Gigi question."""
+    recorded = CURRENT.gigi_conditions
     return {
         e["name"]: FollowUp(e["name"], e["text"], parser(e), e["source"])
         for e in entries()
-        if "all" in e["datasets"] or dataset in e["datasets"]
+        if ("all" in e["datasets"] or dataset in e["datasets"])
+        and (recorded is None or e["gigi_condition"] is None or e["gigi_condition"] in recorded)
     }
 
 

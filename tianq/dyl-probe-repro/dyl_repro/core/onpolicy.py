@@ -31,7 +31,7 @@ def generate_answer(
     tokenizer: PreTrainedTokenizerBase,
     messages: list[dict[str, str]],
 ) -> Generated:
-    prompt_ids = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=True)
+    prompt_ids = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=True, return_dict=False)
     input_ids = torch.tensor([prompt_ids], device=model.device)
     stop = [tokenizer.eos_token_id, tokenizer.convert_tokens_to_ids("<end_of_turn>")]
     out = model.generate(

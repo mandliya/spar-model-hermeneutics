@@ -13,6 +13,7 @@
 #   ./run.sh compare_outcome_flags                            # CPU: what the released probe flags on each answer group
 #   ./run.sh compare_no_followup                              # CPU: the transfer matrix with no follow-up question
 #   ./run.sh compare_diversity                                # CPU: does training on more kinds of lie help on unseen ones?
+#   ./run.sh compare_diversity_matrices                       # CPU: its k = 1 probes as two transfer matrices
 #
 # Every invocation writes its own raw log to scratch/logs/run_<utc>_<command>.log:
 # the exact argv, the environment (python, nvidia-smi, pip freeze), the complete
@@ -36,12 +37,12 @@ set -a
 source <(tr -d '\r' < .env)
 set +a
 
-command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags|compare_no_followup|compare_diversity> [args]}"
+command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags|compare_no_followup|compare_diversity|compare_diversity_matrices> [args]}"
 shift
 case "$command" in
-  extract | evaluate | compare_wordings | train_probe | compare_generalization | compare_outcome_flags | compare_no_followup | compare_diversity) ;;
+  extract | evaluate | compare_wordings | train_probe | compare_generalization | compare_outcome_flags | compare_no_followup | compare_diversity | compare_diversity_matrices) ;;
   *) echo "unknown command: $command (expected extract, evaluate, compare_wordings, train_probe," \
-          "compare_generalization, compare_outcome_flags, compare_no_followup or compare_diversity)" >&2; exit 1 ;;
+          "compare_generalization, compare_outcome_flags, compare_no_followup, compare_diversity or compare_diversity_matrices)" >&2; exit 1 ;;
 esac
 
 if [[ -z "${TMUX:-}" ]] && command -v tmux >/dev/null 2>&1; then
@@ -56,7 +57,8 @@ started=$(date +%s)
   printf '### %s  host=%s  cwd=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$(hostname)" "$PWD"
   printf '$ ./run.sh'
   printf ' %q' "$command" "$@"
-  printf '\n--- python\n'
+  # Which model the step runs on (dyl_repro/core/model.py); unset means Gemma.
+  printf '\nDYL_MODEL=%s\n--- python\n' "${DYL_MODEL:-}"
   python --version
   printf -- '--- nvidia-smi\n'
   if command -v nvidia-smi >/dev/null; then nvidia-smi; else echo "nvidia-smi not present on this host"; fi

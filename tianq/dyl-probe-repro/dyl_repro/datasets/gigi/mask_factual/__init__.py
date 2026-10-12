@@ -22,6 +22,7 @@ from __future__ import annotations
 from functools import cache
 
 from dyl_repro.core.conversation import Conversation
+from dyl_repro.core.model import CURRENT
 from dyl_repro.core.probe import DylProbe
 from dyl_repro.core.store import ActivationCache
 from dyl_repro.datasets import followups, gigi
@@ -50,8 +51,10 @@ def rows() -> gigi.GigiRows:
         # A reply whose verdict did not parse has no label.
         turn_lie={uid: gigi.BOOL[r["lied"]] if r["verdict"] else None for uid, r in prior.items()},
         groups={},
-        recorded_csv={c: RERUN_CSV if c in ("named", "eval_named") else BENCHMARK_CSV
-                      for c in followups.gigi_conditions(DATASET)},
+        # Gemma's named answers come from his re-run (see above); another model's run asked them in
+        # the named wording from the start, so they are in its benchmark file.
+        recorded_csv={c: RERUN_CSV if c in ("named", "eval_named") and CURRENT.gigi_results is None
+                      else BENCHMARK_CSV for c in followups.gigi_conditions(DATASET)},
     )
 
 
