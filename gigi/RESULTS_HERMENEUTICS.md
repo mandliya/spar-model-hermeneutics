@@ -291,18 +291,17 @@ The act named, with reasoning first:
 
 ### gemma swapped in answers like gemma, not like Qwen
 
-Each dot is one category × question on one branch (after a Qwen lie, or
-after an honest Qwen answer): how often the answer is "yes, I lied". Up =
-gemma swapped in on Qwen's conversations. Across = who it is compared
-with. A dot on the dashed line means the same rate:
+The pooled bars from above, with a third bar added: gemma asked about its
+**own** conversations (part one of the project: its own answers, its own
+lies). The two blue bars are almost the same length; the green one is not:
 
-![Whom gemma swapped in resembles: Qwen on the same conversations, or gemma on its own](charts/hermeneutics_gemma_like_gemma.png)
+![Qwen, gemma swapped in on Qwen's conversations, and gemma on its own conversations](charts/hermeneutics_gemma_like_gemma.png)
 
-- **Left, against Qwen on the very same conversations:** the dots are on
-  average 39 points from the line, nearly all above it.
-- **Right, against gemma on its own conversations** (part one; different
-  conversations, gemma's own lies): they sit on the line, 8 points away on
-  average.
+- **All four questions:** after a lie, Qwen confesses 49% of the time,
+  gemma swapped in 76%, gemma on its own conversations 74%. After an
+  honest answer the false-confession rates are 19%, 51% and 53%.
+- **The plain question:** 9%, 48% and 48% after a lie; 2%, 34% and 35%
+  after an honest answer.
 - **Its rates track its own, not Qwen's.** Over the 44 category × question
   combinations, gemma's confession rate on Qwen's conversations differs from
   its rate on its own conversations by 6 points on average, and from Qwen's

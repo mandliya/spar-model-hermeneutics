@@ -8,9 +8,8 @@
       says no after an honest Qwen answer)
   charts/hermeneutics_four_paths_<question>.png  the same bars by category,
       one figure per follow-up question
-  charts/hermeneutics_gemma_like_gemma.png  whom gemma swapped in resembles: its
-      rates against Qwen's on the same conversations, and against its own rates
-      on its own conversations, with the "same rate" line
+  charts/hermeneutics_gemma_like_gemma.png  whom gemma swapped in resembles: the
+      pooled bars plus a third bar, gemma about its own conversations
   RESULTS_HERMENEUTICS.md  the tables between the PART1, FOUR-PATHS-POOLED and
       FOUR-PATHS-<question> markers
 
@@ -45,48 +44,6 @@ def wilson(k, n, z=1.96):
     c, h = (p + z * z / (2 * n)) / (1 + z * z / n), z * ((p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5) / (1 + z * z / n)
     return c - h, c + h
 
-
-# 1. whom does gemma swapped in resemble? Two scatters against the "same rate" line ------
-# Each dot is one category x question on one branch (after a Qwen lie, or after an honest
-# Qwen answer): how often the answer is "yes, I lied". Up: gemma swapped in on Qwen's
-# conversations. Across: Qwen on those same conversations (left), gemma on its own
-# conversations (right). On the line = the same rate.
-import numpy as np
-
-pts = pd.concat([P2[["category", "question", f"qwen_{k}", f"gemma_{k}", f"gemma_own_{k}"]]
-                 .set_axis(["category", "question", "qwen", "swapped", "own"], axis=1).assign(branch=k)
-                 for k in ("confess", "false_confess")]).dropna()
-fig, axes = plt.subplots(1, 2, figsize=(10.4, 6.5), sharey=True)
-fig.subplots_adjust(left=0.1, right=0.975, top=0.74, bottom=0.2, wspace=0.08)
-for ax, col, head, xlab in ((axes[0], "qwen", "Compared with Qwen", "Qwen, about the very same conversations"),
-                            (axes[1], "own", "Compared with gemma itself", "gemma, about its own conversations")):
-    d = 100 * (pts.swapped - pts[col]).abs().mean()
-    ax.plot([0, 100], [0, 100], color=MUTED, lw=1, ls="--", zorder=1)
-    ax.scatter(100 * pts[col], 100 * pts.swapped, s=58, color=GEMMA, alpha=0.72, edgecolor="white", lw=1.1, zorder=3, clip_on=False)
-    ax.set_xlim(-2, 102); ax.set_ylim(-2, 102); ax.set_aspect("equal")
-    ax.set_xticks([0, 25, 50, 75, 100]); ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"])
-    ax.set_yticks([0, 25, 50, 75, 100]); ax.set_yticklabels(["0%", "25%", "50%", "75%", "100%"])
-    ax.grid(color=GRID, lw=0.6, zorder=0); ax.set_axisbelow(True)
-    for sp in ax.spines.values():
-        sp.set_visible(False)
-    ax.tick_params(length=0)
-    ax.set_xlabel(xlab, fontsize=10.5, labelpad=8)
-    ax.text(0, 1.085, head, transform=ax.transAxes, ha="left", va="bottom", fontsize=12.5, fontweight="bold", color=INK)
-    ax.text(0, 1.025, f"on average {d:.0f} points away from the line", transform=ax.transAxes, ha="left", va="bottom", fontsize=10.5, color=INK)
-    if col == "qwen":   # labelled once, where the area under the line is empty
-        ax.text(63, 57, "same rate", rotation=45, ha="center", va="top", fontsize=8.5, color=MUTED, rotation_mode="anchor")
-axes[0].set_ylabel("gemma swapped in on Qwen's conversations", fontsize=10.5, labelpad=8)
-fig.text(0.02, 0.965, "gemma swapped in answers the way gemma answers about its own conversations,\nnot the way Qwen answers about these ones",
-         ha="left", va="top", fontsize=13.5, fontweight="bold", linespacing=1.3)
-fig.text(0.02, 0.868, f"How often the answer is \"yes, I lied\". Each dot is one category × question, after a Qwen lie or after an honest Qwen answer "
-         f"({len(pts)} dots per panel).", ha="left", va="top", fontsize=9.5, color=MUTED)
-fig.text(0.5, 0.035, "A dot on the dashed line means the two rates are equal. Left: the dots sit far from the line, mostly above it (gemma says yes more often than Qwen).\n"
-         "Right: they sit on it. gemma's own conversations are different conversations, with gemma's own lies.",
-         ha="center", va="bottom", fontsize=9, color=MUTED, linespacing=1.4)
-fig.savefig(G / "charts/hermeneutics_gemma_like_gemma.png", dpi=180, bbox_inches="tight", pad_inches=0.25)
-plt.close(fig)
-print("saved the 'like gemma, not like Qwen' chart | mean distance: from Qwen",
-      round(100 * (pts.swapped - pts.qwen).abs().mean(), 1), "| from gemma's own", round(100 * (pts.swapped - pts.own).abs().mean(), 1), "| dots", len(pts))
 
 # 1b. Part 1: lie or no lie on the first response, one row per category ----------------
 def base(ax, xmax=100, ticks=(0, 25, 50, 75, 100)):
@@ -158,17 +115,25 @@ REST = "#e4e2db"   # the part of each bar that says "no"
 QS = ["neutral", "neutral_cot", "named", "named_cot"]
 
 
-def four_paths_figure(groups, title, subtitle, out, notes, pitch):
+SERIES2 = [("Qwen", QWEN, "Qwen3-Next-80B says yes, about its own conversation"),
+           ("gemma", GEMMA, "gemma-3-27b says yes, swapped in on Qwen's conversation")]
+
+
+def four_paths_figure(groups, title, subtitle, out, notes, pitch, series=SERIES2, heads=("After a Qwen lie", "After an honest Qwen answer")):
     """groups: dicts with label, optional sub (muted second line), bold, rule (a line under the
-    group), and confess / false_confess = (Qwen's rate, gemma's rate). notes: the muted text
-    after each block's heading. pitch: inches of height per group."""
-    n, top_in, bottom_in, W = len(groups), 2.1, 0.85, 12.4
+    group), and confess / false_confess = one rate per series. series: (row name, colour,
+    legend text) per bar. notes: the muted text after each block's heading. pitch: inches of
+    height per group."""
+    n, top_in, bottom_in, W = len(groups), 2.1 + 0.2 * subtitle.count("\n"), 0.85, 12.4
     H = top_in + bottom_in + pitch * n
+    wide = max(len(name) for name, _, _ in series) > 8   # long row names need a wider left margin
     fig, axes = plt.subplots(1, 2, figsize=(W, H), sharey=True)
-    fig.subplots_adjust(left=0.235, right=0.945, top=1 - top_in / H, bottom=bottom_in / H, wspace=0.34)
-    bar_h, off = 0.3, 0.18
-    for ax, key, head, note, yes, no in ((axes[0], "confess", "After a Qwen lie", notes[0], "CONFESSES", "DOUBLES DOWN"),
-                                        (axes[1], "false_confess", "After an honest Qwen answer", notes[1], "FALSELY CONFESSES", "HONESTLY SAYS NO")):
+    fig.subplots_adjust(left=0.33 if wide else 0.235, right=0.95, top=1 - top_in / H, bottom=bottom_in / H, wspace=0.36 if wide else 0.34)
+    k = len(series)
+    bar_h = 0.3 if k == 2 else 0.23
+    offs = [0.18, -0.18] if k == 2 else [0.27, 0.0, -0.27]
+    for ax, key, head, note, yes, no in ((axes[0], "confess", heads[0], notes[0], "CONFESSES", "DOUBLES DOWN"),
+                                        (axes[1], "false_confess", heads[1], notes[1], "FALSELY CONFESSES", "HONESTLY SAYS NO")):
         ax.set_xlim(0, 100); ax.set_ylim(-0.6, n - 0.4)
         ax.set_xticks([])
         for sp in ax.spines.values():
@@ -177,7 +142,7 @@ def four_paths_figure(groups, title, subtitle, out, notes, pitch):
         yt, yl = [], []
         for i, g in enumerate(groups):
             yc = n - 1 - i
-            for v, col, name, dy in ((g[key][0], QWEN, "Qwen", off), (g[key][1], GEMMA, "gemma", -off)):
+            for v, (name, col, _), dy in zip(g[key], series, offs):
                 v, y = 100 * v, yc + dy
                 ax.barh(y, v, height=bar_h, color=col, edgecolor="white", linewidth=1.4, zorder=3)
                 ax.barh(y, 100 - v, left=v, height=bar_h, color=REST, edgecolor="white", linewidth=1.4, zorder=3)
@@ -192,22 +157,23 @@ def four_paths_figure(groups, title, subtitle, out, notes, pitch):
         ax.text(1, 1, no, transform=up(9), ha="right", va="bottom", fontsize=10, fontweight="bold", color=INK)
         ax.plot([0, 1], [1, 1], transform=up(37), color=GRID, lw=1, clip_on=False)
         t = ax.text(0, 1, head, transform=up(44), ha="left", va="bottom", fontsize=12.5, fontweight="bold", color=INK)
-        ax.annotate("   " + note, xy=(1, 0), xycoords=t, va="bottom", fontsize=9.5, color=MUTED)
+        if note:
+            ax.annotate("   " + note, xy=(1, 0), xycoords=t, va="bottom", fontsize=9.5, color=MUTED)
     tr = blended_transform_factory(axes[0].transAxes, axes[0].transData)
+    xl = -0.64 if wide else -0.355
     for i, g in enumerate(groups):
         yc = n - 1 - i
         if g.get("sub"):
-            axes[0].text(-0.355, yc + 0.13, g["label"], transform=tr, ha="right", va="center", fontsize=10.5, color=INK)
-            axes[0].text(-0.355, yc - 0.2, g["sub"], transform=tr, ha="right", va="center", fontsize=8.5, color=MUTED)
+            axes[0].text(xl, yc + 0.13, g["label"], transform=tr, ha="right", va="center", fontsize=10.5, color=INK)
+            axes[0].text(xl, yc - 0.2, g["sub"], transform=tr, ha="right", va="center", fontsize=8.5, color=MUTED)
         else:
-            axes[0].text(-0.355, yc, g["label"], transform=tr, ha="right", va="center", fontsize=10.5, color=INK, linespacing=1.25,
+            axes[0].text(xl, yc, g["label"], transform=tr, ha="right", va="center", fontsize=10.5, color=INK, linespacing=1.25,
                          fontweight="bold" if g.get("bold") else "normal")
     fig.text(0.02, 1 - 0.3 / H, title, ha="left", va="top", fontsize=13.5, fontweight="bold", linespacing=1.3)
-    fig.text(0.02, 1 - (0.42 + 0.27 * (title.count("\n") + 1)) / H, subtitle, ha="left", va="top", fontsize=9.5, color=MUTED)
-    fig.legend(handles=[Patch(color=QWEN, label="Qwen3-Next-80B says yes, about its own conversation"),
-                        Patch(color=GEMMA, label="gemma-3-27b says yes, swapped in on Qwen's conversation"),
-                        Patch(color=REST, label="says no")],
-               loc="lower center", ncol=3, frameon=False, fontsize=9.5, bbox_to_anchor=(0.5, 0.08 / H), handlelength=1.2, handleheight=0.9, columnspacing=2.2)
+    fig.text(0.02, 1 - (0.42 + 0.27 * (title.count("\n") + 1)) / H, subtitle, ha="left", va="top", fontsize=9.5, color=MUTED, linespacing=1.45)
+    fig.legend(handles=[Patch(color=col, label=text) for _, col, text in series] + [Patch(color=REST, label="says no")],
+               loc="lower center", ncol=2 if k > 2 else 3, frameon=False, fontsize=9.5, bbox_to_anchor=(0.5, 0.02 / H if k > 2 else 0.08 / H),
+               handlelength=1.2, handleheight=0.9, columnspacing=2.2)
     fig.savefig(out, dpi=180, bbox_inches="tight", pad_inches=0.25)
     plt.close(fig)
 
@@ -230,6 +196,40 @@ four_paths_figure(groups,
                   "all 11 categories pooled.",
                   G / "charts/hermeneutics_four_paths_pooled.png",
                   (f"n = {n_lied:,} per question, {int(P2.n_lied.sum()):,} in all", f"n = {n_honest:,} per question, {int(P2.n_honest.sum()):,} in all"), pitch=0.84)
+
+# whom gemma swapped in resembles: the pooled bars again, plus gemma on its OWN conversations
+# (part one: gemma's own answers, labelled with gemma's own lies)
+OWN = pd.read_csv(RES / "comparison_counts.csv")
+OWN = OWN[OWN.model == "gemma-3-27b"]
+GEMMA_OWN = "#7db3f7"   # the same model on other conversations: a lighter blue (validated), and its own row label
+
+
+def own_rates(y):
+    return (y.confess.sum() / (y.confess.sum() + y.double_down.sum()), y.false_confess.sum() / (y.false_confess.sum() + y.honest.sum()))
+
+
+def three(x, y):
+    a, b = pooled(x), own_rates(y)
+    return {"confess": (*a["confess"], b[0]), "false_confess": (*a["false_confess"], b[1])}
+
+
+groups = [{"label": "ALL FOUR\nQUESTIONS", "bold": True, "rule": True, **three(P2, OWN)}]
+groups += [{"label": QLAB[q], **three(P2[P2.question == q], OWN[OWN.question == q])} for q in QS]
+own_lied = int((OWN[OWN.question == "neutral"].confess + OWN[OWN.question == "neutral"].double_down).sum())
+own_honest = int((OWN[OWN.question == "named"].false_confess + OWN[OWN.question == "named"].honest).sum())
+four_paths_figure(groups,
+                  "gemma swapped in answers like gemma, not like Qwen:\n"
+                  "the two blue bars are almost the same length, the green one is not",
+                  "The top two bars of each group are the chart above. The third is gemma asked about its own conversations (part one of the project): "
+                  "its own answers, its own lies.\n"
+                  f"Per question: {n_lied:,} Qwen lies and {n_honest:,} honest Qwen answers; {own_lied:,} gemma lies and about {own_honest:,} honest gemma answers.",
+                  G / "charts/hermeneutics_gemma_like_gemma.png",
+                  ("", ""),
+                  pitch=1.08,
+                  series=[("Qwen", QWEN, "Qwen3-Next-80B says yes, about its own conversation"),
+                          ("gemma swapped in", GEMMA, "gemma-3-27b says yes, swapped in on Qwen's conversation"),
+                          ("gemma on its own", GEMMA_OWN, "gemma-3-27b says yes, about its own conversation")],
+                  heads=("After a lie", "After an honest answer"))
 
 # by category: one figure per question, one group per category, biggest confession gap on top
 QTITLE = {"neutral": "Plain \"Did you lie?\": Qwen rarely says yes, gemma swapped in says it far more often",
