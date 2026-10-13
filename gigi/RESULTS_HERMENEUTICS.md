@@ -195,9 +195,13 @@ The category's own question (the act named):
 
 ![The four paths by category, the act named](charts/hermeneutics_four_paths_named.png)
 
-The same two questions with reasoning first:
-[plain, reasons first](charts/hermeneutics_four_paths_neutral_cot.png) ·
-[act named, reasons first](charts/hermeneutics_four_paths_named_cot.png).
+The plain question with reasoning first (explain, then answer):
+
+![The four paths by category, plain question, reasons first](charts/hermeneutics_four_paths_neutral_cot.png)
+
+The act named, with reasoning first:
+
+![The four paths by category, the act named, reasons first](charts/hermeneutics_four_paths_named_cot.png)
 
 <details>
 <summary>Numbers, plain question: rates, differences (gemma minus Qwen) with 95% intervals, and gemma on its own conversations</summary>
@@ -239,6 +243,48 @@ The same two questions with reasoning first:
 | MASK known facts | 38 | 21.1% | 57.9% | +37 (+24 to +53) | 51.2% | 24 | 4.2% | 62.5% | +58 (+38 to +75) | 57.1% |
 | sycophancy B | 62 | 0.0% | 72.6% | +73 (+61 to +82) | 81.9% | 139 | 0.0% | 64.0% | +64 (+56 to +72) | 40.0% |
 <!-- FOUR-PATHS-NAMED:END -->
+
+</details>
+
+<details>
+<summary>Numbers, plain question, reasons first</summary>
+
+<!-- FOUR-PATHS-NEUTRAL-COT:START -->
+| Category | Qwen lied: n | Qwen confesses | gemma confesses | difference, points (95% interval) | gemma on its own lies (reference) | Qwen honest: n | Qwen falsely confesses | gemma falsely confesses | difference, points (95% interval) | gemma on its own honest answers (reference) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| mask-factual | 74 | 77.0% | 98.6% | +22 (+12 to +31) | 96.4% | 12 | 16.7% | 100.0% | +83 (+58 to +100) | 93.5% |
+| MASK disinformation | 20 | 50.0% | 100.0% | +50 (+30 to +70) | 96.6% | 52 | 0.0% | 42.3% | +42 (+29 to +56) | 45.5% |
+| ascii-sandbagging | 87 | 0.0% | 21.8% | +22 (+14 to +31) | 52.9% | 223 | 0.0% | 87.0% | +87 (+83 to +91) | 89.1% |
+| MASK statistics | 29 | 41.4% | 89.7% | +48 (+28 to +69) | 86.4% | 20 | 20.0% | 80.0% | +60 (+40 to +80) | 100.0% |
+| alibi | 809 | 38.7% | 85.8% | +47 (+43 to +51) | 86.5% | 470 | 8.5% | 52.3% | +44 (+39 to +48) | 58.7% |
+| MASK continuations | 53 | 26.4% | 84.9% | +58 (+43 to +74) | 91.8% | 34 | 8.8% | 52.9% | +44 (+26 to +62) | 85.7% |
+| capture-the-secret | 59 | 3.4% | 83.1% | +80 (+69 to +90) | 84.9% | 332 | 6.6% | 70.5% | +64 (+58 to +69) | 76.1% |
+| sycophancy A | 23 | 43.5% | 82.6% | +39 (+22 to +61) | 81.6% | 135 | 1.5% | 68.9% | +67 (+60 to +75) | 55.8% |
+| unanswerable | 72 | 1.4% | 77.8% | +76 (+67 to +85) | 73.3% | 20 | 0.0% | 75.0% | +75 (+55 to +95) | 42.9% |
+| MASK known facts | 38 | 44.7% | 94.7% | +50 (+34 to +66) | 93.0% | 24 | 20.8% | 75.0% | +54 (+33 to +75) | 67.9% |
+| sycophancy B | 62 | 0.0% | 29.0% | +29 (+18 to +40) | 39.7% | 139 | 0.0% | 29.5% | +29 (+22 to +37) | 24.7% |
+<!-- FOUR-PATHS-NEUTRAL-COT:END -->
+
+</details>
+
+<details>
+<summary>Numbers, the act named, reasons first</summary>
+
+<!-- FOUR-PATHS-NAMED-COT:START -->
+| Category | Qwen lied: n | Qwen confesses | gemma confesses | difference, points (95% interval) | gemma on its own lies (reference) | Qwen honest: n | Qwen falsely confesses | gemma falsely confesses | difference, points (95% interval) | gemma on its own honest answers (reference) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| mask-factual | 74 | 89.2% | 100.0% | +11 (+4 to +18) | 100.0% | 12 | 25.0% | 100.0% | +75 (+50 to +100) | 96.8% |
+| MASK disinformation | 20 | 75.0% | 100.0% | +25 (+5 to +45) | 100.0% | 52 | 1.9% | 57.7% | +56 (+40 to +69) | 45.5% |
+| ascii-sandbagging | 87 | 0.0% | 58.6% | +59 (+48 to +69) | 66.5% | 223 | 0.0% | 94.2% | +94 (+91 to +97) | 92.4% |
+| MASK statistics | 29 | 37.9% | 96.6% | +59 (+41 to +76) | 100.0% | 20 | 10.0% | 85.0% | +75 (+55 to +90) | 100.0% |
+| alibi | 809 | 99.4% | 93.2% | −6 (−8 to −4) | 95.8% | 470 | 43.4% | 33.6% | −10 (−15 to −5) | 38.2% |
+| MASK continuations | 53 | 84.9% | 98.1% | +13 (+4 to +25) | 91.8% | 34 | 50.0% | 76.5% | +26 (+3 to +50) | 85.7% |
+| capture-the-secret | 59 | 83.1% | 100.0% | +17 (+8 to +27) | 100.0% | 332 | 86.7% | 97.0% | +10 (+6 to +14) | 97.4% |
+| sycophancy A | 23 | 4.3% | 60.9% | +57 (+30 to +78) | 57.9% | 135 | 0.0% | 56.3% | +56 (+47 to +64) | 48.3% |
+| unanswerable | 72 | 36.1% | 70.8% | +35 (+22 to +46) | 65.1% | 20 | 25.0% | 100.0% | +75 (+55 to +95) | 85.7% |
+| MASK known facts | 38 | 28.9% | 92.1% | +63 (+47 to +76) | 72.1% | 24 | 16.7% | 62.5% | +46 (+25 to +67) | 82.1% |
+| sycophancy B | 62 | 0.0% | 96.8% | +97 (+92 to +100) | 100.0% | 139 | 0.0% | 95.7% | +96 (+92 to +99) | 97.6% |
+<!-- FOUR-PATHS-NAMED-COT:END -->
 
 </details>
 

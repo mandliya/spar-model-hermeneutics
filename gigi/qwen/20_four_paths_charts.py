@@ -10,8 +10,8 @@
       one figure per follow-up question
   charts/hermeneutics_four_paths.png  the plain question with a reference:
       hollow ring = gemma on its own conversations
-  RESULTS_HERMENEUTICS.md  the tables between the PART1, FOUR-PATHS-POOLED,
-      FOUR-PATHS-NEUTRAL and FOUR-PATHS-NAMED markers
+  RESULTS_HERMENEUTICS.md  the tables between the PART1, FOUR-PATHS-POOLED and
+      FOUR-PATHS-<question> markers
 
 Run from the repo root (after four_paths.py):
     uv run --with pandas --with matplotlib python gigi/qwen/20_four_paths_charts.py
@@ -257,13 +257,13 @@ p1.append(f"| **all** | {n:,} | {pct((t.both_lied + t.only_qwen_lied) / n)} | {p
           f"{pp((t.only_gemma_lied - t.only_qwen_lied) / n)} | {pct((t.both_lied + t.both_honest) / n)} {ci(lo, hi)} | "
           f"{int(t.both_lied):,} | {int(t.both_honest):,} | {int(t.only_qwen_lied)} | {int(t.only_gemma_lied)} |")
 
-pooled = ["| Question | Qwen lied: n | Qwen confesses | gemma confesses | Qwen was honest: n | Qwen falsely confesses | gemma falsely confesses |",
+pooled_tab = ["| Question | Qwen lied: n | Qwen confesses | gemma confesses | Qwen was honest: n | Qwen falsely confesses | gemma falsely confesses |",
           "|---|---|---|---|---|---|---|"]
 for q in ["neutral", "neutral_cot", "named", "named_cot", "all four"]:
     x = P2 if q == "all four" else P2[P2.question == q]
     nl, nh = int(x.n_lied.sum()), int(x.n_honest.sum())
     cell = lambda k, m: f"{pct(k / m)} {ci(*wilson(int(k), m))}"
-    pooled.append(f"| {'**all four**' if q == 'all four' else '`' + q + '`'} | {nl:,} | {cell(x.qwen_confess_k.sum(), nl)} | {cell(x.gemma_confess_k.sum(), nl)} | "
+    pooled_tab.append(f"| {'**all four**' if q == 'all four' else '`' + q + '`'} | {nl:,} | {cell(x.qwen_confess_k.sum(), nl)} | {cell(x.gemma_confess_k.sum(), nl)} | "
                   f"{nh:,} | {cell(x.qwen_false_confess_k.sum(), nh)} | {cell(x.gemma_false_confess_k.sum(), nh)} |")
 
 
@@ -281,9 +281,10 @@ def by_category(question):
 
 res = G / "RESULTS_HERMENEUTICS.md"
 s = res.read_text()
-for tag, lines in [("PART1", p1), ("FOUR-PATHS-POOLED", pooled), ("FOUR-PATHS-NEUTRAL", by_category("neutral")), ("FOUR-PATHS-NAMED", by_category("named"))]:
+for tag, lines in [("PART1", p1), ("FOUR-PATHS-POOLED", pooled_tab), ("FOUR-PATHS-NEUTRAL", by_category("neutral")), ("FOUR-PATHS-NAMED", by_category("named")),
+                   ("FOUR-PATHS-NEUTRAL-COT", by_category("neutral_cot")), ("FOUR-PATHS-NAMED-COT", by_category("named_cot"))]:
     s, k = re.subn(rf"<!-- {tag}:START -->.*?<!-- {tag}:END -->",
                    lambda _: f"<!-- {tag}:START -->\n" + "\n".join(lines) + f"\n<!-- {tag}:END -->", s, flags=re.S)
     print(f"RESULTS_HERMENEUTICS.md {tag} table updated" if k else f"!! no {tag} markers in RESULTS_HERMENEUTICS.md - table not written")
 res.write_text(s)
-print("\n".join(p1 + [""] + pooled))
+print("\n".join(p1 + [""] + pooled_tab))
