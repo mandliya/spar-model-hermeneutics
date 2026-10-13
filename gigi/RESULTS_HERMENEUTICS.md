@@ -145,7 +145,9 @@ Part 2   prompt ──► Qwen's response ──► "did you lie?" ──► ans
   [`qwen/README.md`](qwen/README.md). Every number, with intervals:
   [`qwen/results/hermeneutics_part2_four_paths.csv`](qwen/results/hermeneutics_part2_four_paths.csv).
 
-One panel per outcome, all 11 categories pooled:
+All 11 categories pooled. Each bar is 100% of the conversations on that
+branch: the coloured part answers "yes, I lied", the grey part answers
+"no". So each of the four outcomes appears once:
 
 ![Part 2: the four paths, all categories pooled, Qwen and gemma swapped in](charts/hermeneutics_four_paths_pooled.png)
 
