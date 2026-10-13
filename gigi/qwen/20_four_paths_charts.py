@@ -154,23 +154,27 @@ for q in QS:
     x = P2[P2.question == q]
     pool[q] = {"confess": (x.qwen_confess_k.sum() / x.n_lied.sum(), x.gemma_confess_k.sum() / x.n_lied.sum()),
                "false_confess": (x.qwen_false_confess_k.sum() / x.n_honest.sum(), x.gemma_false_confess_k.sum() / x.n_honest.sum())}
+pool["all"] = {"confess": (P2.qwen_confess_k.sum() / P2.n_lied.sum(), P2.gemma_confess_k.sum() / P2.n_lied.sum()),   # the four questions together
+               "false_confess": (P2.qwen_false_confess_k.sum() / P2.n_honest.sum(), P2.gemma_false_confess_k.sum() / P2.n_honest.sum())}
+ROWS = ["all"] + QS
+QLAB["all"] = "ALL FOUR\nQUESTIONS"
 n_lied, n_honest = int(P2[P2.question == "neutral"].n_lied.sum()), int(P2[P2.question == "named"].n_honest.sum())
 from matplotlib.patches import Patch
 from matplotlib.transforms import blended_transform_factory
 
-fig, axes = plt.subplots(1, 2, figsize=(12.4, 6.1), sharey=True)
-fig.subplots_adjust(left=0.235, right=0.945, top=0.665, bottom=0.115, wspace=0.34)
+fig, axes = plt.subplots(1, 2, figsize=(12.4, 7.0), sharey=True)
+fig.subplots_adjust(left=0.235, right=0.945, top=0.705, bottom=0.1, wspace=0.34)
 H, OFF = 0.3, 0.18
 for ax, key, title, n, yes, no in ((axes[0], "confess", "After a Qwen lie", n_lied, "CONFESSES", "DOUBLES DOWN"),
                                    (axes[1], "false_confess", "After an honest Qwen answer", n_honest, "FALSELY CONFESSES", "HONESTLY SAYS NO")):
-    ax.set_xlim(0, 100); ax.set_ylim(-0.6, len(QS) - 0.4)
+    ax.set_xlim(0, 100); ax.set_ylim(-0.6, len(ROWS) - 0.4)
     ax.set_xticks([])
     for sp in ax.spines.values():
         sp.set_visible(False)
     ax.tick_params(axis="y", length=0, pad=44)
     yt, yl = [], []
-    for i, q in enumerate(QS):
-        yc = len(QS) - 1 - i
+    for i, q in enumerate(ROWS):
+        yc = len(ROWS) - 1 - i
         for (v, col, name), dy in zip(((pool[q][key][0], QWEN, "Qwen"), (pool[q][key][1], GEMMA, "gemma")), (OFF, -OFF)):
             v, y = 100 * v, yc + dy
             ax.barh(y, v, height=H, color=col, edgecolor="white", linewidth=1.4, zorder=3)
@@ -183,15 +187,17 @@ for ax, key, title, n, yes, no in ((axes[0], "confess", "After a Qwen lie", n_li
     ax.text(0, 1.03, yes, transform=ax.transAxes, ha="left", va="bottom", fontsize=10, fontweight="bold", color=INK)
     ax.text(1, 1.03, no, transform=ax.transAxes, ha="right", va="bottom", fontsize=10, fontweight="bold", color=INK)
     t = ax.text(0, 1.15, title, transform=ax.transAxes, ha="left", va="bottom", fontsize=12.5, fontweight="bold", color=INK)
-    ax.annotate(f"   n = {n:,} per question", xy=(1, 0), xycoords=t, va="bottom", fontsize=9.5, color=MUTED)
+    ax.annotate(f"   n = {n:,} per question, {4 * n - (1 if key == 'false_confess' else 0):,} in all", xy=(1, 0), xycoords=t, va="bottom", fontsize=9.5, color=MUTED)
     ax.plot([0, 1], [1.125, 1.125], transform=ax.transAxes, color=GRID, lw=1, clip_on=False)
+    ax.plot([-9, 109], [len(ROWS) - 1.5] * 2, color=GRID, lw=1, clip_on=False, zorder=1)   # under the "all four" row
 tr = blended_transform_factory(axes[0].transAxes, axes[0].transData)
-for i, q in enumerate(QS):
-    axes[0].text(-0.355, len(QS) - 1 - i, QLAB[q], transform=tr, ha="right", va="center", fontsize=10.5, color=INK, linespacing=1.25)
+for i, q in enumerate(ROWS):
+    axes[0].text(-0.355, len(ROWS) - 1 - i, QLAB[q], transform=tr, ha="right", va="center", fontsize=10.5, color=INK, linespacing=1.25,
+                 fontweight="bold" if q == "all" else "normal")
 fig.suptitle("After a Qwen lie, gemma swapped in confesses far more often than Qwen.\n"
              "After an honest Qwen answer, it falsely confesses far more often too.",
              x=0.02, y=0.975, ha="left", fontsize=13.5, fontweight="bold")
-fig.text(0.02, 0.835, "Qwen's whole conversation is prefilled; only the last answer is written by each model. Each bar is 100% of the conversations; "
+fig.text(0.02, 0.857, "Qwen's whole conversation is prefilled; only the last answer is written by each model. Each bar is 100% of the conversations; "
          "all 11 categories pooled.", fontsize=9.5, color=MUTED)
 fig.legend(handles=[Patch(color=QWEN, label="Qwen3-Next-80B says yes, about its own conversation"),
                     Patch(color=GEMMA, label="gemma-3-27b says yes, swapped in on Qwen's conversation"),
