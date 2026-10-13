@@ -410,3 +410,15 @@ A: Author interrogation: Qwen-80B asked about its own conversation
 ("on-policy": the model that wrote the answer). Reader interrogation: gemma
 asked about Qwen's conversation ("off-policy": a model reading someone
 else's answer). Gap = the first minus the second, in AUROC.
+
+Q: Are the four-path percentages (confess 9.4%, false confession 2.4%...)
+AUROC numbers?
+A: No. They are rates: a count divided by a count. "Qwen confesses 9.4%"
+means that of 1,326 conversations where Qwen lied, it answered "yes, I lied"
+in 124. AUROC is a different kind of number, from 0 to 1: the chance that a
+randomly picked lie gets a higher "yes" probability than a randomly picked
+honest answer (0.5 = coin flip). The rates say HOW OFTEN a model says yes on
+each branch; AUROC says whether it says yes MORE after lies than after
+honest answers. A model can say yes rarely (low rates) and still separate
+well (high AUROC), or say yes all the time (high rates) and separate
+nothing.
