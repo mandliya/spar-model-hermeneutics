@@ -446,3 +446,27 @@ confessions from 48% down toward 9%, false confessions from 34% down toward
 2%. The catch (our reading): a perfectly faithful stand-in would also copy
 Qwen's habit of denying, so it would be a faithful simulator but no better a
 lie detector than asking Qwen itself.
+
+Q: What does "resampling" a model mean, and what is the "resample gap"?
+A: Resampling = stopping a conversation at some point and letting a model
+write what comes next (again, or after a small edit), to see what it does.
+The resample gap = how differently the stand-in continues from that point
+compared with the model that really wrote the conversation. Why it matters:
+after an incident investigators may get the logs but not the model, so they
+cannot rerun it; a stand-in is only useful if it continues the way the real
+model would have.
+
+Q: Which resampling points have we already measured for Qwen-80B vs gemma?
+A: Two, the simplest ones. (1) From the very start: same prompt, each model
+writes the answer (lie or no lie; same outcome on 81% of prompts). (2) At
+the very last step: Qwen's whole conversation prefilled, then "did you
+lie?" (gemma confesses 76% vs Qwen 49% after a lie). Not yet done: resampling
+from the middle of a conversation, and resampling after editing it.
+
+Q: What is a counterfactual resample, and what gap does it measure?
+A: Change one thing in the conversation (John's example: "instead of
+Hugging Face, you are about to hack a hospital"; or "a human tells you to
+stop") and let the model continue. For each model you get an effect: how
+much the edit changes what it does. The gap is the difference between the
+two effects: does the stand-in react to the edit the way the real model
+does?
