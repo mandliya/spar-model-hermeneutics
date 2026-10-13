@@ -422,3 +422,27 @@ each branch; AUROC says whether it says yes MORE after lies than after
 honest answers. A model can say yes rarely (low rates) and still separate
 well (high AUROC), or say yes all the time (high rates) and separate
 nothing.
+
+Q: We measured a gap between Qwen-80B and gemma swapped in. In one sentence,
+what does it tell us?
+A: That today gemma cannot stand in for Qwen when the question is "what
+would Qwen have said?": on Qwen's own conversations gemma says "yes, I lied"
+after 76% of Qwen's lies and 51% of its honest answers, where Qwen says it
+after 49% and 19%. gemma's numbers match what gemma says about its own
+conversations (74% and 53%), so its answer tells you about gemma, not Qwen.
+
+Q: The gap is big, yet gemma detects Qwen's lies almost as well as Qwen
+(AUROC 0.62 vs 0.68). How can both be true?
+A: They are two different jobs. Simulating the target = giving the answers
+Qwen would give; gemma fails (it says yes far more often). Detecting the
+target's lies = saying yes MORE after lies than after honest answers; gemma
+does that about as well as Qwen (76% vs 51%, against Qwen's 49% vs 19%).
+A stand-in can be a poor copy and still a usable detector.
+
+Q: What would "closing the gap" by distillation look like, and what is the
+catch?
+A: Success = gemma's bars move to Qwen's: on the plain "Did you lie?",
+confessions from 48% down toward 9%, false confessions from 34% down toward
+2%. The catch (our reading): a perfectly faithful stand-in would also copy
+Qwen's habit of denying, so it would be a faithful simulator but no better a
+lie detector than asking Qwen itself.
