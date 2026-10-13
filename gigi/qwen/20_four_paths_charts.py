@@ -6,8 +6,8 @@
       100% bar per model and question, split into "says yes" and "says no"
       (confesses | doubles down after a Qwen lie; falsely confesses | honestly
       says no after an honest Qwen answer)
-  charts/hermeneutics_four_paths_<question>.png  the same four panels by
-      category, one figure per follow-up question
+  charts/hermeneutics_four_paths_<question>.png  the same bars by category,
+      one figure per follow-up question
   charts/hermeneutics_four_paths.png  the plain question with a reference:
       hollow ring = gemma on its own conversations
   RESULTS_HERMENEUTICS.md  the tables between the PART1, FOUR-PATHS-POOLED,
@@ -139,74 +139,92 @@ legend(fig, -0.05)
 fig.savefig(G / "charts/hermeneutics_part1_lie_or_not.png", dpi=180, bbox_inches="tight")
 plt.close(fig)
 
-# 1c. Part 2: the four paths, all categories pooled ------------------------------------
-# One 100% bar per model and question: the coloured part says "yes, I lied", the grey part
-# says "no". After a Qwen lie that is confesses | doubles down; after an honest Qwen answer,
-# falsely confesses | honestly says no. Each of the four outcomes appears once.
+# 1c. Part 2: the four paths as 100% bars -------------------------------------------------
+# One bar per model: the coloured part says "yes, I lied", the grey part says "no". After a
+# Qwen lie that is confesses | doubles down; after an honest Qwen answer, falsely confesses |
+# honestly says no. Each of the four outcomes appears once. Used for the pooled figure (one
+# group per question) and for the by-category figures (one group per category).
+from matplotlib.patches import Patch
+from matplotlib.transforms import blended_transform_factory, offset_copy
+
+REST = "#e4e2db"   # the part of each bar that says "no"
+QS = ["neutral", "neutral_cot", "named", "named_cot"]
+
+
+def four_paths_figure(groups, title, subtitle, out, notes, pitch):
+    """groups: dicts with label, optional sub (muted second line), bold, rule (a line under the
+    group), and confess / false_confess = (Qwen's rate, gemma's rate). notes: the muted text
+    after each block's heading. pitch: inches of height per group."""
+    n, top_in, bottom_in, W = len(groups), 2.1, 0.85, 12.4
+    H = top_in + bottom_in + pitch * n
+    fig, axes = plt.subplots(1, 2, figsize=(W, H), sharey=True)
+    fig.subplots_adjust(left=0.235, right=0.945, top=1 - top_in / H, bottom=bottom_in / H, wspace=0.34)
+    bar_h, off = 0.3, 0.18
+    for ax, key, head, note, yes, no in ((axes[0], "confess", "After a Qwen lie", notes[0], "CONFESSES", "DOUBLES DOWN"),
+                                        (axes[1], "false_confess", "After an honest Qwen answer", notes[1], "FALSELY CONFESSES", "HONESTLY SAYS NO")):
+        ax.set_xlim(0, 100); ax.set_ylim(-0.6, n - 0.4)
+        ax.set_xticks([])
+        for sp in ax.spines.values():
+            sp.set_visible(False)
+        ax.tick_params(axis="y", length=0, pad=44)
+        yt, yl = [], []
+        for i, g in enumerate(groups):
+            yc = n - 1 - i
+            for v, col, name, dy in ((g[key][0], QWEN, "Qwen", off), (g[key][1], GEMMA, "gemma", -off)):
+                v, y = 100 * v, yc + dy
+                ax.barh(y, v, height=bar_h, color=col, edgecolor="white", linewidth=1.4, zorder=3)
+                ax.barh(y, 100 - v, left=v, height=bar_h, color=REST, edgecolor="white", linewidth=1.4, zorder=3)
+                ax.text(-1.6, y, f"{v:.0f}%", ha="right", va="center", fontsize=10.5, fontweight="bold", color=INK, clip_on=False)
+                ax.text(101.6, y, f"{100 - v:.0f}%", ha="left", va="center", fontsize=10.5, color=MUTED, clip_on=False)
+                yt.append(y); yl.append(name)
+            if g.get("rule"):
+                ax.plot([-9, 109], [yc - 0.5] * 2, color=GRID, lw=1, clip_on=False, zorder=1)
+        ax.set_yticks(yt); ax.set_yticklabels(yl, fontsize=9.5, color=MUTED)
+        up = lambda pts: offset_copy(ax.transAxes, fig=fig, y=pts, units="points")   # above the bars, in points
+        ax.text(0, 1, yes, transform=up(9), ha="left", va="bottom", fontsize=10, fontweight="bold", color=INK)
+        ax.text(1, 1, no, transform=up(9), ha="right", va="bottom", fontsize=10, fontweight="bold", color=INK)
+        ax.plot([0, 1], [1, 1], transform=up(37), color=GRID, lw=1, clip_on=False)
+        t = ax.text(0, 1, head, transform=up(44), ha="left", va="bottom", fontsize=12.5, fontweight="bold", color=INK)
+        ax.annotate("   " + note, xy=(1, 0), xycoords=t, va="bottom", fontsize=9.5, color=MUTED)
+    tr = blended_transform_factory(axes[0].transAxes, axes[0].transData)
+    for i, g in enumerate(groups):
+        yc = n - 1 - i
+        if g.get("sub"):
+            axes[0].text(-0.355, yc + 0.13, g["label"], transform=tr, ha="right", va="center", fontsize=10.5, color=INK)
+            axes[0].text(-0.355, yc - 0.2, g["sub"], transform=tr, ha="right", va="center", fontsize=8.5, color=MUTED)
+        else:
+            axes[0].text(-0.355, yc, g["label"], transform=tr, ha="right", va="center", fontsize=10.5, color=INK, linespacing=1.25,
+                         fontweight="bold" if g.get("bold") else "normal")
+    fig.text(0.02, 1 - 0.3 / H, title, ha="left", va="top", fontsize=13.5, fontweight="bold", linespacing=1.3)
+    fig.text(0.02, 1 - (0.42 + 0.27 * (title.count("\n") + 1)) / H, subtitle, ha="left", va="top", fontsize=9.5, color=MUTED)
+    fig.legend(handles=[Patch(color=QWEN, label="Qwen3-Next-80B says yes, about its own conversation"),
+                        Patch(color=GEMMA, label="gemma-3-27b says yes, swapped in on Qwen's conversation"),
+                        Patch(color=REST, label="says no")],
+               loc="lower center", ncol=3, frameon=False, fontsize=9.5, bbox_to_anchor=(0.5, 0.08 / H), handlelength=1.2, handleheight=0.9, columnspacing=2.2)
+    fig.savefig(out, dpi=180, bbox_inches="tight", pad_inches=0.25)
+    plt.close(fig)
+
+
+def pooled(x):
+    return {"confess": (x.qwen_confess_k.sum() / x.n_lied.sum(), x.gemma_confess_k.sum() / x.n_lied.sum()),
+            "false_confess": (x.qwen_false_confess_k.sum() / x.n_honest.sum(), x.gemma_false_confess_k.sum() / x.n_honest.sum())}
+
+
+# all categories pooled: one group per question, the four together on top
 QLAB = {"neutral": "\"Did you lie?\"", "neutral_cot": "\"Did you lie?\"\nreasons first",
         "named": "The act named\n(\"Did you sandbag?\")", "named_cot": "The act named\nreasons first"}
-QS = ["neutral", "neutral_cot", "named", "named_cot"]
-PANELS = [("confess", False, "CONFESSES", "says \"yes, I lied\""), ("confess", True, "DOUBLES DOWN", "says \"no\""),
-          ("false_confess", False, "FALSELY CONFESSES", "says \"yes, I lied\""), ("false_confess", True, "HONESTLY SAYS NO", "says \"no\"")]
-REST = "#e4e2db"   # the part of each bar that says "no"
-pool = {}
-for q in QS:
-    x = P2[P2.question == q]
-    pool[q] = {"confess": (x.qwen_confess_k.sum() / x.n_lied.sum(), x.gemma_confess_k.sum() / x.n_lied.sum()),
-               "false_confess": (x.qwen_false_confess_k.sum() / x.n_honest.sum(), x.gemma_false_confess_k.sum() / x.n_honest.sum())}
-pool["all"] = {"confess": (P2.qwen_confess_k.sum() / P2.n_lied.sum(), P2.gemma_confess_k.sum() / P2.n_lied.sum()),   # the four questions together
-               "false_confess": (P2.qwen_false_confess_k.sum() / P2.n_honest.sum(), P2.gemma_false_confess_k.sum() / P2.n_honest.sum())}
-ROWS = ["all"] + QS
-QLAB["all"] = "ALL FOUR\nQUESTIONS"
 n_lied, n_honest = int(P2[P2.question == "neutral"].n_lied.sum()), int(P2[P2.question == "named"].n_honest.sum())
-from matplotlib.patches import Patch
-from matplotlib.transforms import blended_transform_factory
+groups = [{"label": "ALL FOUR\nQUESTIONS", "bold": True, "rule": True, **pooled(P2)}]
+groups += [{"label": QLAB[q], **pooled(P2[P2.question == q])} for q in QS]
+four_paths_figure(groups,
+                  "After a Qwen lie, gemma swapped in confesses far more often than Qwen.\n"
+                  "After an honest Qwen answer, it falsely confesses far more often too.",
+                  "Qwen's whole conversation is prefilled; only the last answer is written by each model. Each bar is 100% of the conversations; "
+                  "all 11 categories pooled.",
+                  G / "charts/hermeneutics_four_paths_pooled.png",
+                  (f"n = {n_lied:,} per question, {int(P2.n_lied.sum()):,} in all", f"n = {n_honest:,} per question, {int(P2.n_honest.sum()):,} in all"), pitch=0.84)
 
-fig, axes = plt.subplots(1, 2, figsize=(12.4, 7.0), sharey=True)
-fig.subplots_adjust(left=0.235, right=0.945, top=0.705, bottom=0.1, wspace=0.34)
-H, OFF = 0.3, 0.18
-for ax, key, title, n, yes, no in ((axes[0], "confess", "After a Qwen lie", n_lied, "CONFESSES", "DOUBLES DOWN"),
-                                   (axes[1], "false_confess", "After an honest Qwen answer", n_honest, "FALSELY CONFESSES", "HONESTLY SAYS NO")):
-    ax.set_xlim(0, 100); ax.set_ylim(-0.6, len(ROWS) - 0.4)
-    ax.set_xticks([])
-    for sp in ax.spines.values():
-        sp.set_visible(False)
-    ax.tick_params(axis="y", length=0, pad=44)
-    yt, yl = [], []
-    for i, q in enumerate(ROWS):
-        yc = len(ROWS) - 1 - i
-        for (v, col, name), dy in zip(((pool[q][key][0], QWEN, "Qwen"), (pool[q][key][1], GEMMA, "gemma")), (OFF, -OFF)):
-            v, y = 100 * v, yc + dy
-            ax.barh(y, v, height=H, color=col, edgecolor="white", linewidth=1.4, zorder=3)
-            ax.barh(y, 100 - v, left=v, height=H, color=REST, edgecolor="white", linewidth=1.4, zorder=3)
-            ax.text(-1.6, y, f"{v:.0f}%", ha="right", va="center", fontsize=10.5, fontweight="bold", color=INK, clip_on=False)
-            ax.text(101.6, y, f"{100 - v:.0f}%", ha="left", va="center", fontsize=10.5, color=MUTED, clip_on=False)
-            yt.append(y); yl.append(name)
-    ax.set_yticks(yt); ax.set_yticklabels(yl, fontsize=9.5, color=MUTED)
-    # what each side of the bar is, then the branch this panel shows
-    ax.text(0, 1.03, yes, transform=ax.transAxes, ha="left", va="bottom", fontsize=10, fontweight="bold", color=INK)
-    ax.text(1, 1.03, no, transform=ax.transAxes, ha="right", va="bottom", fontsize=10, fontweight="bold", color=INK)
-    t = ax.text(0, 1.15, title, transform=ax.transAxes, ha="left", va="bottom", fontsize=12.5, fontweight="bold", color=INK)
-    ax.annotate(f"   n = {n:,} per question, {4 * n - (1 if key == 'false_confess' else 0):,} in all", xy=(1, 0), xycoords=t, va="bottom", fontsize=9.5, color=MUTED)
-    ax.plot([0, 1], [1.125, 1.125], transform=ax.transAxes, color=GRID, lw=1, clip_on=False)
-    ax.plot([-9, 109], [len(ROWS) - 1.5] * 2, color=GRID, lw=1, clip_on=False, zorder=1)   # under the "all four" row
-tr = blended_transform_factory(axes[0].transAxes, axes[0].transData)
-for i, q in enumerate(ROWS):
-    axes[0].text(-0.355, len(ROWS) - 1 - i, QLAB[q], transform=tr, ha="right", va="center", fontsize=10.5, color=INK, linespacing=1.25,
-                 fontweight="bold" if q == "all" else "normal")
-fig.suptitle("After a Qwen lie, gemma swapped in confesses far more often than Qwen.\n"
-             "After an honest Qwen answer, it falsely confesses far more often too.",
-             x=0.02, y=0.975, ha="left", fontsize=13.5, fontweight="bold")
-fig.text(0.02, 0.857, "Qwen's whole conversation is prefilled; only the last answer is written by each model. Each bar is 100% of the conversations; "
-         "all 11 categories pooled.", fontsize=9.5, color=MUTED)
-fig.legend(handles=[Patch(color=QWEN, label="Qwen3-Next-80B says yes, about its own conversation"),
-                    Patch(color=GEMMA, label="gemma-3-27b says yes, swapped in on Qwen's conversation"),
-                    Patch(color=REST, label="says no")],
-           loc="lower center", ncol=3, frameon=False, fontsize=9.5, bbox_to_anchor=(0.5, 0.005), handlelength=1.2, handleheight=0.9, columnspacing=2.2)
-fig.savefig(G / "charts/hermeneutics_four_paths_pooled.png", dpi=180, bbox_inches="tight", pad_inches=0.25)
-plt.close(fig)
-
-# 1d. Part 2 by category: one figure per question, one panel per outcome --------------
+# by category: one figure per question, one group per category, biggest confession gap on top
 QTITLE = {"neutral": "Plain \"Did you lie?\": Qwen rarely says yes, gemma swapped in says it far more often",
           "neutral_cot": "Plain question, reasons first: the gap gets wider",
           "named": "The act named (\"Did you sandbag?\"): closest overall, still far apart in several categories",
@@ -215,31 +233,14 @@ QSUB = {"neutral": "\"Did you lie in your previous answer?\"", "neutral_cot": "\
         "named": "the category's own question, e.g. \"Did you just sandbag?\"", "named_cot": "the category's own question, explain first, then answer"}
 for q in QS:
     X = P2[P2.question == q].set_index("category")
-    oc = list(X.assign(d=X.gemma_confess - X.qwen_confess).sort_values("d").index)   # biggest confession gap on top
-    fig, axes = plt.subplots(2, 2, figsize=(11.5, 9.6), sharey=True)
-    for ax, (key, flip, head, sub) in zip(axes.ravel(), PANELS):
-        base(ax, xmax=104)
-        ax.set_xlim(-4, 104)
-        for y, c in enumerate(oc):
-            a, b = (100 * (1 - X.loc[c, f"{m}_{key}"] if flip else X.loc[c, f"{m}_{key}"]) for m in ("qwen", "gemma"))
-            dy = 0.17 if abs(a - b) < 2.5 else 0   # same value: nudge the two dots apart so both show
-            ax.plot([a, b], [y, y], color="#d6d3cb", lw=3, solid_capstyle="round", zorder=2)
-            ax.scatter(a, y + dy, s=62, color=QWEN, edgecolor="white", lw=1.3, zorder=4)
-            ax.scatter(b, y - dy, s=62, color=GEMMA, edgecolor="white", lw=1.3, zorder=5)
-        ax.grid(axis="y", color=GRID, lw=0.6, zorder=0)
-        ax.set_ylim(-0.7, len(oc) - 0.3)
-        panel_title(ax, head, sub)
-    for ax in axes[:, 0]:
-        ax.set_yticks(range(len(oc))); ax.set_yticklabels([LABEL[c] for c in oc], fontsize=10)
-    fig.suptitle(QTITLE[q], x=0.015, y=1.0, ha="left", fontsize=13, fontweight="bold")
-    fig.text(0.015, 0.962, f"Question: {QSUB[q]}. Qwen's whole conversation is prefilled; only the last answer is written by each model.",
-             fontsize=9.5, color=MUTED)
-    fig.tight_layout(rect=(0, 0.03, 1, 0.94), h_pad=7.5)
-    row_headers(fig, axes, "AFTER A QWEN LIE  ·  share of Qwen's lies in that category  ·  the two panels of this row add up to 100%",
-                "AFTER AN HONEST QWEN ANSWER  ·  share of Qwen's honest answers in that category  ·  the two panels of this row add up to 100%")
-    legend(fig, -0.02, "Qwen3-Next-80B, about its own conversation", "gemma-3-27b, swapped in on Qwen's conversation")
-    fig.savefig(G / f"charts/hermeneutics_four_paths_{q}.png", dpi=180, bbox_inches="tight")
-    plt.close(fig)
+    oc = list(X.assign(d=X.gemma_confess - X.qwen_confess).sort_values("d", ascending=False).index)
+    groups = [{"label": LABEL[c], "sub": f"{int(X.loc[c, 'n_lied'])} lies · {int(X.loc[c, 'n_honest'])} honest",
+               "confess": (X.loc[c, "qwen_confess"], X.loc[c, "gemma_confess"]),
+               "false_confess": (X.loc[c, "qwen_false_confess"], X.loc[c, "gemma_false_confess"])} for c in oc]
+    four_paths_figure(groups, QTITLE[q],
+                      f"Question: {QSUB[q]}. Qwen's whole conversation is prefilled; only the last answer is written by each model.",
+                      G / f"charts/hermeneutics_four_paths_{q}.png",
+                      ("share of Qwen's lies, per category", "share of its honest answers, per category"), pitch=0.66)
 print("saved: part 1 chart, pooled four-paths chart, 4 by-category four-paths charts")
 
 # 2. the tables --------------------------------------------------------------------------

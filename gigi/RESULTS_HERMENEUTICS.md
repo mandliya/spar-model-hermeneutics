@@ -184,8 +184,10 @@ branch: the coloured part answers "yes, I lied", the grey part answers
 
 ### The four paths by category
 
-Each row is one category; the grey line is the distance between the two
-models. The plain question first:
+The same bars, one pair per category, sorted by how far apart the two
+models are on confessions. Under each category name: how many of Qwen's
+answers were lies and how many were honest, so a rate on a dozen
+conversations isn't over-read. The plain question first:
 
 ![The four paths by category, plain question](charts/hermeneutics_four_paths_neutral.png)
 
