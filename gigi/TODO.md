@@ -136,6 +136,23 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   20_four_paths_charts.py draws: part 1 (lie or no lie, one row per category), part 2 pooled (one
   panel per outcome: confesses, doubles down, falsely confesses, honestly says no), part 2 by category
   (one figure per question, same four panels). The tables are folded under each chart.
+- Qwen3-235B PLAN (13 Oct, NOT approved, nothing spent). Facts looked up 13 Oct:
+  weights `Qwen/Qwen3-235B-A22B` and `-Instruct-2507` = 470.2 GB in bf16, 94 layers, hidden 4096
+  (one all-layer activation tensor = 1.56 MB float32); mixture of experts, 22B active per token.
+  Vast right now: only 8x RTX PRO 6000 boxes fit it cheaply (765 GB): $10.9-16/h, about 4 offers;
+  4x H200 NVL 562 GB $16.70/h. OpenRouter serves `qwen/qwen3-235b-a22b-2507` (Instruct, no thinking)
+  at $0.09-0.25/M in, $0.35-1.0/M out, every provider fp8-quantized. Our workload, measured on the
+  80B run: 2,811 conversations, 11,244 follow-ups, 13.1M prompt tokens over the follow-ups.
+  Option A (John's suggestion): text via OpenRouter (~$5) + judge (~$15-20), then ONE box
+  teacher-forces the saved text for activations and P("A") (~16.5k forward passes, est. 8-16 box-hours):
+  roughly $130-300, 2-3 days including a day of building. Needs the user's OK to break the
+  "no open-weight model through an API" rule for this model; text would come from an fp8 deployment,
+  activations from bf16 weights.
+  Option B (everything on rented GPUs, as for the 80B): est. 2-3x the 80B's time per row on boxes
+  5x the price: roughly $700-1,400, ~1-1.5 days on 3 boxes, little new code.
+  Either way: a smoke test first (~$25-30, mostly the 470 GB download) to replace the speed guess.
+  Open decisions: which variant (the paper only says "Qwen3-235B"); which positions TQ needs;
+  whether gemma should also read the 235B's conversations afterwards (~$30).
 - Also on John's 12 Oct list, NOT started (each needs a quote and the user's yes):
   "rerun pipeline for qwen235B data for tq" (activations, so a Vast box; Qwen3-235B is ~470 GB in
   bf16). John suggested OpenRouter for the 235B's plain forward passes; that would be an exception to
