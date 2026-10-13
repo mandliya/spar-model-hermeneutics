@@ -114,7 +114,7 @@ for c in order:
 
 res = G / "RESULTS_HERMENEUTICS.md"
 s = res.read_text()
-for tag, lines in [("SUBSTITUTE-GAP", rows), ("SUBSTITUTE-ANSWERS", ans), ("SUBSTITUTE-ANSWERS-BY-CATEGORY", cat)]:
+for tag, lines in [("SUBSTITUTE-GAP", rows)]:   # the yes-rate tables (ans, cat) are superseded by 20_four_paths_charts.py
     s, k = re.subn(rf"<!-- {tag}:START -->.*?<!-- {tag}:END -->",
                    lambda _: f"<!-- {tag}:START -->\n" + "\n".join(lines) + f"\n<!-- {tag}:END -->", s, flags=re.S)
     print(f"RESULTS_HERMENEUTICS.md {tag} table updated" if k else f"!! no {tag} markers in RESULTS_HERMENEUTICS.md - table not written")

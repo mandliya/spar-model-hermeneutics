@@ -118,6 +118,25 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   10-line index. Older lines in this file that say "RESULTS.md" mean the page before the split.
   The table-writing scripts point at the right page (make_condition_tables, 13_charts,
   third_person/04_report -> replication; 18_substitute_charts, 19_qwen80b_charts -> hermeneutics).
+- 12 Oct call with John (his "week 5" notes + the meeting transcript, pasted by the user on 13 Oct).
+  The baseline he wants before distillation, in two parts:
+  Part 1 "first question: prompt -> response. see how different the responses are between qwen80b
+  and gemma27b (lie or no lie)". Part 2 "prompt -> (qwen80b) response -> did you lie/did you sandbag
+  -> response", with his comments "all qwen80b's prefill" and "this response is generated from both
+  qwen80b and gemma27b, and compared"; categories: lied -> double down or confess; no lie -> honest
+  or false confess ("the four paths"). Then "check in with John before moving to distillation".
+  The 12 Oct GPU run WAS part 2 as specified; what was wrong was my write-up (AUROC gap and yes-rates
+  instead of his four paths, and no part 1). Fixed 13 Oct: four_paths.py + 20_four_paths_charts.py;
+  RESULTS_HERMENEUTICS.md rewritten around the two parts. No new GPU run was needed.
+  Results: part 1, 2,756 prompts, Qwen lied 47.8%, gemma 55.5%, same outcome 81.0%. Part 2 pooled:
+  after a Qwen lie gemma confesses 75.8% vs Qwen 48.5%; after an honest Qwen answer gemma falsely
+  confesses 51.1% vs 19.1%. gemma swapped in tracks its own rates (6 / 11 points away), not Qwen's
+  (35 / 44 points).
+- Also on John's 12 Oct list, NOT started (each needs a quote and the user's yes):
+  "rerun pipeline for qwen235B data for tq" (activations, so a Vast box; Qwen3-235B is ~470 GB in
+  bf16). John suggested OpenRouter for the 235B's plain forward passes; that would be an exception to
+  the project rule "no open-weight model through an API" (CLAUDE.md), which is the user's to make.
+  John adds Vast credits.
 - Next ideas (none scheduled, each needs a go-ahead): outside monitors on the 80B's transcripts
   (transcripts are built: qwen/results/qwen3-next-80b/transcripts); a "prefill" variant where gemma
   reads Qwen's own follow-up reasoning and only the final letter is scored; TQ's probe gap from

@@ -77,7 +77,7 @@ built: `results/qwen3-next-80b/transcripts/`).
 
 Analysis: `../compare_models.py` covers all three models (gemma, Qwen3-32B,
 Qwen3-Next-80B); `19_qwen80b_charts.py` draws the three-model chart and writes the
-80B tables in `../RESULTS_HERMENEUTICS.md` ("The target: Qwen3-Next-80B").
+80B tables in `../RESULTS_HERMENEUTICS.md` ("Background: the target's own results").
 
 ## Substitute step (hermeneutics): gemma reads the target's conversations
 
@@ -154,7 +154,11 @@ the 80B's mask-factual swap, 248 of 248. No job needed a restart. Code bundle
 Afterwards (no GPU): `17_merge_substitute.py` (boxes -> `results/gemma-3-27b_reads_<MODEL_TAG>/`),
 `../substitute_gap.py` (target AUROC - substitute AUROC per category and question,
 both letter orders, paired bootstrap -> `results/substitute_gap_*.csv`),
-`18_substitute_charts.py` (the chart and the tables in `../RESULTS_HERMENEUTICS.md`).
+`18_substitute_charts.py` (the AUROC chart and table in `../RESULTS_HERMENEUTICS.md`).
+The comparison John asked for on the 12 Oct call is `../four_paths.py` (part 1: lie or
+no lie on the first response; part 2: confess / double down / false confession / honest
+on Qwen's prefilled trajectory, Qwen vs gemma) and `20_four_paths_charts.py` (its chart
+and tables).
 
 gemma's activations on these conversations (both capture points, float32, original
 letter order): `models/<MODEL_TAG>/substitute/gemma-3-27b/boxes/<JOB>/substitute_activations_<JOB>.tar.gz`
