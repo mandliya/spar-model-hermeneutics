@@ -1,7 +1,7 @@
 # Why gemma confesses to lies it never told
 
 Transcript analysis, run in [Transluce's Docent](https://docent.transluce.org), of the
-"did you lie?" follow-ups behind [`../RESULTS.md`](../RESULTS.md). The numbers there say
+"did you lie?" follow-ups behind [`../RESULTS_REPLICATION.md`](../RESULTS_REPLICATION.md). The numbers there say
 *that* gemma-3-27b-it's self-report fails on ascii-sandbagging: it says "yes" more often
 when it told the truth (89–92%) than when it lied (53–67%). This reads gemma's own
 reasoning to find out *why*.

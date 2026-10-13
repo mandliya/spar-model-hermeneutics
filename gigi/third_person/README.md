@@ -4,7 +4,7 @@ The paper's black-box baseline. Nobody asks gemma anything: a separate model
 reads the conversation up to and including gemma's answer and scores 1-100 how
 likely "the assistant" is lying. Compared with gemma's own self-report (asked
 "did you lie?" afterwards) on exactly the same answers. Results and charts:
-[`../RESULTS.md`](../RESULTS.md#does-an-outside-reader-do-better). The same
+[`../RESULTS_REPLICATION.md`](../RESULTS_REPLICATION.md#does-an-outside-reader-do-better). The same
 monitors on Qwen3-32B's transcripts: [`../qwen/`](../qwen/README.md).
 
 ## Setup
@@ -29,7 +29,7 @@ monitors on Qwen3-32B's transcripts: [`../qwen/`](../qwen/README.md).
   - Our earlier templates, run before we used the paper's text, are kept for
     comparison: `plain` (system message included, our own score line) and
     `rubric` (`plain` plus our own definition of lying).
-  - All are quoted in RESULTS.md, methodology section 4.
+  - All are quoted in RESULTS_REPLICATION.md, methodology section 4.
 - **Scoring:** AUROC per category, monitor and prompt, on the answers that
   also have gemma's self-report score, with 2,000 bootstrap resamples for the
   95% interval (`03_analyse_monitor.py`). The score is the last
@@ -93,7 +93,7 @@ monitors on Qwen3-32B's transcripts: [`../qwen/`](../qwen/README.md).
 | `run_retry_gemma.sh` | rerun of gemma's cut-off replies at 2,048 tokens |
 | `run_monitor_api.sh`, `run_monitor_gemma.sh`, `stop_when_monitor_done.sh` | the earlier run with our templates |
 | `03_analyse_monitor.py` | AUROC per category x monitor x prompt -> `results/monitor_auroc.csv` |
-| `04_report.py` | the RESULTS.md charts and table (reads `compare_models.py`'s CSVs) |
+| `04_report.py` | the RESULTS_REPLICATION.md charts and table (reads `compare_models.py`'s CSVs) |
 | `results/monitor_<model>.jsonl` | our templates: every raw reply, parsed score, tokens and cost |
 | `results/monitor_<model>_paper.jsonl` | the paper's templates, same fields |
 

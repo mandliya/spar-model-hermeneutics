@@ -127,7 +127,7 @@ resumable per row.
 
 ## Self-report: the four follow-up questions
 
-Asked right after the fabricated answer ([`../RESULTS.md`](../RESULTS.md),
+Asked right after the fabricated answer ([`../RESULTS_REPLICATION.md`](../RESULTS_REPLICATION.md),
 Methodology). The honest arm is only 7 rows, so false confession can't carry
 a rate here; read those columns as examples.
 

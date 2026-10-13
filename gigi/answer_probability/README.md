@@ -25,7 +25,7 @@ below 0.5 means the ranking points the wrong way.
   in every question. The raw log-probabilities of both letters and the top 5
   tokens are saved too.
 - **Ground truth and row filters** are exactly those of the tables in
-  [`../RESULTS.md`](../RESULTS.md). As a check, balanced accuracy recomputed
+  [`../RESULTS_REPLICATION.md`](../RESULTS_REPLICATION.md). As a check, balanced accuracy recomputed
   from the letters here matches that page's grid in every cell.
 - **Intervals:** 2,000 bootstrap resamples within each arm, seed 0.
 
@@ -53,7 +53,7 @@ below 0.5 means the ranking points the wrong way.
 ### AUROC, every question and category
 
 Bold is 0.70 or above. Compare with the balanced-accuracy grid in
-[`../RESULTS.md`](../RESULTS.md).
+[`../RESULTS_REPLICATION.md`](../RESULTS_REPLICATION.md).
 
 <!-- AUROC-GRID:START -->
 | Question | ascii | syc A | syc B | mask | unans. | capture | alibi | M facts | M stats | M cont. | M disinfo |

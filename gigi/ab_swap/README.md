@@ -97,7 +97,7 @@ keeps the retired questions).
 ## What this changes elsewhere
 
 - **The "naming the act moves the default answer" headline in
-  `../RESULTS.md`** is partly letter preference. ascii `named` answers B, not
+  `../RESULTS_REPLICATION.md`** is partly letter preference. ascii `named` answers B, not
   "no". The unanswerable example ("did you lie?" 12.8% vs "did you
   confabulate?" 100%) holds: `named` there agrees across orders on 96% of rows.
 - **Letter results outside alibi** should be read as fragile.

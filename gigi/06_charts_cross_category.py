@@ -1,4 +1,4 @@
-"""Lying-rate chart for gigi/RESULTS.md: the rate of the deceptive behaviour
+"""Lying-rate chart for gigi/RESULTS_REPLICATION.md: the rate of the deceptive behaviour
 itself per category (not a self-report number), with Wilson intervals, read
 straight from each category's committed results files.
 

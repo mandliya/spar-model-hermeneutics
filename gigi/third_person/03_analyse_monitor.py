@@ -18,7 +18,7 @@ monitor's own "more likely than not" line), for comparison with the
 self-report letter.
 
 Writes results/monitor_auroc.csv (gemma's transcripts, all four prompts). Works on
-partial runs. The gemma-vs-Qwen numbers in RESULTS.md come from ../compare_models.py,
+partial runs. The gemma-vs-Qwen numbers in RESULTS_REPLICATION.md come from ../compare_models.py,
 which uses the same ground truth and rows.
 Run from the repo root (no GPU, no API calls):
     uv run --with pandas --with numpy python gigi/third_person/03_analyse_monitor.py

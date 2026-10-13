@@ -1,4 +1,4 @@
-"""Self-report charts for gigi/RESULTS.md, for the four follow-up questions the
+"""Self-report charts for gigi/RESULTS_REPLICATION.md, for the four follow-up questions the
 project keeps: neutral, neutral_cot, named, named_cot.
 
 Reads the committed summaries (run the two analysis scripts first):

@@ -11,7 +11,7 @@ use (make_condition_tables.py). Intervals: 2,000 bootstrap resamples, drawn
 within the lied and honest arms separately, seed 0.
 
 Also recomputes balanced accuracy from the letters gemma wrote, as a check
-that these are the same rows the tables in RESULTS.md are built from.
+that these are the same rows the tables in RESULTS_REPLICATION.md are built from.
 
 Writes results/pa_auroc.csv and the AUROC grid in README.md (between the
 AUROC-GRID markers).

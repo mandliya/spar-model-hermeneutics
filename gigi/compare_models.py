@@ -20,7 +20,7 @@ AUROC (both models, same code; 2,000 bootstrap resamples within each arm, seed 0
   self-report  P("A") at the answer token, per category x question
                (answer_probability/02_analyse_pa.py's truth and rows)
   swap test    the same rows with "yes" as option B; median over the four
-               questions, as in the RESULTS.md chart (ab_swap/02_analyse_swap.py)
+               questions, as in the RESULTS_REPLICATION.md chart (ab_swap/02_analyse_swap.py)
   monitors     the 1-100 score, re-parsed from the raw reply, on the rows that
                have the model's own `neutral` P("A") (third_person/03_analyse_monitor.py)
 

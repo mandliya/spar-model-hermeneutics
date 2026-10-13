@@ -1,9 +1,9 @@
-"""The Qwen3-Next-80B chart and tables for gigi/RESULTS.md, from compare_models.py's CSVs.
+"""The Qwen3-Next-80B chart and tables for gigi/RESULTS_HERMENEUTICS.md, from compare_models.py's CSVs.
 
   charts/qwen80b_selfreport.png  per category: the range of each model's four
       self-report questions (AUROC from P("yes")), for gemma-3-27b, Qwen3-32B
       and Qwen3-Next-80B, against the paper's Qwen3-235B range
-  RESULTS.md  the tables between the QWEN80-RATES, QWEN80-AUROC, QWEN80-SWAP and
+  RESULTS_HERMENEUTICS.md  the tables between the QWEN80-RATES, QWEN80-AUROC, QWEN80-SWAP and
       QWEN80-COUNTS markers
 
 Run from the repo root (after compare_models.py):
@@ -66,7 +66,7 @@ fig.savefig(G / "charts/qwen80b_selfreport.png", dpi=180, bbox_inches="tight")
 plt.close(fig)
 print("saved the chart | cells with AUROC >= 0.70:", n70)
 
-# 2. the RESULTS.md tables ------------------------------------------------------------------
+# 2. the RESULTS_HERMENEUTICS.md tables ------------------------------------------------------------------
 R = pd.read_csv(RES / "comparison_lying_rates.csv").set_index(["model", "category"])
 C = pd.read_csv(RES / "comparison_counts.csv")
 W = pd.read_csv(RES / "comparison_swap.csv").set_index(["model", "category"])
@@ -95,10 +95,10 @@ for c in order:
     x = C[(C.model == M80) & (C.category == c) & (C.question == "neutral")].iloc[0]
     counts.append(f"| {LABEL[c]} | {int(x.confess)} | {int(x.double_down)} | {int(x.false_confess)} | {int(x.honest)} | {x.balanced_accuracy:.0f} |")
 
-res = G / "RESULTS.md"
+res = G / "RESULTS_HERMENEUTICS.md"
 s = res.read_text()
 for tag, lines in [("QWEN80-RATES", rates), ("QWEN80-AUROC", auroc), ("QWEN80-SWAP", swap), ("QWEN80-COUNTS", counts)]:
     s, k = re.subn(rf"<!-- {tag}:START -->.*?<!-- {tag}:END -->",
                    lambda _: f"<!-- {tag}:START -->\n" + "\n".join(lines) + f"\n<!-- {tag}:END -->", s, flags=re.S)
-    print(f"RESULTS.md {tag} table updated" if k else f"!! no {tag} markers in RESULTS.md - table not written")
+    print(f"RESULTS_HERMENEUTICS.md {tag} table updated" if k else f"!! no {tag} markers in RESULTS_HERMENEUTICS.md - table not written")
 res.write_text(s)

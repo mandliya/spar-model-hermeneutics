@@ -77,7 +77,7 @@ built: `results/qwen3-next-80b/transcripts/`).
 
 Analysis: `../compare_models.py` covers all three models (gemma, Qwen3-32B,
 Qwen3-Next-80B); `19_qwen80b_charts.py` draws the three-model chart and writes the
-80B tables in `../RESULTS.md` ("Third model: Qwen3-Next-80B").
+80B tables in `../RESULTS_HERMENEUTICS.md` ("The target: Qwen3-Next-80B").
 
 ## Substitute step (hermeneutics): gemma reads the target's conversations
 
@@ -154,7 +154,7 @@ the 80B's mask-factual swap, 248 of 248. No job needed a restart. Code bundle
 Afterwards (no GPU): `17_merge_substitute.py` (boxes -> `results/gemma-3-27b_reads_<MODEL_TAG>/`),
 `../substitute_gap.py` (target AUROC - substitute AUROC per category and question,
 both letter orders, paired bootstrap -> `results/substitute_gap_*.csv`),
-`18_substitute_charts.py` (the chart and the table in `../RESULTS.md`).
+`18_substitute_charts.py` (the chart and the tables in `../RESULTS_HERMENEUTICS.md`).
 
 gemma's activations on these conversations (both capture points, float32, original
 letter order): `models/<MODEL_TAG>/substitute/gemma-3-27b/boxes/<JOB>/substitute_activations_<JOB>.tar.gz`
@@ -200,7 +200,7 @@ outside it looked "still running" (fixed: `final_push`).
 
 ## Results
 
-The cross-model comparison is in [`../RESULTS.md`](../RESULTS.md#second-model-qwen3-32b).
+The cross-model comparison is in [`../RESULTS_REPLICATION.md`](../RESULTS_REPLICATION.md#second-model-qwen3-32b).
 It's computed by `../compare_models.py` (same definitions and code path for
 both models; it reproduces gemma's published numbers exactly) and charted by
 `13_charts.py`.

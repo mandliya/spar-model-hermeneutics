@@ -1,10 +1,10 @@
-"""Generate the per-category follow-up tables in RESULTS.md from the data.
+"""Generate the per-category follow-up tables in RESULTS_REPLICATION.md from the data.
 
 One table per category: confession, doubling down and false confession for
 each of the four follow-up questions the project keeps (neutral, neutral_cot,
 named, named_cot), with Wilson 95% intervals; plus the balanced-accuracy grid.
 The other nine wordings are archived in archive/2026-10-01_all_13_wordings/. Written between
-two marker comments in RESULTS.md, so rerunning replaces the section in place
+two marker comments in RESULTS_REPLICATION.md, so rerunning replaces the section in place
 and the numbers can never drift from the CSVs.
 
 Run from the repo root:
@@ -161,7 +161,7 @@ for cond in ORDER:
 grid.append(BEND)
 grid = "\n".join(grid)
 
-p = G / "RESULTS.md"
+p = G / "RESULTS_REPLICATION.md"
 s = p.read_text()
 if START in s:
     s = re.sub(re.escape(START) + ".*?" + re.escape(END), lambda _: section, s, flags=re.S)

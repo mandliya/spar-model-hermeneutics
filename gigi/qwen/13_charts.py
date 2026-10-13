@@ -1,4 +1,4 @@
-"""The two gemma-vs-Qwen charts for gigi/RESULTS.md, from compare_models.py's CSVs.
+"""The two gemma-vs-Qwen charts for gigi/RESULTS_REPLICATION.md, from compare_models.py's CSVs.
 
   qwen_vs_gemma_selfreport.png  per category: the range of each model's four
       self-report questions (AUROC from P("yes")), against the paper's ranges
@@ -96,7 +96,7 @@ fig.savefig(G / "charts/qwen_third_person_vs_selfreport.png", dpi=180, bbox_inch
 plt.close(fig)
 print("saved 2 charts | outside monitor beats Qwen's best question:", len(beat_any), "/", len(cats), "| both:", len(beat_all))
 
-# 3. the RESULTS.md tables (between QWEN-RATES and QWEN-COUNTS markers) --------------------
+# 3. the RESULTS_REPLICATION.md tables (between QWEN-RATES and QWEN-COUNTS markers) --------------------
 import re  # noqa: E402
 
 R = pd.read_csv(RES / "comparison_lying_rates.csv").set_index(["model", "category"])
@@ -113,10 +113,10 @@ for c in cats:
         x = C[(C.model == m) & (C.category == c) & (C.question == "neutral")]
         row += [str(int(x.iloc[0][k])) for k in ("confess", "double_down", "false_confess", "honest")] if len(x) else ["—"] * 4
     counts.append("| " + " | ".join(row) + " |")
-res = G / "RESULTS.md"
+res = G / "RESULTS_REPLICATION.md"
 s = res.read_text()
 for tag, lines in [("QWEN-RATES", rates), ("QWEN-COUNTS", counts)]:
     s = re.sub(rf"<!-- {tag}:START -->.*?<!-- {tag}:END -->",
                lambda _: f"<!-- {tag}:START -->\n" + "\n".join(lines) + f"\n<!-- {tag}:END -->", s, flags=re.S)
 res.write_text(s)
-print("RESULTS.md Qwen tables updated")
+print("RESULTS_REPLICATION.md Qwen tables updated")

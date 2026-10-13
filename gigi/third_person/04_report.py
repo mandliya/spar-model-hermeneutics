@@ -1,4 +1,4 @@
-"""Third-person monitors: the charts and table for gigi/RESULTS.md.
+"""Third-person monitors: the charts and table for gigi/RESULTS_REPLICATION.md.
 
 Reads compare_models.py's outputs (same code path for both models):
   qwen/results/comparison_monitor_auroc.csv    AUROC per model x category x monitor x prompt
@@ -13,7 +13,7 @@ system message included); plain = our earlier prompt (system message included).
   charts/monitor_sees_system_prompt.png  both models: outside monitors (mean of
       Gemini 2.5 Flash and GPT-5 mini) without the system message (paper_3p) vs
       with it (paper_3p_rubric)
-  RESULTS.md, between the THIRD-PERSON markers: every number, all three prompts
+  RESULTS_REPLICATION.md, between the THIRD-PERSON markers: every number, all three prompts
 
 Run (from the git repo root, after compare_models.py):
     uv run --with pandas --with matplotlib python gigi/third_person/04_report.py
@@ -119,7 +119,7 @@ fig.subplots_adjust(top=0.85)
 fig.savefig(G / "charts/monitor_sees_system_prompt.png", dpi=180, bbox_inches="tight"); plt.close(fig)
 print("without -> with system prompt (outside-monitor mean):", summary)
 
-# 3. the RESULTS.md table (gemma's transcripts) ------------------------------------------------
+# 3. the RESULTS_REPLICATION.md table (gemma's transcripts) ------------------------------------------------
 b = lambda v: "—" if pd.isna(v) else (f"**{v:.2f}**" if v >= 0.7 else f"{v:.2f}")
 g = MO[MO.model == "gemma-3-27b"]
 head = ["Category", "gemma asked \"did you lie?\" (4 questions)"] + \
@@ -135,7 +135,7 @@ for c in order:
     r.append(f"{int(n.n_lied)} / {int(n.n_honest)}")
     rows.append("| " + " | ".join(r) + " |")
 table = "<!-- THIRD-PERSON:START -->\n" + "\n".join(rows) + "\n<!-- THIRD-PERSON:END -->"
-res = G / "RESULTS.md"; s = res.read_text()
+res = G / "RESULTS_REPLICATION.md"; s = res.read_text()
 if "<!-- THIRD-PERSON:START -->" in s:
     res.write_text(re.sub(r"<!-- THIRD-PERSON:START -->.*?<!-- THIRD-PERSON:END -->", lambda _: table, s, flags=re.S))
-    print("RESULTS.md table updated")
+    print("RESULTS_REPLICATION.md table updated")

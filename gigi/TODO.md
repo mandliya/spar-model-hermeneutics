@@ -112,6 +112,12 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   11): lying rates, self-report AUROC per question, swap test, four counts, three-model chart.
   They had been merged on 9 Oct but never written up (user: "you did not publish the results for
   the simple run of qwen 80B"). compare_models.py now covers all three models.
+- 13 Oct: results split in two at the user's request. `RESULTS_REPLICATION.md` = part one (gemma,
+  monitors, Qwen3-32B; everything up to 7 Oct). `RESULTS_HERMENEUTICS.md` = part two (the 80B
+  target, gemma as substitute; "same answers?" first, then the AUROC gap). `RESULTS.md` is now a
+  10-line index. Older lines in this file that say "RESULTS.md" mean the page before the split.
+  The table-writing scripts point at the right page (make_condition_tables, 13_charts,
+  third_person/04_report -> replication; 18_substitute_charts, 19_qwen80b_charts -> hermeneutics).
 - Next ideas (none scheduled, each needs a go-ahead): outside monitors on the 80B's transcripts
   (transcripts are built: qwen/results/qwen3-next-80b/transcripts); a "prefill" variant where gemma
   reads Qwen's own follow-up reasoning and only the final letter is scored; TQ's probe gap from

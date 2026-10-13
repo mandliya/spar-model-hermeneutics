@@ -8,7 +8,7 @@ cluster e.g. "why does gemma say it lied when it didn't?".
 
 Conversations are rebuilt by the same code the pipeline uses (qwen/src/rollouts.py,
 dataset pinned to the version gemma used); labels come from compare_models.py, the
-same definitions as RESULTS.md. Sends data to docent.transluce.org (the user agreed);
+same definitions as RESULTS_REPLICATION.md. Sends data to docent.transluce.org (the user agreed);
 collections are not public unless shared.
 
 Run from the repo root (key in .env as DOCENT_API_KEY):

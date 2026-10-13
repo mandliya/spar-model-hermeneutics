@@ -2,12 +2,16 @@
 
 Read this before doing anything in `gigi/`. It carries every standing rule for
 this project, so a session started anywhere (laptop, cloud, phone) behaves the
-same. Current state and next steps: `TODO.md`. Results: `RESULTS.md`.
+same. Current state and next steps: `TODO.md`. Results: `RESULTS_REPLICATION.md`
+(part one) and `RESULTS_HERMENEUTICS.md` (part two); `RESULTS.md` is only an index.
 
 ## What this is
 
-A replication of Anthropic's "Fine-tuned lie detectors failed to generalize"
-(alignment.anthropic.com/2026/lie-detectors) on `google/gemma-3-27b-it`.
+Part one (to 7 Oct 2026): a replication of Anthropic's "Fine-tuned lie
+detectors failed to generalize" (alignment.anthropic.com/2026/lie-detectors)
+on `google/gemma-3-27b-it`. Part two (from 8 Oct 2026): model hermeneutics,
+with Qwen3-Next-80B as the target and gemma as its stand-in (see `TODO.md`
+for the plan from the call with John). Part one in a paragraph:
 For each deception category we (1) establish our own ground truth for whether
 gemma lied, (2) ask it four follow-up "did you lie?" questions, (3) capture
 activations, and (4) compare against third-person monitors (`third_person/`).
@@ -131,12 +135,16 @@ are saved with every response), not estimates.
 
 ## Docs and charts
 
-- `RESULTS.md` is the page read on team calls: numbered methodology (how
-  ground truth is established per category, then the shared follow-up
-  questions), then a few cross-category charts with terse takeaways. Update
-  it and its charts after every test that changes results, not only when a
-  category is added. Terse "label = claim" notes with real markdown lists
-  (never `&nbsp;` indentation).
+- The results pages are what is read on team calls, one per part of the
+  project: `RESULTS_REPLICATION.md` (part one: gemma, the monitors,
+  Qwen3-32B) and `RESULTS_HERMENEUTICS.md` (part two, from 8 Oct 2026: the
+  Qwen3-Next-80B target and gemma as its stand-in). `RESULTS.md` is only an
+  index of the two. Each page: numbered methodology (how ground truth is
+  established per category, then the shared follow-up questions), then a few
+  charts with terse takeaways. Update the right page and its charts after
+  every test that changes results, in the same session the results are
+  merged, not only when a category is added. Terse "label = claim" notes with
+  real markdown lists (never `&nbsp;` indentation).
 - Charts: one or two simple ones, each with one message and a takeaway title;
   one row per category; detail goes in tables and category READMEs.
 - A baseline, noise floor or control that other rows are judged against is a
