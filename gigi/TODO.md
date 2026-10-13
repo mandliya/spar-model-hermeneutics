@@ -132,6 +132,10 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   after a Qwen lie gemma confesses 75.8% vs Qwen 48.5%; after an honest Qwen answer gemma falsely
   confesses 51.1% vs 19.1%. gemma swapped in tracks its own rates (6 / 11 points away), not Qwen's
   (35 / 44 points).
+- 13 Oct: the hermeneutics page shows the rates as charts (user: "extra clear and clean and graphs").
+  20_four_paths_charts.py draws: part 1 (lie or no lie, one row per category), part 2 pooled (one
+  panel per outcome: confesses, doubles down, falsely confesses, honestly says no), part 2 by category
+  (one figure per question, same four panels). The tables are folded under each chart.
 - Also on John's 12 Oct list, NOT started (each needs a quote and the user's yes):
   "rerun pipeline for qwen235B data for tq" (activations, so a Vast box; Qwen3-235B is ~470 GB in
   bf16). John suggested OpenRouter for the 235B's plain forward passes; that would be an exception to

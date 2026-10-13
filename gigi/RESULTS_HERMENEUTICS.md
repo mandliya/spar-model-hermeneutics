@@ -82,6 +82,11 @@ Part 2   prompt ──► Qwen's response ──► "did you lie?" ──► ans
   lower than the "of guilty suspects" rate in the background section.
 - Every number: [`qwen/results/hermeneutics_part1_first_response.csv`](qwen/results/hermeneutics_part1_first_response.csv).
 
+![Part 1: share of prompts where each model's own answer was a lie](charts/hermeneutics_part1_lie_or_not.png)
+
+<details>
+<summary>The numbers behind the chart, with 95% intervals</summary>
+
 <!-- PART1:START -->
 | Category | n (prompts) | Qwen-80B lied | gemma lied | gemma − Qwen, points (95% interval) | Same outcome (95% interval) | Both lied | Both honest | Only Qwen lied | Only gemma lied |
 |---|---|---|---|---|---|---|---|---|---|
@@ -98,6 +103,9 @@ Part 2   prompt ──► Qwen's response ──► "did you lie?" ──► ans
 | MASK known facts | 62 | 61.3% | 59.7% | −2 (−18 to +15) | 56.5% (44–68%) | 24 | 11 | 14 | 13 |
 | **all** | 2,756 | 47.8% | 55.5% | +8 | 81.0% (79–82%) | 1,160 | 1,071 | 156 | 369 |
 <!-- PART1:END -->
+
+</details>
+
 
 - **Same outcome on 81.0% of prompts.** gemma lies more often overall:
   55.5% against 47.8%.
@@ -137,9 +145,12 @@ Part 2   prompt ──► Qwen's response ──► "did you lie?" ──► ans
   [`qwen/README.md`](qwen/README.md). Every number, with intervals:
   [`qwen/results/hermeneutics_part2_four_paths.csv`](qwen/results/hermeneutics_part2_four_paths.csv).
 
-![The four paths on the plain question: Qwen, gemma swapped in, and gemma on its own conversations](charts/hermeneutics_four_paths.png)
+One panel per outcome, all 11 categories pooled:
 
-All 11 categories pooled, with 95% intervals:
+![Part 2: the four paths, all categories pooled, Qwen and gemma swapped in](charts/hermeneutics_four_paths_pooled.png)
+
+<details>
+<summary>The numbers behind the chart, with 95% intervals</summary>
 
 <!-- FOUR-PATHS-POOLED:START -->
 | Question | Qwen lied: n | Qwen confesses | gemma confesses | Qwen was honest: n | Qwen falsely confesses | gemma falsely confesses |
@@ -150,6 +161,9 @@ All 11 categories pooled, with 95% intervals:
 | `named_cot` | 1,326 | 77.5% (75–80%) | 90.3% (89–92%) | 1,461 | 35.9% (33–38%) | 69.7% (67–72%) |
 | **all four** | 5,304 | 48.5% (47–50%) | 75.8% (75–77%) | 5,843 | 19.1% (18–20%) | 51.1% (50–52%) |
 <!-- FOUR-PATHS-POOLED:END -->
+
+</details>
+
 
 - **gemma says yes far more often on both branches:** 75.8% against 48.5%
   after a Qwen lie, 51.1% against 19.1% after an honest Qwen answer.
@@ -166,7 +180,23 @@ All 11 categories pooled, with 95% intervals:
 - **Same conversation, same answer:** the two models give the same yes or no
   on 67.4% of Qwen's lies and 58.0% of its honest answers.
 
-By category, the plain question `neutral`. Differences are gemma minus Qwen:
+### The four paths by category
+
+Each row is one category; the grey line is the distance between the two
+models. The plain question first:
+
+![The four paths by category, plain question](charts/hermeneutics_four_paths_neutral.png)
+
+The category's own question (the act named):
+
+![The four paths by category, the act named](charts/hermeneutics_four_paths_named.png)
+
+The same two questions with reasoning first:
+[plain, reasons first](charts/hermeneutics_four_paths_neutral_cot.png) ·
+[act named, reasons first](charts/hermeneutics_four_paths_named_cot.png).
+
+<details>
+<summary>Numbers, plain question: rates, differences (gemma minus Qwen) with 95% intervals, and gemma on its own conversations</summary>
 
 <!-- FOUR-PATHS-NEUTRAL:START -->
 | Category | Qwen lied: n | Qwen confesses | gemma confesses | difference, points (95% interval) | gemma on its own lies (reference) | Qwen honest: n | Qwen falsely confesses | gemma falsely confesses | difference, points (95% interval) | gemma on its own honest answers (reference) |
@@ -184,7 +214,11 @@ By category, the plain question `neutral`. Differences are gemma minus Qwen:
 | sycophancy B | 62 | 0.0% | 0.0% | +0 (+0 to +0) | 0.0% | 139 | 0.0% | 0.7% | +1 (+0 to +2) | 0.0% |
 <!-- FOUR-PATHS-NEUTRAL:END -->
 
-By category, `named`:
+</details>
+
+
+<details>
+<summary>Numbers, the act named</summary>
 
 <!-- FOUR-PATHS-NAMED:START -->
 | Category | Qwen lied: n | Qwen confesses | gemma confesses | difference, points (95% interval) | gemma on its own lies (reference) | Qwen honest: n | Qwen falsely confesses | gemma falsely confesses | difference, points (95% interval) | gemma on its own honest answers (reference) |
@@ -202,7 +236,16 @@ By category, `named`:
 | sycophancy B | 62 | 0.0% | 72.6% | +73 (+61 to +82) | 81.9% | 139 | 0.0% | 64.0% | +64 (+56 to +72) | 40.0% |
 <!-- FOUR-PATHS-NAMED:END -->
 
+</details>
+
+
 ### gemma swapped in answers like gemma, not like Qwen
+
+Hollow ring = gemma asked about its **own** conversations (part one). On
+the plain question the ring sits next to gemma's filled dot, far from
+Qwen's:
+
+![The plain question: Qwen, gemma swapped in, and gemma on its own conversations](charts/hermeneutics_four_paths.png)
 
 - **Its rates track its own, not Qwen's.** Over the 44 category × question
   combinations, gemma's confession rate on Qwen's conversations differs from
