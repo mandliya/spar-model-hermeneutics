@@ -24,7 +24,10 @@ AUROC (both models, same code; 2,000 bootstrap resamples within each arm, seed 0
   monitors     the 1-100 score, re-parsed from the raw reply, on the rows that
                have the model's own `neutral` P("A") (third_person/03_analyse_monitor.py)
 
-Writes qwen/results/comparison_{counts,lying_rates,selfreport_auroc,swap,monitor_auroc}.csv.
+  pooled       the self-report AUROC over all categories at once, per question (the
+               paper scores this way: one AUROC per fold of mixed lie types)
+
+Writes qwen/results/comparison_{counts,lying_rates,selfreport_auroc,selfreport_auroc_pooled,swap,monitor_auroc}.csv.
 Run from the repo root (no GPU, no API):
     uv run --with pandas --with statsmodels python gigi/compare_models.py
 """
@@ -198,6 +201,24 @@ def selfreport_auroc(m, cat, T):
     return out
 
 
+def pooled_selfreport_auroc(m):
+    """AUROC over every category's conversations at once, per question: how the paper
+    scores (one AUROC per fold of mixed lie types), as opposed to one per category."""
+    out = []
+    for q in ORDER:
+        t, v = [], []
+        for cat in CATS:
+            T = truth_map(m, cat)
+            pa = pd.DataFrame([r for r in jl(pa_file(m, cat)) if not r.get("error")])
+            if not T or not len(pa): continue
+            x = pa[(pa.condition == q) & pa.sample_id.isin(T) & pa.p_A_norm.notna()].drop_duplicates("sample_id")
+            t += [T[s] for s in x.sample_id]; v += list(x.p_A_norm.astype(float))
+        t, v = np.array(t, dtype=bool), np.array(v)
+        r = scored(v[t], v[~t], model=m, question=q)
+        if r: out.append(r)
+    return out
+
+
 def swap_auroc(m, cat):
     """median over the four questions of AUROC with yes = A (original) and yes = B (swapped)."""
     root = G / "ab_swap/results" if m == "gemma-3-27b" else QW[m]
@@ -282,6 +303,8 @@ if __name__ == "__main__":
             if (x := swap_auroc(m, cat)): sw.append(x)
             mo += monitor_auroc(m, cat, T)
     pd.DataFrame(sr).to_csv(OUT / "comparison_selfreport_auroc.csv", index=False)
+    pd.DataFrame([r for m in MODELS for r in pooled_selfreport_auroc(m)]).to_csv(
+        OUT / "comparison_selfreport_auroc_pooled.csv", index=False)
     pd.DataFrame(sw).to_csv(OUT / "comparison_swap.csv", index=False)
     pd.DataFrame(mo).to_csv(OUT / "comparison_monitor_auroc.csv", index=False)
     C, R = pd.DataFrame(counts), pd.DataFrame(rates)

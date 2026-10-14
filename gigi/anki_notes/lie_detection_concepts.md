@@ -221,11 +221,13 @@ stuck at 0.70-0.75, barely above just prompting. It's transfer across lie
 types within one model, not from small models to big ones.
 
 Q: Is Qwen3-235B's self-report near perfect in the lie-detector paper? Is ours?
-A: In the paper, yes: it "could somewhat reliably identify its own deceptions
-when asked directly", AUROC 0.98-0.99 with simple prompting (gemma-3-27b:
-0.46-0.80). Ours is no: Qwen3-32B reaches at most 0.88 asked about itself,
-in gemma's range. Possible reasons: size (235B vs 32B), or the paper's
-labels (GPT-5 judge with metadata) vs ours (independent checks).
+A: In the paper's text, yes: "near-ceiling" AUROC 0.98-0.99. But its Figure 4
+shows that is the best cell: one prompt (self-report with a rubric) on one half
+of its lie types. On the other half the same prompt gets 0.59-0.70, and the plain
+"did you lie?" gets 0.72-0.85. Ours (15 Oct): our own Qwen3-235B gets 0.46 on the
+plain question, scored the same way, while our gemma and Qwen3-80B come out
+close to the paper's numbers for them. Example: a headline number can be the best of 16 bars
+in a figure, so check the figure before comparing.
 
 Q: Black-box vs grey-box vs white-box lie detection?
 A: Black box = only what the model outputs (asking "did you lie?", or an

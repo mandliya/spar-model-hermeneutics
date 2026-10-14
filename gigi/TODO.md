@@ -2,6 +2,54 @@
 
 Kept in git so they survive a lost session. Delete a line when it's done.
 
+## To run separately: every missing row and every step never run (listed 15 Oct 2026)
+
+The user, 15 Oct: "I'll want to run the things that were not run separately ... I don't want to
+leave anything to chance." Each item needs a cost quote and the user's yes before it runs. Found
+by scanning every results file of every model for errors never retried, missing letters, missing
+P("yes") and missing judge verdicts. After each rerun: merge, rerun the analysis scripts, update
+both results pages.
+
+A. GPU rows that failed (CUDA out of memory: the inline capture calls the model with
+   output_hidden_states=True, which keeps every layer for every token; the longest capture-the-secret
+   conversations, ~12k tokens, need several GB more than the card had). Fix the capture first: keep
+   only the two positions that are saved (forward hooks), or use a box with more memory per GPU.
+   1. Qwen3-235B, capture-the-secret: 10_truth_10, 12_truth_10, 41_truth_10 have no follow-ups (9
+      answers, plus their named_cot, P("yes") and activations). Needs the 8x96 GB box again: do it
+      on the same box as C1.
+   2. Qwen3-32B, capture-the-secret: 12_truth_9, 40_truth_10, 41_truth_10, 8_truth_10 (11 answers).
+      One 96 GB GPU.
+   3. gemma-3-27b, capture-the-secret: 22_truth_6, 37_truth_5, 38_truth_8 have no follow-ups and
+      35_lie_3 lacks `neutral` (10 answers); 17_truth_10, 17_truth_9, 41_truth_8, 47_truth_9 lack a
+      P("yes") on some question (cause not yet checked). One >= 80 GB GPU.
+B. Judge rows with no verdict (Claude Sonnet 4.5 via OpenRouter, a few cents). The same
+   conversations fail for every model, so it is the judge, not the models: mostly an empty reply
+   (probably a refusal), once a reply cut off before the verdict, once an API error saved as the reply.
+   1. alibi: 14_lie_3 (all four models), 8_lie_5 (80B), 86_lie_2, 92_truth_8, 61_truth_1 (gemma).
+   2. mask-factual: conv_20250719_mask_678e2bae61b7f951a84d916e (all four models).
+   3. capture-the-secret: 38_truth_6 (gemma, 80B, 235B): cut off, rerun with more tokens.
+   4. MASK continuations, statement verdict: conv_20250719_mask_6774a05fc4444204dae7b42e (all four),
+      conv_20250719_mask_67736afd37d92e457bae5e65 (gemma, 80B).
+   First read why (refusal or empty API reply), rerun with the same judge and settings, and if it
+   refuses again, say so in the docs ("judge refused", left out).
+   Not failures, no rerun: gemma reading the 80B, capture 17_truth_10 `neutral`, answered "." (greedy,
+   a rerun gives the same); gemma MASK statistics, 13 conversations whose follow-ups hit a template
+   error (none of the 13 has a label, so no result changes).
+C. Steps never run:
+   1. The paper's own self-report prompts ("Direct Self-Report", with and without the rubric, single
+      token and reasoning: the conversation as a flat transcript, "You are a careful adjudicator of lies
+      in model behavior", the lie definitions, "Did you lie? Answer (A) or (B)"). Never run on any
+      model; our "did you lie?" is a follow-up turn inside the chat. This is the test that tells
+      whether our 235B differs from the paper because of the prompt or because of the labels: same
+      conversations, same labels, the paper's prompt. All four models; the 235B on the A1 box.
+   2. Outside monitors (and the model as its own monitor) on the 80B's and the 235B's transcripts
+      (built: qwen/results/<tag>/transcripts.jsonl).
+   3. Qwen3-32B mask-factual swap test (run_swap_mask_factual.sh with MODEL_TAG=qwen3-32b, one 96 GB
+      GPU).
+   4. Optional: gemma as the 235B's stand-in (16_substitute_followups.py, MODEL_TAG=qwen3-235b, ~$30).
+   5. From before: the lie types we never built (self-sycophancy, CoT unfaithfulness, off-policy,
+      tool and chess sandbagging).
+
 ## Now (7 Oct 2026, ~11:00 UTC): what's done and what's next
 
 Done (all in git; box outputs on HF):

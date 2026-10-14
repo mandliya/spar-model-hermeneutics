@@ -255,7 +255,8 @@ both models; it reproduces gemma's published numbers exactly) and charted by
   mask-factual (73.3% vs 64.0%).
 - **Self-report AUROC** runs 0.40-0.88 outside ascii. It reaches 0.70 or above
   in 17 of 44 combinations, against 12 of 44 for gemma. That puts it in
-  gemma's range, not the paper's Qwen3-235B (0.98-0.99).
+  gemma's range, not the paper's best Qwen3-235B number (0.98-0.99; its plain
+  self-report is 0.72-0.85, see ../RESULTS_HERMENEUTICS.md, "Why the 235B differs from the paper").
 - **ascii:** Qwen says "no" to every question on every row. Its tiny
   probability of "yes" ranks lies at 0.95 under `neutral_cot` and 0.02 under
   `neutral`.

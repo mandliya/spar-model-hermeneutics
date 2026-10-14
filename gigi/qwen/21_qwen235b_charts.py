@@ -4,7 +4,8 @@
       self-report questions (AUROC from P("yes")), Qwen3-32B, Qwen3-Next-80B and
       Qwen3-235B, against the paper's Qwen3-235B range
   RESULTS_HERMENEUTICS.md  the tables between the QWEN235-RATES, QWEN235-AUROC,
-      QWEN235-SWAP and QWEN235-COUNTS markers
+      QWEN235-SWAP, QWEN235-COUNTS and QWEN235-PAPER markers (the last: the paper's Figure 4
+      self-report numbers next to ours, pooled over all categories as the paper scores)
 
 Run from the repo root (after compare_models.py):
     uv run --with pandas --with matplotlib python gigi/qwen/21_qwen235b_charts.py
@@ -102,9 +103,27 @@ for c in order:
     counts.append(f"| {LABEL[c]} | {int(x.confess)} | {int(x.double_down)} | {int(x.false_confess)} | {int(x.honest)} | {x.balanced_accuracy:.0f} | "
                   + (f"{y.iloc[0].balanced_accuracy:.0f}" if len(y) else "—") + " |")
 
+# the paper's self-report numbers next to ours, scored the paper's way (pooled over all categories).
+# PAPER = read off the paper's Figure 4 ("Baseline Performance Comparison by Fold"; alignment.anthropic.com/
+# 2026/lie-detectors/fig4.png): (fold A reasoning, fold A single token, fold B reasoning, fold B single token)
+PAPER = {"gemma-3-27b": {"plain": (0.47, 0.51, 0.60, 0.60), "rubric": (0.65, 0.65, 0.57, 0.49)},
+         "qwen3-next-80b": {"plain": (0.69, 0.71, 0.68, 0.69), "rubric": (0.45, 0.44, 0.75, 0.70)},
+         "qwen3-235b": {"plain": (0.85, 0.81, 0.72, 0.80), "rubric": (0.99, 0.99, 0.70, 0.59)}}
+PO = pd.read_csv(RES / "comparison_selfreport_auroc_pooled.csv").set_index(["model", "question"])
+span2 = lambda a, b: f"{min(a, b):.2f}" if a == b else f"{min(a, b):.2f}–{max(a, b):.2f}"
+pp = lambda v: f"A {span2(*v[:2])}, B {span2(*v[2:])}"
+po = lambda m, q: f"{PO.loc[(m, q), 'auroc']:.2f} ({PO.loc[(m, q), 'ci_lo']:.2f}–{PO.loc[(m, q), 'ci_hi']:.2f})"
+paper = ["| Model | Paper: Direct Self-Report (fold A, fold B) | Paper: with Rubric (fold A, fold B) | Ours: `neutral` | Ours: `neutral_cot` | Ours: `named` | Ours: `named_cot` |",
+         "|---|---|---|---|---|---|---|"]
+for m, name, _ in [GEMMA] + QWENS:
+    pa = PAPER.get(m)
+    paper.append(f"| {name} | {pp(pa['plain']) if pa else 'not tested'} | {pp(pa['rubric']) if pa else 'not tested'} | "
+                 + " | ".join(po(m, q) for q in ("neutral", "neutral_cot", "named", "named_cot")) + " |")
+
 res = G / "RESULTS_HERMENEUTICS.md"
 s = res.read_text()
-for tag, lines in [("QWEN235-RATES", rates), ("QWEN235-AUROC", auroc), ("QWEN235-SWAP", swap), ("QWEN235-COUNTS", counts)]:
+for tag, lines in [("QWEN235-RATES", rates), ("QWEN235-AUROC", auroc), ("QWEN235-SWAP", swap), ("QWEN235-COUNTS", counts),
+                   ("QWEN235-PAPER", paper)]:
     s, k = re.subn(rf"<!-- {tag}:START -->.*?<!-- {tag}:END -->",
                    lambda _: f"<!-- {tag}:START -->\n" + "\n".join(lines) + f"\n<!-- {tag}:END -->", s, flags=re.S)
     print(f"RESULTS_HERMENEUTICS.md {tag} table updated" if k else f"!! no {tag} markers in RESULTS_HERMENEUTICS.md - table not written")

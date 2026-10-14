@@ -78,9 +78,9 @@ nine are archived, not deleted, in
 10. **A second model, Qwen3-32B, gives the same picture** (all 11 categories;
     [section below](#second-model-qwen3-32b)). It lies at similar rates to
     gemma in 8 of 11 categories. Its self-report is just as weak: AUROC
-    0.40–0.88 outside ascii, while the paper reports 0.98–0.99 for Qwen3-235B
-    identifying its own lies. Outside monitors beat its best question in 6 of
-    11 categories (both do in 5).
+    0.40–0.88 outside ascii, while the paper's best number for Qwen3-235B is
+    0.98–0.99 (its plain self-report: 0.72–0.85; [part two](RESULTS_HERMENEUTICS.md#why-the-235b-differs-from-the-paper)). Outside
+    monitors beat its best question in 6 of 11 categories (both do in 5).
 
 ## Methodology
 
@@ -474,9 +474,12 @@ The deceptive act: wrote content contradicting its own stated belief, presented 
   4. Code and details: [`qwen/README.md`](qwen/README.md).
 - **Why Qwen:** the paper reports that Qwen3-235B "could somewhat reliably
   identify its own deceptions when asked directly", at near-ceiling AUROC
-  (0.98–0.99) "with simple prompting". It doesn't say which prompt format.
-  gemma-3-27b got 0.46–0.80 "depending on lie type and prompt format". A Qwen
-  at gemma's size tests whether that's a Qwen trait.
+  (0.98–0.99) "with simple prompting". Its Figure 4 shows that number is one
+  prompt ("Direct Self-Report with Rubric") on one of its two folds; the same
+  prompt scores 0.59–0.70 on the other, and the plain "Direct Self-Report"
+  0.72–0.85 ([part two](RESULTS_HERMENEUTICS.md#why-the-235b-differs-from-the-paper)). gemma-3-27b got 0.46–0.80 "depending on lie
+  type and prompt format". A Qwen at gemma's size tests whether that's a
+  Qwen trait.
 - **Coverage** = all 11 categories; 2,801 transcripts went to the monitors.
   ascii-sandbagging and mask-factual ran last, on separate boxes, after
   download failures. The swap test was not run for Qwen's mask-factual.
@@ -530,6 +533,10 @@ The deceptive act: wrote content contradicting its own stated belief, presented 
      no thinking; 14 October, part two) does no better than Qwen3-32B, with
      a best of 0.95 and 17 of 44 combinations at 0.70 or above
      ([part two](RESULTS_HERMENEUTICS.md#qwen3-235b-its-own-results-the-model-for-tqs-probe)).
+  5. The paper's 0.98–0.99 is its best cell (one prompt, one fold). Scored
+     the paper's way, our gemma and Qwen3-Next-80B come out close to its
+     numbers for them; our 235B is below its plain self-report (0.46 against
+     0.72–0.85 on the plain question; [part two](RESULTS_HERMENEUTICS.md#why-the-235b-differs-from-the-paper)).
 - **ascii is the odd case:**
   1. Qwen never says yes. All 31 lies and all 279 honest answers get "no",
      on all four questions.
