@@ -526,6 +526,10 @@ The deceptive act: wrote content contradicting its own stated belief, presented 
   3. Near-ceiling self-report isn't a Qwen-family trait at 32B. The cause
      could be size, or differences in setup: the paper's labels came from a
      GPT-5 judge with the setup's metadata, ours from independent checks.
+  4. Size alone doesn't explain it: our own Qwen3-235B run (Instruct-2507,
+     no thinking; 14 October, part two) does no better than Qwen3-32B, with
+     a best of 0.95 and 17 of 44 combinations at 0.70 or above
+     ([part two](RESULTS_HERMENEUTICS.md#qwen3-235b-its-own-results-the-model-for-tqs-probe)).
 - **ascii is the odd case:**
   1. Qwen never says yes. All 31 lies and all 279 honest answers get "no",
      on all four questions.

@@ -93,13 +93,32 @@ first step: 2 conversations through every stage for ascii, alibi and MASK known 
 to measure the model's real speed before the full run is quoted. The full `SMOKE` job
 would mostly pay for model loads (about 90 of them at a few minutes each).
 
-Status (14 Oct 2026, 20:40 UTC): run on 4 boxes (8x RTX PRO 6000 each) with the same 10 jobs as
-the 80B; J1-J6 and J8-J10 finished with no errors and are merged in `results/qwen3-235b/`
-(`11_merge_boxes.py`); J7 (sycophancy A + B) is still running. Activations: one archive per job,
-`models/qwen3-235b/boxes/<JOB>/activations_<JOB>.tar.gz` on HF (float32, every layer: the
-embeddings + 94 layers x 4096, at the last prompt token and at the answer letter of each follow-up;
-file names in each row's `*_file` fields). Analysis: `../compare_models.py` (all four models) and
+Status: **done** (14 Oct 2026, 05:50-22:46 UTC). Run on 4 boxes (8x RTX PRO 6000 each) with the
+same 10 jobs as the 80B (box A = J1 J4 J7, B = J8 J9, C = J2 J5 J10, D = J3 J6); every job finished
+and its results were verified on HF. Only failures: 9 follow-up answers on 3 very long
+capture-the-secret conversations (GPU out of memory during the all-layer capture; J4), and one
+MASK continuations judge verdict that couldn't be parsed (J9). Results merged in
+`results/qwen3-235b/` (`11_merge_boxes.py`). Analysis: `../compare_models.py` (all four models) and
 `21_qwen235b_charts.py` (chart + tables in `../RESULTS_HERMENEUTICS.md`).
+
+Activations (for TQ): one archive per job, `models/qwen3-235b/boxes/<JOB>/activations_<JOB>.tar.gz`
+on HF, 23.9 GB in all.
+
+- **Each tensor** = float32, shape (95, 4096): the embeddings plus the output of each of the 94
+  layers, at one token.
+- **Two tokens per follow-up answer:** `predecision` (the last prompt token, before the model
+  answers) and `answer_token` (the A/B letter of the answer, teacher-forced on the saved reply, as in
+  the DYL paper). Some first answers are captured too (`*_activations_file` in the first-run files).
+- **Which row is which:** each row names its files (`predecision_activations_file` /
+  `answer_token_activations_file`, or `predecision_file` / `answer_token_file`). The recaptured
+  follow-ups of ascii, sycophancy A/B and mask-factual are listed in `fp32_map_<category>.jsonl`.
+  The swapped-letter rows (`ab_swap_*`) have no activations.
+- **Inside an archive:** `workspace/<JOB>/qwen/results/qwen3-235b/activations/` (scripts that
+  capture inline), `workspace/fp32_staging/` (`named_cot` and the recaptured follow-ups) and
+  `workspace/mask_belief_staging/` (the four MASK belief categories).
+- **Archives overlap:** the two staging folders are per box, not per job, so each archive also
+  holds the staging files of the jobs that ran before it on the same box. These are identical
+  copies under the same path; dedupe by path.
 
 ## Substitute step (hermeneutics): gemma reads the target's conversations
 

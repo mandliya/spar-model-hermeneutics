@@ -28,7 +28,7 @@ GEMMA = ("gemma-3-27b", "gemma-3-27b", "#2a78d6")
 QWENS = [("qwen3-32b", "Qwen3-32B", "#eb6834"), ("qwen3-next-80b", "Qwen3-Next-80B", "#1baf7a"),
          ("qwen3-235b", "Qwen3-235B", "#eda100")]   # one fixed colour per model, on every chart
 M = "qwen3-235b"
-TITLE = "Our Qwen3-235B reports its own lies no better than the 80B,\nand nowhere near the paper's Qwen3-235B"
+TITLE = "Our Qwen3-235B reports its own lies no better than Qwen3-32B,\nand nowhere near the paper's Qwen3-235B"
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 11, "text.color": INK,
                      "axes.edgecolor": GRID, "xtick.color": MUTED, "ytick.color": INK})
 cats = [c for c in LABEL if c in set(S[S.model == M].category)]

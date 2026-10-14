@@ -184,21 +184,24 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   run; ~/gigi_launch/OPTIONAL_AUTOSTOP_QWEN235B.txt). After: MODEL_TAG=qwen3-235b python
   11_merge_boxes.py, then the 235B's own results + tell TQ where the activations are
   (models/qwen3-235b/boxes/<JOB>/activations_<JOB>.tar.gz).
-- Qwen3-235B, 14 Oct 20:40 UTC: J1-J6 and J8-J10 FINISHED clean (0 errors in every stage, "results
-  verified on HF: yes", 9 activation archives = 20.4 GB). Merged into results/qwen3-235b/ (72 files) with
-  J7 filtered out of 11_merge_boxes.py for now; J7's merge later is a superset, so plain
-  `MODEL_TAG=qwen3-235b python 11_merge_boxes.py` afterwards. Text check: 18,786 answers, none garbled.
-  Written up: RESULTS_HERMENEUTICS.md "Qwen3-235B: its own results" (21_qwen235b_charts.py): lies like
-  the 80B; self-report no better (0.70+ in 17 of 36 vs the 80B's 20), best 0.95, not the paper's
-  0.98-0.99; denies almost everything on the letter. J7 (sycophancy A+B) still running on box A
-  55856383, ETA ~22:45 UTC. After J7: merge, compare_models.py, 21_qwen235b_charts.py, refresh the
-  section's numbers and drop "still running"; user destroys all 4 boxes (they stop themselves, but a
-  stopped box still bills its disk); send TQ the activations note.
-- Also on John's 12 Oct list, NOT started (each needs a quote and the user's yes):
-  "rerun pipeline for qwen235B data for tq" (activations, so a Vast box; Qwen3-235B is ~470 GB in
-  bf16). John suggested OpenRouter for the 235B's plain forward passes; that would be an exception to
-  the project rule "no open-weight model through an API" (CLAUDE.md), which is the user's to make.
-  John adds Vast credits.
+- Qwen3-235B DONE, 14 Oct 22:46 UTC: all 10 jobs finished, every job's results verified on HF, 10
+  activation archives = 23.9 GB (models/qwen3-235b/boxes/<JOB>/activations_<JOB>.tar.gz; float32,
+  (95, 4096) per tensor; layout and the per-box overlap of the staging folders in qwen/README.md).
+  Merged: results/qwen3-235b/ (88 files, 2,811 transcripts, as for the 80B). Written up in
+  RESULTS_HERMENEUTICS.md "Qwen3-235B: its own results" (21_qwen235b_charts.py): lies like the 80B
+  (intervals overlap in all 11 categories); self-report like Qwen3-32B (0.70+ in 17 of 44, mean 0.61;
+  the 80B 24 of 44, 0.68), best 0.95, not the paper's 0.98-0.99; almost never says yes on `neutral`.
+  Rows lost: 3 of 393 capture-the-secret conversations (CUDA out of memory, 9 follow-ups, J4); 1 MASK
+  continuations judge verdict unparseable (J9). The boxes were armed to stop themselves (the user's
+  call for this run); the user still has to check the console and DESTROY all four (55856383,
+  55874319, 55874339, 55874378): a stopped box bills its 700 GB disk. Not checkable from the laptop
+  (its Vast key is invalid). TQ note handed to the user 15 Oct.
+  Lessons for the next big-model run: (1) inline captures call the model with
+  output_hidden_states=True, which keeps every layer for every token: on 96 GB cards a ~12k-token
+  conversation needs ~9 GB extra and fails. Capture only the needed positions (forward hooks), or
+  give the box headroom. (2) The *_selfreport_benchmark.py scripts exit 0 when rows fail, so
+  run_job.sh's stage retry never saw these 9; exit non-zero on failed rows (as 16_substitute does).
+- John's 12 Oct item "rerun pipeline for qwen235B data for tq": DONE on rented boxes (above).
 - Next ideas (none scheduled, each needs a go-ahead): outside monitors on the 80B's transcripts
   (transcripts are built: qwen/results/qwen3-next-80b/transcripts); a "prefill" variant where gemma
   reads Qwen's own follow-up reasoning and only the final letter is scored; TQ's probe gap from
