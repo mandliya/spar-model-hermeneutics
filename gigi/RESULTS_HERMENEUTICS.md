@@ -12,6 +12,40 @@ Part one, the replication on gemma-3-27b and Qwen3-32B, is in
 deception categories, its ground-truth checks, its four follow-up questions
 and its scoring ([methodology](RESULTS_REPLICATION.md#methodology)).
 
+## In short (for the call with John)
+
+As of 15 October 2026. The question: can gemma, reading Qwen-80B's
+conversations, tell us what Qwen would have said?
+
+1. **Same choices.** On the same prompts, gemma and Qwen make the same
+   lie-or-not choice 81% of the time. They differ most on MASK
+   disinformation: Qwen lies on 25%, gemma on 85%.
+2. **Different confessions.** Asked "did you lie?" after Qwen's answer,
+   gemma swapped in says yes far more often: 76% against Qwen's 49% after a
+   lie, 51% against 19% after an honest answer. Those are gemma's own habits
+   (74% and 53% on its own conversations), not Qwen's.
+3. **Similar ranking.** gemma still ranks Qwen's lies almost as well as Qwen
+   does: AUROC 0.62 against 0.68.
+4. **Bigger isn't better.** Qwen3-235B lies like the 80B but reports its
+   lies only as well as Qwen3-32B. The paper's 0.98–0.99 is one cell of its
+   figure. Scored the paper's way, our gemma and 80B come out close to the
+   paper; our 235B doesn't (0.46 against 0.72–0.85).
+
+**So:** a stand-in tells you *which* conversations look like lies, not *what
+the target would say*. And since another model reading the transcript ranks
+lies almost as well, the signal seems to come from the transcript, not from
+the model knowing itself.
+
+**Next steps:**
+1. **Distil Qwen into gemma** (step 2): do gemma's yes-rates move toward
+   Qwen's? Decide with John what to train on.
+2. **TQ's probe version:** activations for the 80B, gemma swapped in and the
+   235B are on HF.
+3. **Paper check:** run the paper's own self-report prompt on our data, all
+   four models. Is the 235B gap the prompt or the labels?
+4. **Fill the gaps:** about 30 failed answers and 20 missing judge labels,
+   listed in `TODO.md`.
+
 ## The plan and where it stands
 
 Set with John on the calls of 8 and 12 October 2026. Target = Qwen3-Next-80B,
