@@ -93,9 +93,13 @@ first step: 2 conversations through every stage for ascii, alibi and MASK known 
 to measure the model's real speed before the full run is quoted. The full `SMOKE` job
 would mostly pay for model loads (about 90 of them at a few minutes each).
 
-Status: smoke test ready, not run (14 Oct 2026). Bundle `qwen235b.tar.gz` on the private
-HF repo; launch line in `~/gigi_launch/LAUNCH_QWEN235B_SMOKE.txt`. `results/qwen3-235b/`
-holds only the six model-independent input files so far.
+Status (14 Oct 2026, 20:40 UTC): run on 4 boxes (8x RTX PRO 6000 each) with the same 10 jobs as
+the 80B; J1-J6 and J8-J10 finished with no errors and are merged in `results/qwen3-235b/`
+(`11_merge_boxes.py`); J7 (sycophancy A + B) is still running. Activations: one archive per job,
+`models/qwen3-235b/boxes/<JOB>/activations_<JOB>.tar.gz` on HF (float32, every layer: the
+embeddings + 94 layers x 4096, at the last prompt token and at the answer letter of each follow-up;
+file names in each row's `*_file` fields). Analysis: `../compare_models.py` (all four models) and
+`21_qwen235b_charts.py` (chart + tables in `../RESULTS_HERMENEUTICS.md`).
 
 ## Substitute step (hermeneutics): gemma reads the target's conversations
 

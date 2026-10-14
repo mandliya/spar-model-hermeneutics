@@ -1,4 +1,4 @@
-"""gemma-3-27b vs Qwen3-32B vs Qwen3-Next-80B on the same benchmarks: lying rates
+"""gemma-3-27b vs Qwen3-32B vs Qwen3-Next-80B vs Qwen3-235B on the same benchmarks: lying rates
 and the four self-report counts per category and follow-up question (confess,
 double down, false confession, honest).
 
@@ -37,7 +37,7 @@ import pandas as pd
 from statsmodels.stats.proportion import proportion_confint
 
 G = pathlib.Path(__file__).resolve().parent
-QW = {m: G / "qwen/results" / m for m in ("qwen3-32b", "qwen3-next-80b")}   # one folder per Qwen model
+QW = {m: G / "qwen/results" / m for m in ("qwen3-32b", "qwen3-next-80b", "qwen3-235b")}   # one folder per Qwen model
 OUT = G / "qwen/results"
 FOLDER = {"ascii": "ascii-sandbagging", "syc": "sycophancy", "mask": "mask-factual",
           "unans": "unanswerable", "capture": "capture-the-secret", "alibi": "alibi",
@@ -221,7 +221,7 @@ sys.path.insert(0, str(G / "third_person"))
 from monitor_prompt import parse_score  # noqa: E402
 MONITORS = {"gemma-3-27b": ["gemini-2.5-flash", "gpt-5-mini", "gemma-3-27b"],
             "qwen3-32b": ["gemini-2.5-flash", "gpt-5-mini", "qwen3-32b"],
-            "qwen3-next-80b": []}   # no monitors were run on the 80B's transcripts
+            "qwen3-next-80b": [], "qwen3-235b": []}   # no monitors were run on these two models' transcripts
 
 
 def monitor_auroc(m, cat, T):
@@ -247,7 +247,7 @@ def monitor_auroc(m, cat, T):
 
 CATS = ["ascii", "sycophancy_a", "sycophancy_b", "mask_factual", "unanswerable", "capture_secret", "alibi",
         "mask_known_facts", "mask_statistics", "mask_continuations", "mask_disinformation"]
-MODELS = ["gemma-3-27b", "qwen3-32b", "qwen3-next-80b"]
+MODELS = ["gemma-3-27b", "qwen3-32b", "qwen3-next-80b", "qwen3-235b"]
 
 if __name__ == "__main__":
     counts, rates = [], []

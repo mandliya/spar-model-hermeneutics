@@ -184,6 +184,16 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   run; ~/gigi_launch/OPTIONAL_AUTOSTOP_QWEN235B.txt). After: MODEL_TAG=qwen3-235b python
   11_merge_boxes.py, then the 235B's own results + tell TQ where the activations are
   (models/qwen3-235b/boxes/<JOB>/activations_<JOB>.tar.gz).
+- Qwen3-235B, 14 Oct 20:40 UTC: J1-J6 and J8-J10 FINISHED clean (0 errors in every stage, "results
+  verified on HF: yes", 9 activation archives = 20.4 GB). Merged into results/qwen3-235b/ (72 files) with
+  J7 filtered out of 11_merge_boxes.py for now; J7's merge later is a superset, so plain
+  `MODEL_TAG=qwen3-235b python 11_merge_boxes.py` afterwards. Text check: 18,786 answers, none garbled.
+  Written up: RESULTS_HERMENEUTICS.md "Qwen3-235B: its own results" (21_qwen235b_charts.py): lies like
+  the 80B; self-report no better (0.70+ in 17 of 36 vs the 80B's 20), best 0.95, not the paper's
+  0.98-0.99; denies almost everything on the letter. J7 (sycophancy A+B) still running on box A
+  55856383, ETA ~22:45 UTC. After J7: merge, compare_models.py, 21_qwen235b_charts.py, refresh the
+  section's numbers and drop "still running"; user destroys all 4 boxes (they stop themselves, but a
+  stopped box still bills its disk); send TQ the activations note.
 - Also on John's 12 Oct list, NOT started (each needs a quote and the user's yes):
   "rerun pipeline for qwen235B data for tq" (activations, so a Vast box; Qwen3-235B is ~470 GB in
   bf16). John suggested OpenRouter for the 235B's plain forward passes; that would be an exception to
