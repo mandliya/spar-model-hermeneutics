@@ -43,7 +43,7 @@ esac
 case "${MODEL_TAG:-}" in
   qwen3-32b)      MIN_GPU_MIB=75000;  MIN_DISK_GB=150; MODEL_ID=Qwen/Qwen3-32B; MODEL_GB=60;  DL_TIMEOUT=3600 ;;
   qwen3-next-80b) MIN_GPU_MIB=170000; MIN_DISK_GB=250; MODEL_ID=Qwen/Qwen3-Next-80B-A3B-Instruct; MODEL_GB=150; DL_TIMEOUT=7200 ;;   # 163 GB of weights
-  qwen3-235b)     MIN_GPU_MIB=540000; MIN_DISK_GB=620; MODEL_ID=Qwen/Qwen3-235B-A22B-Instruct-2507; MODEL_GB=440; DL_TIMEOUT=14400 ;;   # 470 GB of weights: 8 x 96 GB or 4 x 141 GB
+  qwen3-235b)     MIN_GPU_MIB=540000; MIN_DISK_GB=620; MODEL_ID=Qwen/Qwen3-235B-A22B-Instruct-2507; MODEL_GB=420; DL_TIMEOUT=14400 ;;   # 470 GB of weights (438 GiB as du counts it): 8 x 96 GB or 4 x 141 GB
   *) echo "MODEL_TAG must be set at launch (qwen3-32b, qwen3-next-80b or qwen3-235b), got '${MODEL_TAG:-}'"; exit 1 ;;
 esac
 export MODEL_TAG
@@ -62,6 +62,8 @@ DISK=$(df -BG --output=avail /workspace 2>/dev/null | tail -1 | awk '{print $NF}
 # A second job on the same box finds the model already downloaded: then it needs only
 # room for results, not for another copy (9 Oct: J7 and J10 were refused for this and
 # their boxes stopped).
+# du counts GiB: 470 GB of weights show as 438G, so MODEL_GB must sit below the GiB figure
+# (14 Oct: MODEL_GB=440 refused three jobs on the box that already had the 235B).
 CACHED=$(du -sBG "$HF_HOME/hub/models--${MODEL_ID//\//--}" 2>/dev/null | cut -f1 | tr -dc '0-9')
 [ "${CACHED:-0}" -ge "$MODEL_GB" ] && MIN_DISK_GB=30
 if echo "$GPUS" | grep -qi "GB10" || ! [ "${MEM:-0}" -ge "$MIN_GPU_MIB" ] 2>/dev/null || ! [ "${DISK:-0}" -ge "$MIN_DISK_GB" ] 2>/dev/null; then
