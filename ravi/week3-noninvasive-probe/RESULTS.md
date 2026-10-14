@@ -29,6 +29,8 @@ Queue (1–4 done; 5–7 still running). Cache from the smoke was deleted before
 | 6 | HTC | `python -u scripts/09_eval_noninvasive.py --skip-invasive` | Stored denials, pre-follow-up residual. |
 | 7 | City / varied | `python -u scripts/08_train_noninvasive_probe.py --eval-only --datasets dyl_city,dyl_varied --max-per-dataset 800` | AISI original-turn, after the probe is frozen. |
 
+The comparison with Tianq’s no-follow-up matrix (0.71 / 0.73 / 0.80 in-category, 0.50 transfer) is [`COMPARE_TIANQ.md`](COMPARE_TIANQ.md) and `scripts/10_compare_tianq.py`. Quote that script’s mean next to **0.50**. Do not put `08`’s AUROC in that table.
+
 ## How to run
 
 ```bash
