@@ -30,3 +30,4 @@ ravi/week3-noninvasive-probe/results/*
 !ravi/week3-noninvasive-probe/results/tianq_compare_intent.json
 !ravi/week3-noninvasive-probe/results/tianq_compare_truth.json
 !ravi/week3-noninvasive-probe/results/flavor_matrix.json
+ravi/week6-early-detection/results/

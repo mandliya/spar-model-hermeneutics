@@ -8,7 +8,7 @@ ravi/week6-early-detection
 
 Your job is the lead-time curve: at each action before the bad tool call, one AUROC over the whole set. Write `CURVE.md` in this folder and append every stage to `LOG.md`. Ravi will read those two files. Do not leave the numbers only in the terminal.
 
-There is no extract script in this folder yet. Write one that does exactly what this brief says, then run it. Do not widen the experiment while you are on the GPU.
+The script is `scripts/01_lead_curve.py`. Run it. Do not rewrite the bad-call rule or swap in another dataset.
 
 ## The number
 
@@ -86,7 +86,7 @@ nvidia-smi
 python -m pytest tests/ -q
 ```
 
-The tests cover the horizon rule on fake trajectories. They do not load Gemma. If you add the script, add a test that a command containing `sudoers` is t* and a harmless `ls` is not, and that horizon 0 is excluded from τ90.
+The tests cover the horizon rule on fake trajectories. They do not load Gemma. `sudoers` is the bad call, `ls` is not, and horizon 0 is excluded from τ90.
 
 ## Run
 
