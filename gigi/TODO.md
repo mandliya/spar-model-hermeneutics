@@ -165,6 +165,12 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   failed download, failed smoke stage, STOP_WHEN_DONE). NOT tested: the model itself.
   After the smoke: per-row gpu_seconds vs the 80B's same rows -> quote; keep the box (model on
   disk) and start full-run jobs on it; do not stop it between smoke and full run.
+- Qwen3-235B SMOKE3 LAUNCHED 14 Oct 03:22 UTC on Vast instance 55856383 (Czechia, m:152148, 8x RTX PRO
+  6000 WS, $16.02/h, 719 GB disk free; box check and GPU-to-GPU copy check passed; download started
+  03:23 UTC). A first instance (55855644, same machine) was rented with a 70 GB disk, refused by the
+  box check and destroyed. Log: models/qwen3-235b/boxes/SMOKE3/job.log on HF. Keep the box after the
+  smoke test (model on disk) for the full run. 80B baseline for the quote, from its box logs: 29.0
+  box-hours of full-run stages + 1.7 h swap, 77 stages, model load 30 s.
 - Also on John's 12 Oct list, NOT started (each needs a quote and the user's yes):
   "rerun pipeline for qwen235B data for tq" (activations, so a Vast box; Qwen3-235B is ~470 GB in
   bf16). John suggested OpenRouter for the 235B's plain forward passes; that would be an exception to
