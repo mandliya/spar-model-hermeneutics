@@ -177,6 +177,13 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   Full-run estimate: ~55-66 box-hours incl. downloads -> about $850-1,050 on 4 boxes, 15-18 h wall.
   Smoke cost ~$36. Full-run launch lines (4 boxes: the smoke box A = J1 J4 J7; B = J8 J9; C = J2 J5 J10;
   D = J3 J6) in ~/gigi_launch/LAUNCH_QWEN235B_FULL.txt. 11_merge_boxes.py now leaves out SMOKE3.
+- Qwen3-235B FULL RUN running since 14 Oct ~05:50 UTC on 4 boxes: A 55856383 (J1 J4 J7), B 55874319
+  (J8 J9), C 55874339 (J2 J5 J10), D 55874378 (J3 J6). Box A's jobs first refused (cached-model
+  threshold bug, fixed by a sed line on all four boxes). Speed ~1.5x the 80B. Expected to finish
+  ~17:40-20:00 UTC; the user armed a stop-when-done on each box (pasted 14 Oct, their decision for this
+  run; ~/gigi_launch/OPTIONAL_AUTOSTOP_QWEN235B.txt). After: MODEL_TAG=qwen3-235b python
+  11_merge_boxes.py, then the 235B's own results + tell TQ where the activations are
+  (models/qwen3-235b/boxes/<JOB>/activations_<JOB>.tar.gz).
 - Also on John's 12 Oct list, NOT started (each needs a quote and the user's yes):
   "rerun pipeline for qwen235B data for tq" (activations, so a Vast box; Qwen3-235B is ~470 GB in
   bf16). John suggested OpenRouter for the 235B's plain forward passes; that would be an exception to
