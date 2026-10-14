@@ -171,6 +171,12 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   box check and destroyed. Log: models/qwen3-235b/boxes/SMOKE3/job.log on HF. Keep the box after the
   smoke test (model on disk) for the full run. 80B baseline for the quote, from its box logs: 29.0
   box-hours of full-run stages + 1.7 h swap, 77 stages, model load 30 s.
+- Qwen3-235B SMOKE3 PASSED 14 Oct 05:10 UTC (ascii, alibi, MASK known facts; 0 errors, 0 unparseable;
+  answers read normally). Download of 470 GB took 77 min despite a 6 Gbps line. Measured vs the 80B on
+  the same rows (14 stages): row time x1.73-2.0, model load ~80-95 s per stage (80B: 30 s).
+  Full-run estimate: ~55-66 box-hours incl. downloads -> about $850-1,050 on 4 boxes, 15-18 h wall.
+  Smoke cost ~$36. Full-run launch lines (4 boxes: the smoke box A = J1 J4 J7; B = J8 J9; C = J2 J5 J10;
+  D = J3 J6) in ~/gigi_launch/LAUNCH_QWEN235B_FULL.txt. 11_merge_boxes.py now leaves out SMOKE3.
 - Also on John's 12 Oct list, NOT started (each needs a quote and the user's yes):
   "rerun pipeline for qwen235B data for tq" (activations, so a Vast box; Qwen3-235B is ~470 GB in
   bf16). John suggested OpenRouter for the 235B's plain forward passes; that would be an exception to
