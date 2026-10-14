@@ -2,6 +2,8 @@
 
 This folder is week 6. The finished-reply probes that did not transfer are week 3, in [`../week3-noninvasive-probe`](../week3-noninvasive-probe). This experiment asks whether a probe can tell that Gemma is going to misbehave before the bad action, and how early.
 
+The run for a GPU agent is [`AGENTS.md`](AGENTS.md). The rows are BashArena tool trajectories, one point per action before the bad call. Gigi’s replies start at the lie, so they are not this curve.
+
 The number to report is a lead time, not another end-of-reply AUROC.
 
 **τ90:** the largest number of tokens before the bad action at which a probe still reaches AUROC ≥ 0.90. If it never does, say so and report the best earlier offset anyway.
@@ -92,16 +94,11 @@ Skip activation steering unless τ90 ≥ 2 on at least two flavors. Li et al. al
 - Not their MMD detector, and not a sweep over every layer. Layer 58 and a linear probe answer John’s question. A fancier detector that hits 0.90 one token earlier is a later paper.
 - Not “several model calls before the tool call.” That is Li et al.’s step horizon. Ours is tokens inside the generation that contains the action. Their seven-step result can stay as the agent-level cousin, cited, not rerun.
 - Not a follow-up question. *Caught in the Act* still asks one. This experiment does not.
-- Not a fixed last-32-token pool. The point is to find the smallest lead that clears 0.90, which a fixed window cannot report.
-- Not the hackathon tool-call setup yet. That is phase 2, after this curve exists. The bad event there is the first token of the tool call. The offsets, the 0.90 bar, the same-prefix monitor, and the “offset 1 does not count” rule stay the same. Looking at that repo before this curve is specified would mix two definitions of t*.
+- Not a fixed last-32-token pool. The point is to find the earliest action that still clears 0.90, which a fixed window cannot report.
+- Not a rerun of the hackathon’s single per-action AUROC. That number pools the sabotage command with the earlier calls, on Qwen. This run splits the same trajectories by how many actions remain before the bad call, on Gemma.
 
 ## Order of work
 
-1. Write the t* rule for ASCII, sycophancy answer, MASK known facts, and alibi. Check twenty rows by hand. If the rule and the eye disagree, fix the rule before extracting.
-2. Extract layer-58 residuals at the offset grid only. Cache by flavor and offset. Do not refit the week 3 finished-reply matrix.
-3. Fit in-category curves. Fill τ90.
-4. At each flavor’s τ90, and at `prompt_last`, run the transfer row: train on that flavor, test on the other three.
-5. Run the truncated-text monitor at those same offsets.
-6. Write one page: the curve, τ90 per flavor, transfer at τ90 next to transfer on the finished reply, and the probe-minus-monitor gap.
+The GPU agent follows [`AGENTS.md`](AGENTS.md). In short: mark the bad call, stop if the rule misses half the attack trajectories, extract layer 58 at each earlier action, fit the curve, write `CURVE.md`.
 
-Done when those four numbers exist, including the case where τ90 does not. A curve that never reaches 0.90 before the action is a result.
+Done when τ90 is filled, including the case where no earlier action reaches 0.90.
