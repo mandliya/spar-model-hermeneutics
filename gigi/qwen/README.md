@@ -79,6 +79,24 @@ Analysis: `../compare_models.py` covers all three models (gemma, Qwen3-32B,
 Qwen3-Next-80B); `19_qwen80b_charts.py` draws the three-model chart and writes the
 80B tables in `../RESULTS_HERMENEUTICS.md` ("Background: the target's own results").
 
+## Qwen3-235B (for TQ's activations)
+
+`MODEL_TAG=qwen3-235b` = `Qwen/Qwen3-235B-A22B-Instruct-2507` (the July 2025 Instruct
+release, no thinking mode; the paper only says "Qwen3-235B"). 470 GB in bf16, 94 layers,
+hidden size 4096, mixture of experts with 22B parameters active per token. Box: eight
+96 GB GPUs (or four 141 GB), 700 GB disk. One all-layer activation tensor is 1.56 MB.
+
+Everything runs on the rented box, as for the 80B (the user's choice, 14 Oct 2026; the
+alternative, text through OpenRouter and the box only for activations, was about five
+times cheaper but mixes an fp8 deployment with bf16 weights). `run_job.sh SMOKE3` is the
+first step: 2 conversations through every stage for ascii, alibi and MASK known facts,
+to measure the model's real speed before the full run is quoted. The full `SMOKE` job
+would mostly pay for model loads (about 90 of them at a few minutes each).
+
+Status: smoke test ready, not run (14 Oct 2026). Bundle `qwen235b.tar.gz` on the private
+HF repo; launch line in `~/gigi_launch/LAUNCH_QWEN235B_SMOKE.txt`. `results/qwen3-235b/`
+holds only the six model-independent input files so far.
+
 ## Substitute step (hermeneutics): gemma reads the target's conversations
 
 `16_substitute_followups.py`: gemma-3-27b answers the four follow-up questions

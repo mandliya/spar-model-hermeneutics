@@ -62,7 +62,10 @@ CONFIG = os.getenv("CONFIG", "google-gemma-3-27b-it_megafolds_fold_1")
 MODELS = {"qwen3-32b": "Qwen/Qwen3-32B",
           # the hermeneutics target (8 Oct 2026): 80B mixture-of-experts, 3B active per
           # token, no thinking mode; 163 GB in bf16 -> two 96 GB GPUs
-          "qwen3-next-80b": "Qwen/Qwen3-Next-80B-A3B-Instruct"}
+          "qwen3-next-80b": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+          # 13 Oct 2026, for TQ's activations: 235B mixture-of-experts (22B active per token),
+          # the July 2025 Instruct release (no thinking mode); 470 GB in bf16 -> eight 96 GB GPUs
+          "qwen3-235b": "Qwen/Qwen3-235B-A22B-Instruct-2507"}
 TARGET_MODEL = MODELS[MODEL_TAG]
 assert "gemma" not in TARGET_MODEL.lower(), "qwen is for models other than gemma"
 

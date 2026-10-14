@@ -153,6 +153,18 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   Either way: a smoke test first (~$25-30, mostly the 470 GB download) to replace the speed guess.
   Open decisions: which variant (the paper only says "Qwen3-235B"); which positions TQ needs;
   whether gemma should also read the 235B's conversations afterwards (~$30).
+- Qwen3-235B, 14 Oct: the user chose the rented box for everything ("had the go ahead with the
+  rented box, we need activations"), no-thinking Instruct-2507. I read that as option B and as
+  covering the SMOKE TEST only (~$25-50: 470 GB download + ~16 model loads + a few rows); the full
+  run (est. $700-1,400) gets an exact quote from the smoke timings and its own yes.
+  Ready: MODEL_TAG=qwen3-235b in src/common.py and run_job.sh (box check >= 540,000 MiB of GPU
+  memory and 620 GB free disk; download with a hang timeout; log on HF from the start, every
+  10 min and at the end; one copy per box), job SMOKE3 (ascii, alibi, MASK known facts), bundle
+  qwen235b.tar.gz, launch line ~/gigi_launch/LAUNCH_QWEN235B_SMOKE.txt. Tested: tokenizer and chat
+  format locally; run_job.sh on the simulated box (8x RTX PRO 6000, 4x H200, too-small boxes,
+  failed download, failed smoke stage, STOP_WHEN_DONE). NOT tested: the model itself.
+  After the smoke: per-row gpu_seconds vs the 80B's same rows -> quote; keep the box (model on
+  disk) and start full-run jobs on it; do not stop it between smoke and full run.
 - Also on John's 12 Oct list, NOT started (each needs a quote and the user's yes):
   "rerun pipeline for qwen235B data for tq" (activations, so a Vast box; Qwen3-235B is ~470 GB in
   bf16). John suggested OpenRouter for the 235B's plain forward passes; that would be an exception to

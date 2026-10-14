@@ -34,15 +34,24 @@ case $JOB in
   J6b) CATS="mask_factual" ;;   # mask-factual again: J6 stopped on the empty-trace rows
   SMOKE) CATS="ascii sycophancy_a sycophancy_b mask_factual unanswerable capture_secret alibi mask_known_facts mask_statistics mask_continuations mask_disinformation"
          SMOKE_ONLY=1 ;;   # every category's smoke test, then stop: per-category timings
-  *) echo "unknown job '$JOB' (J1-J10, J6b, SMOKE)"; exit 1 ;;
+  SMOKE3) CATS="ascii alibi mask_known_facts"
+         SMOKE_ONLY=1 ;;   # three categories only (short prompts, long multi-turn, MASK belief): for a model
+                           # that takes minutes to load, the full SMOKE would mostly pay for ~90 model loads
+  *) echo "unknown job '$JOB' (J1-J10, J6b, SMOKE, SMOKE3)"; exit 1 ;;
 esac
 # No default model: a launch line without MODEL_TAG would silently rerun the wrong one.
 case "${MODEL_TAG:-}" in
-  qwen3-32b)      MIN_GPU_MIB=75000;  MIN_DISK_GB=150; MODEL_ID=Qwen/Qwen3-32B; MODEL_GB=60 ;;
-  qwen3-next-80b) MIN_GPU_MIB=170000; MIN_DISK_GB=250; MODEL_ID=Qwen/Qwen3-Next-80B-A3B-Instruct; MODEL_GB=150 ;;   # 163 GB of weights
-  *) echo "MODEL_TAG must be set at launch (qwen3-32b or qwen3-next-80b), got '${MODEL_TAG:-}'"; exit 1 ;;
+  qwen3-32b)      MIN_GPU_MIB=75000;  MIN_DISK_GB=150; MODEL_ID=Qwen/Qwen3-32B; MODEL_GB=60;  DL_TIMEOUT=3600 ;;
+  qwen3-next-80b) MIN_GPU_MIB=170000; MIN_DISK_GB=250; MODEL_ID=Qwen/Qwen3-Next-80B-A3B-Instruct; MODEL_GB=150; DL_TIMEOUT=7200 ;;   # 163 GB of weights
+  qwen3-235b)     MIN_GPU_MIB=540000; MIN_DISK_GB=620; MODEL_ID=Qwen/Qwen3-235B-A22B-Instruct-2507; MODEL_GB=440; DL_TIMEOUT=14400 ;;   # 470 GB of weights: 8 x 96 GB or 4 x 141 GB
+  *) echo "MODEL_TAG must be set at launch (qwen3-32b, qwen3-next-80b or qwen3-235b), got '${MODEL_TAG:-}'"; exit 1 ;;
 esac
 export MODEL_TAG
+# One copy per box: pasting the launch line twice must not start a second run on the same GPUs.
+if command -v flock > /dev/null; then
+  exec 9> /workspace/$JOB.lock
+  flock -n 9 || { say "!!! $JOB is ALREADY RUNNING on this box - not starting a second copy (check: tail -3 /workspace/job_$JOB.log)"; exit 1; }
+fi
 say "model: $MODEL_TAG | categories: $CATS | shard: ${SHARD:-all rows} | Vast instance: ${CONTAINER_ID:-unknown}"
 # Dedicated GPU memory, summed over every GPU (device_map="auto" spreads the model).
 # A GB10 (DGX Spark, shared CPU/GPU memory, reported as [N/A]) or too little memory
@@ -122,6 +131,14 @@ if os.path.exists(log):
         print("log push failed:", repr(e)[:200], flush=True)
 PY
 }
+final_push () {   # the last log lines must reach HF, or a finished box looks "still running" from outside.
+  # Never holds up the end of the job for more than 5 minutes.
+  push > /dev/null 2>&1 &
+  local p=$! i=0
+  while kill -0 $p 2>/dev/null && [ $i -lt 300 ]; do sleep 1; i=$((i + 1)); done
+  kill $p 2>/dev/null
+  return 0
+}
 ok_rows () {   # ok_rows <jsonl> -> number of rows without an "error" field
   python -c "import json,sys; print(sum(1 for l in open(sys.argv[1]) if l.strip() and 'error' not in json.loads(l)))" "$1" 2>/dev/null || echo 0
 }
@@ -141,17 +158,22 @@ pip install -q "transformers==5.17.0" accelerate pandas pyarrow fsspec huggingfa
 [ "$MODEL_TAG" = qwen3-next-80b ] && pip install -q "flash-linear-attention==0.5.2" && say "--- flash-linear-attention OK"
 python -c 'import transformers, torch; print("transformers", transformers.__version__, "| torch", torch.__version__, "| cuda", torch.cuda.is_available())'
 MODEL=$(python -c "from src import common as C; print(C.TARGET_MODEL)")
+push   # the log is on HF from here on, so the box can be checked without opening it
+( exec 9>&-; while sleep 600; do push > /dev/null 2>&1; done ) &   # ...and every 10 minutes; 9>&-: must not hold the lock
+PUSHER=$!
 say "=== setup: $MODEL"
 for attempt in 1 2 3 4 5; do
   # from attempt 2: plain HTTP instead of HF's xet transfer (J6 hit xet "CAS Client
   # Error ... error decoding response body" three times in a row)
   [ $attempt -ge 2 ] && export HF_HUB_DISABLE_XET=1
-  python -c "from huggingface_hub import snapshot_download; print('DOWNLOADED', snapshot_download('$MODEL'))" && break
-  say "download attempt $attempt failed, retrying"; sleep 30
+  # a download that hangs is killed after DL_TIMEOUT and retried; finished files are kept
+  timeout $DL_TIMEOUT python -c "from huggingface_hub import snapshot_download; print('DOWNLOADED', snapshot_download('$MODEL'))" && break
+  say "download attempt $attempt failed or hung, retrying"; sleep 30
 done
+say "--- model on disk: $(du -sh "$HF_HOME/hub/models--${MODEL_ID//\//--}" 2>/dev/null | cut -f1)"
 if ! python -c "from huggingface_hub import snapshot_download; snapshot_download('$MODEL', local_files_only=True)"; then
   say "!!! model download failed 5 times - nothing run"
-  push
+  kill $PUSHER 2>/dev/null; final_push
   [ "${STOP_WHEN_DONE:-0}" = 1 ] && { say "stopping the box (STOP_WHEN_DONE=1)"; vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"; }
   exit 1
 fi
@@ -201,7 +223,7 @@ for c in $CATS; do
   say "##### SMOKE TEST: $c"
   T0=$SECONDS
   if chain $c 2 && gate $R/$FIRST 2 "$c first run"; then TIMES="$TIMES $c=$((SECONDS - T0))s"; else
-    say "!!! SMOKE TEST FAILED for $c - aborting this job before the full run"; push
+    say "!!! SMOKE TEST FAILED for $c - aborting this job before the full run"; kill $PUSHER 2>/dev/null; final_push
     [ "${STOP_WHEN_DONE:-0}" = 1 ] && vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
     exit 1
   fi
@@ -210,6 +232,7 @@ say "##### SMOKE TEST PASSED for every category: $CATS"
 say "smoke-test seconds per category (2 rows, every stage):$TIMES"; push
 if [ "${SMOKE_ONLY:-0}" = 1 ]; then
   say "=== SMOKE_ONLY: stopping here. Box is IDLE and STILL BILLING unless STOP_WHEN_DONE=1."
+  kill $PUSHER 2>/dev/null; final_push
   [ "${STOP_WHEN_DONE:-0}" = 1 ] && vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
   exit 0
 fi
@@ -281,9 +304,12 @@ print("yes" if ok else "no")
 PY
 )
 say "results verified on HF: $VERIFIED"
+kill $PUSHER 2>/dev/null
 if [ "${STOP_WHEN_DONE:-0}" = 1 ]; then   # always stop at the end; the check above is only logged
   say "=== ALL DONE and verified - stopping the box (STOP_WHEN_DONE=1 set at launch)"
+  final_push
   vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"
 else
   say "=== ALL STAGES FINISHED - box is IDLE and STILL BILLING; stop it by hand"
+  final_push
 fi
