@@ -2,7 +2,7 @@
 
 This folder is week 6. The finished-reply probes that did not transfer are week 3, in [`../week3-noninvasive-probe`](../week3-noninvasive-probe). This experiment asks whether a probe can tell that Gemma is going to misbehave before the bad action, and how early.
 
-The run for a GPU agent is [`AGENTS.md`](AGENTS.md). The rows are BashArena tool trajectories, one point per action before the bad call. Gigi’s replies start at the lie, so they are not this curve.
+The run for a GPU agent is [`AGENTS.md`](AGENTS.md). The rows are Gigi’s deception flavors, one residual per token before the bad token. A Docent BashArena action-horizon curve is a later experiment; do not block this one on it.
 
 The number to report is a lead time, not another end-of-reply AUROC.
 
@@ -22,6 +22,7 @@ Do not re-run these. Use them as the bar.
 | Pre-Action Intent Forecasting (survey through Aug 2026) | The token immediately before an action is a weak claim: that residual is what produces the next-token logits, so “I can predict the action one token early” can be tautological. A real forecast needs lead time, and it must beat features that are just the output distribution. | Methodological constraint. | — |
 
 The week 3 result sits next to these. A probe on the finished reply is real inside one flavor and about chance on the others. Li et al. remark that transferable structure can show up *before* the strongest decision-adjacent signal. That is the hole. Nobody has measured it in tokens, on these flavors, against a text monitor that is not allowed to see the future.
+
 
 ## The claim worth making
 
@@ -99,6 +100,6 @@ Skip activation steering unless τ90 ≥ 2 on at least two flavors. Li et al. al
 
 ## Order of work
 
-The GPU agent follows [`AGENTS.md`](AGENTS.md). In short: mark the bad call, stop if the rule misses half the attack trajectories, extract layer 58 at each earlier action, fit the curve, write `CURVE.md`.
+The GPU agent follows [`AGENTS.md`](AGENTS.md). In short: mark t* on Gigi’s flavors with a rule written before any fit, extract layer 58 at each earlier token, fit one probe per flavor per offset, write `CURVE.md`.
 
-Done when τ90 is filled, including the case where no earlier action reaches 0.90.
+Done when τ90 is filled for the flavors that have tokens before the bad token, including the case where no earlier offset reaches 0.90. ASCII with a one-token reply stays a negative control with τ90 undefined.
