@@ -32,6 +32,57 @@ def test_no_early_fire_is_a_result():
     assert lead["lead_steps"] is None
 
 
+def test_each_method_keeps_its_own_threshold():
+    from early_detection.goodfire_dom import score_report
+
+    rows = []
+    for index in range(20):
+        rows.append(
+            {
+                "trace_id": "train",
+                "consensus": "negative",
+                "step": index,
+                "passage_n": index,
+                "statuses": [],
+                "score": float(index),
+            }
+        )
+    rows.append(
+        {
+            "trace_id": "hack",
+            "consensus": "negative",
+            "step": 0,
+            "passage_n": 0,
+            "statuses": [],
+            "score": 0.0,
+        }
+    )
+    rows.append(
+        {
+            "trace_id": "hack",
+            "consensus": "positive",
+            "step": 1,
+            "passage_n": 1,
+            "statuses": ["considered"],
+            "score": 100.0,
+        }
+    )
+    rows.append(
+        {
+            "trace_id": "hack",
+            "consensus": "positive",
+            "step": 4,
+            "passage_n": 2,
+            "statuses": ["enacted"],
+            "score": 100.0,
+        }
+    )
+    report = score_report(rows, {"train"}, {"hack"})
+    assert report["test_auroc"] == 1.0
+    assert report["lead"]["n_fired_before_action"] == 1
+    assert report["lead"]["median_lead_steps"] == 3.0
+
+
 def test_threshold_is_the_honest_tail():
     scores = np.arange(100, dtype=np.float64)
     cutoff = fpr_threshold(scores, fpr=0.05)

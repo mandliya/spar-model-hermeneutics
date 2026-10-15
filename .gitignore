@@ -33,3 +33,4 @@ ravi/week3-noninvasive-probe/results/*
 ravi/week6-early-detection/results/*
 !ravi/week6-early-detection/results/token_curve.json
 !ravi/week6-early-detection/results/goodfire_dom.json
+!ravi/week6-early-detection/results/goodfire_monitor.json
