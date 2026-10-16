@@ -2,6 +2,43 @@
 
 Kept in git so they survive a lost session. Delete a line when it's done.
 
+## Direction from the 14 Oct 2026 call with John (and Yuki): model forensics
+
+Full transcript: pasted into the Claude Code session of 15-16 Oct 2026 (session log
+8ed398c4-..., grep "Why do models task game"). Reference paper: "Why do models task game?"
+(Singh, Nanda, Rajamanoharan, 6 Aug 2026), https://www.lesswrong.com/posts/HACauvWhEdC6QhdS4;
+environments: https://github.com/gkroiz/agent-interp-envs (Docker per rollout, OpenRouter supported,
+every step checkpointed, `scripts/resume.py <step-N> agent.model=<other>` resumes with another model).
+
+- Gigi: move to the forensics environments now ("I think you can move to the second one right
+  away") and build the black-box resampling baseline there. John: "if I had to choose a data set
+  to do the hill climbing on, I think it would be this one". His design: Qwen-80B "does 1, 2, 3 ...
+  10 steps on its own, and then reward hacks on step 11 ... does Gemma, when substituted at turn 1
+  through 10, converge on the same sort of ... reward hack?"; swap at turn N, else N-1, N-2.
+- Yuki: "do we have a baseline for how the black box method works without proxy?" = Qwen
+  resampled from the same step, the reference for gemma's rate.
+- Inference via OpenRouter, no GPUs ("we don't need the activations right now"). This breaks the
+  CLAUDE.md rule "no open-weight model through an API"; the user decides (asked 16 Oct).
+- TQ: distillation (inner loop) on the Lie Detectors data; the call notes say "coordinate with TQ
+  on ownership". Ravi: early detection from activations.
+- Lie Detectors 235B: check for a code base and replicate their setup "as closely as possible";
+  John: "don't be too worried ... if our result doesn't replicate". The paper links only its dataset
+  (huggingface.co/datasets/Noddybear/lies) and a Kaggle write-up, no code. Correction to give John:
+  the call notes say the adjudicator prompt was used "for 235B only"; the paper's Figure 4 runs the
+  same four prompts on all three models. Replicating = item C1 below.
+
+Plan (16 Oct): (1) set up the repo, offline mock smoke test (free); (2) pick 3 short environments
+with a binary, automatically detected cheat (secret_number, coding/is_prime, precommit_hook);
+(3) smoke test, 1-2 rollouts per model per environment (small spend, needs a yes): can Qwen-80B and
+gemma-27B use the tools at all; (4) each model alone, ~50 rollouts per environment: cheat rates;
+(5) from Qwen's cheating rollouts, resume at steps N, N-1, N-2 ... with Qwen (reference) and with
+gemma (swap); also from its honest rollouts (does gemma cheat where Qwen didn't); (6) new page
+RESULTS_FORENSICS.md. OpenRouter facts (16 Oct): Qwen3-Next-80B, tool calls on DeepInfra, Parasail,
+Google ($0.09-0.15/M in, $1.10-1.20/M out, fp8 where stated); gemma-3-27b-it, tool calls only on
+DeepInfra (fp8, $0.08/M in, $0.16/M out). Open decisions: the OpenRouter exception, sampling
+temperature for resampling (must be > 0), where the containers run (laptop Docker or Modal), and
+the autoraters' Anthropic key.
+
 ## To run separately: every missing row and every step never run (listed 15 Oct 2026)
 
 The user, 15 Oct: "I'll want to run the things that were not run separately ... I don't want to
