@@ -35,9 +35,15 @@ gemma-27B use the tools at all; (4) each model alone, ~50 rollouts per environme
 gemma (swap); also from its honest rollouts (does gemma cheat where Qwen didn't); (6) new page
 RESULTS_FORENSICS.md. OpenRouter facts (16 Oct): Qwen3-Next-80B, tool calls on DeepInfra, Parasail,
 Google ($0.09-0.15/M in, $1.10-1.20/M out, fp8 where stated); gemma-3-27b-it, tool calls only on
-DeepInfra (fp8, $0.08/M in, $0.16/M out). Open decisions: the OpenRouter exception, sampling
-temperature for resampling (must be > 0), where the containers run (laptop Docker or Modal), and
-the autoraters' Anthropic key.
+DeepInfra (fp8, $0.08/M in, $0.16/M out). Read in the repo (16 Oct): the paper's configs set no
+temperature (provider defaults); OpenRouter provider pinning is supported (`provider_preferences`:
+order, allow_fallbacks false); the three starter environments detect cheating without the Claude
+autorater (coding: full reward needs the impossible test to pass, tests are read-only;
+secret_number: `read_secret_file` flag, the noise env-var cheat is not flagged; precommit_hook:
+`score.py` flags --no-verify, removed hook, mass type-ignores, weakened config, but not the
+staged-files-only hook the paper saw most). Docker is not installed on the user's laptop.
+Open decisions: the OpenRouter exception, sampling settings (set explicitly, must be > 0), and
+where the containers run (Docker Desktop on the laptop, or Modal).
 
 ## To run separately: every missing row and every step never run (listed 15 Oct 2026)
 
