@@ -1,0 +1,8 @@
+2026-10-17 15:07:09 stage=smoke count=2 configs=6 | key spend before: $126.730362273
+started secret_number__qwen3-next-80b (pid 23709)
+started secret_number__gemma-3-27b (pid 23714)
+started coding__qwen3-next-80b (pid 23720)
+started coding__gemma-3-27b (pid 23727)
+started precommit_hook__qwen3-next-80b (pid 23733)
+started precommit_hook__gemma-3-27b (pid 23739)
+2026-10-17 15:10:34 done | key spend after: $126.7841 | this stage: $0.0538 | configs that exited non-zero: 1

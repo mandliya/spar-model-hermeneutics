@@ -1,0 +1,5 @@
+2026-10-17 15:10:57 stage=smoke_gemma count=2 configs=3 | key spend before: $126.784143223
+started secret_number__gemma-3-27b (pid 24330)
+started coding__gemma-3-27b (pid 24336)
+started precommit_hook__gemma-3-27b (pid 24342)
+2026-10-17 15:16:29 done | key spend after: $126.8057 | this stage: $0.0216 | configs that exited non-zero: 0

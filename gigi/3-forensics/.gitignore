@@ -1,0 +1,4 @@
+# the environments repo is cloned here by setup.sh at a pinned commit; not ours to commit
+agent-interp-envs/
+# raw rollouts (every step's checkpoint) go to HF, not git
+results/raw/

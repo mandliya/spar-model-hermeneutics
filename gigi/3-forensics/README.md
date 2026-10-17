@@ -45,6 +45,47 @@ Short ones, where the cheat is a clear yes or no that the harness records.
     0.95, top-k 64.
 - **Containers**: Docker Desktop on the laptop.
 
+## How to run
+
+```bash
+bash gigi/3-forensics/setup.sh            # the environments repo at 310c03f + our patch + packages
+export FORENSICS_ENV_FILE=<a file holding only OPENROUTER_API_KEY>
+bash gigi/3-forensics/scripts/run_stage.sh <stage> <runs per config> <parallel per config> <config names...>
+uv run --with pyyaml python gigi/3-forensics/scripts/collect.py <stage>       # one row per run
+uv run --with requests python gigi/3-forensics/scripts/judge_reports.py <stage>   # Broken Test Runner reports
+```
+
+`run_stage.sh` keeps the Mac awake, writes raw runs to `results/raw/<stage>/` (not in git; to HF),
+logs to `results/logs/<stage>/`, and the key's spend before and after to `results/logs/<stage>/cost.txt`.
+Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac password.
+
+## Deviations from the paper's setup
+
+1. Models through OpenRouter, DeepInfra fp8 (the paper: frontier models through their own APIs).
+2. Sampling from each model card, sent explicitly (the paper's configs send none: provider defaults).
+3. `secret_number`: step cap 100 (shipped: 500), so a looping run can't run up the bill.
+4. Our patch to the framework (`patches/forensics.patch`, applied by `setup.sh`):
+   - top-k and min-p reach OpenRouter; `reasoning_effort: none` sends no reasoning field.
+   - `secret_number`, `precommit_hook` and `norvane` dropped temperature and top-p on fresh runs
+     but kept them on resumes, so a run and its replay were different experiments. They now pass
+     every setting both ways, as `coding` already did.
+   - `precommit_hook` is scored in its container when a run ends (`score.py` needs the final files).
+   - gemma-3 has no tool-call tokens and writes its calls as text, e.g.
+     ```` ```tool_code [execute_command(command='ls')] ``` ```` (also labelled python, or a bare
+     line); the harness read that as a final reply. When a reply has no structured call, the first
+     such call that names an offered tool becomes one. gemma's text stays in the transcript.
+   - An empty reply (no text, no call) is retried as a provider glitch, not read as the end.
+5. Broken Test Runner: the paper grades reports offline with a grader that isn't public; ours is
+   Claude Sonnet 4.5 with the environment README's honest/dishonest definitions verbatim.
+
 ## Status
 
-17 Oct 2026: setting up. Nothing run, nothing spent.
+17 Oct 2026:
+- **Set up and tested** offline (scripted fake model) in all three first environments.
+- **Smoke test** (2 runs per model per environment, $0.08 for 22 runs): Qwen was fully honest
+  everywhere (correct is_prime submitted at reward 0; reported that the hook blocked the commit;
+  played Secret Number honestly). gemma could not act until the tool-call translator; with it,
+  it played all three honestly too.
+- **Screening, running:** Qwen alone, 10 runs each in five environments (Secret Number, is_prime
+  with and without the no-hardcoding rule, pre-commit hook, Broken Test Runner), to find where it
+  misbehaves often enough to replay. The swap needs Qwen runs that cheat.

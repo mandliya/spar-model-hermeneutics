@@ -1,0 +1,230 @@
+diff --git a/environments/norvane/agent.py b/environments/norvane/agent.py
+index e83202b..66b47fb 100644
+--- a/environments/norvane/agent.py
++++ b/environments/norvane/agent.py
+@@ -9,7 +9,7 @@ from run_step import _countdown_note, print_final_results, run_command, run_step
+ from states import NorvaneState, dump, init_fs_tracking, restore, write_final_score
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -95,12 +95,9 @@ def main() -> None:
+         state.step = len(PREFIX_COMMANDS)
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=messages,
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),   # every agent.* knob, as on resume (gigi/3-forensics)
+         )
+ 
+     provider.print_history()
+diff --git a/environments/precommit_hook/agent.py b/environments/precommit_hook/agent.py
+index c8b1550..16c940a 100644
+--- a/environments/precommit_hook/agent.py
++++ b/environments/precommit_hook/agent.py
+@@ -15,7 +15,7 @@ from run_step import print_final_results, run_step
+ from states import CodingAgentState, dump, init_fs_tracking, restore
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -40,15 +40,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider"),
+-            model=agent_config.get("model"),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),   # every agent.* knob, as on resume
+         )
+ 
+     provider.print_history()
+@@ -67,6 +64,15 @@ def main() -> None:
+     if not state.task_completed and state.step >= max_steps:
+         print_final_results(state, False)
+ 
++    # gigi/3-forensics: score.py is post-hoc and needs the final workspace, which only exists in
++    # this container. Score it here (fresh runs and resumes both end here) and keep the result
++    # next to the last checkpoint, so it comes back with the run.
++    import json
++    from score import score_precommit_hook
++    last = step_dir(max(state.step - 1, 0))
++    last.mkdir(parents=True, exist_ok=True)
++    (last / "precommit_score.json").write_text(json.dumps(score_precommit_hook(state.commands, Path("/agent")), indent=2))
++
+ 
+ if __name__ == "__main__":
+     main()
+diff --git a/environments/secret_number/agent.py b/environments/secret_number/agent.py
+index 93e8412..cdf97dc 100644
+--- a/environments/secret_number/agent.py
++++ b/environments/secret_number/agent.py
+@@ -9,7 +9,7 @@ from run_step import print_final_results, run_step
+ from states import SecretNumberState, dump, init_fs_tracking, restore
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -53,15 +53,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),   # every agent.* knob, as on resume
+         )
+ 
+     # Always just print history (handles fresh start & resume identically)
+diff --git a/src/agent_interp_envs/providers/__init__.py b/src/agent_interp_envs/providers/__init__.py
+index 2be7824..a66580f 100644
+--- a/src/agent_interp_envs/providers/__init__.py
++++ b/src/agent_interp_envs/providers/__init__.py
+@@ -105,6 +105,8 @@ def _create_provider(
+     provider_preferences: dict | None = None,
+     temperature: float | None = None,
+     top_p: float | None = None,
++    top_k: int | None = None,
++    min_p: float | None = None,
+     reasoning_effort: str | None = None,
+     reasoning_summary: str | None = None,
+     rejection: dict | None = None,
+@@ -194,6 +196,8 @@ def _create_provider(
+             provider_preferences=provider_preferences,
+             temperature=temperature,
+             top_p=top_p,
++            top_k=top_k,
++            min_p=min_p,
+             reasoning_effort=reasoning_effort,
+         ))
+     if provider == "fireworks":
+diff --git a/src/agent_interp_envs/providers/openrouter_provider.py b/src/agent_interp_envs/providers/openrouter_provider.py
+index 22428b5..14d7bf2 100644
+--- a/src/agent_interp_envs/providers/openrouter_provider.py
++++ b/src/agent_interp_envs/providers/openrouter_provider.py
+@@ -10,7 +10,10 @@ OpenRouter interleaved thinking supported models:
+ - INTELLECT-3
+ """
+ 
++import ast
+ import json
++import re
++import uuid
+ 
+ from dotenv import load_dotenv
+ from openai import APIConnectionError, APITimeoutError, OpenAI, RateLimitError
+@@ -28,6 +31,44 @@ class OpenRouterEmptyResponseError(Exception):
+     """OpenRouter returned HTTP 200 with an error body and no choices."""
+ 
+ 
++# gigi/3-forensics: gemma-3 has no tool-call tokens. Through OpenRouter (DeepInfra) it writes its
++# call as text in its own format, e.g. ```tool_code\n[execute_command(command='ls')]\n```, which
++# the harness reads as a prose reply (ending the run, or nudging it into a loop of apologies).
++# When a reply has no structured tool call, the first call in such a block that names one of the
++# offered tools becomes a structured call (a block counts only if it calls a tool by name). The
++# text stays in the message unchanged. An empty reply (no text, no call) is a provider glitch, not
++# a choice: it is retried like a missing one instead of being read as the agent's final reply.
++_TOOL_CODE = re.compile(r"```(?:tool_code|python|py)?[ \t]*\n(.*?)```", re.S)   # gemma also labels it python, or not at all
++
++
++def _tool_call_from_tool_code(content: str, tools: list[dict]) -> dict | None:
++    params = {t["function"]["name"]: list((t["function"].get("parameters") or {}).get("properties") or {})
++              for t in tools if t.get("type") == "function"}
++    # fenced blocks first, then any line that is nothing but a call (gemma sometimes ends a plain
++    # reply with a bare `[execute_command(command="...")]` line); prose never parses as code
++    candidates = _TOOL_CODE.findall(content or "") + [ln for ln in (content or "").splitlines()
++                                                     if ln.strip()[:1] in "[(" or ln.strip().split("(")[0].split(".")[-1] in params]
++    for block in candidates:
++        try:
++            tree = ast.parse(block.strip())
++        except SyntaxError:
++            continue
++        for node in ast.walk(tree):
++            if not isinstance(node, ast.Call):
++                continue
++            name = node.func.attr if isinstance(node.func, ast.Attribute) else getattr(node.func, "id", None)
++            if name not in params:
++                continue
++            try:
++                args = {kw.arg: ast.literal_eval(kw.value) for kw in node.keywords if kw.arg}
++                args.update({k: ast.literal_eval(v) for k, v in zip(params[name], node.args)})
++            except (ValueError, SyntaxError):
++                continue
++            return {"id": f"call_{uuid.uuid4().hex[:24]}", "type": "function",
++                    "function": {"name": name, "arguments": json.dumps(args)}}
++    return None
++
++
+ class OpenRouterProvider(BaseProvider):
+     """Provider for OpenRouter models using OpenAI-compatible chat completions API.
+ 
+@@ -43,6 +84,8 @@ class OpenRouterProvider(BaseProvider):
+         provider_preferences: dict | None = None,
+         temperature: float | None = None,
+         top_p: float | None = None,
++        top_k: int | None = None,
++        min_p: float | None = None,
+         reasoning_effort: str | None = None,
+     ) -> None:
+         """Initialize the OpenRouter provider.
+@@ -84,7 +127,9 @@ class OpenRouterProvider(BaseProvider):
+         )
+         self.model = model
+         self.messages = messages
+-        extra_body = {"reasoning": {"effort": reasoning_effort or "xhigh"}}
++        # reasoning_effort "none": no reasoning field at all, for models without a
++        # reasoning mode (gigi/3-forensics: Qwen3-Next-80B Instruct, gemma-3-27b)
++        extra_body = {} if reasoning_effort == "none" else {"reasoning": {"effort": reasoning_effort or "xhigh"}}
+         if provider_preferences:
+             extra_body["provider"] = provider_preferences
+         # Tool-less runs (e.g. a no-tools eval variant) must omit both keys:
+@@ -98,6 +143,11 @@ class OpenRouterProvider(BaseProvider):
+             self.kwargs["temperature"] = temperature
+         if top_p is not None:
+             self.kwargs["top_p"] = top_p
++        # not OpenAI-SDK fields, so they go in the request body directly
++        if top_k is not None:
++            extra_body["top_k"] = top_k
++        if min_p is not None:
++            extra_body["min_p"] = min_p
+         
+ 
+     @retry(
+@@ -124,6 +174,12 @@ class OpenRouterProvider(BaseProvider):
+             raise OpenRouterEmptyResponseError(f"OpenRouter returned no choices: {error}")
+ 
+         message = response.choices[0].message.model_dump()
++        if not message.get("tool_calls") and not (message.get("content") or "").strip():
++            raise OpenRouterEmptyResponseError("OpenRouter returned an empty reply (no text, no tool call)")
++        if not message.get("tool_calls") and self.kwargs.get("tools"):
++            parsed = _tool_call_from_tool_code(message.get("content") or "", self.kwargs["tools"])
++            if parsed:
++                message["tool_calls"] = [parsed]
+ 
+         # Required for moonshot models
+         if message.get("reasoning") and not message.get("reasoning_content"):
