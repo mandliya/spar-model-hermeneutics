@@ -8,7 +8,7 @@ Ground truth is exactly the one the cross-category tables use
 (make_condition_tables.py): the same truth column, the same row filters.
 
 Run from the repo root (no GPU, no API calls):
-    uv run --with pandas python gigi/ab_swap/00_pick_subset.py
+    uv run --with pandas python gigi/1-replication/ab_swap/00_pick_subset.py
 """
 
 import pathlib

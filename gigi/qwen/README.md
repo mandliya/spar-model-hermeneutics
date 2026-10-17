@@ -75,9 +75,9 @@ and activations under `models/qwen3-next-80b/boxes/` on HF. Text check over all
 (`run_swap_mask_factual.sh`). No monitors were run on its transcripts (they are
 built: `results/qwen3-next-80b/transcripts/`).
 
-Analysis: `../compare_models.py` covers all three models (gemma, Qwen3-32B,
+Analysis: `gigi/2-hermeneutics/analysis/compare_models.py` covers all three models (gemma, Qwen3-32B,
 Qwen3-Next-80B); `19_qwen80b_charts.py` draws the three-model chart and writes the
-80B tables in `../RESULTS_HERMENEUTICS.md` ("Background: the target's own results").
+80B tables in `../2-hermeneutics/RESULTS.md` ("Background: the target's own results").
 
 ## Qwen3-235B (for TQ's activations)
 
@@ -98,8 +98,8 @@ same 10 jobs as the 80B (box A = J1 J4 J7, B = J8 J9, C = J2 J5 J10, D = J3 J6);
 and its results were verified on HF. Only failures: 9 follow-up answers on 3 very long
 capture-the-secret conversations (GPU out of memory during the all-layer capture; J4), and one
 MASK continuations judge verdict that couldn't be parsed (J9). Results merged in
-`results/qwen3-235b/` (`11_merge_boxes.py`). Analysis: `../compare_models.py` (all four models) and
-`21_qwen235b_charts.py` (chart + tables in `../RESULTS_HERMENEUTICS.md`).
+`results/qwen3-235b/` (`11_merge_boxes.py`). Analysis: `gigi/2-hermeneutics/analysis/compare_models.py` (all four models) and
+`21_qwen235b_charts.py` (chart + tables in `../2-hermeneutics/RESULTS.md`).
 
 Activations (for TQ): one archive per job, `models/qwen3-235b/boxes/<JOB>/activations_<JOB>.tar.gz`
 on HF, 23.9 GB in all.
@@ -193,10 +193,10 @@ the 80B's mask-factual swap, 248 of 248. No job needed a restart. Code bundle
 (with the key, not in git) in `~/gigi_launch/LAUNCH_SUBSTITUTE.txt`.
 
 Afterwards (no GPU): `17_merge_substitute.py` (boxes -> `results/gemma-3-27b_reads_<MODEL_TAG>/`),
-`../substitute_gap.py` (target AUROC - substitute AUROC per category and question,
+`gigi/2-hermeneutics/analysis/substitute_gap.py` (target AUROC - substitute AUROC per category and question,
 both letter orders, paired bootstrap -> `results/substitute_gap_*.csv`),
-`18_substitute_charts.py` (the AUROC chart and table in `../RESULTS_HERMENEUTICS.md`).
-The comparison John asked for on the 12 Oct call is `../four_paths.py` (part 1: lie or
+`18_substitute_charts.py` (the AUROC chart and table in `../2-hermeneutics/RESULTS.md`).
+The comparison John asked for on the 12 Oct call is `gigi/2-hermeneutics/analysis/four_paths.py` (part 1: lie or
 no lie on the first response; part 2: confess / double down / false confession / honest
 on Qwen's prefilled trajectory, Qwen vs gemma) and `20_four_paths_charts.py` (its chart
 and tables).
@@ -245,8 +245,8 @@ outside it looked "still running" (fixed: `final_push`).
 
 ## Results
 
-The cross-model comparison is in [`../RESULTS_REPLICATION.md`](../RESULTS_REPLICATION.md#second-model-qwen3-32b).
-It's computed by `../compare_models.py` (same definitions and code path for
+The cross-model comparison is in [`../1-replication/RESULTS.md`](../1-replication/RESULTS.md#second-model-qwen3-32b).
+It's computed by `gigi/2-hermeneutics/analysis/compare_models.py` (same definitions and code path for
 both models; it reproduces gemma's published numbers exactly) and charted by
 `13_charts.py`.
 
@@ -256,7 +256,7 @@ both models; it reproduces gemma's published numbers exactly) and charted by
 - **Self-report AUROC** runs 0.40-0.88 outside ascii. It reaches 0.70 or above
   in 17 of 44 combinations, against 12 of 44 for gemma. That puts it in
   gemma's range, not the paper's best Qwen3-235B number (0.98-0.99; its plain
-  self-report is 0.72-0.85, see ../RESULTS_HERMENEUTICS.md, "Why the 235B differs from the paper").
+  self-report is 0.72-0.85, see ../2-hermeneutics/RESULTS.md, "Why the 235B differs from the paper").
 - **ascii:** Qwen says "no" to every question on every row. Its tiny
   probability of "yes" ranks lies at 0.95 under `neutral_cot` and 0.02 under
   `neutral`.

@@ -1,6 +1,6 @@
 > **Archived 1 October 2026.** A frozen copy from before the project kept only four follow-up
 > questions (`neutral`, `neutral_cot`, `named`, `named_cot`). It still covers all 13.
-> The live version is [answer_probability/README.md](../../../answer_probability/README.md); what was archived and why is in
+> The live version is [answer_probability/README.md](../../../1-replication/answer_probability/README.md); what was archived and why is in
 > [the archive index](../README.md).
 
 # Is gemma's confidence more informative than its yes/no answer?
@@ -99,7 +99,7 @@ Intervals and row counts for every cell are in `results/pa_auroc.csv`.
   differences like 0.9999 vs 0.99999. A working detector would have to
   threshold in that range, and whether that holds up on new data is untested.
 - **Letter preference.** A always means "yes" here. The A/B swap test
-  ([`../ab_swap/`](../../../ab_swap)) reverses the options on a 626-row subset:
+  ([`../ab_swap/`](../../../1-replication/ab_swap)) reverses the options on a 626-row subset:
   mask-factual's and alibi's AUROCs hold (0.73 → 0.72, 0.86 → 0.89), but
   ascii's falls from 0.50 to 0.21, so its probabilities follow the letter
   rather than the lie.

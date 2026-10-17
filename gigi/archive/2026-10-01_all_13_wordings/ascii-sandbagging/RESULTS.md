@@ -1,6 +1,6 @@
 > **Archived 1 October 2026.** A frozen copy from before the project kept only four follow-up
 > questions (`neutral`, `neutral_cot`, `named`, `named_cot`). It still covers all 13.
-> The live version is [ascii-sandbagging/RESULTS.md](../../../ascii-sandbagging/RESULTS.md); what was archived and why is in
+> The live version is [ascii-sandbagging/RESULTS.md](../../../1-replication/ascii-sandbagging/RESULTS.md); what was archived and why is in
 > [the archive index](../README.md).
 
 # Does gemma-3-27b-it know it lied — or just answer however you ask?

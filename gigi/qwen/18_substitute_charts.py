@@ -1,10 +1,10 @@
-"""The substitute-gap chart and table for gigi/RESULTS_HERMENEUTICS.md, from substitute_gap.py's CSV.
+"""The substitute-gap chart and table for gigi/2-hermeneutics/RESULTS.md, from substitute_gap.py's CSV.
 
-  charts/substitute_gap_selfreport.png  per category: the range of the four
+  2-hermeneutics/charts/substitute_gap_selfreport.png  per category: the range of the four
       self-report questions for Qwen3-Next-80B asked about its own conversation
       (target) and for gemma-3-27b asked about the same conversation
       (substitute), same labels (did Qwen lie)
-  RESULTS_HERMENEUTICS.md  the table between the SUBSTITUTE-GAP markers
+  2-hermeneutics/RESULTS.md  the table between the SUBSTITUTE-GAP markers
 
 Run from the repo root (after substitute_gap.py):
     uv run --with pandas --with matplotlib python gigi/qwen/18_substitute_charts.py
@@ -72,11 +72,11 @@ ax.text(0, 1.015, f"No clear difference in {len(O) - n_t - n_s} of {len(O)} cate
 fig.legend(handles=[Line2D([], [], color=QWEN, lw=7, label="Qwen3-Next-80B asked about its own conversation (target)"),
                     Line2D([], [], color=GEMMA, lw=7, label="gemma-3-27b asked about Qwen's conversation (substitute)")],
            loc="lower center", ncol=1, frameon=False, fontsize=9.5, bbox_to_anchor=(0.5, -0.12))
-fig.savefig(G / "charts/substitute_gap_selfreport.png", dpi=180, bbox_inches="tight")
+fig.savefig(G / "2-hermeneutics/charts/substitute_gap_selfreport.png", dpi=180, bbox_inches="tight")
 plt.close(fig)
 print(f"saved the chart | cells {len(O)}: Qwen better {n_t}, gemma better {n_s}, no clear difference {len(O) - n_t - n_s}")
 
-# 2. the RESULTS_HERMENEUTICS.md table (between the SUBSTITUTE-GAP markers) ----------------------------
+# 2. the 2-hermeneutics/RESULTS.md table (between the SUBSTITUTE-GAP markers) ----------------------------
 rng = lambda lo, hi: f"{lo:.2f}–{hi:.2f}"
 rows = ["| Category | n (Qwen lied / honest) | Qwen-80B about itself | gemma reading Qwen | Mean gap | Clearly better, of 4 questions (Qwen / gemma) | Swapped letter order: mean gap | Reference: gemma about its own conversations |",
         "|---|---|---|---|---|---|---|---|"]
@@ -112,11 +112,11 @@ for c in order:
         row += [pct(x.target_yes), pct(x.substitute_yes), f"{pct(x.agreement)} ({100 * x.agreement_lo:.0f}–{100 * x.agreement_hi:.0f}%)"]
     cat.append("| " + " | ".join(row) + " |")
 
-res = G / "RESULTS_HERMENEUTICS.md"
+res = G / "2-hermeneutics/RESULTS.md"
 s = res.read_text()
 for tag, lines in [("SUBSTITUTE-GAP", rows)]:   # the yes-rate tables (ans, cat) are superseded by 20_four_paths_charts.py
     s, k = re.subn(rf"<!-- {tag}:START -->.*?<!-- {tag}:END -->",
                    lambda _: f"<!-- {tag}:START -->\n" + "\n".join(lines) + f"\n<!-- {tag}:END -->", s, flags=re.S)
-    print(f"RESULTS_HERMENEUTICS.md {tag} table updated" if k else f"!! no {tag} markers in RESULTS_HERMENEUTICS.md - table not written")
+    print(f"2-hermeneutics/RESULTS.md {tag} table updated" if k else f"!! no {tag} markers in 2-hermeneutics/RESULTS.md - table not written")
 res.write_text(s)
 print("\n".join(ans + [""] + cat))

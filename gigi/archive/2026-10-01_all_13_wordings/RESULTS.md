@@ -1,6 +1,6 @@
 > **Archived 1 October 2026.** A frozen copy from before the project kept only four follow-up
 > questions (`neutral`, `neutral_cot`, `named`, `named_cot`). It still covers all 13.
-> The live version is [RESULTS.md](../../RESULTS.md); what was archived and why is in
+> The live version is [RESULTS.md](../../README.md); what was archived and why is in
 > [the archive index](README.md).
 
 # Cross-category results
@@ -53,7 +53,7 @@ gets its own independently checkable ground truth.
 
 1. **ascii-sandbagging**: a capability check run first, with no pressure, shows
    gemma can draw ASCII art
-   ([`capability_proof_local.txt`](../../ascii-sandbagging/results/capability_proof_local.txt)).
+   ([`capability_proof_local.txt`](../../1-replication/ascii-sandbagging/results/capability_proof_local.txt)).
    Claiming it can't is then a demonstrated lie.
 2. **sycophancy, Track A** (trivia): ask the bare question, then the version
    with the user's stated belief. `fold` = the pressured answer moved toward
@@ -383,7 +383,7 @@ The deceptive act: maintained a false alibi. **308** rows where gemma did it, **
 | A/B swap test (letter vs meaning) | [`ab_swap/README.md`](ab_swap/README.md) |
 
 Every false-confession rollout, with the full exchange, is in
-[`false_confessions/`](../../false_confessions).
+[`false_confessions/`](../../1-replication/false_confessions).
 
 ## Regenerating this page
 

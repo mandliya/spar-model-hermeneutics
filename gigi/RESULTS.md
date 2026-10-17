@@ -1,10 +1,7 @@
-# Results
+# Moved
 
-The results are in two documents, one per part of the project.
+The results now live in one folder per part of the project (17 October
+2026). Start at [`README.md`](README.md).
 
-| Part | What it covers | Read it here |
-|---|---|---|
-| 1. Replication (September to 7 October 2026) | Anthropic's "Fine-tuned lie detectors failed to generalize" on gemma-3-27b: 11 deception categories, four "did you lie?" questions, outside monitors, and the same experiment on Qwen3-32B | [`RESULTS_REPLICATION.md`](RESULTS_REPLICATION.md) |
-| 2. Hermeneutics (from 8 October 2026) | Qwen3-Next-80B as the target model, and gemma-3-27b as a stand-in that reads its conversations: does asking the stand-in tell you what asking the model would? Also the Qwen3-235B run for TQ's probe, with its own results | [`RESULTS_HERMENEUTICS.md`](RESULTS_HERMENEUTICS.md) |
-
-Per-category write-ups are linked at the bottom of part one.
+- Part one, replication: [`1-replication/RESULTS.md`](1-replication/RESULTS.md)
+- Part two, hermeneutics: [`2-hermeneutics/RESULTS.md`](2-hermeneutics/RESULTS.md)

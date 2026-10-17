@@ -1,6 +1,6 @@
 > **Archived 1 October 2026.** A frozen copy from before the project kept only four follow-up
 > questions (`neutral`, `neutral_cot`, `named`, `named_cot`). It still covers all 13.
-> The live version is [ab_swap/README.md](../../../ab_swap/README.md); what was archived and why is in
+> The live version is [ab_swap/README.md](../../../1-replication/ab_swap/README.md); what was archived and why is in
 > [the archive index](../README.md).
 
 # Does gemma answer the question or the letter? The A/B swap test
@@ -32,7 +32,7 @@ letter, the verdict flips.
   300 when reasoning comes first) and the same parsers as the original runs.
   6,886 answers, 0 errors, 0 unparseable.
 - **Original-order answers** for the same rows come from the main runs, with
-  their letter probabilities from [`../answer_probability/`](../../../answer_probability).
+  their letter probabilities from [`../answer_probability/`](../../../1-replication/answer_probability).
 
 **Measures**, per category and wording:
 - **letter shift**: half the difference between the "yes" rate with yes at A

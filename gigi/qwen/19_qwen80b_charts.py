@@ -1,9 +1,9 @@
-"""The Qwen3-Next-80B chart and tables for gigi/RESULTS_HERMENEUTICS.md, from compare_models.py's CSVs.
+"""The Qwen3-Next-80B chart and tables for gigi/2-hermeneutics/RESULTS.md, from compare_models.py's CSVs.
 
-  charts/qwen80b_selfreport.png  per category: the range of each model's four
+  2-hermeneutics/charts/qwen80b_selfreport.png  per category: the range of each model's four
       self-report questions (AUROC from P("yes")), for gemma-3-27b, Qwen3-32B
       and Qwen3-Next-80B, against the paper's Qwen3-235B range
-  RESULTS_HERMENEUTICS.md  the tables between the QWEN80-RATES, QWEN80-AUROC, QWEN80-SWAP and
+  2-hermeneutics/RESULTS.md  the tables between the QWEN80-RATES, QWEN80-AUROC, QWEN80-SWAP and
       QWEN80-COUNTS markers
 
 Run from the repo root (after compare_models.py):
@@ -62,11 +62,11 @@ ax.text(0, 1.015, "AUROC of 0.70 or more, out of 44 category × question combina
         + ", ".join(f"{name} {n70[m]}" for m, name, _ in MODELS) + ".", transform=ax.transAxes, fontsize=9.5, color=MUTED)
 fig.legend(handles=[Line2D([], [], color=col, lw=6, label=name + " (ours)") for _, name, col in MODELS],
            loc="lower center", ncol=3, frameon=False, fontsize=9.5, bbox_to_anchor=(0.5, -0.06))
-fig.savefig(G / "charts/qwen80b_selfreport.png", dpi=180, bbox_inches="tight")
+fig.savefig(G / "2-hermeneutics/charts/qwen80b_selfreport.png", dpi=180, bbox_inches="tight")
 plt.close(fig)
 print("saved the chart | cells with AUROC >= 0.70:", n70)
 
-# 2. the RESULTS_HERMENEUTICS.md tables ------------------------------------------------------------------
+# 2. the 2-hermeneutics/RESULTS.md tables ------------------------------------------------------------------
 R = pd.read_csv(RES / "comparison_lying_rates.csv").set_index(["model", "category"])
 C = pd.read_csv(RES / "comparison_counts.csv")
 W = pd.read_csv(RES / "comparison_swap.csv").set_index(["model", "category"])
@@ -95,10 +95,10 @@ for c in order:
     x = C[(C.model == M80) & (C.category == c) & (C.question == "neutral")].iloc[0]
     counts.append(f"| {LABEL[c]} | {int(x.confess)} | {int(x.double_down)} | {int(x.false_confess)} | {int(x.honest)} | {x.balanced_accuracy:.0f} |")
 
-res = G / "RESULTS_HERMENEUTICS.md"
+res = G / "2-hermeneutics/RESULTS.md"
 s = res.read_text()
 for tag, lines in [("QWEN80-RATES", rates), ("QWEN80-AUROC", auroc), ("QWEN80-SWAP", swap), ("QWEN80-COUNTS", counts)]:
     s, k = re.subn(rf"<!-- {tag}:START -->.*?<!-- {tag}:END -->",
                    lambda _: f"<!-- {tag}:START -->\n" + "\n".join(lines) + f"\n<!-- {tag}:END -->", s, flags=re.S)
-    print(f"RESULTS_HERMENEUTICS.md {tag} table updated" if k else f"!! no {tag} markers in RESULTS_HERMENEUTICS.md - table not written")
+    print(f"2-hermeneutics/RESULTS.md {tag} table updated" if k else f"!! no {tag} markers in 2-hermeneutics/RESULTS.md - table not written")
 res.write_text(s)

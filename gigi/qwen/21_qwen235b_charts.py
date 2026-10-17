@@ -1,9 +1,9 @@
-"""The Qwen3-235B chart and tables for gigi/RESULTS_HERMENEUTICS.md, from compare_models.py's CSVs.
+"""The Qwen3-235B chart and tables for gigi/2-hermeneutics/RESULTS.md, from compare_models.py's CSVs.
 
-  charts/qwen235b_selfreport.png  per category: the range of each Qwen model's four
+  2-hermeneutics/charts/qwen235b_selfreport.png  per category: the range of each Qwen model's four
       self-report questions (AUROC from P("yes")), Qwen3-32B, Qwen3-Next-80B and
       Qwen3-235B, against the paper's Qwen3-235B range
-  RESULTS_HERMENEUTICS.md  the tables between the QWEN235-RATES, QWEN235-AUROC,
+  2-hermeneutics/RESULTS.md  the tables between the QWEN235-RATES, QWEN235-AUROC,
       QWEN235-SWAP, QWEN235-COUNTS and QWEN235-PAPER markers (the last: the paper's Figure 4
       self-report numbers next to ours, pooled over all categories as the paper scores)
 
@@ -66,11 +66,11 @@ ax.text(0, 1.015, f"AUROC of 0.70 or more, out of {ncell[M]} category × questio
         + ", ".join(f"{name} {n70[m]}" for m, name, _ in QWENS) + ".", transform=ax.transAxes, fontsize=9.5, color=MUTED)
 fig.legend(handles=[Line2D([], [], color=col, lw=6, label=name + " (ours)") for _, name, col in QWENS],
            loc="lower center", ncol=3, frameon=False, fontsize=9.5, bbox_to_anchor=(0.5, -0.06))
-fig.savefig(G / "charts/qwen235b_selfreport.png", dpi=180, bbox_inches="tight")
+fig.savefig(G / "2-hermeneutics/charts/qwen235b_selfreport.png", dpi=180, bbox_inches="tight")
 plt.close(fig)
 print("saved the chart | cells with AUROC >= 0.70:", n70, "of", ncell)
 
-# 2. the RESULTS_HERMENEUTICS.md tables ---------------------------------------------------
+# 2. the 2-hermeneutics/RESULTS.md tables ---------------------------------------------------
 R = pd.read_csv(RES / "comparison_lying_rates.csv").set_index(["model", "category"])
 C = pd.read_csv(RES / "comparison_counts.csv")
 W = pd.read_csv(RES / "comparison_swap.csv").set_index(["model", "category"])
@@ -120,11 +120,11 @@ for m, name, _ in [GEMMA] + QWENS:
     paper.append(f"| {name} | {pp(pa['plain']) if pa else 'not tested'} | {pp(pa['rubric']) if pa else 'not tested'} | "
                  + " | ".join(po(m, q) for q in ("neutral", "neutral_cot", "named", "named_cot")) + " |")
 
-res = G / "RESULTS_HERMENEUTICS.md"
+res = G / "2-hermeneutics/RESULTS.md"
 s = res.read_text()
 for tag, lines in [("QWEN235-RATES", rates), ("QWEN235-AUROC", auroc), ("QWEN235-SWAP", swap), ("QWEN235-COUNTS", counts),
                    ("QWEN235-PAPER", paper)]:
     s, k = re.subn(rf"<!-- {tag}:START -->.*?<!-- {tag}:END -->",
                    lambda _: f"<!-- {tag}:START -->\n" + "\n".join(lines) + f"\n<!-- {tag}:END -->", s, flags=re.S)
-    print(f"RESULTS_HERMENEUTICS.md {tag} table updated" if k else f"!! no {tag} markers in RESULTS_HERMENEUTICS.md - table not written")
+    print(f"2-hermeneutics/RESULTS.md {tag} table updated" if k else f"!! no {tag} markers in 2-hermeneutics/RESULTS.md - table not written")
 res.write_text(s)

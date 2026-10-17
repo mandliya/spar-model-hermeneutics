@@ -27,7 +27,7 @@ Writes, per subtype:
   ../answer_probability/results/pa_mask_<subtype>.jsonl   P("A") records for the
       cross-category AUROC analysis
 
-Run from the repo root:  uv run --with pandas python gigi/mask-belief/02_analyse_mask_belief.py
+Run from the repo root:  uv run --with pandas python gigi/1-replication/mask-belief/02_analyse_mask_belief.py
 """
 import json
 import os

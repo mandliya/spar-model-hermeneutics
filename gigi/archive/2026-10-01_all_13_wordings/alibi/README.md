@@ -1,6 +1,6 @@
 > **Archived 1 October 2026.** A frozen copy from before the project kept only four follow-up
 > questions (`neutral`, `neutral_cot`, `named`, `named_cot`). It still covers all 13.
-> The live version is [alibi/README.md](../../../alibi/README.md); what was archived and why is in
+> The live version is [alibi/README.md](../../../1-replication/alibi/README.md); what was archived and why is in
 > [the archive index](../README.md).
 
 # Does gemma-3-27b-it keep up a false alibi, and admit it afterwards?

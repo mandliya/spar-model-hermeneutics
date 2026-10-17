@@ -42,8 +42,17 @@ autorater (coding: full reward needs the impossible test to pass, tests are read
 secret_number: `read_secret_file` flag, the noise env-var cheat is not flagged; precommit_hook:
 `score.py` flags --no-verify, removed hook, mass type-ignores, weakened config, but not the
 staged-files-only hook the paper saw most). Docker is not installed on the user's laptop.
-Open decisions: the OpenRouter exception, sampling settings (set explicitly, must be > 0), and
-where the containers run (Docker Desktop on the laptop, or Modal).
+Decided by the user, 17 Oct 2026: OpenRouter for part three only (CLAUDE.md exception), both
+models pinned to DeepInfra fp8; sampling from each model card, sent explicitly (Qwen T 0.7, top-p
+0.8, top-k 20, min-p 0; gemma T 1.0, top-p 0.95, top-k 64; DeepInfra accepts all of them, the
+framework passes only temperature and top-p, so our wrapper adds the rest; the framework also sends
+a reasoning-effort setting by default, check it in the smoke test); containers on Docker Desktop on
+the laptop (the user installs it). Work goes in gigi/3-forensics/ (README written 17 Oct).
+- Repo reorganised by project part, 17 Oct 2026 (the user's choice): 1-replication/, 2-hermeneutics/,
+  3-forensics/, qwen/ unchanged; symlinks at the 7 old category paths for TQ's and Ravi's loaders;
+  "moved" notes at RESULTS.md, RESULTS_REPLICATION.md, RESULTS_HERMENEUTICS.md. Every analysis and
+  chart script was rerun from the new paths: all outputs byte-identical, 0 broken links. The local
+  docent/.venv moved with docent/ and must be recreated before the next Docent upload.
 
 ## To run separately: every missing row and every step never run (listed 15 Oct 2026)
 
@@ -103,7 +112,7 @@ Done (all in git; box outputs on HF):
 - Qwen: all 11 categories. `qwen/11_merge_boxes.py` now replaces local files that still
   held J6's partial mask-factual rows (that had kept J6b's P("A") out of the analysis).
 - RESULTS.md rewritten: the paper's rubric template is the main monitor result, a "what
-  the monitor is shown" chart (`charts/monitor_sees_system_prompt.png`), our templates
+  the monitor is shown" chart (`1-replication/charts/monitor_sees_system_prompt.png`), our templates
   as a comparison column, Qwen's 11 categories in every gemma-vs-Qwen table. Docs
   updated: `third_person/README.md`, `qwen/README.md`, `HF_DATASET_CARD.md`.
 
@@ -203,8 +212,8 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   11): lying rates, self-report AUROC per question, swap test, four counts, three-model chart.
   They had been merged on 9 Oct but never written up (user: "you did not publish the results for
   the simple run of qwen 80B"). compare_models.py now covers all three models.
-- 13 Oct: results split in two at the user's request. `RESULTS_REPLICATION.md` = part one (gemma,
-  monitors, Qwen3-32B; everything up to 7 Oct). `RESULTS_HERMENEUTICS.md` = part two (the 80B
+- 13 Oct: results split in two at the user's request. `1-replication/RESULTS.md` = part one (gemma,
+  monitors, Qwen3-32B; everything up to 7 Oct). `2-hermeneutics/RESULTS.md` = part two (the 80B
   target, gemma as substitute; "same answers?" first, then the AUROC gap). `RESULTS.md` is now a
   10-line index. Older lines in this file that say "RESULTS.md" mean the page before the split.
   The table-writing scripts point at the right page (make_condition_tables, 13_charts,
@@ -218,7 +227,7 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   or false confess ("the four paths"). Then "check in with John before moving to distillation".
   The 12 Oct GPU run WAS part 2 as specified; what was wrong was my write-up (AUROC gap and yes-rates
   instead of his four paths, and no part 1). Fixed 13 Oct: four_paths.py + 20_four_paths_charts.py;
-  RESULTS_HERMENEUTICS.md rewritten around the two parts. No new GPU run was needed.
+  2-hermeneutics/RESULTS.md rewritten around the two parts. No new GPU run was needed.
   Results: part 1, 2,756 prompts, Qwen lied 47.8%, gemma 55.5%, same outcome 81.0%. Part 2 pooled:
   after a Qwen lie gemma confesses 75.8% vs Qwen 48.5%; after an honest Qwen answer gemma falsely
   confesses 51.1% vs 19.1%. gemma swapped in tracks its own rates (6 / 11 points away), not Qwen's
@@ -279,7 +288,7 @@ John's post: https://www.lesswrong.com/posts/CZLhfNGaDqtYxvGJD (author = target,
   activation archives = 23.9 GB (models/qwen3-235b/boxes/<JOB>/activations_<JOB>.tar.gz; float32,
   (95, 4096) per tensor; layout and the per-box overlap of the staging folders in qwen/README.md).
   Merged: results/qwen3-235b/ (88 files, 2,811 transcripts, as for the 80B). Written up in
-  RESULTS_HERMENEUTICS.md "Qwen3-235B: its own results" (21_qwen235b_charts.py): lies like the 80B
+  2-hermeneutics/RESULTS.md "Qwen3-235B: its own results" (21_qwen235b_charts.py): lies like the 80B
   (intervals overlap in all 11 categories); self-report like Qwen3-32B (0.70+ in 17 of 44, mean 0.61;
   the 80B 24 of 44, 0.68), best 0.95, not the paper's 0.98-0.99; almost never says yes on `neutral`.
   Rows lost: 3 of 393 capture-the-secret conversations (CUDA out of memory, 9 follow-ups, J4); 1 MASK

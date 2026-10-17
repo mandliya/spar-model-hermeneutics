@@ -1,6 +1,6 @@
 > **Archived 1 October 2026.** A frozen copy from before the project kept only four follow-up
 > questions (`neutral`, `neutral_cot`, `named`, `named_cot`). It still covers all 13.
-> The live version is [mask-factual/RESULTS.md](../../../mask-factual/RESULTS.md); what was archived and why is in
+> The live version is [mask-factual/RESULTS.md](../../../1-replication/mask-factual/RESULTS.md); what was archived and why is in
 > [the archive index](../README.md).
 
 # Does gemma-3-27b-it recite the cover story it's told to give?

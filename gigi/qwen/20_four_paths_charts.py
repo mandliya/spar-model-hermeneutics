@@ -1,16 +1,16 @@
-"""The four-paths chart and tables for gigi/RESULTS_HERMENEUTICS.md, from four_paths.py's CSVs.
+"""The four-paths chart and tables for gigi/2-hermeneutics/RESULTS.md, from four_paths.py's CSVs.
 
-  charts/hermeneutics_part1_lie_or_not.png  part 1: per category, how often each
+  2-hermeneutics/charts/hermeneutics_part1_lie_or_not.png  part 1: per category, how often each
       model's own answer to the same prompt is a lie
-  charts/hermeneutics_four_paths_pooled.png  part 2, all categories pooled: one
+  2-hermeneutics/charts/hermeneutics_four_paths_pooled.png  part 2, all categories pooled: one
       100% bar per model and question, split into "says yes" and "says no"
       (confesses | doubles down after a Qwen lie; falsely confesses | honestly
       says no after an honest Qwen answer)
-  charts/hermeneutics_four_paths_<question>.png  the same bars by category,
+  2-hermeneutics/charts/hermeneutics_four_paths_<question>.png  the same bars by category,
       one figure per follow-up question
-  charts/hermeneutics_gemma_like_gemma.png  whom gemma swapped in resembles: the
+  2-hermeneutics/charts/hermeneutics_gemma_like_gemma.png  whom gemma swapped in resembles: the
       pooled bars plus a third bar, gemma about its own conversations
-  RESULTS_HERMENEUTICS.md  the tables between the PART1, FOUR-PATHS-POOLED and
+  2-hermeneutics/RESULTS.md  the tables between the PART1, FOUR-PATHS-POOLED and
       FOUR-PATHS-<question> markers
 
 Run from the repo root (after four_paths.py):
@@ -100,7 +100,7 @@ ax.set_title("Part 1. On the same prompts, the two models often lie at different
 ax.text(0, 1.045, "Same prompt to both models; each writes its own answer. \"Same outcome\" = both lied or both didn't, on the same prompt.",
         transform=ax.transAxes, fontsize=9.5, color=MUTED)
 legend(fig, -0.05)
-fig.savefig(G / "charts/hermeneutics_part1_lie_or_not.png", dpi=180, bbox_inches="tight")
+fig.savefig(G / "2-hermeneutics/charts/hermeneutics_part1_lie_or_not.png", dpi=180, bbox_inches="tight")
 plt.close(fig)
 
 # 1c. Part 2: the four paths as 100% bars -------------------------------------------------
@@ -194,7 +194,7 @@ four_paths_figure(groups,
                   "After an honest Qwen answer, it falsely confesses far more often too.",
                   "Qwen's whole conversation is prefilled; only the last answer is written by each model. Each bar is 100% of the conversations; "
                   "all 11 categories pooled.",
-                  G / "charts/hermeneutics_four_paths_pooled.png",
+                  G / "2-hermeneutics/charts/hermeneutics_four_paths_pooled.png",
                   (f"n = {n_lied:,} per question, {int(P2.n_lied.sum()):,} in all", f"n = {n_honest:,} per question, {int(P2.n_honest.sum()):,} in all"), pitch=0.84)
 
 # whom gemma swapped in resembles: the pooled bars again, plus gemma on its OWN conversations
@@ -223,7 +223,7 @@ four_paths_figure(groups,
                   "The top two bars of each group are the chart above. The third is gemma asked about its own conversations (part one of the project): "
                   "its own answers, its own lies.\n"
                   f"Per question: {n_lied:,} Qwen lies and {n_honest:,} honest Qwen answers; {own_lied:,} gemma lies and about {own_honest:,} honest gemma answers.",
-                  G / "charts/hermeneutics_gemma_like_gemma.png",
+                  G / "2-hermeneutics/charts/hermeneutics_gemma_like_gemma.png",
                   ("", ""),
                   pitch=1.08,
                   series=[("Qwen", QWEN, "Qwen3-Next-80B says yes, about its own conversation"),
@@ -246,7 +246,7 @@ for q in QS:
                "false_confess": (X.loc[c, "qwen_false_confess"], X.loc[c, "gemma_false_confess"])} for c in oc]
     four_paths_figure(groups, QTITLE[q],
                       f"Question: {QSUB[q]}. Qwen's whole conversation is prefilled; only the last answer is written by each model.",
-                      G / f"charts/hermeneutics_four_paths_{q}.png",
+                      G / f"2-hermeneutics/charts/hermeneutics_four_paths_{q}.png",
                       ("share of Qwen's lies, per category", "share of its honest answers, per category"), pitch=0.66)
 print("saved: part 1 chart, pooled four-paths chart, 4 by-category four-paths charts")
 
@@ -287,12 +287,12 @@ def by_category(question):
     return out
 
 
-res = G / "RESULTS_HERMENEUTICS.md"
+res = G / "2-hermeneutics/RESULTS.md"
 s = res.read_text()
 for tag, lines in [("PART1", p1), ("FOUR-PATHS-POOLED", pooled_tab), ("FOUR-PATHS-NEUTRAL", by_category("neutral")), ("FOUR-PATHS-NAMED", by_category("named")),
                    ("FOUR-PATHS-NEUTRAL-COT", by_category("neutral_cot")), ("FOUR-PATHS-NAMED-COT", by_category("named_cot"))]:
     s, k = re.subn(rf"<!-- {tag}:START -->.*?<!-- {tag}:END -->",
                    lambda _: f"<!-- {tag}:START -->\n" + "\n".join(lines) + f"\n<!-- {tag}:END -->", s, flags=re.S)
-    print(f"RESULTS_HERMENEUTICS.md {tag} table updated" if k else f"!! no {tag} markers in RESULTS_HERMENEUTICS.md - table not written")
+    print(f"2-hermeneutics/RESULTS.md {tag} table updated" if k else f"!! no {tag} markers in 2-hermeneutics/RESULTS.md - table not written")
 res.write_text(s)
 print("\n".join(p1 + [""] + pooled_tab))

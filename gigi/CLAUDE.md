@@ -2,8 +2,9 @@
 
 Read this before doing anything in `gigi/`. It carries every standing rule for
 this project, so a session started anywhere (laptop, cloud, phone) behaves the
-same. Current state and next steps: `TODO.md`. Results: `RESULTS_REPLICATION.md`
-(part one) and `RESULTS_HERMENEUTICS.md` (part two); `RESULTS.md` is only an index.
+same. Current state and next steps: `TODO.md`. Start page: `README.md`. Results:
+`1-replication/RESULTS.md` (part one), `2-hermeneutics/RESULTS.md` (part two),
+`3-forensics/` (part three).
 
 ## What this is
 
@@ -11,12 +12,30 @@ Part one (to 7 Oct 2026): a replication of Anthropic's "Fine-tuned lie
 detectors failed to generalize" (alignment.anthropic.com/2026/lie-detectors)
 on `google/gemma-3-27b-it`. Part two (from 8 Oct 2026): model hermeneutics,
 with Qwen3-Next-80B as the target and gemma as its stand-in (see `TODO.md`
-for the plan from the call with John). Part one in a paragraph:
+for the plan from the call with John). Part three (from 16 Oct 2026): model
+forensics, the same target-vs-stand-in question on the agent environments of
+"Why do models task game?" (`3-forensics/`). Part one in a paragraph:
 For each deception category we (1) establish our own ground truth for whether
 gemma lied, (2) ask it four follow-up "did you lie?" questions, (3) capture
-activations, and (4) compare against third-person monitors (`third_person/`).
-The dataset's own `did_lie` label is unusable for gemma (see
-`ascii-sandbagging/CLAUDE.md`); every category builds its own ground truth.
+activations, and (4) compare against third-person monitors
+(`1-replication/third_person/`). The dataset's own `did_lie` label is unusable
+for gemma (see `1-replication/ascii-sandbagging/CLAUDE.md`); every category
+builds its own ground truth.
+
+## Repo layout (reorganised 17 Oct 2026, the user's choice)
+
+- `1-replication/`, `2-hermeneutics/`, `3-forensics/`: one folder per part,
+  each with its own `RESULTS.md` (or `README.md`), `charts/` and code.
+- `qwen/`: the GPU-box pipeline for every Qwen run (parts one and two) and its
+  merged results (`qwen/results/<model>/`).
+- The 7 category names at the top of `gigi/` (`alibi`, `ascii-sandbagging`,
+  `capture-the-secret`, `mask-belief`, `mask-factual`, `sycophancy`,
+  `unanswerable`) are symlinks into `1-replication/`. Keep them: TQ's and
+  Ravi's code reads `gigi/<category>/src/` and `gigi/<category>/results/`.
+  Our own code and links use the real paths.
+- `RESULTS.md`, `RESULTS_REPLICATION.md`, `RESULTS_HERMENEUTICS.md` at the top
+  are short "moved" notes for links shared before the move. Don't add to them.
+- New work goes in the folder of its part; never back at the top of `gigi/`.
 
 ## Everything lives in this repo
 
@@ -105,8 +124,14 @@ are saved with every response), not estimates.
   generates greedy, **one conversation at a time** (no batching). Every current
   gemma result, ascii included, was made this way (temperature-0 rebuild, 24
   Sept 2026); scripts that call it via OpenRouter (e.g.
-  `ascii-sandbagging/00_ascii.py`) are leftovers. Before saying how a result
-  was produced, check which script writes that results file.
+  `1-replication/ascii-sandbagging/00_ascii.py`) are leftovers. Before saying
+  how a result was produced, check which script writes that results file.
+  **One exception, part three only** (the user, 17 Oct 2026, at John's
+  request on the 14 Oct call): the forensics runs in `3-forensics/` call
+  Qwen3-Next-80B and gemma-3-27b through OpenRouter, because no activations
+  are needed there yet. Providers pinned as below (gemma on DeepInfra, the only
+  provider with tool calls for it); OpenRouter serves fp8, so say so next to
+  every forensics result. Activations, when needed, come from a GPU box again.
 - Ground truth comes from a live, independently verifiable check per category
   (capability proof, neutral-vs-pressured rerun, belief elicitation...), never
   from the dataset's `did_lie`.
@@ -131,15 +156,19 @@ are saved with every response), not estimates.
 - When a parameter is uncertain or unspecified by the source paper
   (temperature, thresholds, model choice, sample size...), ask the user and
   check what the field normally does, before building on it. Current
-  generation setting: greedy (temperature 0).
+  generation setting: greedy (temperature 0), except in part three: forensics
+  runs and replays need randomness, so they sample with each model's
+  model-card settings (the user, 17 Oct 2026), sent explicitly and recorded
+  with every run.
 
 ## Docs and charts
 
 - The results pages are what is read on team calls, one per part of the
-  project: `RESULTS_REPLICATION.md` (part one: gemma, the monitors,
-  Qwen3-32B) and `RESULTS_HERMENEUTICS.md` (part two, from 8 Oct 2026: the
-  Qwen3-Next-80B target and gemma as its stand-in). `RESULTS.md` is only an
-  index of the two. Each page: numbered methodology (how ground truth is
+  project: `1-replication/RESULTS.md` (part one: gemma, the monitors,
+  Qwen3-32B) and `2-hermeneutics/RESULTS.md` (part two, from 8 Oct 2026: the
+  Qwen3-Next-80B target and gemma as its stand-in), and part three's page in
+  `3-forensics/` once it has results. `README.md` is the start page that links
+  them. Each page: numbered methodology (how ground truth is
   established per category, then the shared follow-up questions), then a few
   charts with terse takeaways. Update the right page and its charts after
   every test that changes results, in the same session the results are
