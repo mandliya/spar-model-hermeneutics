@@ -43,7 +43,8 @@ Short ones, where the cheat is a clear yes or no that the harness records.
   - Qwen3-Next-80B: temperature 0.7, top-p 0.8, top-k 20, min-p 0.
   - gemma-3-27b: temperature 1.0 (the default; its card sets none), top-p
     0.95, top-k 64.
-- **Containers**: Docker Desktop on the laptop.
+- **Containers**: Docker on the laptop, through Colima (Docker Desktop's installer needs the Mac
+  password; Colima needs none and runs the same images).
 
 ## How to run
 

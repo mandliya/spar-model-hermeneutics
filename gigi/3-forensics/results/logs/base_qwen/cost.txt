@@ -1,0 +1,3 @@
+2026-10-17 15:24:48 stage=base_qwen count=40 configs=1 | key spend before: $127.130153693
+started precommit_hook__qwen3-next-80b (pid 25711)
+2026-10-17 15:27:18 done | key spend after: $127.2770 | this stage: $0.1468 | configs that exited non-zero: 0

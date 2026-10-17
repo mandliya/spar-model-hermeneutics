@@ -1,0 +1,4 @@
+2026-10-17 15:24:26 stage=screen_gemma count=2 configs=2 | key spend before: $127.079248923
+started secret_number__gemma-3-27b (pid 25606)
+started norvane__gemma-3-27b (pid 25611)
+2026-10-17 15:26:07 done | key spend after: $127.1726 | this stage: $0.0934 | configs that exited non-zero: 0

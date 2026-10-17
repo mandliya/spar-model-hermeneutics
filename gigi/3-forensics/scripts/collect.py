@@ -105,10 +105,16 @@ def precommit_hook(run, st):
                 first = int(s.name.split("-")[1])
             kinds += hit
     staged = any(STAGED_ONLY.search(c) for s in st for c in tool_commands(s))
+    blocked = None   # the first step whose commit the hook blocked: the decision point in every run
+    for s in st:
+        msgs = json.loads((s / "messages.json").read_text())
+        out = next((m.get("content") or "" for m in reversed(msgs) if m.get("role") == "tool"), "")
+        if any("git commit" in c and "--no-verify" not in c for c in tool_commands(s)) and "Exit code: 1" in out and "error:" in out:
+            blocked = int(s.name.split("-")[1]); break
     cheated = score.get("outcome") == "bad"
     return {"cheated": cheated if score else None,
             "cheat_kind": "+".join(sorted(set(b for b in score.get("behaviors", []) if b in {k for k, _ in PRECOMMIT_BAD} | {"excluded_all_files"}))),
-            "first_cheat_step": first if cheated else None, "staged_only_hook": staged,
+            "first_cheat_step": first if cheated else None, "staged_only_hook": staged, "blocked_commit_step": blocked,
             "outcome": f"score.py: {score.get('outcome', 'MISSING')} {score.get('behaviors', [])}"}
 
 
@@ -138,9 +144,11 @@ def main(stage):
         exp = cfg.parent
         conf = yaml.safe_load(cfg.read_text())
         env, agent = conf.get("environment"), conf.get("agent", {})
+        prompt = str((conf.get("prompts") or {}).get("user_prompt", ""))
+        variant = ("rules" if "Do not special-case" in prompt else "no_rules") if env == "coding" else ""
         for run in sorted(exp.glob("run-*"), key=lambda p: int(p.name.split("-")[1])):
             st = steps(run)
-            row = {"stage": stage, "env": env, "model": agent.get("model"), "experiment": str(exp.relative_to(root)),
+            row = {"stage": stage, "env": env, "variant": variant, "model": agent.get("model"), "experiment": str(exp.relative_to(root)),
                    "run": run.name, "steps": len(st), "temperature": agent.get("temperature"), "top_p": agent.get("top_p"),
                    "top_k": agent.get("top_k"), "provider_only": ",".join((agent.get("provider_preferences") or {}).get("only", []))}
             if not st:
@@ -150,15 +158,15 @@ def main(stage):
             except Exception as e:   # a broken run is a row too, never silently dropped
                 row["outcome"] = f"COLLECT ERROR: {e!r}"
             rows.append(row)
-    out = HERE / "results" / f"runs_{stage}.csv"
-    cols = ["stage", "env", "model", "experiment", "run", "steps", "cheated", "cheat_kind", "first_cheat_step",
-            "staged_only_hook", "outcome", "temperature", "top_p", "top_k", "provider_only"]
+    out = HERE / "results" / f"runs_{stage.replace('/', '_')}.csv"
+    cols = ["stage", "env", "variant", "model", "experiment", "run", "steps", "cheated", "cheat_kind", "first_cheat_step",
+            "staged_only_hook", "blocked_commit_step", "outcome", "temperature", "top_p", "top_k", "provider_only"]
     with out.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
         w.writeheader(); w.writerows(rows)
     print(f"{len(rows)} runs -> {out.relative_to(HERE.parent.parent)}")
     for r in rows:
-        print(f"  {r['env']:15s} {str(r['model'])[:34]:34s} {r['run']:7s} steps={r['steps']:3d} cheated={r.get('cheated')} "
+        print(f"  {r['env'] + (' ' + r['variant'] if r.get('variant') else ''):24s} {str(r['model'])[:34]:34s} {r['run']:7s} steps={r['steps']:3d} cheated={r.get('cheated')} "
               f"{r.get('cheat_kind') or ''} first={r.get('first_cheat_step')} | {str(r.get('outcome'))[:90]}")
 
 
