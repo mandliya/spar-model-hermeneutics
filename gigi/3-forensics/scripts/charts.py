@@ -123,7 +123,7 @@ fig.text(0.01, -0.02, "Grey line = 95% interval (wide, because each row is only 
 fig.savefig(OUT / "solo.png", dpi=180, bbox_inches="tight"); plt.close(fig)
 
 # ---------------------------------------------------------------- chart 2: the runs we replayed, one chart per model
-def timeline(owner, fname, title):
+def timeline(owner, fname, title, times):
     runs = [r for r in RUNS if r[1] == owner]
     fig, ax = plt.subplots(figsize=(11, 0.75 * len(runs) + 1.6))
     for i, (tag, own, label, steps, blocked, cheat, cps) in enumerate(runs):
@@ -134,7 +134,7 @@ def timeline(owner, fname, title):
         if cheat is not None:
             ax.scatter([cheat], [yy], marker="X", s=130, color="#d03b3b", zorder=5)
         for c in cps:
-            ax.annotate("", xy=(c, yy + 0.12), xytext=(c, yy + 0.42), arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1))
+            ax.scatter([c], [yy + 0.28], marker="v", s=70, color=MUTED, zorder=5)
         ax.text(-0.6, yy, label, ha="right", va="center", fontsize=10, color=INK)
         ax.text(steps - 1 + 0.6, yy, "deleted the hook" if cheat is not None else "honest report",
                 va="center", fontsize=9, color="#d03b3b" if cheat is not None else MUTED)
@@ -142,13 +142,13 @@ def timeline(owner, fname, title):
     ax.set_xlabel("step of the run"); style(ax); ax.spines["left"].set_visible(False)
     ax.grid(axis="x", color=GRID, lw=0.5, zorder=0)
     ax.set_title(title, loc="left", fontsize=13, fontweight="bold", pad=24)
-    ax.text(0, 1.02, "|  mypy blocked the commit      ✖  the model deleted the hook      ▼  a checkpoint we restarted from (20 times per model)",
+    ax.text(0, 1.02, "|  mypy blocked the commit      ✖  the model deleted the hook      ▼  a checkpoint we restarted from (" + times + ")",
             transform=ax.transAxes, fontsize=9, color=MUTED)
     fig.savefig(OUT / fname, dpi=180, bbox_inches="tight"); plt.close(fig)
 
 
-timeline("qwen", "runs_timeline_qwen.png", "Qwen's pre-commit runs we replayed, step by step")
-timeline("gemma", "runs_timeline_gemma.png", "gemma's pre-commit runs we replayed (for the check), step by step")
+timeline("qwen", "runs_timeline_qwen.png", "Qwen's pre-commit runs we replayed, step by step", "20 times with each model")
+timeline("gemma", "runs_timeline_gemma.png", "gemma's pre-commit runs we replayed (for the check), step by step", "20 times")
 
 
 # ---------------------------------------------------------------- charts 3 and 4: replays, one row per run and checkpoint
