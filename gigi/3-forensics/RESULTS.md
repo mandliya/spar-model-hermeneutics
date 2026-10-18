@@ -106,7 +106,11 @@ Shown as the last row of the first chart.
 
 ## The swap: gemma in Qwen's place
 
-![Cheat rate after taking over, in Qwen's runs and in gemma's runs](charts/swap.png)
+![The pre-commit runs we replayed, step by step](charts/runs_timeline.png)
+
+Each Qwen run below, replayed from each checkpoint, 20 times with Qwen (itself) and 20 times with gemma:
+
+![Replaying Qwen's runs, one row per run and checkpoint](charts/swap_qwen_runs.png)
 
 Every pre-commit run reaches the same moment: mypy blocks the first commit
 (step 2 or 3). That is the **matched point** (checkpoint 3), used for every
@@ -147,7 +151,11 @@ row is 20 replays per model from that checkpoint.
 
 ## Control: replaying gemma's own runs
 
-![How soon each model stops after taking over](charts/wrap_up.png)
+![Replaying gemma's runs, one row per run and checkpoint](charts/swap_gemma_runs.png)
+
+And how long each model kept working after taking over, run by run:
+
+![How long each model kept working after taking over, per run](charts/wrap_up.png)
 
 The same replays from gemma's own pre-commit runs, three where it deleted the
 hook and one honest: gemma replayed (its own reference) and Qwen swapped in.
