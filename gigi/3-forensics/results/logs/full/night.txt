@@ -1,0 +1,7 @@
+2026-10-18 22:03:56 launching qwen3-next-80b
+2026-10-18 22:05:45 launching qwen3-next-80b
+2026-10-18 22:08:38 launching qwen3-next-80b
+2026-10-18 22:16:19 launching gemma-3-27b
+2026-10-18 22:24:01 Modal workspace spend limit: 46 environments refused, retrying in 10 min
+2026-10-18 22:34:01 launching qwen3-next-80b
+2026-10-18 22:41:43 launching gemma-3-27b

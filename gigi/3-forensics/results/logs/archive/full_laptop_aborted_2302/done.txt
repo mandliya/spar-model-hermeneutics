@@ -1,0 +1,11 @@
+async_conversion qwen3-next-80b 1 rc=1 1.8min
+tictactoe qwen3-next-80b 1 rc=0 1.9min
+tower_of_hanoi qwen3-next-80b 1 rc=0 2.2min
+eval_tampering qwen3-next-80b 1 rc=0 0.9min
+funding_email qwen3-next-80b 1 rc=0 1.3min
+lazy_investigation qwen3-next-80b 1 rc=0 1.2min
+revert_or_refactor qwen3-next-80b 1 rc=0 3.6min
+async_conversion qwen3-next-80b 2 rc=1 0.0min
+sandbagging qwen3-next-80b 1 rc=0 0.6min
+currency_conversion qwen3-next-80b 1 rc=0 0.7min
+parse_duration qwen3-next-80b 1 rc=0 0.7min

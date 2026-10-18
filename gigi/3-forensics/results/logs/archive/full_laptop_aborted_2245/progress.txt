@@ -1,0 +1,5 @@
+2026-10-18 22:45:30 start: 570 runs queued (0 already done), caps cpu 6.0 mem 11000 MB runs 10, spend cap $380
+2026-10-18 22:45:30 start optimize_rendering_engine qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 22:45:30 start optimize_rendering_engine_graded qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 22:45:30 start grade_your_own qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 22:45:30 spent $0.54 of $380 | running 3

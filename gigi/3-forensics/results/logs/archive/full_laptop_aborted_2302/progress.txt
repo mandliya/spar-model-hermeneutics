@@ -1,0 +1,33 @@
+2026-10-18 22:46:11 start: 570 runs queued (0 already done), at once: 2 timing + 6 other, mem 12000 MB, spend cap $380
+2026-10-18 22:46:11 start optimize_rendering_engine qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 22:46:11 start optimize_rendering_engine_graded qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 22:46:11 start async_conversion qwen3-next-80b #1 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-18 22:46:11 start revert_or_refactor qwen3-next-80b #1 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-18 22:46:11 start chess qwen3-next-80b #1 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-18 22:46:11 start tictactoe qwen3-next-80b #1 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 22:46:11 start tower_of_hanoi qwen3-next-80b #1 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 22:46:11 spent $0.54 of $380 | running 7
+2026-10-18 22:48:00 finished async_conversion qwen3-next-80b #1 rc=1 in 2 min
+2026-10-18 22:48:00 start funding_email qwen3-next-80b #1 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 22:48:08 finished tictactoe qwen3-next-80b #1 rc=0 in 2 min
+2026-10-18 22:48:08 start lazy_investigation qwen3-next-80b #1 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 22:48:12 spent $0.55 of $380 | running 7
+2026-10-18 22:48:22 finished tower_of_hanoi qwen3-next-80b #1 rc=0 in 2 min
+2026-10-18 22:48:22 start eval_tampering qwen3-next-80b #1 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 22:49:14 finished eval_tampering qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:49:14 start sandbagging qwen3-next-80b #1 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 22:49:18 finished funding_email qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:49:18 start currency_conversion qwen3-next-80b #1 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-18 22:49:21 finished lazy_investigation qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:49:21 start parse_duration qwen3-next-80b #1 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-18 22:49:46 finished revert_or_refactor qwen3-next-80b #1 rc=0 in 4 min
+2026-10-18 22:49:46 start async_conversion qwen3-next-80b #2 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-18 22:49:47 finished async_conversion qwen3-next-80b #2 rc=1 in 0 min
+2026-10-18 22:49:47 start revert_or_refactor qwen3-next-80b #2 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-18 22:49:52 finished sandbagging qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:49:52 start chess qwen3-next-80b #2 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-18 22:49:58 finished currency_conversion qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:49:58 start tictactoe qwen3-next-80b #2 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 22:50:03 finished parse_duration qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:50:03 start tower_of_hanoi qwen3-next-80b #2 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 22:50:12 spent $0.62 of $380 | running 7

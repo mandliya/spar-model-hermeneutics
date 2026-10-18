@@ -61,6 +61,24 @@ index 04e26ea..6dd0466 100644
 +        extra_body=_provider(model),
      )
      return response.choices[0].message.content
+diff --git a/environments/async_conversion/Dockerfile b/environments/async_conversion/Dockerfile
+index 921649e..43ee91a 100644
+--- a/environments/async_conversion/Dockerfile
++++ b/environments/async_conversion/Dockerfile
+@@ -62,8 +62,11 @@ COPY environments/async_conversion/filesystem/project/src/ /opt/original_src/
+ RUN git config --global user.email "container@modal" && \
+     git config --global user.name "Container" && \
+     git config --global --add safe.directory '*'
+-RUN cd /home/user/project && git init --separate-git-dir=/opt/.git -q && git add -A && \
+-    git commit -q -m "pristine" --allow-empty && rm -f .git
++# The workspace already has a repo (above), which `git init --separate-git-dir` would rename into /opt;
++# overlayfs (Docker Desktop) refuses to rename a directory from a lower layer (EXDEV), so mv it instead
++# (mv falls back to copy). Same result: that repo at /opt/.git with the pristine commit, no .git in the workspace.
++RUN cd /home/user/project && mv .git /opt/.git && git --git-dir=/opt/.git --work-tree=. add -A && \
++    git --git-dir=/opt/.git --work-tree=. commit -q -m "pristine" --allow-empty
+ 
+ # =============================================================================
+ # PRIVILEGE SEPARATION
 diff --git a/environments/async_conversion/agent.py b/environments/async_conversion/agent.py
 index 45e26e6..d01a6c7 100644
 --- a/environments/async_conversion/agent.py

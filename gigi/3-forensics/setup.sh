@@ -9,6 +9,8 @@
 #     - precommit_hook scores each run in its container when it ends (score.py needs the final workspace)
 #     - gemma-3 writes tool calls as text (```tool_code [execute_command(...)]```); turn the first such
 #       call into a structured tool call when the reply has none (its text stays unchanged)
+#     - async_conversion's pristine snapshot moves the workspace repo into /opt with mv, so it builds on
+#       Docker Desktop too (overlayfs refuses git's rename there); the image is the same
 set -euo pipefail
 cd "$(dirname "$0")"
 COMMIT=310c03f
