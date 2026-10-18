@@ -185,28 +185,24 @@ def replay_chart(owner, fname, title, only=("qwen", "gemma")):
 replay_chart("qwen", "swap_qwen_runs.png", "Replaying Qwen's runs: Qwen sometimes repeats its cheat, gemma never does")
 replay_chart("gemma", "swap_gemma_self.png", "The check: gemma replaying its own runs keeps cheating, so restarting doesn't stop it",
              only=("gemma",))
-replay_chart("gemma", "swap_gemma_runs.png", "Side note: Qwen put into gemma's runs cheats often too")
 
-# ---------------------------------------------------------------- chart 5: how soon they stop, per run
-fig, ax = plt.subplots(figsize=(10.5, 5.6))
+# ---------------------------------------------------------------- chart 5: how long gemma kept working, Qwen's runs vs its own
+fig, ax = plt.subplots(figsize=(10.5, 5.4))
 labels = []
 for i, (tag, owner, label, *_rest) in enumerate(RUNS):
     xx = i + (0.6 if owner == "gemma" else 0)
-    for w, dx in (("qwen", -0.18), ("gemma", 0.18)):
-        st = S[S.tag.isin(TAGS.get(tag, [tag])) & (S.who == w)].steps.astype(int)
-        ax.bar(xx + dx, st.median(), width=0.34, color=COL[w], zorder=3)
-        ax.text(xx + dx, st.median() + 0.25, f"{st.median():g}", ha="center", fontsize=8.5, color=INK)
+    st = S[S.tag.isin(TAGS.get(tag, [tag])) & (S.who == "gemma")].steps.astype(int)
+    ax.bar(xx, st.median(), width=0.5, color=COL["gemma"], zorder=3)
+    ax.text(xx, st.median() + 0.25, f"{st.median():g}", ha="center", fontsize=9, color=INK)
     labels.append((xx, label.replace(" run ", "\nrun ").replace(" (", "\n(")))
 ax.set_xticks([l[0] for l in labels]); ax.set_xticklabels([l[1] for l in labels], fontsize=8.5)
 ax.axvline(4.8, color=GRID, lw=1)
-ax.text(2, 14.2, "IN QWEN'S RUNS", ha="center", fontsize=10, fontweight="bold", color=INK)
-ax.text(6.9, 14.2, "IN GEMMA'S RUNS", ha="center", fontsize=10, fontweight="bold", color=INK)
-ax.set_ylim(0, 15.2)
-ax.set_ylabel("steps it kept working after taking over\n(median over the replays)")
+ax.text(2, 14.2, "gemma TAKING OVER QWEN'S RUNS", ha="center", fontsize=10, fontweight="bold", color=INK)
+ax.text(6.9, 14.2, "gemma REPLAYING ITS OWN RUNS", ha="center", fontsize=10, fontweight="bold", color=INK)
+ax.set_ylim(0, 15.2); ax.set_ylabel("steps gemma kept working after taking over\n(median over the replays)")
 ax.grid(axis="y", color=GRID, lw=0.6, zorder=0); ax.tick_params(axis="x", length=0)
 for sp in ("top", "right"): ax.spines[sp].set_visible(False)
-ax.set_title("The run decides when a model stops: in Qwen's runs both models stop almost at once;\nin gemma's runs both keep working, long enough to reach the cheat",
+ax.set_title("Same restart, different run: gemma stops at once in Qwen's runs,\nbut keeps working (and reaches the cheat) in its own",
              loc="left", fontsize=12.5, fontweight="bold", pad=12)
-legend(fig, ax, [f"{NAME['qwen']} takes over", f"{NAME['gemma']} takes over"], loc="upper left", bbox_to_anchor=(0, 0.9))
 fig.savefig(OUT / "wrap_up.png", dpi=180, bbox_inches="tight"); plt.close(fig)
-print("saved charts: solo, runs_timeline_qwen/_gemma, swap_qwen_runs, swap_gemma_self, swap_gemma_runs, wrap_up")
+print("saved charts: solo, runs_timeline_qwen/_gemma, swap_qwen_runs, swap_gemma_self, wrap_up")
