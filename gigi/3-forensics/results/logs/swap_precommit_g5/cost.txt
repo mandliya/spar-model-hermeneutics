@@ -1,0 +1,10 @@
+2026-10-17 17:44:39 swap=precommit_g5 run=/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/raw/base_gemma/precommit_hook/precommit_hook/google-gemma-3-27b-it/2026-10-17_15-27-18-736069/run-5 reps=20 from steps: 8 3 | key spend before: $130.071077013
+17:45:30 from step-8, qwen: batch of 10 done
+17:46:31 from step-8, qwen: batch of 10 done
+17:47:53 from step-8, gemma: batch of 10 done
+17:48:48 from step-8, gemma: batch of 10 done
+17:49:32 from step-3, qwen: batch of 10 done
+17:50:11 from step-3, qwen: batch of 10 done
+17:50:51 from step-3, gemma: batch of 10 done
+17:52:04 from step-3, gemma: batch of 10 done
+2026-10-17 17:52:04 done | key spend after: $130.5652 | this swap: $0.4941

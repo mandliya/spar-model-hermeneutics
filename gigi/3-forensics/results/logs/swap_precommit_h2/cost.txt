@@ -1,0 +1,6 @@
+2026-10-17 17:40:54 swap=precommit_h2 run=/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/raw/screen/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-17_15-20-35-423567/run-2 reps=20 from steps: 3 | key spend before: $129.951258723
+17:42:49 from step-3, qwen: batch of 10 done
+17:43:06 from step-3, qwen: batch of 10 done
+17:43:17 from step-3, gemma: batch of 10 done
+17:43:27 from step-3, gemma: batch of 10 done
+2026-10-17 17:43:27 done | key spend after: $130.0559 | this swap: $0.1047

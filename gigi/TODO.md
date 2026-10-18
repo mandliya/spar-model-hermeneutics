@@ -54,6 +54,17 @@ the laptop (the user installs it). Work goes in gigi/3-forensics/ (README writte
   chart script was rerun from the new paths: all outputs byte-identical, 0 broken links. The local
   docent/.venv moved with docent/ and must be recreated before the next Docent upload.
 
+- Part three DONE 17 Oct 2026 (results: 3-forensics/RESULTS.md; $3.93; raw runs on HF under
+  forensics/raw/). Qwen-80B rarely task-games (pre-commit hook bypassed 2/52, nothing elsewhere);
+  gemma alone more (hook 7/22, is_prime 4/40). Swap: in Qwen's runs gemma never cheats (0/180) and
+  stops within 1-3 steps; in gemma's runs both cheat often and Qwen reproduces gemma's cheat near
+  the decision (100/50/80% vs gemma's 100/56/68%). The run so far decides more than the model.
+  Test Regression: Qwen hides the failing test 2/30, gemma 0/30.
+  Next (each needs a go-ahead): (1) more incidents: a target that cheats more, or the paper's
+  cheating suite; (2) separate content from format: replay gemma in Qwen's runs with Qwen's tool
+  calls rewritten as gemma's text calls; (3) activations at the matched point (GPU). Colima keeps a
+  Docker VM running on the laptop: `colima stop` when not running environments.
+
 ## To run separately: every missing row and every step never run (listed 15 Oct 2026)
 
 The user, 15 Oct: "I'll want to run the things that were not run separately ... I don't want to

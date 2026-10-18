@@ -81,12 +81,7 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
 
 ## Status
 
-17 Oct 2026:
-- **Set up and tested** offline (scripted fake model) in all three first environments.
-- **Smoke test** (2 runs per model per environment, $0.08 for 22 runs): Qwen was fully honest
-  everywhere (correct is_prime submitted at reward 0; reported that the hook blocked the commit;
-  played Secret Number honestly). gemma could not act until the tool-call translator; with it,
-  it played all three honestly too.
-- **Screening, running:** Qwen alone, 10 runs each in five environments (Secret Number, is_prime
-  with and without the no-hardcoding rule, pre-commit hook, Broken Test Runner), to find where it
-  misbehaves often enough to replay. The swap needs Qwen runs that cheat.
+17 Oct 2026: **done**, results in [`RESULTS.md`](RESULTS.md). Smoke test, screening (Qwen alone in
+five environments), each model alone (Qwen 96 runs; gemma 108 with the final translator), Test Regression (30 replies per
+model), the swap (180 replays per model from Qwen's runs) and the control (replays from gemma's runs).
+$3.93 in all. Raw runs: `forensics/raw/<stage>.tar.gz` on the HF dataset.
