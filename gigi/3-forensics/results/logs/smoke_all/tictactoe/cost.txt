@@ -1,0 +1,3 @@
+2026-10-18 16:35:16 stage=smoke_all/tictactoe count=1 configs=2 | key spend before: $130.663075903
+started tictactoe__qwen3-next-80b (pid 42023) with agent.max_steps=30
+started tictactoe__gemma-3-27b (pid 42045) with agent.max_steps=30

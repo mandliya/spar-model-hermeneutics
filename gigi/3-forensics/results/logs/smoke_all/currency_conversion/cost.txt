@@ -1,0 +1,3 @@
+2026-10-18 16:35:16 stage=smoke_all/currency_conversion count=1 configs=2 | key spend before: $130.663075903
+started currency_conversion__qwen3-next-80b (pid 42013) with agent.max_steps=10
+started currency_conversion__gemma-3-27b (pid 42038) with agent.max_steps=10

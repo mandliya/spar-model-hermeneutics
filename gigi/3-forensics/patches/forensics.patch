@@ -424,7 +424,7 @@ index 2be7824..a66580f 100644
          ))
      if provider == "fireworks":
 diff --git a/src/agent_interp_envs/providers/openrouter_provider.py b/src/agent_interp_envs/providers/openrouter_provider.py
-index 22428b5..14d7bf2 100644
+index 22428b5..f2d84b2 100644
 --- a/src/agent_interp_envs/providers/openrouter_provider.py
 +++ b/src/agent_interp_envs/providers/openrouter_provider.py
 @@ -10,7 +10,10 @@ OpenRouter interleaved thinking supported models:
@@ -438,7 +438,7 @@ index 22428b5..14d7bf2 100644
  
  from dotenv import load_dotenv
  from openai import APIConnectionError, APITimeoutError, OpenAI, RateLimitError
-@@ -28,6 +31,44 @@ class OpenRouterEmptyResponseError(Exception):
+@@ -28,6 +31,48 @@ class OpenRouterEmptyResponseError(Exception):
      """OpenRouter returned HTTP 200 with an error body and no choices."""
  
  
@@ -449,7 +449,7 @@ index 22428b5..14d7bf2 100644
 +# offered tools becomes a structured call (a block counts only if it calls a tool by name). The
 +# text stays in the message unchanged. An empty reply (no text, no call) is a provider glitch, not
 +# a choice: it is retried like a missing one instead of being read as the agent's final reply.
-+_TOOL_CODE = re.compile(r"```(?:tool_code|python|py)?[ \t]*\n(.*?)```", re.S)   # gemma also labels it python, or not at all
++_TOOL_CODE = re.compile(r"```(?:tool_code|python|py|json)?[ \t]*\n(.*?)```", re.S)   # gemma also labels it python, json, or nothing
 +
 +
 +def _tool_call_from_tool_code(content: str, tools: list[dict]) -> dict | None:
@@ -459,12 +459,16 @@ index 22428b5..14d7bf2 100644
 +    # reply with a bare `[execute_command(command="...")]` line); prose never parses as code
 +    candidates = _TOOL_CODE.findall(content or "") + [ln for ln in (content or "").splitlines()
 +                                                     if ln.strip()[:1] in "[(" or ln.strip().split("(")[0].split(".")[-1] in params]
-+    for block in candidates:
++    while candidates:
++        block = candidates.pop(0)
 +        try:
 +            tree = ast.parse(block.strip())
 +        except SyntaxError:
 +            continue
 +        for node in ast.walk(tree):
++            # gemma sometimes quotes the call: ```json ["execute_command(command='...')"]```
++            if isinstance(node, ast.Constant) and isinstance(node.value, str) and "(" in node.value:
++                candidates.append(node.value)
 +            if not isinstance(node, ast.Call):
 +                continue
 +            name = node.func.attr if isinstance(node.func, ast.Attribute) else getattr(node.func, "id", None)
@@ -483,7 +487,7 @@ index 22428b5..14d7bf2 100644
  class OpenRouterProvider(BaseProvider):
      """Provider for OpenRouter models using OpenAI-compatible chat completions API.
  
-@@ -43,6 +84,8 @@ class OpenRouterProvider(BaseProvider):
+@@ -43,6 +88,8 @@ class OpenRouterProvider(BaseProvider):
          provider_preferences: dict | None = None,
          temperature: float | None = None,
          top_p: float | None = None,
@@ -492,7 +496,7 @@ index 22428b5..14d7bf2 100644
          reasoning_effort: str | None = None,
      ) -> None:
          """Initialize the OpenRouter provider.
-@@ -84,7 +127,9 @@ class OpenRouterProvider(BaseProvider):
+@@ -84,7 +131,9 @@ class OpenRouterProvider(BaseProvider):
          )
          self.model = model
          self.messages = messages
@@ -503,7 +507,7 @@ index 22428b5..14d7bf2 100644
          if provider_preferences:
              extra_body["provider"] = provider_preferences
          # Tool-less runs (e.g. a no-tools eval variant) must omit both keys:
-@@ -98,6 +143,11 @@ class OpenRouterProvider(BaseProvider):
+@@ -98,6 +147,11 @@ class OpenRouterProvider(BaseProvider):
              self.kwargs["temperature"] = temperature
          if top_p is not None:
              self.kwargs["top_p"] = top_p
@@ -515,7 +519,7 @@ index 22428b5..14d7bf2 100644
          
  
      @retry(
-@@ -124,6 +174,12 @@ class OpenRouterProvider(BaseProvider):
+@@ -124,6 +178,12 @@ class OpenRouterProvider(BaseProvider):
              raise OpenRouterEmptyResponseError(f"OpenRouter returned no choices: {error}")
  
          message = response.choices[0].message.model_dump()
