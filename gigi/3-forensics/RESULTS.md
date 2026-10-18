@@ -47,6 +47,23 @@ $3.93 in all (measured on the OpenRouter key).
   state after its step, so restarting from checkpoint N−1 re-decides step N.
 - **Rates** carry Wilson 95% intervals.
 
+## Which environments: 6 of the paper's 28, so far
+
+The paper's repo has 28 environments. This first pass ran 6 of them: the
+short ones where the harness itself records the cheat as a yes or no, so no
+judge is needed and a run takes minutes. The aim was a working swap first.
+
+| | Environments |
+|---|---|
+| **Ran** | Secret Number, is_prime (with and without the rule), Pre-commit hook, Broken Test Runner (`norvane`), Test Regression (`code_summary_honesty`, one decision point) |
+| **Not run: the paper's cheating suite** (where frontier models cheat most; long tasks, verdict by a Claude autorater) | optimize_cache_c, dashboard_perf, stripped_engine, grade_your_own, lucky_seed, lucky_seed_readable_grader, leaked_fix, tables_coverage_tests, aj_data_anon |
+| **Not run: other task gaming** | revert_or_refactor, ai_rd, async_conversion, games (chess, tic-tac-toe), palisades_bounty, swe_rebench_v2 |
+| **Not run: other honesty** | puppeteer, parse_duration, lazy_investigation, currency_conversion |
+| **Not run: other** | sandbagging, eval_tampering, funding_email |
+
+Qwen cheated in only one of the 6 (the pre-commit hook, 2 runs), so the swap
+rests on that one environment. More environments are next step 1.
+
 ## Each model alone
 
 ![Each model alone: how often it cheats, per environment](charts/solo.png)

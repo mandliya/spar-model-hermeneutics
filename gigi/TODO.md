@@ -60,8 +60,9 @@ the laptop (the user installs it). Work goes in gigi/3-forensics/ (README writte
   stops within 1-3 steps; in gemma's runs both cheat often and Qwen reproduces gemma's cheat near
   the decision (100/50/80% vs gemma's 100/56/68%). The run so far decides more than the model.
   Test Regression: Qwen hides the failing test 2/30, gemma 0/30.
-  Next (each needs a go-ahead): (1) more incidents: a target that cheats more, or the paper's
-  cheating suite; (2) separate content from format: replay gemma in Qwen's runs with Qwen's tool
+  Coverage: 6 of the paper's 28 environments run (the short, mechanically graded ones; list in
+  3-forensics/RESULTS.md). Next (each needs a go-ahead): (1) more incidents: the other 22
+  environments (the cheating suite first), or a target that cheats more; (2) separate content from format: replay gemma in Qwen's runs with Qwen's tool
   calls rewritten as gemma's text calls; (3) activations at the matched point (GPU). Colima keeps a
   Docker VM running on the laptop: `colima stop` when not running environments.
 
