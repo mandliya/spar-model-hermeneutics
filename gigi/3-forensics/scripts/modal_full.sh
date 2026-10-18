@@ -18,7 +18,7 @@ cd "$HERE/agent-interp-envs"
 for spec in "$@"; do
   e=${spec%%:*}; n=${spec##*:}
   cfg="$HERE/configs/${e}__${MODEL}.yaml"; f="$LOG/${e}__${MODEL}.log"
-  [ -f "$f" ] && ! grep -q "rate limit exceeded" "$f" && continue   # launched already
+  [ -f "$f" ] && ! grep -qE "rate limit exceeded|exceeded its spend limit" "$f" && continue   # launched already
   read cap hasmodal < <(env -u VIRTUAL_ENV uv run python -c "import yaml,sys; c=yaml.safe_load(open(sys.argv[1])); print(c['agent']['max_steps'], int('modal' in c))" "$cfg")
   ov=""; [ "$hasmodal" = 0 ] && ov="modal.memory=2048"
   to=14400; [ "$cap" -le 60 ] && to=3600

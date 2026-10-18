@@ -12,9 +12,14 @@ puppeteer:5 async_conversion:5 revert_or_refactor:5 optimize_lru_cache:10 lucky_
 lucky_seed_readable_grader:10 leaked_scorer:10 reference_extraction:10 copying_of_answers:10
 dashboard_costly_failure:10 chess:20 tictactoe:20 tower_of_hanoi:20 funding_email:20
 lazy_investigation:20 eval_tampering:20 sandbagging:20 currency_conversion:20 parse_duration:20"
-for model in qwen3-next-80b gemma-3-27b; do
-  say "launching $model"
-  bash "$HERE/scripts/modal_full.sh" full "$model" $ENVS || say "launcher for $model exited non-zero"
+for attempt in $(seq 1 60); do   # a launch refused by Modal's workspace spend limit is retried every 10 min, 10 h at most
+  for model in qwen3-next-80b gemma-3-27b; do
+    say "launching $model"
+    bash "$HERE/scripts/modal_full.sh" full "$model" $ENVS || say "launcher for $model exited non-zero"
+  done
+  grep -lq "exceeded its spend limit" "$LOG"/*.log || break
+  say "Modal workspace spend limit: $(grep -l "exceeded its spend limit" "$LOG"/*.log | wc -l | tr -d ' ') environments refused, retrying in 10 min"
+  sleep 600
 done
 cd "$HERE/agent-interp-envs"
 running () { env -u VIRTUAL_ENV uv run modal app list --json 2>/dev/null | python3 -c "
