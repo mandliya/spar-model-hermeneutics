@@ -2,13 +2,14 @@
 # Stop every running Modal app once the OpenRouter key has spent CAP_USD since this started.
 # Polls every 2 minutes; logs to results/logs/<stage>/watchdog.txt. Runs on the laptop (keep it awake).
 #   FORENSICS_ENV_FILE=... CAP_USD=60 bash gigi/3-forensics/scripts/spend_watchdog.sh <stage>
+# START_USD=<key spend> restarts a watchdog (e.g. with a new cap) counting from the first one's baseline.
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"; LOG="$HERE/results/logs/$1"; mkdir -p "$LOG"
 : "${FORENSICS_ENV_FILE:?}"; CAP_USD=${CAP_USD:?}
 usage () { ( set -a; . "$FORENSICS_ENV_FILE"; set +a
   curl -s -m 20 https://openrouter.ai/api/v1/key -H "Authorization: Bearer $OPENROUTER_API_KEY" \
     | python3 -c 'import sys, json; print(json.load(sys.stdin)["data"]["usage"])' ) || echo ""; }
-START=$(usage); echo "$(date '+%F %T') watchdog start: key spend \$$START, cap \$$CAP_USD" >> "$LOG/watchdog.txt"
+START=${START_USD:-$(usage)}; echo "$(date '+%F %T') watchdog start: key spend \$$START, cap \$$CAP_USD" >> "$LOG/watchdog.txt"
 cd "$HERE/agent-interp-envs"
 while true; do
   sleep 120
