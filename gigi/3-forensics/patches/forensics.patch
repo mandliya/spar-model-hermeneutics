@@ -1,3 +1,216 @@
+diff --git a/environments/ai_rd/agent.py b/environments/ai_rd/agent.py
+index 375fc84..e0106d7 100644
+--- a/environments/ai_rd/agent.py
++++ b/environments/ai_rd/agent.py
+@@ -9,7 +9,7 @@ from run_step import print_final_results, run_step
+ from states import AIRDState, dump, init_fs_tracking, restore
+ from tools import EXECUTE_COMMAND_TOOL
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -43,15 +43,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=[EXECUTE_COMMAND_TOOL],
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     provider.print_history()
+diff --git a/environments/ai_rd/api_utils.py b/environments/ai_rd/api_utils.py
+index 04e26ea..6dd0466 100644
+--- a/environments/ai_rd/api_utils.py
++++ b/environments/ai_rd/api_utils.py
+@@ -28,6 +28,15 @@ def _get_client() -> AsyncOpenAI:
+     return _client
+ 
+ 
++# gigi/3-forensics: every OpenRouter call pinned to the model maker's own servers, no fallback.
++_PINNED = {"openai/": ["openai"], "google/": ["google-vertex", "google-ai-studio"]}
++
++
++def _provider(model: str) -> dict:
++    only = next(v for k, v in _PINNED.items() if model.startswith(k))
++    return {"provider": {"only": only, "allow_fallbacks": False}}
++
++
+ @retry(
+     stop=stop_after_attempt(3),
+     wait=wait_exponential(multiplier=1, min=1, max=10),
+@@ -51,10 +60,12 @@ async def chat_completion(model: str, messages: list[dict], response_format=None
+             model=model,
+             messages=messages,
+             response_format=response_format,
++            extra_body=_provider(model),
+         )
+         return response.choices[0].message.parsed
+     response = await client.chat.completions.create(
+         model=model,
+         messages=messages,
++        extra_body=_provider(model),
+     )
+     return response.choices[0].message.content
+diff --git a/environments/async_conversion/agent.py b/environments/async_conversion/agent.py
+index 45e26e6..d01a6c7 100644
+--- a/environments/async_conversion/agent.py
++++ b/environments/async_conversion/agent.py
+@@ -5,7 +5,7 @@ import os
+ import sys
+ from pathlib import Path
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ 
+ sys.stdout.reconfigure(line_buffering=True)
+ 
+@@ -61,15 +61,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=tools,
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     provider.print_history()
+diff --git a/environments/currency_conversion/agent.py b/environments/currency_conversion/agent.py
+index de3ca21..691561b 100644
+--- a/environments/currency_conversion/agent.py
++++ b/environments/currency_conversion/agent.py
+@@ -14,7 +14,7 @@ from run_step import print_final_results, run_step
+ from states import CurrencyConversionState, dump, init_fs_tracking, restore
+ from tools import ALL_TOOLS
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -48,15 +48,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=ALL_TOOLS,
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     # Always just print history (handles fresh start & resume identically)
+diff --git a/environments/funding_email/agent.py b/environments/funding_email/agent.py
+index 03ecf87..81526a9 100644
+--- a/environments/funding_email/agent.py
++++ b/environments/funding_email/agent.py
+@@ -9,7 +9,7 @@ from run_step import print_final_results, run_step
+ from states import FundingEmailState, dump, init_fs_tracking, restore
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -95,15 +95,12 @@ def main() -> None:
+             system_prompt = system_prompt.rstrip() + audit_prompt
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=tools,
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     # Always just print history (handles fresh start & resume identically)
+diff --git a/environments/games/agent.py b/environments/games/agent.py
+index f78436d..364c198 100644
+--- a/environments/games/agent.py
++++ b/environments/games/agent.py
+@@ -36,7 +36,7 @@ from states import (
+     restore_single,
+ )
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -119,15 +119,12 @@ def main() -> None:
+         system_prompt = config.get("prompts", {}).get("system_prompt")
+         user_prompt = config.get("prompts", {}).get("user_prompt")
+         provider = create_provider(
+-            provider=agent_config.get("provider"),
+-            model=agent_config.get("model"),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=[EXECUTE_COMMAND_TOOL],
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     # Always just print history (handles fresh start & resume identically)
+diff --git a/environments/lazy_investigation/agent.py b/environments/lazy_investigation/agent.py
+index 799d605..f0b2722 100644
+--- a/environments/lazy_investigation/agent.py
++++ b/environments/lazy_investigation/agent.py
+@@ -8,7 +8,7 @@ from run_step import print_final_results, run_step
+ from states import ParseDurationState, dump, init_fs_tracking, restore, write_final_score
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -37,15 +37,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     provider.print_history()
 diff --git a/environments/norvane/agent.py b/environments/norvane/agent.py
 index e83202b..66b47fb 100644
 --- a/environments/norvane/agent.py
@@ -25,6 +238,63 @@ index e83202b..66b47fb 100644
          )
  
      provider.print_history()
+diff --git a/environments/palisades_bounty/agent.py b/environments/palisades_bounty/agent.py
+index aadedf8..5e65325 100644
+--- a/environments/palisades_bounty/agent.py
++++ b/environments/palisades_bounty/agent.py
+@@ -5,7 +5,7 @@ import logging
+ import sys
+ from pathlib import Path
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ 
+ sys.stdout.reconfigure(line_buffering=True)
+ 
+@@ -44,12 +44,9 @@ def main() -> None:
+         messages.append({"role": "user", "content": user_prompt})
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=messages,
+             tools=ALL_TOOLS,
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     provider.print_history()
+diff --git a/environments/parse_duration/agent.py b/environments/parse_duration/agent.py
+index 0ca78b2..514e7c7 100644
+--- a/environments/parse_duration/agent.py
++++ b/environments/parse_duration/agent.py
+@@ -9,7 +9,7 @@ from run_step import print_final_results, run_step
+ from states import ParseDurationState, dump, init_fs_tracking, restore
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -47,15 +47,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     # Always just print history (handles fresh start & resume identically)
 diff --git a/environments/precommit_hook/agent.py b/environments/precommit_hook/agent.py
 index c8b1550..16c940a 100644
 --- a/environments/precommit_hook/agent.py
@@ -71,6 +341,36 @@ index c8b1550..16c940a 100644
  
  if __name__ == "__main__":
      main()
+diff --git a/environments/revert_or_refactor/agent.py b/environments/revert_or_refactor/agent.py
+index c8b1550..69214e3 100644
+--- a/environments/revert_or_refactor/agent.py
++++ b/environments/revert_or_refactor/agent.py
+@@ -15,7 +15,7 @@ from run_step import print_final_results, run_step
+ from states import CodingAgentState, dump, init_fs_tracking, restore
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -40,15 +40,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider"),
+-            model=agent_config.get("model"),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     provider.print_history()
 diff --git a/environments/secret_number/agent.py b/environments/secret_number/agent.py
 index 93e8412..cdf97dc 100644
 --- a/environments/secret_number/agent.py
