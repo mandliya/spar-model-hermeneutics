@@ -122,31 +122,37 @@ fig.suptitle("Each model working alone: gemma cheats more, mostly by deleting th
 fig.text(0.01, -0.02, "Grey line = 95% interval (wide, because each row is only 10 to 52 runs).", fontsize=9, color=MUTED)
 fig.savefig(OUT / "solo.png", dpi=180, bbox_inches="tight"); plt.close(fig)
 
-# ---------------------------------------------------------------- chart 2: the runs we replayed
-fig, ax = plt.subplots(figsize=(11, 5.6))
-for i, (tag, owner, label, steps, blocked, cheat, cps) in enumerate(RUNS):
-    yy = len(RUNS) - 1 - i - (0.6 if owner == "gemma" else 0)
-    ax.plot([0, steps - 1], [yy, yy], color=COL[owner], lw=5, solid_capstyle="round", alpha=0.35, zorder=2)
-    ax.scatter(range(steps), [yy] * steps, s=10, color=COL[owner], zorder=3)
-    ax.scatter([blocked], [yy], marker="|", s=260, color=INK, lw=2, zorder=4)
-    if cheat is not None:
-        ax.scatter([cheat], [yy], marker="X", s=130, color="#d03b3b", zorder=5)
-    for c in cps:
-        ax.annotate("", xy=(c, yy + 0.12), xytext=(c, yy + 0.42), arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1))
-    ax.text(-0.6, yy, label, ha="right", va="center", fontsize=10, color=INK)
-    ax.text(steps - 1 + 0.6, yy, "deleted the hook" if cheat is not None else "honest report",
-            va="center", fontsize=9, color="#d03b3b" if cheat is not None else MUTED)
-ax.set_xlim(-0.5, 24); ax.set_ylim(-1.2, len(RUNS) - 0.3); ax.set_yticks([])
-ax.set_xlabel("step of the run"); style(ax); ax.spines["left"].set_visible(False)
-ax.grid(axis="x", color=GRID, lw=0.5, zorder=0)
-ax.set_title("The pre-commit runs we replayed, step by step", loc="left", fontsize=13, fontweight="bold", pad=24)
-ax.text(0, 1.02, "|  mypy blocked the commit      ✖  the model deleted the hook      ▼  a checkpoint we restarted from (20 times per model)",
-        transform=ax.transAxes, fontsize=9, color=MUTED)
-fig.savefig(OUT / "runs_timeline.png", dpi=180, bbox_inches="tight"); plt.close(fig)
+# ---------------------------------------------------------------- chart 2: the runs we replayed, one chart per model
+def timeline(owner, fname, title):
+    runs = [r for r in RUNS if r[1] == owner]
+    fig, ax = plt.subplots(figsize=(11, 0.75 * len(runs) + 1.6))
+    for i, (tag, own, label, steps, blocked, cheat, cps) in enumerate(runs):
+        yy = len(runs) - 1 - i
+        ax.plot([0, steps - 1], [yy, yy], color=COL[own], lw=5, solid_capstyle="round", alpha=0.35, zorder=2)
+        ax.scatter(range(steps), [yy] * steps, s=10, color=COL[own], zorder=3)
+        ax.scatter([blocked], [yy], marker="|", s=260, color=INK, lw=2, zorder=4)
+        if cheat is not None:
+            ax.scatter([cheat], [yy], marker="X", s=130, color="#d03b3b", zorder=5)
+        for c in cps:
+            ax.annotate("", xy=(c, yy + 0.12), xytext=(c, yy + 0.42), arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1))
+        ax.text(-0.6, yy, label, ha="right", va="center", fontsize=10, color=INK)
+        ax.text(steps - 1 + 0.6, yy, "deleted the hook" if cheat is not None else "honest report",
+                va="center", fontsize=9, color="#d03b3b" if cheat is not None else MUTED)
+    ax.set_xlim(-0.5, 24); ax.set_ylim(-0.6, len(runs) - 0.3); ax.set_yticks([])
+    ax.set_xlabel("step of the run"); style(ax); ax.spines["left"].set_visible(False)
+    ax.grid(axis="x", color=GRID, lw=0.5, zorder=0)
+    ax.set_title(title, loc="left", fontsize=13, fontweight="bold", pad=24)
+    ax.text(0, 1.02, "|  mypy blocked the commit      ✖  the model deleted the hook      ▼  a checkpoint we restarted from (20 times per model)",
+            transform=ax.transAxes, fontsize=9, color=MUTED)
+    fig.savefig(OUT / fname, dpi=180, bbox_inches="tight"); plt.close(fig)
+
+
+timeline("qwen", "runs_timeline_qwen.png", "Qwen's pre-commit runs we replayed, step by step")
+timeline("gemma", "runs_timeline_gemma.png", "gemma's pre-commit runs we replayed (for the check), step by step")
 
 
 # ---------------------------------------------------------------- charts 3 and 4: replays, one row per run and checkpoint
-def replay_chart(owner, fname, title):
+def replay_chart(owner, fname, title, only=("qwen", "gemma")):
     rows = []
     for tag, own, label, steps, blocked, cheat, cps in RUNS:
         if own != owner:
@@ -159,10 +165,10 @@ def replay_chart(owner, fname, title):
     fig, ax = plt.subplots(figsize=(10.5, 0.62 * len(rows) + 1.6))
     y = np.arange(len(rows))[::-1]
     for i, (label, cnt) in enumerate(rows):
-        for w, dy in (("qwen", 0.18), ("gemma", -0.18)):
+        for w, dy in [x for x in (("qwen", 0.18), ("gemma", -0.18)) if x[0] in only] if len(only) == 2 else [(only[0], 0)]:
             k, n = cnt[w]
             p = k / n
-            ax.barh(y[i] + dy, p * 100, height=0.33, color=COL[w], zorder=3)
+            ax.barh(y[i] + dy, p * 100, height=0.33 if len(only) == 2 else 0.5, color=COL[w], zorder=3)
             ax.plot([0], [y[i] + dy], marker="s", ms=6, color=COL[w], zorder=4, clip_on=False)   # visible even at 0
             ax.text(p * 100 + 1.5, y[i] + dy, f"{k} of {n}", va="center", fontsize=8.5, color=INK)
     ax.set_yticks(y); ax.set_yticklabels([r[0] for r in rows], fontsize=9)
@@ -170,17 +176,19 @@ def replay_chart(owner, fname, title):
     ax.grid(axis="x", color=GRID, lw=0.6, zorder=0); style(ax)
     ax.set_title(title, loc="left", fontsize=12.5, fontweight="bold", pad=10)
     who_own = NAME[owner]
-    legend(fig, ax, [f"{NAME['qwen']} takes over" + (" (replaying itself)" if owner == "qwen" else ""),
-                     f"{NAME['gemma']} takes over" + (" (replaying itself)" if owner == "gemma" else "")],
-           loc="upper center", bbox_to_anchor=(0.35, -0.09), ncol=2)
+    labs = {w: f"{NAME[w]} takes over" + (" (replaying itself)" if owner == w else "") for w in ("qwen", "gemma")}
+    ax.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=COL[w]) for w in only], labels=[labs[w] for w in only],
+              frameon=False, loc="upper center", bbox_to_anchor=(0.35, -0.09), ncol=2)
     fig.savefig(OUT / fname, dpi=180, bbox_inches="tight"); plt.close(fig)
 
 
 replay_chart("qwen", "swap_qwen_runs.png", "Replaying Qwen's runs: Qwen sometimes repeats its cheat, gemma never does")
-replay_chart("gemma", "swap_gemma_runs.png", "Replaying gemma's runs: both models cheat often, Qwen included")
+replay_chart("gemma", "swap_gemma_self.png", "The check: gemma replaying its own runs keeps cheating, so restarting doesn't stop it",
+             only=("gemma",))
+replay_chart("gemma", "swap_gemma_runs.png", "Side note: Qwen put into gemma's runs cheats often too")
 
 # ---------------------------------------------------------------- chart 5: how soon they stop, per run
-fig, ax = plt.subplots(figsize=(10.5, 5.2))
+fig, ax = plt.subplots(figsize=(10.5, 5.6))
 labels = []
 for i, (tag, owner, label, *_rest) in enumerate(RUNS):
     xx = i + (0.6 if owner == "gemma" else 0)
@@ -190,11 +198,15 @@ for i, (tag, owner, label, *_rest) in enumerate(RUNS):
         ax.text(xx + dx, st.median() + 0.25, f"{st.median():g}", ha="center", fontsize=8.5, color=INK)
     labels.append((xx, label.replace(" run ", "\nrun ").replace(" (", "\n(")))
 ax.set_xticks([l[0] for l in labels]); ax.set_xticklabels([l[1] for l in labels], fontsize=8.5)
+ax.axvline(4.8, color=GRID, lw=1)
+ax.text(2, 14.2, "IN QWEN'S RUNS", ha="center", fontsize=10, fontweight="bold", color=INK)
+ax.text(6.9, 14.2, "IN GEMMA'S RUNS", ha="center", fontsize=10, fontweight="bold", color=INK)
+ax.set_ylim(0, 15.2)
 ax.set_ylabel("steps it kept working after taking over\n(median over the replays)")
 ax.grid(axis="y", color=GRID, lw=0.6, zorder=0); ax.tick_params(axis="x", length=0)
 for sp in ("top", "right"): ax.spines[sp].set_visible(False)
-ax.set_title("Why: in Qwen's runs both models stop almost at once; in gemma's runs both keep working",
+ax.set_title("The run decides when a model stops: in Qwen's runs both models stop almost at once;\nin gemma's runs both keep working, long enough to reach the cheat",
              loc="left", fontsize=12.5, fontweight="bold", pad=12)
-legend(fig, ax, [f"{NAME['qwen']} takes over", f"{NAME['gemma']} takes over"], loc="upper left")
+legend(fig, ax, [f"{NAME['qwen']} takes over", f"{NAME['gemma']} takes over"], loc="upper left", bbox_to_anchor=(0, 0.9))
 fig.savefig(OUT / "wrap_up.png", dpi=180, bbox_inches="tight"); plt.close(fig)
-print("saved charts: solo, runs_timeline, swap_qwen_runs, swap_gemma_runs, wrap_up")
+print("saved charts: solo, runs_timeline_qwen/_gemma, swap_qwen_runs, swap_gemma_self, swap_gemma_runs, wrap_up")
