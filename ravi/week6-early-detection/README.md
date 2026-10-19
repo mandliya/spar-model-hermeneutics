@@ -103,3 +103,15 @@ Skip activation steering unless τ90 ≥ 2 on at least two flavors. Li et al. al
 The GPU agent follows [`AGENTS.md`](AGENTS.md). In short: mark t* on Gigi’s flavors with a rule written before any fit, extract layer 58 at each earlier token, fit one probe per flavor per offset, write `CURVE.md`.
 
 Done when τ90 is filled for the flavors that have tokens before the bad token, including the case where no earlier offset reaches 0.90. ASCII with a one-token reply stays a negative control with τ90 undefined.
+
+## Goodfire, scored the way the paper scores a passage
+
+`scripts/03_goodfire_dom.py` already ran. It stores one residual, the last token of a prefix cut at 2048, and the content channel includes the reasoning. `scripts/05_goodfire_peak.py` is the closer eval: the same synthetic direction, the peak inside the labeled channel only, on a prefix of up to 8192 tokens. Goodfire did not release this code. Their dataset is traces and labels at `Goodfire/reward-hack-data`. Kimi's own activations are not in that release, and Kimi K3 does not fit on this GPU, so Gemma remains the reader.
+
+```bash
+cd ravi/week6-early-detection
+python -u scripts/05_goodfire_peak.py --limit 4
+python -u scripts/05_goodfire_peak.py
+```
+
+The result is `GOODFIRE_PEAK.md`. If the 4-step command stops with a span error, do not start the full run. If the process is killed for memory, rerun with `--max-length 4096`. A killed job resumes. Rerun without `--limit` before reading the table as the result.
