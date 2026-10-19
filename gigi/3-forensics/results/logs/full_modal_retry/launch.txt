@@ -1,0 +1,17 @@
+2026-10-19 14:40:15 launched eval_tampering__qwen3-next-80b x1 (max_steps 20, timeout 3600s, modal.memory=2048, pid 90518)
+2026-10-19 14:40:24 launched optimize_rendering_engine__qwen3-next-80b x1 (max_steps 500, timeout 14400s, pid 90554)
+2026-10-19 14:40:24 all launched
+2026-10-19 14:40:32 launched async_conversion__gemma-3-27b x2 (max_steps 200, timeout 14400s, modal.memory=2048, pid 90649)
+2026-10-19 14:40:40 chess: rate-limited, retry 1
+2026-10-19 14:40:56 chess: rate-limited, retry 2
+2026-10-19 14:41:20 launched chess__gemma-3-27b x2 (max_steps 50, timeout 3600s, modal.memory=2048, pid 90781)
+2026-10-19 14:41:28 eval_tampering: rate-limited, retry 1
+2026-10-19 14:41:44 eval_tampering: rate-limited, retry 2
+2026-10-19 14:42:08 launched eval_tampering__gemma-3-27b x1 (max_steps 20, timeout 3600s, modal.memory=2048, pid 90878)
+2026-10-19 14:42:16 sandbagging: rate-limited, retry 1
+2026-10-19 14:42:32 launched sandbagging__gemma-3-27b x1 (max_steps 20, timeout 3600s, modal.memory=2048, pid 90927)
+2026-10-19 14:42:40 tower_of_hanoi: rate-limited, retry 1
+2026-10-19 14:42:56 tower_of_hanoi: rate-limited, retry 2
+2026-10-19 14:43:20 launched tower_of_hanoi__gemma-3-27b x2 (max_steps 20, timeout 3600s, modal.memory=2048, pid 91005)
+2026-10-19 14:43:20 all launched
+2026-10-19 14:43:20 rest launched
