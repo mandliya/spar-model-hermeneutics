@@ -1,0 +1,44 @@
+2026-10-19 11:27:17 launched lucky_seed__qwen3-next-80b x2 (max_steps 500, timeout 14400s, pid 85501)
+2026-10-19 11:27:25 launched dashboard_costly_failure__qwen3-next-80b x3 (max_steps 500, timeout 14400s, pid 85593)
+2026-10-19 11:27:33 chess: rate-limited, retry 1
+2026-10-19 11:27:49 chess: rate-limited, retry 2
+2026-10-19 11:28:13 launched chess__qwen3-next-80b x10 (max_steps 50, timeout 3600s, modal.memory=2048, pid 85781)
+2026-10-19 11:28:21 launched tower_of_hanoi__qwen3-next-80b x7 (max_steps 20, timeout 3600s, modal.memory=2048, pid 85811)
+2026-10-19 11:28:29 funding_email: rate-limited, retry 1
+2026-10-19 11:28:45 funding_email: rate-limited, retry 2
+2026-10-19 11:29:09 launched funding_email__qwen3-next-80b x2 (max_steps 30, timeout 3600s, modal.memory=2048, pid 85899)
+2026-10-19 11:29:17 lazy_investigation: rate-limited, retry 1
+2026-10-19 11:29:33 lazy_investigation: rate-limited, retry 2
+2026-10-19 11:29:57 launched lazy_investigation__qwen3-next-80b x4 (max_steps 30, timeout 3600s, modal.memory=2048, pid 85976)
+2026-10-19 11:30:05 eval_tampering: rate-limited, retry 1
+2026-10-19 11:30:21 launched eval_tampering__qwen3-next-80b x2 (max_steps 20, timeout 3600s, modal.memory=2048, pid 86038)
+2026-10-19 11:30:29 sandbagging: rate-limited, retry 1
+2026-10-19 11:30:45 sandbagging: rate-limited, retry 2
+2026-10-19 11:31:09 launched sandbagging__qwen3-next-80b x1 (max_steps 20, timeout 3600s, modal.memory=2048, pid 86118)
+2026-10-19 11:31:17 parse_duration: rate-limited, retry 1
+2026-10-19 11:31:33 parse_duration: rate-limited, retry 2
+2026-10-19 11:31:57 launched parse_duration__qwen3-next-80b x6 (max_steps 10, timeout 3600s, modal.memory=2048, pid 86212)
+2026-10-19 11:31:57 all launched
+2026-10-19 11:32:06 lucky_seed: rate-limited, retry 1
+2026-10-19 11:32:22 launched lucky_seed__gemma-3-27b x1 (max_steps 500, timeout 14400s, pid 86265)
+2026-10-19 11:32:30 reference_extraction: rate-limited, retry 1
+2026-10-19 11:32:46 launched reference_extraction__gemma-3-27b x3 (max_steps 250, timeout 14400s, pid 86313)
+2026-10-19 11:32:54 launched chess__gemma-3-27b x11 (max_steps 50, timeout 3600s, modal.memory=2048, pid 86336)
+2026-10-19 11:33:02 tictactoe: rate-limited, retry 1
+2026-10-19 11:33:18 tictactoe: rate-limited, retry 2
+2026-10-19 11:33:42 launched tictactoe__gemma-3-27b x7 (max_steps 30, timeout 3600s, modal.memory=2048, pid 86439)
+2026-10-19 11:33:50 tower_of_hanoi: rate-limited, retry 1
+2026-10-19 11:34:06 launched tower_of_hanoi__gemma-3-27b x8 (max_steps 20, timeout 3600s, modal.memory=2048, pid 86499)
+2026-10-19 11:34:14 lazy_investigation: rate-limited, retry 1
+2026-10-19 11:34:30 lazy_investigation: rate-limited, retry 2
+2026-10-19 11:34:54 launched lazy_investigation__gemma-3-27b x7 (max_steps 30, timeout 3600s, modal.memory=2048, pid 86575)
+2026-10-19 11:35:02 eval_tampering: rate-limited, retry 1
+2026-10-19 11:35:18 eval_tampering: rate-limited, retry 2
+2026-10-19 11:35:42 launched eval_tampering__gemma-3-27b x11 (max_steps 20, timeout 3600s, modal.memory=2048, pid 86673)
+2026-10-19 11:35:50 sandbagging: rate-limited, retry 1
+2026-10-19 11:36:06 launched sandbagging__gemma-3-27b x13 (max_steps 20, timeout 3600s, modal.memory=2048, pid 86731)
+2026-10-19 11:36:14 parse_duration: rate-limited, retry 1
+2026-10-19 11:36:30 parse_duration: rate-limited, retry 2
+2026-10-19 11:36:55 launched parse_duration__gemma-3-27b x11 (max_steps 10, timeout 3600s, modal.memory=2048, pid 86860)
+2026-10-19 11:36:55 all launched
+2026-10-19 11:36:55 rest launched

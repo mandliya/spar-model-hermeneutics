@@ -1,0 +1,5 @@
+2026-10-19 10:52:41 launching qwen3-next-80b
+2026-10-19 11:00:23 launching gemma-3-27b
+2026-10-19 11:07:26 our apps still running: 43
+2026-10-19 11:17:28 our apps still running: 41
+2026-10-19 11:25:45 launchers stopped: every remaining run is launched at once so the laptop can go (stage full_modal_rest)
