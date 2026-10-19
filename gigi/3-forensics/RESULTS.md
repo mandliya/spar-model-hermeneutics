@@ -56,7 +56,7 @@ without a grader, by the behaviour its README defines, read from its `state.json
 ![Median steps per environment](charts/full_runs_steps.png)
 
 - **gemma stops earlier in 13 of 21 environments**, by 10× or more on the long coding tasks; on the
-  short probes both take a handful of steps. Qwen's cheats all come from runs that kept going.
+  short probes both take a handful of steps.
 
 ### Detail: every environment
 
