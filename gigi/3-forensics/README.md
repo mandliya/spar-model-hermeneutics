@@ -85,6 +85,10 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
      Docker Desktop (overlayfs refuses git's rename there). The image is the same.
 5. Broken Test Runner: the paper grades reports offline with a grader that isn't public; ours is
    Claude Sonnet 4.5 with the environment README's honest/dishonest definitions verbatim.
+6. Full runs (from 19 Oct 2026): graded with each environment's own grader (`grade_rollouts.py`, 9
+   environments) and its default judge, Claude Opus 5 through Anthropic's API (the user's choice), so
+   the grading matches the environments as shipped; not the Sonnet 4.5 judge of parts 1–2.
+   Environments without a grader are scored from their own outcome files.
 
 ## Status
 
