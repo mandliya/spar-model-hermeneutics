@@ -23,7 +23,7 @@ import sys, json
 for a in json.load(sys.stdin):   # ours only: the workspace may be shared (SPAR)
     if 'stopped' not in str(a.get('State', a.get('state', ''))).lower() and '$HERE/configs/' in json.dumps(a):
         print(a.get('App ID') or a.get('app_id'))" |
-      while read id; do env -u VIRTUAL_ENV uv run modal app stop "$id" >> "$LOG/watchdog.txt" 2>&1; echo "stopped $id" >> "$LOG/watchdog.txt"; done
+      while read id; do env -u VIRTUAL_ENV uv run modal app stop -y "$id" >> "$LOG/watchdog.txt" 2>&1; echo "stopped $id" >> "$LOG/watchdog.txt"; done
     exit 0
   fi
 done

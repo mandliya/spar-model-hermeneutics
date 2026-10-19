@@ -1,0 +1,72 @@
+diff --git a/scripts/run_modal.py b/scripts/run_modal.py
+index 1794cb6..c0be71c 100644
+--- a/scripts/run_modal.py
++++ b/scripts/run_modal.py
+@@ -563,6 +563,21 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, timeout_s, max_concurrent=None, ga
+         return list(pool.map(_run_one, jobs))
+ 
+ 
++# =============================================================================
++# SERVER-SIDE DISPATCH (--server-dispatch)
++# =============================================================================
++#
++# run_isolated_jobs drives the sandboxes from the launching machine: its threads start each
++# sandbox and start the next as one finishes, so that machine must stay up until the whole fleet
++# is done. With --server-dispatch the same loop runs in a DEPLOYED Modal app
++# (scripts/modal_dispatcher.py; a call spawned into this ephemeral `modal run` app is never
++# scheduled once the entrypoint returns). The host resolves everything environment-specific and
++# hands it over as plain data: the sandbox image is built here and passed by id. Isolated,
++# non-sidecar runs only; same creation backoff, machine-gate redraws and rolling window.
++
++DISPATCH_APP = "agent-interp-envs-dispatch"   # scripts/modal_dispatcher.py, deployed once per workspace
++
++
+ # =============================================================================
+ # DOWNLOAD
+ # =============================================================================
+@@ -596,7 +611,8 @@ def download_results(volume, experiment_dir: str, local_root: Path, include_step
+ @app.local_entrypoint()
+ def main(config: str, count: int = 1, overrides: str = "", timeout: int = 86400,
+          no_download: bool = False, download_steps: bool = False, max_concurrent: int = 0,
+-         grace_pct: float = 1.0, grace_mins: float = 10.0, results_dir: str = "", no_judge: bool = False):
++         grace_pct: float = 1.0, grace_mins: float = 10.0, results_dir: str = "", no_judge: bool = False,
++         server_dispatch: bool = False):
+     """
+     Run experiments on Modal.
+ 
+@@ -613,6 +629,9 @@ def main(config: str, count: int = 1, overrides: str = "", timeout: int = 86400,
+             runs are done plus grace_mins (default 1.0 = never; see env_registry.collect_with_grace)
+         results_dir: local results root (default ./results)
+         no_judge: skip the environment's autorater after the download
++        server_dispatch: start the runs from a Modal function and return at once (use with
++            --detach): the launching machine may then sleep. Results stay on the volume (no
++            download, no judge here). Isolated, non-sidecar environments only.
+     """
+     import tempfile
+     from datetime import datetime
+@@ -666,6 +685,25 @@ def main(config: str, count: int = 1, overrides: str = "", timeout: int = 86400,
+         else:
+             cidrs, hosts_pin = _resolve_provider_allowlist()
+             print(f"Network isolation: egress allowlisted to {cidrs} (provider API only); all else blocked.")
++        if server_dispatch:
++            if MODAL_RUN['sidecar']:
++                raise ValueError("--server-dispatch does not support sidecar runs")
++            import inspect
++            iso_image = image.dockerfile_commands(["USER root"])
++            iso_image.build(app)
++            spec = {"image_id": iso_image.object_id, "volume": volume_name, "secrets": SECRET_NAMES, "jobs": jobs,
++                    "timeout": configured_timeout, "resources": _resource_kwargs(),
++                    "allowlist_param": _sandbox_allowlist_param(), "cidrs": cidrs, "hosts_pin": hosts_pin,
++                    "setup_cmd": ISOLATED_SETUP_CMD, "max_concurrent": max_concurrent or 0,
++                    "recovery_setup": (inspect.getsource(_stage_dashboard_checkpoint) +
++                                       "\nimport os\n_stage_dashboard_checkpoint(os.environ['AGENT_OUTPUT_DIR'])")
++                    if _own_loop_env(active_env) else ""}
++            spec.update(argv_cmd=ISOLATED_ARGV_CMD, gate_exit=MACHINE_GATE_EXIT, gate_draws=MACHINE_GATE_MAX_DRAWS,
++                        create_tries=SANDBOX_CREATE_MAX_TRIES, create_max_delay_s=SANDBOX_CREATE_MAX_DELAY_S)
++            call = modal.Function.from_name(DISPATCH_APP, "dispatch").spawn(spec)
++            print(f"Dispatched {count} runs server-side (call {call.object_id}); this machine may now disconnect.")
++            print(f"Results on volume {volume_name} at: {experiment_dir}")
++            return
+         results = run_isolated_jobs(jobs, cidrs, hosts_pin, configured_timeout,
+                                     max_concurrent=max_concurrent or None, gateway=MODAL_RUN['sidecar'])
+     else:
