@@ -11,6 +11,8 @@
 #       call into a structured tool call when the reply has none (its text stays unchanged)
 #     - async_conversion's pristine snapshot moves the workspace repo into /opt with mv, so it builds on
 #       Docker Desktop too (overlayfs refuses git's rename there); the image is the same
+#     - the OpenRouter provider logs every retry ("[provider retry] ..." in rollout.log): a retry resamples
+#       the reply, and DeepInfra drops gemma replies whose tool call it cannot parse, so retries must be visible
 set -euo pipefail
 cd "$(dirname "$0")"
 COMMIT=310c03f

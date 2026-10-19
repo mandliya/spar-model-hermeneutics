@@ -137,12 +137,38 @@ def run_one(env, model, idx, steps, cpu, mem, first):
             lock.notify_all()
 
 
+PROVIDER_FAILURE = re.compile(r"RetryError\[.*raised (RateLimitError|OpenRouterEmptyResponseError)|"
+                              r"InternalServerError: Error code: 5\d\d")
+
+
+def provider_failures():
+    """Finished runs that ended on a provider error (after the harness's own retries): {(env, model): [rollout logs]}.
+    Found through each launch's "Output: <fleet dir>/" line in the per-config log."""
+    out = {}
+    for log in LOG.glob("*__*.log"):
+        env, model = log.stem.split("__")
+        for fleet in re.findall(r"^Output: (\S+)/$", log.read_text(errors="replace"), re.M):
+            rollout = pathlib.Path(fleet) / "run-1" / "rollout.log"
+            if rollout.exists() and PROVIDER_FAILURE.search(rollout.read_text(errors="replace")[-3000:]):
+                out.setdefault((env, model), []).append(str(rollout))
+    return out
+
+
 def main():
     done = {}
     if (LOG / "done.txt").exists():
         for line in (LOG / "done.txt").read_text().splitlines():
             env, model = line.split()[:2]
             done[(env, model)] = done.get((env, model), 0) + 1
+    # Runs lost to provider errors are not data: queue that many again, once per start, except where the
+    # provider fails systematically (SKIP_RETRY="env:model,..."), which retrying cannot fix.
+    skip = {tuple(s.split(":")) for s in os.environ.get("SKIP_RETRY", "").split(",") if s}
+    for (env, model), logs in provider_failures().items():
+        if (env, model) in skip:
+            continue
+        done[(env, model)] -= len(logs)
+        with open(LOG / "retried.txt", "a") as f:
+            f.writelines(f"{time.strftime('%F %T')} {env} {model} requeued after provider failure: {p}\n" for p in logs)
     queue = []
     for model in MODELS:
         for i in range(1, max(COUNTS.values()) + 1):

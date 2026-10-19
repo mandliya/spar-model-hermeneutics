@@ -442,7 +442,7 @@ index 2be7824..a66580f 100644
          ))
      if provider == "fireworks":
 diff --git a/src/agent_interp_envs/providers/openrouter_provider.py b/src/agent_interp_envs/providers/openrouter_provider.py
-index 22428b5..f2d84b2 100644
+index 22428b5..409f89f 100644
 --- a/src/agent_interp_envs/providers/openrouter_provider.py
 +++ b/src/agent_interp_envs/providers/openrouter_provider.py
 @@ -10,7 +10,10 @@ OpenRouter interleaved thinking supported models:
@@ -537,7 +537,17 @@ index 22428b5..f2d84b2 100644
          
  
      @retry(
-@@ -124,6 +178,12 @@ class OpenRouterProvider(BaseProvider):
+@@ -106,6 +160,9 @@ class OpenRouterProvider(BaseProvider):
+         retry=retry_if_exception_type(
+             (RateLimitError, APITimeoutError, APIConnectionError, OpenRouterEmptyResponseError, json.JSONDecodeError)
+         ),
++        # a retry resamples the reply, so log each one: silent resampling would hide replies the provider dropped
++        before_sleep=lambda rs: print(
++            f"[provider retry] attempt {rs.attempt_number} failed: {type(rs.outcome.exception()).__name__}", flush=True),
+     )
+     def invoke(self) -> LLMResponse:
+         """Make an API call to OpenRouter using internal message history.
+@@ -124,6 +181,12 @@ class OpenRouterProvider(BaseProvider):
              raise OpenRouterEmptyResponseError(f"OpenRouter returned no choices: {error}")
  
          message = response.choices[0].message.model_dump()
