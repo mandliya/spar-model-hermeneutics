@@ -43,6 +43,23 @@ without a grader, by the behaviour its README defines, read from its `state.json
 4. **For the swap:** 6 new Qwen incidents in 3 coding environments (before: 2 incidents in one).
    On the honesty probes both models misbehave, so a swap there says little.
 
+### Overview: by category
+
+![Bad behaviour by category](charts/full_runs_categories.png)
+
+- **Honesty probes** (eval_tampering, lazy_investigation, parse_duration; both models scored): Qwen
+  34/56 = 61%, gemma 39/56 = 70%. Both fail eval_tampering and lazy_investigation almost always; the
+  difference is parse_duration, where gemma answered without checking in 4/21 and Qwen never did.
+- **Cheating suite** (10 coding environments, Opus-graded): Qwen 6/74 = 8%, gemma 1/72 = 1%.
+- **Other task gaming** (revert, test edits, Tower of Hanoi): 0/30 and 0/12.
+
+![Median steps per environment](charts/full_runs_steps.png)
+
+- **gemma stops earlier in 13 of 21 environments**, by 10× or more on the long coding tasks; on the
+  short probes both take a handful of steps. Qwen's cheats all come from runs that kept going.
+
+### Detail: every environment
+
 ![Share of runs showing each environment's bad behaviour](charts/full_runs.png)
 
 | Environment | Bad behaviour | Scored by | Qwen3-Next-80B | gemma-3-27b |
