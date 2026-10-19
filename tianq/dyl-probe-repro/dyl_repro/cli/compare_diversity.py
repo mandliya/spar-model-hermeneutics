@@ -29,10 +29,11 @@ from dyl_repro import datasets
 from dyl_repro.cli.compare_generalization import RESULT, fetch
 from dyl_repro.cli.compare_no_followup import NAME as NO_FOLLOWUP_RESULT
 from dyl_repro.cli.evaluate import pull_run
-from dyl_repro.core.model import CURRENT, IS_DEFAULT
+from dyl_repro.core.model import CURRENT, IS_DEFAULT, IS_SELF_READ, READER
 from dyl_repro.core.store import SCRATCH, RowStore, namespaced
 from dyl_repro.datasets.gigi import transfer
 from dyl_repro.datasets.gigi.analyses import diversity, diversity_charts, no_followup
+from dyl_repro.datasets.followups import NO_FOLLOWUP as NO_FOLLOWUP_KEY
 from dyl_repro.datasets.gigi.analyses.generalization import CATEGORIES, FEW, INDEX
 
 NAME = RESULT.replace("generalization_", "diversity_", 1)
@@ -52,16 +53,16 @@ def load(variant: str, dataset: str) -> diversity.Category:
     if not run.complete:
         raise SystemExit(f"{key}: {len(run.cache.records)} rows stored, {run.rows_expected} expected")
     cache = run.cache
-    _, _, x = cache.matrix(diversity.VARIANTS[variant].position, INDEX)
+    uids, _, x = cache.matrix(diversity.VARIANTS[variant].position, INDEX)
     train = np.array([scored(y) for y in datasets.labels(name, cache, followup)])
-    if variant == "none":
+    if diversity.VARIANTS[variant].followup == NO_FOLLOWUP_KEY:
         test = train
     else:
         # Held out, a neutral probe is scored on the denials only: doubled down vs truthful.
         rows, _ = transfer.label_rows(cache, datasets.get(name).FOLLOWUPS[followup], None)
         test = np.array([{"lied_denied": 1, "truthful_denied": 0}.get(r["outcome"], diversity.NOT_SCORED)
                          for r in rows])
-    return diversity.Category(x, train, test)
+    return diversity.Category(x, train, test, tuple(uids))
 
 
 def checkpointed() -> dict[tuple, dict]:
@@ -116,7 +117,8 @@ def stored_reference(variant: str) -> float:
 
 
 def main() -> None:
-    print(f"model {CURRENT.name} @ {CURRENT.revision}, layer {CURRENT.probe_layer} (hidden_states[{INDEX}])", flush=True)
+    print(f"model {READER.name} @ {READER.revision}, layer {READER.probe_layer} (hidden_states[{INDEX}]),"
+          f" reading the conversations of {CURRENT.name}", flush=True)
     plan = diversity.subsets()
     done = checkpointed()
     total = len(diversity.VARIANTS) * len(diversity.LINES) * sum(len(s) for s in plan.values())
@@ -151,7 +153,7 @@ def main() -> None:
                           + f" ({time.time() - started:.1f}s)", flush=True)
 
     # Gemma's transfer matrices are on the Hub; another model has none to reproduce.
-    check = reproduces_matrices(records) if IS_DEFAULT else None
+    check = reproduces_matrices(records) if IS_DEFAULT and IS_SELF_READ else None
     if check is not None:
         print(f"\nk = 1 against the stored transfer matrices: {check['cells_compared']} cells compared,"
               f" {len(check['mismatches'])} differ", flush=True)
@@ -177,7 +179,7 @@ def main() -> None:
     references = {variant: r["mean"] for variant, r in reference_detail.items()}
     for variant, r in reference_detail.items():
         line = f"\nIN-CATEGORY REFERENCE {variant} (each category's own probe, 5-fold): {r['mean']:.4f} over {r['categories']} categories"
-        if IS_DEFAULT:
+        if IS_DEFAULT and IS_SELF_READ:
             stored = stored_reference(variant)
             line += f"; stored by the transfer matrices {stored:.4f}"
             if not np.isclose(stored, r["mean"], rtol=0, atol=1e-9):
@@ -208,10 +210,10 @@ def main() -> None:
             breakdown[variant][line] = {"per_category": table, "splits": splits}
 
     store = RowStore(os.environ["HF_DATASET_REPO"], os.environ["HF_TOKEN"], SCRATCH, "gigi")
-    store.put_chart(NAME, diversity_charts.draw(records, summaries, references, CURRENT, IS_DEFAULT))
+    store.put_chart(NAME, diversity_charts.draw(records, summaries, references, READER, IS_DEFAULT and IS_SELF_READ, CURRENT))
     store.put_result(NAME, {
-        "model": {"name": CURRENT.name, "revision": CURRENT.revision, "probe_layer": CURRENT.probe_layer,
-                  "hidden_states_index": INDEX},
+        "model": {"name": READER.name, "revision": READER.revision, "probe_layer": READER.probe_layer,
+                  "hidden_states_index": INDEX, "conversations_of": CURRENT.name},
         "in_category_reference_detail": reference_detail,
         "design": {"ks": list(diversity.KS), "subsets_per_k": diversity.SUBSETS_PER_K, "seed": diversity.SEED,
                    "size_matched_rows": diversity.SIZE_MATCHED_ROWS, "few": diversity.FEW,

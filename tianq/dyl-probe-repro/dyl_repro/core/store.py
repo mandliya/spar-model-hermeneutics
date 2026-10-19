@@ -43,13 +43,15 @@ from safetensors import safe_open
 from safetensors.torch import save_file
 
 from dyl_repro.core.logs import log_operations, with_retries
-from dyl_repro.core.model import CURRENT, IS_DEFAULT
+from dyl_repro.core.model import CURRENT, IS_DEFAULT, IS_SELF_READ, READER
 from dyl_repro.core.probe import PROBE_POSITION, DylProbe
 
 SCRATCH = Path(__file__).resolve().parents[2] / "scratch"
 # Every key of a model other than Gemma lives under that model's tag, locally and on the Hub
-# (core/model.py); Gemma keeps the original layout.
-NAMESPACE = "" if IS_DEFAULT else CURRENT.tag
+# (core/model.py); Gemma keeps the original layout. A substitute reading another model's
+# conversations lives under "<author>/read_by_<reader>".
+NAMESPACE = (("" if IS_DEFAULT else CURRENT.tag) if IS_SELF_READ
+             else f"{CURRENT.tag}/read_by_{READER.tag}")
 
 
 def namespaced(key: str) -> str:

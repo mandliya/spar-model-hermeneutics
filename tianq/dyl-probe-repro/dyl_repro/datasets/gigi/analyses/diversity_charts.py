@@ -67,10 +67,15 @@ def _panel(ax, variant: str, records: list[dict], summary: dict, reference: floa
     ax.set_title(TITLES[variant], loc="left", fontsize=9.5, color=INK)
 
 
-def draw(records: list[dict], summaries: dict[str, dict], references: dict[str, float], model, is_default: bool) -> Figure:
+def draw(records: list[dict], summaries: dict[str, dict], references: dict[str, float], model, is_default: bool,
+         author=None) -> Figure:
     """records: every probe of diversity.run, with its variant; summaries: variant -> diversity.summary;
-    model: core.model.Model, the model read (its own conversations, its own labels)."""
+    model: core.model.Model, the model read; author: the model whose conversations and lies it reads
+    (model itself when None)."""
     name = model.name.split("/")[-1]
+    author_name = None if author is None or author.name == model.name else author.name.split("/")[-1]
+    reads = (f"{name} reading its own conversations, labelled by its own lies." if author_name is None else
+             f"{name} reading {author_name}'s conversations, labelled by {author_name}'s lies.")
     values = [r["held_out_mean"] for r in records if r.get("held_out_mean") is not None]
     low = min(0.4, min(values) - 0.03)
     high = max(0.85, max(values) + 0.03, *(v + 0.05 for v in references.values()))
@@ -87,7 +92,7 @@ def draw(records: list[dict], summaries: dict[str, dict], references: dict[str, 
         fig.text(0.06, 0.975, f"{name}: does training on more kinds of lie help a probe catch a kind it never saw?",
                  ha="left", va="top", fontsize=12, weight="bold", color=INK)
         fig.text(0.06, 0.93, textwrap.fill(
-            f"{name} reading its own conversations, labelled by its own lies. AISI's probe recipe (logistic"
+            f"{reads} AISI's probe recipe (logistic"
             f" regression, layer {model.probe_layer}), trained on k of Gigi's 11 categories and scored on"
             " each of the others. Faint marks: one training subset each (all subsets for k = 1 and 10, 20 random"
             " ones otherwise), its AUROC averaged over the held-out categories with at least 10 of each class."

@@ -15,7 +15,7 @@ import os
 
 from dyl_repro.cli.compare_diversity import NAME as DIVERSITY
 from dyl_repro.cli.compare_generalization import fetch
-from dyl_repro.core.model import CURRENT
+from dyl_repro.core.model import CURRENT, IS_SELF_READ, READER
 from dyl_repro.core.store import SCRATCH, RowStore
 from dyl_repro.datasets.gigi.analyses import diversity, generalization, generalization_charts
 
@@ -43,16 +43,19 @@ def main() -> None:
     tables = {m["variant"]: generalization.markdown(m, MEASURE) for m in matrices}
     for variant, table in tables.items():
         d = summaries[variant][MEASURE]
-        print(f"\n{CURRENT.name}, {variant}: {summaries[variant]['probes_trained']} probes trained; over cells with at"
+        print(f"\n{READER.name} reading {CURRENT.name}, {variant}: {summaries[variant]['probes_trained']} probes trained;"
+              f" over cells with at"
               f" least {generalization.FEW} of each class: in-category {_number(d['mean_in_category'])}, transfer"
               f" {_number(d['mean_transfer'])} ({d['transfer_cells_at_least_0_7']} of {d['transfer_cells']} cells at 0.7"
               " or more)\n")
         print(table)
 
     store = RowStore(os.environ["HF_DATASET_REPO"], os.environ["HF_TOKEN"], SCRATCH, "gigi")
-    headline = f"{CURRENT.name}: does a probe trained on one kind of lie catch another?"
+    # The reader goes in the caption: with it, the headline runs off the figure.
+    headline = f"{READER.name}: does a probe trained on one kind of lie catch another?"
+    reads = "" if IS_SELF_READ else f"{READER.name} reading {CURRENT.name}'s conversations, labelled by its lies. "
     panels = [(TITLES[m["variant"]], m) for m in matrices]
-    store.put_chart(NAME, generalization_charts.draw(panels, MEASURE, headline, CAPTION))
+    store.put_chart(NAME, generalization_charts.draw(panels, MEASURE, headline, reads + CAPTION))
     store.put_result(NAME, {"model": stored["model"], "from": f"gigi/results/{DIVERSITY}.json",
                             "matrices": matrices, "summary": summaries, "markdown": tables})
 

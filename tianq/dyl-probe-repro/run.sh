@@ -14,6 +14,7 @@
 #   ./run.sh compare_no_followup                              # CPU: the transfer matrix with no follow-up question
 #   ./run.sh compare_diversity                                # CPU: does training on more kinds of lie help on unseen ones?
 #   ./run.sh compare_diversity_matrices                       # CPU: its k = 1 probes as two transfer matrices
+#   ./run.sh compare_faithfulness                             # CPU: target minus substitute probe AUROC (DYL_READER)
 #
 # Every invocation writes its own raw log to scratch/logs/run_<utc>_<command>.log:
 # the exact argv, the environment (python, nvidia-smi, pip freeze), the complete
@@ -37,12 +38,12 @@ set -a
 source <(tr -d '\r' < .env)
 set +a
 
-command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags|compare_no_followup|compare_diversity|compare_diversity_matrices> [args]}"
+command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags|compare_no_followup|compare_diversity|compare_diversity_matrices|compare_faithfulness> [args]}"
 shift
 case "$command" in
-  extract | evaluate | compare_wordings | train_probe | compare_generalization | compare_outcome_flags | compare_no_followup | compare_diversity | compare_diversity_matrices) ;;
+  extract | evaluate | compare_wordings | train_probe | compare_generalization | compare_outcome_flags | compare_no_followup | compare_diversity | compare_diversity_matrices | compare_faithfulness) ;;
   *) echo "unknown command: $command (expected extract, evaluate, compare_wordings, train_probe," \
-          "compare_generalization, compare_outcome_flags, compare_no_followup, compare_diversity or compare_diversity_matrices)" >&2; exit 1 ;;
+          "compare_generalization, compare_outcome_flags, compare_no_followup, compare_diversity, compare_diversity_matrices or compare_faithfulness)" >&2; exit 1 ;;
 esac
 
 if [[ -z "${TMUX:-}" ]] && command -v tmux >/dev/null 2>&1; then
@@ -57,8 +58,8 @@ started=$(date +%s)
   printf '### %s  host=%s  cwd=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$(hostname)" "$PWD"
   printf '$ ./run.sh'
   printf ' %q' "$command" "$@"
-  # Which model the step runs on (dyl_repro/core/model.py); unset means Gemma.
-  printf '\nDYL_MODEL=%s\n--- python\n' "${DYL_MODEL:-}"
+  # Whose conversations, and whose weights read them (dyl_repro/core/model.py); unset means Gemma / DYL_MODEL.
+  printf '\nDYL_MODEL=%s DYL_READER=%s\n--- python\n' "${DYL_MODEL:-}" "${DYL_READER:-}"
   python --version
   printf -- '--- nvidia-smi\n'
   if command -v nvidia-smi >/dev/null; then nvidia-smi; else echo "nvidia-smi not present on this host"; fi

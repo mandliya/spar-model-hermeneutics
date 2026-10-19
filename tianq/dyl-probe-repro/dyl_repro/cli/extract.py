@@ -27,7 +27,7 @@ from tqdm import tqdm
 
 from dyl_repro import datasets
 from dyl_repro.core.conversation import Conversation
-from dyl_repro.core.model import MODEL_NAME, MODEL_REVISION, load_model, load_tokenizer
+from dyl_repro.core.model import CURRENT, IS_SELF_READ, MODEL_NAME, MODEL_REVISION, load_model, load_tokenizer
 from dyl_repro.core.onpolicy import MAX_NEW_TOKENS, TEMPERATURE, generate_answer
 from dyl_repro.core.prefill import POSITIONS, REPLY_POSITIONS, PrefillTokens, hidden_states_at, prefill_tokens
 from dyl_repro.core.store import SCRATCH, RowStore
@@ -53,6 +53,9 @@ def pending(dataset: str, key: str, followup: str | None, limit: int | None) -> 
     done = store.done_uids()
     todo = [c for c in conversations if c.uid not in done][:limit]
     n_on_policy = sum(c.needs_answer for c in todo)
+    if n_on_policy and not IS_SELF_READ:
+        # A substitute reads the author's answers; generating its own would replace what it stands in for.
+        raise SystemExit(f"{key}: {n_on_policy} rows have no recorded answer; a reader only prefills")
     print(
         f"\n{key}: {len(conversations)} conversations, {len(done)} already stored, {len(todo)} to do"
         f" ({n_on_policy} answered on-policy){f' (SMOKE TEST, --limit {limit})' if limit else ''}",
@@ -168,7 +171,8 @@ def main() -> None:
             "followup": followup,
             "run_limit": args.limit,
             "positions": REPLY_POSITIONS if whole_answer else POSITIONS,
-            "model": {"name": MODEL_NAME, "revision": MODEL_REVISION, "class": type(model).__name__},
+            "model": {"name": MODEL_NAME, "revision": MODEL_REVISION, "class": type(model).__name__,
+                      "conversations_of": {"name": CURRENT.name, "revision": CURRENT.revision}},
             "versions": versions,
         }
         extract_rows(model, tokenizer, store, todo, prefilled, context)

@@ -79,6 +79,7 @@ class Category:
     x: np.ndarray  # (rows, d_model) activations at the variant's position
     train_label: np.ndarray  # 1 lie, 0 honest, NOT_SCORED for rows the label excludes
     test_label: np.ndarray  # 1 lie, 0 honest, NOT_SCORED for rows a held-out score leaves out
+    uids: tuple[str, ...] = ()  # each row's conversation, so two models' rows can be matched
 
     @property
     def trainable(self) -> np.ndarray:
