@@ -199,6 +199,18 @@ index f78436d..364c198 100644
          )
  
      # Always just print history (handles fresh start & resume identically)
+diff --git a/environments/grade_your_own/grade_rollouts.py b/environments/grade_your_own/grade_rollouts.py
+index 0d1e0bf..9158232 100644
+--- a/environments/grade_your_own/grade_rollouts.py
++++ b/environments/grade_your_own/grade_rollouts.py
+@@ -24,6 +24,7 @@ import sys
+ from pathlib import Path
+ from typing import Literal
+ 
++import yaml
+ from pydantic import BaseModel, Field
+ 
+ from agent_interp_envs.grading import judge_cli
 diff --git a/environments/lazy_investigation/agent.py b/environments/lazy_investigation/agent.py
 index 799d605..f0b2722 100644
 --- a/environments/lazy_investigation/agent.py
@@ -419,6 +431,45 @@ index 93e8412..cdf97dc 100644
          )
  
      # Always just print history (handles fresh start & resume identically)
+diff --git a/src/agent_interp_envs/grading.py b/src/agent_interp_envs/grading.py
+index e0138a1..a477f01 100644
+--- a/src/agent_interp_envs/grading.py
++++ b/src/agent_interp_envs/grading.py
+@@ -104,6 +104,11 @@ def final_report(run_dir: Path) -> str:
+ 
+ 
+ def judge_client() -> AsyncAnthropic:
++    if os.environ.get("JUDGE_VIA_OPENROUTER"):
++        # OpenRouter's Anthropic-compatible endpoint: same model, prompts and parameters; the provider is
++        # pinned with no fallbacks (_JUDGE_KWARGS) and the model id gets OpenRouter's "anthropic/" prefix.
++        return AsyncAnthropic(max_retries=20, base_url="https://openrouter.ai/api", timeout=1800.0,
++                              api_key=require_api_key("OPENROUTER_API_KEY", "autorater"))
+     return AsyncAnthropic(max_retries=20, api_key=require_api_key("ANTHROPIC_API_KEY", "autorater"),
+                           timeout=1800.0)
+ 
+@@ -114,6 +119,13 @@ JUDGE_TOKEN_LIMIT = 950_000
+ _LONG_CHARS = 1_800_000  # only count tokens for prompts that could be near the limit
+ _STEP_BANNER = re.compile(r"^={20,}\n\s+STEP (\d+)\s*\n={20,}\n", re.M)
+ _JUDGE_KWARGS = {"thinking": {"type": "adaptive"}, "output_config": {"effort": "max"}}
++if os.environ.get("JUDGE_VIA_OPENROUTER"):   # pinned: Anthropic's own endpoint, no fallback to another host
++    _JUDGE_KWARGS["extra_body"] = {"provider": {"only": ["anthropic"], "allow_fallbacks": False}}
++
++
++def _judge_model(model: str) -> str:
++    """OpenRouter names Anthropic's models "anthropic/<id>"."""
++    return f"anthropic/{model}" if os.environ.get("JUDGE_VIA_OPENROUTER") and "/" not in model else model
+ 
+ 
+ class Extract(BaseModel):
+@@ -166,7 +178,7 @@ async def _batch(client: AsyncAnthropic, model: str, requests: Sequence[tuple[li
+             resent_400 = False
+             for attempt in range(_TRANSIENT_ATTEMPTS):
+                 try:
+-                    return await client.messages.parse(model=model, messages=messages, max_tokens=max_tokens,
++                    return await client.messages.parse(model=_judge_model(model), messages=messages, max_tokens=max_tokens,
+                                                        output_format=output_format, **_JUDGE_KWARGS)
+                 except Exception as exc:
+                     if not resent_400 and "Invalid request data" in str(exc):
 diff --git a/src/agent_interp_envs/providers/__init__.py b/src/agent_interp_envs/providers/__init__.py
 index 2be7824..a66580f 100644
 --- a/src/agent_interp_envs/providers/__init__.py

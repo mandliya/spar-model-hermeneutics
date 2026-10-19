@@ -1,1 +1,8 @@
 2026-10-19 14:43:27 our apps running: 9
+2026-10-19 14:51:25 our apps running: 4
+2026-10-19 14:56:27 our apps running: 4
+2026-10-19 15:01:29 our apps running: 0
+2026-10-19 15:01:29 syncing
+2026-10-19 15:16:26 uploading: modal full_laptop
+2026-10-19 15:16:26 upload exited non-zero
+2026-10-19 15:16:26 done

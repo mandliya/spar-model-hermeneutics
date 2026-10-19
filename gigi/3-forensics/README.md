@@ -89,6 +89,13 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
    environments) and its default judge, Claude Opus 5 through Anthropic's API (the user's choice), so
    the grading matches the environments as shipped; not the Sonnet 4.5 judge of parts 1–2.
    Environments without a grader are scored from their own outcome files.
+   - The judge is called through OpenRouter (`JUDGE_VIA_OPENROUTER=1`), pinned to Anthropic's own
+     endpoint with no fallbacks; prompts, rubric, effort (`max`) and thinking are unchanged.
+   - Opus 5's safety classifier refused most transcripts of lucky_seed, lucky_seed_readable_grader,
+     optimize_cache_c and grade_your_own (`stop_reason=refusal`, also on a retry). Those runs were graded
+     by Claude Opus 4.8, the fallback Anthropic documents for Opus 5 refusals; each verdict's
+     `grading.json` names its judge, and the results table says how many each judge graded.
+   - grade_your_own's grader used `yaml` without importing it; fixed (`patches/forensics.patch`).
 
 ## Status
 
@@ -97,7 +104,10 @@ five environments), each model alone (Qwen 96 runs; gemma 108 with the final tra
 model), the swap (180 replays per model from Qwen's runs) and the control (replays from gemma's runs).
 $3.93 in all. Raw runs: `forensics/raw/<stage>.tar.gz` on the HF dataset.
 
-18–19 Oct 2026: **full runs in progress** on the laptop in Docker (`scripts/laptop_full.py`): 23
+19 Oct 2026: **full runs done**, on Modal in SPAR's workspace (530 runs; results and chart in
+[`RESULTS.md`](RESULTS.md), table `results/full_runs.csv`). The laptop pass below is kept as a replication.
+
+18–19 Oct 2026: full runs on the laptop in Docker (`scripts/laptop_full.py`): 23
 environments × 2 models, 570 runs at the paper's step caps, $380 spend cap. Modal was the plan; it
 stopped at the workspace's spend limit. Containers reach only OpenRouter, through an allowlist proxy
 (`scripts/egress_proxy.py`), as Modal's sandboxes did. Runs lost to provider errors are rerun once.

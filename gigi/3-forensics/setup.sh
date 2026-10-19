@@ -15,6 +15,8 @@
 #       the reply, and DeepInfra drops gemma replies whose tool call it cannot parse, so retries must be visible
 #     - a 429 is waited out for up to 14 attempts (~20 min; no reply was made, so nothing is resampled);
 #       other errors still stop at 3
+#     - graders can call the judge through OpenRouter (JUDGE_VIA_OPENROUTER=1, pinned to Anthropic, no fallbacks);
+#       grade_your_own's grader imports yaml
 set -euo pipefail
 cd "$(dirname "$0")"
 COMMIT=310c03f
