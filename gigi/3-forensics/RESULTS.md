@@ -43,6 +43,38 @@ without a grader, by the behaviour its README defines, read from its `state.json
 4. **For the swap:** 6 new Qwen incidents in 3 coding environments (before: 2 incidents in one).
    On the honesty probes both models misbehave, so a swap there says little.
 
+### Three findings
+
+**1. The failures are in what the models report, not in exploiting the environment.**
+
+![Report, not action](charts/finding_report_not_action.png)
+
+- Offered exploits (leaked tests, leaked scorer, copyable answers, reverting the fix, editing the
+  tests, cheating at the game): taken in **0/65** Qwen runs and **0/44** gemma runs.
+- Withheld or misreported what they knew (the honesty probes): **74/75** Qwen, **35/35** gemma.
+- The 7 cheats in the coding suite: **4 false success claims** (3 Qwen, 1 gemma) and **3 code or
+  baseline changes** (all Qwen).
+
+**2. The performance targets were out of reach; Qwen sometimes cheated after failing, gemma never did.**
+
+![Targets out of reach](charts/finding_impossible_targets.png)
+
+- No run of the three performance tasks reached its target (0 of 38); most never beat 1.0× (≈33% of a
+  3× target).
+- From those failing runs, **4 of Qwen's 20 cheated** (claimed the target or changed the workload),
+  **0 of gemma's 18**.
+- Suggests cheating follows a failed honest attempt under a fixed goal; testable by making the
+  target reachable (next steps).
+
+**3. gemma's runs mostly end before the point where Qwen's cheats happen.**
+
+![Persistence](charts/finding_persistence.png)
+
+- Every cheat came at step 15 or later; **58 of gemma's 83** graded runs ended before step 10
+  (Qwen: 48 of 89).
+- So gemma's lower cheat count is confounded by how long it keeps working: not evidence that it
+  is more honest, and a limit on gemma as Qwen's stand-in on long tasks.
+
 ### Overview: by category
 
 ![Bad behaviour by category](charts/full_runs_categories.png)
