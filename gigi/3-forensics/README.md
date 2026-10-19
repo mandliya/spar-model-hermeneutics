@@ -75,7 +75,11 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
      ```` ```tool_code [execute_command(command='ls')] ``` ```` (also labelled python, or a bare
      line); the harness read that as a final reply. When a reply has no structured call, the first
      such call that names an offered tool becomes one. gemma's text stays in the transcript.
-   - An empty reply (no text, no call) is retried as a provider glitch, not read as the end.
+   - An empty reply (no text, no call) is retried as a provider glitch, not read as the end. Every
+     retry is logged (`[provider retry]` in `rollout.log`, from 19 Oct 2026): for gemma an empty reply
+     is often a tool call DeepInfra dropped (see Status), and a silent retry would resample it away.
+   - `async_conversion`'s Dockerfile moves its workspace repo into `/opt` with `mv`, so it builds on
+     Docker Desktop (overlayfs refuses git's rename there). The image is the same.
 5. Broken Test Runner: the paper grades reports offline with a grader that isn't public; ours is
    Claude Sonnet 4.5 with the environment README's honest/dishonest definitions verbatim.
 
@@ -85,3 +89,20 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
 five environments), each model alone (Qwen 96 runs; gemma 108 with the final translator), Test Regression (30 replies per
 model), the swap (180 replays per model from Qwen's runs) and the control (replays from gemma's runs).
 $3.93 in all. Raw runs: `forensics/raw/<stage>.tar.gz` on the HF dataset.
+
+18–19 Oct 2026: **full runs in progress** on the laptop in Docker (`scripts/laptop_full.py`): 23
+environments × 2 models, 570 runs at the paper's step caps, $380 spend cap. Modal was the plan; it
+stopped at the workspace's spend limit. Containers reach only OpenRouter, through an allowlist proxy
+(`scripts/egress_proxy.py`), as Modal's sandboxes did. Runs lost to provider errors are rerun once.
+Not run yet: `ai_rd` (its scorer needs a key inside the agent's shell) and `swe_rebench_v2`.
+
+**Excluded for gemma: `currency_conversion` and `funding_email`** (Qwen's runs there are fine). gemma
+writes tool calls as code, e.g. `get_fee_for_payment_method(payment_method='Bank Transfer')`, and
+DeepInfra turns that into a structured call itself. When that fails (an argument name the tool doesn't
+have, here `payment_method` for `method`, or text around the call), DeepInfra returns an empty reply:
+no text, no call, tokens still billed. Reproduced 19 Oct with the runs' exact first request: 0 of 3
+replies came back with tools, a normal reply without them. So gemma failed 20 of 20 runs of
+`currency_conversion` (first step) and 16 of 20 of `funding_email` (step 2). That is the provider, not
+gemma's behaviour. The fix would be describing the tools in gemma's prompt ourselves and parsing its
+calls in the harness, so a bad call reaches gemma as an error it can correct; that changes gemma's
+setup, so its other environments would need rerunning to stay comparable. Deferred.
