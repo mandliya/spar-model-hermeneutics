@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Stop every running Modal app once the OpenRouter key has spent CAP_USD since this started.
+# Stop every running Modal app of ours (launched from this folder's configs) once the OpenRouter key has spent CAP_USD since this started.
 # Polls every 2 minutes; logs to results/logs/<stage>/watchdog.txt. Runs on the laptop (keep it awake).
 #   FORENSICS_ENV_FILE=... CAP_USD=60 bash gigi/3-forensics/scripts/spend_watchdog.sh <stage>
 # START_USD=<key spend> restarts a watchdog (e.g. with a new cap) counting from the first one's baseline.
@@ -20,8 +20,9 @@ while true; do
     echo "$(date '+%F %T') CAP REACHED: stopping every running Modal app" >> "$LOG/watchdog.txt"
     env -u VIRTUAL_ENV uv run modal app list --json | python3 -c "
 import sys, json
-for a in json.load(sys.stdin):
-    if 'stopped' not in str(a.get('State', a.get('state', ''))).lower(): print(a.get('App ID') or a.get('app_id'))" |
+for a in json.load(sys.stdin):   # ours only: the workspace may be shared (SPAR)
+    if 'stopped' not in str(a.get('State', a.get('state', ''))).lower() and '$HERE/configs/' in json.dumps(a):
+        print(a.get('App ID') or a.get('app_id'))" |
       while read id; do env -u VIRTUAL_ENV uv run modal app stop "$id" >> "$LOG/watchdog.txt" 2>&1; echo "stopped $id" >> "$LOG/watchdog.txt"; done
     exit 0
   fi

@@ -1,0 +1,1442 @@
+2026-10-18 22:50:40 start: 570 runs queued (0 already done), at once: 2 timing + 6 other, mem 12000 MB, spend cap $380
+2026-10-18 22:50:40 start optimize_rendering_engine qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 22:50:40 start optimize_rendering_engine_graded qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 22:50:40 start async_conversion qwen3-next-80b #1 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-18 22:50:40 start revert_or_refactor qwen3-next-80b #1 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-18 22:50:40 start chess qwen3-next-80b #1 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-18 22:50:40 start tictactoe qwen3-next-80b #1 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 22:50:40 start tower_of_hanoi qwen3-next-80b #1 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 22:50:40 spent $0.63 of $380 | running 7
+2026-10-18 22:51:17 finished tower_of_hanoi qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:51:17 start funding_email qwen3-next-80b #1 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 22:51:20 finished tictactoe qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:51:20 start lazy_investigation qwen3-next-80b #1 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 22:51:26 finished optimize_rendering_engine_graded qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:51:26 start grade_your_own qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 22:51:37 finished funding_email qwen3-next-80b #1 rc=0 in 0 min
+2026-10-18 22:51:37 start eval_tampering qwen3-next-80b #1 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 22:51:48 finished eval_tampering qwen3-next-80b #1 rc=0 in 0 min
+2026-10-18 22:51:48 start sandbagging qwen3-next-80b #1 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 22:52:01 finished sandbagging qwen3-next-80b #1 rc=0 in 0 min
+2026-10-18 22:52:01 start currency_conversion qwen3-next-80b #1 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-18 22:52:10 finished grade_your_own qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:52:10 start leaked_tests qwen3-next-80b #1 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-18 22:52:11 finished currency_conversion qwen3-next-80b #1 rc=0 in 0 min
+2026-10-18 22:52:11 start parse_duration qwen3-next-80b #1 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-18 22:52:21 finished parse_duration qwen3-next-80b #1 rc=0 in 0 min
+2026-10-18 22:52:21 start async_conversion qwen3-next-80b #2 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-18 22:52:33 finished lazy_investigation qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 22:52:33 start revert_or_refactor qwen3-next-80b #2 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-18 22:52:42 spent $0.76 of $380 | running 7
+2026-10-18 22:53:59 finished chess qwen3-next-80b #1 rc=0 in 3 min
+2026-10-18 22:53:59 start chess qwen3-next-80b #2 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-18 22:54:42 spent $0.93 of $380 | running 7
+2026-10-18 22:56:25 finished chess qwen3-next-80b #2 rc=0 in 2 min
+2026-10-18 22:56:25 start tictactoe qwen3-next-80b #2 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 22:56:42 spent $1.07 of $380 | running 7
+2026-10-18 22:56:52 finished optimize_rendering_engine qwen3-next-80b #1 rc=0 in 6 min
+2026-10-18 22:56:52 start puppeteer qwen3-next-80b #1 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-18 22:56:52 start tower_of_hanoi qwen3-next-80b #2 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 22:56:54 finished tictactoe qwen3-next-80b #2 rc=0 in 0 min
+2026-10-18 22:56:54 start funding_email qwen3-next-80b #2 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 22:57:13 finished funding_email qwen3-next-80b #2 rc=0 in 0 min
+2026-10-18 22:57:13 start lazy_investigation qwen3-next-80b #2 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 22:57:27 finished tower_of_hanoi qwen3-next-80b #2 rc=0 in 1 min
+2026-10-18 22:57:27 start eval_tampering qwen3-next-80b #2 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 22:57:31 finished lazy_investigation qwen3-next-80b #2 rc=0 in 0 min
+2026-10-18 22:57:31 start sandbagging qwen3-next-80b #2 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 22:57:37 finished eval_tampering qwen3-next-80b #2 rc=0 in 0 min
+2026-10-18 22:57:37 start currency_conversion qwen3-next-80b #2 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-18 22:57:56 finished currency_conversion qwen3-next-80b #2 rc=0 in 0 min
+2026-10-18 22:57:56 start parse_duration qwen3-next-80b #2 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-18 22:57:56 finished sandbagging qwen3-next-80b #2 rc=0 in 0 min
+2026-10-18 22:57:56 start async_conversion qwen3-next-80b #3 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-18 22:58:05 finished parse_duration qwen3-next-80b #2 rc=0 in 0 min
+2026-10-18 22:58:05 start revert_or_refactor qwen3-next-80b #3 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-18 22:58:42 spent $1.21 of $380 | running 8
+2026-10-18 23:00:06 finished leaked_tests qwen3-next-80b #1 rc=0 in 8 min
+2026-10-18 23:00:06 start optimize_lru_cache qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 23:00:42 spent $1.38 of $380 | running 8
+2026-10-18 23:01:25 finished optimize_lru_cache qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 23:01:25 start lucky_seed qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 23:02:42 spent $1.52 of $380 | running 8
+2026-10-18 23:04:43 spent $1.73 of $380 | running 8
+2026-10-18 23:06:43 spent $1.92 of $380 | running 8
+2026-10-18 23:07:30 finished puppeteer qwen3-next-80b #1 rc=0 in 11 min
+2026-10-18 23:07:30 start puppeteer qwen3-next-80b #2 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-18 23:08:43 spent $2.15 of $380 | running 8
+2026-10-18 23:10:43 spent $2.35 of $380 | running 8
+2026-10-18 23:12:43 spent $2.53 of $380 | running 8
+2026-10-18 23:14:43 spent $2.80 of $380 | running 8
+2026-10-18 23:16:44 spent $3.06 of $380 | running 8
+2026-10-18 23:18:44 spent $3.34 of $380 | running 8
+2026-10-18 23:20:44 spent $3.56 of $380 | running 8
+2026-10-18 23:22:44 spent $3.80 of $380 | running 8
+2026-10-18 23:24:44 spent $4.06 of $380 | running 8
+2026-10-18 23:26:44 spent $4.16 of $380 | running 8
+2026-10-18 23:28:45 spent $4.36 of $380 | running 8
+2026-10-18 23:30:45 spent $4.70 of $380 | running 8
+2026-10-18 23:32:10 finished lucky_seed qwen3-next-80b #1 rc=1 in 31 min
+2026-10-18 23:32:10 start lucky_seed_readable_grader qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 23:32:13 finished async_conversion qwen3-next-80b #1 rc=1 in 42 min
+2026-10-18 23:32:13 start chess qwen3-next-80b #3 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-18 23:32:20 finished async_conversion qwen3-next-80b #2 rc=1 in 0 min
+2026-10-18 23:32:20 start tictactoe qwen3-next-80b #3 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 23:32:21 finished chess qwen3-next-80b #3 rc=1 in 0 min
+2026-10-18 23:32:21 start tower_of_hanoi qwen3-next-80b #3 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 23:32:45 spent $5.01 of $380 | running 8
+2026-10-18 23:33:03 finished lucky_seed_readable_grader qwen3-next-80b #1 rc=0 in 1 min
+2026-10-18 23:33:03 start leaked_scorer qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-18 23:34:45 spent $5.30 of $380 | running 8
+2026-10-18 23:34:52 finished tower_of_hanoi qwen3-next-80b #3 rc=0 in 3 min
+2026-10-18 23:34:52 start funding_email qwen3-next-80b #3 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 23:35:08 finished tictactoe qwen3-next-80b #3 rc=0 in 3 min
+2026-10-18 23:35:08 start lazy_investigation qwen3-next-80b #3 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 23:35:34 finished funding_email qwen3-next-80b #3 rc=0 in 1 min
+2026-10-18 23:35:34 start eval_tampering qwen3-next-80b #3 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 23:35:43 finished eval_tampering qwen3-next-80b #3 rc=0 in 0 min
+2026-10-18 23:35:43 start sandbagging qwen3-next-80b #3 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 23:35:45 finished lazy_investigation qwen3-next-80b #3 rc=0 in 1 min
+2026-10-18 23:35:45 start currency_conversion qwen3-next-80b #3 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-18 23:36:24 finished currency_conversion qwen3-next-80b #3 rc=0 in 1 min
+2026-10-18 23:36:24 start parse_duration qwen3-next-80b #3 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-18 23:36:30 finished parse_duration qwen3-next-80b #3 rc=0 in 0 min
+2026-10-18 23:36:30 start async_conversion qwen3-next-80b #4 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-18 23:36:45 spent $5.51 of $380 | running 8
+2026-10-18 23:38:12 finished sandbagging qwen3-next-80b #3 rc=0 in 2 min
+2026-10-18 23:38:12 start revert_or_refactor qwen3-next-80b #4 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-18 23:38:46 spent $5.82 of $380 | running 8
+2026-10-18 23:40:46 spent $6.36 of $380 | running 8
+2026-10-18 23:41:12 finished leaked_scorer qwen3-next-80b #1 rc=0 in 8 min
+2026-10-18 23:41:12 start reference_extraction qwen3-next-80b #1 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-18 23:42:46 spent $6.75 of $380 | running 8
+2026-10-18 23:43:47 finished puppeteer qwen3-next-80b #2 rc=1 in 36 min
+2026-10-18 23:43:47 start puppeteer qwen3-next-80b #3 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-18 23:44:46 spent $7.04 of $380 | running 8
+2026-10-18 23:46:46 spent $7.16 of $380 | running 8
+2026-10-18 23:48:11 finished async_conversion qwen3-next-80b #3 rc=0 in 16 min
+2026-10-18 23:48:11 start chess qwen3-next-80b #4 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-18 23:48:47 spent $7.35 of $380 | running 8
+2026-10-18 23:49:55 finished revert_or_refactor qwen3-next-80b #1 rc=1 in 59 min
+2026-10-18 23:49:55 start tictactoe qwen3-next-80b #4 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 23:50:47 spent $7.61 of $380 | running 8
+2026-10-18 23:50:48 finished puppeteer qwen3-next-80b #3 rc=0 in 7 min
+2026-10-18 23:50:48 start puppeteer qwen3-next-80b #4 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-18 23:51:28 finished tictactoe qwen3-next-80b #4 rc=0 in 2 min
+2026-10-18 23:51:28 start tower_of_hanoi qwen3-next-80b #4 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 23:51:33 finished chess qwen3-next-80b #4 rc=0 in 3 min
+2026-10-18 23:51:33 start funding_email qwen3-next-80b #4 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 23:52:25 finished funding_email qwen3-next-80b #4 rc=0 in 1 min
+2026-10-18 23:52:25 start lazy_investigation qwen3-next-80b #4 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 23:52:40 finished tower_of_hanoi qwen3-next-80b #4 rc=0 in 1 min
+2026-10-18 23:52:40 start eval_tampering qwen3-next-80b #4 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 23:52:47 spent $7.91 of $380 | running 8
+2026-10-18 23:52:55 finished eval_tampering qwen3-next-80b #4 rc=0 in 0 min
+2026-10-18 23:52:55 start sandbagging qwen3-next-80b #4 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 23:52:56 finished lazy_investigation qwen3-next-80b #4 rc=0 in 1 min
+2026-10-18 23:52:56 start currency_conversion qwen3-next-80b #4 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-18 23:53:10 finished currency_conversion qwen3-next-80b #4 rc=0 in 0 min
+2026-10-18 23:53:10 start parse_duration qwen3-next-80b #4 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-18 23:53:38 finished parse_duration qwen3-next-80b #4 rc=0 in 0 min
+2026-10-18 23:53:38 start async_conversion qwen3-next-80b #5 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-18 23:54:47 spent $8.17 of $380 | running 8
+2026-10-18 23:56:40 finished sandbagging qwen3-next-80b #4 rc=0 in 4 min
+2026-10-18 23:56:40 start revert_or_refactor qwen3-next-80b #5 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-18 23:56:47 spent $8.34 of $380 | running 8
+2026-10-18 23:56:58 finished async_conversion qwen3-next-80b #4 rc=0 in 20 min
+2026-10-18 23:56:58 start chess qwen3-next-80b #5 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-18 23:57:30 finished revert_or_refactor qwen3-next-80b #2 rc=0 in 8 min
+2026-10-18 23:57:30 start tictactoe qwen3-next-80b #5 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-18 23:58:37 finished tictactoe qwen3-next-80b #5 rc=0 in 1 min
+2026-10-18 23:58:37 start tower_of_hanoi qwen3-next-80b #5 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-18 23:58:47 spent $8.57 of $380 | running 8
+2026-10-18 23:59:58 finished revert_or_refactor qwen3-next-80b #3 rc=0 in 10 min
+2026-10-18 23:59:58 start funding_email qwen3-next-80b #5 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:00:20 finished tower_of_hanoi qwen3-next-80b #5 rc=0 in 2 min
+2026-10-19 00:00:20 start lazy_investigation qwen3-next-80b #5 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:00:33 finished funding_email qwen3-next-80b #5 rc=0 in 1 min
+2026-10-19 00:00:33 start eval_tampering qwen3-next-80b #5 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:00:40 finished lazy_investigation qwen3-next-80b #5 rc=0 in 0 min
+2026-10-19 00:00:40 start sandbagging qwen3-next-80b #5 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:00:48 spent $8.83 of $380 | running 8
+2026-10-19 00:00:55 finished eval_tampering qwen3-next-80b #5 rc=0 in 0 min
+2026-10-19 00:00:55 start currency_conversion qwen3-next-80b #5 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:01:06 finished currency_conversion qwen3-next-80b #5 rc=0 in 0 min
+2026-10-19 00:01:06 start parse_duration qwen3-next-80b #5 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:01:14 finished parse_duration qwen3-next-80b #5 rc=0 in 0 min
+2026-10-19 00:01:14 start chess qwen3-next-80b #6 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:02:48 spent $9.03 of $380 | running 8
+2026-10-19 00:04:48 spent $9.27 of $380 | running 8
+2026-10-19 00:05:09 finished chess qwen3-next-80b #5 rc=0 in 8 min
+2026-10-19 00:05:09 start tictactoe qwen3-next-80b #6 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:06:31 finished chess qwen3-next-80b #6 rc=0 in 5 min
+2026-10-19 00:06:31 start tower_of_hanoi qwen3-next-80b #6 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:06:48 spent $9.46 of $380 | running 8
+2026-10-19 00:07:37 finished tictactoe qwen3-next-80b #6 rc=0 in 2 min
+2026-10-19 00:07:37 start funding_email qwen3-next-80b #6 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:08:30 finished tower_of_hanoi qwen3-next-80b #6 rc=0 in 2 min
+2026-10-19 00:08:30 start lazy_investigation qwen3-next-80b #6 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:08:48 spent $9.69 of $380 | running 8
+2026-10-19 00:08:55 finished funding_email qwen3-next-80b #6 rc=0 in 1 min
+2026-10-19 00:08:55 start eval_tampering qwen3-next-80b #6 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:09:39 finished eval_tampering qwen3-next-80b #6 rc=0 in 1 min
+2026-10-19 00:09:39 start sandbagging qwen3-next-80b #6 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:10:24 finished sandbagging qwen3-next-80b #6 rc=0 in 1 min
+2026-10-19 00:10:24 start currency_conversion qwen3-next-80b #6 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:10:47 finished currency_conversion qwen3-next-80b #6 rc=0 in 0 min
+2026-10-19 00:10:47 start parse_duration qwen3-next-80b #6 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:10:48 spent $9.96 of $380 | running 8
+2026-10-19 00:11:00 finished parse_duration qwen3-next-80b #6 rc=0 in 0 min
+2026-10-19 00:11:00 start chess qwen3-next-80b #7 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:11:54 finished lazy_investigation qwen3-next-80b #6 rc=0 in 3 min
+2026-10-19 00:11:54 start tictactoe qwen3-next-80b #7 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:12:30 finished tictactoe qwen3-next-80b #7 rc=0 in 1 min
+2026-10-19 00:12:30 start tower_of_hanoi qwen3-next-80b #7 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:12:49 spent $10.29 of $380 | running 8
+2026-10-19 00:13:26 finished tower_of_hanoi qwen3-next-80b #7 rc=0 in 1 min
+2026-10-19 00:13:26 start funding_email qwen3-next-80b #7 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:14:14 finished funding_email qwen3-next-80b #7 rc=0 in 1 min
+2026-10-19 00:14:14 start lazy_investigation qwen3-next-80b #7 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:14:16 finished chess qwen3-next-80b #7 rc=0 in 3 min
+2026-10-19 00:14:16 start eval_tampering qwen3-next-80b #7 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:14:26 finished eval_tampering qwen3-next-80b #7 rc=0 in 0 min
+2026-10-19 00:14:26 start sandbagging qwen3-next-80b #7 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:14:49 spent $10.73 of $380 | running 8
+2026-10-19 00:15:29 finished lazy_investigation qwen3-next-80b #7 rc=0 in 1 min
+2026-10-19 00:15:29 start currency_conversion qwen3-next-80b #7 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:15:44 finished currency_conversion qwen3-next-80b #7 rc=0 in 0 min
+2026-10-19 00:15:44 start parse_duration qwen3-next-80b #7 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:15:57 finished parse_duration qwen3-next-80b #7 rc=0 in 0 min
+2026-10-19 00:15:57 start chess qwen3-next-80b #8 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:16:08 finished sandbagging qwen3-next-80b #7 rc=0 in 2 min
+2026-10-19 00:16:08 start tictactoe qwen3-next-80b #8 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:16:25 finished tictactoe qwen3-next-80b #8 rc=0 in 0 min
+2026-10-19 00:16:25 start tower_of_hanoi qwen3-next-80b #8 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:16:49 spent $11.13 of $380 | running 8
+2026-10-19 00:17:16 finished tower_of_hanoi qwen3-next-80b #8 rc=0 in 1 min
+2026-10-19 00:17:16 start funding_email qwen3-next-80b #8 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:17:48 finished funding_email qwen3-next-80b #8 rc=0 in 1 min
+2026-10-19 00:17:48 start lazy_investigation qwen3-next-80b #8 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:18:31 finished lazy_investigation qwen3-next-80b #8 rc=0 in 1 min
+2026-10-19 00:18:31 start eval_tampering qwen3-next-80b #8 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:18:46 finished eval_tampering qwen3-next-80b #8 rc=0 in 0 min
+2026-10-19 00:18:46 start sandbagging qwen3-next-80b #8 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:18:49 spent $11.60 of $380 | running 8
+2026-10-19 00:19:38 finished revert_or_refactor qwen3-next-80b #4 rc=1 in 30 min
+2026-10-19 00:19:38 start currency_conversion qwen3-next-80b #8 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:19:47 finished currency_conversion qwen3-next-80b #8 rc=0 in 0 min
+2026-10-19 00:19:47 start parse_duration qwen3-next-80b #8 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:19:47 finished async_conversion qwen3-next-80b #5 rc=0 in 26 min
+2026-10-19 00:19:47 start chess qwen3-next-80b #9 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:20:03 finished parse_duration qwen3-next-80b #8 rc=0 in 0 min
+2026-10-19 00:20:03 start tictactoe qwen3-next-80b #9 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:20:15 finished sandbagging qwen3-next-80b #8 rc=0 in 1 min
+2026-10-19 00:20:15 start tower_of_hanoi qwen3-next-80b #9 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:20:40 finished chess qwen3-next-80b #9 rc=0 in 1 min
+2026-10-19 00:20:40 start funding_email qwen3-next-80b #9 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:20:41 finished tictactoe qwen3-next-80b #9 rc=0 in 1 min
+2026-10-19 00:20:41 start lazy_investigation qwen3-next-80b #9 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:20:49 finished puppeteer qwen3-next-80b #4 rc=0 in 30 min
+2026-10-19 00:20:49 start puppeteer qwen3-next-80b #5 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-19 00:20:49 spent $12.23 of $380 | running 8
+2026-10-19 00:20:49 finished chess qwen3-next-80b #8 rc=0 in 5 min
+2026-10-19 00:20:49 start eval_tampering qwen3-next-80b #9 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:20:57 finished tower_of_hanoi qwen3-next-80b #9 rc=0 in 1 min
+2026-10-19 00:20:57 start sandbagging qwen3-next-80b #9 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:20:59 finished eval_tampering qwen3-next-80b #9 rc=0 in 0 min
+2026-10-19 00:20:59 start currency_conversion qwen3-next-80b #9 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:21:06 finished sandbagging qwen3-next-80b #9 rc=0 in 0 min
+2026-10-19 00:21:06 start parse_duration qwen3-next-80b #9 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:21:10 finished currency_conversion qwen3-next-80b #9 rc=0 in 0 min
+2026-10-19 00:21:10 start chess qwen3-next-80b #10 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:21:13 finished funding_email qwen3-next-80b #9 rc=0 in 1 min
+2026-10-19 00:21:13 start tictactoe qwen3-next-80b #10 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:21:15 finished parse_duration qwen3-next-80b #9 rc=0 in 0 min
+2026-10-19 00:21:15 start tower_of_hanoi qwen3-next-80b #10 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:21:37 finished tictactoe qwen3-next-80b #10 rc=0 in 0 min
+2026-10-19 00:21:37 start funding_email qwen3-next-80b #10 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:21:55 finished tower_of_hanoi qwen3-next-80b #10 rc=0 in 1 min
+2026-10-19 00:21:55 start lazy_investigation qwen3-next-80b #10 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:22:00 finished funding_email qwen3-next-80b #10 rc=0 in 0 min
+2026-10-19 00:22:00 start eval_tampering qwen3-next-80b #10 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:22:06 finished lazy_investigation qwen3-next-80b #9 rc=0 in 1 min
+2026-10-19 00:22:06 start sandbagging qwen3-next-80b #10 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:22:08 finished eval_tampering qwen3-next-80b #10 rc=0 in 0 min
+2026-10-19 00:22:08 start currency_conversion qwen3-next-80b #10 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:22:19 finished sandbagging qwen3-next-80b #10 rc=0 in 0 min
+2026-10-19 00:22:19 start parse_duration qwen3-next-80b #10 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:22:23 finished currency_conversion qwen3-next-80b #10 rc=0 in 0 min
+2026-10-19 00:22:23 start chess qwen3-next-80b #11 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:22:24 finished revert_or_refactor qwen3-next-80b #5 rc=0 in 26 min
+2026-10-19 00:22:24 start tictactoe qwen3-next-80b #11 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:22:25 finished parse_duration qwen3-next-80b #10 rc=0 in 0 min
+2026-10-19 00:22:25 start tower_of_hanoi qwen3-next-80b #11 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:22:39 finished tictactoe qwen3-next-80b #11 rc=0 in 0 min
+2026-10-19 00:22:39 start funding_email qwen3-next-80b #11 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:22:49 spent $12.77 of $380 | running 8
+2026-10-19 00:22:54 finished tower_of_hanoi qwen3-next-80b #11 rc=0 in 0 min
+2026-10-19 00:22:54 start lazy_investigation qwen3-next-80b #11 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:23:08 finished funding_email qwen3-next-80b #11 rc=0 in 0 min
+2026-10-19 00:23:08 start eval_tampering qwen3-next-80b #11 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:23:09 finished lazy_investigation qwen3-next-80b #11 rc=0 in 0 min
+2026-10-19 00:23:09 start sandbagging qwen3-next-80b #11 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:23:10 finished chess qwen3-next-80b #10 rc=0 in 2 min
+2026-10-19 00:23:10 start currency_conversion qwen3-next-80b #11 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:23:14 finished lazy_investigation qwen3-next-80b #10 rc=0 in 1 min
+2026-10-19 00:23:14 start parse_duration qwen3-next-80b #11 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:23:15 finished eval_tampering qwen3-next-80b #11 rc=0 in 0 min
+2026-10-19 00:23:15 start chess qwen3-next-80b #12 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:23:17 finished currency_conversion qwen3-next-80b #11 rc=0 in 0 min
+2026-10-19 00:23:17 start tictactoe qwen3-next-80b #12 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:23:19 finished parse_duration qwen3-next-80b #11 rc=0 in 0 min
+2026-10-19 00:23:19 start tower_of_hanoi qwen3-next-80b #12 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:23:24 finished sandbagging qwen3-next-80b #11 rc=0 in 0 min
+2026-10-19 00:23:24 start funding_email qwen3-next-80b #12 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:23:32 finished tictactoe qwen3-next-80b #12 rc=0 in 0 min
+2026-10-19 00:23:32 start lazy_investigation qwen3-next-80b #12 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:23:38 finished chess qwen3-next-80b #11 rc=0 in 1 min
+2026-10-19 00:23:38 start eval_tampering qwen3-next-80b #12 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:23:41 finished funding_email qwen3-next-80b #12 rc=0 in 0 min
+2026-10-19 00:23:41 start sandbagging qwen3-next-80b #12 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:23:45 finished tower_of_hanoi qwen3-next-80b #12 rc=0 in 0 min
+2026-10-19 00:23:45 start currency_conversion qwen3-next-80b #12 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:23:48 finished eval_tampering qwen3-next-80b #12 rc=0 in 0 min
+2026-10-19 00:23:48 start parse_duration qwen3-next-80b #12 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:23:48 finished lazy_investigation qwen3-next-80b #12 rc=0 in 0 min
+2026-10-19 00:23:48 start chess qwen3-next-80b #13 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:23:52 finished sandbagging qwen3-next-80b #12 rc=0 in 0 min
+2026-10-19 00:23:52 start tictactoe qwen3-next-80b #13 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:23:54 finished parse_duration qwen3-next-80b #12 rc=0 in 0 min
+2026-10-19 00:23:54 start tower_of_hanoi qwen3-next-80b #13 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:23:54 finished currency_conversion qwen3-next-80b #12 rc=0 in 0 min
+2026-10-19 00:23:54 start funding_email qwen3-next-80b #13 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:24:09 finished tictactoe qwen3-next-80b #13 rc=0 in 0 min
+2026-10-19 00:24:09 start lazy_investigation qwen3-next-80b #13 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:24:11 finished funding_email qwen3-next-80b #13 rc=0 in 0 min
+2026-10-19 00:24:11 start eval_tampering qwen3-next-80b #13 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:24:17 finished eval_tampering qwen3-next-80b #13 rc=0 in 0 min
+2026-10-19 00:24:17 start sandbagging qwen3-next-80b #13 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:24:19 finished tower_of_hanoi qwen3-next-80b #13 rc=0 in 0 min
+2026-10-19 00:24:19 start currency_conversion qwen3-next-80b #13 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:24:23 finished lazy_investigation qwen3-next-80b #13 rc=0 in 0 min
+2026-10-19 00:24:23 start parse_duration qwen3-next-80b #13 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:24:27 finished currency_conversion qwen3-next-80b #13 rc=0 in 0 min
+2026-10-19 00:24:27 start chess qwen3-next-80b #14 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:24:28 finished sandbagging qwen3-next-80b #13 rc=0 in 0 min
+2026-10-19 00:24:28 start tictactoe qwen3-next-80b #14 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:24:29 finished parse_duration qwen3-next-80b #13 rc=0 in 0 min
+2026-10-19 00:24:29 start tower_of_hanoi qwen3-next-80b #14 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:24:45 finished tictactoe qwen3-next-80b #14 rc=0 in 0 min
+2026-10-19 00:24:45 start funding_email qwen3-next-80b #14 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:24:49 spent $13.11 of $380 | running 8
+2026-10-19 00:24:50 finished tower_of_hanoi qwen3-next-80b #14 rc=0 in 0 min
+2026-10-19 00:24:50 start lazy_investigation qwen3-next-80b #14 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:25:03 finished lazy_investigation qwen3-next-80b #14 rc=0 in 0 min
+2026-10-19 00:25:03 start eval_tampering qwen3-next-80b #14 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:25:08 finished funding_email qwen3-next-80b #14 rc=0 in 0 min
+2026-10-19 00:25:08 start sandbagging qwen3-next-80b #14 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:25:19 finished eval_tampering qwen3-next-80b #14 rc=0 in 0 min
+2026-10-19 00:25:19 start currency_conversion qwen3-next-80b #14 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:25:26 finished chess qwen3-next-80b #12 rc=0 in 2 min
+2026-10-19 00:25:26 start parse_duration qwen3-next-80b #14 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:25:27 finished sandbagging qwen3-next-80b #14 rc=0 in 0 min
+2026-10-19 00:25:27 start chess qwen3-next-80b #15 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:25:29 finished currency_conversion qwen3-next-80b #14 rc=0 in 0 min
+2026-10-19 00:25:29 start tictactoe qwen3-next-80b #15 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:25:31 finished parse_duration qwen3-next-80b #14 rc=0 in 0 min
+2026-10-19 00:25:31 start tower_of_hanoi qwen3-next-80b #15 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:26:01 finished tictactoe qwen3-next-80b #15 rc=0 in 1 min
+2026-10-19 00:26:01 start funding_email qwen3-next-80b #15 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:26:07 finished tower_of_hanoi qwen3-next-80b #15 rc=0 in 1 min
+2026-10-19 00:26:07 start lazy_investigation qwen3-next-80b #15 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:26:09 finished chess qwen3-next-80b #14 rc=0 in 2 min
+2026-10-19 00:26:09 start eval_tampering qwen3-next-80b #15 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:26:18 finished eval_tampering qwen3-next-80b #15 rc=0 in 0 min
+2026-10-19 00:26:18 start sandbagging qwen3-next-80b #15 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:26:28 finished funding_email qwen3-next-80b #15 rc=0 in 0 min
+2026-10-19 00:26:28 start currency_conversion qwen3-next-80b #15 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:26:34 finished currency_conversion qwen3-next-80b #15 rc=0 in 0 min
+2026-10-19 00:26:34 start parse_duration qwen3-next-80b #15 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:26:39 finished parse_duration qwen3-next-80b #15 rc=0 in 0 min
+2026-10-19 00:26:39 start chess qwen3-next-80b #16 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:26:44 finished chess qwen3-next-80b #13 rc=0 in 3 min
+2026-10-19 00:26:44 start tictactoe qwen3-next-80b #16 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:26:50 spent $13.46 of $380 | running 8
+2026-10-19 00:26:53 finished sandbagging qwen3-next-80b #15 rc=0 in 1 min
+2026-10-19 00:26:53 start tower_of_hanoi qwen3-next-80b #16 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:27:09 finished tictactoe qwen3-next-80b #16 rc=0 in 0 min
+2026-10-19 00:27:09 start funding_email qwen3-next-80b #16 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:27:24 finished chess qwen3-next-80b #16 rc=0 in 1 min
+2026-10-19 00:27:24 start lazy_investigation qwen3-next-80b #16 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:27:26 finished tower_of_hanoi qwen3-next-80b #16 rc=0 in 1 min
+2026-10-19 00:27:26 start eval_tampering qwen3-next-80b #16 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:27:27 finished funding_email qwen3-next-80b #16 rc=0 in 0 min
+2026-10-19 00:27:27 start sandbagging qwen3-next-80b #16 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:27:32 finished lazy_investigation qwen3-next-80b #15 rc=0 in 1 min
+2026-10-19 00:27:32 start currency_conversion qwen3-next-80b #16 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:27:34 finished eval_tampering qwen3-next-80b #16 rc=0 in 0 min
+2026-10-19 00:27:34 start parse_duration qwen3-next-80b #16 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:27:43 finished currency_conversion qwen3-next-80b #16 rc=0 in 0 min
+2026-10-19 00:27:43 start chess qwen3-next-80b #17 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:27:46 finished parse_duration qwen3-next-80b #16 rc=0 in 0 min
+2026-10-19 00:27:46 start tictactoe qwen3-next-80b #17 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:27:48 finished chess qwen3-next-80b #15 rc=0 in 2 min
+2026-10-19 00:27:48 start tower_of_hanoi qwen3-next-80b #17 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:28:18 finished tictactoe qwen3-next-80b #17 rc=0 in 1 min
+2026-10-19 00:28:18 start funding_email qwen3-next-80b #17 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:28:22 finished tower_of_hanoi qwen3-next-80b #17 rc=0 in 1 min
+2026-10-19 00:28:22 start lazy_investigation qwen3-next-80b #17 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:28:31 finished funding_email qwen3-next-80b #17 rc=0 in 0 min
+2026-10-19 00:28:31 start eval_tampering qwen3-next-80b #17 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:28:34 finished lazy_investigation qwen3-next-80b #16 rc=0 in 1 min
+2026-10-19 00:28:34 start sandbagging qwen3-next-80b #17 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:28:36 finished sandbagging qwen3-next-80b #16 rc=0 in 1 min
+2026-10-19 00:28:36 start currency_conversion qwen3-next-80b #17 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:28:38 finished eval_tampering qwen3-next-80b #17 rc=0 in 0 min
+2026-10-19 00:28:38 start parse_duration qwen3-next-80b #17 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:28:42 finished parse_duration qwen3-next-80b #17 rc=0 in 0 min
+2026-10-19 00:28:42 start chess qwen3-next-80b #18 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:28:44 finished currency_conversion qwen3-next-80b #17 rc=0 in 0 min
+2026-10-19 00:28:44 start tictactoe qwen3-next-80b #18 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:28:50 spent $13.98 of $380 | running 8
+2026-10-19 00:28:50 finished sandbagging qwen3-next-80b #17 rc=0 in 0 min
+2026-10-19 00:28:50 start tower_of_hanoi qwen3-next-80b #18 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:29:09 finished tictactoe qwen3-next-80b #18 rc=0 in 0 min
+2026-10-19 00:29:09 start funding_email qwen3-next-80b #18 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:29:20 finished tower_of_hanoi qwen3-next-80b #18 rc=0 in 0 min
+2026-10-19 00:29:20 start lazy_investigation qwen3-next-80b #18 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:29:28 finished funding_email qwen3-next-80b #18 rc=0 in 0 min
+2026-10-19 00:29:28 start eval_tampering qwen3-next-80b #18 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:29:33 finished lazy_investigation qwen3-next-80b #18 rc=0 in 0 min
+2026-10-19 00:29:33 start sandbagging qwen3-next-80b #18 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:29:34 finished lazy_investigation qwen3-next-80b #17 rc=0 in 1 min
+2026-10-19 00:29:34 start currency_conversion qwen3-next-80b #18 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:29:37 finished chess qwen3-next-80b #17 rc=0 in 2 min
+2026-10-19 00:29:37 start parse_duration qwen3-next-80b #18 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:29:41 finished eval_tampering qwen3-next-80b #18 rc=0 in 0 min
+2026-10-19 00:29:41 start chess qwen3-next-80b #19 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:29:43 finished parse_duration qwen3-next-80b #18 rc=0 in 0 min
+2026-10-19 00:29:43 start tictactoe qwen3-next-80b #19 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:29:50 finished sandbagging qwen3-next-80b #18 rc=0 in 0 min
+2026-10-19 00:29:50 start tower_of_hanoi qwen3-next-80b #19 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:29:57 finished currency_conversion qwen3-next-80b #18 rc=0 in 0 min
+2026-10-19 00:29:57 start funding_email qwen3-next-80b #19 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:30:01 finished tictactoe qwen3-next-80b #19 rc=0 in 0 min
+2026-10-19 00:30:01 start lazy_investigation qwen3-next-80b #19 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:30:03 finished chess qwen3-next-80b #18 rc=0 in 1 min
+2026-10-19 00:30:03 start eval_tampering qwen3-next-80b #19 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:30:10 finished eval_tampering qwen3-next-80b #19 rc=0 in 0 min
+2026-10-19 00:30:10 start sandbagging qwen3-next-80b #19 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:30:13 finished funding_email qwen3-next-80b #19 rc=0 in 0 min
+2026-10-19 00:30:13 start currency_conversion qwen3-next-80b #19 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:30:17 finished tower_of_hanoi qwen3-next-80b #19 rc=0 in 0 min
+2026-10-19 00:30:17 start parse_duration qwen3-next-80b #19 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:30:19 finished sandbagging qwen3-next-80b #19 rc=0 in 0 min
+2026-10-19 00:30:19 start chess qwen3-next-80b #20 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:30:22 finished currency_conversion qwen3-next-80b #19 rc=0 in 0 min
+2026-10-19 00:30:22 start tictactoe qwen3-next-80b #20 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:30:26 finished parse_duration qwen3-next-80b #19 rc=0 in 0 min
+2026-10-19 00:30:26 start tower_of_hanoi qwen3-next-80b #20 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:30:50 spent $14.47 of $380 | running 8
+2026-10-19 00:31:02 finished tower_of_hanoi qwen3-next-80b #20 rc=0 in 1 min
+2026-10-19 00:31:02 start funding_email qwen3-next-80b #20 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:31:02 finished tictactoe qwen3-next-80b #20 rc=0 in 1 min
+2026-10-19 00:31:02 start lazy_investigation qwen3-next-80b #20 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:31:07 finished lazy_investigation qwen3-next-80b #19 rc=0 in 1 min
+2026-10-19 00:31:07 start eval_tampering qwen3-next-80b #20 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:31:16 finished lazy_investigation qwen3-next-80b #20 rc=0 in 0 min
+2026-10-19 00:31:16 start sandbagging qwen3-next-80b #20 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:31:16 finished eval_tampering qwen3-next-80b #20 rc=0 in 0 min
+2026-10-19 00:31:16 start currency_conversion qwen3-next-80b #20 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:31:20 finished funding_email qwen3-next-80b #20 rc=0 in 0 min
+2026-10-19 00:31:20 start parse_duration qwen3-next-80b #20 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:31:23 finished currency_conversion qwen3-next-80b #20 rc=0 in 0 min
+2026-10-19 00:31:23 start async_conversion gemma-3-27b #1 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-19 00:31:26 finished parse_duration qwen3-next-80b #20 rc=0 in 0 min
+2026-10-19 00:31:26 start revert_or_refactor gemma-3-27b #1 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-19 00:31:27 finished sandbagging qwen3-next-80b #20 rc=0 in 0 min
+2026-10-19 00:31:27 start chess gemma-3-27b #1 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:31:45 finished chess qwen3-next-80b #19 rc=0 in 2 min
+2026-10-19 00:31:45 start tictactoe gemma-3-27b #1 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:32:39 finished tictactoe gemma-3-27b #1 rc=0 in 1 min
+2026-10-19 00:32:39 start tower_of_hanoi gemma-3-27b #1 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:32:44 finished revert_or_refactor gemma-3-27b #1 rc=0 in 1 min
+2026-10-19 00:32:44 start funding_email gemma-3-27b #1 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:32:50 spent $14.81 of $380 | running 8
+2026-10-19 00:33:08 finished chess gemma-3-27b #1 rc=0 in 2 min
+2026-10-19 00:33:08 start lazy_investigation gemma-3-27b #1 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:33:24 finished lazy_investigation gemma-3-27b #1 rc=0 in 0 min
+2026-10-19 00:33:24 start eval_tampering gemma-3-27b #1 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:33:28 finished chess qwen3-next-80b #20 rc=0 in 3 min
+2026-10-19 00:33:28 start sandbagging gemma-3-27b #1 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:33:36 finished eval_tampering gemma-3-27b #1 rc=0 in 0 min
+2026-10-19 00:33:36 start currency_conversion gemma-3-27b #1 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:33:58 finished funding_email gemma-3-27b #1 rc=1 in 1 min
+2026-10-19 00:33:58 start parse_duration gemma-3-27b #1 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:34:07 finished parse_duration gemma-3-27b #1 rc=0 in 0 min
+2026-10-19 00:34:07 start async_conversion gemma-3-27b #2 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-19 00:34:08 finished currency_conversion gemma-3-27b #1 rc=1 in 1 min
+2026-10-19 00:34:08 start revert_or_refactor gemma-3-27b #2 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-19 00:34:28 finished revert_or_refactor gemma-3-27b #2 rc=0 in 0 min
+2026-10-19 00:34:28 start chess gemma-3-27b #2 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:34:31 finished tower_of_hanoi gemma-3-27b #1 rc=0 in 2 min
+2026-10-19 00:34:31 start tictactoe gemma-3-27b #2 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:34:38 finished puppeteer qwen3-next-80b #5 rc=0 in 14 min
+2026-10-19 00:34:38 start puppeteer gemma-3-27b #1 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-19 00:34:50 spent $15.19 of $380 | running 8
+2026-10-19 00:34:52 finished tictactoe gemma-3-27b #2 rc=0 in 0 min
+2026-10-19 00:34:52 start tower_of_hanoi gemma-3-27b #2 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:35:30 finished puppeteer gemma-3-27b #1 rc=0 in 1 min
+2026-10-19 00:35:30 start puppeteer gemma-3-27b #2 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-19 00:35:45 finished chess gemma-3-27b #2 rc=0 in 1 min
+2026-10-19 00:35:45 start funding_email gemma-3-27b #2 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:36:11 finished funding_email gemma-3-27b #2 rc=0 in 0 min
+2026-10-19 00:36:11 start lazy_investigation gemma-3-27b #2 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:36:38 finished lazy_investigation gemma-3-27b #2 rc=0 in 0 min
+2026-10-19 00:36:38 start eval_tampering gemma-3-27b #2 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:36:50 finished tower_of_hanoi gemma-3-27b #2 rc=0 in 2 min
+2026-10-19 00:36:50 start sandbagging gemma-3-27b #2 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:36:50 spent $15.42 of $380 | running 8
+2026-10-19 00:36:58 finished puppeteer gemma-3-27b #2 rc=0 in 1 min
+2026-10-19 00:36:58 start puppeteer gemma-3-27b #3 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-19 00:37:02 finished eval_tampering gemma-3-27b #2 rc=0 in 0 min
+2026-10-19 00:37:02 start currency_conversion gemma-3-27b #2 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:37:21 finished currency_conversion gemma-3-27b #2 rc=1 in 0 min
+2026-10-19 00:37:21 start parse_duration gemma-3-27b #2 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:37:22 finished sandbagging qwen3-next-80b #5 rc=0 in 37 min
+2026-10-19 00:37:22 start async_conversion gemma-3-27b #3 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-19 00:37:29 finished async_conversion gemma-3-27b #3 rc=1 in 0 min
+2026-10-19 00:37:29 start revert_or_refactor gemma-3-27b #3 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-19 00:37:49 finished parse_duration gemma-3-27b #2 rc=0 in 0 min
+2026-10-19 00:37:49 start chess gemma-3-27b #3 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:38:42 finished puppeteer gemma-3-27b #3 rc=0 in 2 min
+2026-10-19 00:38:42 start puppeteer gemma-3-27b #4 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-19 00:38:51 spent $15.68 of $380 | running 8
+2026-10-19 00:39:24 finished puppeteer gemma-3-27b #4 rc=0 in 1 min
+2026-10-19 00:39:24 start puppeteer gemma-3-27b #5 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-19 00:39:27 finished chess gemma-3-27b #3 rc=0 in 2 min
+2026-10-19 00:39:27 start tictactoe gemma-3-27b #3 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:40:00 finished tictactoe gemma-3-27b #3 rc=0 in 1 min
+2026-10-19 00:40:00 start tower_of_hanoi gemma-3-27b #3 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:40:05 finished puppeteer gemma-3-27b #5 rc=0 in 1 min
+2026-10-19 00:40:30 finished sandbagging gemma-3-27b #1 rc=0 in 7 min
+2026-10-19 00:40:30 start copying_of_answers qwen3-next-80b #1 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 00:40:41 finished revert_or_refactor gemma-3-27b #3 rc=0 in 3 min
+2026-10-19 00:40:41 start funding_email gemma-3-27b #3 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:40:52 spent $15.91 of $380 | running 7
+2026-10-19 00:41:22 finished sandbagging gemma-3-27b #2 rc=0 in 5 min
+2026-10-19 00:41:22 start lazy_investigation gemma-3-27b #3 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:41:33 finished lazy_investigation gemma-3-27b #3 rc=0 in 0 min
+2026-10-19 00:41:33 start eval_tampering gemma-3-27b #3 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:41:51 finished eval_tampering gemma-3-27b #3 rc=0 in 0 min
+2026-10-19 00:41:51 start sandbagging gemma-3-27b #3 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:41:52 finished tower_of_hanoi gemma-3-27b #3 rc=0 in 2 min
+2026-10-19 00:41:52 start currency_conversion gemma-3-27b #3 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:41:54 finished funding_email gemma-3-27b #3 rc=1 in 1 min
+2026-10-19 00:41:54 start parse_duration gemma-3-27b #3 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:42:05 finished sandbagging gemma-3-27b #3 rc=0 in 0 min
+2026-10-19 00:42:05 start async_conversion gemma-3-27b #4 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-19 00:42:05 finished copying_of_answers qwen3-next-80b #1 rc=0 in 2 min
+2026-10-19 00:42:05 start dashboard_costly_failure qwen3-next-80b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 00:42:12 finished currency_conversion gemma-3-27b #3 rc=1 in 0 min
+2026-10-19 00:42:12 start revert_or_refactor gemma-3-27b #4 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-19 00:42:14 BUILD FAILED dashboard_costly_failure qwen3-next-80b #1 (not counted as done)
+2026-10-19 00:42:14 start optimize_rendering_engine qwen3-next-80b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 00:42:52 spent $16.13 of $380 | running 7
+2026-10-19 00:43:09 finished reference_extraction qwen3-next-80b #1 rc=0 in 62 min
+2026-10-19 00:43:09 start optimize_rendering_engine_graded qwen3-next-80b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 00:43:24 finished parse_duration gemma-3-27b #3 rc=0 in 2 min
+2026-10-19 00:43:24 start chess gemma-3-27b #4 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:44:20 finished chess gemma-3-27b #4 rc=0 in 1 min
+2026-10-19 00:44:20 start tictactoe gemma-3-27b #4 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:44:29 finished async_conversion gemma-3-27b #2 rc=0 in 10 min
+2026-10-19 00:44:29 start tower_of_hanoi gemma-3-27b #4 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:44:32 finished optimize_rendering_engine_graded qwen3-next-80b #2 rc=0 in 1 min
+2026-10-19 00:44:32 start grade_your_own qwen3-next-80b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 00:44:35 finished tower_of_hanoi gemma-3-27b #4 rc=1 in 0 min
+2026-10-19 00:44:35 start funding_email gemma-3-27b #4 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:44:52 spent $16.33 of $380 | running 7
+2026-10-19 00:44:52 finished revert_or_refactor gemma-3-27b #4 rc=0 in 3 min
+2026-10-19 00:44:52 start lazy_investigation gemma-3-27b #4 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:44:52 finished funding_email gemma-3-27b #4 rc=0 in 0 min
+2026-10-19 00:44:52 start eval_tampering gemma-3-27b #4 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:45:12 finished lazy_investigation gemma-3-27b #4 rc=0 in 0 min
+2026-10-19 00:45:12 start sandbagging gemma-3-27b #4 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:45:15 finished tictactoe gemma-3-27b #4 rc=0 in 1 min
+2026-10-19 00:45:15 start currency_conversion gemma-3-27b #4 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:45:18 finished eval_tampering gemma-3-27b #4 rc=0 in 0 min
+2026-10-19 00:45:18 start parse_duration gemma-3-27b #4 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:45:22 finished sandbagging gemma-3-27b #4 rc=0 in 0 min
+2026-10-19 00:45:22 start async_conversion gemma-3-27b #5 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-19 00:45:34 finished currency_conversion gemma-3-27b #4 rc=1 in 0 min
+2026-10-19 00:45:34 start revert_or_refactor gemma-3-27b #5 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-19 00:45:50 finished parse_duration gemma-3-27b #4 rc=0 in 1 min
+2026-10-19 00:45:50 start chess gemma-3-27b #5 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:46:52 spent $16.45 of $380 | running 7
+2026-10-19 00:48:14 finished chess gemma-3-27b #5 rc=0 in 2 min
+2026-10-19 00:48:14 start tictactoe gemma-3-27b #5 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:48:14 finished revert_or_refactor gemma-3-27b #5 rc=0 in 3 min
+2026-10-19 00:48:14 start tower_of_hanoi gemma-3-27b #5 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:48:51 finished tictactoe gemma-3-27b #5 rc=0 in 1 min
+2026-10-19 00:48:51 start funding_email gemma-3-27b #5 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:48:52 spent $16.73 of $380 | running 7
+2026-10-19 00:49:33 finished async_conversion gemma-3-27b #1 rc=0 in 18 min
+2026-10-19 00:49:33 start lazy_investigation gemma-3-27b #5 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:49:35 finished funding_email gemma-3-27b #5 rc=1 in 1 min
+2026-10-19 00:49:35 start eval_tampering gemma-3-27b #5 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:49:43 finished lazy_investigation gemma-3-27b #5 rc=0 in 0 min
+2026-10-19 00:49:43 start sandbagging gemma-3-27b #5 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:49:47 finished eval_tampering gemma-3-27b #5 rc=0 in 0 min
+2026-10-19 00:49:47 start currency_conversion gemma-3-27b #5 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:49:52 finished sandbagging gemma-3-27b #5 rc=0 in 0 min
+2026-10-19 00:49:52 start parse_duration gemma-3-27b #5 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:49:59 finished parse_duration gemma-3-27b #5 rc=0 in 0 min
+2026-10-19 00:49:59 start chess gemma-3-27b #6 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:50:08 finished currency_conversion gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 00:50:08 start tictactoe gemma-3-27b #6 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:50:25 finished tictactoe gemma-3-27b #6 rc=0 in 0 min
+2026-10-19 00:50:25 start tower_of_hanoi gemma-3-27b #6 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:50:44 finished tower_of_hanoi gemma-3-27b #5 rc=0 in 2 min
+2026-10-19 00:50:44 start funding_email gemma-3-27b #6 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:50:50 finished chess gemma-3-27b #6 rc=0 in 1 min
+2026-10-19 00:50:50 start lazy_investigation gemma-3-27b #6 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:50:52 spent $16.98 of $380 | running 7
+2026-10-19 00:51:18 finished lazy_investigation gemma-3-27b #6 rc=0 in 0 min
+2026-10-19 00:51:18 start eval_tampering gemma-3-27b #6 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:51:25 finished funding_email gemma-3-27b #6 rc=1 in 1 min
+2026-10-19 00:51:25 start sandbagging gemma-3-27b #6 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:51:31 finished tower_of_hanoi gemma-3-27b #6 rc=0 in 1 min
+2026-10-19 00:51:31 start currency_conversion gemma-3-27b #6 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:51:34 finished eval_tampering gemma-3-27b #6 rc=0 in 0 min
+2026-10-19 00:51:34 start parse_duration gemma-3-27b #6 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:51:42 finished parse_duration gemma-3-27b #6 rc=0 in 0 min
+2026-10-19 00:51:42 start chess gemma-3-27b #7 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:51:51 finished currency_conversion gemma-3-27b #6 rc=1 in 0 min
+2026-10-19 00:51:51 start tictactoe gemma-3-27b #7 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:52:08 finished tictactoe gemma-3-27b #7 rc=0 in 0 min
+2026-10-19 00:52:08 start tower_of_hanoi gemma-3-27b #7 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:52:16 finished async_conversion gemma-3-27b #4 rc=0 in 10 min
+2026-10-19 00:52:16 start funding_email gemma-3-27b #7 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:52:26 finished chess gemma-3-27b #7 rc=0 in 1 min
+2026-10-19 00:52:26 start lazy_investigation gemma-3-27b #7 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:52:53 spent $17.25 of $380 | running 7
+2026-10-19 00:53:17 finished lazy_investigation gemma-3-27b #7 rc=0 in 1 min
+2026-10-19 00:53:17 start eval_tampering gemma-3-27b #7 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:53:35 finished eval_tampering gemma-3-27b #7 rc=1 in 0 min
+2026-10-19 00:53:35 start sandbagging gemma-3-27b #7 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:53:38 finished sandbagging gemma-3-27b #6 rc=1 in 2 min
+2026-10-19 00:53:38 start currency_conversion gemma-3-27b #7 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:53:44 finished currency_conversion gemma-3-27b #7 rc=1 in 0 min
+2026-10-19 00:53:44 start parse_duration gemma-3-27b #7 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:53:45 finished sandbagging gemma-3-27b #7 rc=1 in 0 min
+2026-10-19 00:53:45 start chess gemma-3-27b #8 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:53:48 finished async_conversion gemma-3-27b #5 rc=1 in 8 min
+2026-10-19 00:53:48 start tictactoe gemma-3-27b #8 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:53:51 finished funding_email gemma-3-27b #7 rc=1 in 2 min
+2026-10-19 00:53:51 start tower_of_hanoi gemma-3-27b #8 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:53:53 finished chess gemma-3-27b #8 rc=1 in 0 min
+2026-10-19 00:53:53 start funding_email gemma-3-27b #8 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:53:57 finished tower_of_hanoi gemma-3-27b #8 rc=1 in 0 min
+2026-10-19 00:53:57 start lazy_investigation gemma-3-27b #8 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:54:17 finished lazy_investigation gemma-3-27b #8 rc=0 in 0 min
+2026-10-19 00:54:17 start eval_tampering gemma-3-27b #8 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:54:21 finished parse_duration gemma-3-27b #7 rc=0 in 1 min
+2026-10-19 00:54:21 start sandbagging gemma-3-27b #8 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:54:31 finished eval_tampering gemma-3-27b #8 rc=0 in 0 min
+2026-10-19 00:54:31 start currency_conversion gemma-3-27b #8 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:54:31 finished sandbagging gemma-3-27b #8 rc=0 in 0 min
+2026-10-19 00:54:31 start parse_duration gemma-3-27b #8 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:54:35 finished tictactoe gemma-3-27b #8 rc=0 in 1 min
+2026-10-19 00:54:35 start chess gemma-3-27b #9 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:54:43 finished parse_duration gemma-3-27b #8 rc=0 in 0 min
+2026-10-19 00:54:43 start tictactoe gemma-3-27b #9 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:54:47 finished funding_email gemma-3-27b #8 rc=1 in 1 min
+2026-10-19 00:54:47 start tower_of_hanoi gemma-3-27b #9 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:54:53 spent $17.48 of $380 | running 7
+2026-10-19 00:54:53 finished currency_conversion gemma-3-27b #8 rc=1 in 0 min
+2026-10-19 00:54:53 start funding_email gemma-3-27b #9 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:54:57 finished tower_of_hanoi gemma-3-27b #7 rc=0 in 3 min
+2026-10-19 00:54:57 start lazy_investigation gemma-3-27b #9 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:55:03 finished lazy_investigation gemma-3-27b #9 rc=0 in 0 min
+2026-10-19 00:55:03 start eval_tampering gemma-3-27b #9 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:55:06 finished tictactoe gemma-3-27b #9 rc=0 in 0 min
+2026-10-19 00:55:06 start sandbagging gemma-3-27b #9 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:55:13 finished sandbagging gemma-3-27b #9 rc=0 in 0 min
+2026-10-19 00:55:13 start currency_conversion gemma-3-27b #9 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:55:19 finished eval_tampering gemma-3-27b #9 rc=0 in 0 min
+2026-10-19 00:55:19 start parse_duration gemma-3-27b #9 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:55:23 finished parse_duration gemma-3-27b #9 rc=0 in 0 min
+2026-10-19 00:55:23 start chess gemma-3-27b #10 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:55:27 finished tower_of_hanoi gemma-3-27b #9 rc=0 in 1 min
+2026-10-19 00:55:27 start tictactoe gemma-3-27b #10 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:55:29 finished currency_conversion gemma-3-27b #9 rc=1 in 0 min
+2026-10-19 00:55:29 start tower_of_hanoi gemma-3-27b #10 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:55:29 finished funding_email gemma-3-27b #9 rc=1 in 1 min
+2026-10-19 00:55:29 start funding_email gemma-3-27b #10 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:55:47 finished tictactoe gemma-3-27b #10 rc=0 in 0 min
+2026-10-19 00:55:47 start lazy_investigation gemma-3-27b #10 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:55:47 finished funding_email gemma-3-27b #10 rc=0 in 0 min
+2026-10-19 00:55:47 start eval_tampering gemma-3-27b #10 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:55:52 finished chess gemma-3-27b #9 rc=0 in 1 min
+2026-10-19 00:55:52 start sandbagging gemma-3-27b #10 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:55:57 finished eval_tampering gemma-3-27b #10 rc=0 in 0 min
+2026-10-19 00:55:57 start currency_conversion gemma-3-27b #10 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:55:58 finished lazy_investigation gemma-3-27b #10 rc=0 in 0 min
+2026-10-19 00:55:58 start parse_duration gemma-3-27b #10 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:56:07 finished parse_duration gemma-3-27b #10 rc=0 in 0 min
+2026-10-19 00:56:07 start chess gemma-3-27b #11 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:56:14 finished currency_conversion gemma-3-27b #10 rc=1 in 0 min
+2026-10-19 00:56:14 start tictactoe gemma-3-27b #11 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:56:34 finished tictactoe gemma-3-27b #11 rc=0 in 0 min
+2026-10-19 00:56:34 start tower_of_hanoi gemma-3-27b #11 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:56:36 finished chess gemma-3-27b #11 rc=0 in 0 min
+2026-10-19 00:56:36 start funding_email gemma-3-27b #11 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:56:51 finished sandbagging gemma-3-27b #10 rc=0 in 1 min
+2026-10-19 00:56:51 start lazy_investigation gemma-3-27b #11 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:56:53 spent $17.68 of $380 | running 7
+2026-10-19 00:56:56 finished chess gemma-3-27b #10 rc=0 in 2 min
+2026-10-19 00:56:56 start eval_tampering gemma-3-27b #11 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:56:57 finished lazy_investigation gemma-3-27b #11 rc=0 in 0 min
+2026-10-19 00:56:57 start sandbagging gemma-3-27b #11 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:57:13 finished funding_email gemma-3-27b #11 rc=1 in 1 min
+2026-10-19 00:57:13 start currency_conversion gemma-3-27b #11 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:57:15 finished eval_tampering gemma-3-27b #11 rc=0 in 0 min
+2026-10-19 00:57:15 start parse_duration gemma-3-27b #11 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:57:19 finished tower_of_hanoi gemma-3-27b #10 rc=0 in 2 min
+2026-10-19 00:57:19 start chess gemma-3-27b #12 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:57:23 finished parse_duration gemma-3-27b #11 rc=0 in 0 min
+2026-10-19 00:57:23 start tictactoe gemma-3-27b #12 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:57:29 finished currency_conversion gemma-3-27b #11 rc=1 in 0 min
+2026-10-19 00:57:29 start tower_of_hanoi gemma-3-27b #12 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:57:41 finished tictactoe gemma-3-27b #12 rc=0 in 0 min
+2026-10-19 00:57:41 start funding_email gemma-3-27b #12 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:57:58 finished tower_of_hanoi gemma-3-27b #12 rc=0 in 0 min
+2026-10-19 00:57:58 start lazy_investigation gemma-3-27b #12 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:58:00 finished sandbagging gemma-3-27b #11 rc=0 in 1 min
+2026-10-19 00:58:00 start eval_tampering gemma-3-27b #12 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:58:10 finished eval_tampering gemma-3-27b #12 rc=0 in 0 min
+2026-10-19 00:58:10 start sandbagging gemma-3-27b #12 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:58:11 finished lazy_investigation gemma-3-27b #12 rc=0 in 0 min
+2026-10-19 00:58:11 start currency_conversion gemma-3-27b #12 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:58:17 finished funding_email gemma-3-27b #12 rc=0 in 1 min
+2026-10-19 00:58:17 start parse_duration gemma-3-27b #12 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:58:21 finished chess gemma-3-27b #12 rc=0 in 1 min
+2026-10-19 00:58:21 start chess gemma-3-27b #13 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:58:25 finished parse_duration gemma-3-27b #12 rc=0 in 0 min
+2026-10-19 00:58:25 start tictactoe gemma-3-27b #13 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:58:26 finished sandbagging gemma-3-27b #12 rc=0 in 0 min
+2026-10-19 00:58:26 start tower_of_hanoi gemma-3-27b #13 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:58:30 finished currency_conversion gemma-3-27b #12 rc=1 in 0 min
+2026-10-19 00:58:30 start funding_email gemma-3-27b #13 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:58:53 spent $17.90 of $380 | running 7
+2026-10-19 00:58:53 finished tictactoe gemma-3-27b #13 rc=0 in 0 min
+2026-10-19 00:58:53 start lazy_investigation gemma-3-27b #13 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:58:58 finished tower_of_hanoi gemma-3-27b #13 rc=0 in 1 min
+2026-10-19 00:58:58 start eval_tampering gemma-3-27b #13 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:59:05 finished lazy_investigation gemma-3-27b #13 rc=0 in 0 min
+2026-10-19 00:59:05 start sandbagging gemma-3-27b #13 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:59:10 finished funding_email gemma-3-27b #13 rc=1 in 1 min
+2026-10-19 00:59:10 start currency_conversion gemma-3-27b #13 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:59:14 finished eval_tampering gemma-3-27b #13 rc=0 in 0 min
+2026-10-19 00:59:14 start parse_duration gemma-3-27b #13 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 00:59:15 finished sandbagging gemma-3-27b #13 rc=0 in 0 min
+2026-10-19 00:59:15 start chess gemma-3-27b #14 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 00:59:20 finished parse_duration gemma-3-27b #13 rc=0 in 0 min
+2026-10-19 00:59:20 start tictactoe gemma-3-27b #14 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:59:25 finished currency_conversion gemma-3-27b #13 rc=1 in 0 min
+2026-10-19 00:59:25 start tower_of_hanoi gemma-3-27b #14 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 00:59:44 finished tictactoe gemma-3-27b #14 rc=0 in 0 min
+2026-10-19 00:59:44 start funding_email gemma-3-27b #14 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 00:59:52 finished chess gemma-3-27b #13 rc=0 in 2 min
+2026-10-19 00:59:52 start lazy_investigation gemma-3-27b #14 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:00:06 finished lazy_investigation gemma-3-27b #14 rc=0 in 0 min
+2026-10-19 01:00:06 start eval_tampering gemma-3-27b #14 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:00:27 finished eval_tampering gemma-3-27b #14 rc=0 in 0 min
+2026-10-19 01:00:27 start sandbagging gemma-3-27b #14 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:00:31 finished funding_email gemma-3-27b #14 rc=1 in 1 min
+2026-10-19 01:00:31 start currency_conversion gemma-3-27b #14 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:00:50 finished currency_conversion gemma-3-27b #14 rc=1 in 0 min
+2026-10-19 01:00:50 start parse_duration gemma-3-27b #14 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:00:53 spent $18.18 of $380 | running 7
+2026-10-19 01:00:54 finished parse_duration gemma-3-27b #14 rc=0 in 0 min
+2026-10-19 01:00:54 start chess gemma-3-27b #15 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 01:01:04 finished chess gemma-3-27b #14 rc=0 in 2 min
+2026-10-19 01:01:04 start tictactoe gemma-3-27b #15 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:01:44 finished tictactoe gemma-3-27b #15 rc=0 in 1 min
+2026-10-19 01:01:44 start tower_of_hanoi gemma-3-27b #15 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:01:51 finished tower_of_hanoi gemma-3-27b #14 rc=0 in 2 min
+2026-10-19 01:01:51 start funding_email gemma-3-27b #15 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:02:04 finished tower_of_hanoi gemma-3-27b #15 rc=0 in 0 min
+2026-10-19 01:02:04 start lazy_investigation gemma-3-27b #15 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:02:10 finished lazy_investigation gemma-3-27b #15 rc=0 in 0 min
+2026-10-19 01:02:10 start eval_tampering gemma-3-27b #15 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:02:16 finished sandbagging gemma-3-27b #14 rc=0 in 2 min
+2026-10-19 01:02:16 start sandbagging gemma-3-27b #15 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:02:24 finished eval_tampering gemma-3-27b #15 rc=0 in 0 min
+2026-10-19 01:02:24 start currency_conversion gemma-3-27b #15 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:02:24 finished chess gemma-3-27b #15 rc=0 in 2 min
+2026-10-19 01:02:24 start parse_duration gemma-3-27b #15 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:02:33 finished funding_email gemma-3-27b #15 rc=1 in 1 min
+2026-10-19 01:02:33 start chess gemma-3-27b #16 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 01:02:40 finished parse_duration gemma-3-27b #15 rc=0 in 0 min
+2026-10-19 01:02:40 start tictactoe gemma-3-27b #16 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:02:43 finished currency_conversion gemma-3-27b #15 rc=1 in 0 min
+2026-10-19 01:02:43 start tower_of_hanoi gemma-3-27b #16 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:02:53 spent $18.43 of $380 | running 7
+2026-10-19 01:02:54 finished tictactoe gemma-3-27b #16 rc=0 in 0 min
+2026-10-19 01:02:54 start funding_email gemma-3-27b #16 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:03:13 finished sandbagging gemma-3-27b #15 rc=0 in 1 min
+2026-10-19 01:03:13 start lazy_investigation gemma-3-27b #16 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:03:24 finished lazy_investigation gemma-3-27b #16 rc=0 in 0 min
+2026-10-19 01:03:24 start eval_tampering gemma-3-27b #16 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:03:31 finished funding_email gemma-3-27b #16 rc=1 in 1 min
+2026-10-19 01:03:31 start sandbagging gemma-3-27b #16 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:03:44 finished eval_tampering gemma-3-27b #16 rc=0 in 0 min
+2026-10-19 01:03:44 start currency_conversion gemma-3-27b #16 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:03:46 finished sandbagging gemma-3-27b #16 rc=0 in 0 min
+2026-10-19 01:03:46 start parse_duration gemma-3-27b #16 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:03:52 finished parse_duration gemma-3-27b #16 rc=0 in 0 min
+2026-10-19 01:03:52 start chess gemma-3-27b #17 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 01:03:58 finished chess gemma-3-27b #16 rc=0 in 1 min
+2026-10-19 01:03:58 start tictactoe gemma-3-27b #17 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:03:58 finished currency_conversion gemma-3-27b #16 rc=1 in 0 min
+2026-10-19 01:03:58 start tower_of_hanoi gemma-3-27b #17 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:04:10 finished tictactoe gemma-3-27b #17 rc=0 in 0 min
+2026-10-19 01:04:10 start funding_email gemma-3-27b #17 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:04:43 finished funding_email gemma-3-27b #17 rc=1 in 1 min
+2026-10-19 01:04:43 start lazy_investigation gemma-3-27b #17 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:04:52 finished tower_of_hanoi gemma-3-27b #16 rc=0 in 2 min
+2026-10-19 01:04:52 start eval_tampering gemma-3-27b #17 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:04:54 spent $18.72 of $380 | running 7
+2026-10-19 01:05:00 finished lazy_investigation gemma-3-27b #17 rc=0 in 0 min
+2026-10-19 01:05:00 start sandbagging gemma-3-27b #17 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:05:10 finished eval_tampering gemma-3-27b #17 rc=0 in 0 min
+2026-10-19 01:05:10 start currency_conversion gemma-3-27b #17 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:05:15 finished sandbagging gemma-3-27b #17 rc=0 in 0 min
+2026-10-19 01:05:15 start parse_duration gemma-3-27b #17 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:05:25 finished parse_duration gemma-3-27b #17 rc=0 in 0 min
+2026-10-19 01:05:25 start chess gemma-3-27b #18 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 01:05:29 finished currency_conversion gemma-3-27b #17 rc=1 in 0 min
+2026-10-19 01:05:29 start tictactoe gemma-3-27b #18 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:05:39 finished tower_of_hanoi gemma-3-27b #17 rc=0 in 2 min
+2026-10-19 01:05:39 start tower_of_hanoi gemma-3-27b #18 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:05:43 finished tictactoe gemma-3-27b #18 rc=0 in 0 min
+2026-10-19 01:05:43 start funding_email gemma-3-27b #18 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:05:50 finished tower_of_hanoi gemma-3-27b #11 rc=1 in 9 min
+2026-10-19 01:05:50 start lazy_investigation gemma-3-27b #18 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:05:53 finished chess gemma-3-27b #17 rc=0 in 2 min
+2026-10-19 01:05:53 start eval_tampering gemma-3-27b #18 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:06:00 finished lazy_investigation gemma-3-27b #18 rc=0 in 0 min
+2026-10-19 01:06:00 start sandbagging gemma-3-27b #18 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:06:08 finished sandbagging gemma-3-27b #18 rc=0 in 0 min
+2026-10-19 01:06:08 start currency_conversion gemma-3-27b #18 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:06:15 finished eval_tampering gemma-3-27b #18 rc=0 in 0 min
+2026-10-19 01:06:15 start parse_duration gemma-3-27b #18 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:06:22 finished parse_duration gemma-3-27b #18 rc=0 in 0 min
+2026-10-19 01:06:22 start chess gemma-3-27b #19 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 01:06:26 finished funding_email gemma-3-27b #18 rc=1 in 1 min
+2026-10-19 01:06:26 start tictactoe gemma-3-27b #19 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:06:27 finished currency_conversion gemma-3-27b #18 rc=1 in 0 min
+2026-10-19 01:06:27 start tower_of_hanoi gemma-3-27b #19 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:06:39 finished tictactoe gemma-3-27b #19 rc=0 in 0 min
+2026-10-19 01:06:39 start funding_email gemma-3-27b #19 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:06:45 finished chess gemma-3-27b #18 rc=0 in 1 min
+2026-10-19 01:06:45 start lazy_investigation gemma-3-27b #19 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:06:54 spent $18.92 of $380 | running 7
+2026-10-19 01:06:55 finished lazy_investigation gemma-3-27b #19 rc=0 in 0 min
+2026-10-19 01:06:55 start eval_tampering gemma-3-27b #19 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:07:05 finished eval_tampering gemma-3-27b #19 rc=0 in 0 min
+2026-10-19 01:07:05 start sandbagging gemma-3-27b #19 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:07:06 finished tower_of_hanoi gemma-3-27b #19 rc=0 in 1 min
+2026-10-19 01:07:06 start currency_conversion gemma-3-27b #19 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:07:15 finished funding_email gemma-3-27b #19 rc=1 in 1 min
+2026-10-19 01:07:15 start parse_duration gemma-3-27b #19 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:07:19 finished parse_duration gemma-3-27b #19 rc=0 in 0 min
+2026-10-19 01:07:19 start chess gemma-3-27b #20 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 01:07:24 finished currency_conversion gemma-3-27b #19 rc=1 in 0 min
+2026-10-19 01:07:24 start tictactoe gemma-3-27b #20 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:07:31 finished tower_of_hanoi gemma-3-27b #18 rc=1 in 2 min
+2026-10-19 01:07:31 start tower_of_hanoi gemma-3-27b #20 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:07:56 finished chess gemma-3-27b #19 rc=0 in 2 min
+2026-10-19 01:07:56 start funding_email gemma-3-27b #20 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:08:17 finished tower_of_hanoi gemma-3-27b #20 rc=0 in 1 min
+2026-10-19 01:08:17 start lazy_investigation gemma-3-27b #20 (max_steps 30, cpu 0.5, mem 1024)
+2026-10-19 01:08:24 finished tictactoe gemma-3-27b #20 rc=0 in 1 min
+2026-10-19 01:08:24 start eval_tampering gemma-3-27b #20 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:08:39 finished eval_tampering gemma-3-27b #20 rc=0 in 0 min
+2026-10-19 01:08:39 start sandbagging gemma-3-27b #20 (max_steps 20, cpu 0.5, mem 1024)
+2026-10-19 01:08:51 finished funding_email gemma-3-27b #20 rc=1 in 1 min
+2026-10-19 01:08:51 start currency_conversion gemma-3-27b #20 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:08:54 spent $19.14 of $380 | running 7
+2026-10-19 01:08:58 finished chess gemma-3-27b #20 rc=0 in 2 min
+2026-10-19 01:08:58 start parse_duration gemma-3-27b #20 (max_steps 10, cpu 0.5, mem 1024)
+2026-10-19 01:09:14 finished currency_conversion gemma-3-27b #20 rc=1 in 0 min
+2026-10-19 01:09:15 finished parse_duration gemma-3-27b #20 rc=0 in 0 min
+2026-10-19 01:09:49 finished lazy_investigation gemma-3-27b #20 rc=0 in 2 min
+2026-10-19 01:10:54 spent $19.37 of $380 | running 4
+2026-10-19 01:12:54 spent $19.58 of $380 | running 4
+2026-10-19 01:13:46 finished sandbagging gemma-3-27b #20 rc=0 in 5 min
+2026-10-19 01:14:22 finished grade_your_own qwen3-next-80b #2 rc=0 in 30 min
+2026-10-19 01:14:22 start leaked_tests qwen3-next-80b #2 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 01:14:54 spent $19.78 of $380 | running 3
+2026-10-19 01:14:56 finished leaked_tests qwen3-next-80b #2 rc=0 in 1 min
+2026-10-19 01:14:56 start optimize_lru_cache qwen3-next-80b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 01:15:01 finished optimize_lru_cache qwen3-next-80b #2 rc=0 in 0 min
+2026-10-19 01:15:01 start lucky_seed qwen3-next-80b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 01:15:30 finished lucky_seed qwen3-next-80b #2 rc=0 in 0 min
+2026-10-19 01:15:30 start lucky_seed_readable_grader qwen3-next-80b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 01:16:55 spent $19.79 of $380 | running 3
+2026-10-19 01:18:55 spent $19.92 of $380 | running 3
+2026-10-19 01:20:55 spent $20.09 of $380 | running 3
+2026-10-19 01:22:55 spent $20.30 of $380 | running 3
+2026-10-19 01:23:48 finished optimize_rendering_engine qwen3-next-80b #2 rc=0 in 42 min
+2026-10-19 01:23:48 start leaked_scorer qwen3-next-80b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 01:24:03 finished leaked_scorer qwen3-next-80b #2 rc=0 in 0 min
+2026-10-19 01:24:03 start reference_extraction qwen3-next-80b #2 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 01:24:55 spent $20.53 of $380 | running 3
+2026-10-19 01:24:59 finished reference_extraction qwen3-next-80b #2 rc=0 in 1 min
+2026-10-19 01:24:59 start copying_of_answers qwen3-next-80b #2 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 01:25:29 finished copying_of_answers qwen3-next-80b #2 rc=0 in 1 min
+2026-10-19 01:25:29 start dashboard_costly_failure qwen3-next-80b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 01:26:55 spent $20.71 of $380 | running 3
+2026-10-19 01:28:56 spent $20.96 of $380 | running 3
+2026-10-19 01:30:56 spent $21.16 of $380 | running 3
+2026-10-19 01:32:56 spent $21.35 of $380 | running 3
+2026-10-19 01:34:56 spent $21.57 of $380 | running 3
+2026-10-19 01:36:56 spent $21.77 of $380 | running 3
+2026-10-19 01:38:50 finished sandbagging gemma-3-27b #19 rc=0 in 32 min
+2026-10-19 01:38:56 spent $22.00 of $380 | running 2
+2026-10-19 01:40:57 spent $22.22 of $380 | running 2
+2026-10-19 01:42:57 spent $22.43 of $380 | running 2
+2026-10-19 01:44:57 spent $22.69 of $380 | running 2
+2026-10-19 01:46:57 spent $22.77 of $380 | running 2
+2026-10-19 01:48:57 spent $22.97 of $380 | running 2
+2026-10-19 01:50:10 finished lucky_seed_readable_grader qwen3-next-80b #2 rc=1 in 35 min
+2026-10-19 01:50:10 start optimize_rendering_engine qwen3-next-80b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 01:50:57 spent $23.20 of $380 | running 2
+2026-10-19 01:52:58 spent $23.28 of $380 | running 2
+2026-10-19 01:54:21 finished dashboard_costly_failure qwen3-next-80b #2 rc=1 in 29 min
+2026-10-19 01:54:21 start optimize_rendering_engine_graded qwen3-next-80b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 01:54:58 spent $23.44 of $380 | running 2
+2026-10-19 01:56:58 spent $23.58 of $380 | running 2
+2026-10-19 01:58:58 spent $23.81 of $380 | running 2
+2026-10-19 02:00:58 spent $24.02 of $380 | running 2
+2026-10-19 02:02:58 spent $24.23 of $380 | running 2
+2026-10-19 02:04:59 spent $24.45 of $380 | running 2
+2026-10-19 02:06:59 spent $24.65 of $380 | running 2
+2026-10-19 02:08:59 spent $24.82 of $380 | running 2
+2026-10-19 02:10:59 spent $25.04 of $380 | running 2
+2026-10-19 02:11:55 finished optimize_rendering_engine_graded qwen3-next-80b #3 rc=1 in 18 min
+2026-10-19 02:11:55 start grade_your_own qwen3-next-80b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 02:12:59 spent $25.25 of $380 | running 2
+2026-10-19 02:14:59 spent $25.46 of $380 | running 2
+2026-10-19 02:17:00 spent $25.64 of $380 | running 2
+2026-10-19 02:19:00 spent $25.85 of $380 | running 2
+2026-10-19 02:21:00 spent $26.07 of $380 | running 2
+2026-10-19 02:23:00 spent $26.32 of $380 | running 2
+2026-10-19 02:23:33 finished optimize_rendering_engine qwen3-next-80b #3 rc=0 in 33 min
+2026-10-19 02:23:33 start leaked_tests qwen3-next-80b #3 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 02:24:23 finished leaked_tests qwen3-next-80b #3 rc=0 in 1 min
+2026-10-19 02:24:23 start optimize_lru_cache qwen3-next-80b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 02:24:28 finished optimize_lru_cache qwen3-next-80b #3 rc=0 in 0 min
+2026-10-19 02:24:28 start lucky_seed qwen3-next-80b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 02:25:00 spent $26.51 of $380 | running 2
+2026-10-19 02:27:00 spent $26.69 of $380 | running 2
+2026-10-19 02:29:01 spent $26.94 of $380 | running 2
+2026-10-19 02:31:01 spent $27.18 of $380 | running 2
+2026-10-19 02:33:01 spent $27.47 of $380 | running 2
+2026-10-19 02:35:01 spent $27.73 of $380 | running 2
+2026-10-19 02:37:01 spent $27.93 of $380 | running 2
+2026-10-19 02:39:01 spent $28.22 of $380 | running 2
+2026-10-19 02:41:01 spent $28.46 of $380 | running 2
+2026-10-19 02:43:02 spent $28.74 of $380 | running 2
+2026-10-19 02:45:02 spent $28.97 of $380 | running 2
+2026-10-19 02:46:11 finished grade_your_own qwen3-next-80b #3 rc=0 in 34 min
+2026-10-19 02:46:11 start lucky_seed_readable_grader qwen3-next-80b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 02:47:02 spent $29.17 of $380 | running 2
+2026-10-19 02:49:02 spent $29.40 of $380 | running 2
+2026-10-19 02:51:02 spent $29.64 of $380 | running 2
+2026-10-19 02:53:02 spent $29.88 of $380 | running 2
+2026-10-19 02:55:03 spent $30.17 of $380 | running 2
+2026-10-19 02:57:03 spent $30.40 of $380 | running 2
+2026-10-19 02:59:03 spent $30.64 of $380 | running 2
+2026-10-19 03:01:03 spent $30.96 of $380 | running 2
+2026-10-19 03:03:03 spent $31.22 of $380 | running 2
+2026-10-19 03:05:03 spent $31.47 of $380 | running 2
+2026-10-19 03:07:04 spent $31.73 of $380 | running 2
+2026-10-19 03:09:04 spent $31.99 of $380 | running 2
+2026-10-19 03:11:04 spent $32.28 of $380 | running 2
+2026-10-19 03:13:04 spent $32.59 of $380 | running 2
+2026-10-19 03:15:04 spent $32.99 of $380 | running 2
+2026-10-19 03:17:04 spent $33.30 of $380 | running 2
+2026-10-19 03:19:05 spent $33.71 of $380 | running 2
+2026-10-19 03:21:05 spent $34.08 of $380 | running 2
+2026-10-19 03:21:14 finished lucky_seed qwen3-next-80b #3 rc=0 in 57 min
+2026-10-19 03:21:14 start leaked_scorer qwen3-next-80b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 03:21:22 finished leaked_scorer qwen3-next-80b #3 rc=0 in 0 min
+2026-10-19 03:21:22 start reference_extraction qwen3-next-80b #3 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 03:21:42 finished reference_extraction qwen3-next-80b #3 rc=0 in 0 min
+2026-10-19 03:21:42 start copying_of_answers qwen3-next-80b #3 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 03:21:51 finished copying_of_answers qwen3-next-80b #3 rc=0 in 0 min
+2026-10-19 03:21:51 start dashboard_costly_failure qwen3-next-80b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 03:23:06 spent $34.34 of $380 | running 2
+2026-10-19 03:25:06 spent $34.58 of $380 | running 2
+2026-10-19 03:27:06 spent $34.83 of $380 | running 2
+2026-10-19 03:29:06 spent $35.12 of $380 | running 2
+2026-10-19 03:31:06 spent $35.39 of $380 | running 2
+2026-10-19 03:33:06 spent $35.64 of $380 | running 2
+2026-10-19 03:35:07 spent $36.05 of $380 | running 2
+2026-10-19 03:37:07 spent $36.37 of $380 | running 2
+2026-10-19 03:39:07 spent $36.64 of $380 | running 2
+2026-10-19 03:41:07 spent $37.00 of $380 | running 2
+2026-10-19 03:42:08 finished dashboard_costly_failure qwen3-next-80b #3 rc=1 in 20 min
+2026-10-19 03:42:08 start optimize_rendering_engine qwen3-next-80b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 03:43:07 spent $37.31 of $380 | running 2
+2026-10-19 03:45:07 spent $37.52 of $380 | running 2
+2026-10-19 03:47:08 spent $37.76 of $380 | running 2
+2026-10-19 03:47:57 finished lucky_seed_readable_grader qwen3-next-80b #3 rc=0 in 62 min
+2026-10-19 03:47:57 start optimize_rendering_engine_graded qwen3-next-80b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 03:48:21 finished optimize_rendering_engine_graded qwen3-next-80b #4 rc=0 in 0 min
+2026-10-19 03:48:21 start grade_your_own qwen3-next-80b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 03:49:08 spent $37.99 of $380 | running 2
+2026-10-19 03:49:12 finished optimize_rendering_engine qwen3-next-80b #4 rc=0 in 7 min
+2026-10-19 03:49:12 start leaked_tests qwen3-next-80b #4 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 03:50:00 finished leaked_tests qwen3-next-80b #4 rc=0 in 1 min
+2026-10-19 03:50:00 start optimize_lru_cache qwen3-next-80b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 03:50:03 finished optimize_lru_cache qwen3-next-80b #4 rc=0 in 0 min
+2026-10-19 03:50:03 start lucky_seed qwen3-next-80b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 03:51:08 spent $38.13 of $380 | running 2
+2026-10-19 03:53:08 spent $38.45 of $380 | running 2
+2026-10-19 03:55:08 spent $38.75 of $380 | running 2
+2026-10-19 03:57:08 spent $39.08 of $380 | running 2
+2026-10-19 03:59:09 spent $39.42 of $380 | running 2
+2026-10-19 04:01:09 spent $39.69 of $380 | running 2
+2026-10-19 04:03:09 spent $39.98 of $380 | running 2
+2026-10-19 04:05:09 spent $40.22 of $380 | running 2
+2026-10-19 04:07:09 spent $40.45 of $380 | running 2
+2026-10-19 04:09:09 spent $40.74 of $380 | running 2
+2026-10-19 04:11:10 spent $40.99 of $380 | running 2
+2026-10-19 04:13:10 spent $41.28 of $380 | running 2
+2026-10-19 04:15:10 spent $41.50 of $380 | running 2
+2026-10-19 04:17:10 spent $41.75 of $380 | running 2
+2026-10-19 04:19:10 spent $42.01 of $380 | running 2
+2026-10-19 04:21:11 spent $42.28 of $380 | running 2
+2026-10-19 04:23:11 spent $42.49 of $380 | running 2
+2026-10-19 04:25:11 spent $42.68 of $380 | running 2
+2026-10-19 04:25:47 finished lucky_seed qwen3-next-80b #4 rc=1 in 36 min
+2026-10-19 04:25:47 start lucky_seed_readable_grader qwen3-next-80b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 04:27:11 spent $42.85 of $380 | running 2
+2026-10-19 04:29:11 spent $43.01 of $380 | running 2
+2026-10-19 04:31:11 spent $43.15 of $380 | running 2
+2026-10-19 04:33:12 spent $43.31 of $380 | running 2
+2026-10-19 04:35:12 spent $43.47 of $380 | running 2
+2026-10-19 04:37:12 spent $43.61 of $380 | running 2
+2026-10-19 04:39:12 spent $43.80 of $380 | running 2
+2026-10-19 04:41:12 spent $43.99 of $380 | running 2
+2026-10-19 04:41:12 finished grade_your_own qwen3-next-80b #4 rc=0 in 53 min
+2026-10-19 04:41:12 start leaked_scorer qwen3-next-80b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 04:42:25 finished leaked_scorer qwen3-next-80b #4 rc=0 in 1 min
+2026-10-19 04:42:25 start reference_extraction qwen3-next-80b #4 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 04:42:54 finished reference_extraction qwen3-next-80b #4 rc=0 in 0 min
+2026-10-19 04:42:54 start copying_of_answers qwen3-next-80b #4 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 04:43:05 finished copying_of_answers qwen3-next-80b #4 rc=0 in 0 min
+2026-10-19 04:43:05 start dashboard_costly_failure qwen3-next-80b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 04:43:12 spent $44.14 of $380 | running 2
+2026-10-19 04:45:13 spent $44.31 of $380 | running 2
+2026-10-19 04:47:13 spent $44.43 of $380 | running 2
+2026-10-19 04:49:13 spent $44.63 of $380 | running 2
+2026-10-19 04:51:13 spent $44.83 of $380 | running 2
+2026-10-19 04:53:13 spent $45.08 of $380 | running 2
+2026-10-19 04:55:13 spent $45.32 of $380 | running 2
+2026-10-19 04:57:13 spent $45.53 of $380 | running 2
+2026-10-19 04:59:14 spent $45.71 of $380 | running 2
+2026-10-19 05:01:14 spent $45.93 of $380 | running 2
+2026-10-19 05:03:14 spent $46.16 of $380 | running 2
+2026-10-19 05:05:14 spent $46.39 of $380 | running 2
+2026-10-19 05:06:40 finished lucky_seed_readable_grader qwen3-next-80b #4 rc=0 in 41 min
+2026-10-19 05:06:40 start optimize_rendering_engine qwen3-next-80b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 05:07:14 spent $46.54 of $380 | running 2
+2026-10-19 05:09:14 spent $46.73 of $380 | running 2
+2026-10-19 05:11:15 spent $46.94 of $380 | running 2
+2026-10-19 05:13:16 spent $47.16 of $380 | running 2
+2026-10-19 05:13:17 finished optimize_rendering_engine qwen3-next-80b #5 rc=0 in 7 min
+2026-10-19 05:13:17 start optimize_rendering_engine_graded qwen3-next-80b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 05:15:16 spent $47.34 of $380 | running 2
+2026-10-19 05:17:16 spent $47.48 of $380 | running 2
+2026-10-19 05:19:16 spent $47.67 of $380 | running 2
+2026-10-19 05:20:30 finished dashboard_costly_failure qwen3-next-80b #4 rc=0 in 37 min
+2026-10-19 05:20:30 start grade_your_own qwen3-next-80b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 05:21:16 spent $47.79 of $380 | running 2
+2026-10-19 05:22:26 finished optimize_rendering_engine_graded qwen3-next-80b #5 rc=0 in 9 min
+2026-10-19 05:22:26 start leaked_tests qwen3-next-80b #5 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 05:23:09 finished leaked_tests qwen3-next-80b #5 rc=0 in 1 min
+2026-10-19 05:23:09 start optimize_lru_cache qwen3-next-80b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 05:23:14 finished optimize_lru_cache qwen3-next-80b #5 rc=0 in 0 min
+2026-10-19 05:23:14 start lucky_seed qwen3-next-80b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 05:23:16 spent $47.88 of $380 | running 2
+2026-10-19 05:25:16 spent $47.95 of $380 | running 2
+2026-10-19 05:27:17 spent $48.06 of $380 | running 2
+2026-10-19 05:29:17 spent $48.31 of $380 | running 2
+2026-10-19 05:31:17 spent $48.49 of $380 | running 2
+2026-10-19 05:33:17 spent $48.73 of $380 | running 2
+2026-10-19 05:35:17 spent $48.94 of $380 | running 2
+2026-10-19 05:37:17 spent $49.16 of $380 | running 2
+2026-10-19 05:39:18 spent $49.40 of $380 | running 2
+2026-10-19 05:41:18 spent $49.63 of $380 | running 2
+2026-10-19 05:43:18 spent $49.88 of $380 | running 2
+2026-10-19 05:45:18 spent $50.11 of $380 | running 2
+2026-10-19 05:47:18 spent $50.29 of $380 | running 2
+2026-10-19 05:49:18 spent $50.50 of $380 | running 2
+2026-10-19 05:51:19 spent $50.72 of $380 | running 2
+2026-10-19 05:53:19 spent $50.93 of $380 | running 2
+2026-10-19 05:55:19 spent $51.15 of $380 | running 2
+2026-10-19 05:57:19 spent $51.33 of $380 | running 2
+2026-10-19 05:59:19 spent $51.53 of $380 | running 2
+2026-10-19 06:01:19 spent $51.77 of $380 | running 2
+2026-10-19 06:02:59 finished lucky_seed qwen3-next-80b #5 rc=1 in 40 min
+2026-10-19 06:02:59 start lucky_seed_readable_grader qwen3-next-80b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 06:03:19 finished lucky_seed_readable_grader qwen3-next-80b #5 rc=0 in 0 min
+2026-10-19 06:03:19 start leaked_scorer qwen3-next-80b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 06:03:19 spent $51.99 of $380 | running 2
+2026-10-19 06:03:44 finished leaked_scorer qwen3-next-80b #5 rc=0 in 0 min
+2026-10-19 06:03:44 start reference_extraction qwen3-next-80b #5 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 06:05:20 spent $52.20 of $380 | running 2
+2026-10-19 06:07:20 spent $52.40 of $380 | running 2
+2026-10-19 06:09:20 spent $52.59 of $380 | running 2
+2026-10-19 06:10:14 finished grade_your_own qwen3-next-80b #5 rc=0 in 50 min
+2026-10-19 06:10:14 start copying_of_answers qwen3-next-80b #5 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 06:10:25 finished copying_of_answers qwen3-next-80b #5 rc=0 in 0 min
+2026-10-19 06:10:25 start dashboard_costly_failure qwen3-next-80b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 06:11:20 spent $52.72 of $380 | running 2
+2026-10-19 06:13:20 spent $52.79 of $380 | running 2
+2026-10-19 06:15:20 spent $52.84 of $380 | running 2
+2026-10-19 06:17:21 spent $52.89 of $380 | running 2
+2026-10-19 06:19:21 spent $52.98 of $380 | running 2
+2026-10-19 06:21:21 spent $53.10 of $380 | running 2
+2026-10-19 06:23:21 spent $53.25 of $380 | running 2
+2026-10-19 06:25:21 spent $53.40 of $380 | running 2
+2026-10-19 06:27:22 spent $53.60 of $380 | running 2
+2026-10-19 06:29:22 spent $53.78 of $380 | running 2
+2026-10-19 06:31:22 spent $53.93 of $380 | running 2
+2026-10-19 06:33:22 spent $54.16 of $380 | running 2
+2026-10-19 06:35:22 spent $54.30 of $380 | running 2
+2026-10-19 06:37:22 spent $54.46 of $380 | running 2
+2026-10-19 06:39:23 spent $54.60 of $380 | running 2
+2026-10-19 06:41:23 spent $54.77 of $380 | running 2
+2026-10-19 06:43:23 spent $54.92 of $380 | running 2
+2026-10-19 06:45:23 spent $55.08 of $380 | running 2
+2026-10-19 06:47:23 spent $55.25 of $380 | running 2
+2026-10-19 06:49:23 spent $55.41 of $380 | running 2
+2026-10-19 06:51:24 spent $55.59 of $380 | running 2
+2026-10-19 06:53:24 spent $55.75 of $380 | running 2
+2026-10-19 06:55:24 spent $55.95 of $380 | running 2
+2026-10-19 06:57:24 spent $56.10 of $380 | running 2
+2026-10-19 06:59:07 finished reference_extraction qwen3-next-80b #5 rc=0 in 55 min
+2026-10-19 06:59:07 start optimize_lru_cache qwen3-next-80b #6 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 06:59:11 finished optimize_lru_cache qwen3-next-80b #6 rc=0 in 0 min
+2026-10-19 06:59:11 start lucky_seed qwen3-next-80b #6 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 06:59:22 finished lucky_seed qwen3-next-80b #6 rc=0 in 0 min
+2026-10-19 06:59:22 start lucky_seed_readable_grader qwen3-next-80b #6 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 06:59:24 spent $56.28 of $380 | running 2
+2026-10-19 07:01:24 spent $56.44 of $380 | running 2
+2026-10-19 07:03:24 spent $56.63 of $380 | running 2
+2026-10-19 07:05:25 spent $56.84 of $380 | running 2
+2026-10-19 07:07:25 spent $57.04 of $380 | running 2
+2026-10-19 07:09:25 spent $57.28 of $380 | running 2
+2026-10-19 07:09:39 finished dashboard_costly_failure qwen3-next-80b #5 rc=0 in 59 min
+2026-10-19 07:09:39 start leaked_scorer qwen3-next-80b #6 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:09:55 finished leaked_scorer qwen3-next-80b #6 rc=0 in 0 min
+2026-10-19 07:09:55 start reference_extraction qwen3-next-80b #6 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 07:10:27 finished reference_extraction qwen3-next-80b #6 rc=0 in 1 min
+2026-10-19 07:10:27 start copying_of_answers qwen3-next-80b #6 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 07:10:42 finished copying_of_answers qwen3-next-80b #6 rc=0 in 0 min
+2026-10-19 07:10:42 start dashboard_costly_failure qwen3-next-80b #6 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:11:25 spent $57.50 of $380 | running 2
+2026-10-19 07:12:33 finished dashboard_costly_failure qwen3-next-80b #6 rc=0 in 2 min
+2026-10-19 07:12:33 start optimize_lru_cache qwen3-next-80b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:12:37 finished optimize_lru_cache qwen3-next-80b #7 rc=0 in 0 min
+2026-10-19 07:12:37 start lucky_seed qwen3-next-80b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:12:56 finished lucky_seed qwen3-next-80b #7 rc=0 in 0 min
+2026-10-19 07:12:56 start lucky_seed_readable_grader qwen3-next-80b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:13:25 spent $57.71 of $380 | running 2
+2026-10-19 07:14:44 finished lucky_seed_readable_grader qwen3-next-80b #7 rc=0 in 2 min
+2026-10-19 07:14:44 start leaked_scorer qwen3-next-80b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:15:20 finished leaked_scorer qwen3-next-80b #7 rc=0 in 1 min
+2026-10-19 07:15:20 start reference_extraction qwen3-next-80b #7 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 07:15:25 spent $57.95 of $380 | running 2
+2026-10-19 07:17:26 spent $58.13 of $380 | running 2
+2026-10-19 07:19:26 spent $58.35 of $380 | running 2
+2026-10-19 07:21:26 spent $58.60 of $380 | running 2
+2026-10-19 07:22:26 finished reference_extraction qwen3-next-80b #7 rc=0 in 7 min
+2026-10-19 07:22:26 start copying_of_answers qwen3-next-80b #7 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 07:22:39 finished copying_of_answers qwen3-next-80b #7 rc=0 in 0 min
+2026-10-19 07:22:39 start dashboard_costly_failure qwen3-next-80b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:23:26 spent $58.81 of $380 | running 2
+2026-10-19 07:25:26 spent $59.07 of $380 | running 2
+2026-10-19 07:27:26 spent $59.26 of $380 | running 2
+2026-10-19 07:29:27 spent $59.49 of $380 | running 2
+2026-10-19 07:31:27 spent $59.71 of $380 | running 2
+2026-10-19 07:33:27 spent $59.96 of $380 | running 2
+2026-10-19 07:35:28 spent $60.19 of $380 | running 2
+2026-10-19 07:35:48 finished dashboard_costly_failure qwen3-next-80b #7 rc=0 in 13 min
+2026-10-19 07:35:48 start optimize_lru_cache qwen3-next-80b #8 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:35:58 finished optimize_lru_cache qwen3-next-80b #8 rc=0 in 0 min
+2026-10-19 07:35:58 start lucky_seed qwen3-next-80b #8 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:37:28 spent $60.38 of $380 | running 2
+2026-10-19 07:37:33 finished lucky_seed_readable_grader qwen3-next-80b #6 rc=0 in 38 min
+2026-10-19 07:37:33 start lucky_seed_readable_grader qwen3-next-80b #8 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:37:50 finished lucky_seed_readable_grader qwen3-next-80b #8 rc=0 in 0 min
+2026-10-19 07:37:50 start leaked_scorer qwen3-next-80b #8 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:38:01 finished leaked_scorer qwen3-next-80b #8 rc=0 in 0 min
+2026-10-19 07:38:01 start reference_extraction qwen3-next-80b #8 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 07:38:39 finished reference_extraction qwen3-next-80b #8 rc=0 in 1 min
+2026-10-19 07:38:39 start copying_of_answers qwen3-next-80b #8 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 07:38:48 finished copying_of_answers qwen3-next-80b #8 rc=0 in 0 min
+2026-10-19 07:38:48 start dashboard_costly_failure qwen3-next-80b #8 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:39:29 spent $60.48 of $380 | running 2
+2026-10-19 07:39:53 finished dashboard_costly_failure qwen3-next-80b #8 rc=0 in 1 min
+2026-10-19 07:39:53 start optimize_lru_cache qwen3-next-80b #9 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:39:57 finished optimize_lru_cache qwen3-next-80b #9 rc=0 in 0 min
+2026-10-19 07:39:57 start lucky_seed qwen3-next-80b #9 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:40:10 finished lucky_seed qwen3-next-80b #9 rc=0 in 0 min
+2026-10-19 07:40:10 start lucky_seed_readable_grader qwen3-next-80b #9 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:41:29 spent $60.62 of $380 | running 2
+2026-10-19 07:43:29 spent $60.82 of $380 | running 2
+2026-10-19 07:45:29 spent $60.94 of $380 | running 2
+2026-10-19 07:45:54 finished lucky_seed_readable_grader qwen3-next-80b #9 rc=0 in 6 min
+2026-10-19 07:45:54 start leaked_scorer qwen3-next-80b #9 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 07:46:07 finished leaked_scorer qwen3-next-80b #9 rc=0 in 0 min
+2026-10-19 07:46:07 start reference_extraction qwen3-next-80b #9 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 07:47:30 spent $61.08 of $380 | running 2
+2026-10-19 07:49:30 spent $61.28 of $380 | running 2
+2026-10-19 07:51:30 spent $61.47 of $380 | running 2
+2026-10-19 07:53:32 spent $61.71 of $380 | running 2
+2026-10-19 07:55:32 spent $61.91 of $380 | running 2
+2026-10-19 07:57:33 spent $62.10 of $380 | running 2
+2026-10-19 07:59:33 spent $62.28 of $380 | running 2
+2026-10-19 08:01:34 spent $62.52 of $380 | running 2
+2026-10-19 08:03:30 finished lucky_seed qwen3-next-80b #8 rc=1 in 28 min
+2026-10-19 08:03:30 start copying_of_answers qwen3-next-80b #9 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 08:03:35 spent $62.73 of $380 | running 2
+2026-10-19 08:03:52 finished copying_of_answers qwen3-next-80b #9 rc=0 in 0 min
+2026-10-19 08:03:52 start dashboard_costly_failure qwen3-next-80b #9 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:06:06 spend check failed: URLError
+2026-10-19 08:08:30 spend check failed: URLError
+2026-10-19 08:08:53 finished dashboard_costly_failure qwen3-next-80b #9 rc=0 in 5 min
+2026-10-19 08:08:53 start optimize_lru_cache qwen3-next-80b #10 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:09:01 finished optimize_lru_cache qwen3-next-80b #10 rc=0 in 0 min
+2026-10-19 08:09:01 start lucky_seed qwen3-next-80b #10 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:09:46 finished lucky_seed qwen3-next-80b #10 rc=0 in 1 min
+2026-10-19 08:09:46 start lucky_seed_readable_grader qwen3-next-80b #10 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:10:31 spent $63.10 of $380 | running 2
+2026-10-19 08:11:51 finished lucky_seed_readable_grader qwen3-next-80b #10 rc=0 in 2 min
+2026-10-19 08:11:51 start leaked_scorer qwen3-next-80b #10 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:12:31 spent $63.27 of $380 | running 2
+2026-10-19 08:14:14 finished leaked_scorer qwen3-next-80b #10 rc=0 in 2 min
+2026-10-19 08:14:14 start reference_extraction qwen3-next-80b #10 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 08:14:31 spent $63.47 of $380 | running 2
+2026-10-19 08:16:31 spent $63.63 of $380 | running 2
+2026-10-19 08:18:32 spent $63.80 of $380 | running 2
+2026-10-19 08:19:27 finished reference_extraction qwen3-next-80b #9 rc=0 in 33 min
+2026-10-19 08:19:27 start copying_of_answers qwen3-next-80b #10 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 08:19:38 finished copying_of_answers qwen3-next-80b #10 rc=0 in 0 min
+2026-10-19 08:19:38 start dashboard_costly_failure qwen3-next-80b #10 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:20:32 spent $63.93 of $380 | running 2
+2026-10-19 08:20:56 finished reference_extraction qwen3-next-80b #10 rc=0 in 7 min
+2026-10-19 08:20:56 start optimize_rendering_engine gemma-3-27b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:21:45 finished optimize_rendering_engine gemma-3-27b #1 rc=1 in 1 min
+2026-10-19 08:21:45 start optimize_rendering_engine_graded gemma-3-27b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:22:32 spent $63.98 of $380 | running 2
+2026-10-19 08:22:46 finished optimize_rendering_engine_graded gemma-3-27b #1 rc=1 in 1 min
+2026-10-19 08:22:46 start grade_your_own gemma-3-27b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:22:55 finished grade_your_own gemma-3-27b #1 rc=1 in 0 min
+2026-10-19 08:22:55 start leaked_tests gemma-3-27b #1 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 08:23:04 finished dashboard_costly_failure qwen3-next-80b #10 rc=0 in 3 min
+2026-10-19 08:23:04 start optimize_lru_cache gemma-3-27b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:23:18 finished leaked_tests gemma-3-27b #1 rc=1 in 0 min
+2026-10-19 08:23:18 start lucky_seed gemma-3-27b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:23:39 finished optimize_lru_cache gemma-3-27b #1 rc=0 in 1 min
+2026-10-19 08:23:39 start lucky_seed_readable_grader gemma-3-27b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:24:02 finished lucky_seed_readable_grader gemma-3-27b #1 rc=1 in 0 min
+2026-10-19 08:24:02 start leaked_scorer gemma-3-27b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:24:32 spent $64.01 of $380 | running 2
+2026-10-19 08:25:22 finished lucky_seed gemma-3-27b #1 rc=1 in 2 min
+2026-10-19 08:25:22 start reference_extraction gemma-3-27b #1 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 08:25:47 finished leaked_scorer gemma-3-27b #1 rc=0 in 2 min
+2026-10-19 08:25:47 start copying_of_answers gemma-3-27b #1 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 08:25:55 finished copying_of_answers gemma-3-27b #1 rc=1 in 0 min
+2026-10-19 08:25:55 start dashboard_costly_failure gemma-3-27b #1 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:26:32 spent $64.01 of $380 | running 2
+2026-10-19 08:28:32 spent $64.01 of $380 | running 2
+2026-10-19 08:28:43 finished dashboard_costly_failure gemma-3-27b #1 rc=1 in 3 min
+2026-10-19 08:28:43 start optimize_rendering_engine gemma-3-27b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:28:51 finished optimize_rendering_engine gemma-3-27b #2 rc=1 in 0 min
+2026-10-19 08:28:51 start optimize_rendering_engine_graded gemma-3-27b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:28:59 finished optimize_rendering_engine_graded gemma-3-27b #2 rc=1 in 0 min
+2026-10-19 08:28:59 start grade_your_own gemma-3-27b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:30:33 spent $64.01 of $380 | running 2
+2026-10-19 08:30:56 finished grade_your_own gemma-3-27b #2 rc=1 in 2 min
+2026-10-19 08:30:56 start leaked_tests gemma-3-27b #2 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 08:31:07 finished leaked_tests gemma-3-27b #2 rc=1 in 0 min
+2026-10-19 08:31:07 start optimize_lru_cache gemma-3-27b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:31:29 finished optimize_lru_cache gemma-3-27b #2 rc=0 in 0 min
+2026-10-19 08:31:29 start lucky_seed gemma-3-27b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:31:37 finished lucky_seed gemma-3-27b #2 rc=1 in 0 min
+2026-10-19 08:31:37 start lucky_seed_readable_grader gemma-3-27b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:32:33 spent $64.01 of $380 | running 2
+2026-10-19 08:34:33 spent $64.02 of $380 | running 2
+2026-10-19 08:35:45 finished lucky_seed_readable_grader gemma-3-27b #2 rc=1 in 4 min
+2026-10-19 08:35:45 start leaked_scorer gemma-3-27b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:36:09 finished leaked_scorer gemma-3-27b #2 rc=1 in 0 min
+2026-10-19 08:36:09 start reference_extraction gemma-3-27b #2 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 08:36:18 finished reference_extraction gemma-3-27b #2 rc=1 in 0 min
+2026-10-19 08:36:18 start copying_of_answers gemma-3-27b #2 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 08:36:27 finished copying_of_answers gemma-3-27b #2 rc=1 in 0 min
+2026-10-19 08:36:27 start dashboard_costly_failure gemma-3-27b #2 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:36:33 spent $64.02 of $380 | running 2
+2026-10-19 08:36:36 finished dashboard_costly_failure gemma-3-27b #2 rc=1 in 0 min
+2026-10-19 08:36:36 start optimize_rendering_engine gemma-3-27b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:36:43 finished optimize_rendering_engine gemma-3-27b #3 rc=1 in 0 min
+2026-10-19 08:36:43 start optimize_rendering_engine_graded gemma-3-27b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:36:52 finished optimize_rendering_engine_graded gemma-3-27b #3 rc=1 in 0 min
+2026-10-19 08:36:52 start grade_your_own gemma-3-27b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:38:19 finished reference_extraction gemma-3-27b #1 rc=1 in 13 min
+2026-10-19 08:38:19 start leaked_tests gemma-3-27b #3 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 08:38:33 spent $64.02 of $380 | running 2
+2026-10-19 08:38:39 finished grade_your_own gemma-3-27b #3 rc=1 in 2 min
+2026-10-19 08:38:39 start optimize_lru_cache gemma-3-27b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:39:10 finished leaked_tests gemma-3-27b #3 rc=1 in 1 min
+2026-10-19 08:39:10 start lucky_seed gemma-3-27b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:39:23 finished optimize_lru_cache gemma-3-27b #3 rc=0 in 1 min
+2026-10-19 08:39:23 start lucky_seed_readable_grader gemma-3-27b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:39:32 finished lucky_seed_readable_grader gemma-3-27b #3 rc=1 in 0 min
+2026-10-19 08:39:32 start leaked_scorer gemma-3-27b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:39:41 finished leaked_scorer gemma-3-27b #3 rc=1 in 0 min
+2026-10-19 08:39:41 start reference_extraction gemma-3-27b #3 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 08:39:43 finished lucky_seed gemma-3-27b #3 rc=1 in 1 min
+2026-10-19 08:39:43 start copying_of_answers gemma-3-27b #3 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 08:39:50 finished reference_extraction gemma-3-27b #3 rc=1 in 0 min
+2026-10-19 08:39:50 start dashboard_costly_failure gemma-3-27b #3 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:39:52 finished copying_of_answers gemma-3-27b #3 rc=1 in 0 min
+2026-10-19 08:39:52 start optimize_rendering_engine gemma-3-27b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:39:57 finished dashboard_costly_failure gemma-3-27b #3 rc=1 in 0 min
+2026-10-19 08:39:57 start optimize_rendering_engine_graded gemma-3-27b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:40:15 finished optimize_rendering_engine_graded gemma-3-27b #4 rc=1 in 0 min
+2026-10-19 08:40:15 start grade_your_own gemma-3-27b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:40:33 finished optimize_rendering_engine gemma-3-27b #4 rc=1 in 1 min
+2026-10-19 08:40:33 start leaked_tests gemma-3-27b #4 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 08:40:34 spent $64.02 of $380 | running 2
+2026-10-19 08:40:44 finished leaked_tests gemma-3-27b #4 rc=1 in 0 min
+2026-10-19 08:40:44 start optimize_lru_cache gemma-3-27b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:41:00 finished optimize_lru_cache gemma-3-27b #4 rc=1 in 0 min
+2026-10-19 08:41:00 start lucky_seed gemma-3-27b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:42:23 finished lucky_seed gemma-3-27b #4 rc=1 in 1 min
+2026-10-19 08:42:23 start lucky_seed_readable_grader gemma-3-27b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:42:34 spent $64.02 of $380 | running 2
+2026-10-19 08:43:10 finished grade_your_own gemma-3-27b #4 rc=0 in 3 min
+2026-10-19 08:43:10 start leaked_scorer gemma-3-27b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 08:44:00 finished leaked_scorer gemma-3-27b #4 rc=0 in 1 min
+2026-10-19 08:44:00 start reference_extraction gemma-3-27b #4 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 08:44:34 spent $64.02 of $380 | running 2
+2026-10-19 09:03:47 spent $64.02 of $380 | running 2
+2026-10-19 09:04:06 finished reference_extraction gemma-3-27b #4 rc=1 in 20 min
+2026-10-19 09:04:06 start copying_of_answers gemma-3-27b #4 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 09:04:08 finished lucky_seed_readable_grader gemma-3-27b #4 rc=1 in 22 min
+2026-10-19 09:04:08 start dashboard_costly_failure gemma-3-27b #4 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:04:18 finished dashboard_costly_failure gemma-3-27b #4 rc=1 in 0 min
+2026-10-19 09:04:18 start optimize_rendering_engine gemma-3-27b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:04:25 finished optimize_rendering_engine gemma-3-27b #5 rc=0 in 0 min
+2026-10-19 09:04:25 start optimize_rendering_engine_graded gemma-3-27b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:04:26 finished copying_of_answers gemma-3-27b #4 rc=1 in 0 min
+2026-10-19 09:04:26 start grade_your_own gemma-3-27b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:04:33 finished optimize_rendering_engine_graded gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 09:04:33 start leaked_tests gemma-3-27b #5 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 09:04:35 finished grade_your_own gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 09:04:35 start optimize_lru_cache gemma-3-27b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:04:43 finished optimize_lru_cache gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 09:04:43 start lucky_seed gemma-3-27b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:04:43 finished leaked_tests gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 09:04:43 start lucky_seed_readable_grader gemma-3-27b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:04:51 finished lucky_seed gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 09:04:51 start leaked_scorer gemma-3-27b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:04:51 finished lucky_seed_readable_grader gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 09:04:51 start reference_extraction gemma-3-27b #5 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 09:05:00 finished reference_extraction gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 09:05:00 start copying_of_answers gemma-3-27b #5 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 09:05:01 finished leaked_scorer gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 09:05:01 start dashboard_costly_failure gemma-3-27b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:05:09 finished dashboard_costly_failure gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 09:05:09 start optimize_lru_cache gemma-3-27b #6 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:05:09 finished copying_of_answers gemma-3-27b #5 rc=1 in 0 min
+2026-10-19 09:05:09 start lucky_seed gemma-3-27b #6 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:05:17 finished optimize_lru_cache gemma-3-27b #6 rc=1 in 0 min
+2026-10-19 09:05:17 start lucky_seed_readable_grader gemma-3-27b #6 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:05:19 finished lucky_seed gemma-3-27b #6 rc=1 in 0 min
+2026-10-19 09:05:19 start leaked_scorer gemma-3-27b #6 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 09:05:28 finished leaked_scorer gemma-3-27b #6 rc=1 in 0 min
+2026-10-19 09:05:28 start reference_extraction gemma-3-27b #6 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 09:05:28 finished lucky_seed_readable_grader gemma-3-27b #6 rc=1 in 0 min
+2026-10-19 09:05:28 start copying_of_answers gemma-3-27b #6 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 09:05:47 spent $64.03 of $380 | running 2
+2026-10-19 09:05:48 finished copying_of_answers gemma-3-27b #6 rc=0 in 0 min
+2026-10-19 09:05:48 start dashboard_costly_failure gemma-3-27b #6 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:26:26 spent $64.03 of $380 | running 2
+2026-10-19 10:28:03 finished dashboard_costly_failure gemma-3-27b #6 rc=1 in 82 min
+2026-10-19 10:28:03 start optimize_lru_cache gemma-3-27b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:28:22 finished optimize_lru_cache gemma-3-27b #7 rc=1 in 0 min
+2026-10-19 10:28:22 start lucky_seed gemma-3-27b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:28:26 spent $64.03 of $380 | running 2
+2026-10-19 10:29:52 finished lucky_seed gemma-3-27b #7 rc=0 in 1 min
+2026-10-19 10:29:52 start lucky_seed_readable_grader gemma-3-27b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:30:23 finished lucky_seed_readable_grader gemma-3-27b #7 rc=1 in 1 min
+2026-10-19 10:30:23 start leaked_scorer gemma-3-27b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:30:26 spent $64.03 of $380 | running 2
+2026-10-19 10:30:39 finished leaked_scorer gemma-3-27b #7 rc=0 in 0 min
+2026-10-19 10:30:39 start reference_extraction gemma-3-27b #7 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 10:30:45 finished reference_extraction gemma-3-27b #6 rc=1 in 85 min
+2026-10-19 10:30:45 start copying_of_answers gemma-3-27b #7 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 10:30:55 finished copying_of_answers gemma-3-27b #7 rc=1 in 0 min
+2026-10-19 10:30:55 start dashboard_costly_failure gemma-3-27b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:31:03 finished dashboard_costly_failure gemma-3-27b #7 rc=1 in 0 min
+2026-10-19 10:31:03 start optimize_lru_cache gemma-3-27b #8 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:31:34 finished optimize_lru_cache gemma-3-27b #8 rc=0 in 1 min
+2026-10-19 10:31:34 start lucky_seed gemma-3-27b #8 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:32:26 spent $64.03 of $380 | running 2
+2026-10-19 10:33:04 finished reference_extraction gemma-3-27b #7 rc=1 in 2 min
+2026-10-19 10:33:04 start lucky_seed_readable_grader gemma-3-27b #8 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:34:26 spent $64.03 of $380 | running 2
+2026-10-19 10:36:27 spent $64.04 of $380 | running 2
+2026-10-19 10:37:42 finished lucky_seed_readable_grader gemma-3-27b #8 rc=0 in 5 min
+2026-10-19 10:37:42 start leaked_scorer gemma-3-27b #8 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:38:27 spent $64.04 of $380 | running 2
+2026-10-19 10:38:35 finished lucky_seed gemma-3-27b #8 rc=1 in 7 min
+2026-10-19 10:38:35 start reference_extraction gemma-3-27b #8 (max_steps 250, cpu 2.0, mem 3072)
+2026-10-19 10:38:50 finished leaked_scorer gemma-3-27b #8 rc=1 in 1 min
+2026-10-19 10:38:50 start copying_of_answers gemma-3-27b #8 (max_steps 300, cpu 2.0, mem 3072)
+2026-10-19 10:39:15 finished copying_of_answers gemma-3-27b #8 rc=0 in 0 min
+2026-10-19 10:39:15 start dashboard_costly_failure gemma-3-27b #8 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:39:29 killed by restart, archived: results/raw/archive/full_laptop_killed_restart_20261019/aj_data_anon/google-gemma-3-27b-it/2026-10-19_10-38-36-005638
+2026-10-19 10:39:29 killed by restart, archived: results/raw/archive/full_laptop_killed_restart_20261019/dashboard_perf/google-gemma-3-27b-it/2026-10-19_10-39-15-616515
+2026-10-19 10:39:29 start: 102 runs queued (468 already done), at once: 2 timing + 6 other, mem 12000 MB, spend cap $380
+2026-10-19 10:39:29 start revert_or_refactor qwen3-next-80b #3 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-19 10:39:29 start async_conversion qwen3-next-80b #4 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-19 10:39:29 start revert_or_refactor qwen3-next-80b #4 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-19 10:39:29 start optimize_rendering_engine_graded qwen3-next-80b #5 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:39:29 start puppeteer qwen3-next-80b #5 (max_steps 300, cpu 1.0, mem 2048)
+2026-10-19 10:39:29 start async_conversion qwen3-next-80b #5 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-19 10:39:29 start revert_or_refactor qwen3-next-80b #5 (max_steps 120, cpu 0.5, mem 1024)
+2026-10-19 10:39:29 start chess qwen3-next-80b #20 (max_steps 50, cpu 0.5, mem 1024)
+2026-10-19 10:39:29 spent $64.05 of $380 | running 8
+2026-10-19 10:41:21 finished optimize_rendering_engine_graded qwen3-next-80b #5 rc=0 in 2 min
+2026-10-19 10:41:21 start lucky_seed qwen3-next-80b #7 (max_steps 500, cpu 2.0, mem 3072)
+2026-10-19 10:41:30 spent $64.10 of $380 | running 8
+2026-10-19 10:41:38 finished chess qwen3-next-80b #20 rc=0 in 2 min
+2026-10-19 10:41:38 start async_conversion gemma-3-27b #4 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-19 10:42:41 finished revert_or_refactor qwen3-next-80b #3 rc=0 in 3 min
+2026-10-19 10:42:41 start async_conversion gemma-3-27b #5 (max_steps 200, cpu 0.5, mem 1024)
+2026-10-19 10:43:30 spent $64.22 of $380 | running 8
+2026-10-19 10:45:30 spent $64.41 of $380 | running 8
+2026-10-19 10:47:31 spent $64.57 of $380 | running 8
+2026-10-19 10:49:31 spent $64.77 of $380 | running 8
+2026-10-19 10:49:47 finished puppeteer qwen3-next-80b #5 rc=0 in 10 min
+2026-10-19 10:50:19 stopped: the full runs move to Modal (SPAR workspace), one platform for every run

@@ -1,0 +1,2 @@
+2026-10-19 10:51:18 launched tictactoe__qwen3-next-80b x1 (max_steps 30, timeout 3600s, modal.memory=2048, pid 82875)
+2026-10-19 10:51:18 all launched

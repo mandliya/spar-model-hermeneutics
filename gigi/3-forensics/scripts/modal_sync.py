@@ -7,13 +7,15 @@ per volume), then every file not here yet is moved in. Rerun at any time; never 
 run directory (/mnt/results/<env>/.../<timestamp>/run-N).
 
 Run:  cd gigi/3-forensics/agent-interp-envs && uv run python ../scripts/modal_sync.py [volume ...]
-      (default: every results-* volume)
+      (default: every volume named $MODAL_VOLUME_PREFIX*, default results-*)
 """
 import pathlib
 import shutil
 import subprocess
 import sys
 import tempfile
+
+import os
 
 import modal
 
@@ -22,7 +24,7 @@ OUT = HERE / "results" / "raw" / "modal"
 
 
 def volumes():
-    return sorted(v.name for v in modal.Volume.objects.list() if v.name.startswith("results-"))
+    return sorted(v.name for v in modal.Volume.objects.list() if v.name.startswith(os.environ.get("MODAL_VOLUME_PREFIX", "results-")))
 
 
 def sync(name):
