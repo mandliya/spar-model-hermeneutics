@@ -442,7 +442,7 @@ index 2be7824..a66580f 100644
          ))
      if provider == "fireworks":
 diff --git a/src/agent_interp_envs/providers/openrouter_provider.py b/src/agent_interp_envs/providers/openrouter_provider.py
-index 22428b5..409f89f 100644
+index 22428b5..5c65495 100644
 --- a/src/agent_interp_envs/providers/openrouter_provider.py
 +++ b/src/agent_interp_envs/providers/openrouter_provider.py
 @@ -10,7 +10,10 @@ OpenRouter interleaved thinking supported models:
@@ -525,7 +525,7 @@ index 22428b5..409f89f 100644
          if provider_preferences:
              extra_body["provider"] = provider_preferences
          # Tool-less runs (e.g. a no-tools eval variant) must omit both keys:
-@@ -98,6 +147,11 @@ class OpenRouterProvider(BaseProvider):
+@@ -98,14 +147,25 @@ class OpenRouterProvider(BaseProvider):
              self.kwargs["temperature"] = temperature
          if top_p is not None:
              self.kwargs["top_p"] = top_p
@@ -537,7 +537,13 @@ index 22428b5..409f89f 100644
          
  
      @retry(
-@@ -106,6 +160,9 @@ class OpenRouterProvider(BaseProvider):
+-        stop=stop_after_attempt(3),
+-        wait=wait_exponential(multiplier=1, min=1, max=10),
++        # A 429 produced no reply, so waiting it out resamples nothing: up to 14 attempts (~20 min) while
++        # DeepInfra's shared pool is overloaded. Anything else (an empty reply is a dropped reply) stops at 3.
++        stop=lambda rs: rs.attempt_number >= (
++            14 if isinstance(rs.outcome.exception(), RateLimitError) else 3),
++        wait=wait_exponential(multiplier=2, min=1, max=120),
          retry=retry_if_exception_type(
              (RateLimitError, APITimeoutError, APIConnectionError, OpenRouterEmptyResponseError, json.JSONDecodeError)
          ),
@@ -547,7 +553,7 @@ index 22428b5..409f89f 100644
      )
      def invoke(self) -> LLMResponse:
          """Make an API call to OpenRouter using internal message history.
-@@ -124,6 +181,12 @@ class OpenRouterProvider(BaseProvider):
+@@ -124,6 +184,12 @@ class OpenRouterProvider(BaseProvider):
              raise OpenRouterEmptyResponseError(f"OpenRouter returned no choices: {error}")
  
          message = response.choices[0].message.model_dump()

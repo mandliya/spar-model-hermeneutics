@@ -13,6 +13,8 @@
 #       Docker Desktop too (overlayfs refuses git's rename there); the image is the same
 #     - the OpenRouter provider logs every retry ("[provider retry] ..." in rollout.log): a retry resamples
 #       the reply, and DeepInfra drops gemma replies whose tool call it cannot parse, so retries must be visible
+#     - a 429 is waited out for up to 14 attempts (~20 min; no reply was made, so nothing is resampled);
+#       other errors still stop at 3
 set -euo pipefail
 cd "$(dirname "$0")"
 COMMIT=310c03f

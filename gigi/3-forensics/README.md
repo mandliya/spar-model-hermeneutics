@@ -78,6 +78,9 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
    - An empty reply (no text, no call) is retried as a provider glitch, not read as the end. Every
      retry is logged (`[provider retry]` in `rollout.log`, from 19 Oct 2026): for gemma an empty reply
      is often a tool call DeepInfra dropped (see Status), and a silent retry would resample it away.
+   - A rate limit (429) is retried for up to ~20 min instead of 3 tries in 10 s: from 19 Oct DeepInfra's
+     shared gemma pool was overloaded (`engine_overloaded`) and most of gemma's timing runs died at step 0.
+     Nothing is resampled (a 429 has no reply). Those runs were rerun.
    - `async_conversion`'s Dockerfile moves its workspace repo into `/opt` with `mv`, so it builds on
      Docker Desktop (overlayfs refuses git's rename there). The image is the same.
 5. Broken Test Runner: the paper grades reports offline with a grader that isn't public; ours is
