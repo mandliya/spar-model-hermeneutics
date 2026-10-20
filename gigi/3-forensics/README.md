@@ -75,6 +75,16 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
      ```` ```tool_code [execute_command(command='ls')] ``` ```` (also labelled python, or a bare
      line); the harness read that as a final reply. When a reply has no structured call, the first
      such call that names an offered tool becomes one. gemma's text stays in the transcript.
+   - **From 20 Oct 2026, gemma runs in text mode (`agent.text_tools: true`).** Before, the tools went
+     to DeepInfra, which turned gemma's text into structured calls itself and silently dropped any
+     reply it could not parse (two environments unusable, 40 runs lost; Status). Now the request
+     carries no `tools`: the system prompt carries Google's Gemma 3 function-calling instruction
+     verbatim (from philschmid.de/gemma-function-calling, the reference Google points to) and the
+     tools as Python stubs; every earlier call in the history, gemma's own or Qwen's in a swap, is
+     shown as a ```` ```tool_code ```` block and every result as ```` ```tool_output ````; our harness
+     parses the reply into a call. Stored transcripts keep the standard format. Checked on the
+     failures: currency_conversion's first request 5/5 calls (was 0/3), funding_email's step 2 5/5
+     (was dropped in 16/20 runs). Qwen is unchanged (native tool calls).
    - An empty reply (no text, no call) is retried as a provider glitch, not read as the end. Every
      retry is logged (`[provider retry]` in `rollout.log`, from 19 Oct 2026): for gemma an empty reply
      is often a tool call DeepInfra dropped (see Status), and a silent retry would resample it away.

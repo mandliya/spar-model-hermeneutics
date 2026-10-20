@@ -29,6 +29,7 @@ agent:
     only: [deepinfra]
     allow_fallbacks: false
   reasoning_effort: none  # no reasoning mode: send no reasoning field (our patch)
+  text_tools: true        # gemma-3 has no tool-call tokens: tools described in the prompt, calls parsed by our harness (README)
   temperature: 1.0     # model card: temperature 1.0, top-p 0.95, top-k 64
   top_p: 0.95
   top_k: 64

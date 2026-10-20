@@ -471,10 +471,10 @@ index e0138a1..a477f01 100644
                  except Exception as exc:
                      if not resent_400 and "Invalid request data" in str(exc):
 diff --git a/src/agent_interp_envs/providers/__init__.py b/src/agent_interp_envs/providers/__init__.py
-index 2be7824..a66580f 100644
+index 2be7824..105dfaf 100644
 --- a/src/agent_interp_envs/providers/__init__.py
 +++ b/src/agent_interp_envs/providers/__init__.py
-@@ -105,6 +105,8 @@ def _create_provider(
+@@ -105,10 +105,13 @@ def _create_provider(
      provider_preferences: dict | None = None,
      temperature: float | None = None,
      top_p: float | None = None,
@@ -483,17 +483,27 @@ index 2be7824..a66580f 100644
      reasoning_effort: str | None = None,
      reasoning_summary: str | None = None,
      rejection: dict | None = None,
-@@ -194,6 +196,8 @@ def _create_provider(
+     mock_script: list[str] | None = None,
++    text_tools: bool = False,
+ ) -> BaseProvider:
+     """Create an LLM provider instance.
+ 
+@@ -194,8 +197,13 @@ def _create_provider(
              provider_preferences=provider_preferences,
              temperature=temperature,
              top_p=top_p,
 +            top_k=top_k,
 +            min_p=min_p,
              reasoning_effort=reasoning_effort,
++            text_tools=text_tools,
          ))
++    if text_tools:
++        raise ValueError(f"text_tools is only supported for openrouter, not {provider}")
      if provider == "fireworks":
+         return _finish(provider_class(
+             model=model,
 diff --git a/src/agent_interp_envs/providers/openrouter_provider.py b/src/agent_interp_envs/providers/openrouter_provider.py
-index 22428b5..5c65495 100644
+index 22428b5..aa11699 100644
 --- a/src/agent_interp_envs/providers/openrouter_provider.py
 +++ b/src/agent_interp_envs/providers/openrouter_provider.py
 @@ -10,7 +10,10 @@ OpenRouter interleaved thinking supported models:
@@ -507,7 +517,7 @@ index 22428b5..5c65495 100644
  
  from dotenv import load_dotenv
  from openai import APIConnectionError, APITimeoutError, OpenAI, RateLimitError
-@@ -28,6 +31,48 @@ class OpenRouterEmptyResponseError(Exception):
+@@ -28,6 +31,130 @@ class OpenRouterEmptyResponseError(Exception):
      """OpenRouter returned HTTP 200 with an error body and no choices."""
  
  
@@ -524,6 +534,9 @@ index 22428b5..5c65495 100644
 +def _tool_call_from_tool_code(content: str, tools: list[dict]) -> dict | None:
 +    params = {t["function"]["name"]: list((t["function"].get("parameters") or {}).get("properties") or {})
 +              for t in tools if t.get("type") == "function"}
++    types = {t["function"]["name"]: {k: (v or {}).get("type") for k, v in
++                                     ((t["function"].get("parameters") or {}).get("properties") or {}).items()}
++             for t in tools if t.get("type") == "function"}
 +    # fenced blocks first, then any line that is nothing but a call (gemma sometimes ends a plain
 +    # reply with a bare `[execute_command(command="...")]` line); prose never parses as code
 +    candidates = _TOOL_CODE.findall(content or "") + [ln for ln in (content or "").splitlines()
@@ -545,27 +558,108 @@ index 22428b5..5c65495 100644
 +                continue
 +            try:
 +                args = {kw.arg: ast.literal_eval(kw.value) for kw in node.keywords if kw.arg}
-+                args.update({k: ast.literal_eval(v) for k, v in zip(params[name], node.args)})
++                positional = [ast.literal_eval(v) for v in node.args]
 +            except (ValueError, SyntaxError):
 +                continue
++            # gemma also writes `execute_command({"command": "ls"})`: one dict of the tool's own parameter
++            # names, passed positionally, is the arguments themselves (not the first parameter's value)
++            if (len(positional) == 1 and not args and isinstance(positional[0], dict) and positional[0]
++                    and set(positional[0]) <= set(params[name])):
++                args = dict(positional[0])
++            else:
++                args.update(dict(zip(params[name], positional)))
++            # a string parameter given a dict or list gets it as JSON text, as a schema-checked API would
++            args = {k: json.dumps(v) if types[name].get(k) == "string" and isinstance(v, (dict, list)) else v
++                    for k, v in args.items()}
 +            return {"id": f"call_{uuid.uuid4().hex[:24]}", "type": "function",
 +                    "function": {"name": name, "arguments": json.dumps(args)}}
 +    return None
 +
 +
++# Text-mode tool calling (agent.text_tools: true), for models with no tool-call tokens (gemma-3): the
++# request carries no `tools`; the system prompt carries Google's Gemma 3 function-calling instruction
++# (verbatim, from philschmid.de/gemma-function-calling, the reference Google points to) and the tools as
++# Python stubs; every earlier call in the history (this model's or another's, e.g. Qwen's in a swap) is
++# shown as a ```tool_code``` block and every tool result as a ```tool_output``` block in a user turn.
++# The reply is parsed back into a structured call (_tool_call_from_tool_code), so the stored history,
++# checkpoints and transcripts keep the standard format. Nothing is dropped by a provider-side parser.
++TEXT_TOOLS_INSTRUCTION = (
++    "At each turn, if you decide to invoke any of the function(s), it should be wrapped with ```tool_code```. "
++    "The python methods described below are imported and available, you can only use defined methods. "
++    "The generated code should be readable and efficient. The response to a method will be wrapped in "
++    "```tool_output``` use it to call more tools or generate a helpful, friendly response. When using a "
++    "```tool_call``` think step by step why and how it should be used.")
++_PY_TYPES = {"string": "str", "integer": "int", "number": "float", "boolean": "bool", "array": "list", "object": "dict"}
++
++
++def _python_stub(tool: dict) -> str:
++    """One tool as a Python signature with its description and arguments as the docstring."""
++    fn = tool["function"]; params = fn.get("parameters") or {}
++    props = params.get("properties") or {}; required = set(params.get("required") or [])
++    sig = ", ".join(f"{k}: {_PY_TYPES.get(v.get('type'), 'str')}" + ("" if k in required else " = None")
++                    for k, v in props.items())
++    doc = [fn.get("description", "").strip()]
++    if props:
++        doc += ["", "Args:"] + [f"  {k}: {(v.get('description') or '').strip()}" for k, v in props.items()]
++    body = "\n".join("    " + ln if ln else "" for ln in doc)
++    return f'def {fn["name"]}({sig}) -> str:\n    """\n{body}\n    """'
++
++
++def _call_text(name: str, arguments: str) -> str:
++    try:
++        args = json.loads(arguments) if arguments else {}
++        args = json.loads(args) if isinstance(args, str) else args
++    except (ValueError, TypeError):
++        return f"{name}()"
++    return f"{name}(" + ", ".join(f"{k}={v!r}" for k, v in (args or {}).items()) + ")"
++
++
++def _text_tools_messages(messages: list[dict], tools: list[dict]) -> list[dict]:
++    """The history as a model without tool-call tokens sees it (see TEXT_TOOLS_INSTRUCTION)."""
++    preamble = (TEXT_TOOLS_INSTRUCTION + "\n\nThe following Python methods are available:\n\n```python\n"
++                + "\n\n".join(_python_stub(t) for t in tools if t.get("type") == "function") + "\n```")
++    out: list[dict] = []
++    for m in messages:
++        role, content = m["role"], m.get("content")
++        content = content if isinstance(content, str) else ("" if content is None else json.dumps(content))
++        if role == "system":
++            out.append({"role": "system", "content": f"{content}\n\n{preamble}"})
++        elif role == "assistant":
++            text = content
++            # a call already written as text (this model's own turn) is shown as written
++            if m.get("tool_calls") and not _tool_call_from_tool_code(text, tools):
++                blocks = [f"```tool_code\n{_call_text(tc['function']['name'], tc['function'].get('arguments'))}\n```"
++                          for tc in m["tool_calls"]]
++                text = "\n".join([text.strip()] + blocks if text.strip() else blocks)
++            out.append({"role": "assistant", "content": text})
++        else:   # tool results and mid-run user messages: one user turn, so turns keep alternating
++            text = f"```tool_output\n{content}\n```" if role == "tool" else content
++            if out and out[-1]["role"] == "user":
++                out[-1]["content"] += "\n\n" + text
++            else:
++                out.append({"role": "user", "content": text})
++    if not any(m["role"] == "system" for m in out):
++        first = next((m for m in out if m["role"] == "user"), None)
++        if first is not None:
++            first["content"] = f"{preamble}\n\n{first['content']}"
++    return out
++
++
  class OpenRouterProvider(BaseProvider):
      """Provider for OpenRouter models using OpenAI-compatible chat completions API.
  
-@@ -43,6 +88,8 @@ class OpenRouterProvider(BaseProvider):
+@@ -43,7 +170,10 @@ class OpenRouterProvider(BaseProvider):
          provider_preferences: dict | None = None,
          temperature: float | None = None,
          top_p: float | None = None,
 +        top_k: int | None = None,
 +        min_p: float | None = None,
          reasoning_effort: str | None = None,
++        text_tools: bool = False,
      ) -> None:
          """Initialize the OpenRouter provider.
-@@ -84,7 +131,9 @@ class OpenRouterProvider(BaseProvider):
+ 
+@@ -84,28 +214,43 @@ class OpenRouterProvider(BaseProvider):
          )
          self.model = model
          self.messages = messages
@@ -576,7 +670,16 @@ index 22428b5..5c65495 100644
          if provider_preferences:
              extra_body["provider"] = provider_preferences
          # Tool-less runs (e.g. a no-tools eval variant) must omit both keys:
-@@ -98,14 +147,25 @@ class OpenRouterProvider(BaseProvider):
+         # upstream APIs reject an empty tools array and reject
+         # parallel_tool_calls without tools.
+         self.kwargs = {"extra_body": extra_body}
+-        if tools:
++        self.text_tools = bool(text_tools)
++        self.tool_defs = list(tools or [])
++        if tools and not self.text_tools:
+             self.kwargs["tools"] = tools
+             self.kwargs["parallel_tool_calls"] = False
+         if temperature is not None:
              self.kwargs["temperature"] = temperature
          if top_p is not None:
              self.kwargs["top_p"] = top_p
@@ -604,16 +707,44 @@ index 22428b5..5c65495 100644
      )
      def invoke(self) -> LLMResponse:
          """Make an API call to OpenRouter using internal message history.
-@@ -124,6 +184,12 @@ class OpenRouterProvider(BaseProvider):
+@@ -115,7 +260,7 @@ class OpenRouterProvider(BaseProvider):
+         """
+         response = self.client.chat.completions.create(
+             model=self.model,
+-            messages=self.messages,
++            messages=_text_tools_messages(self.messages, self.tool_defs) if self.text_tools else self.messages,
+             **self.kwargs,
+         )
+ 
+@@ -124,6 +269,12 @@ class OpenRouterProvider(BaseProvider):
              raise OpenRouterEmptyResponseError(f"OpenRouter returned no choices: {error}")
  
          message = response.choices[0].message.model_dump()
 +        if not message.get("tool_calls") and not (message.get("content") or "").strip():
 +            raise OpenRouterEmptyResponseError("OpenRouter returned an empty reply (no text, no tool call)")
-+        if not message.get("tool_calls") and self.kwargs.get("tools"):
-+            parsed = _tool_call_from_tool_code(message.get("content") or "", self.kwargs["tools"])
++        if not message.get("tool_calls") and (self.kwargs.get("tools") or self.text_tools):
++            parsed = _tool_call_from_tool_code(message.get("content") or "", self.tool_defs)
 +            if parsed:
 +                message["tool_calls"] = [parsed]
  
          # Required for moonshot models
          if message.get("reasoning") and not message.get("reasoning_content"):
+diff --git a/tests/environments/test_provider_kwargs_forwarding.py b/tests/environments/test_provider_kwargs_forwarding.py
+index 0e2a47d..2d881dc 100644
+--- a/tests/environments/test_provider_kwargs_forwarding.py
++++ b/tests/environments/test_provider_kwargs_forwarding.py
+@@ -35,12 +35,8 @@ ENVS = Path(__file__).resolve().parents[2] / "environments"
+ AGENTS = sorted(p for p in ENVS.glob("*/agent.py"))
+ 
+ #: Environments that still build their provider by hand. Shrink only.
+-LEGACY = {
+-    "ai_rd", "async_conversion", "currency_conversion",
+-    "funding_email", "games", "lazy_investigation", "norvane",
+-    "palisades_bounty", "parse_duration", "precommit_hook",
+-    "revert_or_refactor", "secret_number",
+-}
++# Empty since gigi/3-forensics' patch: every environment forwards the agent config via provider_kwargs.
++LEGACY: set[str] = set()
+ 
+ # Everything create_provider takes that provider_kwargs is responsible for
+ # forwarding. Naming any of these at a call site is the bug.

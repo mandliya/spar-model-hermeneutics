@@ -17,6 +17,8 @@
 #       other errors still stop at 3
 #     - graders can call the judge through OpenRouter (JUDGE_VIA_OPENROUTER=1, pinned to Anthropic, no fallbacks);
 #       grade_your_own's grader imports yaml
+#     - text-mode tool calling (agent.text_tools: true, gemma): tools in the prompt as Python stubs with Google's
+#       Gemma 3 instruction, history rendered as tool_code/tool_output blocks, calls parsed by the harness
 set -euo pipefail
 cd "$(dirname "$0")"
 COMMIT=310c03f

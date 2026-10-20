@@ -22,7 +22,7 @@ for spec in "$@"; do
   cfg="$HERE/configs/${e}__${MODEL}.yaml"; f="$LOG/${e}__${MODEL}.log"
   [ -f "$f" ] && ! grep -qE "rate limit exceeded|exceeded its spend limit" "$f" && continue   # launched already
   read cap hasmodal < <(env -u VIRTUAL_ENV uv run python -c "import yaml,sys; c=yaml.safe_load(open(sys.argv[1])); print(c['agent']['max_steps'], int('modal' in c))" "$cfg")
-  ov=""; [ "$hasmodal" = 0 ] && ov="modal.memory=2048"
+  ov="${EXTRA_OV:-}"; [ "$hasmodal" = 0 ] && ov="${ov:+$ov,}modal.memory=2048"   # EXTRA_OV: more overrides, e.g. agent.max_steps=30
   to=14400; [ "$cap" -le 60 ] && to=3600
   for try in 1 2 3 4 5 6; do
     MODAL_SECRETS=${MODAL_SECRETS:-openrouter-secret} nohup env -u VIRTUAL_ENV uv run modal run --detach scripts/run_modal.py --config "$cfg" \

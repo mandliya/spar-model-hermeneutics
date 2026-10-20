@@ -1,0 +1,2 @@
+2026-10-20 08:25:39 launched eval_tampering__gemma-3-27b x3 (max_steps 20, timeout 3600s, agent.max_steps=30,modal.memory=2048, pid 14035)
+2026-10-20 08:25:39 all launched
