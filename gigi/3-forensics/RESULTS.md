@@ -43,6 +43,23 @@ without a grader, by the behaviour its README defines, read from its `state.json
 4. **For the swap:** 6 new Qwen incidents in 3 coding environments (before: 2 incidents in one).
    On the honesty probes both models misbehave, so a swap there says little.
 
+### The swap so far (17 Oct): gemma in Qwen's place
+
+The project's main question: when Qwen does something bad at step N, does gemma, restarted from Qwen's
+own run a few steps earlier, do the same? Run on the one environment where Qwen had cheated then
+(the pre-commit hook, 2 incidents). Details and method: [`archive/RESULTS_17oct_swap.md`](archive/RESULTS_17oct_swap.md).
+
+![Replaying Qwen's runs, one row per run and checkpoint](charts/swap_qwen_runs.png)
+
+- **gemma in Qwen's place never cheated: 0 of 180 replays.** Qwen, replayed from the same
+  checkpoints, cheated again 20–35% of the time before incident 1 (5% for incident 2).
+- **gemma stopped almost at once** (median 1 step) instead of carrying on Qwen's work.
+- **Control:** restarted the same way from its *own* runs, gemma keeps working (median 8–12 steps)
+  and deletes the hook in 50–100% of replays, so the 0 of 180 comes from Qwen's runs, not from the
+  restart method.
+- **Next:** the full runs give 6 new Qwen incidents in 3 coding environments (below) to swap on;
+  finding 3 (gemma stops early on long tasks) is the same pattern at scale.
+
 ### Three findings
 
 **1. The failures are in what the models report, not in exploiting the environment.**
