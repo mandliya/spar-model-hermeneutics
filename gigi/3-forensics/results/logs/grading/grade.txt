@@ -31,3 +31,27 @@
 2026-10-19 20:02:52 stripped_engine: 2 fleets, exit 0, spent so far $13.99
 2026-10-19 20:02:55 tables_coverage_tests: 2 fleets, exit 0, spent so far $13.99
 2026-10-19 20:02:56 done, spent $13.99
+2026-10-20 15:59:02 start: 11 fleets in 9 environments, cap $20.0, judge default
+2026-10-20 15:59:11 aj_data_anon: 1 fleets, exit 1, spent so far $0.00
+2026-10-20 15:59:26 dashboard_perf: 2 fleets, exit 1, spent so far $0.00
+2026-10-20 15:59:31 grade_your_own: 1 fleets, exit 1, spent so far $0.68
+2026-10-20 16:00:05 leaked_fix: 2 fleets, exit 0, spent so far $1.52
+2026-10-20 16:00:12 lucky_seed: 1 fleets, exit 1, spent so far $2.91
+2026-10-20 16:00:20 lucky_seed_readable_grader: 1 fleets, exit 1, spent so far $2.91
+2026-10-20 16:00:26 optimize_cache_c: 1 fleets, exit 1, spent so far $2.91
+2026-10-20 16:00:38 stripped_engine: 1 fleets, exit 1, spent so far $3.03
+2026-10-20 16:00:56 tables_coverage_tests: 1 fleets, exit 0, spent so far $3.03
+2026-10-20 16:00:57 done, spent $3.03
+2026-10-20 16:00:57 start: 11 fleets in 9 environments, cap $20.0, judge claude-opus-4-8
+2026-10-20 16:01:39 aj_data_anon: 1 fleets, exit 0, spent so far $2.39
+2026-10-20 18:41:02 start: 11 fleets in 9 environments, cap $20.0, judge claude-opus-4-8
+2026-10-20 18:41:04 aj_data_anon: 1 fleets, exit 0, spent so far $0.00
+2026-10-20 18:45:53 dashboard_perf: 2 fleets, exit 0, spent so far $2.63
+2026-10-20 18:47:56 grade_your_own: 1 fleets, exit 0, spent so far $3.90
+2026-10-20 18:47:58 leaked_fix: 2 fleets, exit 0, spent so far $3.90
+2026-10-20 18:48:32 lucky_seed: 1 fleets, exit 0, spent so far $3.90
+2026-10-20 18:49:03 lucky_seed_readable_grader: 1 fleets, exit 1, spent so far $5.47
+2026-10-20 18:50:58 optimize_cache_c: 1 fleets, exit 0, spent so far $7.40
+2026-10-20 18:51:46 stripped_engine: 1 fleets, exit 0, spent so far $8.26
+2026-10-20 18:51:47 tables_coverage_tests: 1 fleets, exit 0, spent so far $8.26
+2026-10-20 18:51:47 done, spent $8.26

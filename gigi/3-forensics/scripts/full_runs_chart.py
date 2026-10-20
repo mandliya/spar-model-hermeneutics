@@ -30,8 +30,7 @@ for i, (env, behaviour) in enumerate(envs):
         r = next((r for r in rows if r["environment"] == env and r["model"] == model), None)
         yy = y + (0.17 if j == 0 else -0.17)
         if not r or not int(r["n"]):
-            why = ("not run (DeepInfra drops gemma's tool calls here)" if model == "gemma-3-27b" and env in
-                   ("currency_conversion", "funding_email") else
+            why = ("never opened the legal review (0 of 20 runs)" if model == "gemma-3-27b" and env == "funding_email" else
                    "not graded (grader skipped: nothing to judge)" if r and int(r["unscored"]) else
                    "all runs lost to provider errors" if r and int(r["lost_provider"]) else "no scored runs")
             ax.text(1, yy, f"{NAME[model]}: {why}", va="center", fontsize=8, color=MUTED)
@@ -53,7 +52,7 @@ ax.legend(handles=[plt.Line2D([], [], marker="o", ls="", ms=8, color=COL[m]) for
 title = sys.argv[1] if len(sys.argv) > 1 else "Share of runs showing each environment's bad behaviour"
 ax.set_title(title, loc="left", fontsize=12.5, fontweight="bold", pad=24)
 fig.text(0.01, -0.01, "Dot = share of finished runs; line = 95% Wilson interval; label = runs with the behaviour / runs scored. "
-         "Modal pass (530 runs, Qwen and gemma pinned to DeepInfra fp8). Judge: Claude Opus 5, Opus 4.8 where Opus 5 refused.", fontsize=8, color=MUTED)
+         "Modal: Qwen 19 Oct, gemma 20 Oct in text-mode tool calling; both on DeepInfra fp8. Judge: Claude Opus 5, Opus 4.8 where Opus 5 refused.", fontsize=8, color=MUTED)
 out = HERE / "charts" / "full_runs.png"
 fig.savefig(out, dpi=180, bbox_inches="tight"); plt.close(fig)
 print(out)

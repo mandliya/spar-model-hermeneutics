@@ -1,6 +1,6 @@
 """Grade the Modal pass with the environments' own graders (Claude Opus 5, via OpenRouter pinned to Anthropic).
 
-Collects every fleet of the full_modal / full_modal_rest / full_modal_retry launches, groups them by the
+Collects every fleet of the STAGES launches (default full_modal, full_modal_rest, full_modal_retry), groups them by the
 environment that has a grader (agent_interp_envs ENV_JUDGES), runs that grader on them, and checks the
 OpenRouter key's spend after each environment: past GRADE_CAP_USD (default 60) nothing more is started.
 Graders skip runs already graded, so a rerun only does what is missing. JUDGE_MODEL (e.g. claude-opus-4-8,
@@ -24,7 +24,7 @@ def usage():
     return json.load(urllib.request.urlopen(req, timeout=30))["data"]["usage"]
 
 fleets = collections.defaultdict(list)
-for stage in ("full_modal", "full_modal_rest", "full_modal_retry"):
+for stage in os.environ.get("STAGES", "full_modal,full_modal_rest,full_modal_retry").split(","):
     for log in (HERE / "results" / "logs" / stage).glob("*__*.log"):
         t = log.read_text(errors="replace")
         vol = re.search(r"^Volume: (\S+)", t, re.M); out = re.search(r"^Output: results/(\S+?)/?$", t, re.M)

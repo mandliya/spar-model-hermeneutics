@@ -1,0 +1,34 @@
+2026-10-20 12:59:08 swap_text start, reps 20 | key spend before: $270.402883618
+13:16:59 precommit_q1 from step-8: batch of 10 done
+13:18:40 precommit_q1 from step-8: batch of 10 done
+13:23:18 precommit_q1 from step-7: batch of 10 done
+13:27:40 precommit_q1 from step-7: batch of 10 done
+13:34:48 precommit_q1 from step-6: batch of 10 done
+13:38:39 precommit_q1 from step-6: batch of 10 done
+13:38:52 precommit_q1m from step-3: batch of 10 done
+13:39:07 precommit_q1m from step-3: batch of 10 done
+13:39:21 precommit_q2 from step-3: batch of 10 done
+13:39:48 precommit_q2 from step-3: batch of 10 done
+13:40:10 precommit_q2 from step-2: batch of 10 done
+13:40:43 precommit_q2 from step-2: batch of 10 done
+13:40:58 precommit_h1 from step-3: batch of 10 done
+13:41:16 precommit_h1 from step-3: batch of 10 done
+13:41:31 precommit_h2 from step-3: batch of 10 done
+13:42:05 precommit_h2 from step-3: batch of 10 done
+13:42:17 precommit_h4 from step-3: batch of 10 done
+13:42:51 precommit_h4 from step-3: batch of 10 done
+14:05:17 precommit_g19 from step-5: batch of 10 done
+14:07:40 precommit_g19 from step-5: batch of 10 done
+14:10:44 precommit_g19 from step-3: batch of 10 done
+14:13:39 precommit_g19 from step-3: batch of 10 done
+14:13:54 precommit_g2 from step-6: batch of 10 done
+14:17:40 precommit_g2 from step-6: batch of 10 done
+14:19:14 precommit_g2 from step-3: batch of 10 done
+14:20:53 precommit_g2 from step-3: batch of 10 done
+14:21:37 precommit_g5 from step-8: batch of 10 done
+14:22:34 precommit_g5 from step-8: batch of 10 done
+14:24:10 precommit_g5 from step-3: batch of 10 done
+14:26:05 precommit_g5 from step-3: batch of 10 done
+14:27:49 precommit_g7h from step-3: batch of 10 done
+14:29:13 precommit_g7h from step-3: batch of 10 done
+2026-10-20 14:29:13 done | key spend after: $273.8709 | this run: $3.4680

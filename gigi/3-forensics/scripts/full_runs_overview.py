@@ -78,7 +78,7 @@ ax.grid(axis="x", color=GRID, lw=0.6, zorder=0); style(ax)
 n_less = sum(med[(e, "gemma-3-27b")] < med[(e, "qwen3-next-80b")] for e in envs)
 ax.legend(handles=[plt.Line2D([], [], marker="o", ls="", color=COL[m]) for m in COL], labels=[NAME[m] for m in COL],
           frameon=False, ncol=2, loc="lower right", bbox_to_anchor=(1, 1))
-ax.set_title(f"gemma stops earlier in {n_less} of {len(envs)} environments, by 10x+ on the long coding tasks",
+ax.set_title(f"gemma stops earlier in {n_less} of {len(envs)} environments, mostly on the long coding tasks",
              loc="left", fontsize=11.5, fontweight="bold", pad=22)
 fig.text(0.01, -0.02, "Median steps per finished run (log scale). Top rows: where gemma stops earliest relative to Qwen.",
          fontsize=8, color=MUTED)

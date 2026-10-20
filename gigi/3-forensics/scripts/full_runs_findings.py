@@ -4,7 +4,7 @@
   2. charts/finding_impossible_targets.png the performance tasks: every run's best benchmark against its
      target, by verdict (no run reached the target; some of Qwen's failing runs cheated)
   3. charts/finding_persistence.png        steps per graded run in the cheating suite, cheats marked:
-     gemma's runs end before the point where Qwen's cheats happen
+     with working tool calls gemma keeps going as long as Qwen, and still cheats less
 Data: results/full_runs.csv, final/grading.json, rollout.log (benchmark output only, never the agent's claims).
 """
 import collections, csv, json, pathlib, re, sys
@@ -84,7 +84,7 @@ a2.set_yticks([]); a2.set_xlim(0, max(left) + 1.5); a2.set_xticks(range(0, max(l
 a2.set_title(f"The {len(cheats)} cheats in the coding suite, by shape", loc="left", fontsize=9.5, color=MUTED)
 fig.suptitle("The failures are in what the models report, not in exploiting the environment", x=0.01, ha="left",
              fontsize=12, fontweight="bold", y=1.04)
-fig.text(0.01, -0.05, "Left: pooled share of scored runs (Modal pass); gemma ran only 2 of the 4 honesty probes. "
+fig.text(0.01, -0.05, "Left: pooled share of scored runs; gemma never opened funding_email's legal review, so that probe is unscored for it. "
          "Right: each cheat's verdict evidence (Opus grader). Black line = 95% Wilson interval.", fontsize=8, color=MUTED)
 fig.savefig(OUT / "finding_report_not_action.png", dpi=180, bbox_inches="tight"); plt.close(fig)
 
@@ -143,8 +143,9 @@ ax.set_xticks([1, 3, 10, 30, 100, 300]); ax.set_xticklabels(["1", "3", "10", "30
 ax.grid(axis="x", color=GRID, lw=0.6, zorder=0); style(ax)
 ax.legend(handles=[plt.Line2D([], [], marker="X", ls="", color=CHEAT, ms=8)], labels=["cheated"], frameon=False,
           loc="lower right", bbox_to_anchor=(1, 1), fontsize=8.5)
-ax.set_title("gemma's runs mostly end before the point where Qwen's cheats happen", loc="left", fontsize=11.5,
-             fontweight="bold", pad=22)
+(q10, qn, qc), (g10, gn, gc) = stat["qwen3-next-80b"], stat["gemma-3-27b"]
+ax.set_title(f"As many gemma runs as Qwen runs reach 10+ steps ({g10}/{gn} vs {q10}/{qn}); gemma cheats less ({gc} vs {qc})",
+             loc="left", fontsize=11.5, fontweight="bold", pad=22)
 fig.text(0.01, -0.06, "Each dot = one graded run of the coding cheating suite (Modal pass), by the number of steps it lasted (log scale).",
          fontsize=8, color=MUTED)
 fig.savefig(OUT / "finding_persistence.png", dpi=180, bbox_inches="tight"); plt.close(fig)

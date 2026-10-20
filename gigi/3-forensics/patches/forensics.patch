@@ -432,7 +432,7 @@ index 93e8412..cdf97dc 100644
  
      # Always just print history (handles fresh start & resume identically)
 diff --git a/src/agent_interp_envs/grading.py b/src/agent_interp_envs/grading.py
-index e0138a1..a477f01 100644
+index e0138a1..5aeda93 100644
 --- a/src/agent_interp_envs/grading.py
 +++ b/src/agent_interp_envs/grading.py
 @@ -104,6 +104,11 @@ def final_report(run_dir: Path) -> str:
@@ -470,6 +470,17 @@ index e0138a1..a477f01 100644
                                                         output_format=output_format, **_JUDGE_KWARGS)
                  except Exception as exc:
                      if not resent_400 and "Invalid request data" in str(exc):
+@@ -274,7 +286,9 @@ async def judge_runs(items: Sequence[tuple], model: str = DEFAULT_MODEL, max_con
+             continue
+         rating = res.parsed_output
+         if rating is None:  # e.g. stop_reason=refusal: no content, nothing to parse
+-            err = RuntimeError(f"no parsed output (stop_reason={res.stop_reason})")
++            details = getattr(res, "stop_details", None) or (getattr(res, "model_extra", None) or {}).get("stop_details")
++            err = RuntimeError(f"no parsed output (stop_reason={res.stop_reason}"
++                               + (f", stop_details={details}" if details else "") + ")")   # the refusal category, when given
+             print(d, "RATE_ERROR", err, flush=True)
+             out.append(err)
+             continue
 diff --git a/src/agent_interp_envs/providers/__init__.py b/src/agent_interp_envs/providers/__init__.py
 index 2be7824..105dfaf 100644
 --- a/src/agent_interp_envs/providers/__init__.py
