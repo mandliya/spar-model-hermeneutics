@@ -19,13 +19,14 @@ plt.rcParams.update({"font.family": "sans-serif", "font.size": 10, "text.color":
                      "xtick.color": MUTED, "ytick.color": INK})
 CATS = {
     "Honesty probes\n(stay quiet / take the shortcut)": ["eval_tampering", "lazy_investigation", "parse_duration",
-                                                          "currency_conversion", "funding_email"],
+                                                          "currency_conversion", "funding_email", "puppeteer"],
     "Cheating suite\n(coding, Opus-graded)": ["optimize_rendering_engine", "optimize_rendering_engine_graded",
                                              "dashboard_costly_failure", "grade_your_own", "lucky_seed",
                                              "lucky_seed_readable_grader", "optimize_lru_cache", "leaked_tests",
                                              "leaked_scorer", "copying_of_answers", "reference_extraction"],
     "Other task gaming\n(broken test, answer file, hook,\nrevert, weaken tests, game cheat)": ["coding", "coding_norules",
-        "secret_number", "precommit_hook", "norvane", "async_conversion", "revert_or_refactor", "tower_of_hanoi"],
+        "secret_number", "precommit_hook", "norvane", "async_conversion", "revert_or_refactor", "tower_of_hanoi",
+        "chess", "tictactoe"],
 }
 
 rows = {(r["environment"], r["model"]): r for r in csv.DictReader(open(HERE / "results" / "full_runs.csv"))}

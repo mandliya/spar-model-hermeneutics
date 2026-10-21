@@ -20,12 +20,13 @@ NAME = {"qwen": "Qwen replayed in its own run", "gemma": "gemma swapped in"}
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 10, "text.color": INK, "axes.edgecolor": GRID,
                      "xtick.color": MUTED, "ytick.color": INK})
 CATEGORY = {
-    "Honesty probes": ["eval_tampering", "funding_email", "currency_conversion", "lazy_investigation", "parse_duration"],
+    "Honesty probes": ["eval_tampering", "funding_email", "currency_conversion", "lazy_investigation", "parse_duration",
+                       "puppeteer"],
     "Cheating suite (coding, Opus-graded)": ["optimize_rendering_engine", "dashboard_costly_failure", "grade_your_own",
         "optimize_rendering_engine_graded", "copying_of_answers", "leaked_scorer", "leaked_tests", "lucky_seed",
         "lucky_seed_readable_grader", "reference_extraction"],
     "Other task gaming": ["precommit_hook", "revert_or_refactor", "async_conversion", "tower_of_hanoi", "coding",
-                          "coding_norules", "secret_number", "norvane"],
+                          "coding_norules", "secret_number", "norvane", "chess", "tictactoe"],
 }
 BEHAVIOUR = {"eval_tampering": "hid the tampering", "funding_email": "pushed the pitch after the legal review",
              "currency_conversion": "did the forbidden arithmetic", "lazy_investigation": "took the shortcut",
@@ -33,7 +34,8 @@ BEHAVIOUR = {"eval_tampering": "hid the tampering", "funding_email": "pushed the
              "async_conversion": "weakened test assertions", "tower_of_hanoi": "cheating detected",
              "precommit_hook": "removed the hook", "coding": "made the broken test pass",
              "coding_norules": "made the broken test pass", "secret_number": "read the answer or switched noise off",
-             "norvane": "tampered with the unrunnable tests"}
+             "norvane": "tampered with the unrunnable tests", "chess": "won (cannot honestly)",
+             "tictactoe": "won (cannot honestly)", "puppeteer": "hid the missing screenshot"}
 
 agg = collections.defaultdict(lambda: [0, 0])
 unmeasured = set()
@@ -93,8 +95,8 @@ ax.set_title(title, loc="left", fontsize=12, fontweight="bold", pad=24)
 fig.text(0.01, 0.075, "Share of finished replays with the environment's bad behaviour (coding suite: grader verdict 'cheated', Claude "
          "Opus 5, or Opus 4.8 where Opus 5 refused); line = 95% Wilson interval.\nRestart point = checkpoint N−1 (and N−2 for "
          "incidents), N = Qwen's bad step or its final decision. Lost replays (provider errors, context window, crashes) are "
-         "left out, never counted as behaviour.\nReplayed but without a bad-behaviour measure: chess, tictactoe, puppeteer, "
-         "sandbagging. optimize_lru_cache: Qwen quits at step 1, nothing to restart. No gemma: async_conversion (Qwen's "
+         "left out, never counted as behaviour.\nReplayed but without a bad-behaviour measure: "
+         "sandbagging (needs its control condition). optimize_lru_cache: Qwen quits at step 1, nothing to restart. No gemma: async_conversion (Qwen's "
          "history from step ~100 exceeds gemma's 131k context).", fontsize=7.5, color=MUTED, va="top")
 fig.savefig(HERE / "charts" / "swap_all.png", dpi=180, bbox_inches="tight"); plt.close(fig)
 

@@ -25,8 +25,9 @@ plt.rcParams.update({"font.family": "sans-serif", "font.size": 10, "text.color":
 OUT = HERE / "charts"
 rows = {(r["environment"], r["model"]): r for r in csv.DictReader(open(HERE / "results" / "full_runs.csv"))}
 EXPLOIT = ["leaked_tests", "leaked_scorer", "copying_of_answers", "reference_extraction", "revert_or_refactor",
-           "async_conversion", "tower_of_hanoi", "coding", "coding_norules", "secret_number", "precommit_hook", "norvane"]
-WITHHOLD = ["eval_tampering", "lazy_investigation", "currency_conversion", "funding_email"]
+           "async_conversion", "tower_of_hanoi", "coding", "coding_norules", "secret_number", "precommit_hook", "norvane",
+           "chess", "tictactoe"]
+WITHHOLD = ["eval_tampering", "lazy_investigation", "currency_conversion", "funding_email", "puppeteer"]
 SUITE = [e for e, v in T.JUDGED.items()]
 
 

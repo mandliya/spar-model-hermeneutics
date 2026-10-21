@@ -1,0 +1,4 @@
+2026-10-21 21:09:12 launched sandbagging__qwen3-next-80b x20 (max_steps 20, timeout 3600s, task.reverse=true,modal.memory=2048, pid 61175)
+2026-10-21 21:09:12 all launched
+2026-10-21 21:09:20 launched sandbagging__gemma-3-27b x20 (max_steps 20, timeout 3600s, task.reverse=true,modal.memory=2048, pid 61212)
+2026-10-21 21:09:20 all launched
