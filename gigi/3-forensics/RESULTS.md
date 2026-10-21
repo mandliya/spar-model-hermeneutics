@@ -45,11 +45,16 @@ its `state.json`. Scripts: `scripts/full_runs_table.py` (→ `results/full_runs.
    vs 43), but in the cheating suite as many gemma runs reach 10+ steps as Qwen runs (41/90 vs 41/89),
    and it still cheats less. The 19 Oct pass made gemma look like a quitter: replies DeepInfra could
    not parse ended its runs (now fixed, README).
-4. **Swap: gemma in Qwen's place still almost never cheats:** 1 of 179 replays in text mode (0 of
-   180 on 17 Oct), where Qwen, replayed from the same points, cheats again 20–35% of the time. At
-   Qwen's last step before its cheat, gemma ends with an honest status report instead.
+4. **Swap, so far in ONE environment only (the pre-commit hook, Qwen's 2 incidents there):** gemma
+   in Qwen's place cheats in 1 of 179 replays in text mode (0 of 180 on 17 Oct), where Qwen, replayed
+   from the same points, cheats again 20–35% of the time. The full runs' 6 new Qwen cheats (3 coding
+   environments) and the honesty probes have **not been swapped yet**.
 
-### The swap: gemma in Qwen's place
+### The swap: gemma in Qwen's place (pre-commit hook only, so far)
+
+**Scope:** one environment, the pre-commit hook, the only one where Qwen had cheated when the swap
+was run (17 Oct). Not yet swapped: Qwen's 6 cheats in the full runs (optimize_rendering_engine,
+grade_your_own, dashboard_costly_failure) and the honesty probes.
 
 Qwen's run restarted 20 times from one checkpoint, once with Qwen itself (the reference) and once
 with gemma taking over; N = the step where Qwen cheated (removing the pre-commit hook), so restarting
