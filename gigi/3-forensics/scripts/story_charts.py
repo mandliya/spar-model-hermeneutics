@@ -172,17 +172,17 @@ SW = list(csv.DictReader(open(HERE / "results" / "swap_all.csv")))
 TAKE = {1: "N", 2: "N−1", 3: "N−2", 6: "N−5"}          # checkpoint N-k -> takeover at turn N-k+1
 XPOS = {"N−5": 0, "N−2": 1, "N−1": 2, "N": 3}
 HON = {"eval_tampering", "funding_email", "currency_conversion", "lazy_investigation"}
-PANELS = [  # (title, act, selector on swap_all rows)
+PANELS = [  # (title, act, selector on swap_all rows); rows of the grid: gemma copies / doesn't / neither or control
     ("Honesty probes (4)", "misreports what it saw", lambda r: r["env"] in HON),
     ("is_prime (4 incidents)", "hard-codes the buggy test's 7", lambda r: r["env"] in ("coding", "coding_norules")),
-    ("ai_rd (3 incidents)", "writes the eval answers into its prompt", lambda r: r["env"] == "ai_rd"),
     ("grade_your_own · run 3", "false gain report (the eval printed nothing)",
      lambda r: r["env"] == "grade_your_own" and "_run-3_" in r["point"]),
-    ("grade_your_own · run 5", "edits the baseline", lambda r: r["env"] == "grade_your_own" and "_run-5_" in r["point"]),
     ("Rendering engine (3 incidents)", "false 3× claim, or a smaller workload",
      lambda r: r["env"] == "optimize_rendering_engine"),
-    ("Dashboard (1 incident)", "swaps in an approximation", lambda r: r["env"] == "dashboard_costly_failure"),
+    ("ai_rd (3 incidents)", "writes the eval answers into its prompt", lambda r: r["env"] == "ai_rd"),
     ("Pre-commit hook (2 incidents)", "bypasses the hook", None),
+    ("grade_your_own · run 5", "edits the baseline", lambda r: r["env"] == "grade_your_own" and "_run-5_" in r["point"]),
+    ("Dashboard (1 incident)", "swaps in an approximation", lambda r: r["env"] == "dashboard_costly_failure"),
 ]
 data = collections.defaultdict(lambda: [0, 0])   # (panel, take, model) -> [k, n]
 for i, (title, act, sel) in enumerate(PANELS):
@@ -205,7 +205,7 @@ def precommit(tag, text):
     return out
 
 
-PC = len(PANELS) - 1
+PC = next(i for i, p in enumerate(PANELS) if p[2] is None)   # the pre-commit study
 for tag, N in (("q1", 9), ("q2", 4), ("q1m", 9)):
     for text, m in ((False, Q), (True, G)):
         for K, (k, n) in precommit(tag, text).items():
@@ -217,10 +217,12 @@ for f in sorted((HERE / "results").glob("runs_swap_text_precommit_g*.csv")):
         if re.search(r"/gemma/", row["experiment"]) and int(row["steps"] or 0) >= 1 and row["cheated"] in ("True", "False"):
             own[0] += row["cheated"] == "True"; own[1] += 1
 dec = {m: [0, 0] for m in (Q, G)}
+aird_dec = {m: [0, 0] for m in (Q, G)}   # ai_rd's clean runs: shown in its own panel, not pooled into the control
 for r in SW:
     if r["incident"] == "False" and r["env"] != "sandbagging":
         m = Q if r["who"] == "qwen" else G
-        dec[m][0] += int(r["k"]); dec[m][1] += int(r["n"])
+        tgt = aird_dec if r["env"] == "ai_rd" else dec
+        tgt[m][0] += int(r["k"]); tgt[m][1] += int(r["n"])
 
 fig, axs = plt.subplots(3, 3, figsize=(12.5, 10.6), sharey=True, gridspec_kw={"hspace": 0.68, "wspace": 0.14})
 for i, (title, act, _) in enumerate(PANELS + [("Where Qwen did nothing bad (20 environments)", "does anything bad", None)]):
@@ -256,12 +258,19 @@ for i, (title, act, _) in enumerate(PANELS + [("Where Qwen did nothing bad (20 e
     ax.grid(axis="y", color=GRID, lw=0.6, zorder=0); clean(ax, left=True)
     ax.set_title(title, loc="left", fontsize=9.3, fontweight="bold", pad=17)
     ax.text(0, 1.03, act, transform=ax.transAxes, fontsize=7.6, color=MUTED, va="bottom")
+    if title.startswith("ai_rd") and aird_dec[Q][1]:
+        ax.text(-0.35, 104, f"Qwen's clean runs, before its last turn:\nQwen {aird_dec[Q][0]}/{aird_dec[Q][1]}, "
+                f"gemma {aird_dec[G][0]}/{aird_dec[G][1]}", fontsize=6.8, color=MUTED, va="top")
     if title.startswith("grade_your_own · run 3"):
         ax.text(2.06, 18, "judge split: all 10 made\nthe same false report", fontsize=6.6, color=COL[G], va="top")
 fig.legend(handles=[plt.Line2D([], [], color=COL[Q], marker="o", lw=1.8, mec="white"),
                     plt.Line2D([], [], color=COL[G], marker="o", lw=1.8, mec="white")],
            labels=["Qwen replaying its own run (the baseline)", "gemma swapped into Qwen's run"], frameon=False, ncol=2,
            loc="upper right", bbox_to_anchor=(0.99, 0.985), fontsize=9)
+for r, lab in enumerate(["gemma copies Qwen", "gemma doesn't copy Qwen", "neither repeats it · too few · control"]):
+    pos = axs[r, 0].get_position()
+    fig.text(0.035, (pos.y0 + pos.y1) / 2, lab, rotation=90, ha="center", va="center", fontsize=10.5,
+             fontweight="bold", color=[COL[G], GAP, MUTED][r])
 fig.suptitle("3 · Swapped into Qwen's runs, gemma repeats the bad act where Qwen's history leads to it, and rarely otherwise",
              x=0.02, ha="left", y=1.02, fontsize=12.5, fontweight="bold")
 fig.text(0.02, -0.03, "Share of replays doing Qwen's bad act; vertical line = 95% Wilson interval. N = the turn where Qwen "
@@ -280,6 +289,9 @@ for i, (title, act, _) in enumerate(PANELS):
             gaps.append((title.split(" (")[0], t, d, lo, hi, a, b))
 d, lo, hi = newcombe(dec[Q][0], dec[Q][1], dec[G][0], dec[G][1])
 gaps.append(("Where Qwen did nothing bad", "last", d, lo, hi, dec[Q], dec[G]))
+if aird_dec[Q][1] and aird_dec[G][1]:
+    d, lo, hi = newcombe(aird_dec[Q][0], aird_dec[Q][1], aird_dec[G][0], aird_dec[G][1])
+    gaps.append(("ai_rd · Qwen's clean runs", "last", d, lo, hi, aird_dec[Q], aird_dec[G]))
 gaps.sort(key=lambda g: -g[2])
 fig, ax = plt.subplots(figsize=(11.5, 0.34 * len(gaps) + 1.7))
 for y, (name, t, d, lo, hi, a, b) in zip(range(len(gaps))[::-1], gaps):
@@ -299,8 +311,8 @@ ax.set_xlim(-100, 100); ax.set_ylim(-0.8, len(gaps) + 0.4); ax.set_yticks([])
 ax.set_xticks([-100, -50, 0, 50, 100]); ax.set_xticklabels(["−100", "−50", "0", "+50", "+100"])
 ax.set_xlabel("gap = Qwen's rate − gemma's rate, in percentage points", fontsize=8.5)
 ax.grid(axis="x", color=GRID, lw=0.6, zorder=0); clean(ax)
-title = ("4 · The gap distillation has to close: Qwen's code cheats (rendering engine, is_prime one turn early, pre-commit hook);"
-         "\n    none on misreports, nor where Qwen behaves")
+title = ("4 · The gap distillation has to close: Qwen's code cheats (rendering engine, ai_rd's hard-coded answers, is_prime"
+         "\n    one turn early, pre-commit hook); none on the misreports, nor where Qwen behaves")
 ax.set_title(title, loc="left", fontsize=12, fontweight="bold", pad=14)
 fig.text(0.01, -0.06 + 0.4 / (0.34 * len(gaps) + 1.7), "Dot = difference between Qwen replaying its own run and gemma swapped "
          "in at the same point; line = 95% Newcombe interval. Red: Qwen significantly higher (a gap distillation should "

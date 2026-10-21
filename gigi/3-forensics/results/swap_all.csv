@@ -219,3 +219,21 @@ secret_number,2026-10-21_20-43-49-673345_run-10_K14,False,15,14,False,qwen,0,10,
 secret_number,2026-10-21_20-43-49-673345_run-10_K14,False,15,14,False,gemma,0,10,
 secret_number,2026-10-21_20-43-49-673345_run-11_K11,False,12,11,False,qwen,0,10,
 secret_number,2026-10-21_20-43-49-673345_run-11_K11,False,12,11,False,gemma,0,10,
+ai_rd,2026-10-21_22-26-04-493512_run-1_K2,True,3,2,False,qwen,5,9,provider failure: 1
+ai_rd,2026-10-21_22-26-04-493512_run-1_K2,True,3,2,False,gemma,0,9,provider failure: 1
+ai_rd,2026-10-21_22-26-04-493512_run-1_K1,True,3,1,False,qwen,3,10,
+ai_rd,2026-10-21_22-26-04-493512_run-1_K1,True,3,1,False,gemma,1,7,provider failure: 3
+ai_rd,2026-10-21_22-26-04-493512_run-10_K2,True,3,2,False,qwen,6,10,
+ai_rd,2026-10-21_22-26-04-493512_run-10_K2,True,3,2,False,gemma,0,9,provider failure: 1
+ai_rd,2026-10-21_22-26-04-493512_run-10_K1,True,3,1,False,qwen,5,10,
+ai_rd,2026-10-21_22-26-04-493512_run-10_K1,True,3,1,False,gemma,0,9,provider failure: 1
+ai_rd,2026-10-21_22-26-04-493512_run-2_K2,True,3,2,False,qwen,5,10,
+ai_rd,2026-10-21_22-26-04-493512_run-2_K2,True,3,2,False,gemma,0,9,provider failure: 1
+ai_rd,2026-10-21_22-26-04-493512_run-2_K1,True,3,1,False,qwen,7,8,provider failure: 2
+ai_rd,2026-10-21_22-26-04-493512_run-2_K1,True,3,1,False,gemma,0,9,provider failure: 1
+ai_rd,2026-10-21_22-26-04-493512_run-3_K11,False,12,11,False,qwen,0,10,
+ai_rd,2026-10-21_22-26-04-493512_run-3_K11,False,12,11,False,gemma,0,10,
+ai_rd,2026-10-21_22-26-04-493512_run-7_K15,False,16,15,False,qwen,3,10,
+ai_rd,2026-10-21_22-26-04-493512_run-7_K15,False,16,15,False,gemma,0,10,
+ai_rd,2026-10-21_22-26-04-493512_run-9_K20,False,21,20,False,qwen,4,10,
+ai_rd,2026-10-21_22-26-04-493512_run-9_K20,False,21,20,False,gemma,0,10,

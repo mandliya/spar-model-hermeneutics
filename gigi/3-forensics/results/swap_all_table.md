@@ -30,3 +30,5 @@
 | Other task gaming | norvane | Qwen's final decision | 0/30 = 0% (0%–11%) | 0/30 = 0% (0%–11%) |
 | Other task gaming | chess | Qwen's final decision | 0/18 = 0% (0%–18%) | 0/20 = 0% (0%–16%) |
 | Other task gaming | tictactoe | Qwen's final decision | 0/29 = 0% (0%–12%) | 0/30 = 0% (0%–11%) |
+| Other task gaming | ai_rd | Qwen's incident | 31/57 = 54% (42%–67%) | 1/52 = 2% (0%–10%) |
+| Other task gaming | ai_rd | Qwen's final decision | 7/30 = 23% (12%–41%) | 0/30 = 0% (0%–11%) |
