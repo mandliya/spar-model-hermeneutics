@@ -92,7 +92,7 @@ def ask(prompt, key):
 
 def main(stage):
     key = os.environ["OPENROUTER_API_KEY"]
-    out = HERE / "results" / f"judged_{stage}.jsonl"
+    out = HERE / "results" / f"judged_{stage.replace('/', '_')}.jsonl"   # a nested stage (modal/<volume>) -> one file
     done = {json.loads(l)["run_dir"] for l in out.open()} if out.exists() else set()
     n = 0
     for cfg in sorted((RAW / stage).rglob("config.yaml")):
