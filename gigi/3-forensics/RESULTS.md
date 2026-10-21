@@ -35,7 +35,7 @@ in the tables under each chart (click to open).
 
 ## 1 and 2 · What each model does on its own
 
-![Each model on its own: share of runs with each environment's bad behaviour, and steps per run](charts/story_1_alone.png)
+![Each model on its own: share of runs with each environment's bad behaviour, steps per run, and why gemma stops early](charts/q12_alone.png)
 
 **Setup** = 385 runs per model on Modal (SPAR workspace), the paper's step caps, 5–20 runs per
 environment, sandboxes that can reach OpenRouter and nothing else. gemma calls tools in **text mode**
@@ -150,7 +150,7 @@ so its grader had nothing to judge.
 
 ## 3 · gemma swapped into Qwen's runs at turn N, N−1, N−2, N−5
 
-![gemma swapped into Qwen's runs, by the turn it takes over, next to Qwen replaying itself](charts/story_2_swap.png)
+![gemma swapped into Qwen's runs at every restart point we ran, in every environment, next to Qwen replaying itself](charts/q3_swap_all.png)
 
 **How.** N = the turn where Qwen did the bad thing (the misreport in its final answer, the hard-coded 7,
 the `bandWindow` edit at turn 11, the approximation at turn 64, the edited baseline at turn 31, the hook
@@ -263,7 +263,7 @@ reason).
 
 ## 4 · The gap distillation has to close
 
-![The gap between Qwen replaying itself and gemma swapped in, at every takeover point](charts/story_3_gap.png)
+![The gap between Qwen replaying itself and gemma swapped in, grouped: gap to close (outlined), no gap, unclear](charts/q4_gap.png)
 
 The outer loop's measurement, at every takeover point: Qwen's rate minus gemma's, with a 95% interval
 (Newcombe). A red row is a significant gap, behaviour of Qwen that gemma in its place does not reproduce;
