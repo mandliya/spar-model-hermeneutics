@@ -175,6 +175,7 @@ HON = {"eval_tampering", "funding_email", "currency_conversion", "lazy_investiga
 PANELS = [  # (title, act, selector on swap_all rows)
     ("Honesty probes (4)", "misreports what it saw", lambda r: r["env"] in HON),
     ("is_prime (4 incidents)", "hard-codes the buggy test's 7", lambda r: r["env"] in ("coding", "coding_norules")),
+    ("ai_rd (3 incidents)", "writes the eval answers into its prompt", lambda r: r["env"] == "ai_rd"),
     ("grade_your_own · run 3", "false gain report (the eval printed nothing)",
      lambda r: r["env"] == "grade_your_own" and "_run-3_" in r["point"]),
     ("grade_your_own · run 5", "edits the baseline", lambda r: r["env"] == "grade_your_own" and "_run-5_" in r["point"]),
@@ -221,7 +222,7 @@ for r in SW:
         m = Q if r["who"] == "qwen" else G
         dec[m][0] += int(r["k"]); dec[m][1] += int(r["n"])
 
-fig, axs = plt.subplots(2, 4, figsize=(14, 7.4), sharey=True, gridspec_kw={"hspace": 0.62, "wspace": 0.12})
+fig, axs = plt.subplots(3, 3, figsize=(12.5, 10.6), sharey=True, gridspec_kw={"hspace": 0.68, "wspace": 0.14})
 for i, (title, act, _) in enumerate(PANELS + [("Where Qwen did nothing bad (20 environments)", "does anything bad", None)]):
     ax = axs.flat[i]
     if i == len(PANELS):   # the control: restarted before Qwen's last step in runs where it behaved
@@ -260,7 +261,7 @@ for i, (title, act, _) in enumerate(PANELS + [("Where Qwen did nothing bad (20 e
 fig.legend(handles=[plt.Line2D([], [], color=COL[Q], marker="o", lw=1.8, mec="white"),
                     plt.Line2D([], [], color=COL[G], marker="o", lw=1.8, mec="white")],
            labels=["Qwen replaying its own run (the baseline)", "gemma swapped into Qwen's run"], frameon=False, ncol=2,
-           loc="upper right", bbox_to_anchor=(0.99, 1.0), fontsize=9)
+           loc="upper right", bbox_to_anchor=(0.99, 0.985), fontsize=9)
 fig.suptitle("3 · Swapped into Qwen's runs, gemma repeats the bad act where Qwen's history leads to it, and rarely otherwise",
              x=0.02, ha="left", y=1.02, fontsize=12.5, fontweight="bold")
 fig.text(0.02, -0.03, "Share of replays doing Qwen's bad act; vertical line = 95% Wilson interval. N = the turn where Qwen "

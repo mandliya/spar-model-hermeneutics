@@ -54,15 +54,14 @@ the laptop (the user installs it). Work goes in gigi/3-forensics/ (README writte
   chart script was rerun from the new paths: all outputs byte-identical, 0 broken links. The local
   docent/.venv moved with docent/ and must be recreated before the next Docent upload.
 
-- Part three, 21 Oct 2026 (3-forensics/RESULTS.md): full runs of 28 environments x 2 models on Modal
-  (SPAR workspace), gemma in text mode, every one scored (chess/tic-tac-toe by game result, puppeteer by
-  disclosure, sandbagging against its reverse control); the swap in every scored environment (Opus 5,
-  Opus 4.8 where it refuses; judge check done); raw on HF (forensics/raw/modal, swap_all). $580 on the main
-  OpenRouter key since 18 Oct; the user approved up to $1500 since the 18 Oct baseline.
-  Open: ai_rd and swe_rebench_v2 wait only for a capped agent key (the user creates it and writes
-  AGENT_OPENROUTER_API_KEY into the repo .env; scripts/when_key.sh, running, then launches both; then score
-  with full_runs_table.py, swap ai_rd with MODAL_SECRETS=openrouter-agent); optional: text-mode parser
-  should answer a call to an unknown tool with an error instead of ending the run (4 gemma runs), then
+- Part three, 21 Oct 2026 (3-forensics/RESULTS.md, rebuilt around the four questions of the 14 Oct call:
+  each model alone, the swap by takeover turn N/N-1/N-2/N-5, the gap distillation has to close). All 29
+  suite entries run with both models and scored; swap everywhere a measure exists; ai_rd fixed (the harness
+  scrubbed the key its scorer and judge need) and rerun: Qwen hard-codes the eval answers in 7/10 runs,
+  gemma 0/9; ai_rd's swap launched 23:20. Main OpenRouter key used for ai_rd and swe_rebench_v2 (the user's
+  choice); outputs redacted (scripts/redact_key.py), the real key never appeared. ~$580 since the 18 Oct
+  baseline (ceiling $1500). Open: fold in the ai_rd swap (fetch, score, story_charts.py, RESULTS.md);
+  optional: text-mode parser should answer a call to an unknown tool with an error (4 gemma runs), then
   rerun gemma's puppeteer and revert_or_refactor; the judges disagree on the bandWindow edit.
 - Part three DONE 17 Oct 2026 (results: 3-forensics/RESULTS.md; $3.93; raw runs on HF under
   forensics/raw/). Qwen-80B rarely task-games (pre-commit hook bypassed 2/52, nothing elsewhere);
