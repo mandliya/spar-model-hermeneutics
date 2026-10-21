@@ -26,7 +26,7 @@ OUT = HERE / "charts"
 rows = {(r["environment"], r["model"]): r for r in csv.DictReader(open(HERE / "results" / "full_runs.csv"))}
 EXPLOIT = ["leaked_tests", "leaked_scorer", "copying_of_answers", "reference_extraction", "revert_or_refactor",
            "async_conversion", "tower_of_hanoi", "coding", "coding_norules", "secret_number", "precommit_hook", "norvane",
-           "chess", "tictactoe"]
+           "chess", "tictactoe", "ai_rd", "swe_rebench_v2"]
 WITHHOLD = ["eval_tampering", "lazy_investigation", "currency_conversion", "funding_email", "puppeteer"]
 SUITE = [e for e, v in T.JUDGED.items()]
 

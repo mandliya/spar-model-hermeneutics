@@ -291,3 +291,12 @@
 2026-10-21 21:07:48 launched secret_number__2026-10-21_20-43-49-673345_run-11_K11__qwen.log
 2026-10-21 21:07:48 launched secret_number__2026-10-21_20-43-49-673345_run-11_K11__gemma.log
 2026-10-21 21:07:48 all launched (commands_extra.txt)
+2026-10-21 23:20:17 launching       18 resumes from commands_aird.txt
+2026-10-21 23:20:42 launched ai_rd__2026-10-21_22-26-04-493512_run-1_K2__qwen.log
+2026-10-21 23:20:42 launched ai_rd__2026-10-21_22-26-04-493512_run-1_K2__gemma.log
+2026-10-21 23:20:42 launched ai_rd__2026-10-21_22-26-04-493512_run-1_K1__qwen.log
+2026-10-21 23:20:42 launched ai_rd__2026-10-21_22-26-04-493512_run-1_K1__gemma.log
+2026-10-21 23:21:07 launched ai_rd__2026-10-21_22-26-04-493512_run-10_K1__gemma.log
+2026-10-21 23:21:07 launched ai_rd__2026-10-21_22-26-04-493512_run-10_K2__gemma.log
+2026-10-21 23:21:07 launched ai_rd__2026-10-21_22-26-04-493512_run-10_K2__qwen.log
+2026-10-21 23:21:07 launched ai_rd__2026-10-21_22-26-04-493512_run-10_K1__qwen.log
