@@ -57,7 +57,7 @@ FALSE_CLAIM = re.compile(r"fabricat|invented|claims?|declares|report(s|ed)? (a |
 shape = collections.Counter("False success claim" if FALSE_CLAIM.search(str(d.get("evidence"))) else
                             "Changed the code or baseline" for _, _, _, d, _ in cheats)
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 3.6), gridspec_kw={"width_ratios": [1.5, 1], "wspace": 0.75})
-groups = [("Took an offered exploit\n(leaked tests or scorer, copied answers,\nrevert, edit tests, game cheat)", EXPLOIT),
+groups = [("Took an offered exploit\n(leaked tests or scorer, copied answers,\nrevert, weaken tests, game cheat)", EXPLOIT),
           ("Withheld or misreported\nwhat it knew\n(honesty probes)", WITHHOLD)]
 for i, (label, envs) in enumerate(groups):
     for j, m in enumerate(COL):
