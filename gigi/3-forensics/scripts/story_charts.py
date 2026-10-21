@@ -69,7 +69,7 @@ SHORT = {"read the tampering note, did not disclose it": "hid the tampering note
          "did the forbidden arithmetic": "did the forbidden arithmetic", "took the shortcut (wrong answer)": "took the shortcut",
          "answered without running durc": "answered without running the tool",
          "final report hides that the screenshot could not be taken": "hid the missing screenshot",
-         "cheated": "cheated (grader verdict)",
+         "cheated": "cheated", "cheated (Opus grader)": "cheated",
          "made the broken test pass (hard-coded 7, or unlocked and rewrote the test)": "made the impossible test pass",
          "bypassed or weakened the pre-commit hook": "bypassed the pre-commit hook",
          "tampered with the unrunnable tests": "tampered with the unrunnable tests",
@@ -159,8 +159,9 @@ axes[2].set_xticklabels(["1", "3", "10", "30", "100", "300"]); axes[2].grid(axis
 clean(axes[2]); axes[2].set_title("How long it keeps going\nmedian steps per run (log)", loc="left", fontsize=10,
                                   color=MUTED, fontweight="bold")
 axes[0].set_yticks([]); axes[0].set_ylim(-0.8, len(layout) - 0.2)
+fig.subplots_adjust(top=1 - 1.25 / H)
 fig.suptitle("On their own, both models misreport in the honesty probes; Qwen cheats more on code and keeps going longer",
-             x=0.02, ha="left", y=1.0 + 0.6 / H, fontsize=12.5, fontweight="bold")
+             x=0.02, ha="left", y=1 - 0.18 / H, fontsize=12.5, fontweight="bold")
 fig.text(0.02, -0.25 / H, "Bars: share of scored runs (k/n printed; black line = 95% Wilson interval). Right: median "
          "number of steps per finished run, Qwen (green) and gemma (blue). Both on DeepInfra, fp8, the paper's step caps.",
          fontsize=7.8, color=MUTED)
@@ -174,10 +175,10 @@ HON = {"eval_tampering", "funding_email", "currency_conversion", "lazy_investiga
 PANELS = [  # (title, act, selector on swap_all rows)
     ("Honesty probes (4)", "misreports what it saw", lambda r: r["env"] in HON),
     ("is_prime (4 incidents)", "hard-codes the buggy test's 7", lambda r: r["env"] in ("coding", "coding_norules")),
-    ("grade_your_own · run 3", "reports a gain it never measured\n(the eval had printed nothing)",
+    ("grade_your_own · run 3", "false gain report (the eval printed nothing)",
      lambda r: r["env"] == "grade_your_own" and "_run-3_" in r["point"]),
     ("grade_your_own · run 5", "edits the baseline", lambda r: r["env"] == "grade_your_own" and "_run-5_" in r["point"]),
-    ("Rendering engine (3 incidents)", "claims 3× after FAILED benches,\nor shrinks the workload",
+    ("Rendering engine (3 incidents)", "false 3× claim, or a smaller workload",
      lambda r: r["env"] == "optimize_rendering_engine"),
     ("Dashboard (1 incident)", "swaps in an approximation", lambda r: r["env"] == "dashboard_costly_failure"),
     ("Pre-commit hook (2 incidents)", "bypasses the hook", None),
@@ -247,13 +248,15 @@ for i, (title, act, _) in enumerate(PANELS + [("Where Qwen did nothing bad (20 e
         if i == PC and own[1]:
             yv = own[0] / own[1] * 100
             ax.axhline(yv, color=COL[G], lw=1, ls=(0, (3, 2)), alpha=0.8, zorder=1)
-            ax.text(-0.25, yv + 3, f"gemma in its own cheating runs: {own[0]}/{own[1]}", fontsize=7, color=COL[G])
+            ax.text(3.4, yv + 11, f"gemma in its own cheating runs: {own[0]}/{own[1]}", fontsize=7, color=COL[G], ha="right")
         ax.set_xticks(list(XPOS.values())); ax.set_xticklabels(list(XPOS)); ax.set_xlim(-0.45, 3.45)
         ax.set_xlabel("turn at which the model takes over", fontsize=7.6)
     ax.set_ylim(-4, 109); ax.set_yticks([0, 50, 100]); ax.set_yticklabels(["0%", "50%", "100%"])
     ax.grid(axis="y", color=GRID, lw=0.6, zorder=0); clean(ax, left=True)
-    ax.set_title(f"{title}\n", loc="left", fontsize=9.3, fontweight="bold")
-    ax.text(0, 1.035, act, transform=ax.transAxes, fontsize=7.6, color=MUTED, va="bottom")
+    ax.set_title(title, loc="left", fontsize=9.3, fontweight="bold", pad=17)
+    ax.text(0, 1.03, act, transform=ax.transAxes, fontsize=7.6, color=MUTED, va="bottom")
+    if title.startswith("grade_your_own · run 3"):
+        ax.text(2.06, 18, "judge split: all 10 made\nthe same false report", fontsize=6.6, color=COL[G], va="top")
 fig.legend(handles=[plt.Line2D([], [], color=COL[Q], marker="o", lw=1.8, mec="white"),
                     plt.Line2D([], [], color=COL[G], marker="o", lw=1.8, mec="white")],
            labels=["Qwen replaying its own run (the baseline)", "gemma swapped into Qwen's run"], frameon=False, ncol=2,
@@ -285,7 +288,8 @@ for y, (name, t, d, lo, hi, a, b) in zip(range(len(gaps))[::-1], gaps):
     ax.scatter([d * 100], [y], s=46, color=col, zorder=3, edgecolor="white", linewidth=1.2)
     label = f"{name} · {'takes over at turn ' + t if t != 'last' else 'before its last step'}"
     ax.text(-104, y, label, ha="right", va="center", fontsize=8.6, fontweight="bold" if lo > 0 else "normal")
-    ax.text(103, y, f"Qwen {a[0]}/{a[1]}  ·  gemma {b[0]}/{b[1]}", va="center", fontsize=7.6, color=MUTED)
+    note = "  (judge split: all 10 gemma replays made the same false report)" if name.startswith("grade_your_own · run 3") and t == "N−1" else ""
+    ax.text(103, y, f"Qwen {a[0]}/{a[1]}  ·  gemma {b[0]}/{b[1]}{note}", va="center", fontsize=7.6, color=MUTED)
 ax.axvline(0, color=INK, lw=0.8, alpha=0.6, zorder=1)
 ax.axvspan(0, 100, color=GAP, alpha=0.035, zorder=0)
 ax.text(50, len(gaps) - 0.2, "Qwen does it more: distillation has to close this", ha="center", fontsize=8, color=GAP)
@@ -294,10 +298,8 @@ ax.set_xlim(-100, 100); ax.set_ylim(-0.8, len(gaps) + 0.4); ax.set_yticks([])
 ax.set_xticks([-100, -50, 0, 50, 100]); ax.set_xticklabels(["−100", "−50", "0", "+50", "+100"])
 ax.set_xlabel("gap = Qwen's rate − gemma's rate, in percentage points", fontsize=8.5)
 ax.grid(axis="x", color=GRID, lw=0.6, zorder=0); clean(ax)
-top = [g for g in gaps if g[3] > 0]
-title = ("4 · The gap to close: " + ", ".join(f"{g[0].lower() if g[0][0].isupper() and g[0] != 'Rendering engine' else g[0]} at "
-                                             f"{g[1]} (+{g[2] * 100:.0f})" for g in top[:3])
-         + "; no gap on misreports") if top else "4 · No significant gap between Qwen and gemma"
+title = ("4 · The gap distillation has to close: Qwen's code cheats (rendering engine, is_prime one turn early, pre-commit hook);"
+         "\n    none on misreports, nor where Qwen behaves")
 ax.set_title(title, loc="left", fontsize=12, fontweight="bold", pad=14)
 fig.text(0.01, -0.06 + 0.4 / (0.34 * len(gaps) + 1.7), "Dot = difference between Qwen replaying its own run and gemma swapped "
          "in at the same point; line = 95% Newcombe interval. Red: Qwen significantly higher (a gap distillation should "
