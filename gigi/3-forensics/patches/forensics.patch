@@ -199,6 +199,20 @@ index f78436d..364c198 100644
          )
  
      # Always just print history (handles fresh start & resume identically)
+diff --git a/environments/games/chess/Dockerfile b/environments/games/chess/Dockerfile
+index e11319a..ac71d2f 100644
+--- a/environments/games/chess/Dockerfile
++++ b/environments/games/chess/Dockerfile
+@@ -92,6 +92,9 @@ RUN useradd -m -s /bin/bash dev \
+ # RUNTIME CONFIGURATION
+ # =============================================================================
+ ENV PATH=$PATH:/usr/games
++# Modal sandboxes start a login shell, which resets PATH and drops /usr/games: link the engine (same name)
++# into /usr/local/bin so the game finds it there too, as it does under docker run
++RUN ln -sf /usr/games/chess-engine /usr/local/bin/chess-engine
+ 
+ # Set engine parameters as environment variables (can be overridden at runtime)
+ ENV MAX_DEPTH=15
 diff --git a/environments/grade_your_own/grade_rollouts.py b/environments/grade_your_own/grade_rollouts.py
 index 0d1e0bf..9158232 100644
 --- a/environments/grade_your_own/grade_rollouts.py
@@ -432,22 +446,23 @@ index 93e8412..cdf97dc 100644
  
      # Always just print history (handles fresh start & resume identically)
 diff --git a/src/agent_interp_envs/grading.py b/src/agent_interp_envs/grading.py
-index e0138a1..5aeda93 100644
+index e0138a1..ec9cafa 100644
 --- a/src/agent_interp_envs/grading.py
 +++ b/src/agent_interp_envs/grading.py
-@@ -104,6 +104,11 @@ def final_report(run_dir: Path) -> str:
+@@ -104,6 +104,12 @@ def final_report(run_dir: Path) -> str:
  
  
  def judge_client() -> AsyncAnthropic:
 +    if os.environ.get("JUDGE_VIA_OPENROUTER"):
 +        # OpenRouter's Anthropic-compatible endpoint: same model, prompts and parameters; the provider is
 +        # pinned with no fallbacks (_JUDGE_KWARGS) and the model id gets OpenRouter's "anthropic/" prefix.
-+        return AsyncAnthropic(max_retries=20, base_url="https://openrouter.ai/api", timeout=1800.0,
++        # 10 min per request (not 30): a stalled OpenRouter stream is retried instead of holding the whole batch
++        return AsyncAnthropic(max_retries=20, base_url="https://openrouter.ai/api", timeout=600.0,
 +                              api_key=require_api_key("OPENROUTER_API_KEY", "autorater"))
      return AsyncAnthropic(max_retries=20, api_key=require_api_key("ANTHROPIC_API_KEY", "autorater"),
                            timeout=1800.0)
  
-@@ -114,6 +119,13 @@ JUDGE_TOKEN_LIMIT = 950_000
+@@ -114,6 +120,13 @@ JUDGE_TOKEN_LIMIT = 950_000
  _LONG_CHARS = 1_800_000  # only count tokens for prompts that could be near the limit
  _STEP_BANNER = re.compile(r"^={20,}\n\s+STEP (\d+)\s*\n={20,}\n", re.M)
  _JUDGE_KWARGS = {"thinking": {"type": "adaptive"}, "output_config": {"effort": "max"}}
@@ -461,7 +476,7 @@ index e0138a1..5aeda93 100644
  
  
  class Extract(BaseModel):
-@@ -166,7 +178,7 @@ async def _batch(client: AsyncAnthropic, model: str, requests: Sequence[tuple[li
+@@ -166,7 +179,7 @@ async def _batch(client: AsyncAnthropic, model: str, requests: Sequence[tuple[li
              resent_400 = False
              for attempt in range(_TRANSIENT_ATTEMPTS):
                  try:
@@ -470,7 +485,7 @@ index e0138a1..5aeda93 100644
                                                         output_format=output_format, **_JUDGE_KWARGS)
                  except Exception as exc:
                      if not resent_400 and "Invalid request data" in str(exc):
-@@ -274,7 +286,9 @@ async def judge_runs(items: Sequence[tuple], model: str = DEFAULT_MODEL, max_con
+@@ -274,7 +287,9 @@ async def judge_runs(items: Sequence[tuple], model: str = DEFAULT_MODEL, max_con
              continue
          rating = res.parsed_output
          if rating is None:  # e.g. stop_reason=refusal: no content, nothing to parse

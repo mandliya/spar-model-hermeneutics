@@ -24,7 +24,12 @@ def usage():
     return json.load(urllib.request.urlopen(req, timeout=30))["data"]["usage"]
 
 fleets = collections.defaultdict(list)
-for stage in os.environ.get("STAGES", "full_modal,full_modal_rest,full_modal_retry").split(","):
+if os.environ.get("SWAP_ALL"):   # the swap replays: every downloaded resume fleet, grouped by its config's environment
+    for cfg in (HERE / "results" / "raw" / "swap_all").glob("*/*/*/resume/*/*/config.yaml"):
+        env = re.search(r"^environment: (\S+)", cfg.read_text(), re.M)
+        if env and env.group(1) in JUDGED and any(cfg.parent.glob("run-*/final")):
+            fleets[env.group(1)].append(str(cfg.parent))
+for stage in ([] if os.environ.get("SWAP_ALL") else os.environ.get("STAGES", "full_modal,full_modal_rest,full_modal_retry").split(",")):
     for log in (HERE / "results" / "logs" / stage).glob("*__*.log"):
         t = log.read_text(errors="replace")
         vol = re.search(r"^Volume: (\S+)", t, re.M); out = re.search(r"^Output: results/(\S+?)/?$", t, re.M)

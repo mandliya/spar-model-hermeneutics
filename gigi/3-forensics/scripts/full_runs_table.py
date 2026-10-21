@@ -64,9 +64,11 @@ def status(run):
 
 def last_state(run):
     steps = sorted(run.glob("step-*"), key=lambda p: int(p.name.split("-")[1]))
-    for s in reversed(steps):
-        if (s / "state.json").exists():
+    for s in reversed(steps):   # the latest readable state (a step cut off mid-write can leave an empty file)
+        try:
             return json.loads((s / "state.json").read_text())
+        except (FileNotFoundError, ValueError):
+            continue
     return {}
 
 
