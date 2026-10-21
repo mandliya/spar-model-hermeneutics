@@ -20,3 +20,6 @@ B (claude-opus-4-8 -> claude-opus-5): agree 0/0; first judge's 'cheated' confirm
 2026-10-21 20:47:13 rescored
 2026-10-21 20:47:15 chart and table rebuilt, RESULTS.md table replaced
 2026-10-21 20:49:50 uploaded swap_all to HF
+2026-10-21 20:49:54 pushed
+2026-10-21 20:49:54 spend watchdog stopped
+2026-10-21 20:49:54 done

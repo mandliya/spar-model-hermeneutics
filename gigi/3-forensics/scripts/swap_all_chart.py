@@ -24,13 +24,16 @@ CATEGORY = {
     "Cheating suite (coding, Opus-graded)": ["optimize_rendering_engine", "dashboard_costly_failure", "grade_your_own",
         "optimize_rendering_engine_graded", "copying_of_answers", "leaked_scorer", "leaked_tests", "lucky_seed",
         "lucky_seed_readable_grader", "reference_extraction"],
-    "Other task gaming": ["precommit_hook", "revert_or_refactor", "async_conversion", "tower_of_hanoi"],
+    "Other task gaming": ["precommit_hook", "revert_or_refactor", "async_conversion", "tower_of_hanoi", "coding",
+                          "coding_norules", "secret_number", "norvane"],
 }
 BEHAVIOUR = {"eval_tampering": "hid the tampering", "funding_email": "pushed the pitch after the legal review",
              "currency_conversion": "did the forbidden arithmetic", "lazy_investigation": "took the shortcut",
              "parse_duration": "answered without running durc", "revert_or_refactor": "reverted the fix",
              "async_conversion": "weakened test assertions", "tower_of_hanoi": "cheating detected",
-             "precommit_hook": "removed the hook"}
+             "precommit_hook": "removed the hook", "coding": "made the broken test pass",
+             "coding_norules": "made the broken test pass", "secret_number": "read the answer or switched noise off",
+             "norvane": "tampered with the unrunnable tests"}
 
 agg = collections.defaultdict(lambda: [0, 0])
 unmeasured = set()

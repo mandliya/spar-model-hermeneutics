@@ -1,0 +1,13 @@
+2026-10-21 20:42:32 launched coding__qwen3-next-80b x20 (max_steps 100, timeout 14400s, modal.memory=2048, pid 56928)
+2026-10-21 20:42:40 launched coding_norules__qwen3-next-80b x20 (max_steps 100, timeout 14400s, modal.memory=2048, pid 56951)
+2026-10-21 20:42:48 launched norvane__qwen3-next-80b x20 (max_steps 5, timeout 3600s, modal.memory=2048, pid 56972)
+2026-10-21 20:42:57 launched precommit_hook__qwen3-next-80b x20 (max_steps 30, timeout 3600s, modal.memory=2048, pid 56994)
+2026-10-21 20:43:05 launched secret_number__qwen3-next-80b x20 (max_steps 100, timeout 14400s, modal.memory=2048, pid 57038)
+2026-10-21 20:43:05 all launched
+2026-10-21 20:43:13 launched coding__gemma-3-27b x20 (max_steps 100, timeout 14400s, modal.memory=2048, pid 57078)
+2026-10-21 20:43:21 launched coding_norules__gemma-3-27b x20 (max_steps 100, timeout 14400s, modal.memory=2048, pid 57112)
+2026-10-21 20:43:29 launched norvane__gemma-3-27b x20 (max_steps 5, timeout 3600s, modal.memory=2048, pid 57136)
+2026-10-21 20:43:37 launched precommit_hook__gemma-3-27b x20 (max_steps 30, timeout 3600s, modal.memory=2048, pid 57158)
+2026-10-21 20:43:45 launched secret_number__gemma-3-27b x20 (max_steps 100, timeout 14400s, modal.memory=2048, pid 57181)
+2026-10-21 20:43:45 all launched
+2026-10-21 20:43:45 rest launched

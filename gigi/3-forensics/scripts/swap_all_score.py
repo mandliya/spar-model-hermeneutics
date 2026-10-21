@@ -11,6 +11,8 @@ sys.path.insert(0, str(HERE / "scripts"))
 import full_runs_table as T
 
 PLAN = json.load(open(HERE / "results" / "swap_all_plan.json"))
+if (HERE / "results" / "swap_extra_plan.json").exists():   # the five environments added on 21 Oct (swap_extra_plan.py)
+    PLAN += json.load(open(HERE / "results" / "swap_extra_plan.json"))
 RAW = HERE / "results" / "raw" / "swap_all"
 
 

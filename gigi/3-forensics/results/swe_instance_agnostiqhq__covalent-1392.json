@@ -1,0 +1,91 @@
+{
+ "base_commit": "15089219bdb609b6b5149fbe1aa520b98dc1b52d",
+ "created_at": "2022-10-27 20:40:57",
+ "image_name": "docker.io/swerebenchv2/agnostiqhq-covalent:1392-1508921",
+ "instance_id": "agnostiqhq__covalent-1392",
+ "interface": "No new interfaces are introduced.",
+ "language": "python",
+ "license": "Apache-2.0",
+ "patch": "diff --git a/CHANGELOG.md b/CHANGELOG.md\nindex e6ba6955..a613f6ce 100644\n--- a/CHANGELOG.md\n+++ b/CHANGELOG.md\n@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0\n \n - Support for transferring the contents of folders to and from S3 buckets using the file transfer module.\n \n+### Fixed\n+\n+- Result objects now print correctly when nodes fail\n+\n ## [0.207.0-rc.0] - 2022-10-26\n \n ### Authors\ndiff --git a/covalent/_results_manager/result.py b/covalent/_results_manager/result.py\nindex 6851175b..c0571336 100644\n--- a/covalent/_results_manager/result.py\n+++ b/covalent/_results_manager/result.py\n@@ -124,7 +124,7 @@ Node Outputs\n \n         node_outputs = self.get_all_node_outputs()\n         for k, v in node_outputs.items():\n-            show_result_str += f\"{k}: {v.object_string}\\n\"\n+            show_result_str += f\"{k}: {TransportableObject.make_transportable(v).object_string}\\n\"\n \n         return show_result_str\n \n",
+ "pr_description": "Ensure that each node output is a TransportableObject when printing\nConvert None outputs to TransportableObject(None)\r\n\r\n<!--\r\n\u26a0\ufe0f Your pull request title should be short detailed and understandable for all.\r\n\u26a0\ufe0f Increment the version number in the /VERSION file. If this is a bugfix, increment the patch version (the rightmost number), for example 0.18.2 becomes 0.18.3. If it's a new feature, increment the minor version (the middle number), for example 0.18.2 becomes 0.19.0.\r\n\u26a0\ufe0f Add a note to /CHANGELOG.md with your version number and the date, summarizing the changes.\r\n\u26a0\ufe0f If your pull request fixes an open issue, please link to the issue.\r\n\u26a0\ufe0f Rebase the latest changes from the develop branch. Assuming origin points to https://github.com/AgnostiqHQ/covalent, you should run git rebase origin/develop.\r\n-->\r\n\r\n- [x] I have added the tests to cover my changes.\r\n- [x] I have updated the documentation and CHANGELOG accordingly.\r\n- [x] I have read the CONTRIBUTING document.\r\n\r\nCloses #1393.\r\n",
+ "problem_statement": "Result object cannot be printed if a node fails\nConsider the following trivial workflow:\n\n```python\n@ct.electron(executor=\"local\")\ndef task():\n    raise RuntimeError(\"error\")\n\n@ct.lattice(executor=\"local\")\ndef workflow():\n    return task()\n```\nI cannot print the result object:\n```\ndispatch_id = ct.dispatch(workflow)()\nresult_object = ct.get_result(dispatch_id, wait=True)\nprint(result_object)\n```\n\n```\n---------------------------------------------------------------------------\nAttributeError                            Traceback (most recent call last)\nInput In [18], in <cell line: 11>()\n      9 dispatch_id = ct.dispatch(workflow)()\n     10 result_object = ct.get_result(dispatch_id, wait=True)\n---> 11 print(result_object)\n\nFile ~/Agnostiq/code/covalent/covalent/_results_manager/result.py:127, in Result.__str__(self)\n    125 node_outputs = self.get_all_node_outputs()\n    126 for k, v in node_outputs.items():\n--> 127     show_result_str += f\"{k}: {v.object_string}\\n\"\n    129 return show_result_str\n\nAttributeError: 'NoneType' object has no attribute 'object_string'\n```\n\nThis happens because when Covalent encounters an exception when processing a task, the transport graph node's `output` property is set to `None`; for any task that completes normally, the output is a `TransportableObject` (tasks that don't return a value have output `TransportableObject(None)`).\n\nA simple fix is to convert all `None` node outputs to `TransportableObject(None)` in the `Result.__str__` method; the idempotent `TransportableObject.make_transportable()` method is convenient for this.",
+ "repo": "AgnostiqHQ/covalent",
+ "test_patch": "diff --git a/tests/covalent_tests/results_manager_tests/results_test.py b/tests/covalent_tests/results_manager_tests/results_test.py\nindex 9c0da777..538a3ecb 100644\n--- a/tests/covalent_tests/results_manager_tests/results_test.py\n+++ b/tests/covalent_tests/results_manager_tests/results_test.py\n@@ -88,6 +88,29 @@ def result_1():\n     return result\n \n \n+@pytest.fixture\n+def result_2():\n+    @ct.electron(executor=le)\n+    def task_1(x, y):\n+        raise RuntimeError(\"error\")\n+\n+    @ct.lattice(executor=le, workflow_executor=le, results_dir=TEMP_RESULTS_DIR)\n+    def workflow_1(a, b):\n+        \"\"\"Docstring\"\"\"\n+        res_1 = task_1(a, b)\n+        return res_1\n+\n+    Path(f\"{TEMP_RESULTS_DIR}/dispatch_1\").mkdir(parents=True, exist_ok=True)\n+    workflow_1.build_graph(a=1, b=2)\n+    received_lattice = LatticeClass.deserialize_from_json(workflow_1.serialize_to_json())\n+    result = Result(\n+        lattice=received_lattice, results_dir=TEMP_RESULTS_DIR, dispatch_id=\"dispatch_1\"\n+    )\n+    result.lattice.metadata[\"results_dir\"] = TEMP_RESULTS_DIR\n+    result._initialize_nodes()\n+    return result\n+\n+\n def test_get_node_error(result_1):\n     \"\"\"Test result method to get the node error.\"\"\"\n     assert not result_1._get_node_error(node_id=0)\n@@ -103,6 +126,12 @@ def test_get_all_node_results(result_1, mocker):\n             assert data_row[\"node_name\"] == \":parameter:1\"\n \n \n+def test_str_result(result_2, mocker):\n+    \"\"\"Test result __str__ method\"\"\"\n+    s = str(result_2)\n+    assert \"task_1\" in s\n+\n+\n def test_result_root_dispatch_id(result_1):\n     \"\"\"Test the `root_dispatch_id` property`\"\"\"\n \n",
+ "FAIL_TO_PASS": [
+  "tests/covalent_tests/results_manager_tests/results_test.py::test_str_result"
+ ],
+ "PASS_TO_PASS": [
+  "tests/covalent_tests/results_manager_tests/results_test.py::test_get_node_error",
+  "tests/covalent_tests/results_manager_tests/results_test.py::test_get_all_node_results",
+  "tests/covalent_tests/results_manager_tests/results_test.py::test_result_root_dispatch_id",
+  "tests/covalent_tests/results_manager_tests/results_test.py::test_result_post_process"
+ ],
+ "install_config": {
+  "base_image_name": "python_base_310",
+  "docker_specs": {
+   "_variant": null,
+   "bazel_version": null,
+   "bun_version": null,
+   "cargo_version": null,
+   "deno_version": null,
+   "docker_version": null,
+   "erlang_version": null,
+   "gcc_version": null,
+   "go_version": null,
+   "helm_version": null,
+   "java_version": null,
+   "jdk_version": null,
+   "llvm_version": null,
+   "lua_version": null,
+   "luajit_version": null,
+   "neovim_version": null,
+   "node_version": null,
+   "npm_version": null,
+   "nvim_version": null,
+   "pnpm_version": null,
+   "python_image": "python_base_310",
+   "python_version": null,
+   "redis_version": null,
+   "ruby_version": null,
+   "rust_version": null,
+   "rustc_version": null,
+   "solana_version": null,
+   "sqlite_version": null
+  },
+  "install": [
+   "export HOME=/tmp",
+   "pip install -q -r requirements.txt",
+   "pip install -q -e .",
+   "pip install -q -r tests/requirements.txt"
+  ],
+  "log_parser": "parse_log_pytest",
+  "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider -W ignore::DeprecationWarning tests/covalent_tests/results_manager_tests/results_test.py"
+ },
+ "meta": {
+  "llm_metadata": {
+   "code": "A",
+   "confidence": 0.98,
+   "detected_issues": {
+    "B1": false,
+    "B2": false,
+    "B3": false,
+    "B4": false,
+    "B5": false,
+    "B6": false
+   },
+   "difficulty": "easy",
+   "external_urls": [],
+   "intent_completeness": "complete",
+   "pr_categories": [
+    "minor_bug"
+   ],
+   "reasoning": "The issue reports that printing a Result object fails when a node raises an exception because the node output is None, leading to an AttributeError in Result.__str__. The test adds a failing task and asserts that converting the Result to string succeeds and contains the task name, which directly matches the proposed fix of wrapping None with TransportableObject.make_transportable. There are no ambiguous requirements, external dependencies, or test\u2011suite coupling concerns, so the task is clearly specified and test\u2011aligned.",
+   "test_alignment_issues": []
+  },
+  "num_modified_files": 2,
+  "num_modified_lines": 5,
+  "pr_author": "cjao",
+  "pr_labels": [],
+  "pr_url": null
+ }
+}

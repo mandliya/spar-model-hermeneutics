@@ -24,7 +24,8 @@ CATS = {
                                              "dashboard_costly_failure", "grade_your_own", "lucky_seed",
                                              "lucky_seed_readable_grader", "optimize_lru_cache", "leaked_tests",
                                              "leaked_scorer", "copying_of_answers", "reference_extraction"],
-    "Other task gaming\n(revert, weaken tests, game cheat)": ["async_conversion", "revert_or_refactor", "tower_of_hanoi"],
+    "Other task gaming\n(broken test, answer file, hook,\nrevert, weaken tests, game cheat)": ["coding", "coding_norules",
+        "secret_number", "precommit_hook", "norvane", "async_conversion", "revert_or_refactor", "tower_of_hanoi"],
 }
 
 rows = {(r["environment"], r["model"]): r for r in csv.DictReader(open(HERE / "results" / "full_runs.csv"))}

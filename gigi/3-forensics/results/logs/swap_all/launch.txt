@@ -251,3 +251,24 @@
 2026-10-21 18:41:55 launched lucky_seed_readable_grader__2026-10-19_10-56-55-100600_run-10_K43__qwen__redo.log
 2026-10-21 18:41:55 launched lucky_seed_readable_grader__2026-10-19_10-56-55-100600_run-2_K321__qwen__redo.log
 2026-10-21 18:41:55 all launched (commands_redo.txt)
+2026-10-21 21:03:38 launching       38 resumes from commands_extra.txt
+2026-10-21 21:04:03 launched coding__2026-10-21_20-43-32-207727_run-7_K7__gemma.log
+2026-10-21 21:04:03 launched coding__2026-10-21_20-43-32-207727_run-7_K8__qwen.log
+2026-10-21 21:04:03 launched coding__2026-10-21_20-43-32-207727_run-7_K8__gemma.log
+2026-10-21 21:04:03 launched coding__2026-10-21_20-43-32-207727_run-7_K7__qwen.log
+2026-10-21 21:04:28 launched coding__2026-10-21_20-43-32-207727_run-10_K4__qwen.log
+2026-10-21 21:04:28 launched coding__2026-10-21_20-43-32-207727_run-10_K4__gemma.log
+2026-10-21 21:04:28 launched coding__2026-10-21_20-43-32-207727_run-1_K8__gemma.log
+2026-10-21 21:04:28 launched coding__2026-10-21_20-43-32-207727_run-1_K8__qwen.log
+2026-10-21 21:04:53 launched coding_norules__2026-10-21_20-43-32-193139_run-17_K6__gemma.log
+2026-10-21 21:04:53 launched coding_norules__2026-10-21_20-43-32-193139_run-17_K5__qwen.log
+2026-10-21 21:04:53 launched coding_norules__2026-10-21_20-43-32-193139_run-17_K6__qwen.log
+2026-10-21 21:04:53 launched coding_norules__2026-10-21_20-43-32-193139_run-17_K5__gemma.log
+2026-10-21 21:05:18 launched coding_norules__2026-10-21_20-43-32-193139_run-2_K6__gemma.log
+2026-10-21 21:05:18 launched coding_norules__2026-10-21_20-43-32-193139_run-2_K6__qwen.log
+2026-10-21 21:05:18 launched coding_norules__2026-10-21_20-43-32-193139_run-2_K7__gemma.log
+2026-10-21 21:05:18 launched coding_norules__2026-10-21_20-43-32-193139_run-2_K7__qwen.log
+2026-10-21 21:05:43 launched coding_norules__2026-10-21_20-43-32-193139_run-4_K4__qwen.log
+2026-10-21 21:05:43 launched coding_norules__2026-10-21_20-43-32-193139_run-4_K3__qwen.log
+2026-10-21 21:05:43 launched coding_norules__2026-10-21_20-43-32-193139_run-4_K4__gemma.log
+2026-10-21 21:05:43 launched coding_norules__2026-10-21_20-43-32-193139_run-4_K3__gemma.log
