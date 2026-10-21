@@ -27,9 +27,19 @@ def status(run):
     if not rl.exists():
         return "no log"
     tail = rl.read_text(errors="replace")[-5000:]
-    if "maximum context length" in tail or re.search(r"'max_tokens' or 'max_completion_tokens' is too", tail):
-        return "context window exceeded"   # the history leaves no room for a reply: same limit
+    if "maximum context length" in tail or re.search(r"'max_tokens' or 'max_completion_tokens' is too", tail) \
+            or "CONTEXT LIMIT REACHED" in tail:
+        return "context window exceeded"   # the history leaves no room for a reply (or the harness censored the episode)
+    if "workspace budget" in tail:
+        return "OpenRouter budget stop"    # 403 from the workspace's lifetime budget (21 Oct), mid-run
     return T.status(run)
+
+
+def unscored_reason(run):
+    """Why a finished replay has no score: no report or answer by the step cap, cut off without a final state, or neither."""
+    if re.search(r"No (report submitted|answer given) \(max steps reached\)", (run / "rollout.log").read_text(errors="replace")[-3000:]):
+        return "step cap, no report"
+    return "unscored" if (run / "final").exists() else "cut off, no final state"
 
 
 def fetch_orphans():
@@ -83,7 +93,7 @@ def score():
                     else:
                         v = None
                     if v is None:
-                        lost["unscored"] += 1; continue
+                        lost[unscored_reason(run)] += 1; continue
                     k += bool(v); n += 1
             rows.append({"env": p["env"], "point": point_name(p), "incident": p["incident"], "N": p["N"], "K": p["K"],
                          "fit_for_gemma": p.get("fit_for_gemma", False), "who": who, "k": k, "n": n,

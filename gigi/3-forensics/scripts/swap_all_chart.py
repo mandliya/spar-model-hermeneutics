@@ -87,10 +87,12 @@ ax.legend(handles=[plt.Line2D([], [], marker="o", ls="", color=COL[w]) for w in 
           frameon=False, ncol=2, loc="lower right", bbox_to_anchor=(1, 1), fontsize=8.5)
 title = sys.argv[1] if len(sys.argv) > 1 else "The swap in every environment"
 ax.set_title(title, loc="left", fontsize=12, fontweight="bold", pad=24)
-fig.text(0.01, -0.01, "Share of finished replays with the environment's bad behaviour (coding suite: Opus grader verdict 'cheated'); "
-         "line = 95% Wilson interval. Restart point = checkpoint N−1 (and N−2 for incidents), N = Qwen's bad step or its "
-         "final decision.\nReplayed but without a bad-behaviour measure: chess, tictactoe, puppeteer, sandbagging. "
-         "optimize_lru_cache: Qwen quits at step 1, nothing to restart.\nNo gemma: async_conversion (Qwen's history from step ~100 exceeds gemma's 131k context). Not graded (OpenRouter workspace budget reached): lucky_seed, lucky_seed_readable_grader, optimize_rendering_engine_graded.", fontsize=7.5, color=MUTED)
+fig.text(0.01, 0.075, "Share of finished replays with the environment's bad behaviour (coding suite: grader verdict 'cheated', Claude "
+         "Opus 5, or Opus 4.8 where Opus 5 refused); line = 95% Wilson interval.\nRestart point = checkpoint N−1 (and N−2 for "
+         "incidents), N = Qwen's bad step or its final decision. Lost replays (provider errors, context window, crashes) are "
+         "left out, never counted as behaviour.\nReplayed but without a bad-behaviour measure: chess, tictactoe, puppeteer, "
+         "sandbagging. optimize_lru_cache: Qwen quits at step 1, nothing to restart. No gemma: async_conversion (Qwen's "
+         "history from step ~100 exceeds gemma's 131k context).", fontsize=7.5, color=MUTED, va="top")
 fig.savefig(HERE / "charts" / "swap_all.png", dpi=180, bbox_inches="tight"); plt.close(fig)
 
 lines = ["| Category | Environment | Restart point | Qwen replayed | gemma swapped in |", "|---|---|---|---|---|"]

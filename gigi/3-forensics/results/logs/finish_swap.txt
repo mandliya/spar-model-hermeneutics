@@ -11,3 +11,5 @@ B (claude-opus-4-8 -> claude-opus-5): agree 0/0; first judge's 'cheated' confirm
 2026-10-21 19:21:48 still missing: 48 resumes, 188 replays to top up
 2026-10-21 19:21:49 chart and table rebuilt
 2026-10-21 19:26:13 uploaded swap_all to HF
+2026-10-21 19:26:17 pushed
+2026-10-21 19:26:17 done

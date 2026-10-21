@@ -104,7 +104,10 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
    - Opus 5's safety classifier refused most transcripts of lucky_seed, lucky_seed_readable_grader,
      optimize_cache_c and grade_your_own (`stop_reason=refusal`, also on a retry). Those runs were graded
      by Claude Opus 4.8, the fallback Anthropic documents for Opus 5 refusals; each verdict's
-     `grading.json` names its judge, and the results table says how many each judge graded.
+     `grading.json` names its judge, and the results table says how many each judge graded. In the
+     swap (21 Oct) Opus 5 also refused most replays of the rendering, dashboard and
+     reference-extraction tasks, so Opus 4.8 graded 451 of the 618 swap verdicts (RESULTS.md, data
+     quality, with the check of the two judges).
    - grade_your_own's grader used `yaml` without importing it; fixed (`patches/forensics.patch`).
 
 ## Status
@@ -130,6 +133,15 @@ have, here `payment_method` for `method`, or text around the call), DeepInfra re
 no text, no call, tokens still billed. Reproduced 19 Oct with the runs' exact first request: 0 of 3
 replies came back with tools, a normal reply without them. So gemma failed 20 of 20 runs of
 `currency_conversion` (first step) and 16 of 20 of `funding_email` (step 2). That is the provider, not
-gemma's behaviour. The fix would be describing the tools in gemma's prompt ourselves and parsing its
-calls in the harness, so a bad call reaches gemma as an error it can correct; that changes gemma's
-setup, so its other environments would need rerunning to stay comparable. Deferred.
+gemma's behaviour. Fixed 20 Oct: gemma now gets the tools in its prompt and our harness parses its
+calls (text mode, deviation 4), and every gemma environment was rerun that way, so both are in.
+
+20 Oct 2026: **gemma rerun in text mode** (285 runs, 0 lost); the 19 Oct gemma numbers are archived
+(`results/archive_full_runs_gemma_deepinfra_19oct.csv`).
+
+21 Oct 2026: **the swap in every environment**, on Modal: 91 restart points (Qwen's incidents at N−1
+and N−2, and its final decisions where it did nothing bad), 10 replays per point with Qwen and 10 with
+gemma, graded like the full runs, plus a check of the two judges against each other
+(`scripts/swap_all_*.py`, `scripts/judge_agreement.py`). Results in [`RESULTS.md`](RESULTS.md); raw
+replays on HF (`forensics/raw/swap_all.tar.gz`; the full runs in `forensics/raw/modal.tar.gz`). 4 long
+Qwen top-ups were still running at 19:40. Still not run: `ai_rd` and `swe_rebench_v2`.
