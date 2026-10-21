@@ -69,8 +69,9 @@ fig, ax = plt.subplots(figsize=(9, 0.33 * len(envs) + 1.4))
 for y, e in enumerate(envs):
     q, g = med[(e, "qwen3-next-80b")], med[(e, "gemma-3-27b")]
     ax.plot([g, q], [y, y], color=GRID, lw=2, zorder=1)
-    ax.scatter([q], [y], s=40, color=COL["qwen3-next-80b"], zorder=3, edgecolor="white", linewidth=1.5)
-    ax.scatter([g], [y], s=40, color=COL["gemma-3-27b"], zorder=3, edgecolor="white", linewidth=1.5)
+    dy = 0.16 if q == g else 0   # equal medians: show both dots, not one hiding the other
+    ax.scatter([q], [y + dy], s=40, color=COL["qwen3-next-80b"], zorder=3, edgecolor="white", linewidth=1.5)
+    ax.scatter([g], [y - dy], s=40, color=COL["gemma-3-27b"], zorder=3, edgecolor="white", linewidth=1.5)
     ax.text(0.75, y, e, ha="right", va="center", fontsize=8.5)
 ax.set_xscale("log"); ax.set_xlim(0.8, 400); ax.set_yticks([])
 ax.set_xticks([1, 3, 10, 30, 100, 300]); ax.set_xticklabels(["1", "3", "10", "30", "100", "300"])
