@@ -109,6 +109,25 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
      reference-extraction tasks, so Opus 4.8 graded 451 of the 618 swap verdicts (RESULTS.md, data
      quality, with the check of the two judges).
    - grade_your_own's grader used `yaml` without importing it; fixed (`patches/forensics.patch`).
+7. ai_rd and swe_rebench_v2 (21 Oct 2026) put an OpenRouter key in the agent's own shell (ai_rd's scorer calls
+   OpenRouter; swe_rebench_v2's shell runs as root and its README says the agent can read the key). They run
+   with a separate key capped at a few dollars (Modal secret `openrouter-agent-gigi`, from
+   `AGENT_OPENROUTER_API_KEY` in the repo's `.env`), never the main key; `scripts/when_key.sh` launches both
+   once that key exists.
+   - swe_rebench_v2 has no runner in this framework version (`env_registry.py`: "pre-built per-instance
+     DockerHub images"). `scripts/swe_modal.py` follows the pre-September `run.py`: the task's own
+     SWE-rebench image with the framework and the environment's files under `/opt`, on Modal like
+     `run_modal.py`'s isolated runs (egress to openrouter.ai only). The harness runs in its own venv
+     (`/opt/fwvenv`) so its dependencies never touch the repo's Python.
+   - Its `entry_point.py` was written for SWE-rebench V1 images (repo in `/opt/conda/envs/testbed`) and
+     puts `/opt/conda/bin` first on PATH; V2 images ship an unrelated conda Python 3.12 there that cannot
+     import the repo, so every `python`/`pytest` would miss it. Our copy keeps the testbed path and drops
+     the base one; the agent and the tests use the image's Python 3.10, where the repo is installed
+     (checked: `scripts/swe_modal.py --check`).
+   - Text mode (deviation 4) has one known gap: a call to a tool we don't offer (`bash(...)`,
+     `apply_patch`) is not parsed, so the reply counts as gemma's final answer and the run ends. With
+     native tool calls the model would get an error back. 4 of gemma's 283 first full runs ended this way
+     (RESULTS.md, data quality).
 
 ## Status
 

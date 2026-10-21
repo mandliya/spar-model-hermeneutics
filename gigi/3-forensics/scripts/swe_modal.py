@@ -43,6 +43,7 @@ CHECK = FIND_PY + r"""
 echo "harness python: $PY"; "$PY" -c "import sys, agent_interp_envs; print(sys.version.split()[0], 'framework ok')"
 echo "image python: $(command -v python) $(python --version 2>&1)"; python -c "import covalent; print('repo importable:', covalent.__file__)"
 command -v pytest
+grep -n "/opt/conda" /opt/entry_point.py
 for c in /opt/conda/envs/testbed/bin/python /opt/conda/bin/python; do [ -x "$c" ] && { echo "conda python: $c $($c --version 2>&1)"; $c -c "import covalent" 2>&1 | tail -1 | sed "s/^/  import covalent: /"; }; done
 printf '%s' "$ROLLOUT_CONFIG_YAML" > /opt/config.yaml; "$PY" -c "import yaml; c = yaml.safe_load(open('/opt/config.yaml'));
 import os; d = c['task']['cwd']; print('cwd', d, os.path.isdir(d), len(os.listdir(d)) if os.path.isdir(d) else 0, 'entries')"
@@ -89,7 +90,18 @@ def image_for(docker_image: str) -> modal.Image:
     img = img.add_local_dir(str(REPO / "src"), "/opt/src", copy=True)
     img = img.add_local_file(str(REPO / "pyproject.toml"), "/opt/pyproject.toml", copy=True)
     for f in FILES:
-        img = img.add_local_file(str(ENV / f), f"/opt/{f}", copy=True)
+        src = ENV / f
+        if f == "entry_point.py":
+            # V2 images ship an unrelated base conda Python (3.12, without the repo's deps) next to the image Python
+            # the repo is installed in; entry_point.py, written for V1 images (repo in /opt/conda/envs/testbed),
+            # would put /opt/conda/bin first on PATH, and every `python`/`pytest` would miss the repo. Keep the
+            # testbed path, drop the base one (README, deviations).
+            text = src.read_text()
+            old = '        "/opt/conda/envs/testbed/bin",\n        "/opt/conda/bin",\n'
+            assert old in text, "entry_point.py changed upstream: recheck the conda paths"
+            src = pathlib.Path("/tmp") / "swe_entry_point.py"
+            src.write_text(text.replace(old, '        "/opt/conda/envs/testbed/bin",\n'))
+        img = img.add_local_file(str(src), f"/opt/{f}", copy=True)
     # the framework importable from Modal's Python everywhere (evaluate.py runs with PYTHONPATH=/opt only)
     return img.run_commands(FIND_PY + " && \"$PY\" -c \"import site; open(site.getsitepackages()[0] + "
                             "'/agent_interp_envs_src.pth', 'w').write('/opt/src\\n')\"")
@@ -132,7 +144,9 @@ def main(config: str, count: int = 10, stage: str = "full_swe", timeout: int = 1
         print(sb.stdout.read(), sb.stderr.read(), f"exit {sb.returncode}", flush=True)
         return
 
-    local_cfg = HERE / "results" / "raw" / stage / VOLUME / prefix / "config.yaml"
+    # the layout run_modal.py logs and full_runs_table.modal_runs() reads: results/raw/modal/<volume>/<prefix>/run-N
+    print(f"Volume: {VOLUME}\nOutput: results/{prefix}/", flush=True)
+    local_cfg = HERE / "results" / "raw" / "modal" / VOLUME / prefix / "config.yaml"
     local_cfg.parent.mkdir(parents=True, exist_ok=True)
     local_cfg.write_text(cfg_yaml)
 
@@ -153,5 +167,5 @@ def main(config: str, count: int = 10, stage: str = "full_swe", timeout: int = 1
 
     with ThreadPoolExecutor(max_workers=count) as pool:
         codes = list(pool.map(one, range(1, count + 1)))
-    n = download(vol, prefix, HERE / "results" / "raw" / stage / VOLUME)
-    print(f"done: {sum(c == 0 for c in codes)}/{count} exit 0; {n} files -> results/raw/{stage}/{VOLUME}/{prefix}", flush=True)
+    n = download(vol, prefix, HERE / "results" / "raw" / "modal" / VOLUME)
+    print(f"done: {sum(c == 0 for c in codes)}/{count} exit 0; {n} files -> results/raw/modal/{VOLUME}/{prefix}", flush=True)
