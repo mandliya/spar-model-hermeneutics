@@ -35,11 +35,20 @@ def status(run):
     return T.status(run)
 
 
-def unscored_reason(run):
-    """Why a finished replay has no score: no report or answer by the step cap, cut off without a final state, or neither."""
+def unscored_reason(run, env):
+    """Why a finished replay has no score: the environment has no measure, no report or answer by the step cap,
+    cut off before a (full) final state, or else not graded / no value for the measure."""
+    if env not in T.MEASURES and env not in T.JUDGED:
+        return "no measure"
     if re.search(r"No (report submitted|answer given) \(max steps reached\)", (run / "rollout.log").read_text(errors="replace")[-3000:]):
         return "step cap, no report"
-    return "unscored" if (run / "final").exists() else "cut off, no final state"
+    if env in T.MEASURES:   # scored from the last step's state.json; these environments write no final/
+        return "no value for the measure" if any(run.glob("step-*/state.json")) else "state not fetched yet"
+    if not (run / "final").exists():
+        return "cut off, no final state"
+    if not (run / "final" / "messages.json").exists():
+        return "cut off, no full final state"
+    return "not graded"
 
 
 def fetch_orphans():
@@ -93,7 +102,7 @@ def score():
                     else:
                         v = None
                     if v is None:
-                        lost[unscored_reason(run)] += 1; continue
+                        lost[unscored_reason(run, p["env"])] += 1; continue
                     k += bool(v); n += 1
             rows.append({"env": p["env"], "point": point_name(p), "incident": p["incident"], "N": p["N"], "K": p["K"],
                          "fit_for_gemma": p.get("fit_for_gemma", False), "who": who, "k": k, "n": n,
