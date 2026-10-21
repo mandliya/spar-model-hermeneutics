@@ -115,6 +115,17 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
    (21 Oct 2026, 21:30). So every output of these two runs goes through `scripts/redact_key.py` (the main
    key and any OpenRouter-key-shaped string replaced) before it is uploaded or committed, and the spend
    watchdog stops our apps at the user's ceiling. `scripts/when_key.sh` (the capped-key path) is kept, unused.
+   - ai_rd was broken in this framework version: create_provider scrubs API keys from the harness process
+     once the model client is built, and the hardened agent shell passes none, so the agent's `score.py`
+     and the end-of-run hard-coding judge both failed ("OPENROUTER_API_KEY environment variable not set").
+     Our patch captures the key when `run_step.py` is imported (before the scrub, as `tool_calling.py`
+     does for its own heal call) and hands it to exactly those two, as the task text says ("The
+     environment has an OPENROUTER_API_KEY already configured"). The first 20 runs (21:31) were broken
+     this way and are archived (`results/logs/archive/ai_rd_broken_21oct/`); the rerun started 22:26
+     after a one-run smoke test (scorer and judge both working). The key-shaped string in two of the
+     broken Qwen runs was one Qwen invented, not the real key (checked against the unredacted copy).
+   - ai_rd's own scorer and judge call OpenRouter without a pinned provider (the environment's
+     agent-visible `api_utils.py`, left as shipped).
    - swe_rebench_v2 has no runner in this framework version (`env_registry.py`: "pre-built per-instance
      DockerHub images"). `scripts/swe_modal.py` follows the pre-September `run.py`: the task's own
      SWE-rebench image with the framework and the environment's files under `/opt`, on Modal like

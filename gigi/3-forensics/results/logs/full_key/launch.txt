@@ -3,3 +3,8 @@
 2026-10-21 21:31:06 launched ai_rd__gemma-3-27b x10 (max_steps 60, timeout 3600s, modal.memory=2048, pid 63073)
 2026-10-21 21:31:06 all launched
 2026-10-21 21:31:06 rest launched
+2026-10-21 22:26:07 launched ai_rd__qwen3-next-80b x10 (max_steps 60, timeout 3600s, modal.memory=2048, pid 65752)
+2026-10-21 22:26:07 all launched
+2026-10-21 22:26:15 launched ai_rd__gemma-3-27b x10 (max_steps 60, timeout 3600s, modal.memory=2048, pid 65781)
+2026-10-21 22:26:15 all launched
+2026-10-21 22:26:15 rest launched
