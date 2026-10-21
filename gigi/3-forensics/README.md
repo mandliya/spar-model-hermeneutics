@@ -110,10 +110,11 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
      quality, with the check of the two judges).
    - grade_your_own's grader used `yaml` without importing it; fixed (`patches/forensics.patch`).
 7. ai_rd and swe_rebench_v2 (21 Oct 2026) put an OpenRouter key in the agent's own shell (ai_rd's scorer calls
-   OpenRouter; swe_rebench_v2's shell runs as root and its README says the agent can read the key). They run
-   with a separate key capped at a few dollars (Modal secret `openrouter-agent-gigi`, from
-   `AGENT_OPENROUTER_API_KEY` in the repo's `.env`), never the main key; `scripts/when_key.sh` launches both
-   once that key exists.
+   OpenRouter; swe_rebench_v2's shell runs as root and its README says the agent can read the key). A
+   separate capped key would bound what the agent could do with it; the user chose the main key instead
+   (21 Oct 2026, 21:30). So every output of these two runs goes through `scripts/redact_key.py` (the main
+   key and any OpenRouter-key-shaped string replaced) before it is uploaded or committed, and the spend
+   watchdog stops our apps at the user's ceiling. `scripts/when_key.sh` (the capped-key path) is kept, unused.
    - swe_rebench_v2 has no runner in this framework version (`env_registry.py`: "pre-built per-instance
      DockerHub images"). `scripts/swe_modal.py` follows the pre-September `run.py`: the task's own
      SWE-rebench image with the framework and the environment's files under `/opt`, on Modal like

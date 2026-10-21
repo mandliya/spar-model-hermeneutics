@@ -3,8 +3,9 @@ per-instance DockerHub images"). This follows the pre-September run.py, which pu
 environment's files under /opt in the task's own SWE-rebench image, but runs on Modal like run_modal.py's
 isolated runs: one sandbox per run, egress to the OpenRouter API only, outputs on the
 gigi-forensics-swe-rebench-v2 volume, then downloaded to results/raw/<stage>/swe_rebench_v2/.
-The agent's shell runs as root and can read the API key (environment README), so the sandbox gets the capped
-agent key (Modal secret openrouter-agent-gigi, OPENROUTER_API_KEY), never the main one.
+The agent's shell runs as root and can read the API key (environment README). The user chose to run it with the
+main key (21 Oct, Modal secret openrouter-secret-gigi); transcripts are scanned and the key redacted before any upload
+(scripts/redact_key.py).
 Instance metadata comes from results/swe_instance_<id>.json (fetched from nebius/SWE-rebench-V2, the same
 fields the old run.py took). Modal's Python 3.11 runs the framework (it needs >= 3.10); the agent's commands
 and the tests use the image's conda Python (entry_point.py puts it first on PATH).
@@ -14,6 +15,7 @@ and the tests use the image's conda Python (entry_point.py puts it first on PATH
 """
 import inspect
 import json
+import os
 import pathlib
 import socket
 import time
@@ -25,7 +27,7 @@ from omegaconf import OmegaConf
 HERE = pathlib.Path(__file__).resolve().parents[1]            # gigi/3-forensics
 REPO = HERE / "agent-interp-envs"
 ENV = REPO / "environments" / "swe_rebench_v2"
-SECRET = "openrouter-agent-gigi"
+SECRET = os.environ.get("SWE_SECRET", "openrouter-secret-gigi")   # the main key: the user's choice, 21 Oct (README, dev. 7)
 VOLUME = "gigi-forensics-swe-rebench-v2"
 HOSTS = ["openrouter.ai"]
 DEPS = ["anthropic>=0.121.0", "omegaconf>=2.3", "openai>=2.14.0", "pydantic>=2.0", "python-dotenv>=1.2.1",

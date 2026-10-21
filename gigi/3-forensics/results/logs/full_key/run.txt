@@ -1,1 +1,2 @@
 2026-10-21 21:07:28 waiting for AGENT_OPENROUTER_API_KEY in .env
+2026-10-21 21:30:39 stopped: the user chose the main key (no capped key)
