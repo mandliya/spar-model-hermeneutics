@@ -199,3 +199,55 @@
 2026-10-21 13:33:19 launched lazy_investigation__2026-10-19_10-59-17-279542_run-1_K5__gemma.log
 2026-10-21 13:33:19 launched lazy_investigation__2026-10-19_10-59-17-279542_run-1_K5__qwen.log
 2026-10-21 13:33:19 all launched (commands_relaunch.txt)
+2026-10-21 16:08:43 launching       44 resumes from commands_redo_now.txt
+2026-10-21 16:09:09 launched dashboard_costly_failure__2026-10-19_10-57-49-884559_run-2_K63__qwen__redo.log
+2026-10-21 16:09:09 launched dashboard_costly_failure__2026-10-19_10-57-49-884559_run-2_K62__qwen__redo.log
+2026-10-21 16:09:09 launched dashboard_costly_failure__2026-10-19_10-57-49-884559_run-2_K63__gemma__redo.log
+2026-10-21 16:09:09 launched async_conversion__2026-10-19_10-54-58-362320_run-2_K123__qwen__redo.log
+2026-10-21 16:09:34 launched dashboard_costly_failure__2026-10-19_10-57-49-884559_run-1_K17__qwen__redo.log
+2026-10-21 16:09:34 launched grade_your_own__2026-10-19_10-54-43-338056_run-5_K30__qwen__redo.log
+2026-10-21 16:09:34 launched dashboard_costly_failure__2026-10-19_10-57-49-884559_run-3_K104__gemma__redo.log
+2026-10-21 16:09:34 launched grade_your_own__2026-10-19_10-54-43-338056_run-5_K29__qwen__redo.log
+2026-10-21 16:09:59 launched lazy_investigation__2026-10-19_10-59-17-279542_run-1_K5__qwen__redo.log
+2026-10-21 16:09:59 launched grade_your_own__2026-10-19_10-54-43-338056_run-1_K92__qwen__redo.log
+2026-10-21 16:09:59 launched lazy_investigation__2026-10-19_10-59-17-279542_run-11_K5__qwen__redo.log
+2026-10-21 16:09:59 launched lazy_investigation__2026-10-19_10-59-17-279542_run-1_K6__qwen__redo.log
+2026-10-21 16:10:24 launched leaked_tests__2026-10-19_10-57-18-028514_run-1_K12__qwen__redo.log
+2026-10-21 16:10:24 launched lazy_investigation__2026-10-19_10-59-17-279542_run-12_K3__qwen__redo.log
+2026-10-21 16:10:24 launched leaked_tests__2026-10-19_10-57-18-028514_run-3_K32__qwen__redo.log
+2026-10-21 16:10:24 launched leaked_tests__2026-10-19_10-57-18-028514_run-2_K34__qwen__redo.log
+2026-10-21 16:10:49 launched lucky_seed__2026-10-19_10-56-31-791265_run-2_K5__qwen__redo.log
+2026-10-21 16:10:49 launched lucky_seed_readable_grader__2026-10-19_10-56-55-100600_run-1_K359__qwen__redo.log
+2026-10-21 16:10:49 launched lucky_seed__2026-10-19_10-56-31-791265_run-1_K14__qwen__redo.log
+2026-10-21 16:10:49 launched lucky_seed__2026-10-19_10-56-31-791265_run-3_K5__qwen__redo.log
+2026-10-21 16:11:14 launched optimize_rendering_engine__2026-10-19_10-53-50-441957_run-1_K9__qwen__redo.log
+2026-10-21 16:11:14 launched lucky_seed_readable_grader__2026-10-19_10-56-55-100600_run-10_K48__qwen__redo.log
+2026-10-21 16:11:14 launched lucky_seed_readable_grader__2026-10-19_10-56-55-100600_run-2_K498__qwen__redo.log
+2026-10-21 16:11:14 launched optimize_rendering_engine__2026-10-19_10-53-50-441957_run-1_K10__qwen__redo.log
+2026-10-21 16:11:39 launched optimize_rendering_engine__2026-10-19_10-53-50-441957_run-4_K56__qwen__redo.log
+2026-10-21 16:11:39 launched optimize_rendering_engine__2026-10-19_10-53-50-441957_run-4_K55__qwen__redo.log
+2026-10-21 16:11:39 launched optimize_rendering_engine__2026-10-19_14-40-21-380553_run-1_K24__qwen__redo.log
+2026-10-21 16:11:39 launched optimize_rendering_engine__2026-10-19_14-40-21-380553_run-1_K23__qwen__redo.log
+2026-10-21 16:12:04 launched optimize_rendering_engine_graded__2026-10-19_10-54-09-234825_run-1_K2__qwen__redo.log
+2026-10-21 16:12:04 launched optimize_rendering_engine_graded__2026-10-19_10-54-09-234825_run-3_K3__qwen__redo.log
+2026-10-21 16:12:04 launched optimize_rendering_engine_graded__2026-10-19_10-54-09-234825_run-2_K28__qwen__redo.log
+2026-10-21 16:12:04 launched parse_duration__2026-10-19_11-00-41-256186_run-10_K1__qwen__redo.log
+2026-10-21 16:12:29 launched parse_duration__2026-10-19_11-00-41-256186_run-11_K1__qwen__redo.log
+2026-10-21 16:12:29 launched reference_extraction__2026-10-19_10-58-13-974739_run-1_K5__qwen__redo.log
+2026-10-21 16:12:29 launched reference_extraction__2026-10-19_10-58-13-974739_run-10_K2__qwen__redo.log
+2026-10-21 16:12:29 launched reference_extraction__2026-10-19_10-58-13-974739_run-2_K17__qwen__redo.log
+2026-10-21 16:12:54 launched revert_or_refactor__2026-10-19_10-55-23-727056_run-1_K28__qwen__redo.log
+2026-10-21 16:12:54 launched revert_or_refactor__2026-10-19_10-55-23-727056_run-3_K43__qwen__redo.log
+2026-10-21 16:12:54 launched tower_of_hanoi__2026-10-19_10-58-38-449604_run-1_K18__qwen__redo.log
+2026-10-21 16:12:54 launched revert_or_refactor__2026-10-19_10-55-23-727056_run-2_K30__qwen__redo.log
+2026-10-21 16:13:19 launched grade_your_own__2026-10-19_10-54-43-338056_run-1_K70__qwen__redo.log
+2026-10-21 16:13:19 launched tower_of_hanoi__2026-10-19_10-58-38-449604_run-11_K18__qwen__redo.log
+2026-10-21 16:13:19 launched async_conversion__2026-10-19_10-54-58-362320_run-2_K104__qwen__redo.log
+2026-10-21 16:13:19 launched async_conversion__2026-10-19_10-54-58-362320_run-3_K120__qwen__redo.log
+2026-10-21 16:13:19 all launched (commands_redo_now.txt)
+2026-10-21 18:41:30 launching       48 resumes from commands_redo.txt
+2026-10-21 18:41:55 launched lucky_seed_readable_grader__2026-10-19_10-56-55-100600_run-1_K268__qwen__redo.log
+2026-10-21 18:41:55 launched async_conversion__2026-10-19_10-54-58-362320_run-1_K119__qwen__redo.log
+2026-10-21 18:41:55 launched lucky_seed_readable_grader__2026-10-19_10-56-55-100600_run-10_K43__qwen__redo.log
+2026-10-21 18:41:55 launched lucky_seed_readable_grader__2026-10-19_10-56-55-100600_run-2_K321__qwen__redo.log
+2026-10-21 18:41:55 all launched (commands_redo.txt)

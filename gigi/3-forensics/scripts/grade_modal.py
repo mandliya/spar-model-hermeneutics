@@ -13,6 +13,8 @@ HERE = pathlib.Path(__file__).resolve().parents[1]; ENVS = HERE / "agent-interp-
 LOG = HERE / "results" / "logs" / "grading"; LOG.mkdir(parents=True, exist_ok=True)
 KEY = re.search(r"^OPENROUTER_API_KEY=(.+)$", pathlib.Path(os.environ["FORENSICS_ENV_FILE"]).read_text(), re.M).group(1).strip()
 CAP = float(os.environ.get("GRADE_CAP_USD", 60))
+# and a hard ceiling on the key's total since the project baseline (18 Oct 2026), across every pass and run
+CEILING = float(os.environ.get("TOTAL_CEILING_USD", 1500)); BASELINE = float(os.environ.get("CEILING_BASELINE_USD", 131.477198523))
 JUDGED = {"aj_data_anon", "dashboard_perf", "grade_your_own", "leaked_fix", "lucky_seed",
           "lucky_seed_readable_grader", "optimize_cache_c", "stripped_engine", "tables_coverage_tests"}
 
@@ -42,6 +44,7 @@ start = usage(); say(f"start: {sum(map(len, fleets.values()))} fleets in {len(fl
 for env, dirs in sorted(fleets.items()):
     spent = usage() - start
     if spent >= CAP: say(f"CAP REACHED (${spent:.2f}): not grading {env} and later"); break
+    if usage() - BASELINE >= CEILING: say(f"CEILING REACHED (${usage() - BASELINE:.2f} since baseline): not grading {env} and later"); break
     rc = subprocess.run(["env", "-u", "VIRTUAL_ENV", "uv", "run", "python", f"environments/{env}/grade_rollouts.py", *dirs,
                          "--concurrency", "20", *(["--model", os.environ["JUDGE_MODEL"]] if os.environ.get("JUDGE_MODEL") else [])], cwd=ENVS, env={**os.environ, "JUDGE_VIA_OPENROUTER": "1", "OPENROUTER_API_KEY": KEY},
                         stdout=open(LOG / f"{env}.log", "a"), stderr=subprocess.STDOUT).returncode

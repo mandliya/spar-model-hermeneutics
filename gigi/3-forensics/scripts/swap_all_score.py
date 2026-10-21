@@ -27,12 +27,28 @@ def status(run):
     if not rl.exists():
         return "no log"
     tail = rl.read_text(errors="replace")[-5000:]
-    if "maximum context length" in tail:
-        return "context window exceeded"
+    if "maximum context length" in tail or re.search(r"'max_tokens' or 'max_completion_tokens' is too", tail):
+        return "context window exceeded"   # the history leaves no room for a reply: same limit
     return T.status(run)
 
 
+def fetch_orphans():
+    """Fleets whose launcher was stopped before downloading: the log names them, the volume has them."""
+    for log in (HERE / "results/logs/swap_all").glob("*__*__*.log"):
+        env, point, who = log.stem.split("__")[:3]
+        t = log.read_text(errors="replace")
+        vol = re.search(r"^Volume: (\S+)", t, re.M)
+        for fleet in sorted(set(re.findall(r"(resume/[a-z0-9-]+/[0-9_-]+)/run-", t))):
+            dest = RAW / env / point / who / fleet
+            if vol and not any(dest.glob("run-*/rollout.log")):
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                rc = subprocess.run(["env", "-u", "VIRTUAL_ENV", "uv", "run", "modal", "volume", "get", "--force", vol.group(1),
+                                     fleet, str(dest.parent)], cwd=HERE / "agent-interp-envs", capture_output=True, text=True)
+                print(("orphan got " if rc.returncode == 0 else "orphan FAILED ") + f"{env} {point} {who}", flush=True)
+
+
 def fetch():
+    fetch_orphans()
     for p in PLAN:
         if p["env"] in T.JUDGED:
             continue
