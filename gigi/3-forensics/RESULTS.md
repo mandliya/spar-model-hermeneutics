@@ -4,7 +4,7 @@ The task-gaming environments of "Why do models task game?" (Singh, Nanda, Rajama
 Qwen3-Next-80B as the target and gemma-3-27b as its stand-in, all 29 entries of the suite, both models on
 DeepInfra (fp8, pinned). Setup, settings and every deviation from the paper: [`README.md`](README.md).
 Earlier versions of this page: [`archive/`](archive/). Cost, measured on the OpenRouter key: $3.93 for
-17 Oct; $579.89 for 18–21 Oct to 20:52 (every pass, the swaps, the grading and the judge check); Modal
+17 Oct; $589.18 for 18–21 Oct to 23:52 (every pass, the swaps, the grading and the judge check); Modal
 compute on SPAR's workspace.
 
 ## Four questions (14 Oct call with John and Yuki)
