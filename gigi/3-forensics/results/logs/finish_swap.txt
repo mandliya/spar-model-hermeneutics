@@ -13,3 +13,10 @@ B (claude-opus-4-8 -> claude-opus-5): agree 0/0; first judge's 'cheated' confirm
 2026-10-21 19:26:13 uploaded swap_all to HF
 2026-10-21 19:26:17 pushed
 2026-10-21 19:26:17 done
+2026-10-21 19:46:51 fold_topups start, waiting for launchers 52309 52344 52355 52367
+2026-10-21 20:42:52 top-up launchers done
+2026-10-21 20:45:56 fetch done
+2026-10-21 20:47:12 grading done
+2026-10-21 20:47:13 rescored
+2026-10-21 20:47:15 chart and table rebuilt, RESULTS.md table replaced
+2026-10-21 20:49:50 uploaded swap_all to HF
