@@ -3,8 +3,7 @@
 **Question.** In agent tasks where models cheat, does gemma-3-27b behave like
 Qwen3-Next-80B when it takes over Qwen's run? It is part two's
 target-vs-stand-in question with an action (cheat or not) in place of an
-answer to "did you lie?". Asked for on the 14 Oct 2026 call with John; plan
-and quotes in [`../TODO.md`](../TODO.md).
+answer to "did you lie?". Plan and design notes in [`../TODO.md`](../TODO.md).
 
 **Source.** "Why do models task game?" (Singh, Nanda, Rajamanoharan, 2026),
 https://www.lesswrong.com/posts/HACauvWhEdC6QhdS4. Its environments:
