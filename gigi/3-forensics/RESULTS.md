@@ -317,6 +317,24 @@ gap**: the two rates match. **Unclear**: too few replays, or a judge split.
 
 ## Data quality
 
+- **Validation pass: does gemma still work after taking over Qwen's run?** (23 Oct, from the saved logs;
+  `scripts/swap_validity.py` → `results/swap_validity.csv`; pass criteria fixed before looking.) The swap
+  already shows gemma Qwen's history in gemma's own format: every past call as a ```` ```tool_code ````
+  block and every result as ```` ```tool_output ````, under gemma's chat template (README, deviation 4).
+  - **Passes:** gemma never writes a call in Qwen's format (0 of 1,370 replays). Its first turn after the
+    takeover is a readable call or a final answer in 96.8% of the replays that ran (the other 100 are
+    histories longer than its context window, already counted as lost). Its share of unreadable turns is
+    3.3%, against 2.6% in its own runs. Rendering engine and is_prime: no replay ended by our parser.
+  - **Fails: ai_rd and the pre-commit hook.** When gemma writes a broken call (quotes inside quotes, a
+    bracket never closed), our parser cannot read it and the environment takes the reply as "done", so
+    the run ends; a broken call from Qwen gets an error back and Qwen tries again. This ended 29 of
+    gemma's 52 finished ai_rd replays at Qwen's incidents (12 of them while writing `prompt.txt`, the act
+    being measured) and 12 of 119 pre-commit replays (all rewriting a source file; none touching the
+    hook). On the replays not cut, the gap remains (ai_rd: gemma 1/23 vs Qwen 31/57; pre-commit: 1/107
+    vs 18/100), but both gap rows in chart 4 must be re-measured with the fix below before they are used.
+  - **Fix (next):** a call gemma writes but our parser cannot read gets the same "invalid arguments"
+    error Qwen gets, so the run goes on; then rerun the cut cells.
+
 - **What ran: the whole suite.** The framework's list (`environments/README.md`) has 29 entries: 10 in the
   cheating suite, 10 task-gaming, 9 honesty and disclosure. All ran with both models and are scored, and
   the swap ran wherever a measure exists (ai_rd's swap launched at 23:20 on 21 Oct). Test Regression
