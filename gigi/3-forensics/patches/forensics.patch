@@ -580,7 +580,7 @@ index 2be7824..105dfaf 100644
          return _finish(provider_class(
              model=model,
 diff --git a/src/agent_interp_envs/providers/openrouter_provider.py b/src/agent_interp_envs/providers/openrouter_provider.py
-index 22428b5..aa11699 100644
+index 22428b5..4de879c 100644
 --- a/src/agent_interp_envs/providers/openrouter_provider.py
 +++ b/src/agent_interp_envs/providers/openrouter_provider.py
 @@ -10,7 +10,10 @@ OpenRouter interleaved thinking supported models:
@@ -594,7 +594,7 @@ index 22428b5..aa11699 100644
  
  from dotenv import load_dotenv
  from openai import APIConnectionError, APITimeoutError, OpenAI, RateLimitError
-@@ -28,6 +31,130 @@ class OpenRouterEmptyResponseError(Exception):
+@@ -28,6 +31,158 @@ class OpenRouterEmptyResponseError(Exception):
      """OpenRouter returned HTTP 200 with an error body and no choices."""
  
  
@@ -653,6 +653,33 @@ index 22428b5..aa11699 100644
 +    return None
 +
 +
++# gigi/3-forensics (25 Oct 2026): a call gemma writes but that does not parse (quotes inside quotes, a bracket
++# never closed) or that names a tool we don't offer (`bash(...)`) used to read as "no call", which several
++# environments take as the agent's final answer, so the run ended. A native model's malformed or unknown call
++# gets an error back instead ("invalid arguments" / "unknown function") and the run goes on. So, in text mode,
++# such a call is passed on as a call whose arguments are the raw text (not JSON): the environment answers it
++# exactly as it answers a native model's malformed call. A block counts only if it starts with a call: an
++# offered tool's name in a tool_code/python/bare block, or any name in a tool_code block. Checked on the saved
++# runs (25 Oct): 50 of the 52 replies our parser had ended become such calls (the other 2 type a fake
++# ```tool_output``` and no call); none of gemma's 1,013 final answers does.
++_LABELLED_BLOCK = re.compile(r"```(tool_code|python|py)?[ \t]*\n(.*?)(?:```|\Z)", re.S)
++_CALL_START = re.compile(r"\s*\[?\s*([A-Za-z_][\w.]*)\s*\(")
++
++
++def _unparsed_tool_call(content: str, tools: list[dict]) -> dict | None:
++    names = {t["function"]["name"] for t in tools if t.get("type") == "function"}
++    for label, block in _LABELLED_BLOCK.findall(content or ""):
++        # a tool_code block is a call by gemma's own convention, with or without brackets (`bash "ls"`)
++        m = _CALL_START.match(block) or (label == "tool_code" and re.match(r"\s*\[?\s*([A-Za-z_][\w.]*)", block))
++        if not m:
++            continue
++        name = m.group(1).split(".")[-1]
++        if name in names or label == "tool_code":
++            return {"id": f"call_unparsed_{uuid.uuid4().hex[:16]}", "type": "function",
++                    "function": {"name": name, "arguments": block.strip()}}
++    return None
++
++
 +# Text-mode tool calling (agent.text_tools: true), for models with no tool-call tokens (gemma-3): the
 +# request carries no `tools`; the system prompt carries Google's Gemma 3 function-calling instruction
 +# (verbatim, from philschmid.de/gemma-function-calling, the reference Google points to) and the tools as
@@ -703,8 +730,9 @@ index 22428b5..aa11699 100644
 +            out.append({"role": "system", "content": f"{content}\n\n{preamble}"})
 +        elif role == "assistant":
 +            text = content
-+            # a call already written as text (this model's own turn) is shown as written
-+            if m.get("tool_calls") and not _tool_call_from_tool_code(text, tools):
++            # a call already written as text (this model's own turn, readable or not) is shown as written
++            unparsed = all(tc.get("id", "").startswith("call_unparsed_") for tc in m.get("tool_calls") or [{}])
++            if m.get("tool_calls") and not unparsed and not _tool_call_from_tool_code(text, tools):
 +                blocks = [f"```tool_code\n{_call_text(tc['function']['name'], tc['function'].get('arguments'))}\n```"
 +                          for tc in m["tool_calls"]]
 +                text = "\n".join([text.strip()] + blocks if text.strip() else blocks)
@@ -725,7 +753,7 @@ index 22428b5..aa11699 100644
  class OpenRouterProvider(BaseProvider):
      """Provider for OpenRouter models using OpenAI-compatible chat completions API.
  
-@@ -43,7 +170,10 @@ class OpenRouterProvider(BaseProvider):
+@@ -43,7 +198,10 @@ class OpenRouterProvider(BaseProvider):
          provider_preferences: dict | None = None,
          temperature: float | None = None,
          top_p: float | None = None,
@@ -736,7 +764,7 @@ index 22428b5..aa11699 100644
      ) -> None:
          """Initialize the OpenRouter provider.
  
-@@ -84,28 +214,43 @@ class OpenRouterProvider(BaseProvider):
+@@ -84,28 +242,43 @@ class OpenRouterProvider(BaseProvider):
          )
          self.model = model
          self.messages = messages
@@ -784,7 +812,7 @@ index 22428b5..aa11699 100644
      )
      def invoke(self) -> LLMResponse:
          """Make an API call to OpenRouter using internal message history.
-@@ -115,7 +260,7 @@ class OpenRouterProvider(BaseProvider):
+@@ -115,7 +288,7 @@ class OpenRouterProvider(BaseProvider):
          """
          response = self.client.chat.completions.create(
              model=self.model,
@@ -793,7 +821,7 @@ index 22428b5..aa11699 100644
              **self.kwargs,
          )
  
-@@ -124,6 +269,12 @@ class OpenRouterProvider(BaseProvider):
+@@ -124,6 +297,14 @@ class OpenRouterProvider(BaseProvider):
              raise OpenRouterEmptyResponseError(f"OpenRouter returned no choices: {error}")
  
          message = response.choices[0].message.model_dump()
@@ -801,6 +829,8 @@ index 22428b5..aa11699 100644
 +            raise OpenRouterEmptyResponseError("OpenRouter returned an empty reply (no text, no tool call)")
 +        if not message.get("tool_calls") and (self.kwargs.get("tools") or self.text_tools):
 +            parsed = _tool_call_from_tool_code(message.get("content") or "", self.tool_defs)
++            if not parsed and self.text_tools:
++                parsed = _unparsed_tool_call(message.get("content") or "", self.tool_defs)
 +            if parsed:
 +                message["tool_calls"] = [parsed]
  

@@ -135,10 +135,14 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
      import the repo, so every `python`/`pytest` would miss it. Our copy keeps the testbed path and drops
      the base one; the agent and the tests use the image's Python 3.10, where the repo is installed
      (checked: `scripts/swe_modal.py --check`).
-   - Text mode (deviation 4) has one known gap: a call to a tool we don't offer (`bash(...)`,
-     `apply_patch`) is not parsed, so the reply counts as gemma's final answer and the run ends. With
-     native tool calls the model would get an error back. 4 of gemma's 283 first full runs ended this way
-     (RESULTS.md, data quality).
+   - Text mode (deviation 4) had one gap, closed 25 Oct 2026: a call gemma wrote that does not parse
+     (quotes inside quotes, a bracket never closed) or that names a tool we don't offer (`bash(...)`,
+     `apply_patch`) counted as gemma's final answer, and in environments where a reply without a call means
+     "done" the run ended; a native model's malformed call gets an error back and goes on. Found by the
+     validation pass (RESULTS.md, data quality): it cut 29 of 52 gemma ai_rd replays and 12 of 119
+     pre-commit replays at Qwen's incidents, and 6 of gemma's 403 own runs. Now such a call is passed on
+     with its raw text as (non-JSON) arguments, so the environment answers it as it answers any malformed
+     call ("invalid arguments" / "unknown function"). The affected cells were rerun.
 
 ## Status
 
