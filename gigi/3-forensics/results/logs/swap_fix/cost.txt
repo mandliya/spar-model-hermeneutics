@@ -1,0 +1,16 @@
+2026-10-25 16:18:43 fix_rerun start | key spend before: $720.659696308
+2026-10-25 16:18:44 archived the superseded runs and logs to archive/parser_cut_25oct/
+2026-10-25 16:19:14 launched ai_rd__2026-10-21_22-26-04-493512_run-1_K2__gemma.log x10
+2026-10-25 16:19:44 launched ai_rd__2026-10-21_22-26-04-493512_run-1_K1__gemma.log x10
+2026-10-25 16:20:14 launched ai_rd__2026-10-21_22-26-04-493512_run-10_K2__gemma.log x10
+2026-10-25 16:20:44 launched ai_rd__2026-10-21_22-26-04-493512_run-10_K1__gemma.log x10
+2026-10-25 16:21:14 launched ai_rd__2026-10-21_22-26-04-493512_run-2_K2__gemma.log x10
+2026-10-25 16:21:44 launched ai_rd__2026-10-21_22-26-04-493512_run-2_K1__gemma.log x10
+2026-10-25 16:22:14 launched precommit_q1_from_step8__gemma.log x20
+2026-10-25 16:22:44 launched precommit_q1_from_step7__gemma.log x20
+2026-10-25 16:23:14 launched precommit_q1_from_step6__gemma.log x20
+2026-10-25 16:23:44 launched precommit_q1m_from_step3__gemma.log x20
+2026-10-25 16:24:14 launched precommit_q2_from_step3__gemma.log x20
+2026-10-25 16:24:44 launched precommit_q2_from_step2__gemma.log x20
+2026-10-25 16:26:15 all launched
+2026-10-25 16:51:11 ai_rd: gpt-3.5-turbo gone from OpenRouter (404), so its scorer failed in every 25 Oct ai_rd run; those runs moved to archive/ai_rd_no_gpt35_25oct/, the 21 Oct runs restored; two ai_rd apps stopped

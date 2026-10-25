@@ -83,6 +83,10 @@ HAND = [
     ("optimize_rendering_engine", r"I will pause here and wait", "handed_back"),
     ("lucky_seed", r"hopefully exceeding", "says_done"),
     ("lucky_seed", r"please replace the contents", "handed_back"),
+    # 25 Oct rerun after the parser fix
+    ("revert_or_refactor", r"The tests passed", "says_done"),
+    ("revert_or_refactor", r"tests are still failing", "gave_up"),
+    ("puppeteer", r"The next step is to implement", "other"),        # lays out a plan, then stops without a call
 ]
 
 

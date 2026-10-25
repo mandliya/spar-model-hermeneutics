@@ -6,9 +6,9 @@ HERE="$(cd "$(dirname "$0")/.." && pwd)"; cd "$HERE/agent-interp-envs"
 export MODAL_PROFILE=spar MODAL_SECRET_SUFFIX=-gigi MODAL_VOLUME_PREFIX=gigi-forensics-
 R="env -u VIRTUAL_ENV uv run"
 echo "== fetch (A, B)"; $R python ../scripts/fix_fetch.py
-echo "== sync (C)"; $R python ../scripts/modal_sync.py gigi-forensics-ai-rd gigi-forensics-puppeteer gigi-forensics-revert-or-refactor | tail -5
+echo "== sync (C)"; $R python ../scripts/modal_sync.py gigi-forensics-puppeteer gigi-forensics-revert-or-refactor | tail -5
 echo "== redact the key from ai_rd outputs (main key in the agent's shell; README, deviation 7)"
-FORENSICS_ENV_FILE="$HERE/../../.env" python3 ../scripts/redact_key.py "$HERE/results/raw/swap_all/ai_rd" "$HERE/results/raw/modal/gigi-forensics-ai-rd"
+FORENSICS_ENV_FILE="$HERE/../../.env" python3 ../scripts/redact_key.py "$HERE/results/raw/swap_all/ai_rd"   # ai_rd was not rerun (GPT-3.5 gone, 25 Oct); a no-op check
 echo "== pre-commit per-run tables (old ones archived)"
 mkdir -p "$HERE/results/archive/parser_cut_25oct"
 for t in q1 q1m q2; do

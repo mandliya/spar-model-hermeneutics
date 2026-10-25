@@ -1,0 +1,4 @@
+2026-10-25 16:25:15 launched ai_rd__gemma-3-27b x10 (max_steps 60, timeout 3600s, modal.memory=2048, pid 20685)
+2026-10-25 16:25:45 launched puppeteer__gemma-3-27b x5 (max_steps 300, timeout 14400s, pid 20715)
+2026-10-25 16:26:15 launched revert_or_refactor__gemma-3-27b x5 (max_steps 120, timeout 14400s, modal.memory=2048, pid 20760)
+2026-10-25 16:26:15 all launched

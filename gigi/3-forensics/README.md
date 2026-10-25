@@ -142,7 +142,9 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
      validation pass (RESULTS.md, data quality): it cut 29 of 52 gemma ai_rd replays and 12 of 119
      pre-commit replays at Qwen's incidents, and 6 of gemma's 403 own runs. Now such a call is passed on
      with its raw text as (non-JSON) arguments, so the environment answers it as it answers any malformed
-     call ("invalid arguments" / "unknown function"). The affected cells were rerun.
+     call ("invalid arguments" / "unknown function"). Rerun with the fix (25 Oct): the pre-commit
+     replays at Qwen's incidents and gemma's own puppeteer and revert_or_refactor runs. ai_rd could not be rerun:
+     its scorer's model, GPT-3.5-turbo, is no longer served on OpenRouter (404).
 
 ## Status
 
