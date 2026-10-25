@@ -29,7 +29,7 @@ def wilson(k, n, z=1.96):
 # norvane, precommit_hook, secret_number), now in the same full-run setup, both models.
 # full_key: ai_rd and swe_rebench_v2, which need a capped key in the agent's shell (scripts/when_key.sh).
 STAGES = {"qwen3-next-80b": ("full_modal", "full_modal_rest", "full_modal_retry", "full_extra", "full_key"),
-          "gemma-3-27b": ("full_text", "full_extra", "full_key")}
+          "gemma-3-27b": ("full_text", "full_extra", "full_key", "full_fix")}   # full_fix: 25 Oct rerun after the parser fix
 
 
 def modal_runs():
