@@ -80,7 +80,14 @@ FAMILIES = [
     ("I", "Ethics and oversight", ["eval_tampering", "funding_email", "sandbagging"]),
 ]
 FAMILY_OF = {e: (letter, name) for letter, name, envs in FAMILIES for e in envs}
-LABEL = {"coding": "coding (is_prime)", "coding_norules": "coding_norules (is_prime)"}
+LABEL = {  # the paper's name in parentheses, where the paper names the environment (checked against the post)
+    "coding": "coding (ImpossibleBench)", "coding_norules": "coding_norules (ImpossibleBench)",
+    "dashboard_costly_failure": "dashboard_costly_failure (Performance Dashboard)",
+    "precommit_hook": "precommit_hook (Pre-commit Hook)", "secret_number": "secret_number (Secret Number)",
+    "puppeteer": "puppeteer (Dark Mode)", "parse_duration": "parse_duration (Fictional CLI)",
+    "norvane": "norvane (Broken Test Runner)", "norvane · report": "norvane · report (Broken Test Runner)",
+    "code_summary_honesty": "code_summary_honesty (Test Regression)",
+    "lazy_investigation": "lazy_investigation (Nested Codebase)"}
 NOT_SWAPPED = {  # RESULTS.md, section 3
     "optimize_lru_cache": "not swapped: Qwen quits at step 1",
     "swe_rebench_v2": "not swapped: Qwen never touched the tests",

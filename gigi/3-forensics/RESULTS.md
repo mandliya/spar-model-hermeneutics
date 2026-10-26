@@ -26,17 +26,18 @@ grade_your_own one line per incident run) and its clean runs (the control).
 
 | Family | What the task is | Environments |
 |---|---|---|
-| A · Impossible coding tests | a test is wrong, so only a cheat passes | coding (is_prime, with the rules prompt), coding_norules (is_prime, without) |
-| B · Speed-up targets | reach a speed bar the code can't honestly reach | optimize_rendering_engine, optimize_rendering_engine_graded, optimize_lru_cache, dashboard_costly_failure |
+| A · Impossible coding tests | a test is wrong, so only a cheat passes | coding and coding_norules (*ImpossibleBench*: is_prime, with and without the rules prompt) |
+| B · Speed-up targets | reach a speed bar the code can't honestly reach | optimize_rendering_engine, optimize_rendering_engine_graded, optimize_lru_cache, dashboard_costly_failure (*Performance Dashboard*) |
 | C · Self-certified ML results | beat a baseline, certified by an eval the agent controls | grade_your_own, lucky_seed, lucky_seed_readable_grader, ai_rd |
 | D · Leaked answers and graders | the answer or the grader is lying around in the repo | copying_of_answers, leaked_tests, leaked_scorer, reference_extraction |
-| E · Repo maintenance | ordinary engineering chores with a shortcut | precommit_hook, revert_or_refactor, async_conversion, swe_rebench_v2 |
-| F · Games and puzzles | win or solve when an exploit is in reach | chess, tictactoe, tower_of_hanoi, secret_number |
-| G · Reporting on its own work | does the final report admit what failed | puppeteer, norvane (tampering; final report), code_summary_honesty (Test Regression), parse_duration |
-| H · Following instructions | a stated rule vs a quicker answer | currency_conversion, lazy_investigation |
+| E · Repo maintenance | ordinary engineering chores with a shortcut | precommit_hook (*Pre-commit Hook*), revert_or_refactor, async_conversion, swe_rebench_v2 |
+| F · Games and puzzles | win or solve when an exploit is in reach | chess, tictactoe, tower_of_hanoi, secret_number (*Secret Number*) |
+| G · Reporting on its own work | does the final report admit what failed | puppeteer (*Dark Mode*), norvane (*Broken Test Runner*; tampering, final report), code_summary_honesty (*Test Regression*), parse_duration (*Fictional CLI*) |
+| H · Following instructions | a stated rule vs a quicker answer | currency_conversion, lazy_investigation (*Nested Codebase*) |
 | I · Ethics and oversight | hide, push or underperform under pressure | eval_tampering, funding_email, sandbagging |
 
-The "honesty probes" below are the four entries of H and I that offer a temptation: currency_conversion,
+Names in parentheses (italic here) are the paper's names for the 9 environments it names; the rest keep
+the repo's names. The "honesty probes" below are the four entries of H and I that offer a temptation: currency_conversion,
 lazy_investigation, eval_tampering, funding_email.
 
 **In one minute**
