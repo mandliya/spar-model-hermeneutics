@@ -29,7 +29,7 @@ index 375fc84..e0106d7 100644
  
      provider.print_history()
 diff --git a/environments/ai_rd/api_utils.py b/environments/ai_rd/api_utils.py
-index 04e26ea..6dd0466 100644
+index 04e26ea..46e22f3 100644
 --- a/environments/ai_rd/api_utils.py
 +++ b/environments/ai_rd/api_utils.py
 @@ -28,6 +28,15 @@ def _get_client() -> AsyncOpenAI:
@@ -37,7 +37,7 @@ index 04e26ea..6dd0466 100644
  
  
 +# gigi/3-forensics: every OpenRouter call pinned to the model maker's own servers, no fallback.
-+_PINNED = {"openai/": ["openai"], "google/": ["google-vertex", "google-ai-studio"]}
++_PINNED = {"openai/gpt-3.5": ["azure"], "openai/": ["openai"], "google/": ["google-vertex", "google-ai-studio"]}
 +
 +
 +def _provider(model: str) -> dict:
@@ -111,6 +111,19 @@ index b3ccca1..40de998 100644
 +        rc, output = run_command(command, timeout=300, extra_env={"OPENROUTER_API_KEY": _SCORER_KEY})
          if is_scoring_run and rc == 0:
              state.scoring_runs_used += 1
+ 
+diff --git a/environments/ai_rd/score.py b/environments/ai_rd/score.py
+index 1ad38b8..6676913 100644
+--- a/environments/ai_rd/score.py
++++ b/environments/ai_rd/score.py
+@@ -16,7 +16,7 @@ from api_utils import chat_completion
+ # The prompt is read from prompt.txt
+ PROMPT_PATH = Path(__file__).parent / "prompt.txt"
+ 
+-MODEL = "openai/gpt-3.5-turbo"
++MODEL = "openai/gpt-3.5-turbo-16k"
+ EXTRACT_MODEL = "google/gemini-2.5-flash-lite"
+ MAX_CONCURRENT = 10
  
 diff --git a/environments/async_conversion/Dockerfile b/environments/async_conversion/Dockerfile
 index 921649e..43ee91a 100644
@@ -496,6 +509,19 @@ index 93e8412..cdf97dc 100644
          )
  
      # Always just print history (handles fresh start & resume identically)
+diff --git a/scripts/resume_modal.py b/scripts/resume_modal.py
+index 9945ba0..49f92ab 100644
+--- a/scripts/resume_modal.py
++++ b/scripts/resume_modal.py
+@@ -292,6 +292,8 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, checkpoint_remote_dir, timeout_s,
+             **_resource_kwargs(), **network, volumes={"/mnt/results": results_volume}, secrets=sandbox_secrets,
+             env={"CONTAINER_INIT": ISOLATED_SETUP_CMD, "ROLLOUT_CONFIG_YAML": cfg_yaml, "ROLLOUT_RUN_DIR": run_dir,
+                  "ROLLOUT_CHECKPOINT_DIR": checkpoint_remote_dir, **gateway_env,
++                 # gigi/3-forensics: the opt-in below (resume()) never reached isolated sandboxes; pass it on
++                 **({"FS_BASELINE_MISMATCH": "warn"} if "fs_baseline_mismatch: warn" in cfg_yaml else {}),
+                  **({"ROLLOUT_GATEWAY_TOKEN": token} if gateway else {})})
+         if gateway:
+             try:
 diff --git a/src/agent_interp_envs/grading.py b/src/agent_interp_envs/grading.py
 index e0138a1..ec9cafa 100644
 --- a/src/agent_interp_envs/grading.py
