@@ -1,0 +1,1 @@
+2026-10-26 10:36:12 slow rerun start (PAR=3, WINDOW=4) | key spend before: $734.064231908

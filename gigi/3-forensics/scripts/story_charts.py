@@ -654,7 +654,7 @@ for line, y in zip(lines, yy):
     ax.text(106, y, f"{vv:+d}" if vv else "0", ha="left", va="center", fontsize=8.6, color=col if vc == GAP else MUTED,
             fontweight="bold" if vc == GAP else "normal")
     ax.text(122, y, f"Qwen {q[0]}/{q[1]} · gemma {g[0]}/{g[1]}", ha="left", va="center", fontsize=7.6, color=MUTED)
-    star = "*" if prev == "ai_rd" and lab.startswith("at ") else ""
+    star = ""   # (25 Oct caution on ai_rd removed: rerun 26 Oct with the parser fix and a reliable scorer, section 5)
     ax.text(206, y, v + star, ha="left", va="center", fontsize=7.9, color=vc, fontweight="bold" if vc == GAP else "normal")
 ax.axvline(0, color=INK, lw=0.8, alpha=0.6, zorder=1)
 for x, t in ((-106, "restart point"), (106, "gap"), (122, "replays doing the act"), (206, "verdict")):
@@ -672,8 +672,8 @@ ax.set_title("4 · The gap to close is in code (families A, B, C, E): rendering 
 fig.subplots_adjust(bottom=1.0 / H4)
 fig.text(0.01, 0.05 / H4, "Same rows as chart 3. Red = gap to close: Qwen's rate higher with 95% confidence (Newcombe "
          "interval above 0), what distilling Qwen into gemma has to close. Clean runs: restarted before Qwen's last turn "
-         "where it did nothing bad, pooled per family.\n* ai_rd: our parser cut about half of gemma's replays here and "
-         "they could not be rerun; on the replays not cut the gap is as large (Data quality).", fontsize=7.6, color=MUTED)
+         "where it did nothing bad, pooled per family. After the double-check of 22-26 Oct (RESULTS.md, section 5): "
+         "parser fix, ai_rd rerun with a reliable scorer, unclear rows topped up.", fontsize=7.6, color=MUTED)
 fig.savefig(OUT / "q4_gap.png", dpi=180, bbox_inches="tight"); plt.close(fig)
 
 for g in gaps:

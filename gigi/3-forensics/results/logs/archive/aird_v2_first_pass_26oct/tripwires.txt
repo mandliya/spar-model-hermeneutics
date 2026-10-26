@@ -1,0 +1,14 @@
+2026-10-26 10:56:44 2026-10-21_22-26-04-493512_run-1_K2 gemma: 10 ok | scorer failures after retries: 17 | score/api_utils edits: 0
+2026-10-26 10:56:52 2026-10-21_22-26-04-493512_run-1_K1 qwen: 10 ok | scorer failures after retries: 2 | score/api_utils edits: 1
+2026-10-26 10:57:28 2026-10-21_22-26-04-493512_run-10_K2 qwen: 0 ok | scorer failures after retries: 0 | score/api_utils edits: 0
+2026-10-26 10:57:28 2026-10-21_22-26-04-493512_run-1_K1 gemma: 0 ok | scorer failures after retries: 0 | score/api_utils edits: 0
+2026-10-26 10:57:28 2026-10-21_22-26-04-493512_run-1_K2 qwen: 0 ok | scorer failures after retries: 8 | score/api_utils edits: 52
+2026-10-26 10:58:02 2026-10-21_22-26-04-493512_run-10_K1 gemma: 0 ok | scorer failures after retries: 0 | score/api_utils edits: 0
+2026-10-26 10:58:02 2026-10-21_22-26-04-493512_run-10_K1 qwen: 0 ok | scorer failures after retries: 0 | score/api_utils edits: 0
+2026-10-26 10:58:05 2026-10-21_22-26-04-493512_run-10_K2 gemma: 0 ok | scorer failures after retries: 0 | score/api_utils edits: 0
+2026-10-26 11:15:55 2026-10-21_22-26-04-493512_run-2_K2 qwen: 0 ok | scorer failures after retries: 4 | score/api_utils edits: 5
+2026-10-26 11:15:56 2026-10-21_22-26-04-493512_run-2_K1 qwen: 0 ok | scorer failures after retries: 8 | score/api_utils edits: 2
+2026-10-26 11:15:57 2026-10-21_22-26-04-493512_run-2_K2 gemma: 0 ok | scorer failures after retries: 20 | score/api_utils edits: 3
+2026-10-26 11:18:37 2026-10-21_22-26-04-493512_run-3_K11 gemma: 10 ok | scorer failures after retries: 0 | score/api_utils edits: 0
+2026-10-26 11:24:12 2026-10-21_22-26-04-493512_run-3_K11 qwen: 10 ok | scorer failures after retries: 0 | score/api_utils edits: 0
+2026-10-26 11:24:44 2026-10-21_22-26-04-493512_run-7_K15 qwen: 10 ok | scorer failures after retries: 0 | score/api_utils edits: 0

@@ -1,0 +1,20 @@
+2026-10-26 11:29:31 detached rerun start (one replay every 90s) | key spend before: $752.776587503
+2026-10-26 11:30:17 launched 2026-10-21_22-26-04-493512_run-1_K2 qwen x10, starts at +0 min
+2026-10-26 11:31:02 launched 2026-10-21_22-26-04-493512_run-1_K2 gemma x10, starts at +15 min
+2026-10-26 11:31:47 launched 2026-10-21_22-26-04-493512_run-1_K1 qwen x10, starts at +30 min
+2026-10-26 11:32:32 launched 2026-10-21_22-26-04-493512_run-1_K1 gemma x10, starts at +45 min
+2026-10-26 11:33:17 launched 2026-10-21_22-26-04-493512_run-10_K2 qwen x10, starts at +60 min
+2026-10-26 11:34:02 launched 2026-10-21_22-26-04-493512_run-10_K2 gemma x10, starts at +75 min
+2026-10-26 11:34:47 launched 2026-10-21_22-26-04-493512_run-10_K1 qwen x10, starts at +90 min
+2026-10-26 11:35:32 launched 2026-10-21_22-26-04-493512_run-10_K1 gemma x10, starts at +105 min
+2026-10-26 11:36:17 launched 2026-10-21_22-26-04-493512_run-2_K2 qwen x10, starts at +120 min
+2026-10-26 11:37:02 launched 2026-10-21_22-26-04-493512_run-2_K2 gemma x10, starts at +135 min
+2026-10-26 11:37:47 launched 2026-10-21_22-26-04-493512_run-2_K1 qwen x10, starts at +150 min
+2026-10-26 11:38:32 launched 2026-10-21_22-26-04-493512_run-2_K1 gemma x10, starts at +165 min
+2026-10-26 11:39:17 launched 2026-10-21_22-26-04-493512_run-3_K11 qwen x10, starts at +180 min
+2026-10-26 11:40:02 launched 2026-10-21_22-26-04-493512_run-3_K11 gemma x10, starts at +195 min
+2026-10-26 11:40:47 launched 2026-10-21_22-26-04-493512_run-7_K15 qwen x10, starts at +210 min
+2026-10-26 11:41:32 launched 2026-10-21_22-26-04-493512_run-7_K15 gemma x10, starts at +225 min
+2026-10-26 11:42:17 launched 2026-10-21_22-26-04-493512_run-9_K20 qwen x10, starts at +240 min
+2026-10-26 11:43:02 launched 2026-10-21_22-26-04-493512_run-9_K20 gemma x10, starts at +255 min
+2026-10-26 11:43:02 all launched

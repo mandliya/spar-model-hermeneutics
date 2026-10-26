@@ -148,9 +148,13 @@ Sonnet 4.5 on Anthropic, Gemini 3.1 Flash Lite on Google). To reproduce exactly,
      validation pass (RESULTS.md, data quality): it cut 29 of 52 gemma ai_rd replays and 12 of 119
      pre-commit replays at Qwen's incidents, and 6 of gemma's 403 own runs. Now such a call is passed on
      with its raw text as (non-JSON) arguments, so the environment answers it as it answers any malformed
-     call ("invalid arguments" / "unknown function"). Rerun with the fix (25 Oct): the pre-commit
-     replays at Qwen's incidents and gemma's own puppeteer and revert_or_refactor runs. ai_rd could not be rerun:
-     its scorer's model, GPT-3.5-turbo, is no longer served on OpenRouter (404).
+     call ("invalid arguments" / "unknown function"). Rerun with the fix (25-26 Oct): the pre-commit
+     and rendering-engine replays at Qwen's incidents, gemma's own puppeteer and revert_or_refactor runs, and
+     ai_rd for both models. ai_rd's scorer model, GPT-3.5-turbo, is no longer served on OpenRouter; a
+     site-packages alias outside the agent's workspace (environments/ai_rd/openrouter_compat.py) sends it to
+     the dated gpt-3.5-turbo-16k on Azure and waits out rate limits, so score.py and api_utils.py stay
+     byte-identical (RESULTS.md, section 5). ai_rd's command timeout is 900 s (was 300; no 21 Oct command
+     reached 300 s).
 
 ## Status
 

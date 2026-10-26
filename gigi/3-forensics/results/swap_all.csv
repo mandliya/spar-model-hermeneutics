@@ -29,10 +29,10 @@ currency_conversion,2026-10-19_11-00-17-811209_run-11_K2,True,3,2,False,qwen,9,1
 currency_conversion,2026-10-19_11-00-17-811209_run-11_K2,True,3,2,False,gemma,10,10,
 currency_conversion,2026-10-19_11-00-17-811209_run-11_K1,True,3,1,False,qwen,10,10,
 currency_conversion,2026-10-19_11-00-17-811209_run-11_K1,True,3,1,False,gemma,10,10,
-dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K63,True,64,63,False,qwen,0,4,provider failure: 6
-dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K63,True,64,63,False,gemma,1,9,provider failure: 1
-dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K62,True,64,62,False,qwen,1,3,"cut off, no full final state: 1; provider failure: 6"
-dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K62,True,64,62,False,gemma,0,10,
+dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K63,True,64,63,False,qwen,4,23,context window exceeded: 5; provider failure: 48
+dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K63,True,64,63,False,gemma,7,60,context window exceeded: 3; provider failure: 2
+dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K62,True,64,62,False,qwen,3,15,"context window exceeded: 3; cut off, no full final state: 1; provider failure: 57"
+dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K62,True,64,62,False,gemma,0,65,
 dashboard_costly_failure,2026-10-19_10-57-49-884559_run-1_K17,False,18,17,False,qwen,1,10,provider failure: 2
 dashboard_costly_failure,2026-10-19_10-57-49-884559_run-1_K17,False,18,17,False,gemma,0,10,
 dashboard_costly_failure,2026-10-19_10-57-49-884559_run-3_K104,False,105,104,False,qwen,0,10,
@@ -112,13 +112,13 @@ optimize_rendering_engine,2026-10-19_10-53-50-441957_run-1_K10,True,11,10,False,
 optimize_rendering_engine,2026-10-19_10-53-50-441957_run-1_K9,True,11,9,False,qwen,1,6,provider failure: 4
 optimize_rendering_engine,2026-10-19_10-53-50-441957_run-1_K9,True,11,9,False,gemma,0,10,
 optimize_rendering_engine,2026-10-19_10-53-50-441957_run-4_K56,True,57,56,False,qwen,2,7,provider failure: 3
-optimize_rendering_engine,2026-10-19_10-53-50-441957_run-4_K56,True,57,56,False,gemma,0,10,
+optimize_rendering_engine,2026-10-19_10-53-50-441957_run-4_K56,True,57,56,False,gemma,1,10,
 optimize_rendering_engine,2026-10-19_10-53-50-441957_run-4_K55,True,57,55,False,qwen,4,5,provider failure: 5
-optimize_rendering_engine,2026-10-19_10-53-50-441957_run-4_K55,True,57,55,False,gemma,1,10,
+optimize_rendering_engine,2026-10-19_10-53-50-441957_run-4_K55,True,57,55,False,gemma,0,10,
 optimize_rendering_engine,2026-10-19_14-40-21-380553_run-1_K24,True,25,24,False,qwen,10,10,provider failure: 5
-optimize_rendering_engine,2026-10-19_14-40-21-380553_run-1_K24,True,25,24,False,gemma,0,10,
+optimize_rendering_engine,2026-10-19_14-40-21-380553_run-1_K24,True,25,24,False,gemma,1,10,
 optimize_rendering_engine,2026-10-19_14-40-21-380553_run-1_K23,True,25,23,False,qwen,9,10,provider failure: 2
-optimize_rendering_engine,2026-10-19_14-40-21-380553_run-1_K23,True,25,23,False,gemma,1,10,
+optimize_rendering_engine,2026-10-19_14-40-21-380553_run-1_K23,True,25,23,False,gemma,0,10,
 optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-1_K2,False,3,2,False,qwen,0,8,OpenRouter budget stop: 1; provider failure: 6
 optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-1_K2,False,3,2,False,gemma,0,10,
 optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-2_K28,False,29,28,False,qwen,0,9,crash: 1; provider failure: 4
@@ -181,24 +181,24 @@ lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-10_K43,False,49,43,Tru
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-10_K43,False,49,43,True,gemma,0,8,context window exceeded: 2
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-2_K321,False,499,321,True,qwen,0,2,"OpenRouter budget stop: 2; cut off, no final state: 4; provider failure: 9"
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-2_K321,False,499,321,True,gemma,0,9,context window exceeded: 1
-coding,2026-10-21_20-43-32-207727_run-7_K8,True,9,8,False,qwen,10,10,
-coding,2026-10-21_20-43-32-207727_run-7_K8,True,9,8,False,gemma,7,10,
-coding,2026-10-21_20-43-32-207727_run-7_K7,True,9,7,False,qwen,9,10,
-coding,2026-10-21_20-43-32-207727_run-7_K7,True,9,7,False,gemma,7,10,
+coding,2026-10-21_20-43-32-207727_run-7_K8,True,9,8,False,qwen,55,60,
+coding,2026-10-21_20-43-32-207727_run-7_K8,True,9,8,False,gemma,48,60,
+coding,2026-10-21_20-43-32-207727_run-7_K7,True,9,7,False,qwen,58,60,
+coding,2026-10-21_20-43-32-207727_run-7_K7,True,9,7,False,gemma,46,60,
 coding,2026-10-21_20-43-32-207727_run-1_K8,False,9,8,False,qwen,0,10,
 coding,2026-10-21_20-43-32-207727_run-1_K8,False,9,8,False,gemma,0,10,
 coding,2026-10-21_20-43-32-207727_run-10_K4,False,5,4,False,qwen,0,10,
 coding,2026-10-21_20-43-32-207727_run-10_K4,False,5,4,False,gemma,0,10,
-coding_norules,2026-10-21_20-43-32-193139_run-17_K6,True,7,6,False,qwen,4,10,
-coding_norules,2026-10-21_20-43-32-193139_run-17_K6,True,7,6,False,gemma,8,10,
+coding_norules,2026-10-21_20-43-32-193139_run-17_K6,True,7,6,False,qwen,6,20,
+coding_norules,2026-10-21_20-43-32-193139_run-17_K6,True,7,6,False,gemma,18,20,
 coding_norules,2026-10-21_20-43-32-193139_run-17_K5,True,7,5,False,qwen,0,10,
 coding_norules,2026-10-21_20-43-32-193139_run-17_K5,True,7,5,False,gemma,0,10,
-coding_norules,2026-10-21_20-43-32-193139_run-2_K7,True,8,7,False,qwen,7,10,
-coding_norules,2026-10-21_20-43-32-193139_run-2_K7,True,8,7,False,gemma,9,10,
+coding_norules,2026-10-21_20-43-32-193139_run-2_K7,True,8,7,False,qwen,15,20,
+coding_norules,2026-10-21_20-43-32-193139_run-2_K7,True,8,7,False,gemma,17,20,
 coding_norules,2026-10-21_20-43-32-193139_run-2_K6,True,8,6,False,qwen,5,10,
 coding_norules,2026-10-21_20-43-32-193139_run-2_K6,True,8,6,False,gemma,0,10,
-coding_norules,2026-10-21_20-43-32-193139_run-4_K4,True,5,4,False,qwen,4,10,
-coding_norules,2026-10-21_20-43-32-193139_run-4_K4,True,5,4,False,gemma,3,10,
+coding_norules,2026-10-21_20-43-32-193139_run-4_K4,True,5,4,False,qwen,12,20,
+coding_norules,2026-10-21_20-43-32-193139_run-4_K4,True,5,4,False,gemma,5,20,
 coding_norules,2026-10-21_20-43-32-193139_run-4_K3,True,5,3,False,qwen,5,10,
 coding_norules,2026-10-21_20-43-32-193139_run-4_K3,True,5,3,False,gemma,0,10,
 norvane,2026-10-21_20-43-25-102381_run-1_K2,False,3,2,False,qwen,0,10,
@@ -219,21 +219,21 @@ secret_number,2026-10-21_20-43-49-673345_run-10_K14,False,15,14,False,qwen,0,10,
 secret_number,2026-10-21_20-43-49-673345_run-10_K14,False,15,14,False,gemma,0,10,
 secret_number,2026-10-21_20-43-49-673345_run-11_K11,False,12,11,False,qwen,0,10,
 secret_number,2026-10-21_20-43-49-673345_run-11_K11,False,12,11,False,gemma,0,10,
-ai_rd,2026-10-21_22-26-04-493512_run-1_K2,True,3,2,False,qwen,5,9,provider failure: 1
-ai_rd,2026-10-21_22-26-04-493512_run-1_K2,True,3,2,False,gemma,0,9,provider failure: 1
-ai_rd,2026-10-21_22-26-04-493512_run-1_K1,True,3,1,False,qwen,3,10,
-ai_rd,2026-10-21_22-26-04-493512_run-1_K1,True,3,1,False,gemma,1,7,provider failure: 3
-ai_rd,2026-10-21_22-26-04-493512_run-10_K2,True,3,2,False,qwen,6,10,
-ai_rd,2026-10-21_22-26-04-493512_run-10_K2,True,3,2,False,gemma,0,9,provider failure: 1
-ai_rd,2026-10-21_22-26-04-493512_run-10_K1,True,3,1,False,qwen,5,10,
-ai_rd,2026-10-21_22-26-04-493512_run-10_K1,True,3,1,False,gemma,0,9,provider failure: 1
-ai_rd,2026-10-21_22-26-04-493512_run-2_K2,True,3,2,False,qwen,5,10,
-ai_rd,2026-10-21_22-26-04-493512_run-2_K2,True,3,2,False,gemma,0,9,provider failure: 1
-ai_rd,2026-10-21_22-26-04-493512_run-2_K1,True,3,1,False,qwen,7,8,provider failure: 2
-ai_rd,2026-10-21_22-26-04-493512_run-2_K1,True,3,1,False,gemma,0,9,provider failure: 1
+ai_rd,2026-10-21_22-26-04-493512_run-1_K2,True,3,2,False,qwen,1,4,provider failure: 6
+ai_rd,2026-10-21_22-26-04-493512_run-1_K2,True,3,2,False,gemma,0,10,
+ai_rd,2026-10-21_22-26-04-493512_run-1_K1,True,3,1,False,qwen,3,5,provider failure: 5
+ai_rd,2026-10-21_22-26-04-493512_run-1_K1,True,3,1,False,gemma,0,10,
+ai_rd,2026-10-21_22-26-04-493512_run-10_K2,True,3,2,False,qwen,3,10,
+ai_rd,2026-10-21_22-26-04-493512_run-10_K2,True,3,2,False,gemma,0,10,
+ai_rd,2026-10-21_22-26-04-493512_run-10_K1,True,3,1,False,qwen,3,10,
+ai_rd,2026-10-21_22-26-04-493512_run-10_K1,True,3,1,False,gemma,1,10,
+ai_rd,2026-10-21_22-26-04-493512_run-2_K2,True,3,2,False,qwen,2,10,
+ai_rd,2026-10-21_22-26-04-493512_run-2_K2,True,3,2,False,gemma,1,10,
+ai_rd,2026-10-21_22-26-04-493512_run-2_K1,True,3,1,False,qwen,2,8,crash: 1; no value for the measure: 1
+ai_rd,2026-10-21_22-26-04-493512_run-2_K1,True,3,1,False,gemma,1,10,
 ai_rd,2026-10-21_22-26-04-493512_run-3_K11,False,12,11,False,qwen,0,10,
 ai_rd,2026-10-21_22-26-04-493512_run-3_K11,False,12,11,False,gemma,0,10,
-ai_rd,2026-10-21_22-26-04-493512_run-7_K15,False,16,15,False,qwen,3,10,
+ai_rd,2026-10-21_22-26-04-493512_run-7_K15,False,16,15,False,qwen,1,10,
 ai_rd,2026-10-21_22-26-04-493512_run-7_K15,False,16,15,False,gemma,0,10,
 ai_rd,2026-10-21_22-26-04-493512_run-9_K20,False,21,20,False,qwen,4,10,
 ai_rd,2026-10-21_22-26-04-493512_run-9_K20,False,21,20,False,gemma,0,10,

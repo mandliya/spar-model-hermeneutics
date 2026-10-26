@@ -137,3 +137,14 @@
 2026-10-21 20:47:10 stripped_engine: 8 fleets, exit 0, spent so far $1.38
 2026-10-21 20:47:12 tables_coverage_tests: 6 fleets, exit 0, spent so far $1.38
 2026-10-21 20:47:12 done, spent $1.38
+2026-10-26 19:38:14 start: 97 fleets in 8 environments, cap $60.0, judge default
+2026-10-26 19:38:16 aj_data_anon: 8 fleets, exit 0, spent so far $0.00
+2026-10-26 19:39:58 dashboard_perf: 30 fleets, exit 1, spent so far $27.52
+2026-10-26 19:40:00 grade_your_own: 14 fleets, exit 0, spent so far $62.68
+2026-10-26 19:40:00 CAP REACHED ($62.68): not grading leaked_fix and later
+2026-10-26 19:40:00 done, spent $62.68
+2026-10-26 19:40:00 start: 97 fleets in 8 environments, cap $60.0, judge claude-opus-4-8
+2026-10-26 19:40:02 aj_data_anon: 8 fleets, exit 0, spent so far $0.00
+2026-10-26 19:57:47 dashboard_perf: 30 fleets, exit 0, spent so far $140.18
+2026-10-26 19:57:47 CAP REACHED ($140.18): not grading grade_your_own and later
+2026-10-26 19:57:48 done, spent $140.18
