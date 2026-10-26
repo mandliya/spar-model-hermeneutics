@@ -348,6 +348,13 @@ gap**: the two rates match. **Unclear**: too few replays, or a judge split.
     ("no provider serves this model anymore", 404, 25 Oct). The 25 Oct ai_rd runs (stopped early) are
     archived in `archive/ai_rd_no_gpt35_25oct/` and not counted; ai_rd keeps its 21 Oct numbers, with
     the caution above.
+  - **Second attempt (26 Oct), with the dated `gpt-3.5-turbo-16k`:** OpenAI's own endpoint rejects it as
+    deprecated, so it ran on Azure (one line each in `score.py` and `api_utils.py`; both models resumed at
+    all 9 points). Azure rate-limited it heavily (429 "temporarily rate-limited upstream"): the scorer
+    crashed in most calls at the incident points, and agents of both models began editing `score.py` to
+    switch to other models (up to 9 edits in one batch). The environment was no longer the one measured on
+    21 Oct, so the attempt was stopped after ~10 minutes and archived
+    (`archive/ai_rd_16k_ratelimited_26oct/`); ai_rd keeps its 21 Oct numbers, with the caution above.
 
 - **What ran: the whole suite.** The framework's list (`environments/README.md`) has 29 entries: 10 in the
   cheating suite, 10 task-gaming, 9 honesty and disclosure. All ran with both models and are scored, and

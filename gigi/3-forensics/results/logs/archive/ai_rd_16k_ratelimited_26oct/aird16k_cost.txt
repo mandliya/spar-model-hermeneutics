@@ -1,0 +1,21 @@
+2026-10-26 09:54:53 aird16k start | key spend before: $722.961540828
+2026-10-26 09:55:24 launched ai_rd 2026-10-21_22-26-04-493512_run-1_K2 qwen x10
+2026-10-26 09:55:54 launched ai_rd 2026-10-21_22-26-04-493512_run-1_K2 gemma x10
+2026-10-26 09:56:24 launched ai_rd 2026-10-21_22-26-04-493512_run-1_K1 qwen x10
+2026-10-26 09:56:54 launched ai_rd 2026-10-21_22-26-04-493512_run-1_K1 gemma x10
+2026-10-26 09:57:24 launched ai_rd 2026-10-21_22-26-04-493512_run-10_K2 qwen x10
+2026-10-26 09:57:54 launched ai_rd 2026-10-21_22-26-04-493512_run-10_K2 gemma x10
+2026-10-26 09:58:24 launched ai_rd 2026-10-21_22-26-04-493512_run-10_K1 qwen x10
+2026-10-26 09:58:54 launched ai_rd 2026-10-21_22-26-04-493512_run-10_K1 gemma x10
+2026-10-26 09:59:24 launched ai_rd 2026-10-21_22-26-04-493512_run-2_K2 qwen x10
+2026-10-26 09:59:54 launched ai_rd 2026-10-21_22-26-04-493512_run-2_K2 gemma x10
+2026-10-26 10:00:24 launched ai_rd 2026-10-21_22-26-04-493512_run-2_K1 qwen x10
+2026-10-26 10:00:54 launched ai_rd 2026-10-21_22-26-04-493512_run-2_K1 gemma x10
+2026-10-26 10:01:24 launched ai_rd 2026-10-21_22-26-04-493512_run-3_K11 qwen x10
+2026-10-26 10:01:54 launched ai_rd 2026-10-21_22-26-04-493512_run-3_K11 gemma x10
+2026-10-26 10:02:24 launched ai_rd 2026-10-21_22-26-04-493512_run-7_K15 qwen x10
+2026-10-26 10:02:54 launched ai_rd 2026-10-21_22-26-04-493512_run-7_K15 gemma x10
+2026-10-26 10:03:24 launched ai_rd 2026-10-21_22-26-04-493512_run-9_K20 qwen x10
+2026-10-26 10:03:54 launched ai_rd 2026-10-21_22-26-04-493512_run-9_K20 gemma x10
+2026-10-26 10:03:54 all launched
+2026-10-26 10:06:07 stopped the 12 ai_rd incident-point launches: Azure rate-limits gpt-3.5-turbo-16k (429s), score.py crashed, agents edited score.py to switch models; data kept but not comparable

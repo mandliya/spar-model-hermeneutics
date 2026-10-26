@@ -15,8 +15,10 @@ weak-to-strong stand-in). Status (26 Oct 2026; details in 3-forensics/RESULTS.md
 - Validation pass (23 Oct, `scripts/swap_validity.py`): passes overall; failed in ai_rd and pre-commit,
   where our parser ended runs on gemma's broken calls (Qwen's get an error back). Fixed 25 Oct (d2f7f8b),
   pre-commit and gemma's puppeteer/revert rerun ($2.30): gap unchanged.
-- ai_rd: its scorer's GPT-3.5-turbo alias is gone from OpenRouter; rerun 26 Oct for both models on
-  gpt-3.5-turbo-16k via Azure (fold in when done). Rendering engine: 10 of 60 gemma replays stumbled on
+- ai_rd: its scorer's GPT-3.5-turbo alias is gone from OpenRouter. 26 Oct attempt on gpt-3.5-turbo-16k
+  via Azure failed: Azure rate-limits it, the scorer crashed, agents edited score.py to switch models;
+  stopped and archived. ai_rd keeps its 21 Oct numbers with a caution. Options left: a slow rerun (a few
+  replays at a time), our own Azure key (BYOK, higher limits), or leave it. Rendering engine: 10 of 60 gemma replays stumbled on
   unreadable calls just before ending (pre-fix); the gap survives the worst case; rerun optional (~$30).
 - Running 26 Oct: John's long-history test (gemma takes over 5 long Qwen runs at turn 100, 10 replays
   each; `scripts/parallel_checks.sh`) and top-ups of chart 4's unclear rows. Fold in when done.
