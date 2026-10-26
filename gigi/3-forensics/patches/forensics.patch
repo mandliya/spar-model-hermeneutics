@@ -1,3 +1,17 @@
+diff --git a/environments/ai_rd/Dockerfile b/environments/ai_rd/Dockerfile
+index 3bb4fd0..5ae55d0 100644
+--- a/environments/ai_rd/Dockerfile
++++ b/environments/ai_rd/Dockerfile
+@@ -12,6 +12,9 @@ WORKDIR /agent
+ # PYTHON DEPENDENCIES
+ # =============================================================================
+ RUN pip install pyyaml python-dotenv openai tenacity
++# gigi/3-forensics: openai/gpt-3.5-turbo retired on OpenRouter; site-wide alias to the dated -16k on Azure (outside /agent)
++COPY environments/ai_rd/openrouter_compat.py /usr/local/lib/python3.11/site-packages/openrouter_compat.py
++RUN echo "import openrouter_compat" > /usr/local/lib/python3.11/site-packages/openrouter_compat.pth
+ 
+ # =============================================================================
+ # INSTALL SHARED PACKAGE
 diff --git a/environments/ai_rd/agent.py b/environments/ai_rd/agent.py
 index 375fc84..e0106d7 100644
 --- a/environments/ai_rd/agent.py
@@ -29,7 +43,7 @@ index 375fc84..e0106d7 100644
  
      provider.print_history()
 diff --git a/environments/ai_rd/api_utils.py b/environments/ai_rd/api_utils.py
-index 04e26ea..46e22f3 100644
+index 04e26ea..6dd0466 100644
 --- a/environments/ai_rd/api_utils.py
 +++ b/environments/ai_rd/api_utils.py
 @@ -28,6 +28,15 @@ def _get_client() -> AsyncOpenAI:
@@ -37,7 +51,7 @@ index 04e26ea..46e22f3 100644
  
  
 +# gigi/3-forensics: every OpenRouter call pinned to the model maker's own servers, no fallback.
-+_PINNED = {"openai/gpt-3.5": ["azure"], "openai/": ["openai"], "google/": ["google-vertex", "google-ai-studio"]}
++_PINNED = {"openai/": ["openai"], "google/": ["google-vertex", "google-ai-studio"]}
 +
 +
 +def _provider(model: str) -> dict:
@@ -61,6 +75,99 @@ index 04e26ea..46e22f3 100644
 +        extra_body=_provider(model),
      )
      return response.choices[0].message.content
+diff --git a/environments/ai_rd/openrouter_compat.py b/environments/ai_rd/openrouter_compat.py
+new file mode 100644
+index 0000000..fbc745f
+--- /dev/null
++++ b/environments/ai_rd/openrouter_compat.py
+@@ -0,0 +1,87 @@
++"""gigi/3-forensics (26 Oct 2026): keep ai_rd's scorer working after OpenRouter retired `openai/gpt-3.5-turbo`.
++
++Installed in the image's site-packages (outside the agent's /agent workspace, so score.py and api_utils.py stay
++byte-identical to the 21 Oct runs and their checkpoints) and loaded at interpreter start by a .pth file. Any
++chat-completions call that asks for `openai/gpt-3.5-turbo` is sent to the dated `openai/gpt-3.5-turbo-16k` on Azure
++(OpenAI's own endpoint rejects it as deprecated); a 429 for it is waited out (up to ~5 min) instead of raised,
++so a busy upstream slows a score.py run down rather than crashing it. Calls for any other model are untouched.
++"""
++import importlib.abc
++import importlib.util
++import sys
++import time
++
++ALIAS = {"openai/gpt-3.5-turbo": "openai/gpt-3.5-turbo-16k"}
++PROVIDER = {"only": ["azure"], "allow_fallbacks": False}
++WAITS = [2, 4, 8, 15, 30, 30, 60, 60, 60, 60]
++
++
++def _rewrite(kwargs):
++    model = kwargs.get("model")
++    if model not in ALIAS:
++        return False
++    kwargs["model"] = ALIAS[model]
++    extra = dict(kwargs.get("extra_body") or {})
++    extra["provider"] = dict(PROVIDER)
++    kwargs["extra_body"] = extra
++    return True
++
++
++def _patch():
++    from openai import RateLimitError
++    from openai.resources.chat import completions as cc
++
++    sync_create, async_create = cc.Completions.create, cc.AsyncCompletions.create
++
++    def create(self, *args, **kwargs):
++        if not _rewrite(kwargs):
++            return sync_create(self, *args, **kwargs)
++        for w in WAITS + [None]:
++            try:
++                return sync_create(self, *args, **kwargs)
++            except RateLimitError:
++                if w is None:
++                    raise
++                time.sleep(w)
++
++    async def acreate(self, *args, **kwargs):
++        import asyncio
++        if not _rewrite(kwargs):
++            return await async_create(self, *args, **kwargs)
++        for w in WAITS + [None]:
++            try:
++                return await async_create(self, *args, **kwargs)
++            except RateLimitError:
++                if w is None:
++                    raise
++                await asyncio.sleep(w)
++
++    cc.Completions.create, cc.AsyncCompletions.create = create, acreate
++
++
++class _Finder(importlib.abc.MetaPathFinder):
++    """Patch once the openai package has been imported (never imports it on its own)."""
++
++    def find_spec(self, name, path, target=None):
++        if name != "openai":
++            return None
++        sys.meta_path.remove(self)
++        spec = importlib.util.find_spec(name)
++        if spec is None or spec.loader is None:
++            return spec
++        loader = spec.loader
++        orig_exec = loader.exec_module
++
++        def exec_module(module):
++            orig_exec(module)
++            try:
++                _patch()
++            except Exception as e:   # never break an import
++                print(f"[openrouter_compat] not patched: {e}", file=sys.stderr)
++
++        loader.exec_module = exec_module
++        return spec
++
++
++if not any(isinstance(f, _Finder) for f in sys.meta_path):
++    sys.meta_path.insert(0, _Finder())
 diff --git a/environments/ai_rd/run_step.py b/environments/ai_rd/run_step.py
 index b3ccca1..40de998 100644
 --- a/environments/ai_rd/run_step.py
@@ -111,19 +218,6 @@ index b3ccca1..40de998 100644
 +        rc, output = run_command(command, timeout=300, extra_env={"OPENROUTER_API_KEY": _SCORER_KEY})
          if is_scoring_run and rc == 0:
              state.scoring_runs_used += 1
- 
-diff --git a/environments/ai_rd/score.py b/environments/ai_rd/score.py
-index 1ad38b8..6676913 100644
---- a/environments/ai_rd/score.py
-+++ b/environments/ai_rd/score.py
-@@ -16,7 +16,7 @@ from api_utils import chat_completion
- # The prompt is read from prompt.txt
- PROMPT_PATH = Path(__file__).parent / "prompt.txt"
- 
--MODEL = "openai/gpt-3.5-turbo"
-+MODEL = "openai/gpt-3.5-turbo-16k"
- EXTRACT_MODEL = "google/gemini-2.5-flash-lite"
- MAX_CONCURRENT = 10
  
 diff --git a/environments/async_conversion/Dockerfile b/environments/async_conversion/Dockerfile
 index 921649e..43ee91a 100644
