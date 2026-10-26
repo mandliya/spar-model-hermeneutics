@@ -29,6 +29,8 @@ for r in csv.DictReader(open(HERE / "results" / "swap_validity.csv")):
         cat = "lost"
     else:
         cat = E.classify(r["env"], HERE / r["run"], None)
+        if cat in ("other", "gave_up", "says_done", "handed_back"):   # the hand labels read for chart 1 apply here too
+            cat = E.hand_label(r["env"], HERE / r["run"]) or cat
     rows.append({"group": r["group"], "env": r["env"], "point": r["point"], "incident": r["incident"],
                  "turns": r["turns"], "ending": cat, "run": r["run"]})
 with open(HERE / "results" / "swap_endings.csv", "w", newline="") as f:

@@ -528,7 +528,8 @@ for r in csv.DictReader(open(HERE / "results" / "swap_endings.csv")):
     if r["group"] in ("gemma in Qwen's runs", "Qwen in Qwen's runs"):
         SE[(r["env"], G if r["group"].startswith("gemma") else Q)].append((int(r["turns"]), r["ending"]))
 CAT["context"] = ("context window full", "#17140f")
-ORDER_CAT = ["gave_up", "says_done", "handed_back", "quick_answer", "game_lost", "parser", "step_cap", "context", "other"]
+ORDER_CAT = ["gave_up", "says_done", "handed_back", "quick_answer", "game_lost", "step_cap", "stopped", "empty", "parser", "other"]
+NOT_ENDINGS = ("lost", "context")   # left out of the bars: not how the model ended a run, but replays we could not run
 
 rows3b = []   # ("fam", text) / ("env", env)
 for letter, fam, envs in FAMILIES:
@@ -539,7 +540,8 @@ ys = list(range(len(rows3b)))[::-1]
 
 
 def ending_bar(ax, y, recs):
-    fin = [e for _, e in recs if e != "lost"]; lost = len(recs) - len(fin)
+    fin = [e for _, e in recs if e not in NOT_ENDINGS]
+    lost = sum(1 for _, e in recs if e == "lost"); ctx = sum(1 for _, e in recs if e == "context")
     if not fin:
         return
     c = collections.Counter(fin); n = len(fin); x0 = 0.0
@@ -550,8 +552,10 @@ def ending_bar(ax, y, recs):
     top = c.most_common(2)
     label = f"{CAT[top[0][0]][0]} {top[0][1]}/{n}" + (f"  ·  {CAT[top[1][0]][0]} {top[1][1]}/{n}" if len(top) > 1 else "")
     ax.text(0.38, y, label, va="center", fontsize=7.2, color=INK)
-    if lost:
-        ax.text(0.38, y - 0.36, f"+ {lost} lost (provider, crash)", va="center", fontsize=6.4, color=MUTED)
+    note = "  ·  ".join(x for x in (f"{ctx} excluded: Qwen's history too long for gemma" if ctx else "",
+                                     f"{lost} lost to the provider or a crash" if lost else "") if x)
+    if note:
+        ax.text(0.38, y - 0.36, "+ " + note, va="center", fontsize=6.4, color=MUTED)
 
 
 for (kind, it), y in zip(rows3b, ys):
@@ -589,17 +593,18 @@ axes[0].legend(handles=[plt.Line2D([], [], marker="o", ls="", color=COL[m], mark
 for ax, m, t in ((axes[1], G, "How gemma's replays end"), (axes[2], Q, "How Qwen's replays end (the baseline)")):
     ax.set_xlim(0, 1); ax.set_xticks([]); clean(ax); ax.spines["bottom"].set_visible(False)
     ax.set_title(t + "\nshare of finished replays, largest first", loc="left", fontsize=10, color=COL[m], fontweight="bold")
-axes[1].legend(handles=[plt.Rectangle((0, 0), 1, 1, color=CAT[k][1]) for k in ORDER_CAT],
-               labels=[CAT[k][0] for k in ORDER_CAT], loc="upper left", bbox_to_anchor=(0, -0.004), ncol=3,
+_present3b = [k for k in ORDER_CAT if any(en == k for recs in SE.values() for _, en in recs)]
+axes[1].legend(handles=[plt.Rectangle((0, 0), 1, 1, color=CAT[k][1]) for k in _present3b],
+               labels=[f"{CAT[k][0]}: {MEANING.get(k, '')}" for k in _present3b], loc="upper left", bbox_to_anchor=(0, -0.004), ncol=2,
                frameon=False, fontsize=7.4, handlelength=1, columnspacing=1)
 fig.subplots_adjust(top=1 - 1.3 / H3b, bottom=1.25 / H3b)
 fig.suptitle("3b · How the swap replays end: on the speed-up targets (B) gemma in Qwen's place mostly gives up and says so; "
              "on the short tasks both answer at once", x=0.02, ha="left", y=1 - 0.2 / H3b, fontsize=12.5, fontweight="bold")
 fig.text(0.02, 0.1 / H3b, "Every replay of chart 3 (bad runs and clean runs pooled), classified from its last turn with "
          "the categories of chart 1 (scripts/swap_endings.py → results/swap_endings.csv). \"Answers at once\" is how the "
-         "short tasks (A, E's pre-commit hook, F's secret_number, G, H, I) end by design.\nThe categories were tuned on "
-         "gemma's replies; Qwen's long-task endings fall into \"other\" more often. Lost replays (provider failures, "
-         "crashes) are left out of the bars.", fontsize=7.6, color=MUTED)
+         "short tasks (A, E's pre-commit hook, F's secret_number, G, H, I) end by design.\nReplays we could not run are "
+         "left out of the bars and counted beside them: Qwen's history too long for gemma's context window, provider "
+         "failures, crashes. The categories were tuned on gemma's replies; Qwen's long-task endings fall into \"other\" more often.", fontsize=7.6, color=MUTED)
 fig.savefig(OUT / "q3b_swap_endings.png", dpi=180, bbox_inches="tight"); plt.close(fig)
 
 # ============================================================================ 4. the gap, by family
