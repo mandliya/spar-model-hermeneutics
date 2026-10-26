@@ -77,17 +77,19 @@ index 04e26ea..6dd0466 100644
      return response.choices[0].message.content
 diff --git a/environments/ai_rd/openrouter_compat.py b/environments/ai_rd/openrouter_compat.py
 new file mode 100644
-index 0000000..fbc745f
+index 0000000..f4f0623
 --- /dev/null
 +++ b/environments/ai_rd/openrouter_compat.py
-@@ -0,0 +1,87 @@
+@@ -0,0 +1,93 @@
 +"""gigi/3-forensics (26 Oct 2026): keep ai_rd's scorer working after OpenRouter retired `openai/gpt-3.5-turbo`.
 +
 +Installed in the image's site-packages (outside the agent's /agent workspace, so score.py and api_utils.py stay
 +byte-identical to the 21 Oct runs and their checkpoints) and loaded at interpreter start by a .pth file. Any
 +chat-completions call that asks for `openai/gpt-3.5-turbo` is sent to the dated `openai/gpt-3.5-turbo-16k` on Azure
-+(OpenAI's own endpoint rejects it as deprecated); a 429 for it is waited out (up to ~5 min) instead of raised,
-+so a busy upstream slows a score.py run down rather than crashing it. Calls for any other model are untouched.
++(OpenAI's own endpoint rejects it as deprecated). A 429 for it, or for score.py's answer extractor
++`google/gemini-2.5-flash-lite` (rate-limited upstream 102 times in the 21 Oct ai_rd replays, so agents saw the
++scorer crash), is waited out (up to ~5 min) instead of raised: a busy upstream slows a score.py run down rather
++than crashing it, the same for both models. Calls for any other model are untouched.
 +"""
 +import importlib.abc
 +import importlib.util
@@ -95,14 +97,18 @@ index 0000000..fbc745f
 +import time
 +
 +ALIAS = {"openai/gpt-3.5-turbo": "openai/gpt-3.5-turbo-16k"}
++WAIT_OUT = {"openai/gpt-3.5-turbo", "google/gemini-2.5-flash-lite"}
 +PROVIDER = {"only": ["azure"], "allow_fallbacks": False}
 +WAITS = [2, 4, 8, 15, 30, 30, 60, 60, 60, 60]
 +
 +
 +def _rewrite(kwargs):
++    """True if the call is one whose 429s are waited out; aliases the retired model name."""
 +    model = kwargs.get("model")
-+    if model not in ALIAS:
++    if model not in WAIT_OUT:
 +        return False
++    if model not in ALIAS:
++        return True
 +    kwargs["model"] = ALIAS[model]
 +    extra = dict(kwargs.get("extra_body") or {})
 +    extra["provider"] = dict(PROVIDER)
@@ -169,7 +175,7 @@ index 0000000..fbc745f
 +if not any(isinstance(f, _Finder) for f in sys.meta_path):
 +    sys.meta_path.insert(0, _Finder())
 diff --git a/environments/ai_rd/run_step.py b/environments/ai_rd/run_step.py
-index b3ccca1..40de998 100644
+index b3ccca1..76f328c 100644
 --- a/environments/ai_rd/run_step.py
 +++ b/environments/ai_rd/run_step.py
 @@ -5,6 +5,7 @@ a text-only response (no tool call) is the "done" signal, not an error.
@@ -215,7 +221,7 @@ index b3ccca1..40de998 100644
          rc = 1
      else:
 -        rc, output = run_command(command, timeout=300)
-+        rc, output = run_command(command, timeout=300, extra_env={"OPENROUTER_API_KEY": _SCORER_KEY})
++        rc, output = run_command(command, timeout=900, extra_env={"OPENROUTER_API_KEY": _SCORER_KEY})   # 300 -> 900 (26 Oct): a scorer run slowed by waited-out 429s must not be killed; no 21 Oct command reached 300 s
          if is_scoring_run and rc == 0:
              state.scoring_runs_used += 1
  
@@ -604,18 +610,48 @@ index 93e8412..cdf97dc 100644
  
      # Always just print history (handles fresh start & resume identically)
 diff --git a/scripts/resume_modal.py b/scripts/resume_modal.py
-index 9945ba0..49f92ab 100644
+index 9945ba0..46337c1 100644
 --- a/scripts/resume_modal.py
 +++ b/scripts/resume_modal.py
-@@ -292,6 +292,8 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, checkpoint_remote_dir, timeout_s,
+@@ -286,12 +286,20 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, checkpoint_remote_dir, timeout_s,
+     network = {allowlist_param: [] if gateway else cidrs}
+     gateway_env = {"ROLLOUT_GATEWAY": _env_registry.GATEWAY_URL} if gateway else {"ROLLOUT_HOSTS": hosts_pin}
+ 
+-    def _create(cfg_yaml, run_dir, token):
++    # gigi/3-forensics: optional staggered starts, so a large detached launch paces itself with no laptop attached:
++    # job i of this launch sleeps STAGGER_START + i * STAGGER_STEP seconds before it starts (and gets that much
++    # more sandbox time). Unset: no delay, as before.
++    stagger_start, stagger_step = int(os.environ.get("STAGGER_START", 0)), int(os.environ.get("STAGGER_STEP", 0))
++
++    def _create(cfg_yaml, run_dir, token, delay_s=0):
+         sb = modal.Sandbox.create(
+-            "bash", "-lc", 'eval "$CONTAINER_INIT"', app=app, image=iso_image, timeout=timeout_s,
++            "bash", "-lc", 'eval "$CONTAINER_INIT"', app=app, image=iso_image, timeout=timeout_s + delay_s,
              **_resource_kwargs(), **network, volumes={"/mnt/results": results_volume}, secrets=sandbox_secrets,
-             env={"CONTAINER_INIT": ISOLATED_SETUP_CMD, "ROLLOUT_CONFIG_YAML": cfg_yaml, "ROLLOUT_RUN_DIR": run_dir,
+-            env={"CONTAINER_INIT": ISOLATED_SETUP_CMD, "ROLLOUT_CONFIG_YAML": cfg_yaml, "ROLLOUT_RUN_DIR": run_dir,
++            env={"CONTAINER_INIT": (f"sleep {delay_s}; " if delay_s else "") + ISOLATED_SETUP_CMD,
++                 "ROLLOUT_CONFIG_YAML": cfg_yaml, "ROLLOUT_RUN_DIR": run_dir,
                   "ROLLOUT_CHECKPOINT_DIR": checkpoint_remote_dir, **gateway_env,
 +                 # gigi/3-forensics: the opt-in below (resume()) never reached isolated sandboxes; pass it on
 +                 **({"FS_BASELINE_MISMATCH": "warn"} if "fs_baseline_mismatch: warn" in cfg_yaml else {}),
                   **({"ROLLOUT_GATEWAY_TOKEN": token} if gateway else {})})
          if gateway:
              try:
+@@ -302,12 +310,12 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, checkpoint_remote_dir, timeout_s,
+         return sb
+ 
+     sandboxes = []
+-    for cfg_yaml, run_dir in jobs:
++    for job_i, (cfg_yaml, run_dir) in enumerate(jobs):
+         token = _env_registry.gateway_token() if gateway else ""
+         delay = 1.0
+         for attempt in range(1, 41):
+             try:
+-                sb = _create(cfg_yaml, run_dir, token)
++                sb = _create(cfg_yaml, run_dir, token, stagger_start + job_i * stagger_step)
+                 break
+             except Exception as exc:  # sandbox creation is rate-limited account-wide: back off, never fail the run
+                 text = f"{type(exc).__name__}: {exc}"
 diff --git a/src/agent_interp_envs/grading.py b/src/agent_interp_envs/grading.py
 index e0138a1..ec9cafa 100644
 --- a/src/agent_interp_envs/grading.py
