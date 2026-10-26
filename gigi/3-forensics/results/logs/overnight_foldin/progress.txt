@@ -1,0 +1,56 @@
+2026-10-26 21:56:45 start
+2026-10-26 21:56:47 waiting: 31 top-up apps still running
+2026-10-26 22:28:03 waiting: 26 top-up apps still running
+2026-10-26 22:59:15 waiting: 21 top-up apps still running
+2026-10-26 23:30:20 waiting: 18 top-up apps still running
+2026-10-27 00:02:02 waiting: 14 top-up apps still running
+2026-10-27 00:34:08 waiting: 12 top-up apps still running
+2026-10-27 01:06:12 waiting: 4 top-up apps still running
+2026-10-27 01:38:50 waiting: 2 top-up apps still running
+2026-10-27 02:10:17 waiting: 2 top-up apps still running
+2026-10-27 02:42:12 waiting: 2 top-up apps still running
+2026-10-27 03:13:27 waiting: 2 top-up apps still running
+2026-10-27 03:45:35 waiting: 2 top-up apps still running
+2026-10-27 04:16:56 waiting: 1 top-up apps still running
+2026-10-27 04:48:25 waiting: 1 top-up apps still running
+2026-10-27 05:16:02 all top-up apps finished
+FETCH FAILED dash_K62_qwen
+FETCH FAILED dash_K63_qwen
+FETCH FAILED render_run-1_K10_qwen
+fetched render_run-1_K10_gemma
+FETCH FAILED render_run-1_K9_qwen
+fetched render_run-1_K9_gemma
+fetched render_run-4_K56_qwen
+fetched render_run-4_K56_gemma
+fetched render_run-4_K55_qwen
+fetched render_run-4_K55_gemma
+fetched render_run-1_K24_qwen
+fetched render_run-1_K24_gemma
+fetched render_run-1_K23_qwen
+fetched render_run-1_K23_gemma
+fetched aird_run-1_K2_qwen
+fetched aird_run-1_K2_gemma
+fetched aird_run-1_K1_qwen
+fetched aird_run-1_K1_gemma
+fetched aird_run-10_K2_qwen
+fetched aird_run-10_K2_gemma
+fetched aird_run-10_K1_qwen
+fetched aird_run-10_K1_gemma
+fetched aird_run-2_K2_qwen
+fetched aird_run-2_K2_gemma
+fetched aird_run-2_K1_qwen
+fetched aird_run-2_K1_gemma
+fetched aird_run-3_K11_qwen
+fetched aird_run-3_K11_gemma
+fetched aird_run-7_K15_qwen
+fetched aird_run-7_K15_gemma
+fetched aird_run-9_K20_qwen
+fetched aird_run-9_K20_gemma
+2026-10-27 05:36:39 fetched
+done: 0 key occurrence(s) redacted in 0 file(s) under 1 folder(s)
+2026-10-27 05:50:21 graded
+238 rows -> results/swap_all.csv
+198 replays to label (431 already)
+done
+2026-10-27 06:06:38 scored and redrawn
+2026-10-27 06:06:38 audit written: results/loss_audit.md
