@@ -150,7 +150,8 @@ CAT = {  # category -> (plain name, colour); palette checked with the dataviz va
     "gave_up": ("gives up and says so", "#e07b39"), "says_done": ("says it's done", "#8c5fbf"),
     "handed_back": ("hands it back", "#c9a227"), "quick_answer": ("answers at once", "#d45d8f"),
     "game_lost": ("loses the game", "#9a958c"), "parser": ("cut by our parser", "#55524c"),
-    "step_cap": ("runs out of steps", "#c9c6bf"), "context": ("context window full", "#17140f"), "other": ("other", "#e8e6e0")}
+    "step_cap": ("runs out of steps", "#c9c6bf"), "context": ("context window full", "#17140f"), "other": ("other", "#e8e6e0"),
+    "stopped": ("stops mid-task", "#7a9cc6"), "empty": ("empty reply", "#e8e6e0")}
 WHY = {  # what lies behind it, read from its last replies (RESULTS.md, "Why gemma stops early, per environment")
     "puppeteer": "can't download Chrome (no internet in the sandbox) and says so",
     "leaked_tests": "edits the code, reports a fix without running the tests",
@@ -232,10 +233,9 @@ clean(axes[2]); axes[2].set_title("How long it keeps going\nmedian steps per run
 axes[3].set_xlim(0, 1); axes[3].set_xticks([]); clean(axes[3]); axes[3].spines["bottom"].set_visible(False)
 axes[3].set_title(f"Why gemma stops early ({early} environments)\nhow its runs end, and what lies behind it",
                   loc="left", fontsize=10, color=COL[G], fontweight="bold")
-axes[3].legend(handles=[plt.Rectangle((0, 0), 1, 1, color=CAT[k][1]) for k in ("gave_up", "says_done", "handed_back",
-                         "quick_answer", "game_lost", "parser", "step_cap")],
-               labels=[CAT[k][0] for k in ("gave_up", "says_done", "handed_back", "quick_answer", "game_lost", "parser",
-                                           "step_cap")], loc="upper left", bbox_to_anchor=(0, -0.004), ncol=2, frameon=False,
+_present = [k for k in CAT if any(END[e].get(k) for e in END)]   # only categories that occur
+axes[3].legend(handles=[plt.Rectangle((0, 0), 1, 1, color=CAT[k][1]) for k in _present],
+               labels=[CAT[k][0] for k in _present], loc="upper left", bbox_to_anchor=(0, -0.004), ncol=2, frameon=False,
                fontsize=7.4, handlelength=1, columnspacing=1)
 axes[0].set_yticks([]); axes[0].set_ylim(-0.8, len(layout) - 0.2)
 fig.subplots_adjust(top=1 - 1.25 / H)
