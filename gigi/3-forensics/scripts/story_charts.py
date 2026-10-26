@@ -234,8 +234,14 @@ axes[3].set_xlim(0, 1); axes[3].set_xticks([]); clean(axes[3]); axes[3].spines["
 axes[3].set_title(f"Why gemma stops early ({early} environments)\nhow its runs end, and what lies behind it",
                   loc="left", fontsize=10, color=COL[G], fontweight="bold")
 _present = [k for k in CAT if any(END[e].get(k) for e in END)]   # only categories that occur
+MEANING = {"gave_up": "tries, fails, and reports that it failed", "says_done": "claims success (the grader checks if true)",
+           "handed_back": "asks the user to finish the task", "quick_answer": "submits right away, without digging",
+           "game_lost": "the game ends (these opponents can't be beaten)", "step_cap": "hits the environment's step limit",
+           "stopped": "reads an error or lays out a plan, then stops", "empty": "replies with nothing",
+           "parser": "our harness ended the run (artifact)", "context": "history too long for gemma (artifact)",
+           "other": "unclassified"}
 axes[3].legend(handles=[plt.Rectangle((0, 0), 1, 1, color=CAT[k][1]) for k in _present],
-               labels=[CAT[k][0] for k in _present], loc="upper left", bbox_to_anchor=(0, -0.004), ncol=2, frameon=False,
+               labels=[f"{CAT[k][0]}: {MEANING.get(k, '')}" for k in _present], loc="upper left", bbox_to_anchor=(0, -0.004), ncol=1, frameon=False,
                fontsize=7.4, handlelength=1, columnspacing=1)
 axes[0].set_yticks([]); axes[0].set_ylim(-0.8, len(layout) - 0.2)
 fig.subplots_adjust(top=1 - 1.25 / H)
