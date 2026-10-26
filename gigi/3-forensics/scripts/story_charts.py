@@ -529,7 +529,7 @@ for r in csv.DictReader(open(HERE / "results" / "swap_endings.csv")):
         SE[(r["env"], G if r["group"].startswith("gemma") else Q)].append((int(r["turns"]), r["ending"]))
 CAT["context"] = ("context window full", "#17140f")
 ORDER_CAT = ["gave_up", "says_done", "handed_back", "quick_answer", "game_lost", "step_cap", "stopped", "empty", "parser", "other"]
-NOT_ENDINGS = ("lost", "context")   # left out of the bars: not how the model ended a run, but replays we could not run
+NOT_ENDINGS = ("lost", "context", "parser")   # left out of the bars: not how the model ended a run, but replays we could not run
 
 rows3b = []   # ("fam", text) / ("env", env)
 for letter, fam, envs in FAMILIES:
@@ -542,6 +542,7 @@ ys = list(range(len(rows3b)))[::-1]
 def ending_bar(ax, y, recs):
     fin = [e for _, e in recs if e not in NOT_ENDINGS]
     lost = sum(1 for _, e in recs if e == "lost"); ctx = sum(1 for _, e in recs if e == "context")
+    lost += sum(1 for _, e in recs if e == "parser")   # cut by our parser before the 25 Oct fix: not the model's ending
     if not fin:
         return
     c = collections.Counter(fin); n = len(fin); x0 = 0.0
