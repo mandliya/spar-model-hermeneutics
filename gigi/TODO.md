@@ -25,7 +25,7 @@ weak-to-strong stand-in). Status (26 Oct 2026; details in 3-forensics/RESULTS.md
 - Hand spot check of 15 gemma replays (rendering, is_prime, pre-commit): gemma operates normally,
   reports honestly; it says openly when it hard-codes is_prime's 7.
 - Gigi: send John the Pivotal fellowship details for the referral he offered.
-- At fold-in (26 Oct evening): add RESULTS.md section "5 · Are these results sound? Checks before
+- DONE 26 Oct evening (47d1a57): RESULTS.md section "5 · Are these results sound? Checks before
   distillation" for John: one row per check (worry -> test -> result -> what changed): format/validation pass,
   parser bug and reruns, long-history test, ai_rd's retired scorer (alias, rate-limit infection caught, clean
   rerun), hand spot check, environment bugs (tower_of_hanoi), and chart 4's gap rows before vs after.
