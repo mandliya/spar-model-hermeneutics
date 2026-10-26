@@ -652,6 +652,48 @@ index 9945ba0..46337c1 100644
                  break
              except Exception as exc:  # sandbox creation is rate-limited account-wide: back off, never fail the run
                  text = f"{type(exc).__name__}: {exc}"
+diff --git a/scripts/run_modal.py b/scripts/run_modal.py
+index 1794cb6..9b094dd 100644
+--- a/scripts/run_modal.py
++++ b/scripts/run_modal.py
+@@ -31,6 +31,7 @@ from __future__ import annotations
+ import json
+ import os
+ import random
++import re
+ import sys
+ import time
+ from pathlib import Path
+@@ -515,8 +516,14 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, timeout_s, max_concurrent=None, ga
+             return {"run_dir": job[1], "returncode": -1, "stdout_tail": "",
+                     "error": {"chain": [{"type": type(exc).__name__, "message": str(exc)}]}}
+ 
++    # gigi/3-forensics: optional staggered starts (as in resume_modal.py): run-N sleeps STAGGER_START + (N-1) *
++    # STAGGER_STEP seconds first, so a detached launch paces itself with no laptop attached. Unset: no delay.
++    stagger_start, stagger_step = int(os.environ.get("STAGGER_START", 0)), int(os.environ.get("STAGGER_STEP", 0))
++
+     def _launch_and_wait(job):
+         cfg_yaml, run_dir = job
++        _n = re.search(r"run-(\d+)", run_dir)
++        delay_s = stagger_start + (int(_n.group(1)) - 1) * stagger_step if _n else 0
+         for draw in range(MACHINE_GATE_MAX_DRAWS):
+             # Sandbox creation is rate-limited account-wide; a rejection is contention,
+             # not a failed run: retry with jittered, capped backoff.
+@@ -525,11 +532,12 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, timeout_s, max_concurrent=None, ga
+                 try:
+                     sb = modal.Sandbox.create(
+                         "bash", "-lc", ISOLATED_ARGV_CMD,
+-                        app=app, image=iso_image, timeout=timeout_s,
++                        app=app, image=iso_image, timeout=timeout_s + delay_s,
+                         **_resource_kwargs(), **network,
+                         volumes={"/mnt/results": results_volume},
+                         secrets=sandbox_secrets,
+-                        env={"CONTAINER_INIT": ISOLATED_SETUP_CMD, "CONTAINER_RESTORE": recovery_setup,
++                        env={"CONTAINER_INIT": (f"sleep {delay_s}; " if delay_s else "") + ISOLATED_SETUP_CMD,
++                             "CONTAINER_RESTORE": recovery_setup,
+                              "ROLLOUT_CONFIG_YAML": cfg_yaml, "ROLLOUT_RUN_DIR": run_dir, **gateway_env,
+                              **({"ROLLOUT_GATEWAY_TOKEN": token} if gateway else {})},
+                     )
 diff --git a/src/agent_interp_envs/grading.py b/src/agent_interp_envs/grading.py
 index e0138a1..ec9cafa 100644
 --- a/src/agent_interp_envs/grading.py
