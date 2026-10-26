@@ -5,11 +5,13 @@
 #   incident points (20 each, 60 pooled); dashboard at N (K63) and N-1 (K62): +56 Qwen / +55 gemma, spares for the
 #   provider losses of 21 Oct; pre-commit at N-2 (q1 K6): +20 per model. Pre-commit at N-1 reaches 60 with
 #   parallel_checks.sh alone. New fleets go next to the old ones, so the existing scoring picks them up.
-# Logs: results/logs/topup60/; spend before/after in cost.txt.   bash gigi/3-forensics/scripts/topup60.sh
+# Retry (bash topup60.sh retry): all-at-once Qwen fleets were rate-limited by the provider (dashboard 5/56 and 13/56
+#   finished, pre-commit 9/20); the missing Qwen replays again, plus spares, with Modal's server-side cap of 6 at a time.
+# Logs: results/logs/topup60[_retry]/; spend before/after in cost.txt.   bash gigi/3-forensics/scripts/topup60.sh
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"; ENVS="$HERE/agent-interp-envs"
 export MODAL_PROFILE=spar MODAL_SECRET_SUFFIX=-gigi MODAL_VOLUME_PREFIX=gigi-forensics-
-LOG="$HERE/results/logs/topup60"; mkdir -p "$LOG"
+LOG="$HERE/results/logs/topup60${1:+_$1}"; mkdir -p "$LOG"; CAP=0
 GEMMA="agent.model=google/gemma-3-27b-it,agent.temperature=1.0,agent.top_p=0.95,agent.top_k=64,agent.min_p=null,agent.text_tools=true"
 usage () { ( set -a; . "$HERE/../../.env"; set +a
   curl -s -m 20 https://openrouter.ai/api/v1/key -H "Authorization: Bearer $OPENROUTER_API_KEY" \
@@ -22,7 +24,12 @@ DB=$M/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instr
 DBP=2026-10-19_10-57-49-884559_run-2
 Q1=results/raw/screen/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-17_15-20-35-423567/run-5
 # name | results dir | checkpoint | count | overrides
-cat > "$LOG/commands.txt" <<EOF
+if [ "${1:-}" = retry ]; then CAP=6; cat > "$LOG/commands.txt" <<EOF
+dashboard_K63_qwen|$S/dashboard_costly_failure/${DBP}_K63/qwen|$DB/step-63|40|
+dashboard_K62_qwen|$S/dashboard_costly_failure/${DBP}_K62/qwen|$DB/step-62|48|
+precommit_q1_6_qwen|results/raw/swap/precommit_q1/from_step6/qwen|$Q1/step-6|13|
+EOF
+else cat > "$LOG/commands.txt" <<EOF
 coding_r7K8_qwen|$S/coding/2026-10-21_20-43-32-207727_run-7_K8/qwen|$CR/run-7/step-8|50|
 coding_r7K8_gemma|$S/coding/2026-10-21_20-43-32-207727_run-7_K8/gemma|$CR/run-7/step-8|50|$GEMMA
 coding_r7K7_qwen|$S/coding/2026-10-21_20-43-32-207727_run-7_K7/qwen|$CR/run-7/step-7|50|
@@ -40,11 +47,12 @@ dashboard_K62_gemma|$S/dashboard_costly_failure/${DBP}_K62/gemma|$DB/step-62|55|
 precommit_q1_6_qwen|results/raw/swap/precommit_q1/from_step6/qwen|$Q1/step-6|20|
 precommit_q1_6_gemma|results/raw/swap_text/precommit_q1/from_step6/gemma|$Q1/step-6|20|$GEMMA
 EOF
+fi
 while IFS='|' read -r name out step n ov; do
   [ -d "$HERE/$step" ] || { echo "$(date '+%F %T') SKIP $name: no checkpoint $step" >> "$LOG/cost.txt"; continue; }
   for try in 1 2 3 4 5 6; do
     ( cd "$ENVS" && MODAL_SECRETS=openrouter-secret nohup env -u VIRTUAL_ENV uv run modal run --detach scripts/resume_modal.py \
-        --step-dir "$HERE/$step" --count "$n" --use-current --max-concurrent 0 --no-judge --timeout 14400 \
+        --step-dir "$HERE/$step" --count "$n" --use-current --max-concurrent "$CAP" --no-judge --timeout 14400 \
         --results-dir "$HERE/$out" ${ov:+--overrides "$ov"} > "$LOG/$name.log" 2>&1 & ); sleep 30
     grep -q "rate limit exceeded" "$LOG/$name.log" || break
     sleep $((15 * try))
