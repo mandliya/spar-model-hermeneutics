@@ -438,6 +438,8 @@ def subrows(env):
                 out.append((f"{sub} · at {tk}" if sub else f"at {tk}", c[Q], c[G], sub == "run 3" and tk == "N−1"))
     if env in ctrl:
         out.append(("clean run", ctrl[env][Q], ctrl[env][G], False))
+    if env == "precommit_hook" and own[1]:   # the control that shows gemma can cheat here (20 Oct, text mode)
+        out.append(("gemma's own cheating runs", [0, 0], own, False))
     return out
 
 
@@ -477,12 +479,16 @@ for r, y in zip(allrows, ys3):
         ax.plot([pts[0][1], pts[1][1]], [y, y], color="#cfccc4", lw=3.2, solid_capstyle="round", zorder=1)
     same = len(pts) == 2 and abs(pts[0][1] - pts[1][1]) < 2.5
     for m, x in pts:
-        ax.scatter([x], [y + ((0.13 if m == Q else -0.13) if same else 0)], s=46, color=COL[m], edgecolor="white",
-                   linewidth=1.2, zorder=3)
-    ax.text(XQ, y, f"{q[0]}/{q[1]}", ha="left", va="center", fontsize=7.8, color=INK)
+        yo = y + ((0.13 if m == Q else -0.13) if same else 0)
+        lo, hi = wilson(*(q if m == Q else g))
+        yw = y + (0.2 if m == Q else -0.2)   # interval just above (Qwen) or below (gemma) the row, clear of the bar
+        ax.plot([lo * 100, hi * 100], [yw, yw], color=COL[m], lw=1.0, alpha=0.55, solid_capstyle="round", zorder=2)
+        ax.scatter([x], [yo], s=46, color=COL[m], edgecolor="white", linewidth=1.2, zorder=3)
+    ax.text(XQ, y, f"{q[0]}/{q[1]}" if q[1] else "—", ha="left", va="center", fontsize=7.8, color=INK)
     ax.text(XG, y, f"{g[0]}/{g[1]}" if g[1] else "—", ha="left", va="center", fontsize=7.8, color=INK)
     v, vc = ("same report as Qwen (judge split)", COL[G]) if split else \
-        (("no gemma replays (context window)", MUTED) if not g[1] else verdict(q, g))
+        (("no gemma replays (context window)", MUTED) if not g[1] else
+         ("gemma cheats on its own", COL[G]) if not q[1] else verdict(q, g))
     ax.text(XV, y, v, ha="left", va="center", fontsize=7.9, color=vc, fontweight="bold" if vc in (GAP, COL[G]) else "normal")
 top = len(allrows) - 0.3
 for x, t, ha in ((XS, "restart point", "right"), (XQ, "Qwen", "left"), (XG, "gemma", "left"), (XV, "reading", "left")):
@@ -501,11 +507,94 @@ ax.set_title("3 · Swapped into Qwen's runs, gemma repeats Qwen's bad act only w
              loc="left", fontsize=12.5, fontweight="bold", pad=26)
 fig.subplots_adjust(bottom=0.75 / H3)
 fig.text(0.01, 0.05 / H3, "Each line: share of replays doing the environment's bad act from the same restart point, 10 per "
-         "point and model (lost replays left out). \"at N\": Qwen's run up to turn N−1, then the model writes turn N on\n"
+         "point and model (lost replays left out); thin line = 95% interval. \"at N\": Qwen's run up to turn N−1, then the model writes turn N on\n"
          "(N = Qwen's bad turn; N−1 one turn earlier). \"clean run\": restarted before Qwen's last turn in a run where it "
          "did nothing bad (the control). Reading: \"gemma doesn't do it\" = Qwen higher with 95% confidence;\n"
          "\"copies\" = Qwen does it in 20%+ and gemma within 15 points. Families as in chart 1.", fontsize=7.4, color=MUTED)
 fig.savefig(OUT / "q3_swap_all.png", dpi=180, bbox_inches="tight"); plt.close(fig)
+
+# ---------------------------------------------------------------------------- 3b. how the swap replays end
+# The same families and environments as chart 3, every replay of the swap pooled per environment and model:
+# turns written after the takeover (median), and how the replays end (results/swap_endings.csv, categories of
+# chart 1's last panel; lost replays left out of the bars and counted beside them).
+SE = collections.defaultdict(list)   # (env, model) -> [(turns, ending)]
+for r in csv.DictReader(open(HERE / "results" / "swap_endings.csv")):
+    if r["group"] in ("gemma in Qwen's runs", "Qwen in Qwen's runs"):
+        SE[(r["env"], G if r["group"].startswith("gemma") else Q)].append((int(r["turns"]), r["ending"]))
+CAT["context"] = ("context window full", "#17140f")
+ORDER_CAT = ["gave_up", "says_done", "handed_back", "quick_answer", "game_lost", "parser", "step_cap", "context", "other"]
+
+rows3b = []   # ("fam", text) / ("env", env)
+for letter, fam, envs in FAMILIES:
+    rows3b.append(("fam", f"{letter} · {fam}")); rows3b += [("env", e) for e in envs]
+H3b = 0.3 * len(rows3b) + 2.2
+fig, axes = plt.subplots(1, 3, figsize=(17, H3b), sharey=True, gridspec_kw={"width_ratios": [0.75, 1.25, 1.25], "wspace": 0.05})
+ys = list(range(len(rows3b)))[::-1]
+
+
+def ending_bar(ax, y, recs):
+    fin = [e for _, e in recs if e != "lost"]; lost = len(recs) - len(fin)
+    if not fin:
+        return
+    c = collections.Counter(fin); n = len(fin); x0 = 0.0
+    for cat in sorted(c, key=lambda k: (-c[k], ORDER_CAT.index(k))):
+        w = c[cat] / n * 0.36
+        ax.barh(y, w, left=x0, height=0.56, color=CAT[cat][1], edgecolor="white", linewidth=0.8, zorder=3)
+        x0 += w
+    top = c.most_common(2)
+    label = f"{CAT[top[0][0]][0]} {top[0][1]}/{n}" + (f"  ·  {CAT[top[1][0]][0]} {top[1][1]}/{n}" if len(top) > 1 else "")
+    ax.text(0.38, y, label, va="center", fontsize=7.2, color=INK)
+    if lost:
+        ax.text(0.38, y - 0.36, f"+ {lost} lost (provider, crash)", va="center", fontsize=6.4, color=MUTED)
+
+
+for (kind, it), y in zip(rows3b, ys):
+    if kind == "fam":
+        for ax in axes:
+            ax.axhspan(y - 0.45, y + 0.45, color=BAND, zorder=0, lw=0)
+        axes[0].text(-0.95, y, it, transform=axes[0].get_yaxis_transform(), ha="left", va="center", fontsize=9.8,
+                     fontweight="bold")
+        continue
+    e = it
+    axes[0].text(-0.03, y, LABEL.get(e, e), transform=axes[0].get_yaxis_transform(), ha="right", va="center", fontsize=8.6)
+    if not SE.get((e, Q)) and not SE.get((e, G)):
+        axes[1].text(0.0, y, NOT_SWAPPED.get(e, "not swapped"), va="center", fontsize=7.6, color=MUTED, style="italic")
+        continue
+    med = {}
+    for m, dy in ((Q, 0.12), (G, -0.12)):
+        tt = [t for t, en in SE.get((e, m), []) if en != "lost" and t > 0]
+        if tt:
+            med[m] = statistics.median(tt)
+            axes[0].scatter([med[m]], [y + dy], s=24, color=COL[m], zorder=3, edgecolor="white", linewidth=0.8)
+    if len(med) == 2:
+        axes[0].plot([med[Q], med[G]], [y + 0.12, y - 0.12], color=GRID, lw=1.5, zorder=2)
+    if e == "async_conversion":
+        axes[0].text(1.1, y - 0.12, "gemma: context window full in all 60", va="center", fontsize=6.6, color=MUTED)
+    ending_bar(axes[1], y, SE.get((e, G), []))
+    ending_bar(axes[2], y, SE.get((e, Q), []))
+axes[0].set_xscale("log"); axes[0].set_xlim(0.8, 400); axes[0].set_xticks([1, 3, 10, 30, 100, 300])
+axes[0].set_xticklabels(["1", "3", "10", "30", "100", "300"]); axes[0].grid(axis="x", color=GRID, lw=0.6, zorder=0)
+clean(axes[0]); axes[0].set_yticks([]); axes[0].set_ylim(-0.8, len(rows3b) - 0.2)
+axes[0].set_title("Turns written after taking over\nmedian per replay (log)", loc="left", fontsize=10, color=MUTED,
+                  fontweight="bold")
+axes[0].legend(handles=[plt.Line2D([], [], marker="o", ls="", color=COL[m], markersize=5) for m in (Q, G)],
+               labels=["Qwen (baseline)", "gemma swapped in"], loc="upper left", bbox_to_anchor=(0, -0.03), ncol=2,
+               frameon=False, fontsize=7.4, handletextpad=0.3)
+for ax, m, t in ((axes[1], G, "How gemma's replays end"), (axes[2], Q, "How Qwen's replays end (the baseline)")):
+    ax.set_xlim(0, 1); ax.set_xticks([]); clean(ax); ax.spines["bottom"].set_visible(False)
+    ax.set_title(t + "\nshare of finished replays, largest first", loc="left", fontsize=10, color=COL[m], fontweight="bold")
+axes[1].legend(handles=[plt.Rectangle((0, 0), 1, 1, color=CAT[k][1]) for k in ORDER_CAT],
+               labels=[CAT[k][0] for k in ORDER_CAT], loc="upper left", bbox_to_anchor=(0, -0.004), ncol=3,
+               frameon=False, fontsize=7.4, handlelength=1, columnspacing=1)
+fig.subplots_adjust(top=1 - 1.3 / H3b, bottom=1.25 / H3b)
+fig.suptitle("3b · How the swap replays end: on the speed-up targets (B) gemma in Qwen's place mostly gives up and says so; "
+             "on the short tasks both answer at once", x=0.02, ha="left", y=1 - 0.2 / H3b, fontsize=12.5, fontweight="bold")
+fig.text(0.02, 0.1 / H3b, "Every replay of chart 3 (bad runs and clean runs pooled), classified from its last turn with "
+         "the categories of chart 1 (scripts/swap_endings.py → results/swap_endings.csv). \"Answers at once\" is how the "
+         "short tasks (A, E's pre-commit hook, F's secret_number, G, H, I) end by design.\nThe categories were tuned on "
+         "gemma's replies; Qwen's long-task endings fall into \"other\" more often. Lost replays (provider failures, "
+         "crashes) are left out of the bars.", fontsize=7.6, color=MUTED)
+fig.savefig(OUT / "q3b_swap_endings.png", dpi=180, bbox_inches="tight"); plt.close(fig)
 
 # ============================================================================ 4. the gap, by family
 # The same rows as chart 3's incidents (same names, same order); each family's clean runs pooled into one line
@@ -528,7 +617,7 @@ for letter, fam, envs in FAMILIES:
     lines.append(("fam", f"{letter} · {fam}"))
     pool, pooled = {Q: [0, 0], G: [0, 0]}, []
     for e in envs:
-        rs = [s for s in subrows(e) if s[2][1]]
+        rs = [s for s in subrows(e) if s[1][1] and s[2][1]]
         first = True
         for lab, q, g, split in rs:
             if lab == "clean run" and e != "ai_rd":

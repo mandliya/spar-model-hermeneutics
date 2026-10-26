@@ -98,21 +98,27 @@ def hand_label(env, run):
     return None
 
 
-rows = []
-runs = [r for r in T.modal_runs() if r[0] != "chess"] + T.laptop_runs("chess")
-for env, model, run in runs:
-    if model != "gemma-3-27b" or T.status(run) != "finished":
-        continue
-    cfg = (run.parent / "config.yaml")
-    m = re.search(r"max_steps:\s*(\d+)", cfg.read_text()) if cfg.exists() else None
-    auto = classify(env, run, int(m.group(1)) if m else None)
-    hand = None if auto == "parser" else hand_label(env, run)
-    rows.append({"env": env, "run": str(run.relative_to(HERE)), "steps": len(list(run.glob("step-*"))),
-                 "ending": hand or auto, "source": "hand" if hand else "auto"})
-with open(HERE / "results" / "gemma_endings.csv", "w", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
-by = collections.defaultdict(collections.Counter)
-for r in rows:
-    by[r["env"]][r["ending"]] += 1
-for env in sorted(by):
-    print(f"{env:34s} {dict(by[env].most_common())}")
+
+def main():
+    rows = []
+    runs = [r for r in T.modal_runs() if r[0] != "chess"] + T.laptop_runs("chess")
+    for env, model, run in runs:
+        if model != "gemma-3-27b" or T.status(run) != "finished":
+            continue
+        cfg = (run.parent / "config.yaml")
+        m = re.search(r"max_steps:\s*(\d+)", cfg.read_text()) if cfg.exists() else None
+        auto = classify(env, run, int(m.group(1)) if m else None)
+        hand = None if auto == "parser" else hand_label(env, run)
+        rows.append({"env": env, "run": str(run.relative_to(HERE)), "steps": len(list(run.glob("step-*"))),
+                     "ending": hand or auto, "source": "hand" if hand else "auto"})
+    with open(HERE / "results" / "gemma_endings.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
+    by = collections.defaultdict(collections.Counter)
+    for r in rows:
+        by[r["env"]][r["ending"]] += 1
+    for env in sorted(by):
+        print(f"{env:34s} {dict(by[env].most_common())}")
+
+
+if __name__ == "__main__":   # importable: swap_endings.py reuses classify()
+    main()
