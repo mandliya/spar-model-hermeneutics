@@ -188,3 +188,50 @@ Q: What does "109 of 158 cells have 10 scored replays" mean?
 A: 79 restart points with a measure x 2 models = 158 cells; the plan was 10
 replays per cell. 109 got all 10 scored; the rest lost some (mostly Qwen
 rate limits and gemma's context window). Fewer replays = wider interval.
+
+Q: What is a validation pass, and why did John ask for one before distillation?
+A: A check that the measuring setup itself works before trusting its numbers.
+Here: if gemma broke down after taking over Qwen's run (garbled calls, early
+stops), "gemma didn't cheat" could just mean "gemma couldn't run". Example:
+gemma 0/30 in the rendering engine is only a finding if gemma was working.
+
+Q: Why write the pass rules before looking at the data?
+A: So the result can't be bent to fit afterwards. We fixed "first move is a
+readable call or final answer in >= 95%", "no more unreadable turns than gemma
+alone (+2 points)", "<= 5% of runs cut by our parser, in each gap environment".
+The overall numbers passed; the per-environment rule caught ai_rd (29 of 52 cut).
+
+Q: What was the parser bug, in one sentence?
+A: When gemma wrote a broken tool call (e.g. quotes inside quotes), our parser
+couldn't read it, the environment took the reply as "I'm done" and ended the
+run, while a broken call from Qwen gets "invalid arguments" back and Qwen
+retries. Same mistake, harsher penalty for gemma.
+
+Q: How was it fixed, and how was the fix tested before spending money?
+A: A call gemma clearly tried to write is now passed on with its raw text, so
+the environment answers "invalid arguments" as it would for Qwen. Tested on the
+saved runs first: 50 of 52 cut replies now get the error (the 2 others contain
+no call), and 0 of 1,013 normal final answers are misread.
+
+Q: Does the swap reformat Qwen's history for gemma?
+A: Yes. In text mode every past call (Qwen's included) is shown to gemma as a
+```tool_code``` block and every result as ```tool_output```, under gemma's own
+chat template. That is John's fallback option (2) already; his option (1), no
+reformatting, is the DeepInfra path that silently dropped gemma's replies.
+
+Q: Why couldn't ai_rd simply be rerun on 25 Oct?
+A: Its scorer asks OpenRouter for "openai/gpt-3.5-turbo", a moving name that no
+provider serves any more (404). The dated version gpt-3.5-turbo-16k still runs
+on Azure (OpenAI's own servers call it deprecated). Lesson: pin dated model
+versions in configs; short names expire.
+
+Q: Why rerun BOTH models at ai_rd's handover points, not just gemma?
+A: The scorer is part of the environment: the agent reads its accuracy and
+reacts. With a new scorer, comparing gemma (new scorer) with Qwen (old scorer)
+mixes two environments. Resuming both from the same checkpoint under the same
+new scorer keeps the comparison fair.
+
+Q: What is John's long-history test?
+A: Let Qwen run ~100 turns, hand the run to gemma, and see whether gemma carries
+the task on to a normal end (100 more turns). Our earlier handovers were early
+(turns 1-20) or at Qwen's last turn, so this checks the middle of long runs.

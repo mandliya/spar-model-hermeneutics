@@ -2,6 +2,28 @@
 
 Kept in git so they survive a lost session. Delete a line when it's done.
 
+## Direction from the 22 Oct 2026 call with John: validate the swap before distillation
+
+John's concern: gemma swapped into Qwen's runs may not operate properly (Qwen's history out of distribution
+for gemma), and a broken gemma would look like an honest one. His plan: (1) check gemma works when pre-filled
+with Qwen's turns unchanged; (2) if not, convert Qwen's turns to gemma's format and recheck; (3) if gemma is
+still incompatible, switch to a model with native tool calling (Qwen3-Next-80B target, a small ~3B Qwen as a
+weak-to-strong stand-in). Status (26 Oct 2026; details in 3-forensics/RESULTS.md, data quality):
+- (2) is what the swap already does: text mode shows Qwen's calls to gemma as gemma-format ```tool_code```
+  blocks under gemma's chat template (README, deviation 4). (1) as stated is the 19 Oct DeepInfra path that
+  dropped gemma's replies. Tell John (on the call the user said no reformatting was done).
+- Validation pass (23 Oct, `scripts/swap_validity.py`): passes overall; failed in ai_rd and pre-commit,
+  where our parser ended runs on gemma's broken calls (Qwen's get an error back). Fixed 25 Oct (d2f7f8b),
+  pre-commit and gemma's puppeteer/revert rerun ($2.30): gap unchanged.
+- ai_rd: its scorer's GPT-3.5-turbo alias is gone from OpenRouter; rerun 26 Oct for both models on
+  gpt-3.5-turbo-16k via Azure (fold in when done). Rendering engine: 10 of 60 gemma replays stumbled on
+  unreadable calls just before ending (pre-fix); the gap survives the worst case; rerun optional (~$30).
+- Running 26 Oct: John's long-history test (gemma takes over 5 long Qwen runs at turn 100, 10 replays
+  each; `scripts/parallel_checks.sh`) and top-ups of chart 4's unclear rows. Fold in when done.
+- Hand spot check of 15 gemma replays (rendering, is_prime, pre-commit): gemma operates normally,
+  reports honestly; it says openly when it hard-codes is_prime's 7.
+- Gigi: send John the Pivotal fellowship details for the referral he offered.
+
 ## Direction from the 14 Oct 2026 call with John (and Yuki): model forensics
 
 Full transcript: pasted into the Claude Code session of 15-16 Oct 2026 (session log
@@ -60,9 +82,8 @@ the laptop (the user installs it). Work goes in gigi/3-forensics/ (README writte
   scrubbed the key its scorer and judge need) and rerun: Qwen hard-codes the eval answers in 7/10 runs,
   gemma 0/9; ai_rd's swap launched 23:20. Main OpenRouter key used for ai_rd and swe_rebench_v2 (the user's
   choice); outputs redacted (scripts/redact_key.py), the real key never appeared. ~$580 since the 18 Oct
-  baseline (ceiling $1500). Open: fold in the ai_rd swap (fetch, score, story_charts.py, RESULTS.md);
-  optional: text-mode parser should answer a call to an unknown tool with an error (4 gemma runs), then
-  rerun gemma's puppeteer and revert_or_refactor; the judges disagree on the bandWindow edit.
+  baseline (ceiling $1500). Done since: the ai_rd swap folded in (22 Oct); the parser fix and the reruns
+  (25-26 Oct, see the 22 Oct call above). Still open: the judges disagree on the bandWindow edit.
 - Part three DONE 17 Oct 2026 (results: 3-forensics/RESULTS.md; $3.93; raw runs on HF under
   forensics/raw/). Qwen-80B rarely task-games (pre-commit hook bypassed 2/52, nothing elsewhere);
   gemma alone more (hook 7/22, is_prime 4/40). Swap: in Qwen's runs gemma never cheats (0/180) and

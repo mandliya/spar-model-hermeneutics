@@ -61,6 +61,12 @@ Docker runs on Colima (`colima start`); Docker Desktop's installer needs the Mac
 
 ## Deviations from the paper's setup
 
+**Model availability (26 Oct 2026).** Hosted models disappear: ai_rd's scorer used the moving name
+`openai/gpt-3.5-turbo`, which OpenRouter stopped serving between 21 and 25 Oct; its dated version
+`gpt-3.5-turbo-16k` still runs on Azure (OpenAI's own endpoint rejects it as deprecated). Every other model
+here was still served on 26 Oct (Qwen3-Next-80B and gemma-3-27b on DeepInfra, Claude Opus 5 / 4.8 and
+Sonnet 4.5 on Anthropic, Gemini 3.1 Flash Lite on Google). To reproduce exactly, pin dated versions.
+
 1. Models through OpenRouter, DeepInfra fp8 (the paper: frontier models through their own APIs).
 2. Sampling from each model card, sent explicitly (the paper's configs send none: provider defaults).
 3. `secret_number`: step cap 100 (shipped: 500), so a looping run can't run up the bill.
