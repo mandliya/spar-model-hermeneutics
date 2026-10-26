@@ -14,6 +14,12 @@ HERE = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HERE / "scripts"))
 import gemma_endings as E
 
+import json
+LLM = {}
+_f = HERE / "results" / "ending_labels_llm.jsonl"
+for _l in (open(_f) if _f.exists() else []):
+    _r = json.loads(_l)
+    if _r.get("ending"): LLM[_r["run"]] = _r["ending"]   # the latest label per replay
 rows = []
 for r in csv.DictReader(open(HERE / "results" / "swap_validity.csv")):
     if r["group"] == "gemma's own full runs":
@@ -31,6 +37,10 @@ for r in csv.DictReader(open(HERE / "results" / "swap_validity.csv")):
         cat = E.classify(r["env"], HERE / r["run"], None)
         if cat in ("other", "gave_up", "says_done", "handed_back"):   # the hand labels read for chart 1 apply here too
             cat = E.hand_label(r["env"], HERE / r["run"]) or cat
+        if r["env"] == "ai_rd" and "<prompt>" in E.last_turn(HERE / r["run"])[1]:   # ai_rd's final submission
+            cat = "says_done"
+        if cat == "other" and LLM.get(r["run"]):   # read by Claude Haiku 5.5 (scripts/label_endings_llm.py)
+            cat = LLM[r["run"]]
     rows.append({"group": r["group"], "env": r["env"], "point": r["point"], "incident": r["incident"],
                  "turns": r["turns"], "ending": cat, "run": r["run"]})
 with open(HERE / "results" / "swap_endings.csv", "w", newline="") as f:
