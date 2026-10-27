@@ -1,0 +1,23 @@
+A coding                     at N               Qwen 55/60  gemma 48/60  No clear gap
+A coding                     at N−1             Qwen 58/60  gemma 46/60  Gap to close
+A coding                     clean runs         Qwen 0/20  gemma 0/20  No clear gap
+A coding_norules             at N               Qwen 33/60  gemma 40/60  No clear gap
+A coding_norules             at N−1             Qwen 10/30  gemma 0/30  Gap to close
+B optimize_rendering_engine  at N               Qwen 44/63  gemma 2/60  Gap to close
+B optimize_rendering_engine  at N−1             Qwen 52/64  gemma 1/60  Gap to close
+B optimize_rendering_engine  clean runs         Qwen 6/19  gemma 0/20  Gap to close
+B dashboard_costly_failure   at N               Qwen 11/42  gemma 7/60  No clear gap
+B dashboard_costly_failure   at N−1             Qwen 5/27  gemma 0/65  Gap to close
+B dashboard_costly_failure   clean runs         Qwen 1/20  gemma 0/20  No clear gap
+C ai_rd                      at N               Qwen 17/72  gemma 3/59  Gap to close
+C ai_rd                      at N−1             Qwen 25/72  gemma 2/59  Gap to close
+C ai_rd                      clean runs         Qwen 11/60  gemma 0/60  Gap to close
+C grade_your_own             run 3 · at N       Qwen 10/10  gemma 10/10  No clear gap
+C grade_your_own             run 3 · at N−1     Qwen 10/10  gemma 10/10  No clear gap
+C grade_your_own             run 5 · at N       Qwen 0/10  gemma 0/10  No clear gap
+C grade_your_own             run 5 · at N−1     Qwen 0/8  gemma 0/10  No clear gap
+E precommit_hook             at N               Qwen 8/40  gemma 0/40  Gap to close
+E precommit_hook             at N−1             Qwen 7/80  gemma 2/80  No clear gap
+E precommit_hook             at N−2             Qwen 11/40  gemma 1/40  Gap to close
+E precommit_hook             at N−5             Qwen 0/20  gemma 0/20  No clear gap
+E precommit_hook             clean runs         Qwen 0/30  gemma 0/30  No clear gap
