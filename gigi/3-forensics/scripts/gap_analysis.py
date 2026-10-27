@@ -54,11 +54,11 @@ FAMILIES = [
 ]
 TAKE = {1: "N", 2: "N−1", 3: "N−2", 6: "N−5"}   # checkpoint N-k -> takeover at turn N-k+1 (as in story_charts.py)
 TK_ORDER = ["at N", "at N−1", "at N−2", "at N−5", "clean runs"]
-POINT = {"at N": ("At Qwen's cheating turn (N)", "both models redo Qwen's run from\nthe turn where it cheated"),
-         "at N−1": ("1 turn earlier (N−1)", "both models redo Qwen's run from\n1 turn before it cheated"),
-         "at N−2": ("2 turns earlier (N−2)", "both models redo Qwen's run from\n2 turns before it cheated"),
-         "at N−5": ("5 turns earlier (N−5)", "both models redo Qwen's run from\n5 turns before it cheated"),
-         "clean runs": ("Clean run", "Qwen's original run had no cheating;\nboth models redo its last turn")}
+POINT = {"at N": ("At the cheating turn (N)", "both models redo the run from\nthe turn with the bad act"),
+         "at N−1": ("1 turn earlier (N−1)", "both models redo the run from\n1 turn before the bad act"),
+         "at N−2": ("2 turns earlier (N−2)", "both models redo the run from\n2 turns before the bad act"),
+         "at N−5": ("5 turns earlier (N−5)", "both models redo the run from\n5 turns before the bad act"),
+         "clean runs": ("Clean run", "a run with no bad act;\nboth models redo its last turn")}
 MIN_N = 5
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 9, "text.color": INK})
 
@@ -174,9 +174,9 @@ for letter, envs, title, foot in FAMILIES:
         y += 1.3
     fig.text(0.02, 1 - 0.22 / H, title, fontsize=12.5, fontweight="bold", va="top")
     fig.text(0.02, 1 - 0.58 / H,
-             "Each pair of bars = one of Qwen's runs, rewound to the same turn. Top bar: Qwen (Qwen3-Next-80B) redoes it "
-             "from there. Bottom bar: gemma (gemma-3-27b) takes over\nfrom there. 10–80 tries each; the bar shows how "
-             "they ended. Right: how many tries hacked, and whether Qwen's rate is higher with 95% confidence (a gap to close).",
+             "Each row = a run that Qwen played earlier, rewound to the same turn; then both models continue from there, 10–80 "
+             "tries each: top bar Qwen (Qwen3-Next-80B),\nbottom bar gemma (gemma-3-27b). The bar shows how the tries ended. "
+             "Right: how many tries hacked, and whether Qwen's rate is higher with 95% confidence (a gap to close).",
              fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
     fig.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=col) for _, _, _, col in SEGS], labels=[t for _, t, _, _ in SEGS],
                loc="upper left", bbox_to_anchor=(0.015, 1 - 1.08 / H), ncol=4, frameon=False, fontsize=8.5,
