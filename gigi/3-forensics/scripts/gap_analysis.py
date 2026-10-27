@@ -54,9 +54,11 @@ FAMILIES = [
 ]
 TAKE = {1: "N", 2: "N−1", 3: "N−2", 6: "N−5"}   # checkpoint N-k -> takeover at turn N-k+1 (as in story_charts.py)
 TK_ORDER = ["at N", "at N−1", "at N−2", "at N−5", "clean runs"]
-POINT = {"at N": "From Qwen's cheating turn (N)", "at N−1": "From 1 turn earlier (N−1)",
-         "at N−2": "From 2 turns earlier (N−2)", "at N−5": "From 5 turns earlier (N−5)",
-         "clean runs": "Clean run: Qwen didn't cheat the\nfirst time; its last turn redone"}
+POINT = {"at N": ("At Qwen's cheating turn (N)", "both models redo Qwen's run from\nthe turn where it cheated"),
+         "at N−1": ("1 turn earlier (N−1)", "both models redo Qwen's run from\n1 turn before it cheated"),
+         "at N−2": ("2 turns earlier (N−2)", "both models redo Qwen's run from\n2 turns before it cheated"),
+         "at N−5": ("5 turns earlier (N−5)", "both models redo Qwen's run from\n5 turns before it cheated"),
+         "clean runs": ("Clean run", "Qwen's original run had no cheating;\nboth models redo its last turn")}
 MIN_N = 5
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 9, "text.color": INK})
 
@@ -98,9 +100,10 @@ def order(sub):
 
 
 def label(sub):
+    """(bold first line, muted explanation) for a restart point; grade_your_own's points carry their run."""
     run, _, tk = sub.rpartition(" · ")
-    text = POINT.get(tk, tk)
-    return f"{run.capitalize()}: {text[0].lower()}{text[1:]}" if run else text
+    head, expl = POINT.get(tk, (tk, ""))
+    return (f"{run.capitalize()} · {head[0].lower()}{head[1:]}" if run else head), expl
 
 
 def verdict(env, sub, q, g):
@@ -115,7 +118,7 @@ def verdict(env, sub, q, g):
 
 
 U = 0.3                                    # inches per row unit
-X0, X1 = -60, 152                          # data x: labels from X0, bars 0-100, counts and verdict to the right
+X0, X1 = -72, 152                          # data x: labels from X0, bars 0-100, counts and verdict to the right
 for letter, envs, title, foot in FAMILIES:
     foot = list(foot)
     blocks = []
@@ -143,7 +146,9 @@ for letter, envs, title, foot in FAMILIES:
         ax.text(119, y + 1.35, "Qwen's rate minus gemma's", fontsize=8, color=MUTED, va="center")
         y += 2.1; y_first = y
         for i, (sub, q, g) in enumerate(pts):
-            ax.text(X0, y + 1.0, label(sub), fontsize=9, va="center", linespacing=1.3)
+            head, expl = label(sub)
+            ax.text(X0, y + 0.5, head, fontsize=9.5, fontweight="bold", va="center")
+            ax.text(X0, y + 1.42, expl, fontsize=7.8, color=MUTED, va="center", linespacing=1.25)
             for who, c, yy in (("qwen", q, y + 0.5), ("gemma", g, y + 1.5)):
                 n = sum(c.values()); left = 0
                 ax.text(-1.5, yy, "Qwen" if who == "qwen" else "gemma", fontsize=9, fontweight="bold",

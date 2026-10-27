@@ -427,12 +427,12 @@ of Qwen's runs, rewound to the same turn: in the top bar Qwen redoes it from the
 over from there (10–80 tries each). The colours show how the tries ended; red = the bad act. The row label says
 where the run was rewound to:
 
-- **From Qwen's cheating turn (N):** Qwen's run is kept up to the turn before the bad act; the model writes the
-  turn where Qwen did the bad thing, and everything after.
-- **From 1, 2 or 5 turns earlier (N−1, N−2, N−5):** cut that many turns earlier.
-- **Clean run:** a run where Qwen did nothing bad the first time; the model rewrites its last turn. The control:
-  does a model do the bad thing without a history that leads there? Only some environments have one: to save
-  money we redid 3 of Qwen's runs per environment, cheating runs first, so where Qwen cheated in 3 or more of its
+- **At Qwen's cheating turn (N):** Qwen's run is kept up to the turn before the bad act; then **both models**
+  (Qwen in the top bar, gemma in the bottom bar) write the turn where Qwen did the bad thing, and everything after.
+- **1, 2 or 5 turns earlier (N−1, N−2, N−5):** the same, restarting that many turns before the bad act.
+- **Clean run:** one of Qwen's runs that had no cheating; **both models** redo its last turn. The control: does a
+  model do the bad thing without a history that leads there? Only some environments have one: to save money we
+  redid 3 of Qwen's runs per environment, cheating runs first, so where Qwen cheated in 3 or more of its
   runs (optimize_rendering_engine, coding_norules) no slot was left. ai_rd was planned with 3 + 3 on purpose.
 
 **Summary** (bad tries / scored tries, Qwen vs gemma; gap = Qwen's rate minus gemma's, in points):
