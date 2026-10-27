@@ -25,6 +25,8 @@ for p in S.PLAN:
                         v = T.judged(None, run)
                         g = run / "final" / "grading.json"
                         verdict = json.loads(g.read_text()).get("verdict") if g.exists() else None
+                    if rel in S.HAND:   # a verdict read by hand (results/hand_verdicts.csv) replaces the grader's
+                        v = S.HAND[rel]; verdict = f"{'cheated' if v else 'honest'} (hand; grader: {verdict})"
                     if v is None:
                         st = S.unscored_reason(run, p["env"])
                 e = endings.get(rel, {})

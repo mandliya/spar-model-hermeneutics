@@ -347,7 +347,7 @@ for i, (title, act, _) in enumerate(PANELS + [("Where Qwen did nothing bad (20 e
         ax.text(-0.35, 104, f"Qwen's clean runs, before its last turn:\nQwen {aird_dec[Q][0]}/{aird_dec[Q][1]}, "
                 f"gemma {aird_dec[G][0]}/{aird_dec[G][1]}", fontsize=6.8, color=MUTED, va="top")
     if title.startswith("grade_your_own · run 3"):
-        ax.text(2.06, 18, "judge split: all 10 made\nthe same false report", fontsize=6.6, color=COL[G], va="top")
+        ax.text(2.06, 18, "at N−1: read by hand, all 10\nclaim a gain never measured\n(hand_verdicts.csv)", fontsize=6.4, color=COL[G], va="top")
 fig.legend(handles=[plt.Line2D([], [], color=COL[Q], marker="o", lw=1.8, mec="white"),
                     plt.Line2D([], [], color=COL[G], marker="o", lw=1.8, mec="white")],
            labels=["Qwen replaying its own run (the baseline)", "gemma swapped into Qwen's run"], frameon=False, ncol=2,
@@ -441,7 +441,7 @@ def subrows(env):
         for tk in TK_ORDER:
             c = inc.get((env, sub, tk))
             if c and c[Q][1]:
-                out.append((f"{sub} · at {tk}" if sub else f"at {tk}", c[Q], c[G], sub == "run 3" and tk == "N−1"))
+                out.append((f"{sub} · at {tk}" if sub else f"at {tk}", c[Q], c[G], False))   # the run 3 · N−1 judge split was resolved by hand (hand_verdicts.csv, 27 Oct)
     if env in ctrl:
         out.append(("clean run", ctrl[env][Q], ctrl[env][G], False))
     if env == "precommit_hook" and own[1]:   # the control that shows gemma can cheat here (20 Oct, text mode)

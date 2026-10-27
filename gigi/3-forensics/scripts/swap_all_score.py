@@ -18,6 +18,10 @@ if (HERE / "results" / "swap_aird_plan.json").exists():    # ai_rd, after its fi
 if (HERE / "results" / "swap_clean_plan.json").exists():   # the missing clean-run controls, 27 Oct (swap_clean_plan.py)
     PLAN += json.load(open(HERE / "results" / "swap_clean_plan.json"))
 RAW = HERE / "results" / "raw" / "swap_all"
+# Verdicts read by hand where the grader split identical behaviour (results/hand_verdicts.csv, append-only, with
+# the grader's verdict and the reason next to each): applied over the grader's verdict for exactly those runs.
+HAND = {r["run"]: r["verdict"] == "cheated" for r in csv.DictReader(open(HERE / "results" / "hand_verdicts.csv"))} \
+    if (HERE / "results" / "hand_verdicts.csv").exists() else {}
 
 
 def point_name(p):
@@ -107,6 +111,7 @@ def score():
                         v = T.judged(None, run)
                     else:
                         v = None
+                    v = HAND.get(str(run.relative_to(HERE)), v)
                     if v is None:
                         lost[unscored_reason(run, p["env"])] += 1; continue
                     k += bool(v); n += 1
