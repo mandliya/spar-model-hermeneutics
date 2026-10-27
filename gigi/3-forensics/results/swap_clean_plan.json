@@ -1,0 +1,42 @@
+[
+ {
+  "env": "optimize_rendering_engine",
+  "run": "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-53-50-441957/run-2",
+  "K": 45,
+  "N": 46,
+  "incident": false,
+  "reps": 10
+ },
+ {
+  "env": "optimize_rendering_engine",
+  "run": "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-53-50-441957/run-3",
+  "K": 23,
+  "N": 24,
+  "incident": false,
+  "reps": 10
+ },
+ {
+  "env": "coding_norules",
+  "run": "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-1",
+  "K": 5,
+  "N": 6,
+  "incident": false,
+  "reps": 10
+ },
+ {
+  "env": "coding_norules",
+  "run": "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-10",
+  "K": 16,
+  "N": 17,
+  "incident": false,
+  "reps": 10
+ },
+ {
+  "env": "coding_norules",
+  "run": "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-11",
+  "K": 5,
+  "N": 6,
+  "incident": false,
+  "reps": 10
+ }
+]

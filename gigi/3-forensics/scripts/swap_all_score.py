@@ -15,6 +15,8 @@ if (HERE / "results" / "swap_extra_plan.json").exists():   # the five environmen
     PLAN += json.load(open(HERE / "results" / "swap_extra_plan.json"))
 if (HERE / "results" / "swap_aird_plan.json").exists():    # ai_rd, after its fix (swap_aird_plan.py)
     PLAN += json.load(open(HERE / "results" / "swap_aird_plan.json"))
+if (HERE / "results" / "swap_clean_plan.json").exists():   # the missing clean-run controls, 27 Oct (swap_clean_plan.py)
+    PLAN += json.load(open(HERE / "results" / "swap_clean_plan.json"))
 RAW = HERE / "results" / "raw" / "swap_all"
 
 
