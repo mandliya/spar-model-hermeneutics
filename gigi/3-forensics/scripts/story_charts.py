@@ -618,6 +618,8 @@ def gap_verdict(d, lo, hi, q, g, split):
         return "unclear (judge split)", MUTED
     if lo > 0:
         return "gap to close", GAP
+    if hi < 0:   # gemma's rate higher with 95% confidence (coding_norules clean runs, 28 Oct: 1/48 vs 11/50)
+        return "gemma does it more", COL[G]
     both_rare = q[0] / q[1] <= 0.05 and g[0] / g[1] <= 0.05
     if abs(d) < 0.10 and (both_rare or (hi - lo) < 0.6):
         return "no gap", COL[G]
