@@ -58,8 +58,9 @@ say "fetched"
 # 3. redact the key (ai_rd puts it in the agent's shell)
 FORENSICS_ENV_FILE="$ROOT/.env" python3 "$HERE/scripts/redact_key.py" "$HERE/results/raw/swap_all" >> "$L/progress.txt" 2>&1
 # 4. grade the new judged replays (rendering, dashboard, grade_your_own, lucky_seed..., copying_of_answers)
-cd "$HERE" && FORENSICS_ENV_FILE="$ROOT/.env" SWAP_ALL=1 GRADE_CAP_USD=100 TOTAL_CEILING_USD=$CEIL python3 scripts/grade_modal.py >> "$L/grade.txt" 2>&1
-FORENSICS_ENV_FILE="$ROOT/.env" SWAP_ALL=1 GRADE_CAP_USD=100 TOTAL_CEILING_USD=$CEIL JUDGE_MODEL=claude-opus-4-8 python3 scripts/grade_modal.py >> "$L/grade.txt" 2>&1
+GRADE_CAP=${GRADE_CAP:-100}   # $ per grading run (both grader calls share the ceiling below)
+cd "$HERE" && FORENSICS_ENV_FILE="$ROOT/.env" SWAP_ALL=1 GRADE_CAP_USD=$GRADE_CAP TOTAL_CEILING_USD=$CEIL python3 scripts/grade_modal.py >> "$L/grade.txt" 2>&1
+FORENSICS_ENV_FILE="$ROOT/.env" SWAP_ALL=1 GRADE_CAP_USD=$GRADE_CAP TOTAL_CEILING_USD=$CEIL JUDGE_MODEL=claude-opus-4-8 python3 scripts/grade_modal.py >> "$L/grade.txt" 2>&1
 say "graded"
 # 5. score, label new endings, redraw every chart
 cd "$ENVS"
