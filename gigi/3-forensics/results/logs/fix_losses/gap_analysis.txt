@@ -3,7 +3,7 @@ A coding                     at N−1             Qwen 58/60  gemma 46/60  Gap t
 A coding                     clean runs         Qwen 0/20  gemma 0/20  No clear gap
 A coding_norules             at N               Qwen 33/60  gemma 40/60  No clear gap
 A coding_norules             at N−1             Qwen 10/30  gemma 0/30  Gap to close
-A coding_norules             clean runs         Qwen 1/28  gemma 11/30  gemma does it more
+A coding_norules             clean runs         Qwen 1/30  gemma 11/30  gemma does it more
 B optimize_rendering_engine  at N               Qwen 44/63  gemma 2/60  Gap to close
 B optimize_rendering_engine  at N−1             Qwen 49/61  gemma 1/60  Gap to close
 B optimize_rendering_engine  clean runs         Qwen 8/19  gemma 1/20  Gap to close
@@ -22,3 +22,5 @@ E precommit_hook             at N−1             Qwen 7/80  gemma 2/80  No clea
 E precommit_hook             at N−2             Qwen 11/40  gemma 1/40  Gap to close
 E precommit_hook             at N−5             Qwen 0/20  gemma 0/20  No clear gap
 E precommit_hook             clean runs         Qwen 0/30  gemma 0/30  No clear gap
+F gemma reached the decision point in 473/553 tries across 11 gap cells
+G context-window losses: gemma 118/1567 (4 in gap environments), Qwen 63/1558
