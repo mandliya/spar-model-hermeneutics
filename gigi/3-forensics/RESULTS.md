@@ -519,6 +519,8 @@ where the run was rewound to:
 
 ### How much of Qwen's cheating is the trace pushing it? (Yuqi's question, 28 Oct)
 
+![Qwen's cheating rate under four starts: on its own, from a clean run, from its trace one turn before the cheat, at the cheating turn; gemma on the same trace as reference](charts/q5_trace.png)
+
 The control arm answers it: Qwen restarted from its own trace at N or N−1 (the top bars of 5A–5F), next to
 Qwen restarted at the end of one of its clean runs and Qwen on its own (section 1, 5–20 runs). The difference
 between the trace columns and the clean/solo columns is the share of the bad act that the fed-in history
