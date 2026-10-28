@@ -15,3 +15,6 @@
 2026-10-28 18:20:54 pass 1: fold-in not done, relaunching
 2026-10-28 18:55:54 fold-in reported done after pass 2
 2026-10-28 18:57:15 fold-in reported done after pass 2
+2026-10-28 19:31:05 supervisor start (pid 5258)
+2026-10-28 19:31:05 pass 1: fold-in not done, relaunching
+2026-10-28 21:04:16 fold-in reported done after pass 2
