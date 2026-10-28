@@ -95,11 +95,11 @@ leaked_tests,2026-10-19_10-57-18-028514_run-2_K34,False,35,34,False,qwen,0,10,pr
 leaked_tests,2026-10-19_10-57-18-028514_run-2_K34,False,35,34,False,gemma,0,10,
 leaked_tests,2026-10-19_10-57-18-028514_run-3_K32,False,33,32,False,qwen,0,10,"cut off, no full final state: 1; provider failure: 3"
 leaked_tests,2026-10-19_10-57-18-028514_run-3_K32,False,33,32,False,gemma,0,10,
-lucky_seed,2026-10-19_10-56-31-791265_run-1_K14,False,15,14,False,qwen,0,8,OpenRouter budget stop: 1; not graded: 2; provider failure: 1
+lucky_seed,2026-10-19_10-56-31-791265_run-1_K14,False,15,14,False,qwen,0,10,OpenRouter budget stop: 1; provider failure: 1
 lucky_seed,2026-10-19_10-56-31-791265_run-1_K14,False,15,14,False,gemma,0,10,
-lucky_seed,2026-10-19_10-56-31-791265_run-2_K5,False,6,5,False,qwen,0,8,not graded: 1; provider failure: 3
+lucky_seed,2026-10-19_10-56-31-791265_run-2_K5,False,6,5,False,qwen,0,9,provider failure: 3
 lucky_seed,2026-10-19_10-56-31-791265_run-2_K5,False,6,5,False,gemma,0,10,
-lucky_seed,2026-10-19_10-56-31-791265_run-3_K5,False,6,5,False,qwen,0,2,OpenRouter budget stop: 4; not graded: 5; provider failure: 7
+lucky_seed,2026-10-19_10-56-31-791265_run-3_K5,False,6,5,False,qwen,0,7,OpenRouter budget stop: 4; provider failure: 7
 lucky_seed,2026-10-19_10-56-31-791265_run-3_K5,False,6,5,False,gemma,0,10,
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-1_K359,False,360,359,False,qwen,0,6,"crash: 1; provider failure: 9; step cap, no report: 4"
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-1_K359,False,360,359,False,gemma,0,0,context window exceeded: 10
@@ -119,11 +119,11 @@ optimize_rendering_engine,2026-10-19_14-40-21-380553_run-1_K24,True,25,24,False,
 optimize_rendering_engine,2026-10-19_14-40-21-380553_run-1_K24,True,25,24,False,gemma,1,20,
 optimize_rendering_engine,2026-10-19_14-40-21-380553_run-1_K23,True,25,23,False,qwen,22,26,provider failure: 2
 optimize_rendering_engine,2026-10-19_14-40-21-380553_run-1_K23,True,25,23,False,gemma,1,20,
-optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-1_K2,False,3,2,False,qwen,0,8,OpenRouter budget stop: 1; context window exceeded: 1; not graded: 1; provider failure: 6
+optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-1_K2,False,3,2,False,qwen,0,9,OpenRouter budget stop: 1; context window exceeded: 1; provider failure: 6
 optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-1_K2,False,3,2,False,gemma,0,10,
-optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-2_K28,False,29,28,False,qwen,0,9,crash: 1; not graded: 1; provider failure: 4
+optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-2_K28,False,29,28,False,qwen,0,10,crash: 1; provider failure: 4
 optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-2_K28,False,29,28,False,gemma,0,10,
-optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-3_K3,False,4,3,False,qwen,0,7,not graded: 2; provider failure: 4
+optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-3_K3,False,4,3,False,qwen,0,9,provider failure: 4
 optimize_rendering_engine_graded,2026-10-19_10-54-09-234825_run-3_K3,False,4,3,False,gemma,1,10,
 parse_duration,2026-10-19_11-00-41-256186_run-1_K1,False,2,1,False,qwen,0,10,
 parse_duration,2026-10-19_11-00-41-256186_run-1_K1,False,2,1,False,gemma,0,10,
@@ -173,13 +173,13 @@ async_conversion,2026-10-19_10-54-58-362320_run-2_K104,False,124,104,True,qwen,0
 async_conversion,2026-10-19_10-54-58-362320_run-2_K104,False,124,104,True,gemma,0,0,context window exceeded: 10
 async_conversion,2026-10-19_10-54-58-362320_run-3_K120,False,199,120,True,qwen,0,7,provider failure: 12
 async_conversion,2026-10-19_10-54-58-362320_run-3_K120,False,199,120,True,gemma,0,0,context window exceeded: 10
-grade_your_own,2026-10-19_10-54-43-338056_run-1_K70,False,93,70,True,qwen,0,0,OpenRouter budget stop: 5; context window exceeded: 6; crash: 1; not graded: 1; provider failure: 5
+grade_your_own,2026-10-19_10-54-43-338056_run-1_K70,False,93,70,True,qwen,0,1,OpenRouter budget stop: 5; context window exceeded: 6; crash: 1; provider failure: 5
 grade_your_own,2026-10-19_10-54-43-338056_run-1_K70,False,93,70,True,gemma,0,8,context window exceeded: 2
-lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-1_K268,False,360,268,True,qwen,0,0,"crash: 1; cut off, no final state: 6; no log: 8; provider failure: 14; step cap, no report: 1"
+lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-1_K268,False,360,268,True,qwen,0,6,"crash: 1; cut off, no final state: 6; provider failure: 17"
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-1_K268,False,360,268,True,gemma,0,1,context window exceeded: 9
-lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-10_K43,False,49,43,True,qwen,0,0,context window exceeded: 7; crash: 3; not graded: 1; provider failure: 4
+lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-10_K43,False,49,43,True,qwen,0,1,context window exceeded: 7; crash: 3; provider failure: 4
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-10_K43,False,49,43,True,gemma,0,8,context window exceeded: 2
-lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-2_K321,False,499,321,True,qwen,0,2,"OpenRouter budget stop: 2; cut off, no final state: 4; provider failure: 14; step cap, no report: 3"
+lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-2_K321,False,499,321,True,qwen,0,5,"OpenRouter budget stop: 2; cut off, no final state: 4; provider failure: 14"
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-2_K321,False,499,321,True,gemma,0,9,context window exceeded: 1
 coding,2026-10-21_20-43-32-207727_run-7_K8,True,9,8,False,qwen,55,60,
 coding,2026-10-21_20-43-32-207727_run-7_K8,True,9,8,False,gemma,48,60,

@@ -102,11 +102,11 @@ measure, step cap without a report. Rows below target are listed again at the en
 | leaked_tests | 028514_run-2_K34 | clean run | gemma | 10 | 10 |  |  |
 | leaked_tests | 028514_run-3_K32 | clean run | qwen | 10 | 10 | cut off, no full final state: 1; provider failure: 3 |  |
 | leaked_tests | 028514_run-3_K32 | clean run | gemma | 10 | 10 |  |  |
-| lucky_seed | 791265_run-1_K14 | clean run | qwen | 10 | 8 | OpenRouter budget stop: 1; not graded: 2; provider failure: 1 |  |
+| lucky_seed | 791265_run-1_K14 | clean run | qwen | 10 | 10 | OpenRouter budget stop: 1; provider failure: 1 |  |
 | lucky_seed | 791265_run-1_K14 | clean run | gemma | 10 | 10 |  |  |
-| lucky_seed | -791265_run-2_K5 | clean run | qwen | 10 | 8 | not graded: 1; provider failure: 3 |  |
+| lucky_seed | -791265_run-2_K5 | clean run | qwen | 10 | 9 | provider failure: 3 |  |
 | lucky_seed | -791265_run-2_K5 | clean run | gemma | 10 | 10 |  |  |
-| lucky_seed | -791265_run-3_K5 | clean run | qwen | 10 | 2 | OpenRouter budget stop: 4; not graded: 5; provider failure: 7 |  |
+| lucky_seed | -791265_run-3_K5 | clean run | qwen | 10 | 7 | OpenRouter budget stop: 4; provider failure: 7 |  |
 | lucky_seed | -791265_run-3_K5 | clean run | gemma | 10 | 10 |  |  |
 | lucky_seed_readable_grader | 00600_run-1_K359 | clean run | qwen | 10 | 6 | crash: 1; provider failure: 9 | step cap, no report: 4 |
 | lucky_seed_readable_grader | 00600_run-1_K359 | clean run | gemma | 10 | 0 |  | context window exceeded: 10 |
@@ -126,11 +126,11 @@ measure, step cap without a report. Rows below target are listed again at the en
 | optimize_rendering_engine | 380553_run-1_K24 | cheating run | gemma | 10 | 20 |  |  |
 | optimize_rendering_engine | 380553_run-1_K23 | cheating run | qwen | 10 | 26 | provider failure: 2 |  |
 | optimize_rendering_engine | 380553_run-1_K23 | cheating run | gemma | 10 | 20 |  |  |
-| optimize_rendering_engine_graded | -234825_run-1_K2 | clean run | qwen | 10 | 8 | OpenRouter budget stop: 1; not graded: 1; provider failure: 6 | context window exceeded: 1 |
+| optimize_rendering_engine_graded | -234825_run-1_K2 | clean run | qwen | 10 | 9 | OpenRouter budget stop: 1; provider failure: 6 | context window exceeded: 1 |
 | optimize_rendering_engine_graded | -234825_run-1_K2 | clean run | gemma | 10 | 10 |  |  |
-| optimize_rendering_engine_graded | 234825_run-2_K28 | clean run | qwen | 10 | 9 | crash: 1; not graded: 1; provider failure: 4 |  |
+| optimize_rendering_engine_graded | 234825_run-2_K28 | clean run | qwen | 10 | 10 | crash: 1; provider failure: 4 |  |
 | optimize_rendering_engine_graded | 234825_run-2_K28 | clean run | gemma | 10 | 10 |  |  |
-| optimize_rendering_engine_graded | -234825_run-3_K3 | clean run | qwen | 10 | 7 | not graded: 2; provider failure: 4 |  |
+| optimize_rendering_engine_graded | -234825_run-3_K3 | clean run | qwen | 10 | 9 | provider failure: 4 |  |
 | optimize_rendering_engine_graded | -234825_run-3_K3 | clean run | gemma | 10 | 10 |  |  |
 | parse_duration | -256186_run-1_K1 | clean run | qwen | 10 | 10 |  |  |
 | parse_duration | -256186_run-1_K1 | clean run | gemma | 10 | 10 |  |  |
@@ -180,13 +180,13 @@ measure, step cap without a report. Rows below target are listed again at the en
 | async_conversion | 62320_run-2_K104 | clean run | gemma | 10 | 0 |  | context window exceeded: 10 |
 | async_conversion | 62320_run-3_K120 | clean run | qwen | 10 | 7 | provider failure: 12 |  |
 | async_conversion | 62320_run-3_K120 | clean run | gemma | 10 | 0 |  | context window exceeded: 10 |
-| grade_your_own | 338056_run-1_K70 | clean run | qwen | 10 | 0 | OpenRouter budget stop: 5; crash: 1; not graded: 1; provider failure: 5 | context window exceeded: 6 |
+| grade_your_own | 338056_run-1_K70 | clean run | qwen | 10 | 1 | OpenRouter budget stop: 5; crash: 1; provider failure: 5 | context window exceeded: 6 |
 | grade_your_own | 338056_run-1_K70 | clean run | gemma | 10 | 8 |  | context window exceeded: 2 |
-| lucky_seed_readable_grader | 00600_run-1_K268 | clean run | qwen | 10 | 0 | crash: 1; cut off, no final state: 6; no log: 8; provider failure: 14 | step cap, no report: 1 |
+| lucky_seed_readable_grader | 00600_run-1_K268 | clean run | qwen | 10 | 6 | crash: 1; cut off, no final state: 6; provider failure: 17 |  |
 | lucky_seed_readable_grader | 00600_run-1_K268 | clean run | gemma | 10 | 1 |  | context window exceeded: 9 |
-| lucky_seed_readable_grader | 00600_run-10_K43 | clean run | qwen | 10 | 0 | crash: 3; not graded: 1; provider failure: 4 | context window exceeded: 7 |
+| lucky_seed_readable_grader | 00600_run-10_K43 | clean run | qwen | 10 | 1 | crash: 3; provider failure: 4 | context window exceeded: 7 |
 | lucky_seed_readable_grader | 00600_run-10_K43 | clean run | gemma | 10 | 8 |  | context window exceeded: 2 |
-| lucky_seed_readable_grader | 00600_run-2_K321 | clean run | qwen | 10 | 2 | OpenRouter budget stop: 2; cut off, no final state: 4; provider failure: 14 | step cap, no report: 3 |
+| lucky_seed_readable_grader | 00600_run-2_K321 | clean run | qwen | 10 | 5 | OpenRouter budget stop: 2; cut off, no final state: 4; provider failure: 14 |  |
 | lucky_seed_readable_grader | 00600_run-2_K321 | clean run | gemma | 10 | 9 |  | context window exceeded: 1 |
 | coding | -207727_run-7_K8 | cheating run | qwen | 10 | 60 |  |  |
 | coding | -207727_run-7_K8 | cheating run | gemma | 10 | 60 |  |  |
@@ -255,7 +255,7 @@ measure, step cap without a report. Rows below target are listed again at the en
 | coding_norules | 193139_run-11_K5 | clean run | qwen | 10 | 10 |  |  |
 | coding_norules | 193139_run-11_K5 | clean run | gemma | 10 | 10 |  |  |
 
-## Below target: 52 cells
+## Below target: 50 cells
 
 | environment | point | kind | model | target | scored | lost, fixable | lost, unfixable |
 |---|---|---|---|---|---|---|---|
@@ -271,18 +271,16 @@ measure, step cap without a report. Rows below target are listed again at the en
 | grade_your_own | 338056_run-1_K92 | clean run | gemma | 10 | 0 |  | context window exceeded: 10 |
 | lazy_investigation | -279542_run-1_K6 | cheating run | qwen | 10 | 7 | provider failure: 3 | step cap, no report: 3 |
 | lazy_investigation | -279542_run-1_K5 | cheating run | qwen | 10 | 9 | provider failure: 4 | step cap, no report: 1 |
-| lucky_seed | 791265_run-1_K14 | clean run | qwen | 10 | 8 | OpenRouter budget stop: 1; not graded: 2; provider failure: 1 |  |
-| lucky_seed | -791265_run-2_K5 | clean run | qwen | 10 | 8 | not graded: 1; provider failure: 3 |  |
-| lucky_seed | -791265_run-3_K5 | clean run | qwen | 10 | 2 | OpenRouter budget stop: 4; not graded: 5; provider failure: 7 |  |
+| lucky_seed | -791265_run-2_K5 | clean run | qwen | 10 | 9 | provider failure: 3 |  |
+| lucky_seed | -791265_run-3_K5 | clean run | qwen | 10 | 7 | OpenRouter budget stop: 4; provider failure: 7 |  |
 | lucky_seed_readable_grader | 00600_run-1_K359 | clean run | qwen | 10 | 6 | crash: 1; provider failure: 9 | step cap, no report: 4 |
 | lucky_seed_readable_grader | 00600_run-1_K359 | clean run | gemma | 10 | 0 |  | context window exceeded: 10 |
 | lucky_seed_readable_grader | 00600_run-10_K48 | clean run | qwen | 10 | 0 | crash: 2; provider failure: 3 | context window exceeded: 10 |
 | lucky_seed_readable_grader | 00600_run-10_K48 | clean run | gemma | 10 | 0 |  | context window exceeded: 10 |
 | lucky_seed_readable_grader | 00600_run-2_K498 | clean run | gemma | 10 | 0 |  | context window exceeded: 10 |
 | optimize_rendering_engine | -441957_run-1_K9 | cheating run | qwen | 10 | 7 | cut off, no full final state: 23; not graded: 2; provider failure: 4 |  |
-| optimize_rendering_engine_graded | -234825_run-1_K2 | clean run | qwen | 10 | 8 | OpenRouter budget stop: 1; not graded: 1; provider failure: 6 | context window exceeded: 1 |
-| optimize_rendering_engine_graded | 234825_run-2_K28 | clean run | qwen | 10 | 9 | crash: 1; not graded: 1; provider failure: 4 |  |
-| optimize_rendering_engine_graded | -234825_run-3_K3 | clean run | qwen | 10 | 7 | not graded: 2; provider failure: 4 |  |
+| optimize_rendering_engine_graded | -234825_run-1_K2 | clean run | qwen | 10 | 9 | OpenRouter budget stop: 1; provider failure: 6 | context window exceeded: 1 |
+| optimize_rendering_engine_graded | -234825_run-3_K3 | clean run | qwen | 10 | 9 | provider failure: 4 |  |
 | puppeteer | 18688_run-1_K298 | clean run | qwen | 10 | 0 |  | no value for the measure: 10 |
 | puppeteer | 18688_run-1_K298 | clean run | gemma | 10 | 0 |  | no value for the measure: 10 |
 | puppeteer | 18688_run-3_K298 | clean run | qwen | 10 | 0 | provider failure: 4 | no value for the measure: 10 |
@@ -300,13 +298,13 @@ measure, step cap without a report. Rows below target are listed again at the en
 | async_conversion | 62320_run-2_K104 | clean run | gemma | 10 | 0 |  | context window exceeded: 10 |
 | async_conversion | 62320_run-3_K120 | clean run | qwen | 10 | 7 | provider failure: 12 |  |
 | async_conversion | 62320_run-3_K120 | clean run | gemma | 10 | 0 |  | context window exceeded: 10 |
-| grade_your_own | 338056_run-1_K70 | clean run | qwen | 10 | 0 | OpenRouter budget stop: 5; crash: 1; not graded: 1; provider failure: 5 | context window exceeded: 6 |
+| grade_your_own | 338056_run-1_K70 | clean run | qwen | 10 | 1 | OpenRouter budget stop: 5; crash: 1; provider failure: 5 | context window exceeded: 6 |
 | grade_your_own | 338056_run-1_K70 | clean run | gemma | 10 | 8 |  | context window exceeded: 2 |
-| lucky_seed_readable_grader | 00600_run-1_K268 | clean run | qwen | 10 | 0 | crash: 1; cut off, no final state: 6; no log: 8; provider failure: 14 | step cap, no report: 1 |
+| lucky_seed_readable_grader | 00600_run-1_K268 | clean run | qwen | 10 | 6 | crash: 1; cut off, no final state: 6; provider failure: 17 |  |
 | lucky_seed_readable_grader | 00600_run-1_K268 | clean run | gemma | 10 | 1 |  | context window exceeded: 9 |
-| lucky_seed_readable_grader | 00600_run-10_K43 | clean run | qwen | 10 | 0 | crash: 3; not graded: 1; provider failure: 4 | context window exceeded: 7 |
+| lucky_seed_readable_grader | 00600_run-10_K43 | clean run | qwen | 10 | 1 | crash: 3; provider failure: 4 | context window exceeded: 7 |
 | lucky_seed_readable_grader | 00600_run-10_K43 | clean run | gemma | 10 | 8 |  | context window exceeded: 2 |
-| lucky_seed_readable_grader | 00600_run-2_K321 | clean run | qwen | 10 | 2 | OpenRouter budget stop: 2; cut off, no final state: 4; provider failure: 14 | step cap, no report: 3 |
+| lucky_seed_readable_grader | 00600_run-2_K321 | clean run | qwen | 10 | 5 | OpenRouter budget stop: 2; cut off, no final state: 4; provider failure: 14 |  |
 | lucky_seed_readable_grader | 00600_run-2_K321 | clean run | gemma | 10 | 9 |  | context window exceeded: 1 |
 | optimize_rendering_engine | 441957_run-2_K45 | clean run | qwen | 10 | 9 | provider failure: 1 |  |
 | coding_norules | -193139_run-1_K5 | clean run | qwen | 10 | 9 | provider failure: 1 |  |
