@@ -345,12 +345,13 @@ for s in ("top", "right", "left"): ax.spines[s].set_visible(False)
 ax.tick_params(axis="y", left=False, labelleft=False); ax.tick_params(axis="x", colors=MUTED, labelsize=8); ax.spines["bottom"].set_color(GRID)
 ax.set_xlabel("replays lost to the model's context window (gemma 128k, Qwen 262k tokens)", fontsize=8.5, color=MUTED)
 ax.grid(axis="x", color=GRID, lw=0.7, zorder=0)
-fig.text(0.02, 1 - 0.2 / H2, f"5G · Where capability does bind: gemma's context window, almost only in long environments with no gap between the models",
+fig.text(0.02, 1 - 0.2 / H2, f"5G · Where capability does bind: the context window, on the longest histories, almost only where neither model's scored tries cheat",
          fontsize=12.5, fontweight="bold", va="top")
 fig.text(0.02, 1 - 0.55 / H2,
          f"Every swap replay that ended because the history outgrew the model's window: gemma {tot['gemma']} of {tot_n['gemma']} tries, Qwen "
-         f"{tot['qwen']} of {tot_n['qwen']}. Of gemma's {tot['gemma']}, {in_gap} are in a gap environment (bold);\nthe rest are in environments "
-         f"where chart 4 finds no gap (both models behave alike). A larger window removes these losses; it does not change the gap cells.",
+         f"{tot['qwen']} of {tot_n['qwen']}, both on the longest histories (restart points at step 100–500). Of gemma's {tot['gemma']}, {in_gap} are in a gap "
+         f"environment (bold); the rest are where every scored try of both models is honest\n(async_conversion: gemma has no scored try at all, Qwen's are all "
+         f"honest; grade_your_own: both cheat 10/10 or neither). A larger window removes these losses; it does not change the gap cells.",
          fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
 fig.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=MODEL_COL[w]) for w in ("qwen", "gemma")], labels=["Qwen3-Next-80B", "gemma-3-27b"],
            loc="upper left", bbox_to_anchor=(0.015, 1 - 1.0 / H2), ncol=2, frameon=False, fontsize=8.5, handlelength=1.3)

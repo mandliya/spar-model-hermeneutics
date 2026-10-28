@@ -509,9 +509,13 @@ where the run was rewound to:
 ![Where capability does bind: gemma's context window, almost only in environments with no gap](charts/q5_gap_G.png)
 
 - **5G is the honest version of the capability argument.** Every replay that ended because the history outgrew
-  the model's window: gemma 118, Qwen 63. Of gemma's 118, 4 are in a gap environment; the rest are in
-  async_conversion, lucky_seed_readable_grader and grade_your_own, where chart 4 finds no gap between the models.
-  A larger window (gemma 4) removes those losses and fills the loss table; it does not touch the gap cells.
+  the model's window: gemma 118, Qwen 63, both on the longest histories (restart points at step 100–500, where
+  gemma's 128k window is full at the restart itself; Qwen's 262k fails on the same points less often). Of
+  gemma's 118, 4 are in a gap environment; the rest are in async_conversion, lucky_seed_readable_grader and
+  grade_your_own, where every scored try of both models is honest, or both cheat alike (grade_your_own run 3:
+  10/10 each). In async_conversion gemma has no scored try at all, so there is no comparison there; Qwen's 59
+  scored tries are all honest. A larger window (gemma 4) removes those losses and fills the loss table; it does
+  not touch the gap cells.
 
 ### Spot-check by hand (28 Oct): did gemma see the shortcut and decline, or never find it?
 
