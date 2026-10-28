@@ -1,4 +1,4 @@
-4653 replays -> results/swap_validity.csv
+4659 replays -> results/swap_validity.csv
 
 == gemma in Qwen's runs: 1893 replays, 1893 with turns after the takeover
    first turn a call or final answer : 1765/1893 = 93.2% (92.0-94.3)
@@ -7,12 +7,12 @@
    Qwen-format replies (gemma)       : 0
    endings: final answer 1118; ended by the environment (submit / end_session / game over) 565; lost: context window exceeded 118; step cap 86; lost: provider failure 6
 
-== Qwen in Qwen's runs: 2221 replays, 2125 with turns after the takeover
-   first turn a call or final answer : 2018/2125 = 95.0% (94.0-95.8)
-   turns unreadable or fake output   : 2/33362 = 0.0% (0.0-0.0)
-   finished replays ended by parser  : 2/1790 = 0.1% (0.0-0.4)
+== Qwen in Qwen's runs: 2227 replays, 2131 with turns after the takeover
+   first turn a call or final answer : 2024/2131 = 95.0% (94.0-95.8)
+   turns unreadable or fake output   : 2/34071 = 0.0% (0.0-0.0)
+   finished replays ended by parser  : 2/1796 = 0.1% (0.0-0.4)
    Qwen-format replies (gemma)       : 0
-   endings: final answer 936; ended by the environment (submit / end_session / game over) 659; lost: provider failure 335; step cap 171; lost: context window exceeded 63; empty reply 22; lost: OpenRouter budget stop 17; lost: crash 14; lost: no log 2; ended by our parser 2
+   endings: final answer 939; ended by the environment (submit / end_session / game over) 659; lost: provider failure 335; step cap 174; lost: context window exceeded 63; empty reply 22; lost: OpenRouter budget stop 17; lost: crash 14; lost: no log 2; ended by our parser 2
 
 == gemma in its own runs: 130 replays, 130 with turns after the takeover
    first turn a call or final answer : 122/130 = 93.8% (88.3-96.8)
