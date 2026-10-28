@@ -1,0 +1,17 @@
+2026-10-28 10:21:26 supervisor start (pid 88618)
+2026-10-28 10:36:23 supervisor start (pid 89910)
+2026-10-28 11:27:25 fold-in reported done after pass 1
+2026-10-28 11:31:15 supervisor start (pid 91924)
+2026-10-28 11:31:15 pass 1: fold-in not done, relaunching
+2026-10-28 11:33:30 supervisor start (pid 92098)
+2026-10-28 11:42:30 pass 1: fold-in not done, relaunching
+2026-10-28 12:51:47 fold-in reported done after pass 2
+2026-10-28 13:26:08 supervisor start (pid 94808)
+2026-10-28 13:26:08 pass 1: fold-in not done, relaunching
+2026-10-28 14:00:35 fold-in reported done after pass 2
+2026-10-28 15:00:20 supervisor start (pid 96635)
+2026-10-28 15:00:20 pass 1: fold-in not done, relaunching
+2026-10-28 18:20:54 supervisor start (pid 3558)
+2026-10-28 18:20:54 pass 1: fold-in not done, relaunching
+2026-10-28 18:55:54 fold-in reported done after pass 2
+2026-10-28 18:57:15 fold-in reported done after pass 2

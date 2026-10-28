@@ -73,6 +73,7 @@ cd "$HERE" && FORENSICS_ENV_FILE="$ROOT/.env" python3 scripts/label_endings_llm.
 cd "$ENVS" && $R python ../scripts/swap_endings.py > /dev/null 2>&1
 $R --with matplotlib python ../scripts/story_charts.py > "$L/story_charts.txt" 2>&1
 $R python ../scripts/gap_replays.py >> "$L/progress.txt" 2>&1
+$R python ../scripts/stopped_reasons.py >> "$L/progress.txt" 2>&1   # why the scored 'stopped' tries stopped (chart footnotes)
 $R --with matplotlib python ../scripts/gap_analysis.py > "$L/gap_analysis.txt" 2>&1
 say "scored and redrawn"
 # 6. the full loss audit: every restart point of every plan, both models

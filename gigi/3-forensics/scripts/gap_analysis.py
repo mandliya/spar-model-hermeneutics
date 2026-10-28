@@ -7,7 +7,7 @@ Newcombe interval) and chart 4's verdict. Points with fewer than 5 scored replay
 Sources: results/gap_replays.csv (scripts/gap_replays.py) and the pre-commit study (runs_swap[_text]_precommit_*.csv).
   cd gigi/3-forensics/agent-interp-envs && uv run --with matplotlib python ../scripts/gap_analysis.py
 """
-import collections, csv, json, math, pathlib, re
+import collections, csv, json, math, pathlib, re, textwrap
 
 import matplotlib
 matplotlib.use("Agg")
@@ -167,7 +167,7 @@ def verdict(env, sub, q, g):
 U = 0.3                                    # inches per row unit
 X0, X1 = -72, 152                          # data x: labels from X0, bars 0-100, counts and verdict to the right
 for letter, envs, title, foot in FAMILIES:
-    foot = list(foot) + [LOST_NOTE] + stopped_notes(envs)
+    foot = [w for line in list(foot) + [LOST_NOTE] + stopped_notes(envs) for w in textwrap.wrap(line, 210, subsequent_indent="    ")]
     blocks = []
     for env in envs:
         pts = []
@@ -313,6 +313,7 @@ foot5f = ["Spot-check: RESULTS.md section 6, 'Spot-check by hand (28 Oct)', 24 t
           "Capability checks per family are on charts 5A–5E (rendering telemetry: 0 of both models' tries measured the 3× target; ai_rd: gemma's honest "
           "prompts score within 2 points of Qwen's; pre-commit: gemma bypasses the hook in 34/120 of its own runs).",
           "Clean-run rows: the restart is the last turn of a run with no bad act, so 'the decision point' is the end of the task rather than a cheating turn."]
+foot5f = [w for line in foot5f for w in textwrap.wrap(line, 250, subsequent_indent="    ")]
 for i, line in enumerate(foot5f):
     fig.text(0.02, (bot_in - 0.22 - 0.2 * i) / H, line, fontsize=7.8, color=MUTED, va="center")
 fig.savefig(HERE / "charts" / "q5_gap_F.png", dpi=180, bbox_inches="tight", facecolor="white"); plt.close(fig)
