@@ -38,14 +38,17 @@ for line in (T / "commands.txt").read_text().splitlines():
         # re-fetch every fleet once all apps have stopped: a fleet copied while it was still running leaves run dirs
         # without their final state (22 cells read "state not fetched yet" in the first audit, 27 Oct 21:26, because
         # a "already present" check skipped them). A stamp marks a fleet fetched after the apps stopped, so a restarted
-        # pass skips it. Each download gets 15 min and 3 tries: the laptop sleeping mid-download leaves a hung client.
+        # pass skips it. Each download gets 60 min and 3 tries: the laptop sleeping mid-download leaves a hung client
+        # (a 10-try fleet with 300-step histories is ~10k files, 30+ min; 15 min was too short for lucky_seed K268).
+        # Beware: `modal volume get --force` replaces the run dirs, so local-only files (final/grading.json) are lost;
+        # fetch only fleets that still need it, never re-fetch a graded one.
         stamp = dest / ".fetched_after_apps_stopped"
         if not vol or stamp.exists(): continue
         dest.parent.mkdir(parents=True, exist_ok=True)
         for attempt in range(3):
             try:
                 rc = subprocess.run(["modal", "volume", "get", "--force", vol.group(1), fleet, str(dest.parent)],
-                                    capture_output=True, text=True, timeout=900).returncode
+                                    capture_output=True, text=True, timeout=3600).returncode
             except subprocess.TimeoutExpired:
                 rc = -1
             if rc == 0: stamp.touch(); break

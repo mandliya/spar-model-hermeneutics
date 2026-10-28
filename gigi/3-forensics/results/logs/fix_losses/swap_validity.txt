@@ -7,12 +7,12 @@
    Qwen-format replies (gemma)       : 0
    endings: final answer 1118; ended by the environment (submit / end_session / game over) 565; lost: context window exceeded 118; step cap 86; lost: provider failure 6
 
-== Qwen in Qwen's runs: 2177 replays, 2081 with turns after the takeover
-   first turn a call or final answer : 1974/2081 = 94.9% (93.8-95.7)
-   turns unreadable or fake output   : 2/28864 = 0.0% (0.0-0.0)
-   finished replays ended by parser  : 2/1752 = 0.1% (0.0-0.4)
+== Qwen in Qwen's runs: 2177 replays, 2073 with turns after the takeover
+   first turn a call or final answer : 1966/2073 = 94.8% (93.8-95.7)
+   turns unreadable or fake output   : 2/27626 = 0.0% (0.0-0.0)
+   finished replays ended by parser  : 2/1747 = 0.1% (0.0-0.4)
    Qwen-format replies (gemma)       : 0
-   endings: final answer 920; ended by the environment (submit / end_session / game over) 656; lost: provider failure 335; step cap 158; lost: context window exceeded 57; lost: OpenRouter budget stop 17; empty reply 16; lost: crash 14; lost: no log 2; ended by our parser 2
+   endings: final answer 920; ended by the environment (submit / end_session / game over) 657; lost: provider failure 332; step cap 152; lost: context window exceeded 57; lost: OpenRouter budget stop 17; empty reply 16; lost: crash 14; lost: no log 10; ended by our parser 2
 
 == gemma in its own runs: 130 replays, 130 with turns after the takeover
    first turn a call or final answer : 122/130 = 93.8% (88.3-96.8)

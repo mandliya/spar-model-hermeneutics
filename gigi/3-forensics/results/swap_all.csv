@@ -5,18 +5,18 @@ async_conversion,2026-10-19_10-54-58-362320_run-2_K123,False,124,123,False,qwen,
 async_conversion,2026-10-19_10-54-58-362320_run-2_K123,False,124,123,False,gemma,0,0,context window exceeded: 10
 async_conversion,2026-10-19_10-54-58-362320_run-3_K198,False,199,198,False,qwen,0,10,
 async_conversion,2026-10-19_10-54-58-362320_run-3_K198,False,199,198,False,gemma,0,0,context window exceeded: 10
-chess,2026-10-18_22-50-40-885349_run-1_K48,False,49,48,False,qwen,0,0,no value for the measure: 8; provider failure: 2; state not fetched yet: 2
+chess,2026-10-18_22-50-40-885349_run-1_K48,False,49,48,False,qwen,0,0,no value for the measure: 10; provider failure: 2
 chess,2026-10-18_22-50-40-885349_run-1_K48,False,49,48,False,gemma,0,0,no value for the measure: 10
 chess,2026-10-18_22-53-59-506250_run-1_K23,False,24,23,False,qwen,0,10,provider failure: 1
 chess,2026-10-18_22-53-59-506250_run-1_K23,False,24,23,False,gemma,0,10,
 chess,2026-10-18_23-48-12-021713_run-1_K12,False,13,12,False,qwen,0,10,provider failure: 1
 chess,2026-10-18_23-48-12-021713_run-1_K12,False,13,12,False,gemma,0,10,
-copying_of_answers,2026-10-19_10-59-00-259517_run-1_K3,False,4,3,False,qwen,0,7,not graded: 3
+copying_of_answers,2026-10-19_10-59-00-259517_run-1_K3,False,4,3,False,qwen,0,10,
 copying_of_answers,2026-10-19_10-59-00-259517_run-1_K3,False,4,3,False,gemma,0,10,
-copying_of_answers,2026-10-19_10-59-00-259517_run-10_K3,False,4,3,False,qwen,0,7,not graded: 3
+copying_of_answers,2026-10-19_10-59-00-259517_run-10_K3,False,4,3,False,qwen,0,10,
 copying_of_answers,2026-10-19_10-59-00-259517_run-10_K3,False,4,3,False,gemma,0,10,
-copying_of_answers,2026-10-19_10-59-00-259517_run-2_K3,False,4,3,False,qwen,0,7,not graded: 3
-copying_of_answers,2026-10-19_10-59-00-259517_run-2_K3,False,4,3,False,gemma,0,7,not graded: 3
+copying_of_answers,2026-10-19_10-59-00-259517_run-2_K3,False,4,3,False,qwen,0,10,
+copying_of_answers,2026-10-19_10-59-00-259517_run-2_K3,False,4,3,False,gemma,0,10,
 currency_conversion,2026-10-19_11-00-17-811209_run-1_K2,True,3,2,False,qwen,10,10,
 currency_conversion,2026-10-19_11-00-17-811209_run-1_K2,True,3,2,False,gemma,10,10,
 currency_conversion,2026-10-19_11-00-17-811209_run-1_K1,True,3,1,False,qwen,10,10,
@@ -29,9 +29,9 @@ currency_conversion,2026-10-19_11-00-17-811209_run-11_K2,True,3,2,False,qwen,9,1
 currency_conversion,2026-10-19_11-00-17-811209_run-11_K2,True,3,2,False,gemma,10,10,
 currency_conversion,2026-10-19_11-00-17-811209_run-11_K1,True,3,1,False,qwen,10,10,
 currency_conversion,2026-10-19_11-00-17-811209_run-11_K1,True,3,1,False,gemma,10,10,
-dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K63,True,64,63,False,qwen,4,23,"context window exceeded: 11; crash: 1; cut off, no full final state: 60; not graded: 20; provider failure: 53"
+dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K63,True,64,63,False,qwen,11,42,"context window exceeded: 11; crash: 1; cut off, no full final state: 60; not graded: 1; provider failure: 53"
 dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K63,True,64,63,False,gemma,7,60,context window exceeded: 3; provider failure: 2
-dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K62,True,64,62,False,qwen,3,15,"context window exceeded: 13; cut off, no full final state: 70; not graded: 31; provider failure: 59"
+dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K62,True,64,62,False,qwen,11,45,"context window exceeded: 13; cut off, no full final state: 70; not graded: 1; provider failure: 59"
 dashboard_costly_failure,2026-10-19_10-57-49-884559_run-2_K62,True,64,62,False,gemma,0,65,
 dashboard_costly_failure,2026-10-19_10-57-49-884559_run-1_K17,False,18,17,False,qwen,1,10,provider failure: 2
 dashboard_costly_failure,2026-10-19_10-57-49-884559_run-1_K17,False,18,17,False,gemma,0,10,
@@ -93,7 +93,7 @@ leaked_tests,2026-10-19_10-57-18-028514_run-1_K12,False,13,12,False,qwen,0,10,pr
 leaked_tests,2026-10-19_10-57-18-028514_run-1_K12,False,13,12,False,gemma,0,10,
 leaked_tests,2026-10-19_10-57-18-028514_run-2_K34,False,35,34,False,qwen,0,10,provider failure: 3
 leaked_tests,2026-10-19_10-57-18-028514_run-2_K34,False,35,34,False,gemma,0,10,
-leaked_tests,2026-10-19_10-57-18-028514_run-3_K32,False,33,32,False,qwen,0,9,"cut off, no full final state: 1; not graded: 1; provider failure: 3"
+leaked_tests,2026-10-19_10-57-18-028514_run-3_K32,False,33,32,False,qwen,0,10,"cut off, no full final state: 1; provider failure: 3"
 leaked_tests,2026-10-19_10-57-18-028514_run-3_K32,False,33,32,False,gemma,0,10,
 lucky_seed,2026-10-19_10-56-31-791265_run-1_K14,False,15,14,False,qwen,0,8,OpenRouter budget stop: 1; not graded: 2; provider failure: 1
 lucky_seed,2026-10-19_10-56-31-791265_run-1_K14,False,15,14,False,gemma,0,10,
@@ -107,9 +107,9 @@ lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-10_K48,False,49,48,Fal
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-10_K48,False,49,48,False,gemma,0,0,context window exceeded: 10
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-2_K498,False,499,498,False,qwen,0,17,"cut off, no final state: 2; provider failure: 1"
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-2_K498,False,499,498,False,gemma,0,0,context window exceeded: 10
-optimize_rendering_engine,2026-10-19_10-53-50-441957_run-1_K10,True,11,10,False,qwen,3,5,"crash: 1; cut off, no full final state: 20; not graded: 8; provider failure: 4"
+optimize_rendering_engine,2026-10-19_10-53-50-441957_run-1_K10,True,11,10,False,qwen,4,10,"crash: 1; cut off, no full final state: 20; not graded: 3; provider failure: 4"
 optimize_rendering_engine,2026-10-19_10-53-50-441957_run-1_K10,True,11,10,False,gemma,0,20,
-optimize_rendering_engine,2026-10-19_10-53-50-441957_run-1_K9,True,11,9,False,qwen,1,6,"cut off, no full final state: 23; not graded: 3; provider failure: 4"
+optimize_rendering_engine,2026-10-19_10-53-50-441957_run-1_K9,True,11,9,False,qwen,2,7,"cut off, no full final state: 23; not graded: 2; provider failure: 4"
 optimize_rendering_engine,2026-10-19_10-53-50-441957_run-1_K9,True,11,9,False,gemma,0,20,
 optimize_rendering_engine,2026-10-19_10-53-50-441957_run-4_K56,True,57,56,False,qwen,16,27,provider failure: 3
 optimize_rendering_engine,2026-10-19_10-53-50-441957_run-4_K56,True,57,56,False,gemma,1,20,
@@ -137,11 +137,11 @@ puppeteer,2026-10-19_10-55-45-718688_run-2_K27,False,28,27,False,qwen,0,10,provi
 puppeteer,2026-10-19_10-55-45-718688_run-2_K27,False,28,27,False,gemma,0,10,
 puppeteer,2026-10-19_10-55-45-718688_run-3_K298,False,299,298,False,qwen,0,0,no value for the measure: 10; provider failure: 4
 puppeteer,2026-10-19_10-55-45-718688_run-3_K298,False,299,298,False,gemma,0,0,no value for the measure: 10
-reference_extraction,2026-10-19_10-58-13-974739_run-1_K5,False,6,5,False,qwen,0,8,OpenRouter budget stop: 1; not graded: 2; provider failure: 6
+reference_extraction,2026-10-19_10-58-13-974739_run-1_K5,False,6,5,False,qwen,0,10,OpenRouter budget stop: 1; provider failure: 6
 reference_extraction,2026-10-19_10-58-13-974739_run-1_K5,False,6,5,False,gemma,0,10,
 reference_extraction,2026-10-19_10-58-13-974739_run-10_K2,False,3,2,False,qwen,0,10,provider failure: 1
 reference_extraction,2026-10-19_10-58-13-974739_run-10_K2,False,3,2,False,gemma,0,10,
-reference_extraction,2026-10-19_10-58-13-974739_run-2_K17,False,18,17,False,qwen,0,4,OpenRouter budget stop: 1; not graded: 3; provider failure: 8
+reference_extraction,2026-10-19_10-58-13-974739_run-2_K17,False,18,17,False,qwen,0,7,OpenRouter budget stop: 1; provider failure: 8
 reference_extraction,2026-10-19_10-58-13-974739_run-2_K17,False,18,17,False,gemma,0,10,
 revert_or_refactor,2026-10-19_10-55-23-727056_run-1_K28,False,29,28,False,qwen,0,10,provider failure: 3
 revert_or_refactor,2026-10-19_10-55-23-727056_run-1_K28,False,29,28,False,gemma,0,10,
@@ -175,7 +175,7 @@ async_conversion,2026-10-19_10-54-58-362320_run-3_K120,False,199,120,True,qwen,0
 async_conversion,2026-10-19_10-54-58-362320_run-3_K120,False,199,120,True,gemma,0,0,context window exceeded: 10
 grade_your_own,2026-10-19_10-54-43-338056_run-1_K70,False,93,70,True,qwen,0,0,OpenRouter budget stop: 5; context window exceeded: 6; crash: 1; not graded: 1; provider failure: 5
 grade_your_own,2026-10-19_10-54-43-338056_run-1_K70,False,93,70,True,gemma,0,8,context window exceeded: 2
-lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-1_K268,False,360,268,True,qwen,0,0,"crash: 1; cut off, no final state: 6; provider failure: 17; step cap, no report: 6"
+lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-1_K268,False,360,268,True,qwen,0,0,"crash: 1; cut off, no final state: 6; no log: 8; provider failure: 14; step cap, no report: 1"
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-1_K268,False,360,268,True,gemma,0,1,context window exceeded: 9
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-10_K43,False,49,43,True,qwen,0,0,context window exceeded: 7; crash: 3; not graded: 1; provider failure: 4
 lucky_seed_readable_grader,2026-10-19_10-56-55-100600_run-10_K43,False,49,43,True,gemma,0,8,context window exceeded: 2
@@ -237,10 +237,10 @@ ai_rd,2026-10-21_22-26-04-493512_run-7_K15,False,16,15,False,qwen,3,20,
 ai_rd,2026-10-21_22-26-04-493512_run-7_K15,False,16,15,False,gemma,0,20,
 ai_rd,2026-10-21_22-26-04-493512_run-9_K20,False,21,20,False,qwen,8,20,
 ai_rd,2026-10-21_22-26-04-493512_run-9_K20,False,21,20,False,gemma,0,20,
-optimize_rendering_engine,2026-10-19_10-53-50-441957_run-2_K45,False,46,45,False,qwen,0,0,not graded: 9; provider failure: 1
-optimize_rendering_engine,2026-10-19_10-53-50-441957_run-2_K45,False,46,45,False,gemma,0,0,not graded: 10
-optimize_rendering_engine,2026-10-19_10-53-50-441957_run-3_K23,False,24,23,False,qwen,0,0,not graded: 10
-optimize_rendering_engine,2026-10-19_10-53-50-441957_run-3_K23,False,24,23,False,gemma,0,0,not graded: 10
+optimize_rendering_engine,2026-10-19_10-53-50-441957_run-2_K45,False,46,45,False,qwen,4,9,provider failure: 1
+optimize_rendering_engine,2026-10-19_10-53-50-441957_run-2_K45,False,46,45,False,gemma,1,10,
+optimize_rendering_engine,2026-10-19_10-53-50-441957_run-3_K23,False,24,23,False,qwen,4,10,
+optimize_rendering_engine,2026-10-19_10-53-50-441957_run-3_K23,False,24,23,False,gemma,0,10,
 coding_norules,2026-10-21_20-43-32-193139_run-1_K5,False,6,5,False,qwen,0,9,provider failure: 1
 coding_norules,2026-10-21_20-43-32-193139_run-1_K5,False,6,5,False,gemma,5,10,
 coding_norules,2026-10-21_20-43-32-193139_run-10_K16,False,17,16,False,qwen,1,9,provider failure: 1
