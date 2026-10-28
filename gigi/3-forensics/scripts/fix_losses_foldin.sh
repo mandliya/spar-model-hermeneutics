@@ -8,7 +8,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"; ENVS="$HERE/agent-interp-envs"; ROOT="$(cd "$HERE/../.." && pwd)"
 export MODAL_PROFILE=spar MODAL_SECRET_SUFFIX=-gigi MODAL_VOLUME_PREFIX=gigi-forensics-
-T="$HERE/results/logs/fix_losses"; L="$T"; CEIL=1371
+T="$HERE/results/logs/fix_losses"; L="$T"; CEIL=${CEIL:-1371}   # the key's spend ceiling for grading, $ since 18 Oct
 say () { echo "$(date '+%F %T') $*" >> "$L/progress.txt"; }
 R="env -u VIRTUAL_ENV uv run"
 say "start"
@@ -27,7 +27,7 @@ print(sum(1 for a in apps if (a.get('App ID') or a.get('app_id')) in ids and 'st
 done
 say "all apps finished"
 # 2. fetch every fleet named in the launch logs into its results dir
-cd "$ENVS" && $R python - "$HERE" <<'PY' >> "$L/progress.txt" 2>&1
+cd "$ENVS" && $R python -u - "$HERE" <<'PY' >> "$L/progress.txt" 2>&1
 import pathlib, re, subprocess, sys
 H = pathlib.Path(sys.argv[1]); T = H / "results/logs/fix_losses"
 for line in (T / "commands.txt").read_text().splitlines():
@@ -35,10 +35,21 @@ for line in (T / "commands.txt").read_text().splitlines():
     t = (T / f"{name}.log").read_text(errors="replace"); vol = re.search(r"^Volume: (\S+)", t, re.M)
     for fleet in sorted(set(re.findall(r"(resume/[a-z0-9-]+/[0-9_-]+)/run-", t))):
         dest = H / out / fleet
-        if any(dest.glob("run-*/step-*")) or any(dest.glob("run-*/rollout.log")) or not vol: continue
+        # re-fetch every fleet once all apps have stopped: a fleet copied while it was still running leaves run dirs
+        # without their final state (22 cells read "state not fetched yet" in the first audit, 27 Oct 21:26, because
+        # a "already present" check skipped them). A stamp marks a fleet fetched after the apps stopped, so a restarted
+        # pass skips it. Each download gets 15 min and 3 tries: the laptop sleeping mid-download leaves a hung client.
+        stamp = dest / ".fetched_after_apps_stopped"
+        if not vol or stamp.exists(): continue
         dest.parent.mkdir(parents=True, exist_ok=True)
-        rc = subprocess.run(["modal", "volume", "get", "--force", vol.group(1), fleet, str(dest.parent)], capture_output=True, text=True)
-        print(("fetched " if rc.returncode == 0 else "FETCH FAILED ") + name + " " + fleet)
+        for attempt in range(3):
+            try:
+                rc = subprocess.run(["modal", "volume", "get", "--force", vol.group(1), fleet, str(dest.parent)],
+                                    capture_output=True, text=True, timeout=900).returncode
+            except subprocess.TimeoutExpired:
+                rc = -1
+            if rc == 0: stamp.touch(); break
+        print(("fetched " if rc == 0 else "FETCH FAILED ") + name + " " + fleet + (f" (attempt {attempt + 1})" if attempt else ""))
 PY
 say "fetched"
 # 3. redact the key (ai_rd puts it in the agent's shell)
@@ -104,7 +115,7 @@ if git diff --cached | grep -qF -- "$K" || git diff --cached | grep -qE 'sk-or-v
   say "KEY FOUND IN STAGED FILES: not committing"; git reset -q; exit 1
 fi
 git check-ignore -q .env || { say ".env not ignored: not committing"; git reset -q; exit 1; }
-git commit -q -m "gigi: forensics: loss reruns folded in (every fixable lost try rerun, missing clean runs added; full audit in results/loss_audit.md); charts redrawn
+git commit -q -m "gigi: forensics: loss reruns folded in (every fleet re-fetched after the apps finished; full audit in results/loss_audit.md); charts redrawn
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>" && git push -q && say "pushed $(git log --oneline -1 | cut -c1-8)"
 say "done"

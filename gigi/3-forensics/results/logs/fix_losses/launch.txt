@@ -46,3 +46,9 @@
 2026-10-27 15:44:01 launched coding_norul_run-11_K5_qwen x10 (stream 2, starts at +120 min)
 2026-10-27 15:44:41 launched coding_norul_run-11_K5_gemma x10 (stream 2, starts at +126 min)
 2026-10-27 15:44:41 all launched
+2026-10-28 10:37:03 relaunched chess_run-1_K48_qwen x2 (image build killed on 27 Oct; stream 2, starts at +0 min)
+2026-10-28 10:37:43 relaunched chess_run-1_K23_qwen x1 (image build killed on 27 Oct; stream 2, starts at +1 min)
+2026-10-28 10:38:23 relaunched chess_run-1_K12_qwen x1 (image build killed on 27 Oct; stream 2, starts at +1 min)
+2026-10-28 10:39:03 relaunched leaked_tests_run-3_K32_qwen x1 (image build killed on 27 Oct; stream 2, starts at +2 min)
+2026-10-28 10:39:43 relaunched lucky_seed_run-1_K14_qwen x2 (image build killed on 27 Oct; stream 2, starts at +2 min)
+2026-10-28 10:39:43 all launched (relaunch of 5)

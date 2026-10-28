@@ -45,8 +45,11 @@ for env, dirs in sorted(fleets.items()):
     spent = usage() - start
     if spent >= CAP: say(f"CAP REACHED (${spent:.2f}): not grading {env} and later"); break
     if usage() - BASELINE >= CEILING: say(f"CEILING REACHED (${usage() - BASELINE:.2f} since baseline): not grading {env} and later"); break
-    rc = subprocess.run(["env", "-u", "VIRTUAL_ENV", "uv", "run", "python", f"environments/{env}/grade_rollouts.py", *dirs,
-                         "--concurrency", "20", *(["--model", os.environ["JUDGE_MODEL"]] if os.environ.get("JUDGE_MODEL") else [])], cwd=ENVS, env={**os.environ, "JUDGE_VIA_OPENROUTER": "1", "OPENROUTER_API_KEY": KEY},
-                        stdout=open(LOG / f"{env}.log", "a"), stderr=subprocess.STDOUT).returncode
+    try:   # 2 h per environment: a laptop that slept mid-call leaves a hung grader; graded runs are skipped on the next pass
+        rc = subprocess.run(["env", "-u", "VIRTUAL_ENV", "uv", "run", "python", f"environments/{env}/grade_rollouts.py", *dirs,
+                             "--concurrency", "20", *(["--model", os.environ["JUDGE_MODEL"]] if os.environ.get("JUDGE_MODEL") else [])], cwd=ENVS, env={**os.environ, "JUDGE_VIA_OPENROUTER": "1", "OPENROUTER_API_KEY": KEY},
+                            stdout=open(LOG / f"{env}.log", "a"), stderr=subprocess.STDOUT, timeout=7200).returncode
+    except subprocess.TimeoutExpired:
+        rc = "timeout (2 h)"
     say(f"{env}: {len(dirs)} fleets, exit {rc}, spent so far ${usage() - start:.2f}")
 say(f"done, spent ${usage() - start:.2f}")
