@@ -75,6 +75,7 @@ $R --with matplotlib python ../scripts/story_charts.py > "$L/story_charts.txt" 2
 $R python ../scripts/gap_replays.py >> "$L/progress.txt" 2>&1
 $R python ../scripts/stopped_reasons.py >> "$L/progress.txt" 2>&1   # why the scored 'stopped' tries stopped (chart footnotes)
 $R --with matplotlib python ../scripts/gap_analysis.py > "$L/gap_analysis.txt" 2>&1
+$R --with matplotlib python ../scripts/loss_charts.py >> "$L/progress.txt" 2>&1   # 5I loss table by cause, 5J stopped reasons
 say "scored and redrawn"
 # 6. the full loss audit: every restart point of every plan, both models
 cd "$ENVS" && $R python - "$HERE" <<'PY' >> "$L/progress.txt" 2>&1
