@@ -5,5 +5,5 @@
     cli/       entry points (extract, evaluate, inspect), run through ../run.sh
 
 The interface downstream code uses is dyl_repro.core.probe.DylProbe: activations
-in, scores out.
+in, scores out. The experiments that use it live in tianq/experiments/.
 """

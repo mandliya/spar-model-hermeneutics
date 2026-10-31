@@ -14,7 +14,9 @@
 #   ./run.sh compare_no_followup                              # CPU: the transfer matrix with no follow-up question
 #   ./run.sh compare_diversity                                # CPU: does training on more kinds of lie help on unseen ones?
 #   ./run.sh compare_diversity_matrices                       # CPU: its k = 1 probes as two transfer matrices
+#   ./run.sh compare_diversity_words                          # CPU: the same, the words alone in place of a probe
 #   ./run.sh compare_faithfulness                             # CPU: target minus substitute probe AUROC (DYL_READER)
+#   ./run.sh af_gate                                          # GPU: HAL9000 alignment-faking gate check (af/)
 #
 # Every invocation writes its own raw log to scratch/logs/run_<utc>_<command>.log:
 # the exact argv, the environment (python, nvidia-smi, pip freeze), the complete
@@ -38,13 +40,20 @@ set -a
 source <(tr -d '\r' < .env)
 set +a
 
-command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags|compare_no_followup|compare_diversity|compare_diversity_matrices|compare_faithfulness> [args]}"
+command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags|compare_no_followup|compare_diversity|compare_diversity_matrices|compare_diversity_words|compare_faithfulness|af_gate> [args]}"
 shift
+# The DYL pipeline's own steps live in dyl_repro/cli; each experiment's in ../experiments/<name>/.
 case "$command" in
-  extract | evaluate | compare_wordings | train_probe | compare_generalization | compare_outcome_flags | compare_no_followup | compare_diversity | compare_diversity_matrices | compare_faithfulness) ;;
+  extract | evaluate | train_probe) module="dyl_repro.cli.$command" ;;
+  compare_wordings | compare_outcome_flags) module="experiments.probe_vs_just_asking.$command" ;;
+  compare_generalization | compare_no_followup | compare_diversity | compare_diversity_matrices | compare_diversity_words)
+    module="experiments.cross_category_transfer.$command" ;;
+  compare_faithfulness) module="experiments.hermeneutics.$command" ;;
+  af_gate) module="experiments.alignment_faking_gate.$command" ;;
   *) echo "unknown command: $command (expected extract, evaluate, compare_wordings, train_probe," \
-          "compare_generalization, compare_outcome_flags, compare_no_followup, compare_diversity, compare_diversity_matrices or compare_faithfulness)" >&2; exit 1 ;;
+          "compare_generalization, compare_outcome_flags, compare_no_followup, compare_diversity, compare_diversity_matrices, compare_diversity_words, compare_faithfulness or af_gate)" >&2; exit 1 ;;
 esac
+export PYTHONPATH="$HERE:$(dirname "$HERE")${PYTHONPATH:+:$PYTHONPATH}"
 
 if [[ -z "${TMUX:-}" ]] && command -v tmux >/dev/null 2>&1; then
   echo "Not inside tmux. A dropped SSH session kills the run (resume makes that cheap, not free)." >&2
@@ -70,7 +79,7 @@ started=$(date +%s)
 echo "logging to $LOG"
 
 set +e
-PYTHONUNBUFFERED=1 python -m "dyl_repro.cli.$command" "$@" 2>&1 | tee -a "$LOG"
+PYTHONUNBUFFERED=1 python -m "$module" "$@" 2>&1 | tee -a "$LOG"
 status=${PIPESTATUS[0]}
 set -e
 printf '### exit=%s  seconds=%s\n' "$status" "$(( $(date +%s) - started ))" | tee -a "$LOG"

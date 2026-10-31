@@ -17,7 +17,7 @@ are stored apart, under "<author>/read_by_<reader>", and read at the reader's ow
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import torch
 from transformers import (AutoConfig, AutoModelForCausalLM, AutoModelForImageTextToText, AutoTokenizer,
@@ -47,6 +47,11 @@ MODELS = {
     "qwen3-next-80b": Model("qwen3-next-80b", "Qwen/Qwen3-Next-80B-A3B-Instruct",
                             "9c7f2fbe84465e40164a94cc16cd30b6999b0cc7", 45, "qwen/results/qwen3-next-80b",
                             ("neutral", "neutral_cot", "named"), "92a81dc"),
+    # MoE, 22B active of 235B, residual width 4,096, 94 blocks: 58/62 of 94 = 87.9 -> 88.
+    # Gigi's run of 14 Oct 2026 (gigi/TODO.md "Qwen3-235B DONE"), all 11 categories, read from checkout cb99fed.
+    "qwen3-235b": Model("qwen3-235b", "Qwen/Qwen3-235B-A22B-Instruct-2507",
+                        "ac9c66cc9b46af7306746a9250f23d47083d689e", 88, "qwen/results/qwen3-235b",
+                        ("neutral", "neutral_cot", "named"), "cb99fed"),
     # Dense, residual width 5,120, 64 blocks: 58/62 of 64 = 59.9 -> 60. Gigi's run of 5-7 Oct 2026.
     "qwen3-32b": Model("qwen3-32b", "Qwen/Qwen3-32B", "9216db5781bf21249d130ec9da846c4624c16137", 60,
                        "qwen/results/qwen3-32b", ("neutral", "neutral_cot", "named"), "92a81dc"),
@@ -60,6 +65,9 @@ CURRENT = MODELS[os.environ.get("DYL_MODEL", DEFAULT)]
 if CURRENT.gigi_commit is None:
     raise SystemExit(f"DYL_MODEL={CURRENT.tag} has no rollouts of its own; set it as DYL_READER")
 READER = MODELS[os.environ.get("DYL_READER", CURRENT.tag)]
+# DYL_LAYER: read another layer than the registered one (a layer sweep). Every result is named after its layer.
+if os.environ.get("DYL_LAYER"):
+    READER = replace(READER, probe_layer=int(os.environ["DYL_LAYER"]))
 IS_DEFAULT = CURRENT.tag == DEFAULT
 IS_SELF_READ = READER.tag == CURRENT.tag
 
