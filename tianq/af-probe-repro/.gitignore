@@ -1,0 +1,5 @@
+# Local mirror of what the Hub holds (af-repro/ and logs/), not the record.
+scratch/
+# The tokenizer-cache link run.sh makes for the paper's scripts on a GPU box.
+vendor/deception-detection/
+__pycache__/

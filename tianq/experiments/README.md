@@ -5,7 +5,8 @@ Each experiment built on the DYL pipeline (`../dyl-probe-repro`) has its own fol
 - `probe_vs_just_asking/`: the released probe vs just asking, on Gigi's categories
 - `cross_category_transfer/`: does a probe trained on one kind of lie catch the others? (Gemma, Qwen-80B, Qwen-235B)
 - `hermeneutics/`: John's probe faithfulness gap (target minus substitute AUROC)
-- `alignment_faking_gate/`: HAL9000 gate check for the distillation idea
+- `alignment_faking_hidden_reasoning/`: can anyone tell whether one rollout alignment-faked once its reasoning is hidden? (closed: no)
+- `alignment_faking_propensity/`: can a reader predict how often an organism fakes on a prompt? (yes, but so can any model: no gap)
 - `common/`: shared chart style
 
 Every experiment folder has the same layout:

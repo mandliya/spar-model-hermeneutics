@@ -1,9 +1,8 @@
-"""The two charts of the Oct 30 report, drawn from the Hub at a pinned revision (nothing recomputed).
+"""The chart of the Oct 30 report, drawn from the Hub at a pinned revision (nothing recomputed).
 
     PYTHONPATH=../../..:../../../dyl-probe-repro python report_charts.py
 
 transfer_by_reader.png   held-out AUROC against k for Qwen3-235B and each reader of its conversations, both reads
-af_gate_layers.png       the AF gate's faking probe by depth for HAL9000 and its two readers, reasoning hidden
 """
 
 from __future__ import annotations
@@ -89,38 +88,6 @@ def transfer_chart() -> Figure:
     return fig
 
 
-def af_chart() -> Figure:
-    sweep = json.loads(Path(fetch("af/results/af_gate.json")).read_text())["layer_sweep"]
-    models = (("hal9000", "HAL9000 (the organism)", INK), ("llama3_70b_instruct", "Llama-3-70B (its parent)", TEAL),
-              ("llama3_8b_instruct", "Llama-3.1-8B", BLUE))
-    with rc_context(STYLE):
-        fig = Figure(figsize=(9, 3.6), facecolor=SURFACE)
-        axes = fig.subplots(1, 2, sharey=True)
-        for ax, (position, title) in zip(axes, (("last", "Last token"), ("mean", "Mean over the reply"))):
-            for tag, _, colour in models:
-                values = sweep[f"{tag}|af_vs_honest|{position}|hidden"]
-                ax.plot([i / (len(values) - 1) for i in range(len(values))], values, color=colour, linewidth=2)
-            ax.axhline(0.5, color=AXIS, linewidth=1)
-            ax.set_title(title, color=INK, loc="left")
-            ax.set_xlabel("relative depth (0 = embeddings)")
-            ax.set_facecolor(SURFACE)
-            ax.grid(axis="y", color=GRID, linewidth=0.6)
-            ax.spines[["top", "right"]].set_visible(False)
-        axes[0].set_ylabel("AUROC, faking vs honest")
-        axes[0].set_ylim(0.3, 0.8)
-        fig.legend([Line2D([], [], color=c, linewidth=2) for *_, c in models], [l for _, l, _ in models],
-                   loc="upper center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 1.0), fontsize=8,
-                   labelcolor=SECONDARY)
-        fig.text(0.01, 0.01, textwrap.fill(
-            "Each model's own faking probe (difference of means, synthetic Animal Protection set), tested on HAL9000's "
-            "66 report_failure rollouts with the reasoning removed (30 faking, 36 honest).", 170),
-            fontsize=7, color=MUTED)
-        fig.subplots_adjust(left=0.07, right=0.99, top=0.82, bottom=0.2, wspace=0.08)
-    return fig
-
-
 if __name__ == "__main__":
     transfer_chart().savefig(HERE / "transfer_by_reader.png", dpi=200)
-    af = HERE.parents[1] / "alignment_faking_gate" / "report" / "af_gate_layers.png"
-    af_chart().savefig(af, dpi=200)
-    print("wrote", HERE / "transfer_by_reader.png", af)
+    print("wrote", HERE / "transfer_by_reader.png")
