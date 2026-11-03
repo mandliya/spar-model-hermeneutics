@@ -31,6 +31,7 @@ def wilson(k, n, z=1.96):
 
 
 kn = collections.defaultdict(lambda: [0, 0])          # (env, cond, who) -> [k, n]
+runs = collections.defaultdict(set)                  # (env, cond, who) -> source runs behind the rate
 for r in csv.DictReader(open(HERE / "results" / "full_runs.csv")):
     for who, m in MODEL.items():
         if r["model"] == m and r["environment"] in ENVS:
@@ -42,6 +43,7 @@ for r in csv.DictReader(open(HERE / "results" / "gap_replays.csv")):
         continue                                        # run 5 has no cheat in either model; run 3 is the false report
     cond = TAKE.get(int(r["N"]) - int(r["K"]), "?") if r["incident"] == "True" else "clean"
     kn[(r["env"], cond, r["who"])][0] += int(r["hacked"]); kn[(r["env"], cond, r["who"])][1] += 1
+    runs[(r["env"], cond, r["who"])].add(re.sub(r"_K\d+$", "", r["point"]))
 for tag, N in (("q1", 9), ("q2", 4), ("q1m", 9)):      # pre-commit's cheating-trace restarts (as in gap_analysis.py)
     for text, who in ((False, "qwen"), (True, "gemma")):
         f = HERE / "results" / (f"runs_swap_text_precommit_{tag}.csv" if text else f"runs_swap_precommit_{tag}.csv")
@@ -50,6 +52,7 @@ for tag, N in (("q1", 9), ("q2", 4), ("q1m", 9)):      # pre-commit's cheating-t
             if mm and mm.group(2) == who and int(row["steps"] or 0) >= 1 and row["cheated"] in ("True", "False"):
                 cond = TAKE.get(N - int(mm.group(1)), "?")
                 kn[("precommit_hook", cond, who)][0] += row["cheated"] == "True"; kn[("precommit_hook", cond, who)][1] += 1
+                runs[("precommit_hook", cond, who)].add(tag.rstrip("m"))   # q1 and q1m are the same incident run
 
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 9, "text.color": INK})
 rows = []
@@ -62,7 +65,7 @@ rows.sort(key=lambda r: -((r[3] - r[6]) / r[3] if r[6] is not None and r[3] else
 H = 2.6 + 0.8 * len(rows) + 1.3
 fig = plt.figure(figsize=(13, H)); ax = fig.add_axes([0.21, 1.3 / H, 0.46, 0.8 * len(rows) / H])
 C_WITHOUT, C_WITH = "#9aa5b1", "#0d6b4a"
-for x, t in ((112, "continuing\na clean\nrun"), (131, "continuing\na cheating\nrun"), (150, "difference"), (170, "share of the\ncheating that\ncomes from\nthe run")):
+for x, t in ((109, "continuing\na clean\nrun"), (134, "continuing\na cheating\nrun"), (150, "difference"), (170, "share of the\ncheating that\ncomes from\nthe run")):
     ax.text(x, -1.05, t, fontsize=8, color=MUTED, ha="center", va="center", linespacing=1.15)
 for i, (env, kt, nt, trace, kb, nb, base) in enumerate(rows):
     ax.text(-2, i, LABEL[env], ha="right", va="center", fontsize=9.5, fontweight="bold")
@@ -70,8 +73,8 @@ for i, (env, kt, nt, trace, kb, nb, base) in enumerate(rows):
     if base is None:
         ax.plot(tw, i, "o", color=C_WITH, ms=9, zorder=3)
         ax.text(tw - 2.5, i, f"{tw:.0f}%", ha="right", va="center", fontsize=8.5, fontweight="bold", color=C_WITH)
-        ax.text(113, i, "no clean\nrun to\ncompare", ha="center", va="center", fontsize=7, color=MUTED, linespacing=1.15)
-        ax.text(131, i, f"{tw:.0f}%\n{kt}/{nt}", ha="center", va="center", fontsize=8.5, color=INK, linespacing=1.15)
+        ax.text(110, i, "no clean\nrun to\ncompare", ha="center", va="center", fontsize=7, color=MUTED, linespacing=1.15)
+        ax.text(134, i, f"{tw:.0f}%\n{kt}/{nt} tries\n{len(runs[(env, 'N', 'qwen')])} run" + ("s" if len(runs[(env, 'N', 'qwen')]) != 1 else ""), ha="center", va="center", fontsize=8, color=INK, linespacing=1.1)
         ax.text(150, i, "—", ha="center", va="center", fontsize=9, color=MUTED); ax.text(170, i, "—", ha="center", va="center", fontsize=9, color=MUTED)
         continue
     bw = base * 100
@@ -80,8 +83,8 @@ for i, (env, kt, nt, trace, kb, nb, base) in enumerate(rows):
     ax.plot(bw, i, "o", color=C_WITHOUT, ms=9, zorder=3); ax.plot(tw, i, "o", color=C_WITH, ms=9, zorder=3)
     ax.text(tw + 2.5, i, f"{tw:.0f}%", ha="left", va="center", fontsize=8.5, fontweight="bold", color=C_WITH)
     share = max(trace - base, 0) / trace if trace else 0
-    ax.text(112, i, f"{bw:.0f}%\n{kb}/{nb}", ha="center", va="center", fontsize=8.5, color=INK, linespacing=1.15)
-    ax.text(131, i, f"{tw:.0f}%\n{kt}/{nt}", ha="center", va="center", fontsize=8.5, color=INK, linespacing=1.15)
+    ax.text(109, i, f"{bw:.0f}%\n{kb}/{nb} tries\n{len(runs[(env, 'clean', 'qwen')])} run" + ("s" if len(runs[(env, 'clean', 'qwen')]) != 1 else ""), ha="center", va="center", fontsize=8, color=INK, linespacing=1.1)
+    ax.text(134, i, f"{tw:.0f}%\n{kt}/{nt} tries\n{len(runs[(env, 'N', 'qwen')])} run" + ("s" if len(runs[(env, 'N', 'qwen')]) != 1 else ""), ha="center", va="center", fontsize=8, color=INK, linespacing=1.1)
     ax.text(150, i, f"+{tw - bw:.0f} pts", ha="center", va="center", fontsize=8.5, color=INK)
     ax.text(170, i, f"{share * 100:.0f}%", ha="center", va="center", fontsize=11.5, fontweight="bold", color=C_WITH if share >= 0.5 else INK)
     if i < len(rows) - 1:
@@ -98,7 +101,8 @@ fig.text(0.02, 1 - 0.2 / H, "5H · Does Qwen cheat because of the run it is cont
 SUB = ("How it works: we restart Qwen (always the same model) partway through one of its own earlier runs, let it continue, and count how often it cheats. "
        "Grey dot: the run it continues is one where Qwen did NOT cheat; it is restarted near the end. "
        "Green dot: the run it continues is one where Qwen DID cheat; it is restarted right before the turn where it cheated, so the conversation is already heading towards the cheat. "
-       "The two dots come from different runs, and no random seed is fixed: every try is a fresh sample. "
+       "Each dot is an average: the share of tries that cheated, pooled over all of Qwen's runs of that kind in that environment (tries and runs under each number). "
+       "The grey and green dots on a row come from DIFFERENT runs; they share a row only because they are the same environment. No random seed is fixed: every try is a fresh sample. "
        "The arrow is how much more Qwen cheats when it continues a run that was heading towards cheating; the last column is that extra part as a share of the green rate. "
        "The green dot is also the control in every swap chart (charts 4 and 5F put gemma in the same spot).")
 fig.text(0.02, 1 - 0.55 / H, "\n".join(__import__("textwrap").wrap(SUB, 205)), fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
