@@ -6,7 +6,7 @@ honest with no sign either way, could not (capability), believed it succeeded, u
 how gemma's non-cheating tries split. Prints the markdown table for RESULTS.md.
   cd gigi/3-forensics/agent-interp-envs && uv run --with matplotlib python ../scripts/propensity_chart.py
 """
-import collections, csv, json, math, pathlib
+import collections, csv, json, math, pathlib, textwrap
 
 import matplotlib
 matplotlib.use("Agg")
@@ -52,7 +52,7 @@ for r in csv.DictReader(open(HERE / "results" / "gap_replays.csv")):
 rows = [(e, c) for e in ENVS for c in ("N", "N−1", "N−2", "N−5", "clean")
         if sum(cnt[(e, c, "qwen")].values()) >= MIN_N and sum(cnt[(e, c, "gemma")].values()) >= MIN_N]
 
-H = 1.9 + 0.78 * len(rows) + 1.9
+H = 1.55 + 0.78 * len(rows) + 1.5
 fig = plt.figure(figsize=(14, H)); ax = fig.add_axes([0.2, 1.55 / H, 0.5, 0.78 * len(rows) / H])
 table = ["| environment | restart | model | n | hacked (deliberate · incidental) | declined knowingly (propensity) | honest, no sign | could not (capability) | believed success | unlabelled |",
          "|---|---|---|---|---|---|---|---|---|---|"]
@@ -78,16 +78,16 @@ for i, (env, cond) in enumerate(rows):
     q, g = cnt[(env, cond, "qwen")], cnt[(env, cond, "gemma")]; nq, ng = sum(q.values()), sum(g.values())
     gap = ((q["deliberate"] + q["incidental"]) / nq - (g["deliberate"] + g["incidental"]) / ng) * 100
     gn = ng - g["deliberate"] - g["incidental"]
-    ax.text(118, i, f"{gap:+.0f} pts", ha="center", va="center", fontsize=9.5, fontweight="bold", color=RED if gap >= 10 else MUTED)
-    ax.text(133, i, f"{g['declined_knowingly']}/{gn}" if gn else "—", ha="center", va="center", fontsize=8.6, color="#0d6b4a", fontweight="bold")
-    ax.text(146, i, f"{g['could_not']}/{gn}" if gn else "—", ha="center", va="center", fontsize=8.6, color="#2a78d6", fontweight="bold")
-    ax.text(159, i, f"{g['honest_no_sign']}/{gn}" if gn else "—", ha="center", va="center", fontsize=8.6, color=MUTED)
+    ax.text(123, i, f"{gap:+.0f} pts", ha="center", va="center", fontsize=9.5, fontweight="bold", color=RED if gap >= 10 else MUTED)
+    ax.text(140, i, f"{g['declined_knowingly']}/{gn}" if gn else "—", ha="center", va="center", fontsize=8.6, color="#0d6b4a", fontweight="bold")
+    ax.text(155, i, f"{g['could_not']}/{gn}" if gn else "—", ha="center", va="center", fontsize=8.6, color="#2a78d6", fontweight="bold")
+    ax.text(170, i, f"{g['honest_no_sign']}/{gn}" if gn else "—", ha="center", va="center", fontsize=8.6, color=MUTED)
     if i < len(rows) - 1:
-        ax.plot([-60, 166], [i + 0.5, i + 0.5], color=GRID, lw=0.6, zorder=0, clip_on=False)
-for x, t in ((118, "gap\nQwen − gemma"), (133, "gemma declined\nknowingly"), (146, "gemma\ncould not"), (159, "gemma honest,\nno sign")):
-    ax.text(x, -1.0, t, ha="center", va="center", fontsize=7.8, color=MUTED, linespacing=1.2)
-ax.text(146, -1.55, "of gemma's non-cheating tries", ha="center", va="center", fontsize=7.4, color=MUTED, style="italic")
-ax.set_xlim(0, 166); ax.set_ylim(len(rows) - 0.5, -1.9); ax.set_xticks([0, 25, 50, 75, 100]); ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"], color=MUTED, fontsize=8)
+        ax.plot([-60, 178], [i + 0.5, i + 0.5], color=GRID, lw=0.6, zorder=0, clip_on=False)
+for x, t in ((123, "gap\n(pts)"), (140, "declined\nknowingly"), (155, "could\nnot"), (170, "honest,\nno sign")):
+    ax.text(x, -0.95, t, ha="center", va="center", fontsize=7.8, color=MUTED, linespacing=1.2)
+ax.text(155, -1.5, "of gemma's non-cheating tries", ha="center", va="center", fontsize=7.4, color=MUTED, style="italic")
+ax.set_xlim(0, 178); ax.set_ylim(len(rows) - 0.5, -1.75); ax.set_xticks([0, 25, 50, 75, 100]); ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"], color=MUTED, fontsize=8)
 for s in ("top", "right", "left"): ax.spines[s].set_visible(False)
 ax.spines["bottom"].set_bounds(0, 100); ax.spines["bottom"].set_color(GRID); ax.tick_params(axis="y", left=False, labelleft=False); ax.tick_params(axis="x", length=0)
 ax.set_xlabel("share of scored tries (both models continue the same Qwen trace from the same turn)", fontsize=8.5, color=MUTED)
@@ -102,8 +102,11 @@ fig.text(0.02, 1 - 0.5 / H, f"Every scored try in the gap environments ({nq} Qwe
          fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
 fig.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=c) for _, _, c in SEGS], labels=[l for _, l, _ in SEGS], loc="upper left", bbox_to_anchor=(0.015, 1 - 0.95 / H),
            ncol=2, frameon=False, fontsize=7.9, handlelength=1.2, columnspacing=1.5)
-fig.text(0.02, 0.35 / H, f"Rows pooled over traces, n ≥ {MIN_N} per model. Source: results/intent_labels.jsonl (scripts/intent_labels.py; every label carries a verbatim quote), results/gap_replays.csv. "
-         f"{missing} scored tries not yet labelled.", fontsize=7.6, color=MUTED, va="center")
+foot = (f"Rows pooled over traces, n ≥ {MIN_N} per model. Source: results/intent_labels.jsonl (scripts/intent_labels.py; every label carries a verbatim quote), results/gap_replays.csv. "
+        f"{missing} scored tries not yet labelled. Spot-check (results/intent_labels_spotcheck.md, 46 labels read): 23/25 agree outside 'believed it had succeeded'; that label is unreliable "
+        "(6/21): in the coding environments its quotes are 'the test is wrong, I submit the correct code' (a knowing refusal), on the dashboard an honest shortfall report. Read it as unresolved, "
+        "so the propensity shares above are lower bounds.")
+fig.text(0.02, 0.55 / H, "\n".join(textwrap.wrap(foot, 215)), fontsize=7.6, color=MUTED, va="center", linespacing=1.35)
 fig.savefig(HERE / "charts" / "q5_propensity.png", dpi=180, bbox_inches="tight", facecolor="white")
 print("\n".join(table))
 print(f"\nmissing labels: {missing}; gemma non-cheating {gn}: declined {gap_all[('gemma', 'declined_knowingly')]}, could_not {gap_all[('gemma', 'could_not')]}, "
