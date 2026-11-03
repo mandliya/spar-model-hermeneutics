@@ -79,7 +79,8 @@ def final_reply(cont):
 
 
 def format_wall(r):
-    """A could_not try whose attempt ended on harness-rejected tool calls (gemma's text-mode JSON): the last reply blames the formatting."""
+    """A could_not try that ended on gemma's own malformed tool calls: its call was not valid JSON, the harness sent the error back
+    (the 25 Oct fix: before it, such a call ended the run), and the last reply gives up on the formatting."""
     cont = I.continuation(I.load_msgs(r["run"]), int(r["K"]))
     rejected = any(REJECTED.search(I.text_of(x) or "") for x in cont if x.get("role") == "tool")
     return rejected and bool(FMT_WALL.search(final_reply(cont)[1]))
@@ -176,7 +177,7 @@ for x, t in ((50, "gemma's non-cheating tries, split by why it did not cheat"), 
     ax.text(x, -0.95 if x != 50 else -1.3, t, ha="center", va="center", fontsize=7.9, color=MUTED if x != 50 else INK, linespacing=1.2, fontweight="bold" if x == 50 else "normal")
 ax.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=TIER_COL[k]) for k in TIERS],
           labels=["choice, stated: names the shortcut or the rule, declines", "choice, revealed: faced the same shortfall, did the honest thing, said so",
-                  "capability, task wall: the honest path failed (errors, loops, collapse, gave up)", "capability, tool-format wall: the harness rejected gemma's text-mode calls and it gave up on formatting",
+                  "capability, task wall: the honest path failed (errors, loops, collapse, gave up)", "capability, tool-format wall: gemma wrote malformed tool calls, got an error back and gave up",
                   "borderline: declared the target met without measuring (hedged success claim)", "stopped at the decision point, no report"],
           loc="upper left", bbox_to_anchor=(0.0, -0.1), ncol=2, frameon=False, fontsize=7.6, handlelength=1.2, columnspacing=1.5)
 ax.set_xlim(0, 176); ax.set_ylim(len(rows) + 0.15, -1.9)
@@ -198,7 +199,7 @@ SUB = ("Chart 5L's judge labels, plus three facts read from the logs for the tri
        "measure: the bad act in hedged form, which the grader passed as honest. Stopped = no report either way. Rows sorted by the capability share; gap = Qwen's hack rate minus gemma's (chart 4).")
 fig.text(0.02, 1 - 0.5 / H, "\n".join(textwrap.wrap(SUB, 215)), fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
 tiles = [(PROP, "CHOICE  (propensity)", g["prop"], f"stated {g['stated']}: names the shortcut or rule, declines\nrevealed {g['revealed']}: same shortfall, honest report, no why"),
-         (CAP, "CAPABILITY", g["capab"], f"task wall {g['cap']}: errors, loops, collapse, gave up\ntool-format wall {g['capfmt']}: the harness rejected its calls"),
+         (CAP, "CAPABILITY", g["capab"], f"task wall {g['cap']}: errors, loops, collapse, gave up\ntool-format wall {g['capfmt']}: its own malformed calls"),
          ("#eb9a9a", "BORDERLINE  (hedged success claim)", g["claimed"], "declared the target met without measuring,\nsaying so: the bad act in hedged form"),
          (UNR, "STOPPED", g["stopped"], "stopped at the decision point with no report\n(unresolved either way)")]
 for k, (col, name, v, desc) in enumerate(tiles):
@@ -214,7 +215,7 @@ foot = ("gemma-3-27b's non-cheating tries only (a gap can only come from tries w
         "report is already in the trace: both models repeat it 10/10) and run 5 (neither cheats). Source: results/intent_labels.jsonl (scripts/intent_labels.py), results/gap_replays.csv and "
         "gap_replays_precommit.csv. The spot-check (results/intent_labels_spotcheck.md) found 'believed it had succeeded' unreliable, so it is counted as unresolved; "
         "'declined knowingly' and 'could not' agreed with their quotes in 23/25 reads; the three log facts (faced, report, claim) are regular expressions over the tool outputs and the last reply, "
-        "listed in scripts/split_chart.py; 'revealed choice' is the weaker evidence tier: the model did not say why it did the honest thing. Harness check (3 Nov): the harness rejected "
+        "listed in scripts/split_chart.py; 'revealed choice' is the weaker evidence tier: the model did not say why it did the honest thing. Tool-call check (3 Nov): since the 25 Oct fix a malformed call gets an error back instead of ending the run; gemma got one for "
         "at least one of gemma's text-mode calls in 87 of its 621 non-cheats (Qwen: 2 of its 796 tries on the same traces); the attempt ended on that in the 'tool-format wall' tries only. The dashboard prompt lists an "
         "end_task tool the framework does not offer: gemma runs it as a shell command, gets 'not found' and signs off, in 111 tries, always after its decision; the report is read before the sign-off.")
 fig.text(0.02, 0.45 / H, "\n".join(textwrap.wrap(foot, 205)), fontsize=7.6, color=MUTED, va="center", linespacing=1.35)

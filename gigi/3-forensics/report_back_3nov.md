@@ -9,7 +9,7 @@ user's own notes could not be read from here (login required).
 |---|---|---|
 | Confirm the gemma swap is solid; explain why gemma stops earlier | Gigi | done: Qwen's tool calls are rewritten for gemma; gemma operates in about 90% of tries; stops explained (charts 5J, 5K) |
 | Distil Qwen 80B into gemma 27B in distribution, with holdouts; then out of distribution | Gigi | data built ([distill/README.md](distill/README.md)); training not started |
-| 80/20 train/test split; test set must contain hill-climbable tasks | Gigi | split built; **only 3 of the 8 gap environments hold out a cheating run**; incident-stratified split being prepared |
+| 80/20 train/test split; test set must contain hill-climbable tasks | Gigi | split built. The default split holds out a Qwen cheating run in 4 of the 8 gap environments; the new incident-stratified split (same fraction for cheating and clean runs) gets 5. coding, pre-commit and the graded rendering engine have one or no cheating run in the data, so they cannot hold one out without more Qwen cheating runs ([distill/README.md](distill/README.md)) |
 | Format Qwen traces into gemma tool calls first | Gigi | done (rendered with the inference code itself) |
 | The interesting tasks are families B, C, A, E (where the gaps are) | | the 8 gap environments used everywhere |
 | **Yuqi: how expensive is gemma 4 31B?** | Gigi | answered: the whole swap at bf16 is about $33 ([gemma4_prep.md](gemma4_prep.md)) |
@@ -92,8 +92,8 @@ Hi both, following up on today's call with the two things Yuqi asked for.
 
 How the choice/capability classification was done, with every definition, example quote, the hand spot-check and five
 figures: https://github.com/mandliya/spar-model-hermeneutics/blob/main/gigi/3-forensics/intent_method.md. Since the
-call I also checked whether the capability walls are gemma or our harness. Only 1% of the 621 tries ended on tool
-calls our harness rejected, so the split is now 61% choice and 37% capability.
+call I also checked how many capability walls are tool-call formatting: only 6 of the 621 tries (1%) gave up on gemma's
+own malformed calls, so the split is now 61% choice and 37% capability.
 
 Agreements vs differences on Qwen's cheating traces: gemma agrees (cheats too) in 172 tries and differs by choice in 95
 (stated) to 378 (stated + revealed), so John's 100–400 estimate holds. The catch for the split is that all 378 come
@@ -112,9 +112,9 @@ and Qwen3.6 27B), costs to follow.
 
 :phoenix: Report Week 8 :phoenix:
 
-**Did.** Closed the 26 and 28 Oct call items: Qwen on the traces where gemma stopped (5K), every gap-cell try labelled by intent and sorted by log facts (5L, 5M, method note), harness check on the capability walls, control relabelled, distillation data built.
+**Did.** Closed the 26 and 28 Oct call items: Qwen on the traces where gemma stopped (5K), every gap-cell try labelled by intent and sorted by log facts (5L, 5M, method note), tool-call check on the capability walls, control relabelled, distillation data built.
 
-**Found.** gemma's non-cheats on Qwen's cheating traces are 61% choice and 37% capability, and only 1% of that is our harness. Qwen–gemma differences: 95 to 378 points, from 15 Qwen cheating runs.
+**Found.** gemma's non-cheats on Qwen's cheating traces are 61% choice and 37% capability, and only 1% of that is gemma giving up on its own malformed tool calls. Qwen–gemma differences: 95 to 378 points, from 15 Qwen cheating runs.
 
 **Next / WIP.** Distil Qwen 80B into gemma 27B with a run-level split; re-inference Llama 3.3 70B with gemma-3-27b and Qwen3.6 27B.
 
