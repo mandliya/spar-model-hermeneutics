@@ -78,6 +78,7 @@ $R --with matplotlib python ../scripts/gap_analysis.py > "$L/gap_analysis.txt" 2
 $R --with matplotlib python ../scripts/loss_charts.py >> "$L/progress.txt" 2>&1   # 5I loss table by cause, 5J stopped reasons
 $R --with matplotlib python ../scripts/stopped_pairs.py >> "$L/progress.txt" 2>&1   # 5K: Qwen in the cells where gemma stopped
 $R --with matplotlib python ../scripts/propensity_chart.py >> "$L/progress.txt" 2>&1   # 5L: intent labels (results/intent_labels.jsonl; intent_labels.py is NOT run here, it spends)
+$R --with matplotlib python ../scripts/split_chart.py >> "$L/progress.txt" 2>&1   # 5M: choice / capability / unresolved, one picture
 say "scored and redrawn"
 # 6. the full loss audit: every restart point of every plan, both models
 cd "$ENVS" && $R python - "$HERE" <<'PY' >> "$L/progress.txt" 2>&1
