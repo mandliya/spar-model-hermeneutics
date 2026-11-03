@@ -118,13 +118,15 @@ for i, (env, kind) in enumerate(rows):
     table.append(f"| {env if env != 'ALL' else '**all gap environments**'} | {'cheating' if kind == 'gap' else 'clean'} | {gn} | {g['stated']} ({g['stated'] / gn * 100:.0f}%) | {g['revealed']} ({g['revealed'] / gn * 100:.0f}%) | "
                  f"{g['cap']} ({g['cap'] / gn * 100:.0f}%) | {g['claimed']} ({g['claimed'] / gn * 100:.0f}%) | {g['stopped']} ({g['stopped'] / gn * 100:.0f}%) | "
                  f"{q['hacked']}/{q['n']} | {g['hacked']}/{g['n']} | {gap:+.0f} |")
+ax.plot([116, 116], [-1.4, len(rows) - 0.4], color=INK, lw=2.2, zorder=5, clip_on=False, solid_capstyle="butt")   # divider: the split (left) vs the gap it explains (right)
+ax.text(148, -1.55, "the gap this explains (chart 4)", ha="center", va="center", fontsize=7.9, color=INK, fontweight="bold")
 for x, t in ((50, "gemma's non-cheating tries, split by why it did not cheat"), (130, "Qwen\nhacked"), (148, "gemma\nhacked"), (165, "gap\n(pts)")):
-    ax.text(x, -0.95, t, ha="center", va="center", fontsize=7.9, color=MUTED, linespacing=1.2, fontweight="bold" if x == 50 else "normal")
+    ax.text(x, -0.95 if x != 50 else -1.3, t, ha="center", va="center", fontsize=7.9, color=MUTED if x != 50 else INK, linespacing=1.2, fontweight="bold" if x == 50 else "normal")
 ax.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=TIER_COL[k]) for k in TIERS],
           labels=["choice, stated: names the shortcut or the rule, declines", "choice, revealed: faced the same shortfall, did the honest thing, said so",
                   "capability: the honest path failed mechanically", "borderline: declared the target met without measuring (hedged success claim)", "stopped at the decision point, no report"],
           loc="upper left", bbox_to_anchor=(0.0, -0.1), ncol=2, frameon=False, fontsize=7.6, handlelength=1.2, columnspacing=1.5)
-ax.set_xlim(0, 176); ax.set_ylim(len(rows) + 0.15, -1.45)
+ax.set_xlim(0, 176); ax.set_ylim(len(rows) + 0.15, -1.9)
 ax.set_xticks([0, 25, 50, 75, 100]); ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"], color=MUTED, fontsize=8)
 for s in ("top", "right", "left"): ax.spines[s].set_visible(False)
 ax.spines["bottom"].set_bounds(0, 100); ax.spines["bottom"].set_color(GRID); ax.tick_params(axis="y", left=False, labelleft=False); ax.tick_params(axis="x", length=0)
