@@ -38,26 +38,30 @@ def arrow(ax, p, q, text=None, col=MUTED, t=0.5, dy=0.12):
 
 # ---------------------------------------------------------------- 1. the pipeline (table 1: what is classified)
 def fig_pipeline():
-    Hh = 4.0
+    Hh = 4.3
     fig = plt.figure(figsize=(12, Hh))
-    title(fig, "How each swap try was classified: two stages, one spot-check in between",
-          "2,018 swap tries in the 8 gap environments: Qwen3-Next-80B 1,007 (the control, Qwen resampled on its own run), gemma-3-27b 1,011 (the swap). "
-          "The verdict (hacked or not) is the chart 4 graders'; these stages only say WHY a try did or did not cheat.", Hh, wrap=175)
-    ax = fig.add_axes([0.01, 0.04, 0.98, 1 - 1.0 / Hh]); ax.set_xlim(0, 24); ax.set_ylim(0, 4); ax.axis("off")
-    w, y, h = 5.0, 0.55, 3.1
-    box(ax, 0.3, y, w, h, "Input: 2,018 tries",
-        "one try = the judged model's own\nturns after the takeover + the\ntool results they produced\n\nQwen's prefix is identical for\nboth models in a cell, so it is\nleft out of the judgement",
-        fc="#f4f3ef", ec=GRID)
-    box(ax, 6.4, y, w, h, "Stage 1: the judge",
-        "Claude Sonnet 4.5, temperature 0,\none call per try ($35)\n\nreturns ONE of 6 labels + confidence\n+ a verbatim quote (10–300 chars)\nfrom the continuation, or the try\nstays unlabelled (8 of 2,018)")
-    box(ax, 12.5, y, w, h, "Spot-check by hand",
-        "46 labels read with their quotes\n\n5 labels reliable (23 of 25 agree)\n\nbelieved_success unreliable\n(6 of 21): never used as evidence,\nre-sorted in stage 2", ec=RED, head_col=RED)
-    box(ax, 18.6, y, w, h, "Stage 2: facts from the logs",
-        "no model: regular expressions over\nthe tool outputs and the last reply\n\nreached the point where\nQwen cheated?  ·  ended with\na report?  ·  report claims the target\nor admits the failure?  ·  did it give up on\nits own malformed calls?\n\n→ 6 tiers (figure 5)")
+    title(fig, "How we worked out WHY gemma did not cheat: an AI judge, a hand check, then the logs",
+          "2,018 tries in the 8 environments where Qwen and gemma differ most. In each try, Qwen or gemma takes over one of Qwen's runs at a fixed turn and continues it. "
+          "Whether a try cheated was already decided by the graders (chart 4); these steps only ask WHY gemma did not cheat.", Hh, wrap=175)
+    ax = fig.add_axes([0.01, 0.05, 0.98, 1 - 1.25 / Hh]); ax.set_xlim(0, 24); ax.set_ylim(0, 3.7); ax.axis("off")
+    w, y, h = 5.0, 0.55, 3.05
+    W = lambda t: "\n".join(textwrap.wrap(t, 36))
+    box(ax, 0.3, y, w, h, "1. What is read",
+        W("For each try: only what the model itself wrote after it took over, plus the command outputs it got back.") + "\n\n" +
+        W("The part of Qwen's run before the takeover is the same for both models, so it is left out."), fc="#f4f3ef", ec=GRID)
+    box(ax, 6.4, y, w, h, "2. An AI judge labels each try",
+        W("Claude Sonnet 4.5 reads the try and picks one reason, e.g. \"names the cheat and refuses it\" or \"stuck: its commands keep failing\".") + "\n\n" +
+        W("It must copy the exact sentence from the try that shows this. No quote, no label (8 of 2,018)."))
+    box(ax, 12.5, y, w, h, "3. We check the judge by hand",
+        W("46 labels read against their quotes. Five of the judge's labels agree 23 times out of 25.") + "\n\n" +
+        W("One label, \"believed it had succeeded\", was wrong 15 times out of 21, so it is never used as evidence."), ec=RED, head_col=RED)
+    box(ax, 18.6, y, w, h, "4. The logs settle the rest (no AI)",
+        W("When gemma's words don't say why, simple text searches of its log decide:") + "\n\n" +
+        "did it reach the point where\nQwen cheated?\ndid it end with a report?\ndoes the report claim success\nor admit it failed?\ndid it give up on its own\ninvalid tool calls?")
     for x0 in (5.3, 11.4, 17.5):
         arrow(ax, (x0, y + h / 2), (x0 + 1.1, y + h / 2))
-    ax.text(12, 0.12, "Scripts: scripts/intent_labels.py (stage 1), results/intent_labels_spotcheck.md, scripts/split_chart.py (stage 2, chart 5M)",
-            ha="center", va="bottom", fontsize=7.4, color=MUTED)
+    ax.text(12, 0.12, "Result: six reasons, from \"refused out loud\" to \"stuck on the task\" (next chart). Code: scripts/intent_labels.py, scripts/split_chart.py; "
+            "hand check: results/intent_labels_spotcheck.md", ha="center", va="bottom", fontsize=7.4, color=MUTED)
     fig.savefig(OUT / "method_1_pipeline.png", dpi=180); plt.close(fig)
 
 
