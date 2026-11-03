@@ -183,13 +183,14 @@ def shortcut_text(plan, row):
 
 
 def tries():
-    rows = [r for r in csv.DictReader(open(HERE / "results" / "gap_replays.csv")) if r["hacked"] in ("0", "1") and r["env"] in GAP_ENVS]
+    rows = [r for f in ("gap_replays.csv", "gap_replays_precommit.csv") if (HERE / "results" / f).exists()
+            for r in csv.DictReader(open(HERE / "results" / f)) if r["hacked"] in ("0", "1") and r["env"] in GAP_ENVS]   # precommit: the 20-25 Oct study (scripts/intent_labels_precommit.py)
     return rows
 
 
 def plan():
     P = []
-    for f in ("swap_all_plan.json", "swap_extra_plan.json", "swap_aird_plan.json", "swap_clean_plan.json"):
+    for f in ("swap_all_plan.json", "swap_extra_plan.json", "swap_aird_plan.json", "swap_clean_plan.json", "swap_precommit_plan.json"):
         if (HERE / "results" / f).exists():
             P += json.load(open(HERE / "results" / f))
     return P

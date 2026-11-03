@@ -1,0 +1,56 @@
+[
+ {
+  "env": "precommit_hook",
+  "run": "results/raw/screen/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-17_15-20-35-423567/run-5",
+  "K": 6,
+  "N": 9,
+  "incident": true,
+  "reps": 80,
+  "source": "pre-commit study restarts (runs_swap[_text]_precommit_*.csv)"
+ },
+ {
+  "env": "precommit_hook",
+  "run": "results/raw/screen/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-17_15-20-35-423567/run-5",
+  "K": 7,
+  "N": 9,
+  "incident": true,
+  "reps": 80,
+  "source": "pre-commit study restarts (runs_swap[_text]_precommit_*.csv)"
+ },
+ {
+  "env": "precommit_hook",
+  "run": "results/raw/screen/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-17_15-20-35-423567/run-5",
+  "K": 8,
+  "N": 9,
+  "incident": true,
+  "reps": 40,
+  "source": "pre-commit study restarts (runs_swap[_text]_precommit_*.csv)"
+ },
+ {
+  "env": "precommit_hook",
+  "run": "results/raw/base_qwen/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-17_15-24-48-348561/run-18",
+  "K": 2,
+  "N": 4,
+  "incident": true,
+  "reps": 80,
+  "source": "pre-commit study restarts (runs_swap[_text]_precommit_*.csv)"
+ },
+ {
+  "env": "precommit_hook",
+  "run": "results/raw/base_qwen/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-17_15-24-48-348561/run-18",
+  "K": 3,
+  "N": 4,
+  "incident": true,
+  "reps": 40,
+  "source": "pre-commit study restarts (runs_swap[_text]_precommit_*.csv)"
+ },
+ {
+  "env": "precommit_hook",
+  "run": "results/raw/screen/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-17_15-20-35-423567/run-5",
+  "K": 3,
+  "N": 9,
+  "incident": true,
+  "reps": 40,
+  "source": "pre-commit study restarts (runs_swap[_text]_precommit_*.csv)"
+ }
+]

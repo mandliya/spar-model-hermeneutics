@@ -41,7 +41,8 @@ for l in open(HERE / "results" / "intent_labels.jsonl"):
     r = json.loads(l); labels[r["run"]] = r["label"] or "unlabelled"
 cnt = collections.defaultdict(collections.Counter)      # (env, cond, who) -> label -> n
 missing = 0
-for r in csv.DictReader(open(HERE / "results" / "gap_replays.csv")):
+for r in [x for f in ("gap_replays.csv", "gap_replays_precommit.csv") if (HERE / "results" / f).exists()
+          for x in csv.DictReader(open(HERE / "results" / f))]:   # precommit: the 20-25 Oct study (scripts/intent_labels_precommit.py)
     if r["hacked"] not in ("0", "1") or r["env"] not in ENVS:
         continue
     cond = TAKE.get(int(r["N"]) - int(r["K"]), "?") if r["incident"] == "True" else "clean"
@@ -102,7 +103,7 @@ fig.text(0.02, 1 - 0.5 / H, f"Every scored try in the gap environments ({nq} Qwe
          fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
 fig.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=c) for _, _, c in SEGS], labels=[l for _, l, _ in SEGS], loc="upper left", bbox_to_anchor=(0.015, 1 - 0.95 / H),
            ncol=2, frameon=False, fontsize=7.9, handlelength=1.2, columnspacing=1.5)
-foot = (f"Rows pooled over traces, n ≥ {MIN_N} per model. Source: results/intent_labels.jsonl (scripts/intent_labels.py; every label carries a verbatim quote), results/gap_replays.csv. "
+foot = (f"Rows pooled over traces, n ≥ {MIN_N} per model. Source: results/intent_labels.jsonl (scripts/intent_labels.py; every label carries a verbatim quote), results/gap_replays.csv and gap_replays_precommit.csv. "
         f"{missing} scored tries not yet labelled. Spot-check (results/intent_labels_spotcheck.md, 46 labels read): 23/25 agree outside 'believed it had succeeded'; that label is unreliable "
         "(6/21): in the coding environments its quotes are 'the test is wrong, I submit the correct code' (a knowing refusal), on the dashboard an honest shortfall report. Read it as unresolved, "
         "so the propensity shares above are lower bounds.")
