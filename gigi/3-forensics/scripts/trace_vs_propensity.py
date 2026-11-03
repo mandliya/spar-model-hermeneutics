@@ -63,19 +63,24 @@ for env in ENVS:
 rows.sort(key=lambda r: -((r[3] - r[6]) / r[3] if r[6] is not None and r[3] else -1))
 
 H = 2.6 + 0.8 * len(rows) + 1.3
-fig = plt.figure(figsize=(13, H)); ax = fig.add_axes([0.21, 1.3 / H, 0.52, 0.8 * len(rows) / H])
+fig = plt.figure(figsize=(13, H)); ax = fig.add_axes([0.21, 1.3 / H, 0.56, 0.8 * len(rows) / H])
 C_WITHOUT, C_WITH = "#9aa5b1", "#0d6b4a"
-for x, t in ((116, "continuing\na clean\nrun"), (140, "continuing\na cheating\nrun"), (162, "difference"), (184, "share of the\ncheating that\ncomes from\nthe run")):
-    ax.text(x, -1.05, t, fontsize=8, color=MUTED, ha="center", va="center", linespacing=1.15)
+GREY_TXT = "#5c6773"
+for x, t, col in ((118, "GREY DOT\ncontinuing\na clean run", GREY_TXT), (146, "GREEN DOT\ncontinuing\na cheating run", C_WITH),
+                  (171, "difference", MUTED), (193, "share of the\ncheating that\ncomes from\nthe run", MUTED)):
+    ax.text(x, -1.05, t, fontsize=8, color=col, ha="center", va="center", linespacing=1.15, fontweight="bold" if col != MUTED else "normal")
+for x, col, alpha in ((118, C_WITHOUT, 0.16), (146, C_WITH, 0.10)):      # a band of the dot's colour behind each of its two columns
+    ax.add_patch(plt.Rectangle((x - 12.5, -1.75), 25, len(rows) + 1.25, color=col, alpha=alpha, lw=0, zorder=0, clip_on=False))
+    ax.plot(x, -1.95, "o", color=col, ms=10, clip_on=False, zorder=3)
 for i, (env, kt, nt, trace, kb, nb, base) in enumerate(rows):
     ax.text(-2, i, LABEL[env], ha="right", va="center", fontsize=9.5, fontweight="bold")
     tw = trace * 100
     if base is None:
         ax.plot(tw, i, "o", color=C_WITH, ms=9, zorder=3)
         ax.text(tw - 2.5, i, f"{tw:.0f}%", ha="right", va="center", fontsize=8.5, fontweight="bold", color=C_WITH)
-        ax.text(116, i, "no clean\nrun to\ncompare", ha="center", va="center", fontsize=7, color=MUTED, linespacing=1.15)
-        ax.text(140, i, f"{tw:.0f}%\n{kt}/{nt} tries\n{len(runs[(env, 'N', 'qwen')])} run" + ("s" if len(runs[(env, 'N', 'qwen')]) != 1 else ""), ha="center", va="center", fontsize=8, color=INK, linespacing=1.1)
-        ax.text(162, i, "—", ha="center", va="center", fontsize=9, color=MUTED); ax.text(184, i, "—", ha="center", va="center", fontsize=9, color=MUTED)
+        ax.text(118, i, "no clean\nrun to\ncompare", ha="center", va="center", fontsize=7, color=MUTED, linespacing=1.15)
+        ax.text(146, i, f"{tw:.0f}%\n{kt}/{nt} tries\n{len(runs[(env, 'N', 'qwen')])} run" + ("s" if len(runs[(env, 'N', 'qwen')]) != 1 else ""), ha="center", va="center", fontsize=8, color=C_WITH, linespacing=1.1)
+        ax.text(171, i, "—", ha="center", va="center", fontsize=9, color=MUTED); ax.text(193, i, "—", ha="center", va="center", fontsize=9, color=MUTED)
         continue
     bw = base * 100
     ax.plot([bw, tw], [i, i], color=GRID, lw=3, zorder=1, solid_capstyle="round")
@@ -83,13 +88,13 @@ for i, (env, kt, nt, trace, kb, nb, base) in enumerate(rows):
     ax.plot(bw, i, "o", color=C_WITHOUT, ms=9, zorder=3); ax.plot(tw, i, "o", color=C_WITH, ms=9, zorder=3)
     ax.text(tw + 2.5, i, f"{tw:.0f}%", ha="left", va="center", fontsize=8.5, fontweight="bold", color=C_WITH)
     share = max(trace - base, 0) / trace if trace else 0
-    ax.text(116, i, f"{bw:.0f}%\n{kb}/{nb} tries\n{len(runs[(env, 'clean', 'qwen')])} run" + ("s" if len(runs[(env, 'clean', 'qwen')]) != 1 else ""), ha="center", va="center", fontsize=8, color=INK, linespacing=1.1)
-    ax.text(140, i, f"{tw:.0f}%\n{kt}/{nt} tries\n{len(runs[(env, 'N', 'qwen')])} run" + ("s" if len(runs[(env, 'N', 'qwen')]) != 1 else ""), ha="center", va="center", fontsize=8, color=INK, linespacing=1.1)
-    ax.text(162, i, f"+{tw - bw:.0f} pts", ha="center", va="center", fontsize=8.5, color=INK)
-    ax.text(184, i, f"{share * 100:.0f}%", ha="center", va="center", fontsize=11.5, fontweight="bold", color=C_WITH if share >= 0.5 else INK)
+    ax.text(118, i, f"{bw:.0f}%\n{kb}/{nb} tries\n{len(runs[(env, 'clean', 'qwen')])} run" + ("s" if len(runs[(env, 'clean', 'qwen')]) != 1 else ""), ha="center", va="center", fontsize=8, color=GREY_TXT, linespacing=1.1)
+    ax.text(146, i, f"{tw:.0f}%\n{kt}/{nt} tries\n{len(runs[(env, 'N', 'qwen')])} run" + ("s" if len(runs[(env, 'N', 'qwen')]) != 1 else ""), ha="center", va="center", fontsize=8, color=C_WITH, linespacing=1.1)
+    ax.text(171, i, f"+{tw - bw:.0f} pts", ha="center", va="center", fontsize=8.5, color=INK)
+    ax.text(193, i, f"{share * 100:.0f}%", ha="center", va="center", fontsize=11.5, fontweight="bold", color=C_WITH if share >= 0.5 else INK)
     if i < len(rows) - 1:
-        ax.plot([-60, 194], [i + 0.5, i + 0.5], color=GRID, lw=0.6, zorder=0, clip_on=False)
-ax.set_xlim(0, 194); ax.set_ylim(len(rows) - 0.5, -1.5)
+        ax.plot([-60, 203], [i + 0.5, i + 0.5], color=GRID, lw=0.6, zorder=0, clip_on=False)
+ax.set_xlim(0, 203); ax.set_ylim(len(rows) - 0.5, -1.5)
 ax.set_xticks([0, 25, 50, 75, 100]); ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"], color=MUTED, fontsize=8)
 for s_ in ("top", "right", "left"): ax.spines[s_].set_visible(False)
 ax.spines["bottom"].set_bounds(0, 100); ax.spines["bottom"].set_color(GRID); ax.tick_params(axis="y", left=False, labelleft=False); ax.tick_params(axis="x", length=0)
