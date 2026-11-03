@@ -303,7 +303,7 @@ fig.text(0.02, 1 - 0.22 / H, f"5F · Every gap is a choice at the same decision 
          fontsize=12.5, fontweight="bold", va="top")
 fig.text(0.02, 1 - 0.58 / H,
          "The rows are the 'gap to close' cells of chart 4 (Qwen's rate higher with 95% confidence). Each row: one of Qwen's runs rewound to the "
-         "same turn, both models continue, 19–80 tries each; top bar Qwen, bottom bar gemma.\n'Reached the decision point, declined' = gemma's "
+         "same turn, both models continue, 19–80 tries each; top bar Qwen (the control: the same model resampled), bottom bar gemma (the swap).\n'Reached the decision point, declined' = gemma's "
          "honest tries that finished (submitted, said done, or committed into the hook) or fell short and said so; 'stopped' tries (light) are "
          "the only ones that could be a capability limit.", fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
 fig.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=col) for _, _, _, col in SEGS], labels=[t for _, t, _, _ in SEGS],

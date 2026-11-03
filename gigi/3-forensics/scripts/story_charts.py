@@ -9,7 +9,7 @@
 Takeover at turn N means: Qwen's run up to turn N-1 (its checkpoint N-1), then the model writes turn N onward.
   cd gigi/3-forensics/agent-interp-envs && uv run --with matplotlib python ../scripts/story_charts.py
 """
-import collections, csv, json, math, pathlib, re, statistics, sys
+import textwrap, collections, csv, json, math, pathlib, re, statistics, sys
 
 import matplotlib
 matplotlib.use("Agg")
@@ -350,7 +350,7 @@ for i, (title, act, _) in enumerate(PANELS + [("Where Qwen did nothing bad (20 e
         ax.text(2.06, 18, "at N−1: read by hand, all 10\nclaim a gain never measured\n(hand_verdicts.csv)", fontsize=6.4, color=COL[G], va="top")
 fig.legend(handles=[plt.Line2D([], [], color=COL[Q], marker="o", lw=1.8, mec="white"),
                     plt.Line2D([], [], color=COL[G], marker="o", lw=1.8, mec="white")],
-           labels=["Qwen replaying its own run (the baseline)", "gemma swapped into Qwen's run"], frameon=False, ncol=2,
+           labels=["control: Qwen swapped back into its own run and resampled", "swap: gemma swapped into the same run, same turn"], frameon=False, ncol=2,
            loc="upper right", bbox_to_anchor=(0.99, 0.985), fontsize=9)
 for r, lab in enumerate(["gemma copies Qwen", "gemma doesn't copy Qwen", "neither repeats it · too few · control"]):
     pos = axs[r, 0].get_position()
@@ -507,7 +507,7 @@ for s in ("top", "right", "left", "bottom"):
     ax.spines[s].set_visible(False)
 ax.legend(handles=[plt.Line2D([], [], marker="o", ls="", color=COL[Q], markersize=7),
                    plt.Line2D([], [], marker="o", ls="", color=COL[G], markersize=7)],
-          labels=["Qwen replaying its own run (the baseline)", "gemma swapped into Qwen's run"], frameon=False, ncol=2,
+          labels=["control: Qwen swapped back into its own run and resampled", "swap: gemma swapped into the same run, same turn"], frameon=False, ncol=2,
           loc="lower left", bbox_to_anchor=(0.0, 1.0), fontsize=9)
 ax.set_title("3 · Swapped into Qwen's runs, gemma repeats Qwen's bad act only where Qwen's history leads to it",
              loc="left", fontsize=12.5, fontweight="bold", pad=26)
@@ -683,11 +683,13 @@ ax.spines["bottom"].set_bounds(-100, 100)
 ax.set_xlabel("gap = Qwen's rate − gemma's rate, in percentage points (dot), with its 95% interval (line)", fontsize=8.5)
 ax.set_title("4 · The gap to close is in code (families A, B, C, E): rendering engine, ai_rd, is_prime one turn early, "
              "pre-commit hook", loc="left", fontsize=12.5, fontweight="bold", pad=12, x=0.0)
-fig.subplots_adjust(bottom=1.0 / H4)
-fig.text(0.01, 0.05 / H4, "Same rows as chart 3. Red = gap to close: Qwen's rate higher with 95% confidence (Newcombe "
-         "interval above 0), what distilling Qwen into gemma has to close. Clean runs: restarted before Qwen's last turn "
-         "where it did nothing bad, pooled per family. After the double-check of 22-26 Oct (RESULTS.md, section 5): "
-         "parser fix, ai_rd rerun with a reliable scorer, unclear rows topped up.", fontsize=7.6, color=MUTED)
+fig.subplots_adjust(bottom=1.25 / H4)
+_f4 = ("Same rows as chart 3. Each row: one of Qwen's runs rewound to the same turn and resampled by both models. Qwen's rate is the control (the same "
+       "model swapped back in and resampled), gemma's rate is the swap; the gap is their difference. Red = gap to close: Qwen's rate higher with 95% "
+       "confidence (Newcombe interval above 0), what distilling Qwen into gemma has to close. Clean runs: restarted before Qwen's last turn where it did "
+       "nothing bad, pooled per family. After the double-check of 22-26 Oct (RESULTS.md, section 5): parser fix, ai_rd rerun with a reliable scorer, "
+       "unclear rows topped up.")
+fig.text(0.01, 0.05 / H4, "\n".join(textwrap.wrap(_f4, 215)), fontsize=7.6, color=MUTED, linespacing=1.35)
 fig.savefig(OUT / "q4_gap.png", dpi=180, bbox_inches="tight"); plt.close(fig)
 
 for g in gaps:
