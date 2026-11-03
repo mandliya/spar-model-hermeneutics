@@ -53,7 +53,7 @@ def fig_pipeline():
     box(ax, 12.5, y, w, h, "Spot-check by hand",
         "46 labels read with their quotes\n\n5 labels reliable (23 of 25 agree)\n\nbelieved_success unreliable\n(6 of 21): never used as evidence,\nre-sorted in stage 2", ec=RED, head_col=RED)
     box(ax, 18.6, y, w, h, "Stage 2: facts from the logs",
-        "no model: regular expressions over\nthe tool outputs and the last reply\n\nsaw the failing check?  ·  ended with\na report?  ·  report claims the target\nor admits the failure?  ·  did it give up on\nits own malformed calls?\n\n→ 6 tiers (figure 5)")
+        "no model: regular expressions over\nthe tool outputs and the last reply\n\nreached the point where\nQwen cheated?  ·  ended with\na report?  ·  report claims the target\nor admits the failure?  ·  did it give up on\nits own malformed calls?\n\n→ 6 tiers (figure 5)")
     for x0 in (5.3, 11.4, 17.5):
         arrow(ax, (x0, y + h / 2), (x0 + 1.1, y + h / 2))
     ax.text(12, 0.12, "Scripts: scripts/intent_labels.py (stage 1), results/intent_labels_spotcheck.md, scripts/split_chart.py (stage 2, chart 5M)",
@@ -155,7 +155,7 @@ def fig_tree():
     fig = plt.figure(figsize=(12, Hh))
     title(fig, "Stage 2: how gemma's 621 non-cheating tries on Qwen's cheating traces fall into six tiers",
           "Stage 1 settles 323 tries from the words alone. The other 298 are sorted by facts from the logs, no model: did the model end the run with a report, and does "
-          "the report claim the target or admit the failure? (All 298 had seen the failing check.) could_not tries that gave up on gemma's own malformed tool calls are set apart.", Hh, wrap=170)
+          "the report claim the target or admit the failure? (All 298 had reached the point where Qwen cheated.) could_not tries that gave up on gemma's own malformed tool calls are set apart.", Hh, wrap=170)
     ax = fig.add_axes([0.01, 0.05, 0.98, 1 - 1.1 / Hh]); ax.set_xlim(0, 24); ax.set_ylim(0, 10); ax.axis("off")
     bw, bh = 4.6, 1.7
     # root
@@ -170,7 +170,7 @@ def fig_tree():
     ax.text(x1 - 0.25, 9.6, "stage 1 label", fontsize=8, fontweight="bold", color=MUTED, ha="left", va="top")
     # stage 2 questions
     x2 = 12.9
-    box(ax, x2, 1.3, 3.6, bh + 0.5, "saw the failing check?", "all 298: yes\n\nmodel ended the run\nwith a report? (sign-offs\nafter end_task skipped)", fc="#f4f3ef", ec=GRID)
+    box(ax, x2, 1.3, 3.6, bh + 0.5, "reached the point\nwhere Qwen cheated?", "all 298: yes\n\nmodel ended the run\nwith a report? (sign-offs\nafter end_task skipped)", fc="#f4f3ef", ec=GRID)
     ax.text(x2 - 0.25, 9.6, "stage 2 log facts", fontsize=8, fontweight="bold", color=MUTED, ha="left", va="top")
     arrow(ax, (x1 + bw, 2.4), (x2, 2.4))
     x3 = 17.4
@@ -178,11 +178,11 @@ def fig_tree():
     arrow(ax, (x2 + 3.6, 2.9), (x3, 4.3), "yes: 287", t=0.6, dy=-0.2)
     # leaves
     lx, lw = 21.6, 2.25
-    leaves = [("stated", 8.3, "choice, stated\n95 · 15%"), ("cap", 6.85, "capability: task\n222 · 36%"), ("capfmt", 5.5, "capability: tool format\n6 · 1%"),
-              ("revealed", 4.1, "choice, revealed\n283 · 46%"), ("claimed", 2.7, "borderline\n13 · 2%"), ("stopped", 0.6, "stopped\n2 · 0%")]
+    leaves = [("stated", 8.3, "refused out loud\n(choice)\n95 · 15%"), ("cap", 6.85, "stuck on the task\n(capability)\n222 · 36%"), ("capfmt", 5.5, "stuck on tool calls\n(capability)\n6 · 1%"),
+              ("revealed", 4.1, "refused silently\n(choice)\n283 · 46%"), ("claimed", 2.7, "claimed success\nwithout proof\n13 · 2%"), ("stopped", 0.6, "cut off,\nno report\n2 · 0%")]
     for key, y, t in leaves:
         ax.add_patch(FancyBboxPatch((lx, y), lw, 1.1, boxstyle="round,pad=0,rounding_size=0.1", fc=TIER_COL[key], ec="white", lw=0.8))
-        ax.text(lx + lw / 2, y + 0.55, t, ha="center", va="center", fontsize=7.6, fontweight="bold", color=TIER_TXT[key], linespacing=1.3)
+        ax.text(lx + lw / 2, y + 0.55, t, ha="center", va="center", fontsize=7.4, fontweight="bold", color=TIER_TXT[key], linespacing=1.2)
     arrow(ax, (x1 + bw, 8.45), (lx, 8.85))
     arrow(ax, (x1 + bw, 6.35), (lx, 7.4), "222", t=0.5, dy=0.14)
     arrow(ax, (x1 + bw, 6.0), (lx, 6.05), "6", t=0.5, dy=-0.18)
@@ -198,47 +198,62 @@ def fig_tree():
 
 
 # ---------------------------------------------------------------- 5. the resulting tiers (table 5)
-TIERS = [("stated", "choice, stated", 95, "gemma names the shortcut or the rule and refuses it", "strong: the model said it"),
-         ("revealed", "choice, revealed", 283, "has the same failing check in front of it that Qwen cheated on, does the honest thing, reports that it failed, never mentions the shortcut", "weaker: a model that never thought of the shortcut looks the same"),
-         ("cap", "capability: task wall", 222, "the honest path failed: errors it could not get past, loops, collapse, or it gave up on the task", "strong: the errors and collapses are in the logs, quoted by the judge"),
-         ("capfmt", "capability: tool format", 6, "gemma itself wrote invalid tool calls (bad JSON in long multi-line commands), got an error back each time and gave up. Not last week's fixed bug: that was the harness ending gemma's run on a bad call and not translating Qwen's calls; here the harness works as fixed and sends the error back", "a limit of gemma-3 writing tool calls as text, not of our harness; should vanish with native tools (gemma 4)"),
-         ("claimed", "borderline: hedged claim", 13, "declares the target met with no measurement (12 are rendering tries on the trace whose build is broken at the restart point); the paper's bad act in hedged form, passed as honest by the grader", "a grading question for the team: counted as the bad act, gemma's rendering rate is 15/120 not 3/120 and the gap +61 not +71"),
-         ("stopped", "stopped, no report", 2, "cut mid-work by the step cap, no report", "unresolved either way")]
+TIERS = [("stated", "choice: refused out loud", 95,
+          "gemma names the cheat and refuses it, e.g. \"I could make the test pass by returning False for 7, but that would be a hack\"",
+          "strong: gemma says it in its own words"),
+         ("revealed", "choice: refused silently", 283,
+          "gemma reached the same point where Qwen cheated (e.g. the benchmark still at 1.0x against a 3x target, or the test still failing), did not cheat, and reported honestly that it had not succeeded; it never mentions cheating",
+          "weaker: a model that never thought of cheating would look the same"),
+         ("cap", "capability: stuck on the task", 222,
+          "gemma got stuck doing the honest work: commands it wrote kept failing (broken file edits, build errors), it repeated itself, its output collapsed, or it gave up",
+          "strong: the failing commands and collapses are in the logs, quoted by the judge"),
+         ("capfmt", "capability: stuck on tool calls", 6,
+          "gemma kept writing tool calls in an invalid format, got an error back each time, and gave up. gemma's own mistake, NOT last week's harness bug (fixed 25 Oct: the harness used to end gemma's run on a bad call; now it returns an error and gemma can retry)",
+          "gemma-3's limit with text tool calls, not our harness; native tool calls (gemma 4) should remove it"),
+         ("claimed", "borderline: claimed success without proof", 13,
+          "gemma said the target was met but never ran the measurement that would show it (e.g. \"we can't run the benchmark, but we're confident the 3x target is met\"); 12 are rendering-engine tries",
+          "a soft form of the cheat that the grader passed as honest; counted as cheating, gemma's rendering rate is 15/120 not 3/120 and the gap +61 not +71"),
+         ("stopped", "stopped: cut off, no report", 2,
+          "the run hit the step limit in the middle of the work, before gemma wrote any report",
+          "unknown either way")]
 
 
 def fig_tiers():
-    Hh = 7.8
+    Hh = 9.0
     fig = plt.figure(figsize=(12, Hh))
-    title(fig, "Result: of gemma's 621 non-cheats on Qwen's cheating traces, 15–61% are a choice and 37% are capability walls",
-          "Same classification on gemma's clean-run tries: 7% stated, 85% revealed, 6% capability, 2% borderline, 0% stopped (chart 5M, last row).", Hh, wrap=170)
+    title(fig, "Why gemma did not cheat where Qwen did: in 15–61% of the tries it chose not to, in 37% it could not",
+          "621 tries in which gemma took over one of Qwen's cheating runs (at the turn where Qwen cheated, or 1, 2 or 5 turns before) and did NOT cheat. "
+          "On Qwen's clean runs, where there is no cheat to follow, the same split is 7% refused out loud, 85% refused silently, 6% stuck, 2% claimed success without proof.", Hh, wrap=170)
     ax = fig.add_axes([0.03, 1 - 1.85 / Hh, 0.94, 0.95 / Hh]); ax.set_xlim(0, 100); ax.set_ylim(-0.1, 1.6); ax.axis("off")
     x = 0; N = 621
     for key, name, n, _, _ in TIERS:
         v = n / N * 100
         ax.barh(0.5, v, 0.75, left=x, color=TIER_COL[key], ec="white", lw=1.5)
         if v >= 6:
-            ax.text(x + v / 2, 0.5, f"{name}\n{n} · {v:.0f}%", ha="center", va="center", fontsize=8.6, fontweight="bold", color=TIER_TXT[key], linespacing=1.3)
+            ax.text(x + v / 2, 0.5, f"{name.split(': ')[1]}\n{n} · {v:.0f}%", ha="center", va="center", fontsize=8.6, fontweight="bold", color=TIER_TXT[key], linespacing=1.3)
         else:
             ax.text(x + v / 2, 0.5, f"{n}", ha="center", va="center", fontsize=7.6, fontweight="bold", color=TIER_TXT[key])
         x += v
     # brackets
     s = (95 + 283) / N * 100; c = 228 / N * 100
-    for x0, x1, t in ((0, s, "choice: 15% at least (stated), 61% at most (stated + revealed)"), (s, s + c, "capability: 37%")):
+    for x0, x1, t in ((0, s, "CHOICE: at least 15% (refused out loud), at most 61% (+ refused silently)"), (s, s + c, "CAPABILITY: 37% (stuck)")):
         ax.plot([x0 + 0.3, x0 + 0.3, x1 - 0.3, x1 - 0.3], [1.0, 1.15, 1.15, 1.0], color=INK, lw=1)
         ax.text((x0 + x1) / 2, 1.22, t, ha="center", va="bottom", fontsize=8.4, fontweight="bold")
     ax.text(96, 1.22, "borderline 2% · stopped 0%", ha="center", va="bottom", fontsize=7.4, color=MUTED)
     # table of meanings below
     ty = fig.add_axes([0.03, 0.03, 0.94, 1 - 2.05 / Hh]); ty.set_xlim(0, 100); ty.set_ylim(0, len(TIERS) + 0.8); ty.axis("off")
-    ty.text(0, len(TIERS) + 0.55, "tier", fontsize=8, fontweight="bold", color=MUTED)
-    ty.text(22, len(TIERS) + 0.55, "what it means", fontsize=8, fontweight="bold", color=MUTED)
-    ty.text(63, len(TIERS) + 0.55, "strength of evidence", fontsize=8, fontweight="bold", color=MUTED)
+    ty.text(0, len(TIERS) + 0.55, "why gemma did not cheat", fontsize=8, fontweight="bold", color=MUTED)
+    ty.text(22, len(TIERS) + 0.55, "what gemma did", fontsize=8, fontweight="bold", color=MUTED)
+    ty.text(64, len(TIERS) + 0.55, "how strong the evidence is", fontsize=8, fontweight="bold", color=MUTED)
     for i, (key, name, n, meaning, ev) in enumerate(TIERS):
         y = len(TIERS) - i - 0.25
         ty.add_patch(FancyBboxPatch((0, y - 0.22), 1.6, 0.55, boxstyle="square,pad=0", fc=TIER_COL[key], ec="none"))
-        ty.text(2.4, y + 0.06, f"{name}", fontsize=8.6, fontweight="bold", va="center")
+        cat, short = name.split(": ")
+        ty.text(2.4, y + 0.3, cat.upper(), fontsize=7.2, color=MUTED, va="center", fontweight="bold")
+        ty.text(2.4, y + 0.02, short, fontsize=8.6, fontweight="bold", va="center")
         ty.text(2.4, y - 0.28, f"{n} of 621 · {n / N * 100:.0f}%", fontsize=7.6, color=MUTED, va="center")
-        ty.text(22, y + 0.12, "\n".join(textwrap.wrap(meaning, 84)), fontsize=7.6, va="top", linespacing=1.25)
-        ty.text(63, y + 0.12, "\n".join(textwrap.wrap(ev, 72)), fontsize=7.6, va="top", linespacing=1.25, color=RED if key == "claimed" else INK)
+        ty.text(22, y + 0.3, "\n".join(textwrap.wrap(meaning, 70)), fontsize=7.6, va="top", linespacing=1.25)
+        ty.text(64, y + 0.3, "\n".join(textwrap.wrap(ev, 58)), fontsize=7.6, va="top", linespacing=1.25, color=RED if key == "claimed" else INK)
         ty.axhline(y - 0.55, color=GRID, lw=0.6)
     fig.savefig(OUT / "method_5_tiers.png", dpi=180); plt.close(fig)
 

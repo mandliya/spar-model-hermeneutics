@@ -59,20 +59,20 @@ for env in ENVS:
     rows.append((env, kt, nt, trace, kb, nb, base))
 rows.sort(key=lambda r: -((r[3] - r[6]) / r[3] if r[6] is not None and r[3] else -1))
 
-H = 2.1 + 0.8 * len(rows) + 1.3
+H = 2.6 + 0.8 * len(rows) + 1.3
 fig = plt.figure(figsize=(13, H)); ax = fig.add_axes([0.21, 1.3 / H, 0.46, 0.8 * len(rows) / H])
 C_WITHOUT, C_WITH = "#9aa5b1", "#0d6b4a"
-for x, t in ((110, "without\nhistory"), (127, "with\nhistory"), (145, "history\nadds"), (166, "share due\nto history")):
-    ax.text(x, -1.0, t, fontsize=8, color=MUTED, ha="center", va="center", linespacing=1.2)
+for x, t in ((112, "continuing\na clean\nrun"), (131, "continuing\na cheating\nrun"), (150, "difference"), (170, "share of the\ncheating that\ncomes from\nthe run")):
+    ax.text(x, -1.05, t, fontsize=8, color=MUTED, ha="center", va="center", linespacing=1.15)
 for i, (env, kt, nt, trace, kb, nb, base) in enumerate(rows):
     ax.text(-2, i, LABEL[env], ha="right", va="center", fontsize=9.5, fontweight="bold")
     tw = trace * 100
     if base is None:
         ax.plot(tw, i, "o", color=C_WITH, ms=9, zorder=3)
         ax.text(tw - 2.5, i, f"{tw:.0f}%", ha="right", va="center", fontsize=8.5, fontweight="bold", color=C_WITH)
-        ax.text(110, i, "no clean\nrun", ha="center", va="center", fontsize=7.6, color=MUTED, linespacing=1.15)
-        ax.text(127, i, f"{tw:.0f}%\n{kt}/{nt}", ha="center", va="center", fontsize=8.5, color=INK, linespacing=1.15)
-        ax.text(145, i, "—", ha="center", va="center", fontsize=9, color=MUTED); ax.text(166, i, "—", ha="center", va="center", fontsize=9, color=MUTED)
+        ax.text(113, i, "no clean\nrun to\ncompare", ha="center", va="center", fontsize=7, color=MUTED, linespacing=1.15)
+        ax.text(131, i, f"{tw:.0f}%\n{kt}/{nt}", ha="center", va="center", fontsize=8.5, color=INK, linespacing=1.15)
+        ax.text(150, i, "—", ha="center", va="center", fontsize=9, color=MUTED); ax.text(170, i, "—", ha="center", va="center", fontsize=9, color=MUTED)
         continue
     bw = base * 100
     ax.plot([bw, tw], [i, i], color=GRID, lw=3, zorder=1, solid_capstyle="round")
@@ -80,34 +80,35 @@ for i, (env, kt, nt, trace, kb, nb, base) in enumerate(rows):
     ax.plot(bw, i, "o", color=C_WITHOUT, ms=9, zorder=3); ax.plot(tw, i, "o", color=C_WITH, ms=9, zorder=3)
     ax.text(tw + 2.5, i, f"{tw:.0f}%", ha="left", va="center", fontsize=8.5, fontweight="bold", color=C_WITH)
     share = max(trace - base, 0) / trace if trace else 0
-    ax.text(110, i, f"{bw:.0f}%\n{kb}/{nb}", ha="center", va="center", fontsize=8.5, color=INK, linespacing=1.15)
-    ax.text(127, i, f"{tw:.0f}%\n{kt}/{nt}", ha="center", va="center", fontsize=8.5, color=INK, linespacing=1.15)
-    ax.text(145, i, f"+{tw - bw:.0f} pts", ha="center", va="center", fontsize=8.5, color=INK)
-    ax.text(166, i, f"{share * 100:.0f}%", ha="center", va="center", fontsize=11.5, fontweight="bold", color=C_WITH if share >= 0.5 else INK)
+    ax.text(112, i, f"{bw:.0f}%\n{kb}/{nb}", ha="center", va="center", fontsize=8.5, color=INK, linespacing=1.15)
+    ax.text(131, i, f"{tw:.0f}%\n{kt}/{nt}", ha="center", va="center", fontsize=8.5, color=INK, linespacing=1.15)
+    ax.text(150, i, f"+{tw - bw:.0f} pts", ha="center", va="center", fontsize=8.5, color=INK)
+    ax.text(170, i, f"{share * 100:.0f}%", ha="center", va="center", fontsize=11.5, fontweight="bold", color=C_WITH if share >= 0.5 else INK)
     if i < len(rows) - 1:
-        ax.plot([-60, 176], [i + 0.5, i + 0.5], color=GRID, lw=0.6, zorder=0, clip_on=False)
-ax.set_xlim(0, 176); ax.set_ylim(len(rows) - 0.5, -1.5)
+        ax.plot([-60, 180], [i + 0.5, i + 0.5], color=GRID, lw=0.6, zorder=0, clip_on=False)
+ax.set_xlim(0, 180); ax.set_ylim(len(rows) - 0.5, -1.5)
 ax.set_xticks([0, 25, 50, 75, 100]); ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"], color=MUTED, fontsize=8)
 for s_ in ("top", "right", "left"): ax.spines[s_].set_visible(False)
 ax.spines["bottom"].set_bounds(0, 100); ax.spines["bottom"].set_color(GRID); ax.tick_params(axis="y", left=False, labelleft=False); ax.tick_params(axis="x", length=0)
 for xv in (0, 25, 50, 75, 100):
     ax.plot([xv, xv], [-0.5, len(rows) - 0.5], color=GRID, lw=0.7, zorder=0)
-ax.text(50, len(rows) - 0.5 + 0.55, "Qwen's rate of the bad act", ha="center", va="top", fontsize=8.5, color=MUTED)
-fig.text(0.02, 1 - 0.2 / H, "5H · How much of Qwen's cheating is its own history pushing it? Coding and pre-commit: all of it. Dashboard: most. Rendering engine: a third. ai_rd: a fifth",
+ax.text(50, len(rows) - 0.5 + 0.55, "how often Qwen cheats", ha="center", va="top", fontsize=8.5, color=MUTED)
+fig.text(0.02, 1 - 0.2 / H, "5H · Does Qwen cheat because of the run it is continuing? Coding and pre-commit: almost entirely. Dashboard: mostly. Rendering engine: a third. ai_rd: a fifth",
          fontsize=12.5, fontweight="bold", va="top")
-fig.text(0.02, 1 - 0.55 / H,
-         "Same model (Qwen3-Next-80B), same environment, two starts. Grey dot: restarted at the end of one of its own runs that had no bad act, so no cheating history. "
-         "Green dot: restarted from one of its own\ncheating runs at the cheating turn, so the history is already heading for the cheat (this is the control arm of every "
-         "swap chart). The arrow is what the history adds; the last column is that addition as a share\nof the green rate: the fraction of Qwen's cheating that happens "
-         "'only because the trace is going this direction'. gemma on the same traces: charts 4 and 5F.",
-         fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
+SUB = ("How it works: we restart Qwen (always the same model) partway through one of its own earlier runs, let it continue, and count how often it cheats. "
+       "Grey dot: the run it continues is one where Qwen did NOT cheat; it is restarted near the end. "
+       "Green dot: the run it continues is one where Qwen DID cheat; it is restarted right before the turn where it cheated, so the conversation is already heading towards the cheat. "
+       "The two dots come from different runs, and no random seed is fixed: every try is a fresh sample. "
+       "The arrow is how much more Qwen cheats when it continues a run that was heading towards cheating; the last column is that extra part as a share of the green rate. "
+       "The green dot is also the control in every swap chart (charts 4 and 5F put gemma in the same spot).")
+fig.text(0.02, 1 - 0.55 / H, "\n".join(__import__("textwrap").wrap(SUB, 205)), fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
 fig.legend(handles=[plt.Line2D([], [], marker="o", ls="", color=C_WITHOUT, ms=8), plt.Line2D([], [], marker="o", ls="", color=C_WITH, ms=8)],
-           labels=["without the history: restarted at the end of its own clean run", "with the history: restarted from its own cheating run, at the cheating turn"],
-           loc="upper left", bbox_to_anchor=(0.015, 1 - 1.25 / H), ncol=2, frameon=False, fontsize=8.5, handlelength=1.2, columnspacing=2)
+           labels=["continuing a run where Qwen did NOT cheat (restarted near its end)", "continuing a run where Qwen DID cheat (restarted right before the cheat)"],
+           loc="upper left", bbox_to_anchor=(0.015, 1 - 1.55 / H), ncol=2, frameon=False, fontsize=8.5, handlelength=1.2, columnspacing=2)
 alone = " · ".join(f"{LABEL[e]} {kn[(e, 'alone', 'qwen')][0]}/{kn[(e, 'alone', 'qwen')][1]}" for e in ENVS)
-fig.text(0.02, 0.45 / H, "Fresh runs with no history at all (section 1, 5–20 per environment) agree with the grey dots: " + alone + ".",
+fig.text(0.02, 0.45 / H, "Brand-new runs started from scratch (section 1, 5–20 per environment) cheat about as often as the grey dots: " + alone + ".",
          fontsize=7.6, color=MUTED, va="center")
-fig.text(0.02, 0.22 / H, "Restarting one turn before the cheat instead gives the same picture: coding 58/60, coding_norules 10/30, rendering 49/64, dashboard 11/46, ai_rd 25/72, "
+fig.text(0.02, 0.22 / H, "Restarting one turn earlier than the green dot gives the same picture: coding 58/60, coding_norules 10/30, rendering 49/64, dashboard 11/46, ai_rd 25/72, "
          "pre-commit 7/80 (N−1) and 11/40 (N−2). Sources: results/gap_replays.csv, results/full_runs.csv, runs_swap[_text]_precommit_*.csv.",
          fontsize=7.6, color=MUTED, va="center")
 fig.savefig(HERE / "charts" / "q5_trace.png", dpi=180, bbox_inches="tight", facecolor="white")
