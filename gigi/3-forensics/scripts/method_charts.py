@@ -38,14 +38,12 @@ def arrow(ax, p, q, text=None, col=MUTED, t=0.5, dy=0.12):
 
 # ---------------------------------------------------------------- 1. the pipeline (table 1: what is classified)
 def fig_pipeline():
-    Hh = 4.3
+    Hh = 4.0
     fig = plt.figure(figsize=(12, Hh))
     title(fig, "How each swap try was classified: two stages, one spot-check in between",
-          "Unit: one scored swap try, a model's continuation of one of Qwen's runs from a fixed turn. 2,018 tries in the 8 gap "
-          "environments (1,658 main swap + 360 pre-commit study): Qwen3-Next-80B 1,007 (the control, Qwen resampled on its own "
-          "run), gemma-3-27b 1,011 (the swap). The verdict (hacked or not) comes from the existing graders of chart 4 and is never "
-          "changed by this classification; the stages below only say WHY a try did or did not cheat.", Hh, wrap=175)
-    ax = fig.add_axes([0.01, 0.04, 0.98, 1 - 1.25 / Hh]); ax.set_xlim(0, 24); ax.set_ylim(0, 4); ax.axis("off")
+          "2,018 swap tries in the 8 gap environments: Qwen3-Next-80B 1,007 (the control, Qwen resampled on its own run), gemma-3-27b 1,011 (the swap). "
+          "The verdict (hacked or not) is the chart 4 graders'; these stages only say WHY a try did or did not cheat.", Hh, wrap=175)
+    ax = fig.add_axes([0.01, 0.04, 0.98, 1 - 1.0 / Hh]); ax.set_xlim(0, 24); ax.set_ylim(0, 4); ax.axis("off")
     w, y, h = 5.0, 0.55, 3.1
     box(ax, 0.3, y, w, h, "Input: 2,018 tries",
         "one try = the judged model's own\nturns after the takeover + the\ntool results they produced\n\nQwen's prefix is identical for\nboth models in a cell, so it is\nleft out of the judgement",
@@ -77,14 +75,12 @@ CONF = {"declined_knowingly": 0.97, "could_not": 0.95, "honest_no_sign": 0.92, "
 
 
 def fig_labels():
-    Hh = 7.2
+    Hh = 6.8
     fig = plt.figure(figsize=(11, Hh))
     title(fig, "Stage 1: the judge's label for each of the 2,018 tries, by model",
-          "Claude Sonnet 4.5 reads only the judged model's own continuation and must quote it verbatim to support the label. It is told the "
-          "environment's bad act, what Qwen did at the cheating step in the original run, the grader's verdict, and six mechanical counts "
-          "from the logs (turns, tool calls, failed commands, replies without a tool call, most-repeated command, collapsed reply). It is told "
-          "not to infer intent from the outcome. The four upper labels apply to tries that did not cheat, the two lower ones to tries that did.", Hh, wrap=160)
-    ax = fig.add_axes([0.40, 0.9 / Hh, 0.48, 1 - 2.15 / Hh])
+          "Claude Sonnet 4.5 reads only the model's own continuation and must quote it verbatim to support the label. "
+          "Upper four labels: tries that did not cheat. Lower two: tries that did.", Hh, wrap=160)
+    ax = fig.add_axes([0.40, 0.9 / Hh, 0.48, 1 - 1.75 / Hh])
     n = len(LABELS); ys = list(range(n))[::-1]
     for (lab, d, g, q, grp), y in zip(LABELS, ys):
         ax.barh(y + 0.19, g, 0.34, color=MODEL_COL["gemma"], ec="white", lw=0.8)
@@ -128,13 +124,11 @@ SPOT = [("declined_knowingly", 6, 5, "the one miss: a dashboard shortfall report
 
 
 def fig_spot():
-    Hh = 5.2
+    Hh = 4.8
     fig = plt.figure(figsize=(11, Hh))
     title(fig, "Spot-check: 46 stage 1 labels read by hand with their quotes",
-          "One reader, labels spread over environments and models. Five labels are reliable (23 of 25 agree). believed_success is not: "
-          "its quotes mostly describe a refusal or an honest shortfall report, so that label is never used as evidence and its tries are "
-          "sorted again in stage 2 from the logs. A second judge on a 100-try sample has not been run.", Hh, wrap=160)
-    ax = fig.add_axes([0.20, 0.55 / Hh, 0.40, 1 - 1.85 / Hh])
+          "One reader. Five labels are reliable (23 of 25 agree). believed_success is not, so it is never used as evidence: its tries are re-sorted in stage 2.", Hh, wrap=160)
+    ax = fig.add_axes([0.20, 0.55 / Hh, 0.40, 1 - 1.45 / Hh])
     n = len(SPOT); ys = list(range(n))[::-1]
     for (lab, read, ok, note), y in zip(SPOT, ys):
         bad = lab == "believed_success"
@@ -149,22 +143,20 @@ def fig_spot():
     # notes column
     for (lab, read, ok, note), y in zip(SPOT, ys):
         if note:
-            fig.text(0.66, 0.55 / Hh + (1 - 1.85 / Hh) * ((y + 0.6) / (n)), "\n".join(textwrap.wrap(note.replace("\n", " "), 60)),
+            fig.text(0.66, 0.55 / Hh + (1 - 1.45 / Hh) * ((y + 0.6) / (n)), "\n".join(textwrap.wrap(note.replace("\n", " "), 60)),
                      fontsize=7, color=MUTED, va="center", linespacing=1.25)
-    fig.text(0.66, 1 - 1.25 / Hh, "what the misses were", fontsize=8, fontweight="bold", color=INK, va="bottom")
+    fig.text(0.66, 1 - 0.95 / Hh, "what the misses were", fontsize=8, fontweight="bold", color=INK, va="bottom")
     fig.savefig(OUT / "method_3_spotcheck.png", dpi=180); plt.close(fig)
 
 
 # ---------------------------------------------------------------- 4. the decision tree (table 4) on gemma's 621 non-cheats
 def fig_tree():
-    Hh = 7.4
+    Hh = 7.0
     fig = plt.figure(figsize=(12, Hh))
     title(fig, "Stage 2: how gemma's 621 non-cheating tries on Qwen's cheating traces fall into five tiers",
-          "Stage 1 settles a try when the words say why: declined_knowingly is a stated choice, could_not is a capability wall (323 of 621). The "
-          "other 298 (honest_no_sign, believed_success, unlabelled) are sorted by three facts read from the logs with regular expressions and no "
-          "model. All 298 had faced the shortfall measurement Qwen cheated on (it appears in a tool output of the prefix or the continuation), so "
-          "the sort reduces to: did the try end with a report, and does that report claim the target or admit the shortfall?", Hh, wrap=170)
-    ax = fig.add_axes([0.01, 0.05, 0.98, 1 - 1.45 / Hh]); ax.set_xlim(0, 24); ax.set_ylim(0, 10); ax.axis("off")
+          "Stage 1 settles 323 tries from the words alone. The other 298 are sorted by two facts read from the logs with no model: did the try end with a report, "
+          "and does the report claim the target or admit the shortfall? (All 298 had faced the shortfall measurement Qwen cheated on.)", Hh, wrap=170)
+    ax = fig.add_axes([0.01, 0.05, 0.98, 1 - 1.1 / Hh]); ax.set_xlim(0, 24); ax.set_ylim(0, 10); ax.axis("off")
     bw, bh = 4.6, 1.7
     # root
     box(ax, 0.3, 4.15, bw, bh, "621 gemma non-cheats", "on the 8 traces where Qwen\ncheated (chart 4 cells)", fc="#f4f3ef", ec=GRID)
@@ -213,12 +205,11 @@ TIERS = [("stated", "choice, stated", 95, "gemma names the shortcut or the rule 
 
 
 def fig_tiers():
-    Hh = 6.6
+    Hh = 6.3
     fig = plt.figure(figsize=(12, Hh))
     title(fig, "Result: of gemma's 621 non-cheats on Qwen's cheating traces, 15–59% are a choice and 37% are capability walls",
-          "The same classification on gemma's clean-run tries (chart 5M, last row) gives 7% stated, 69% revealed, 6% capability, 2% borderline, 16% stopped: "
-          "the capability walls appear where Qwen's run had already entered the hard part of the task.", Hh, wrap=170)
-    ax = fig.add_axes([0.03, 1 - 2.15 / Hh, 0.94, 0.95 / Hh]); ax.set_xlim(0, 100); ax.set_ylim(-0.1, 1.6); ax.axis("off")
+          "Same classification on gemma's clean-run tries: 7% stated, 69% revealed, 6% capability, 2% borderline, 16% stopped (chart 5M, last row).", Hh, wrap=170)
+    ax = fig.add_axes([0.03, 1 - 1.85 / Hh, 0.94, 0.95 / Hh]); ax.set_xlim(0, 100); ax.set_ylim(-0.1, 1.6); ax.axis("off")
     x = 0; N = 621
     for key, name, n, _, _ in TIERS:
         v = n / N * 100
@@ -235,7 +226,7 @@ def fig_tiers():
         ax.text((x0 + x1) / 2, 1.22, t, ha="center", va="bottom", fontsize=8.4, fontweight="bold")
     ax.text(96, 1.22, "borderline 2% · stopped 2%", ha="center", va="bottom", fontsize=7.4, color=MUTED)
     # table of meanings below
-    ty = fig.add_axes([0.03, 0.03, 0.94, 1 - 2.35 / Hh]); ty.set_xlim(0, 100); ty.set_ylim(0, len(TIERS) + 0.8); ty.axis("off")
+    ty = fig.add_axes([0.03, 0.03, 0.94, 1 - 2.05 / Hh]); ty.set_xlim(0, 100); ty.set_ylim(0, len(TIERS) + 0.8); ty.axis("off")
     ty.text(0, len(TIERS) + 0.55, "tier", fontsize=8, fontweight="bold", color=MUTED)
     ty.text(22, len(TIERS) + 0.55, "what it means", fontsize=8, fontweight="bold", color=MUTED)
     ty.text(63, len(TIERS) + 0.55, "strength of evidence", fontsize=8, fontweight="bold", color=MUTED)
