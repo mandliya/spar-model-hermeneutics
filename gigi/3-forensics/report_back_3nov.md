@@ -39,17 +39,22 @@ Suggested kickoffs from the 28 Oct notes (optional, not action items):
 
 ## Week 8, call of 3 Nov (today: John, Yuqi, TQ; Ravi has left the program)
 
+Source: the full Gemini transcript of the call. Target for all of it: the midweek check-in ("a fresh set, maybe a
+distillation run").
+
 | task | owner | status |
 |---|---|---|
-| **Move to distillation, in distribution: Qwen 80B into gemma 27B**, then see whether the re-inference gets closer | Gigi (TQ may start the pipeline; Gigi finishes it) | pipeline being prepared (agent): incident-stratified split, LoRA training script, serving plan; needs a rented H100 (Tinker has no gemma), about 4–8 H100 hours |
-| Split: 50/50 for target–substitute differences, ~80/20 for agreements (John); the same fraction for both (Yuqi, preferred if the data allow) | Gigi | counts below: 378 differences (95 strict), 172 agreements on the cheating traces, from only 15 Qwen cheating runs |
-| **Re-inference the hero suite: Llama 3.3 70B target, gemma-3-27b and Qwen3.6 27B substitutes** (gemma first if only one); traces only, activations later on a GPU | Gigi | being prepared (agent): model availability, tool calling, cost; needs your approval to spend and to extend the "open-weight via API" exception |
-| Backup substitutes if cheap: gemma 4 31B, GPT-OSS-20B (different family) | Gigi | gemma 4 ready (about $33); GPT-OSS-20B in the agent's prep |
-| **Yuqi: how was propensity checked?** | Gigi | done: [intent_method.md](intent_method.md) with five figures |
-| **Yuqi: what is the proportion of agreements vs differences now?** | Gigi | table below |
-| Yuqi's other questions ("especially proxy") | Gigi | not in any notes we can read: please paste them |
-| JSpace / NLA on both models; measure the faithfulness gap with J-space and NLA | TQ | TQ's; NLA on gemma 27B about 20–60 H100 hours |
-| Midterm report | John submits | memory says submitted 3 Nov |
+| **Re-inference the hero suite: Llama 3.3 70B target, gemma-3-27b and Qwen3.6 27B substitutes** (gemma first if only one). Traces only, no activations, so it runs about 20% faster; activations are repopulated later on a GPU for JSpace and NLA | **Gigi, first priority** | being prepared (agent): providers, tool calling, cost; needs your approval to spend and to extend the "open-weight via API" rule |
+| Build the distillation pipeline, starting with Qwen 80B into gemma 27B as scaffolding, then reuse it on the hero target's traces | TQ starts; Gigi finishes if TQ is interrupted | our side being prepared (agent): incident-stratified split, LoRA script, serving plan. Rented H100 needed (Tinker has no gemma); about 4–8 H100 hours, about $50 |
+| Propose one distillation dataset that both TQ and Gigi use | Gigi with TQ | data built ([distill/README.md](distill/README.md)); split being reworked, below |
+| Split: 50/50 for target–substitute differences, ~80/20 for agreements (John); the same train/test fraction for both (Yuqi; John agreed, "ideally equal") unless differences are too few | Gigi | counts below: 95 to 378 differences, 172 agreements, from only 15 Qwen cheating runs |
+| Backup substitutes if cheap: gemma 4 31B and GPT-OSS-20B (different family; John's pick if only one) | Gigi | gemma 4 ready (about $33); GPT-OSS-20B in the agent's prep |
+| **Yuqi: how was propensity checked?** Gigi promised a report on the classification | Gigi | done: [intent_method.md](intent_method.md), five figures |
+| **Yuqi: what is the proportion of agreements vs differences now?** | Gigi | table below (known for Qwen–gemma only; unknown for the hero suite until it runs) |
+| Yuqi's other questions, "especially proxy" | Gigi | not stated in the call; please paste them |
+| JSpace / NLA on both models; measure the faithfulness gap with JSpace and NLA; diff the NLA from 70B to 27B | TQ (parallel) | TQ's. NLA on gemma 27B about 20–60 H100 hours; decide early whether NLA is worth it |
+| Side-by-side of the two probe methods on same-kind train/test | TQ | TQ's (for Yuqi) |
+| Midterm report: define jargon up front, say "substitute" not "proxy", explain the model-organism part and the datasets, submit by end of day AoE | Gigi or TQ | submitted 3 Nov |
 
 ## Agreements and differences between Qwen and gemma, today's data (Yuqi's question)
 
