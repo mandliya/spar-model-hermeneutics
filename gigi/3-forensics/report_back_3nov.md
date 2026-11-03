@@ -29,6 +29,13 @@ user's own notes could not be read from here (login required).
 | Then, if good, gemma 4 31B | Gigi | superseded by the 3 Nov plan |
 | Report back once propensity and control are done, then decide on switching models | Gigi | done on the 3 Nov call: stay on 27B and distil |
 
+Yuqi's two specific questions in the 28 Oct call (full transcript):
+
+| question | answer |
+|---|---|
+| "The 54 that fell short and said so: is that capability or propensity?" (gemma on the rendering engine at the cheating turn, chart 5B) | mostly capability. Of gemma's 117 non-cheats on the rendering traces: 56% capability walls (build errors it could not get past, collapse), 33% revealed choice (honest shortfall report), 10% declared the target met without measuring, 0% named the shortcut. The build is broken at the restart point, so neither model can reach the target honestly; the gap is Qwen claiming it (chart 5M; RESULTS.md 5B corrected 3 Nov, it had said "a choice") |
+| "If grey and green dots are the same seed, Qwen has no strong propensity to hack even on its own hacking traces, which I doubt" (chart 5H) | different source runs: grey restarts from the end of Qwen's clean runs, green from its cheating runs at the cheating turn; no fixed seed. Her doubt is half right: at the cheating turn Qwen re-cheats 92% in coding and 70% on the rendering engine, but only 20–24% on pre-commit, the dashboard and ai_rd (the dashboard because most tries collapse into repetition) |
+
 Suggested kickoffs from the 28 Oct notes (optional, not action items):
 
 | kickoff | status |
