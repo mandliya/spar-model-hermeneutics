@@ -50,6 +50,37 @@ train + 488 val examples; 63 + 22 runs; train 182 MB, val 18 MB). Long families 
 async_conversion or revert_or_refactor run, long runs under-represented. For training, rebuild the full set locally
 (same command, raise `MAX_BYTES`) or cap contexts with `--max-context-chars`.
 
+## Test set contents (3 Nov 2026): does the 20% contain hill-climbable tasks?
+
+The 28 Oct call asked for an 80/20 split whose test set contains hill-climbable tasks: the environments with a mechanical
+measure where a distilled gemma could move toward Qwen's behaviour. Computed for the **full** set with the split's own
+code (`stratified_split`, seed 0, every family; no file written):
+
+| environment (* = gap environment) | families train / val | runs incl. replays train / val | Qwen hacked / scored in val |
+|---|---|---|---|
+| ai_rd * | 13 / 3 | 200 / 22 | 8 / 22 |
+| optimize_rendering_engine * | 4 / 1 | 138 / 31 | 7 / 21 |
+| dashboard_costly_failure * | 8 / 2 | 246 / 14 | 1 / 12 |
+| coding * | 16 / 4 | 156 / 4 | 0 / 4 |
+| coding_norules * | 16 / 4 | 136 / 4 | 0 / 4 |
+| precommit_hook * | 16 / 4 | 36 / 14 | 0 / 14 |
+| grade_your_own * | 4 / 1 | 63 / 1 | 0 / 1 |
+| optimize_rendering_engine_graded * | 4 / 1 | 25 / 11 | 0 / 11 |
+| the other 22 environments | 249 / 62 | 917 / 195 | 34 / 168 |
+| **total** | **330 / 82** | **1,917 / 296** | |
+
+- **The split is 80/20 by family (82 of 412), but 87/13 by run**, because the families with many replays (Qwen's
+  cheating runs, which carry the swap points) mostly drew train.
+- **Every gap environment is in the test set, and all of them have a mechanical measure** (tests, mypy, speedup,
+  benchmark target, scorer, accuracy), so all are hill-climbable in that sense.
+- **But only 3 of the 8 hold out one of Qwen's cheating runs** (ai_rd, optimize_rendering_engine, dashboard). In coding,
+  coding_norules, precommit_hook, grade_your_own and the graded rendering engine, the held-out families are runs where
+  Qwen did not cheat, so a held-out test there cannot show gemma picking up Qwen's cheating on an unseen incident.
+- **Proposed fix, not applied (it changes the data, the team's call):** stratify by environment *and* by whether the
+  family contains a cheating run, so each gap environment holds out at least one cheating family with its replays.
+- The committed 200 MB sample is not the training set: its val holds 1 family per environment and none from
+  grade_your_own, optimize_rendering_engine, lucky_seed, lucky_seed_readable_grader, puppeteer or swe_rebench_v2.
+
 ## Two variants
 
 - default (what the team wants first): **distil Qwen as it is**, hacked runs included, `hacked` kept per example.
