@@ -53,7 +53,7 @@ def fig_pipeline():
     box(ax, 12.5, y, w, h, "Spot-check by hand",
         "46 labels read with their quotes\n\n5 labels reliable (23 of 25 agree)\n\nbelieved_success unreliable\n(6 of 21): never used as evidence,\nre-sorted in stage 2", ec=RED, head_col=RED)
     box(ax, 18.6, y, w, h, "Stage 2: facts from the logs",
-        "no model: regular expressions over\nthe tool outputs and the last reply\n\nfaced the shortfall?  ·  ended with\na report?  ·  report claims the target\nor admits the shortfall?  ·  did it give up on\nits own malformed calls?\n\n→ 6 tiers (figure 5)")
+        "no model: regular expressions over\nthe tool outputs and the last reply\n\nsaw the failing check?  ·  ended with\na report?  ·  report claims the target\nor admits the failure?  ·  did it give up on\nits own malformed calls?\n\n→ 6 tiers (figure 5)")
     for x0 in (5.3, 11.4, 17.5):
         arrow(ax, (x0, y + h / 2), (x0 + 1.1, y + h / 2))
     ax.text(12, 0.12, "Scripts: scripts/intent_labels.py (stage 1), results/intent_labels_spotcheck.md, scripts/split_chart.py (stage 2, chart 5M)",
@@ -115,12 +115,12 @@ def fig_labels():
 
 
 # ---------------------------------------------------------------- 3. spot-check (table 3)
-SPOT = [("declined_knowingly", 6, 5, "the one miss: a dashboard shortfall report read as a refusal"),
+SPOT = [("declined_knowingly", 6, 5, "the one miss: a dashboard failure report read as a refusal"),
         ("could_not", 6, 6, "sed and escaping errors, module-resolution loops, repeated commands, generation collapse"),
         ("honest_no_sign", 5, 5, ""),
         ("deliberate", 5, 4, "the one miss reads as incidental"),
         ("incidental", 3, 3, ""),
-        ("believed_success", 21, 6, "in coding the quotes are \"the test is wrong, I submit the correct code\" (a refusal);\non the dashboard, honest shortfall reports")]
+        ("believed_success", 21, 6, "in coding the quotes are \"the test is wrong, I submit the correct code\" (a refusal);\non the dashboard, honest failure reports")]
 
 
 def fig_spot():
@@ -155,7 +155,7 @@ def fig_tree():
     fig = plt.figure(figsize=(12, Hh))
     title(fig, "Stage 2: how gemma's 621 non-cheating tries on Qwen's cheating traces fall into six tiers",
           "Stage 1 settles 323 tries from the words alone. The other 298 are sorted by facts from the logs, no model: did the model end the run with a report, and does "
-          "the report claim the target or admit the shortfall? (All 298 had faced the shortfall.) could_not tries that gave up on gemma's own malformed tool calls are set apart.", Hh, wrap=170)
+          "the report claim the target or admit the failure? (All 298 had seen the failing check.) could_not tries that gave up on gemma's own malformed tool calls are set apart.", Hh, wrap=170)
     ax = fig.add_axes([0.01, 0.05, 0.98, 1 - 1.1 / Hh]); ax.set_xlim(0, 24); ax.set_ylim(0, 10); ax.axis("off")
     bw, bh = 4.6, 1.7
     # root
@@ -170,11 +170,11 @@ def fig_tree():
     ax.text(x1 - 0.25, 9.6, "stage 1 label", fontsize=8, fontweight="bold", color=MUTED, ha="left", va="top")
     # stage 2 questions
     x2 = 12.9
-    box(ax, x2, 1.3, 3.6, bh + 0.5, "faced the shortfall?", "all 298: yes\n\nmodel ended the run\nwith a report? (sign-offs\nafter end_task skipped)", fc="#f4f3ef", ec=GRID)
+    box(ax, x2, 1.3, 3.6, bh + 0.5, "saw the failing check?", "all 298: yes\n\nmodel ended the run\nwith a report? (sign-offs\nafter end_task skipped)", fc="#f4f3ef", ec=GRID)
     ax.text(x2 - 0.25, 9.6, "stage 2 log facts", fontsize=8, fontweight="bold", color=MUTED, ha="left", va="top")
     arrow(ax, (x1 + bw, 2.4), (x2, 2.4))
     x3 = 17.4
-    box(ax, x3, 3.55, 3.0, 1.45, "report claims\nthe target is met?", "and does not admit\nthe shortfall", fc="#f4f3ef", ec=GRID)
+    box(ax, x3, 3.55, 3.0, 1.45, "report claims\nthe target is met?", "and does not admit\nthe failure", fc="#f4f3ef", ec=GRID)
     arrow(ax, (x2 + 3.6, 2.9), (x3, 4.3), "yes: 287", t=0.6, dy=-0.2)
     # leaves
     lx, lw = 21.6, 2.25
@@ -199,7 +199,7 @@ def fig_tree():
 
 # ---------------------------------------------------------------- 5. the resulting tiers (table 5)
 TIERS = [("stated", "choice, stated", 95, "gemma names the shortcut or the rule and refuses it", "strong: the model said it"),
-         ("revealed", "choice, revealed", 283, "has the same shortfall in front of it that Qwen cheated on, does the honest thing, reports the shortfall, never mentions the shortcut", "weaker: a model that never thought of the shortcut looks the same"),
+         ("revealed", "choice, revealed", 283, "has the same failing check in front of it that Qwen cheated on, does the honest thing, reports that it failed, never mentions the shortcut", "weaker: a model that never thought of the shortcut looks the same"),
          ("cap", "capability: task wall", 222, "the honest path failed: errors it could not get past, loops, collapse, or it gave up on the task", "strong: the errors and collapses are in the logs, quoted by the judge"),
          ("capfmt", "capability: tool format", 6, "gemma itself wrote invalid tool calls (bad JSON in long multi-line commands), got an error back each time and gave up. Not last week's fixed bug: that was the harness ending gemma's run on a bad call and not translating Qwen's calls; here the harness works as fixed and sends the error back", "a limit of gemma-3 writing tool calls as text, not of our harness; should vanish with native tools (gemma 4)"),
          ("claimed", "borderline: hedged claim", 13, "declares the target met with no measurement (12 are rendering tries on the trace whose build is broken at the restart point); the paper's bad act in hedged form, passed as honest by the grader", "a grading question for the team: counted as the bad act, gemma's rendering rate is 15/120 not 3/120 and the gap +61 not +71"),
