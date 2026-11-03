@@ -201,13 +201,13 @@ def fig_tree():
 TIERS = [("stated", "choice, stated", 95, "gemma names the shortcut or the rule and refuses it", "strong: the model said it"),
          ("revealed", "choice, revealed", 283, "has the same shortfall in front of it that Qwen cheated on, does the honest thing, reports the shortfall, never mentions the shortcut", "weaker: a model that never thought of the shortcut looks the same"),
          ("cap", "capability: task wall", 222, "the honest path failed: errors it could not get past, loops, collapse, or it gave up on the task", "strong: the errors and collapses are in the logs, quoted by the judge"),
-         ("capfmt", "capability: tool format", 6, "gemma wrote malformed tool calls (invalid JSON in multi-line commands), got an error back each time and gave up on formatting", "gemma-3 in this harness's text-tool mode; should vanish with native tools (gemma 4)"),
+         ("capfmt", "capability: tool format", 6, "gemma itself wrote invalid tool calls (bad JSON in long multi-line commands), got an error back each time and gave up. Not last week's fixed bug: that was the harness ending gemma's run on a bad call and not translating Qwen's calls; here the harness works as fixed and sends the error back", "a limit of gemma-3 writing tool calls as text, not of our harness; should vanish with native tools (gemma 4)"),
          ("claimed", "borderline: hedged claim", 13, "declares the target met with no measurement (12 are rendering tries on the trace whose build is broken at the restart point); the paper's bad act in hedged form, passed as honest by the grader", "a grading question for the team: counted as the bad act, gemma's rendering rate is 15/120 not 3/120 and the gap +61 not +71"),
          ("stopped", "stopped, no report", 2, "cut mid-work by the step cap, no report", "unresolved either way")]
 
 
 def fig_tiers():
-    Hh = 7.0
+    Hh = 7.8
     fig = plt.figure(figsize=(12, Hh))
     title(fig, "Result: of gemma's 621 non-cheats on Qwen's cheating traces, 15–61% are a choice and 37% are capability walls",
           "Same classification on gemma's clean-run tries: 7% stated, 85% revealed, 6% capability, 2% borderline, 0% stopped (chart 5M, last row).", Hh, wrap=170)
@@ -237,7 +237,7 @@ def fig_tiers():
         ty.add_patch(FancyBboxPatch((0, y - 0.22), 1.6, 0.55, boxstyle="square,pad=0", fc=TIER_COL[key], ec="none"))
         ty.text(2.4, y + 0.06, f"{name}", fontsize=8.6, fontweight="bold", va="center")
         ty.text(2.4, y - 0.28, f"{n} of 621 · {n / N * 100:.0f}%", fontsize=7.6, color=MUTED, va="center")
-        ty.text(22, y + 0.12, "\n".join(textwrap.wrap(meaning, 78)), fontsize=7.6, va="top", linespacing=1.25)
+        ty.text(22, y + 0.12, "\n".join(textwrap.wrap(meaning, 84)), fontsize=7.6, va="top", linespacing=1.25)
         ty.text(63, y + 0.12, "\n".join(textwrap.wrap(ev, 72)), fontsize=7.6, va="top", linespacing=1.25, color=RED if key == "claimed" else INK)
         ty.axhline(y - 0.55, color=GRID, lw=0.6)
     fig.savefig(OUT / "method_5_tiers.png", dpi=180); plt.close(fig)

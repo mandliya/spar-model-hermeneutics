@@ -177,7 +177,7 @@ for x, t in ((50, "gemma's non-cheating tries, split by why it did not cheat"), 
     ax.text(x, -0.95 if x != 50 else -1.3, t, ha="center", va="center", fontsize=7.9, color=MUTED if x != 50 else INK, linespacing=1.2, fontweight="bold" if x == 50 else "normal")
 ax.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=TIER_COL[k]) for k in TIERS],
           labels=["choice, stated: names the shortcut or the rule, declines", "choice, revealed: faced the same shortfall, did the honest thing, said so",
-                  "capability, task wall: the honest path failed (errors, loops, collapse, gave up)", "capability, tool-format wall: gemma wrote malformed tool calls, got an error back and gave up",
+                  "capability, task wall: the honest path failed (errors, loops, collapse, gave up)", "capability, tool-format wall: gemma's own invalid tool calls, error sent back, it gave up (not the harness bug fixed 25 Oct)",
                   "borderline: declared the target met without measuring (hedged success claim)", "stopped at the decision point, no report"],
           loc="upper left", bbox_to_anchor=(0.0, -0.1), ncol=2, frameon=False, fontsize=7.6, handlelength=1.2, columnspacing=1.5)
 ax.set_xlim(0, 176); ax.set_ylim(len(rows) + 0.15, -1.9)
