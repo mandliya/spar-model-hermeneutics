@@ -1,0 +1,3037 @@
+{
+ "seed": 0,
+ "split": 0.8,
+ "exclude_hacked": false,
+ "envs": null,
+ "max_context_chars": 0,
+ "sampling": "full set is 6712 MB (29807 examples, 386 runs); wrote a stratified sample of 85 runs (200 MB), the run families that fit the 200 MB budget in a seeded round-robin over environments (long families skipped; no run of async_conversion, revert_or_refactor)",
+ "git_commit": "d61693ec7eb19e0a6fd9b1c8120e896d0a677b47",
+ "env_repo_commit": "310c03fbafdbb16df9ee043a7d9dd18a6d8cd3ec",
+ "counts": {
+  "ai_rd": {
+   "train": 20,
+   "val": 12,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "chess": {
+   "train": 37,
+   "val": 26,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "coding": {
+   "train": 27,
+   "val": 17,
+   "train_runs": 3,
+   "val_runs": 1
+  },
+  "coding_norules": {
+   "train": 32,
+   "val": 90,
+   "train_runs": 3,
+   "val_runs": 1
+  },
+  "copying_of_answers": {
+   "train": 16,
+   "val": 1,
+   "train_runs": 3,
+   "val_runs": 1
+  },
+  "currency_conversion": {
+   "train": 3,
+   "val": 1,
+   "train_runs": 3,
+   "val_runs": 1
+  },
+  "dashboard_costly_failure": {
+   "train": 12,
+   "val": 32,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "eval_tampering": {
+   "train": 13,
+   "val": 4,
+   "train_runs": 3,
+   "val_runs": 1
+  },
+  "funding_email": {
+   "train": 26,
+   "val": 2,
+   "train_runs": 3,
+   "val_runs": 1
+  },
+  "grade_your_own": {
+   "train": 15,
+   "val": 0,
+   "train_runs": 1,
+   "val_runs": 0
+  },
+  "lazy_investigation": {
+   "train": 41,
+   "val": 30,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "leaked_scorer": {
+   "train": 16,
+   "val": 2,
+   "train_runs": 3,
+   "val_runs": 1
+  },
+  "leaked_tests": {
+   "train": 66,
+   "val": 46,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "lucky_seed": {
+   "train": 6,
+   "val": 0,
+   "train_runs": 1,
+   "val_runs": 0
+  },
+  "lucky_seed_readable_grader": {
+   "train": 501,
+   "val": 0,
+   "train_runs": 2,
+   "val_runs": 0
+  },
+  "norvane": {
+   "train": 3,
+   "val": 4,
+   "train_runs": 3,
+   "val_runs": 1
+  },
+  "optimize_lru_cache": {
+   "train": 4,
+   "val": 1,
+   "train_runs": 4,
+   "val_runs": 1
+  },
+  "optimize_rendering_engine": {
+   "train": 201,
+   "val": 0,
+   "train_runs": 1,
+   "val_runs": 0
+  },
+  "optimize_rendering_engine_graded": {
+   "train": 45,
+   "val": 111,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "parse_duration": {
+   "train": 6,
+   "val": 3,
+   "train_runs": 3,
+   "val_runs": 1
+  },
+  "precommit_hook": {
+   "train": 18,
+   "val": 5,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "puppeteer": {
+   "train": 63,
+   "val": 0,
+   "train_runs": 1,
+   "val_runs": 0
+  },
+  "reference_extraction": {
+   "train": 18,
+   "val": 32,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "sandbagging": {
+   "train": 44,
+   "val": 18,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "secret_number": {
+   "train": 20,
+   "val": 7,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "swe_rebench_v2": {
+   "train": 16,
+   "val": 0,
+   "train_runs": 2,
+   "val_runs": 0
+  },
+  "tictactoe": {
+   "train": 23,
+   "val": 30,
+   "train_runs": 2,
+   "val_runs": 1
+  },
+  "tower_of_hanoi": {
+   "train": 28,
+   "val": 14,
+   "train_runs": 2,
+   "val_runs": 1
+  }
+ },
+ "totals": {
+  "train": 1320,
+  "val": 488,
+  "train_runs": 63,
+  "val_runs": 22,
+  "full_set_examples": 29807,
+  "full_set_bytes": 7038435726
+ },
+ "excluded_runs": [
+  {
+   "env": "eval_tampering",
+   "run": "results/raw/modal/gigi-forensics-eval-tampering/eval_tampering/notes_self_weapons/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-34-053028/run-6",
+   "kind": "full",
+   "reason": "lost: provider failure"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-53-50-441957/run-5",
+   "kind": "full",
+   "reason": "lost: provider failure"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/modal/gigi-forensics-lucky-seed/lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-31-791265/run-8",
+   "kind": "full",
+   "reason": "lost: crash"
+  },
+  {
+   "env": "chess",
+   "run": "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-18_23-32-13-727245/run-1",
+   "kind": "full",
+   "reason": "lost: provider failure"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-2_K123/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-18-52-804685/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-2_K123/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-18-52-804685/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-2_K123/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-09-51-824630/run-1",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-2_K123/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-09-51-824630/run-2",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-2_K123/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-09-51-824630/run-3",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-2_K123/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-09-51-824630/run-4",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-2_K123/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-09-51-824630/run-5",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "chess",
+   "run": "results/raw/swap_all/chess/2026-10-18_22-50-40-885349_run-1_K48/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-19-30-795234/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "chess",
+   "run": "results/raw/swap_all/chess/2026-10-18_22-50-40-885349_run-1_K48/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-19-30-795234/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "chess",
+   "run": "results/raw/swap_all/chess/2026-10-18_22-53-59-506250_run-1_K23/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-19-30-914068/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "chess",
+   "run": "results/raw/swap_all/chess/2026-10-18_23-48-12-021713_run-1_K12/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-19-30-950728/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-10",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-11",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-12",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-13",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-14",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-15",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-16",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-17",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-18",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-19",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-2",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-20",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-21",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-22",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-23",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-24",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-25",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-26",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-27",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-28",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-29",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-3",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-30",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-31",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-32",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-33",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-34",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-35",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-36",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-37",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-38",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-39",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-4",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-40",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-41",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-42",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-43",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-44",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-45",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-46",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-47",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-48",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-49",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-5",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-50",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-51",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-52",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-53",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-54",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-55",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-56",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-57",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-58",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-59",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-6",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-60",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-7",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-8",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-07-030704/run-9",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K63/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-12-30-445030/run-32",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-22-07-534598/run-10",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_11-26-46-315566/run-17",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_11-26-46-315566/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_11-26-46-315566/run-37",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_11-26-46-315566/run-39",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_11-26-46-315566/run-50",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-1",
+   "kind": "replay",
+   "reason": "no transcript (not graded)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-10",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-11",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-12",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-13",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-14",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-15",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-16",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-17",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-18",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-19",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-2",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-20",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-21",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-22",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-23",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-24",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-25",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-26",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-27",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-28",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-29",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-3",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-30",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-31",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-32",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-33",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-34",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-35",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-36",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-37",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-38",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-39",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-4",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-40",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-41",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-42",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-43",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-44",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-45",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-46",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-47",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-48",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-49",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-5",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-50",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-51",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-52",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-53",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-54",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-55",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-56",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-57",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-58",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-59",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-6",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-60",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-61",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-62",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-63",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-64",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-65",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-66",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-67",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-68",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-69",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-7",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-70",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-8",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_20-59-26-225200/run-9",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-13-06-917990/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "dashboard_costly_failure",
+   "run": "results/raw/swap_all/dashboard_costly_failure/2026-10-19_10-57-49-884559_run-2_K62/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-13-06-917990/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K30/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-16-429812/run-2",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K30/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-16-429812/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K30/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-16-429812/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K30/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-16-429812/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K30/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-16-429812/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K29/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-17-426732/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K29/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-17-426732/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K29/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-17-426732/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K29/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-17-426732/run-5",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K29/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-17-426732/run-6",
+   "kind": "replay",
+   "reason": "no transcript (crash)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K29/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-17-426732/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-5_K29/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-13-45-941520/run-1",
+   "kind": "replay",
+   "reason": "no transcript (no log)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K92/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-18-176137/run-1",
+   "kind": "replay",
+   "reason": "no transcript (context window exceeded)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K92/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-18-176137/run-10",
+   "kind": "replay",
+   "reason": "no transcript (context window exceeded)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K92/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-18-176137/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K92/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-18-176137/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K92/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-18-176137/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K92/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-18-176137/run-6",
+   "kind": "replay",
+   "reason": "no transcript (context window exceeded)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K92/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-18-176137/run-8",
+   "kind": "replay",
+   "reason": "no transcript (crash)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K92/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-25-18-176137/run-9",
+   "kind": "replay",
+   "reason": "no transcript (context window exceeded)"
+  },
+  {
+   "env": "lazy_investigation",
+   "run": "results/raw/swap_all/lazy_investigation/2026-10-19_10-59-17-279542_run-1_K6/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_13-33-03-752990/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lazy_investigation",
+   "run": "results/raw/swap_all/lazy_investigation/2026-10-19_10-59-17-279542_run-1_K6/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_13-33-03-752990/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lazy_investigation",
+   "run": "results/raw/swap_all/lazy_investigation/2026-10-19_10-59-17-279542_run-1_K6/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_13-33-03-752990/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lazy_investigation",
+   "run": "results/raw/swap_all/lazy_investigation/2026-10-19_10-59-17-279542_run-1_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_13-33-03-996361/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lazy_investigation",
+   "run": "results/raw/swap_all/lazy_investigation/2026-10-19_10-59-17-279542_run-1_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_13-33-03-996361/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lazy_investigation",
+   "run": "results/raw/swap_all/lazy_investigation/2026-10-19_10-59-17-279542_run-1_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_13-33-03-996361/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lazy_investigation",
+   "run": "results/raw/swap_all/lazy_investigation/2026-10-19_10-59-17-279542_run-1_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_13-33-03-996361/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lazy_investigation",
+   "run": "results/raw/swap_all/lazy_investigation/2026-10-19_10-59-17-279542_run-12_K3/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_13-32-38-327435/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "leaked_tests",
+   "run": "results/raw/swap_all/leaked_tests/2026-10-19_10-57-18-028514_run-1_K12/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-14-086523/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "leaked_tests",
+   "run": "results/raw/swap_all/leaked_tests/2026-10-19_10-57-18-028514_run-1_K12/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-14-086523/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "leaked_tests",
+   "run": "results/raw/swap_all/leaked_tests/2026-10-19_10-57-18-028514_run-2_K34/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-14-098926/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "leaked_tests",
+   "run": "results/raw/swap_all/leaked_tests/2026-10-19_10-57-18-028514_run-2_K34/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-14-098926/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "leaked_tests",
+   "run": "results/raw/swap_all/leaked_tests/2026-10-19_10-57-18-028514_run-2_K34/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-14-098926/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "leaked_tests",
+   "run": "results/raw/swap_all/leaked_tests/2026-10-19_10-57-18-028514_run-3_K32/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-14-086095/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "leaked_tests",
+   "run": "results/raw/swap_all/leaked_tests/2026-10-19_10-57-18-028514_run-3_K32/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-14-086095/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "leaked_tests",
+   "run": "results/raw/swap_all/leaked_tests/2026-10-19_10-57-18-028514_run-3_K32/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-14-086095/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "leaked_tests",
+   "run": "results/raw/swap_all/leaked_tests/2026-10-19_10-57-18-028514_run-3_K32/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-14-24-984194/run-3",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-1_K14/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-543830/run-10",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-1_K14/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-543830/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-2_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-195550/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-2_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-195550/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-3_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-223803/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-3_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-223803/run-10",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-3_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-223803/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-3_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-223803/run-4",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-3_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-223803/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-3_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-223803/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-3_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-223803/run-8",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "lucky_seed",
+   "run": "results/raw/swap_all/lucky_seed/2026-10-19_10-56-31-791265_run-3_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-01-223803/run-9",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K359/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-29-903350/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K359/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-29-903350/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K359/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-29-903350/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K359/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-29-903350/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K359/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-29-903350/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K359/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-11-28-621134/run-6",
+   "kind": "replay",
+   "reason": "no transcript (step cap, no report)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K359/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-11-28-621134/run-7",
+   "kind": "replay",
+   "reason": "no transcript (step cap, no report)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K359/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-11-28-621134/run-8",
+   "kind": "replay",
+   "reason": "no transcript (step cap, no report)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K359/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-11-28-621134/run-9",
+   "kind": "replay",
+   "reason": "no transcript (step cap, no report)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K48/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-29-850855/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K48/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-29-850855/run-6",
+   "kind": "replay",
+   "reason": "no transcript (crash)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K48/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-29-850855/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K48/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-29-850855/run-9",
+   "kind": "replay",
+   "reason": "no transcript (crash)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K498/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-39-29-848974/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K498/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-11-28-621134/run-10",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K498/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-11-28-621134/run-9",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-22-715742/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-22-715742/run-4",
+   "kind": "replay",
+   "reason": "no transcript (crash)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-11",
+   "kind": "replay",
+   "reason": "no transcript (not graded)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-12",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-13",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-14",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-15",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-16",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-17",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-18",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-19",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-2",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-20",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-21",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-22",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-23",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-3",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-4",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-5",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-6",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-7",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-8",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K10/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-00-47-806400/run-9",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-10",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-11",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-12",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-13",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-14",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-15",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-16",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-17",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-18",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-19",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-2",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-20",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-21",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-22",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-3",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-4",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-5",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-6",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-7",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-8",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_21-02-06-944011/run-9",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-25-26-825837/run-2",
+   "kind": "replay",
+   "reason": "no transcript (not graded)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-25-26-825837/run-3",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-1_K9/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-25-26-825837/run-4",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no full final state)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-4_K56/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-22-695041/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-4_K55/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-22-690379/run-2",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_10-53-50-441957_run-4_K55/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-22-690379/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_14-40-21-380553_run-1_K24/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-23-636332/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_14-40-21-380553_run-1_K24/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-23-636332/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_14-40-21-380553_run-1_K24/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-23-636332/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_14-40-21-380553_run-1_K24/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-23-636332/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_14-40-21-380553_run-1_K23/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-23-432878/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine",
+   "run": "results/raw/swap_all/optimize_rendering_engine/2026-10-19_14-40-21-380553_run-1_K23/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-40-23-432878/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-1_K2/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-963207/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-1_K2/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-963207/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-1_K2/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-963207/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-1_K2/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-963207/run-6",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-1_K2/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-963207/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-1_K2/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-963207/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-1_K2/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-12-44-276031/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-2_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-882189/run-10",
+   "kind": "replay",
+   "reason": "no transcript (crash)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-2_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-882189/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-2_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-882189/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-2_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-882189/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-2_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-12-45-232311/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-3_K3/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-898155/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-3_K3/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-898155/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "optimize_rendering_engine_graded",
+   "run": "results/raw/swap_all/optimize_rendering_engine_graded/2026-10-19_10-54-09-234825_run-3_K3/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-27-898155/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "parse_duration",
+   "run": "results/raw/swap_all/parse_duration/2026-10-19_11-00-41-256186_run-10_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-59-721977/run-2",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "parse_duration",
+   "run": "results/raw/swap_all/parse_duration/2026-10-19_11-00-41-256186_run-10_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-17-12-125725/run-1",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "parse_duration",
+   "run": "results/raw/swap_all/parse_duration/2026-10-19_11-00-41-256186_run-11_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-59-725409/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "parse_duration",
+   "run": "results/raw/swap_all/parse_duration/2026-10-19_11-00-41-256186_run-11_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-41-59-725409/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "parse_duration",
+   "run": "results/raw/swap_all/parse_duration/2026-10-19_11-00-41-256186_run-11_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-17-13-017648/run-1",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "parse_duration",
+   "run": "results/raw/swap_all/parse_duration/2026-10-19_11-00-41-256186_run-11_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-17-13-017648/run-2",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "puppeteer",
+   "run": "results/raw/swap_all/puppeteer/2026-10-19_10-55-45-718688_run-2_K27/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-29-633703/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "puppeteer",
+   "run": "results/raw/swap_all/puppeteer/2026-10-19_10-55-45-718688_run-3_K298/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-29-634938/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "puppeteer",
+   "run": "results/raw/swap_all/puppeteer/2026-10-19_10-55-45-718688_run-3_K298/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-29-634938/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "puppeteer",
+   "run": "results/raw/swap_all/puppeteer/2026-10-19_10-55-45-718688_run-3_K298/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-29-634938/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "puppeteer",
+   "run": "results/raw/swap_all/puppeteer/2026-10-19_10-55-45-718688_run-3_K298/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-29-634938/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "reference_extraction",
+   "run": "results/raw/swap_all/reference_extraction/2026-10-19_10-58-13-974739_run-1_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-36-202482/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "reference_extraction",
+   "run": "results/raw/swap_all/reference_extraction/2026-10-19_10-58-13-974739_run-1_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-14-06-925492/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "reference_extraction",
+   "run": "results/raw/swap_all/reference_extraction/2026-10-19_10-58-13-974739_run-10_K2/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-36-150047/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "reference_extraction",
+   "run": "results/raw/swap_all/reference_extraction/2026-10-19_10-58-13-974739_run-2_K17/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-36-155337/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-1_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-455732/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-1_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-455732/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-1_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-455732/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-1_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-455732/run-9",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-1_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-13-22-528711/run-1",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-1_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-13-22-528711/run-2",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-1_K28/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-13-22-528711/run-3",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-2_K30/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-436788/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-2_K30/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-13-22-545494/run-1",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-3_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-440678/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-3_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-440678/run-10",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-3_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-440678/run-3",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-3_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-440678/run-4",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-3_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-440678/run-5",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-3_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-440678/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-3_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-440678/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-3_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-440678/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "revert_or_refactor",
+   "run": "results/raw/swap_all/revert_or_refactor/2026-10-19_10-55-23-727056_run-3_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-43-48-440678/run-9",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "sandbagging",
+   "run": "results/raw/swap_all/sandbagging/2026-10-19_11-00-07-240490_run-11_K18/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-44-16-094569/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "sandbagging",
+   "run": "results/raw/swap_all/sandbagging/2026-10-19_11-00-07-240490_run-11_K18/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-44-16-094569/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "sandbagging",
+   "run": "results/raw/swap_all/sandbagging/2026-10-19_11-00-07-240490_run-11_K18/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-44-16-094569/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "tictactoe",
+   "run": "results/raw/swap_all/tictactoe/2026-10-19_10-57-47-484642_run-11_K6/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-46-09-290898/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "tower_of_hanoi",
+   "run": "results/raw/swap_all/tower_of_hanoi/2026-10-19_10-58-38-449604_run-1_K18/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-45-33-330711/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "tower_of_hanoi",
+   "run": "results/raw/swap_all/tower_of_hanoi/2026-10-19_10-58-38-449604_run-1_K18/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-13-23-098676/run-1",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "tower_of_hanoi",
+   "run": "results/raw/swap_all/tower_of_hanoi/2026-10-19_10-58-38-449604_run-11_K18/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-45-33-377645/run-2",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "tower_of_hanoi",
+   "run": "results/raw/swap_all/tower_of_hanoi/2026-10-19_10-58-38-449604_run-11_K18/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-45-33-377645/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "tower_of_hanoi",
+   "run": "results/raw/swap_all/tower_of_hanoi/2026-10-19_10-58-38-449604_run-11_K18/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-13-18-414762/run-1",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "tower_of_hanoi",
+   "run": "results/raw/swap_all/tower_of_hanoi/2026-10-19_10-58-38-449604_run-11_K18/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_16-13-18-414762/run-2",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-48-996190/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-48-996190/run-10",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-48-996190/run-2",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-48-996190/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-48-996190/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-48-996190/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-48-996190/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-48-996190/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-48-996190/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-48-996190/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-36-051993/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-36-051993/run-2",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-36-051993/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-36-051993/run-4",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-36-051993/run-5",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-36-051993/run-6",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-36-051993/run-7",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-36-051993/run-8",
+   "kind": "replay",
+   "reason": "no transcript (finished)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-1_K119/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-37-23-361036/run-2",
+   "kind": "replay",
+   "reason": "no transcript (no value for the measure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-2_K104/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-49-066441/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-2_K104/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-50-49-066441/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-3_K120/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-834125/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-3_K120/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-834125/run-2",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-3_K120/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-834125/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-3_K120/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-834125/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-3_K120/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-834125/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-3_K120/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-834125/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-3_K120/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-834125/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-3_K120/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-834125/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "async_conversion",
+   "run": "results/raw/swap_all/async_conversion/2026-10-19_10-54-58-362320_run-3_K120/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-834125/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K70/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-090250/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K70/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-090250/run-10",
+   "kind": "replay",
+   "reason": "no transcript (context window exceeded)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K70/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-090250/run-2",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K70/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-090250/run-3",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K70/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-090250/run-4",
+   "kind": "replay",
+   "reason": "no transcript (crash)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K70/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-090250/run-5",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K70/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-090250/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K70/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-090250/run-8",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "grade_your_own",
+   "run": "results/raw/swap_all/grade_your_own/2026-10-19_10-54-43-338056_run-1_K70/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-13-090250/run-9",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-109881/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-109881/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-109881/run-2",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-109881/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-109881/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-109881/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-109881/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-109881/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-109881/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-109881/run-9",
+   "kind": "replay",
+   "reason": "no transcript (crash)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-778662/run-1",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-778662/run-10",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-778662/run-2",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-778662/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-778662/run-4",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-778662/run-5",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-778662/run-6",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-778662/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-778662/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-1_K268/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-778662/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-467162/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-467162/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-467162/run-2",
+   "kind": "replay",
+   "reason": "no transcript (context window exceeded)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-467162/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-467162/run-4",
+   "kind": "replay",
+   "reason": "no transcript (crash)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-467162/run-5",
+   "kind": "replay",
+   "reason": "no transcript (context window exceeded)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-467162/run-6",
+   "kind": "replay",
+   "reason": "no transcript (context window exceeded)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-467162/run-7",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-467162/run-8",
+   "kind": "replay",
+   "reason": "no transcript (context window exceeded)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-51-39-467162/run-9",
+   "kind": "replay",
+   "reason": "no transcript (context window exceeded)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-10_K43/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-36-46-398423/run-2",
+   "kind": "replay",
+   "reason": "no transcript (crash)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-52-03-137393/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-52-03-137393/run-10",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-52-03-137393/run-2",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-52-03-137393/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-52-03-137393/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-52-03-137393/run-5",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-52-03-137393/run-6",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-52-03-137393/run-7",
+   "kind": "replay",
+   "reason": "no transcript (OpenRouter budget stop)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-52-03-137393/run-8",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_12-52-03-137393/run-9",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-620161/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-620161/run-2",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-620161/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-620161/run-5",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "lucky_seed_readable_grader",
+   "run": "results/raw/swap_all/lucky_seed_readable_grader/2026-10-19_10-56-55-100600_run-2_K321/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_18-41-35-620161/run-7",
+   "kind": "replay",
+   "reason": "no transcript (cut off, no final state)"
+  },
+  {
+   "env": "ai_rd",
+   "run": "results/raw/swap_all/ai_rd/2026-10-21_22-26-04-493512_run-1_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_11-31-06-827410/run-1",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "ai_rd",
+   "run": "results/raw/swap_all/ai_rd/2026-10-21_22-26-04-493512_run-1_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_11-31-06-827410/run-2",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "ai_rd",
+   "run": "results/raw/swap_all/ai_rd/2026-10-21_22-26-04-493512_run-1_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_11-31-06-827410/run-3",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "ai_rd",
+   "run": "results/raw/swap_all/ai_rd/2026-10-21_22-26-04-493512_run-1_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_11-31-06-827410/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "ai_rd",
+   "run": "results/raw/swap_all/ai_rd/2026-10-21_22-26-04-493512_run-1_K1/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_11-31-06-827410/run-6",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "coding_norules",
+   "run": "results/raw/swap_all/coding_norules/2026-10-21_20-43-32-193139_run-1_K5/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-40-46-869696/run-9",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  },
+  {
+   "env": "coding_norules",
+   "run": "results/raw/swap_all/coding_norules/2026-10-21_20-43-32-193139_run-10_K16/qwen/resume/qwen-qwen3-next-80b-a3b-instruct/2026-10-27_15-42-07-358751/run-4",
+   "kind": "replay",
+   "reason": "no transcript (provider failure)"
+  }
+ ],
+ "runs_not_in_sample": [
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-18_22-50-40-885349/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-18_22-53-59-506250/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-18_23-48-12-021713/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-18_23-56-58-203454/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-11-00-972854/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-15-57-409630/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-19-47-673406/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-21-10-451771/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-23-15-444364/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-23-48-636521/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-24-27-637343/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-25-27-398437/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-26-39-431684/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-27-43-978109/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-28-42-751665/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_00-30-19-878966/run-1",
+  "results/raw/full_laptop/chess/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-39-29-780744/run-1",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_22-26-04-493512/run-1",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_22-26-04-493512/run-10",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_22-26-04-493512/run-2",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_22-26-04-493512/run-3",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_22-26-04-493512/run-7",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_22-26-04-493512/run-9",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_14-08-10-174826/run-10",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_14-08-10-174826/run-2",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_14-08-10-174826/run-3",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_14-08-10-174826/run-4",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_14-08-10-174826/run-5",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_14-08-10-174826/run-7",
+  "results/raw/modal/gigi-forensics-ai-rd/ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-10-26_14-08-10-174826/run-8",
+  "results/raw/modal/gigi-forensics-aj-data-anon/aj_data_anon/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-13-974739/run-1",
+  "results/raw/modal/gigi-forensics-aj-data-anon/aj_data_anon/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-13-974739/run-2",
+  "results/raw/modal/gigi-forensics-aj-data-anon/aj_data_anon/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-13-974739/run-4",
+  "results/raw/modal/gigi-forensics-aj-data-anon/aj_data_anon/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-13-974739/run-5",
+  "results/raw/modal/gigi-forensics-aj-data-anon/aj_data_anon/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-13-974739/run-6",
+  "results/raw/modal/gigi-forensics-aj-data-anon/aj_data_anon/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-13-974739/run-7",
+  "results/raw/modal/gigi-forensics-aj-data-anon/aj_data_anon/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-13-974739/run-9",
+  "results/raw/modal/gigi-forensics-async-conversion/async_conversion/default/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-58-362320/run-1",
+  "results/raw/modal/gigi-forensics-async-conversion/async_conversion/default/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-58-362320/run-2",
+  "results/raw/modal/gigi-forensics-async-conversion/async_conversion/default/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-58-362320/run-3",
+  "results/raw/modal/gigi-forensics-async-conversion/async_conversion/default/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-58-362320/run-4",
+  "results/raw/modal/gigi-forensics-async-conversion/async_conversion/default/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-58-362320/run-5",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-1",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-10",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-11",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-12",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-14",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-15",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-17",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-18",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-19",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-2",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-20",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-3",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-5",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-6",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-8",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-193139/run-9",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-1",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-11",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-12",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-13",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-14",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-15",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-16",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-18",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-19",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-2",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-20",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-3",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-5",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-7",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-8",
+  "results/raw/modal/gigi-forensics-coding/coding/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-32-207727/run-9",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-1",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-10",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-11",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-12",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-13",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-16",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-17",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-19",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-2",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-20",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-3",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-4",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-5",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-6",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-7",
+  "results/raw/modal/gigi-forensics-currency-conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-17-811209/run-9",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-53-50-441957/run-1",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-53-50-441957/run-2",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-53-50-441957/run-3",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-53-50-441957/run-4",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-49-884559/run-1",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-49-884559/run-2",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-49-884559/run-3",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-49-884559/run-4",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-49-884559/run-5",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-49-884559/run-7",
+  "results/raw/modal/gigi-forensics-dashboard-perf/dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-27-22-127648/run-1",
+  "results/raw/modal/gigi-forensics-eval-tampering/eval_tampering/notes_self_weapons/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-34-053028/run-1",
+  "results/raw/modal/gigi-forensics-eval-tampering/eval_tampering/notes_self_weapons/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-34-053028/run-11",
+  "results/raw/modal/gigi-forensics-eval-tampering/eval_tampering/notes_self_weapons/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-34-053028/run-15",
+  "results/raw/modal/gigi-forensics-eval-tampering/eval_tampering/notes_self_weapons/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-34-053028/run-18",
+  "results/raw/modal/gigi-forensics-eval-tampering/eval_tampering/notes_self_weapons/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-34-053028/run-3",
+  "results/raw/modal/gigi-forensics-eval-tampering/eval_tampering/notes_self_weapons/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-34-053028/run-4",
+  "results/raw/modal/gigi-forensics-eval-tampering/eval_tampering/notes_self_weapons/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-34-053028/run-5",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-10",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-11",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-13",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-14",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-15",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-18",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-2",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-3",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-4",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-5",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-6",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-7",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-8",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-10-179226/run-9",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-28-52-171003/run-1",
+  "results/raw/modal/gigi-forensics-funding-email/funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-28-52-171003/run-2",
+  "results/raw/modal/gigi-forensics-grade-your-own/grade_your_own/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-43-338056/run-1",
+  "results/raw/modal/gigi-forensics-grade-your-own/grade_your_own/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-43-338056/run-3",
+  "results/raw/modal/gigi-forensics-grade-your-own/grade_your_own/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-43-338056/run-4",
+  "results/raw/modal/gigi-forensics-grade-your-own/grade_your_own/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-43-338056/run-5",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-1",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-11",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-13",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-14",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-15",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-16",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-2",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-3",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-4",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-6",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-7",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-8",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-17-279542/run-9",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-29-54-895499/run-1",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-29-54-895499/run-2",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-29-54-895499/run-3",
+  "results/raw/modal/gigi-forensics-lazy-investigation/lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-29-54-895499/run-4",
+  "results/raw/modal/gigi-forensics-leaked-fix/leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-18-028514/run-1",
+  "results/raw/modal/gigi-forensics-leaked-fix/leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-18-028514/run-3",
+  "results/raw/modal/gigi-forensics-leaked-fix/leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-00-259517/run-1",
+  "results/raw/modal/gigi-forensics-leaked-fix/leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-00-259517/run-10",
+  "results/raw/modal/gigi-forensics-leaked-fix/leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-00-259517/run-2",
+  "results/raw/modal/gigi-forensics-leaked-fix/leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-00-259517/run-5",
+  "results/raw/modal/gigi-forensics-leaked-fix/leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-00-259517/run-6",
+  "results/raw/modal/gigi-forensics-leaked-fix/leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-59-00-259517/run-7",
+  "results/raw/modal/gigi-forensics-lucky-seed-readable-grader/lucky_seed_readable_grader/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-55-100600/run-1",
+  "results/raw/modal/gigi-forensics-lucky-seed-readable-grader/lucky_seed_readable_grader/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-55-100600/run-10",
+  "results/raw/modal/gigi-forensics-lucky-seed-readable-grader/lucky_seed_readable_grader/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-55-100600/run-3",
+  "results/raw/modal/gigi-forensics-lucky-seed-readable-grader/lucky_seed_readable_grader/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-55-100600/run-5",
+  "results/raw/modal/gigi-forensics-lucky-seed-readable-grader/lucky_seed_readable_grader/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-55-100600/run-6",
+  "results/raw/modal/gigi-forensics-lucky-seed-readable-grader/lucky_seed_readable_grader/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-55-100600/run-7",
+  "results/raw/modal/gigi-forensics-lucky-seed-readable-grader/lucky_seed_readable_grader/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-55-100600/run-8",
+  "results/raw/modal/gigi-forensics-lucky-seed-readable-grader/lucky_seed_readable_grader/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-55-100600/run-9",
+  "results/raw/modal/gigi-forensics-lucky-seed/lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-31-791265/run-1",
+  "results/raw/modal/gigi-forensics-lucky-seed/lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-31-791265/run-2",
+  "results/raw/modal/gigi-forensics-lucky-seed/lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-31-791265/run-3",
+  "results/raw/modal/gigi-forensics-lucky-seed/lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-31-791265/run-4",
+  "results/raw/modal/gigi-forensics-lucky-seed/lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-31-791265/run-5",
+  "results/raw/modal/gigi-forensics-lucky-seed/lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-31-791265/run-6",
+  "results/raw/modal/gigi-forensics-lucky-seed/lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-31-791265/run-7",
+  "results/raw/modal/gigi-forensics-lucky-seed/lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-27-18-001977/run-2",
+  "results/raw/modal/gigi-forensics-norvane/norvane/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-25-102381/run-1",
+  "results/raw/modal/gigi-forensics-norvane/norvane/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-25-102381/run-10",
+  "results/raw/modal/gigi-forensics-norvane/norvane/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-25-102381/run-11",
+  "results/raw/modal/gigi-forensics-norvane/norvane/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-25-102381/run-13",
+  "results/raw/modal/gigi-forensics-norvane/norvane/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-25-102381/run-16",
+  "results/raw/modal/gigi-forensics-norvane/norvane/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-25-102381/run-17",
+  "results/raw/modal/gigi-forensics-norvane/norvane/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-25-102381/run-19",
+  "results/raw/modal/gigi-forensics-norvane/norvane/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-25-102381/run-6",
+  "results/raw/modal/gigi-forensics-norvane/norvane/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-25-102381/run-7",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-38-449604/run-1",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-38-449604/run-11",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-38-449604/run-13",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-38-449604/run-3",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-38-449604/run-4",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-38-449604/run-5",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-58-38-449604/run-7",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-28-19-002393/run-1",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-28-19-002393/run-2",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-28-19-002393/run-3",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-28-19-002393/run-4",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-28-19-002393/run-5",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-28-19-002393/run-6",
+  "results/raw/modal/gigi-forensics-palisades-tower-of-hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-28-19-002393/run-7",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-1",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-10",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-11",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-12",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-14",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-15",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-2",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-3",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-5",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-7",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-8",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-41-256186/run-9",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-31-54-484055/run-1",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-31-54-484055/run-2",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-31-54-484055/run-4",
+  "results/raw/modal/gigi-forensics-parse-duration/parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-31-54-484055/run-6",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-1",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-11",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-12",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-13",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-14",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-15",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-16",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-17",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-18",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-19",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-2",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-4",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-5",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-6",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-7",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-8",
+  "results/raw/modal/gigi-forensics-precommit-hook/precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-44-38-567512/run-9",
+  "results/raw/modal/gigi-forensics-puppeteer/puppeteer/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-55-45-718688/run-1",
+  "results/raw/modal/gigi-forensics-puppeteer/puppeteer/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-55-45-718688/run-2",
+  "results/raw/modal/gigi-forensics-puppeteer/puppeteer/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-55-45-718688/run-3",
+  "results/raw/modal/gigi-forensics-puppeteer/puppeteer/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-55-45-718688/run-5",
+  "results/raw/modal/gigi-forensics-revert-or-refactor/revert_or_refactor/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-55-23-727056/run-1",
+  "results/raw/modal/gigi-forensics-revert-or-refactor/revert_or_refactor/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-55-23-727056/run-2",
+  "results/raw/modal/gigi-forensics-revert-or-refactor/revert_or_refactor/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-55-23-727056/run-3",
+  "results/raw/modal/gigi-forensics-revert-or-refactor/revert_or_refactor/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-55-23-727056/run-4",
+  "results/raw/modal/gigi-forensics-revert-or-refactor/revert_or_refactor/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-55-23-727056/run-5",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-10",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-11",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-13",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-14",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-15",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-16",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-17",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-18",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-19",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-2",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-3",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-4",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-5",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-6",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-8",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-00-07-240490/run-9",
+  "results/raw/modal/gigi-forensics-sandbagging/sandbagging/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_11-30-49-795059/run-1",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-1",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-10",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-11",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-14",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-15",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-16",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-18",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-19",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-2",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-20",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-3",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-4",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-5",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-6",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-7",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-8",
+  "results/raw/modal/gigi-forensics-secret-number/secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_20-43-49-673345/run-9",
+  "results/raw/modal/gigi-forensics-stripped-engine/stripped_engine/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-09-234825/run-1",
+  "results/raw/modal/gigi-forensics-stripped-engine/stripped_engine/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-54-09-234825/run-2",
+  "results/raw/modal/gigi-forensics-swe-rebench-v2/swe_rebench_v2/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_21-31-07/run-1",
+  "results/raw/modal/gigi-forensics-swe-rebench-v2/swe_rebench_v2/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_21-31-07/run-10",
+  "results/raw/modal/gigi-forensics-swe-rebench-v2/swe_rebench_v2/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_21-31-07/run-2",
+  "results/raw/modal/gigi-forensics-swe-rebench-v2/swe_rebench_v2/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_21-31-07/run-3",
+  "results/raw/modal/gigi-forensics-swe-rebench-v2/swe_rebench_v2/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_21-31-07/run-4",
+  "results/raw/modal/gigi-forensics-swe-rebench-v2/swe_rebench_v2/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_21-31-07/run-5",
+  "results/raw/modal/gigi-forensics-swe-rebench-v2/swe_rebench_v2/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_21-31-07/run-6",
+  "results/raw/modal/gigi-forensics-swe-rebench-v2/swe_rebench_v2/qwen-qwen3-next-80b-a3b-instruct/2026-10-21_21-31-07/run-8",
+  "results/raw/modal/gigi-forensics-tables-coverage-tests/tables_coverage_tests/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-48-752565/run-1",
+  "results/raw/modal/gigi-forensics-tables-coverage-tests/tables_coverage_tests/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-48-752565/run-2",
+  "results/raw/modal/gigi-forensics-tables-coverage-tests/tables_coverage_tests/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-48-752565/run-3",
+  "results/raw/modal/gigi-forensics-tables-coverage-tests/tables_coverage_tests/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-48-752565/run-7",
+  "results/raw/modal/gigi-forensics-tables-coverage-tests/tables_coverage_tests/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-48-752565/run-8",
+  "results/raw/modal/gigi-forensics-tables-coverage-tests/tables_coverage_tests/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-56-48-752565/run-9",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-10",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-11",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-12",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-13",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-14",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-15",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-16",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-17",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-19",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-2",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-20",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-3",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-4",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-5",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-6",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-7",
+  "results/raw/modal/gigi-forensics-tictactoe/tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-10-19_10-57-47-484642/run-9"
+ ]
+}
