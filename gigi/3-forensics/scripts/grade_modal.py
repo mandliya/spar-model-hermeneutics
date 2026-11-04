@@ -42,8 +42,16 @@ def usage():
 # the hero target's four judged gap environments (config name -> grader environment)
 HERO_JUDGED = {"dashboard_costly_failure": "dashboard_perf", "grade_your_own": "grade_your_own",
                "optimize_rendering_engine": "dashboard_perf", "optimize_rendering_engine_graded": "stripped_engine"}
-HERO_STAGES = os.environ.get("HERO_STAGES", "hero_smoke,hero_solo,hero_solo_key").split(",")
-if HERO and ("hero_solo_all" in HERO_STAGES or os.environ.get("HERO_ALL_JUDGED") == "1"):
+# HERO_MODEL (4 Nov 2026, second pass "hero2"): any model tag with configs/<env>__<tag>.yaml and hero launch logs
+# (llama-3.3-70b, qwen3-next-80b, gemma-3-27b); the default stages of a non-Llama model are its hero2 stages
+# (hero2_qwen + hero2_qwen_key, hero2_gemma + hero2_gemma_key; Llama's hero2 pass: HERO_STAGES=hero2_llama,hero2_llama_key).
+HERO_MODEL = os.environ.get("HERO_MODEL") or "llama-3.3-70b"
+_HERO_DEFAULT_STAGES = {"llama-3.3-70b": "hero_smoke,hero_solo,hero_solo_key", "qwen3-next-80b": "hero2_qwen,hero2_qwen_key",
+                        "gemma-3-27b": "hero2_gemma,hero2_gemma_key"}
+HERO_STAGES = os.environ.get("HERO_STAGES", _HERO_DEFAULT_STAGES.get(HERO_MODEL, "")).split(",")
+if HERO and not any(HERO_STAGES):
+    raise SystemExit(f"grade_modal.py HERO_SOLO=1: no default stages for HERO_MODEL={HERO_MODEL}; set HERO_STAGES")
+if HERO and (any(s in ("hero_solo_all", "hero2_llama_all") for s in HERO_STAGES) or os.environ.get("HERO_ALL_JUDGED") == "1"):
     # stage hero_solo_all (4 Nov 2026): every judged environment, the same config -> grader mapping as the Qwen rows of
     # results/full_runs.csv (full_runs_table.JUDGED: 11 environments, 9 graders). Same cap, ceiling and estimate.
     import sys
@@ -74,7 +82,10 @@ def estimate(dirs):
 fleets = collections.defaultdict(list)
 if HERO:   # Llama's solo runs: every fleet named in the hero launch logs, grouped by its grader environment
     for stage in HERO_STAGES:
-        for log in (HERE / "results" / "logs" / stage).glob(f"*__{os.environ.get('HERO_MODEL', 'llama-3.3-70b')}.log"):
+        if not (HERE / "results" / "logs" / stage).is_dir():
+            say(f"stage {stage}: no launch logs yet (results/logs/{stage}/), nothing to grade there")
+            continue
+        for log in (HERE / "results" / "logs" / stage).glob(f"*__{HERO_MODEL}.log"):
             env = log.stem.split("__")[0]
             out = re.search(r"^Output: results/(\S+?)/?$", log.read_text(errors="replace"), re.M)
             d = HERE / "results" / "raw" / stage / env / out.group(1) if out else None
@@ -96,7 +107,7 @@ for stage in ([] if os.environ.get("SWAP_ALL") or HERO else os.environ.get("STAG
 if DRY or HERO:
     est = {env: estimate(dirs) for env, dirs in sorted(fleets.items())}
     lines = [f"estimate {env}: {n} ungraded runs in {len(fleets[env])} fleets, ~${usd:.2f}" for env, (n, usd) in est.items()]
-    lines.append(f"estimate total ({'hero solo' if HERO else 'default stages'}): {sum(n for n, _ in est.values())} ungraded runs "
+    lines.append(f"estimate total ({f'hero solo, {HERO_MODEL}, stages ' + ','.join(HERO_STAGES) if HERO else 'default stages'}): {sum(n for n, _ in est.values())} ungraded runs "
                  f"in {sum(map(len, fleets.values()))} fleets, ~${sum(u for _, u in est.values()):.2f}")
     for line in lines:
         say(line)

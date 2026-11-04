@@ -235,16 +235,55 @@ def main():
 # hero_full_runs_per_run__<s1+s2>.csv) and the unsuffixed files are rebuilt over the requested stages PLUS every stage
 # already in results/hero_full_runs_per_run.csv, so a fold-in of a new stage adds to the gap rows instead of
 # replacing them. Without HERO_MERGE nothing changes: the unsuffixed files cover the requested stages only.
-HERO_MODEL = "llama-3.3-70b"
-HERO_STAGES = {HERO_MODEL: ("hero_smoke", "hero_solo", "hero_solo_key")}   # hero_solo_key: ai_rd, with the capped agent key
+# HERO_MODEL (4 Nov 2026, second pass "hero2"): the model tag whose hero runs are scored, default llama-3.3-70b. The
+# same measures and graders per environment serve every model (they are the Qwen rows' of results/full_runs.csv).
+# The hero2 stages (scripts/hero2_launch_solo.sh: the 8 gap environments again, with the end-of-run confirmation
+# agent.end_confirm=true) are hero2_llama + hero2_llama_key (ai_rd), hero2_qwen + hero2_qwen_key, hero2_gemma +
+# hero2_gemma_key, same counts as hero_solo + hero_solo_key. Output files are named per model so nothing of the first
+# pass is touched: HERO_OUT_PREFIX names the files (<prefix>.csv and <prefix>_per_run.csv, plus the HERO_MERGE stage
+# suffix); its default is hero_full_runs for Llama's first pass (as before), hero2_full_runs__<model> when a hero2
+# stage is requested, hero_full_runs__<model> for any other model (hero_out_prefix()).
+HERO_MODEL_DEFAULT = "llama-3.3-70b"
+HERO_MODEL = __import__("os").environ.get("HERO_MODEL") or HERO_MODEL_DEFAULT
+HERO_STAGES = {HERO_MODEL_DEFAULT: ("hero_smoke", "hero_solo", "hero_solo_key"),   # hero_solo_key: ai_rd, with the capped agent key
+               "qwen3-next-80b": ("hero2_qwen", "hero2_qwen_key"),
+               "gemma-3-27b": ("hero2_gemma", "hero2_gemma_key")}
+HERO2_STAGES = {HERO_MODEL_DEFAULT: ("hero2_llama", "hero2_llama_key"), "qwen3-next-80b": ("hero2_qwen", "hero2_qwen_key"),
+                "gemma-3-27b": ("hero2_gemma", "hero2_gemma_key")}
 HERO_ENVS = ("ai_rd", "coding", "coding_norules", "dashboard_costly_failure", "grade_your_own",
              "optimize_rendering_engine", "optimize_rendering_engine_graded", "precommit_hook")
 HERO_ENVS_ALL = tuple(sorted(set(MEASURES) | set(JUDGED)))   # the 29 environments of results/full_runs.csv, its order
-HERO_ALL_STAGES = ("hero_solo_all",)
+HERO_ALL_STAGES = ("hero_solo_all", "hero2_llama_all")
+_GAP7 = {"coding": 20, "coding_norules": 20, "dashboard_costly_failure": 10, "grade_your_own": 5,
+         "optimize_rendering_engine": 5, "optimize_rendering_engine_graded": 5, "precommit_hook": 20}
 HERO_TARGETS = {"hero_smoke": {"coding": 2, "optimize_rendering_engine": 2, "dashboard_costly_failure": 2},
-                "hero_solo": {"coding": 20, "coding_norules": 20, "dashboard_costly_failure": 10, "grade_your_own": 5,
-                              "optimize_rendering_engine": 5, "optimize_rendering_engine_graded": 5, "precommit_hook": 20},
-                "hero_solo_key": {"ai_rd": 10}}
+                "hero_solo": dict(_GAP7), "hero_solo_key": {"ai_rd": 10},
+                "hero2_llama": dict(_GAP7), "hero2_llama_key": {"ai_rd": 10},
+                "hero2_qwen": dict(_GAP7), "hero2_qwen_key": {"ai_rd": 10},
+                "hero2_gemma": dict(_GAP7), "hero2_gemma_key": {"ai_rd": 10}}
+# precision to state next to a result when the config pins no quantization: OpenRouter serves Qwen3-Next and gemma-3
+# as fp8 (gigi/CLAUDE.md, part three exception)
+HERO_PRECISION_DEFAULT = {"qwen3-next-80b": "fp8", "gemma-3-27b": "fp8"}
+
+
+def hero_out_prefix(model=None, stages=()):
+    """The base name of the hero csvs (HERO_OUT_PREFIX, else by model and stages; see the note above)."""
+    import os
+    model = model or HERO_MODEL
+    if os.environ.get("HERO_OUT_PREFIX"):
+        return os.environ["HERO_OUT_PREFIX"]
+    if any(s.startswith("hero2_") for s in stages):
+        return f"hero2_full_runs__{model}"
+    return "hero_full_runs" if model == HERO_MODEL_DEFAULT else f"hero_full_runs__{model}"
+
+
+def hero_precision(env, model=None):
+    """'fp16 (coreweave, via OpenRouter)': as pinned in configs/<env>__<model>.yaml (project rule: state the precision)."""
+    model = model or HERO_MODEL
+    cfg = HERE / "configs" / f"{env}__{model}.yaml"
+    c = cfg.read_text() if cfg.exists() else ""
+    q, prov = re.search(r"quantizations: \[([^\]]*)\]", c), re.search(r"only: \[([^\]]*)\]", c)
+    return f"{q.group(1) if q else HERO_PRECISION_DEFAULT.get(model, '?')} ({prov.group(1) if prov else '?'}, via OpenRouter)"
 
 
 def hero_envs(stages):
@@ -256,9 +295,10 @@ def hero_envs(stages):
     return HERO_ENVS
 
 
-def hero_launched(stage, model=HERO_MODEL):
+def hero_launched(stage, model=None):
     """env -> runs launched, from results/logs/<stage>/launch.txt (modal_full.sh; the last line per env wins), plus
     swe_rebench_v2's count from its own launcher's log line ("| N runs ->", swe_modal.py writes no launch.txt line)."""
+    model = model or HERO_MODEL
     lt = HERE / "results" / "logs" / stage / "launch.txt"
     out = {m.group(1): int(m.group(2)) for m in
            re.finditer(rf"launched (\S+)__{re.escape(model)} x(\d+)", lt.read_text() if lt.exists() else "")}
@@ -270,15 +310,16 @@ def hero_launched(stage, model=HERO_MODEL):
     return out
 
 
-def hero_target(stage, env):
+def hero_target(stage, env, model=None):
     """The planned count (HERO_TARGETS); for a stage not listed there (e.g. a relaunch), what was launched."""
-    return HERO_TARGETS[stage].get(env, 0) if stage in HERO_TARGETS else hero_launched(stage).get(env, 0)
+    return HERO_TARGETS[stage].get(env, 0) if stage in HERO_TARGETS else hero_launched(stage, model).get(env, 0)
 
 
-def hero_runs(stages, model=HERO_MODEL):
+def hero_runs(stages, model=None):
     """(env, model, run dir, stage) for every run of the hero launches; logs without an Output line yet are skipped.
     Runs are read from results/raw/<stage>/<env>/<Output path>; when nothing is there yet, from
     results/raw/modal/<Volume>/<Output path> (swe_modal.py downloads there itself)."""
+    model = model or HERO_MODEL
     out = []
     for stage in stages:
         for log in sorted((HERE / "results" / "logs" / stage).glob(f"*__{model}.log")):
@@ -295,9 +336,9 @@ def hero_runs(stages, model=HERO_MODEL):
     return out
 
 
-def hero_prev_stages(outdir):
-    """The stages already in <outdir>/hero_full_runs_per_run.csv (for HERO_MERGE), in first-seen order."""
-    f = outdir / "hero_full_runs_per_run.csv"
+def hero_prev_stages(outdir, prefix="hero_full_runs"):
+    """The stages already in <outdir>/<prefix>_per_run.csv (for HERO_MERGE), in first-seen order."""
+    f = outdir / f"{prefix}_per_run.csv"
     if not f.exists():
         return ()
     return tuple(dict.fromkeys(r["stage"] for r in csv.DictReader(open(f)) if r.get("stage")))
@@ -305,23 +346,31 @@ def hero_prev_stages(outdir):
 
 def hero_main():
     import os
-    stages = tuple(s for s in os.environ.get("HERO_STAGES", ",".join(HERO_STAGES[HERO_MODEL])).split(",") if s)
+    default = HERO_STAGES.get(HERO_MODEL) or HERO2_STAGES.get(HERO_MODEL) or ()
+    stages = tuple(s for s in os.environ.get("HERO_STAGES", ",".join(default)).split(",") if s)
+    if not stages:
+        raise SystemExit(f"no hero stages for model {HERO_MODEL}: set HERO_STAGES (comma list)")
     outdir = pathlib.Path(os.environ.get("HERO_OUT_DIR") or HERE / "results"); outdir.mkdir(parents=True, exist_ok=True)
+    prefix = hero_out_prefix(HERO_MODEL, stages)
     if os.environ.get("HERO_MERGE") == "1":
-        merged = stages + tuple(s for s in hero_prev_stages(outdir) if s not in stages)
-        hero_write(outdir, stages, "__" + "+".join(stages), quiet=True)
+        merged = stages + tuple(s for s in hero_prev_stages(outdir, prefix) if s not in stages)
+        hero_write(outdir, stages, "__" + "+".join(stages), quiet=True, prefix=prefix)
         if merged != stages:
             print(f"merging stages {', '.join(merged)} into the unsuffixed files")
-        hero_write(outdir, merged, "")
+        hero_write(outdir, merged, "", prefix=prefix)
     else:
-        hero_write(outdir, stages, "")
+        hero_write(outdir, stages, "", prefix=prefix)
 
 
-def hero_write(outdir, stages, suffix, quiet=False):
-    """Score the hero runs of `stages` into <outdir>/hero_full_runs<suffix>.csv and hero_full_runs_per_run<suffix>.csv."""
+def hero_write(outdir, stages, suffix, quiet=False, prefix="hero_full_runs", model=None):
+    """Score the hero runs of `stages` into <outdir>/<prefix><suffix>.csv and <prefix>_per_run<suffix>.csv."""
     import swap_all_score as S   # status() and unscored_reason(): context window, budget stop, step cap, not graded
+    model = model or HERO_MODEL
     envs = hero_envs(stages)
-    runs = hero_runs(stages)
+    runs = hero_runs(stages, model)
+    missing = [s for s in stages if not (HERE / "results" / "logs" / s).is_dir()]
+    if missing and not quiet:
+        print(f"note: no launch logs yet for stage(s) {', '.join(missing)} (results/logs/<stage>/): nothing to score there")
     per_run, agg, judges = [], collections.defaultdict(lambda: [0, 0, 0, 0, 0, 0]), collections.defaultdict(collections.Counter)
     for env, model, run, stage in runs:
         if env not in envs:
@@ -346,9 +395,9 @@ def hero_write(outdir, stages, suffix, quiet=False):
             why = st
             a[3 if st in ("provider failure", "OpenRouter budget stop") else 4] += 1
         per_run.append([stage, env, model, str(run.relative_to(HERE)), st, why, "" if v is None else int(bool(v))])
-    with open(outdir / f"hero_full_runs_per_run{suffix}.csv", "w", newline="") as f:
+    with open(outdir / f"{prefix}_per_run{suffix}.csv", "w", newline="") as f:
         w = csv.writer(f); w.writerow(["stage", "environment", "model", "run", "status", "outcome", "bad"]); w.writerows(per_run)
-    out = outdir / f"hero_full_runs{suffix}.csv"
+    out = outdir / f"{prefix}{suffix}.csv"
     with open(out, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["environment", "behaviour", "source", "model", "precision", "stages", "target", "runs_found", "k", "n",
@@ -357,18 +406,14 @@ def hero_write(outdir, stages, suffix, quiet=False):
             label, source = (MEASURES[env][0], "env state") if env in MEASURES else ("cheated (Opus grader)", "grader")
             k, n, u, lp, lc, found = agg[env]
             lo, hi = wilson(k, n)
-            target = sum(hero_target(s, env) for s in stages)
-            cfg = HERE / "configs" / f"{env}__{HERO_MODEL}.yaml"   # precision as pinned in the config (project rule)
-            c = cfg.read_text() if cfg.exists() else ""
-            q, prov = re.search(r"quantizations: \[([^\]]*)\]", c), re.search(r"only: \[([^\]]*)\]", c)
-            prec = f"{q.group(1) if q else '?'} ({prov.group(1) if prov else '?'}, via OpenRouter)"
-            w.writerow([env, label, source, HERO_MODEL, prec, "+".join(stages), target, found,
+            target = sum(hero_target(s, env, model) for s in stages)
+            w.writerow([env, label, source, model, hero_precision(env, model), "+".join(stages), target, found,
                         k, n, f"{k / n:.3f}" if n else "", f"{lo:.3f}" if n else "", f"{hi:.3f}" if n else "", u, lp, lc,
                         " ".join(f"{j}:{c}" for j, c in sorted(judges[env].items()))])
     if quiet:
-        print(f"{len(per_run)} {HERO_MODEL} runs found in stages {', '.join(stages)} -> {out.name}")
+        print(f"{len(per_run)} {model} runs found in stages {', '.join(stages)} -> {out.name}")
         return
-    print(f"{len(per_run)} {HERO_MODEL} runs found in stages {', '.join(stages)}")
+    print(f"{len(per_run)} {model} runs found in stages {', '.join(stages)} -> {out.name}")
     print(open(out).read())
 
 

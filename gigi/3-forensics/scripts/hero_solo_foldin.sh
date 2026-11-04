@@ -23,23 +23,50 @@
 # merged results/hero_loss_audit.md. Without HERO_MERGE the unsuffixed files cover the requested stages only (as before).
 #   HERO_MERGE=1 HERO_STAGES=hero_solo_key2 CEIL=... caffeinate -i bash gigi/3-forensics/scripts/hero_solo_foldin.sh
 #   HERO_MERGE=1 HERO_STAGES=hero_solo_all  CEIL=... caffeinate -i bash gigi/3-forensics/scripts/hero_solo_foldin.sh
+# Per model (4 Nov 2026, the second pass "hero2" with the end-of-run confirmation: scripts/hero2_launch_solo.sh, stages
+# hero2_llama + hero2_llama_key, hero2_qwen + hero2_qwen_key, hero2_gemma + hero2_gemma_key): HERO_MODEL picks the model
+# tag (configs/<env>__<tag>.yaml, launch logs <env>__<tag>.log), HERO_STAGES its stages. When a hero2 stage is requested
+# or the model is not llama-3.3-70b, nothing of the first pass is touched: the scoring goes to
+# results/<HERO_OUT_PREFIX>.csv (+ _per_run; default hero2_full_runs__<model>, full_runs_table.hero_out_prefix), the audit
+# to results/<HERO_AUDIT> (default hero2_loss_audit__<model>.md) and the logs to results/logs/hero2/<model>/ (HERO_LOG_DIR).
+# With HERO_MERGE=1 the suffixed files are <prefix>__<stages>.csv and <audit stem>__<stages>.md and the unsuffixed
+# per-model files are rebuilt over every stage already in <prefix>_per_run.csv. The default run (Llama, hero_* stages)
+# writes exactly the files it wrote before. Driver for all three models: scripts/hero2_driver.sh.
+#   HERO_MODEL=qwen3-next-80b HERO_STAGES=hero2_qwen,hero2_qwen_key CEIL=... caffeinate -i bash gigi/3-forensics/scripts/hero_solo_foldin.sh
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"; ENVS="$HERE/agent-interp-envs"; ROOT="$(cd "$HERE/../.." && pwd)"
 export MODAL_PROFILE=spar MODAL_SECRET_SUFFIX=-gigi MODAL_VOLUME_PREFIX=gigi-forensics-
-MODEL=${HERO_MODEL:-llama-3.3-70b}; STAGES=${HERO_STAGES:-hero_smoke,hero_solo,hero_solo_key}; DRY=${DRY_RUN:-0}
+MODEL=${HERO_MODEL:-llama-3.3-70b}; export HERO_MODEL="$MODEL"
+case "$MODEL" in
+  llama-3.3-70b) DEF_STAGES=hero_smoke,hero_solo,hero_solo_key ;;
+  qwen3-next-80b) DEF_STAGES=hero2_qwen,hero2_qwen_key ;;
+  gemma-3-27b) DEF_STAGES=hero2_gemma,hero2_gemma_key ;;
+  *) DEF_STAGES="" ;;
+esac
+STAGES=${HERO_STAGES:-$DEF_STAGES}; DRY=${DRY_RUN:-0}
+[ -n "$STAGES" ] || { echo "hero_solo_foldin.sh: no default stages for HERO_MODEL=$MODEL; set HERO_STAGES" >&2; exit 2; }
 WAIT=${WAIT_MINUTES:-840}; GRADE_CAP=${GRADE_CAP:-60}; MERGE=${HERO_MERGE:-0}; export HERO_MERGE="$MERGE"
+# second pass or another model: per-model file names, so the first pass's hero_full_runs*.csv / hero_loss_audit*.md stay as they are
+if [ "$MODEL" != llama-3.3-70b ] || [[ ",$STAGES," == *",hero2_"* ]]; then
+  HERO2=1; PREFIX=${HERO_OUT_PREFIX:-hero2_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-hero2_loss_audit__$MODEL.md}; DEF_LOG="$HERE/results/logs/hero2/$MODEL"
+  [[ ",$STAGES," == *",hero2_"* ]] || { PREFIX=${HERO_OUT_PREFIX:-hero_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-hero_loss_audit__$MODEL.md}; }
+else
+  HERO2=0; PREFIX=${HERO_OUT_PREFIX:-hero_full_runs}; AUDIT=${HERO_AUDIT:-hero_loss_audit.md}; DEF_LOG="$HERE/results/logs/hero"
+fi
+export HERO_OUT_PREFIX="$PREFIX"
 if [ "$DRY" = 1 ]; then
   SCR=$(mktemp -d "${TMPDIR:-/tmp}/hero_foldin_dry.XXXXXX")
   L=${HERO_LOG_DIR:-$SCR/logs}; OUTD=${HERO_OUT_DIR:-$SCR}
 else
   : "${CEIL:?set CEIL to the approved spend ceiling (\$ of the key since 18 Oct 2026); there is no default}"
-  L=${HERO_LOG_DIR:-$HERE/results/logs/hero}; OUTD=${HERO_OUT_DIR:-$HERE/results}
+  L=${HERO_LOG_DIR:-$DEF_LOG}; OUTD=${HERO_OUT_DIR:-$HERE/results}
 fi
 mkdir -p "$L" "$OUTD"
 R="env -u VIRTUAL_ENV uv run"
 say () { echo "$(date '+%F %T') $*" >> "$L/progress.txt"; [ "$DRY" = 1 ] && echo "$*"; return 0; }
 step () { local name=$1; shift; say "step $name"; "$@"; local rc=$?; [ $rc = 0 ] || say "STEP FAILED: $name (exit $rc)"; return $rc; }
-say "start (model $MODEL, stages $STAGES, ceiling ${CEIL:-none, dry run}, grade cap $GRADE_CAP$([ "$MERGE" = 1 ] && echo ", merge into the existing hero files")$([ "$DRY" = 1 ] && echo ", DRY RUN"))"
+say "start (model $MODEL, stages $STAGES, ceiling ${CEIL:-none, dry run}, grade cap $GRADE_CAP, files $PREFIX*.csv + $AUDIT$([ "$MERGE" = 1 ] && echo ", merge into the existing files of this model")$([ "$DRY" = 1 ] && echo ", DRY RUN"))"
+for s in ${STAGES//,/ }; do [ -d "$HERE/results/logs/$s" ] || say "stage $s: no launch logs yet (results/logs/$s/): nothing to wait for, fetch, grade or score there this pass"; done
 
 # 1. wait for each stage's launcher, then until none of our apps runs and no local launcher of ours is still downloading
 wait_apps () {
@@ -165,19 +192,22 @@ grade () {
 
 # 5. score: results/hero_full_runs.csv (one row per environment: k/n, Wilson CI, losses) and hero_full_runs_per_run.csv
 score () {
-  (cd "$HERE" && HERO_OUT_DIR="$OUTD" HERO_STAGES="$STAGES" python3 scripts/full_runs_table.py --hero) > "$L/score.txt" 2>&1 \
-    && say "scored: $(head -1 "$L/score.txt")"
+  (cd "$HERE" && HERO_OUT_DIR="$OUTD" HERO_STAGES="$STAGES" HERO_MODEL="$MODEL" HERO_OUT_PREFIX="$PREFIX" python3 scripts/full_runs_table.py --hero) > "$L/score.txt" 2>&1 \
+    && say "scored: $(grep -m1 "runs found" "$L/score.txt")"
 }
 
 # 6. loss audit: every environment and stage, target, launched, found, scored, unscored and lost by cause. With HERO_MERGE=1
 #    the requested stages go to hero_loss_audit__<stages>.md and the merged audit (every stage in hero_full_runs_per_run.csv)
 #    is rebuilt as hero_loss_audit.md; without it hero_loss_audit.md covers the requested stages (as before).
 audit () {
-  python3 - "$HERE" "$OUTD" "$STAGES" "$MODEL" "$MERGE" <<'PY' >> "$L/progress.txt" 2>&1
+  python3 - "$HERE" "$OUTD" "$STAGES" "$MODEL" "$MERGE" "$PREFIX" "$AUDIT" <<'PY' >> "$L/progress.txt" 2>&1
 import collections, csv, pathlib, re, sys
 H, OUT, stages, model, merge = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3].split(","), sys.argv[4], sys.argv[5] == "1"
+PREFIX, AUDIT = sys.argv[6], sys.argv[7]
 sys.path.insert(0, str(H / "scripts"))
 import full_runs_table as T
+MODEL_NAME = {"llama-3.3-70b": "Llama 3.3 70B", "qwen3-next-80b": "Qwen3-Next-80B", "gemma-3-27b": "gemma-3-27b"}.get(model, model)
+CONFIRM = any(s.startswith("hero2_") for s in stages)
 PROVIDER = {"provider failure", "OpenRouter budget stop"}
 OTHER = {"crash", "no log", "context window exceeded", "harness: no chess engine"}
 
@@ -199,16 +229,17 @@ def audit(stages, per_run, name):
             if not o: noout.add((env, s))   # the launch died before its runs started (e.g. a missing Modal secret)
     envs = T.hero_envs(stages) if hasattr(T, "hero_envs") else T.HERO_ENVS
     head = "| environment | stage | target | launched | runs found | fetched | scored | unscored, by reason | lost, provider | lost, other (crash, context, no log) | missing (target - found) |"
-    out = ["# Hero loss audit: Llama 3.3 70B solo runs (written by scripts/hero_solo_foldin.sh)", "",
-           f"Model {model}, fp16 on CoreWeave via OpenRouter (as pinned in configs/<env>__{model}.yaml). Stages: {', '.join(stages)}.",
-           f"One row per environment ({len(envs)}: the 8 gap environments, or all 29 when hero_solo_all is among the stages) and hero",
+    prec = sorted({T.hero_precision(e, model) for e in envs}) if hasattr(T, "hero_precision") else ["fp16 (coreweave, via OpenRouter)"]
+    out = [f"# Hero loss audit: {MODEL_NAME} solo runs{' with the end-of-run confirmation (agent.end_confirm=true)' if CONFIRM else ''} (written by scripts/hero_solo_foldin.sh)", "",
+           f"Model {model}, {' / '.join(prec)} (as pinned in configs/<env>__{model}.yaml). Stages: {', '.join(stages)}.",
+           f"One row per environment ({len(envs)}: the 8 gap environments, or all 29 when hero_solo_all / hero2_llama_all is among the stages) and hero",
            "stage: the planned target (hero_models_prep.md section 4; for hero_solo_all what launch.txt says was launched), runs",
            "launched (launch.txt), runs found locally, whether the fleet was fetched after the apps stopped, runs scored, and every",
            f"other run by cause. Rows below target are listed again at the end. Source: results/{per_run.name}.", "", head, "|" + "---|" * 11]
     below, tot = [], collections.Counter()
     for env in envs:
         for s in stages:
-            k = (env, s); target = T.hero_target(s, env)
+            k = (env, s); target = T.hero_target(s, env, model)
             if not target and not found[k] and k not in launched:
                 continue
             lp = sum(c for w, c in why[k].items() if w in PROVIDER)
@@ -224,14 +255,15 @@ def audit(stages, per_run, name):
     print(f"audit ({', '.join(stages)}): target {tot['target']}, found {tot['found']}, scored {tot['scored']}, {len(below)} cells below target -> {OUT / name}")
 
 
+stem = AUDIT[:-3] if AUDIT.endswith(".md") else AUDIT
 if merge:
     suffix = "__" + "+".join(stages)
-    audit(stages, OUT / f"hero_full_runs_per_run{suffix}.csv", f"hero_loss_audit{suffix}.md")
-    merged_per_run = OUT / "hero_full_runs_per_run.csv"
+    audit(stages, OUT / f"{PREFIX}_per_run{suffix}.csv", f"{stem}{suffix}.md")
+    merged_per_run = OUT / f"{PREFIX}_per_run.csv"
     merged = list(dict.fromkeys(stages + [r["stage"] for r in csv.DictReader(open(merged_per_run))])) if merged_per_run.exists() else stages
-    audit(merged, merged_per_run, "hero_loss_audit.md")
+    audit(merged, merged_per_run, AUDIT)
 else:
-    audit(stages, OUT / "hero_full_runs_per_run.csv", "hero_loss_audit.md")
+    audit(stages, OUT / f"{PREFIX}_per_run.csv", AUDIT)
 PY
 }
 
@@ -245,7 +277,7 @@ else
 fi
 if [ "$DRY" = 1 ] || [ $REDACTED = 1 ]; then step grade grade; else say "grading skipped: redaction did not succeed"; fi
 step score score
-step audit audit && say "audit written: $OUTD/hero_loss_audit.md"
+step audit audit && say "audit written: $OUTD/$AUDIT"
 say "done (not committed: the parent session commits)"
 [ "$DRY" = 1 ] && echo "dry-run outputs in $OUTD and $L"
 exit 0

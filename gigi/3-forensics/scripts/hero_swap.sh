@@ -17,8 +17,16 @@
 #                                               ones lost to the context window (a rerun would lose them again)
 # Every launch spends money (OpenRouter, and Opus grading later): ask first, every time (gigi/CLAUDE.md).
 # MODAL_PROFILE / MODAL_SECRET_SUFFIX / MODAL_VOLUME_PREFIX default to the SPAR workspace values of topup60.sh.
+# HERO2=1 (4 Nov 2026): the swap on Llama's second-pass runs (stages hero2_llama + hero2_llama_key, made with the
+# end-of-run confirmation agent.end_confirm=true). Every arm's override string also carries agent.end_confirm=true
+# (the llama control arm has no override and inherits it from the checkpoint fleet's own config.yaml, where
+# run_modal.py saved the merged config: verified on hero_confirm_smoke's fleets); the plan defaults to
+# results/hero2_swap_plan.json, the replays go to results/raw/hero2_swap/, the logs to results/logs/hero2_swap/, the
+# top-up csv is results/hero2_gap_replays.csv. Without HERO2 nothing changes.
 set -uo pipefail
-HERE="$(cd "$(dirname "$0")/.." && pwd)"; LOG="$HERE/results/logs/hero_swap"
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
+HERO2=${HERO2:-0}; SWAPNAME=hero_swap; [ "$HERO2" = 1 ] && SWAPNAME=hero2_swap
+LOG="$HERE/results/logs/$SWAPNAME"; RAW="$HERE/results/raw/$SWAPNAME"
 export MODAL_PROFILE=${MODAL_PROFILE:-spar} MODAL_SECRET_SUFFIX=${MODAL_SECRET_SUFFIX:--gigi} MODAL_VOLUME_PREFIX=${MODAL_VOLUME_PREFIX:-gigi-forensics-}
 
 # ---- override strings (format of swap_all.sh: one `=` per item, no commas inside a value, single-element lists) ----
@@ -46,8 +54,12 @@ GEMMA4="agent.model=google/gemma-4-31b-it,agent.temperature=1.0,agent.top_p=0.95
 # GPT-OSS-20B (backup): DeepInfra bf16 (an upcast of the native MXFP4 weights; ctx 131,072, $0.03/$0.14, top_k and
 #   min_p); reasoning is mandatory, so the effort is named (medium = OpenRouter's default); README sampling 1.0 / 1.0.
 GPTOSS="agent.model=openai/gpt-oss-20b,agent.temperature=1.0,agent.top_p=1.0,agent.top_k=null,agent.min_p=null,agent.text_tools=false,agent.reasoning_effort=medium,agent.provider_preferences.only=[deepinfra],agent.provider_preferences.quantizations=[bf16],agent.provider_preferences.allow_fallbacks=false"
+if [ "$HERO2" = 1 ]; then   # second pass: the confirmation stays on in every swapped-in arm (the strings above are unchanged)
+  QWEN36="$QWEN36,agent.end_confirm=true"; GEMMA="$GEMMA,agent.end_confirm=true"
+  GEMMA4="$GEMMA4,agent.end_confirm=true"; GPTOSS="$GPTOSS,agent.end_confirm=true"
+fi
 
-ARMS="llama,qwen36,gemma"; PLAN="$HERE/results/hero_swap_plan.json"; DRY=0; TOPUP=0; CMDS=""
+ARMS="llama,qwen36,gemma"; PLAN="$HERE/results/$([ "$HERO2" = 1 ] && echo hero2_swap_plan.json || echo hero_swap_plan.json)"; DRY=0; TOPUP=0; CMDS=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --backups) ARMS="$ARMS,gemma4,gptoss" ;;
@@ -65,18 +77,19 @@ STAMP=$(date '+%Y%m%d-%H%M%S')
 if [ -z "$CMDS" ]; then   # a new, stamped command file per launch (nothing under results/ is overwritten); a dry run writes to a temp file
   if [ $DRY = 1 ]; then CMDS=$(mktemp "${TMPDIR:-/tmp}/hero_swap_commands.XXXXXX"); else
     mkdir -p "$LOG"; CMDS="$LOG/commands$([ $TOPUP = 1 ] && echo "_topup")_$STAMP.txt"; fi
-  python3 - "$HERE" "$PLAN" "$ARMS" "$TOPUP" "$STAMP" "$QWEN36" "$GEMMA" "$GEMMA4" "$GPTOSS" > "$CMDS" <<'PY' || exit 1
+  python3 - "$HERE" "$PLAN" "$ARMS" "$TOPUP" "$STAMP" "$QWEN36" "$GEMMA" "$GEMMA4" "$GPTOSS" "$SWAPNAME" > "$CMDS" <<'PY' || exit 1
 import collections, csv, json, os, pathlib, shlex, sys
 here, plan, arms, topup, stamp = pathlib.Path(sys.argv[1]), sys.argv[2], sys.argv[3].split(","), sys.argv[4] == "1", sys.argv[5]
 OV = {"llama": "", "qwen36": sys.argv[6], "gemma": sys.argv[7], "gemma4": sys.argv[8], "gptoss": sys.argv[9]}
+swapname = sys.argv[10]   # hero_swap, or hero2_swap (HERO2=1)
 bad = [a for a in arms if a not in OV]
 if bad:
     sys.exit(f"unknown arm(s) {bad}; known: {list(OV)}")
 scored, ctx = collections.Counter(), collections.Counter()
 if topup:
-    f = pathlib.Path(os.environ.get("HERO_GAP_CSV", here / "results" / "hero_gap_replays.csv"))   # override: tests only
+    f = pathlib.Path(os.environ.get("HERO_GAP_CSV", here / "results" / f"{swapname.replace('_swap', '_gap_replays')}.csv"))   # override: tests only
     if not f.exists():
-        sys.exit("--topup needs results/hero_gap_replays.csv (swap_all_score.py --hero fetch; gap_replays.py --hero)")
+        sys.exit(f"--topup needs results/{f.name} (swap_all_score.py --hero fetch; gap_replays.py --hero)")
     for r in csv.DictReader(open(f)):
         k = (r["env"], r["point"], r["who"])
         scored[k] += r["hacked"] in ("0", "1"); ctx[k] += r["status"] == "context window exceeded"
@@ -88,8 +101,8 @@ for p in json.load(open(plan)):
             n = p.get("target", p["reps"]) - scored[(p["env"], point, who)] - ctx[(p["env"], point, who)]
             if n <= 0:
                 continue
-        out = here / "results/raw/hero_swap" / p["env"] / point / who
-        log = here / "results/logs/hero_swap" / (f"{p['env']}__{point}__{who}" + (f"__topup_{stamp}" if topup else "") + ".log")
+        out = here / "results/raw" / swapname / p["env"] / point / who
+        log = here / "results/logs" / swapname / (f"{p['env']}__{point}__{who}" + (f"__topup_{stamp}" if topup else "") + ".log")
         args = ["--step-dir", str(run / f"step-{p['K']}"), "--count", str(n), "--use-current", "--max-concurrent", "0",
                 "--no-judge", "--timeout", "7200", "--results-dir", str(out)] + (["--overrides", OV[who]] if OV[who] else [])
         print(shlex.quote(str(log)) + " " + " ".join(shlex.quote(a) for a in args))
@@ -104,27 +117,38 @@ done
 
 if [ $DRY = 1 ]; then
   # free check: each arm's override merged onto a Llama config exactly as resume_modal.py does (run_common.load_config)
-  ( cd "$HERE/agent-interp-envs" && env -u VIRTUAL_ENV uv run python - "$HERE/configs/coding__llama-3.3-70b.yaml" \
-      "$ARMS" "$QWEN36" "$GEMMA" "$GEMMA4" "$GPTOSS" <<'PY'
+  # HERO2: the base is a hero2 fleet's saved config.yaml when one is on disk (it carries end_confirm: true, as the
+  # resumes' will), else the plain config, and every arm with an override must come out with end_confirm true
+  BASE="$HERE/configs/coding__llama-3.3-70b.yaml"
+  if [ "$HERO2" = 1 ]; then
+    f=$(ls "$HERE"/results/raw/hero2_llama/coding/*/*/*/config.yaml 2>/dev/null | head -1); [ -n "$f" ] && BASE="$f"
+  fi
+  ( cd "$HERE/agent-interp-envs" && env -u VIRTUAL_ENV uv run python - "$BASE" \
+      "$ARMS" "$QWEN36" "$GEMMA" "$GEMMA4" "$GPTOSS" "$HERO2" <<'PY'
 import sys
 from omegaconf import OmegaConf
 sys.path.insert(0, "scripts")
 from run_common import load_config, parse_overrides
-cfg, arms = sys.argv[1], sys.argv[2].split(",")
+cfg, arms, hero2 = sys.argv[1], sys.argv[2].split(","), sys.argv[7] == "1"
 OV = {"llama": "", "qwen36": sys.argv[3], "gemma": sys.argv[4], "gemma4": sys.argv[5], "gptoss": sys.argv[6]}
-KEYS = ("model", "temperature", "top_p", "top_k", "min_p", "text_tools", "reasoning_effort", "provider_preferences")
+KEYS = ("model", "temperature", "top_p", "top_k", "min_p", "text_tools", "reasoning_effort", "provider_preferences", "end_confirm")
+print(f"  base config: {cfg}")
 for a in arms:
     ag = OmegaConf.to_container(load_config(cfg, parse_overrides(OV[a]) or None).agent)
     print(f"  {a:7s}", {k: ag.get(k) for k in KEYS})
     assert ag["provider_preferences"].get("allow_fallbacks") is False, a
     assert isinstance(ag.get("reasoning_effort"), str), (a, ag.get("reasoning_effort"))
+    if hero2 and OV[a]:
+        assert ag.get("end_confirm") is True, (a, "HERO2: end_confirm must be true in every swapped-in arm")
+    if hero2 and not OV[a] and ag.get("end_confirm") is not True:
+        print(f"  note: {a} inherits end_confirm from the checkpoint fleet's config.yaml (this base has none)")
 PY
   ) || { echo "merged-config check FAILED" >&2; exit 1; }
   echo "dry run: nothing launched"; exit 0
 fi
 
-{ echo "$(date '+%F %T') launching $N_RES resumes from $(basename "$CMDS"), arms $ARMS"
-  echo "  llama  (no override: the fleet's own config, CoreWeave fp16)"
+{ echo "$(date '+%F %T') launching $N_RES resumes from $(basename "$CMDS"), arms $ARMS$([ "$HERO2" = 1 ] && echo " (HERO2: end-of-run confirmation on in every arm)")"
+  echo "  llama  (no override: the fleet's own config, CoreWeave fp16$([ "$HERO2" = 1 ] && echo ", end_confirm true from the fleet's config.yaml"))"
   echo "  qwen36 fp8, no full-precision endpoint: $QWEN36"
   echo "  gemma  fp8 (no bf16 endpoint listed 4 Nov): $GEMMA"
   echo "  gemma4 bf16: $GEMMA4"

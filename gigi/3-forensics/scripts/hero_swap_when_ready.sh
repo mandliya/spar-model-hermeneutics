@@ -34,10 +34,25 @@
 # Env: PLAN_STAGES (space list), ARMS, REQUIRE_ENVS (comma list), MIN_SCORED, WAIT_MINUTES, POLL_SECONDS,
 # LAUNCHER_WAIT_MINUTES, SPEND_GUARD_USD, GUARD_FACTOR, TURNS, OUT_TOKENS, PRICE_<ARM>_IN / _OUT ($ per M tokens),
 # PLAN_FILE (use this plan instead of building one; passed to hero_swap.sh --plan), HERO_SWAP_LOG_DIR, USAGE_FAKE.
+# HERO2=1 (4 Nov 2026): the same chain on Llama's second pass with the end-of-run confirmation (stages hero2_llama +
+# hero2_llama_key, folded in per model by hero_solo_foldin.sh / hero2_driver.sh). Readiness is read from the per-model
+# files results/hero2_loss_audit__llama-3.3-70b.md and results/hero2_full_runs__llama-3.3-70b.csv (READY_AUDIT /
+# READY_CSV override either), the plan is results/hero2_swap_plan.json (exclusive create), the logs go to
+# results/logs/hero2_swap/ and hero_swap.sh runs in its HERO2 mode (agent.end_confirm=true in every swapped-in arm,
+# replays in results/raw/hero2_swap/). The first pass's files and folders are not touched. Without HERO2 nothing changes.
+#   HERO2=1 PLAN_STAGES="hero2_llama hero2_llama_key" bash gigi/3-forensics/scripts/hero_swap_when_ready.sh
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
-MODEL=${HERO_MODEL:-llama-3.3-70b}; DRY=${DRY_RUN:-0}
-PLAN_STAGES=${PLAN_STAGES:-hero_smoke hero_solo hero_solo_key2}
+MODEL=${HERO_MODEL:-llama-3.3-70b}; DRY=${DRY_RUN:-0}; HERO2=${HERO2:-0}; export HERO2
+if [ "$HERO2" = 1 ]; then
+  PLAN_STAGES=${PLAN_STAGES:-hero2_llama hero2_llama_key}; SWAPNAME=hero2_swap
+  READY_AUDIT=${READY_AUDIT:-$HERE/results/hero2_loss_audit__$MODEL.md}; READY_CSV=${READY_CSV:-$HERE/results/hero2_full_runs__$MODEL.csv}
+  DEFAULT_PLAN="$HERE/results/hero2_swap_plan.json"
+else
+  PLAN_STAGES=${PLAN_STAGES:-hero_smoke hero_solo hero_solo_key2}; SWAPNAME=hero_swap
+  READY_AUDIT=${READY_AUDIT:-$HERE/results/hero_loss_audit.md}; READY_CSV=${READY_CSV:-$HERE/results/hero_full_runs.csv}
+  DEFAULT_PLAN="$HERE/results/hero_swap_plan.json"
+fi
 ARMS=${ARMS:-llama,qwen36,gemma}
 REQUIRE_ENVS=${REQUIRE_ENVS:-ai_rd,coding,coding_norules,dashboard_costly_failure,grade_your_own,optimize_rendering_engine,optimize_rendering_engine_graded,precommit_hook}
 MIN_SCORED=${MIN_SCORED:-1}; WAIT=${WAIT_MINUTES:-2880}; POLL=${POLL_SECONDS:-300}; LWAIT=${LAUNCHER_WAIT_MINUTES:-720}
@@ -50,7 +65,7 @@ export PRICE_GPTOSS_IN=${PRICE_GPTOSS_IN:-0.03} PRICE_GPTOSS_OUT=${PRICE_GPTOSS_
 if [ "$DRY" = 1 ]; then
   L=${HERO_SWAP_LOG_DIR:-$(mktemp -d "${TMPDIR:-/tmp}/hero_swap_chain_dry.XXXXXX")}
 else
-  L=${HERO_SWAP_LOG_DIR:-$HERE/results/logs/hero_swap}
+  L=${HERO_SWAP_LOG_DIR:-$HERE/results/logs/$SWAPNAME}
 fi
 mkdir -p "$L"; CHAIN="$L/chain.txt"; STAMP=$(date '+%Y%m%d-%H%M%S')
 say () { echo "$(date '+%F %T') $*" >> "$CHAIN"; [ "$DRY" = 1 ] && echo "$*"; return 0; }
@@ -70,7 +85,7 @@ if [ "$DRY" != 1 ]; then
   fi
   echo $$ > "$L/chain.pid"; trap 'rm -f "$L/chain.pid"' EXIT
 fi
-say "start (model $MODEL, plan stages: $PLAN_STAGES, arms $ARMS, require $REQUIRE_ENVS >= $MIN_SCORED scored$([ "$DRY" = 1 ] && echo ", DRY RUN"))"
+say "start (model $MODEL, plan stages: $PLAN_STAGES, arms $ARMS, require $REQUIRE_ENVS >= $MIN_SCORED scored$([ "$HERO2" = 1 ] && echo ", HERO2: confirmation on, readiness from $(basename "$READY_CSV")")$([ "$DRY" = 1 ] && echo ", DRY RUN"))"
 
 # ---- idempotency: launched already? ----
 if [ "$DRY" != 1 ] && { [ -f "$L/chain_launched.txt" ] || grep -q "all launched" "$L/launch.txt" 2>/dev/null; }; then
@@ -79,24 +94,26 @@ fi
 
 # ---- 1. wait until the gap environments are scored ----
 ready () {   # exit 0 when every required environment has >= MIN_SCORED scored runs; prints what is missing
-  [ -f "$HERE/results/hero_loss_audit.md" ] || { echo "results/hero_loss_audit.md not written yet"; return 1; }
-  python3 - "$HERE" "$L" "$REQUIRE_ENVS" "$MIN_SCORED" "${PLAN_STAGES// /,}" <<'PY'
+  [ -f "$READY_AUDIT" ] || { echo "$(basename "$READY_AUDIT") not written yet"; return 1; }
+  python3 - "$HERE" "$L" "$REQUIRE_ENVS" "$MIN_SCORED" "${PLAN_STAGES// /,}" "$READY_CSV" "$MODEL" <<'PY'
 import csv, os, pathlib, subprocess, sys
 H, L, envs, need, stages = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3].split(","), int(sys.argv[4]), sys.argv[5]
+ready_csv, model = pathlib.Path(sys.argv[6]), sys.argv[7]
 
 def scored(f):
     if not f.exists():
         return {}
     return {r["environment"]: int(r["n"] or 0) for r in csv.DictReader(open(f))}
 
-main = scored(H / "results" / "hero_full_runs.csv")
+main = scored(ready_csv)
 missing = [e for e in envs if main.get(e, 0) < need]
 if not main:
-    print("results/hero_full_runs.csv not written yet"); sys.exit(1)
+    print(f"{ready_csv.name} not written yet"); sys.exit(1)
 if missing:   # own scoring over the plan stages (local, free), for environments the fold-in's stage set does not cover
     (L / "ready").mkdir(parents=True, exist_ok=True)
     r = subprocess.run([sys.executable, str(H / "scripts" / "full_runs_table.py"), "--hero"], cwd=H, capture_output=True, text=True,
-                       env={**os.environ, "HERO_STAGES": stages, "HERO_OUT_DIR": str(L / "ready")}, timeout=1800)
+                       env={**os.environ, "HERO_STAGES": stages, "HERO_OUT_DIR": str(L / "ready"), "HERO_MODEL": model,
+                            "HERO_OUT_PREFIX": "hero_full_runs"}, timeout=1800)
     own = scored(L / "ready" / "hero_full_runs.csv") if r.returncode == 0 else {}
     accepted = [e for e in missing if own.get(e, 0) >= need]
     if accepted:
@@ -118,12 +135,17 @@ done
 if [ "$DRY" != 1 ] && [ $READY = 0 ]; then loud "NOT READY after $WAIT min ($msg): giving up, nothing launched; rerun this script"; exit 1; fi
 
 # ---- 2. the plan ----
-PLAN=${PLAN_FILE:-$HERE/results/hero_swap_plan.json}
+PLAN=${PLAN_FILE:-$DEFAULT_PLAN}
 PLAN_ARGS=(--model "$MODEL" --stages $PLAN_STAGES)
+# a plan under results/ with another name than hero_swap_plan.json (HERO2: hero2_swap_plan.json) is written by
+# --force-new-name (exclusive create, like the default); a plan elsewhere by --out
+if [ "$DRY" != 1 ] && [ "$(basename "$PLAN")" != hero_swap_plan.json ]; then
+  if [ "$(cd "$(dirname "$PLAN")" && pwd)" = "$HERE/results" ]; then PLAN_ARGS+=(--force-new-name "$(basename "$PLAN")"); else PLAN_ARGS+=(--out "$PLAN"); fi
+fi
 if [ -f "$PLAN" ]; then
   say "plan exists, used as is: $PLAN"
 else
-  if python3 "$HERE/scripts/hero_swap_plan.py" "${PLAN_ARGS[@]}" --dry-run > "$L/plan_dry_$STAMP.txt" 2>&1; then
+  if python3 "$HERE/scripts/hero_swap_plan.py" --model "$MODEL" --stages $PLAN_STAGES --dry-run > "$L/plan_dry_$STAMP.txt" 2>&1; then
     say "plan dry run: $(head -1 "$L/plan_dry_$STAMP.txt")"
     say "plan dry run: $(python3 -c '
 import re, sys; t = open(sys.argv[1]).read()
@@ -132,7 +154,7 @@ print(f"{inc} incident points, {pts - inc} clean points")' "$L/plan_dry_$STAMP.t
   else
     loud "plan dry run FAILED (exit $?): $(tail -3 "$L/plan_dry_$STAMP.txt" | tr '\n' ' '); nothing launched"; exit 1
   fi
-  [ "$DRY" = 1 ] && PLAN="$L/hero_swap_plan.json" && PLAN_ARGS+=(--out "$PLAN")
+  [ "$DRY" = 1 ] && PLAN="$L/$(basename "$DEFAULT_PLAN")" && PLAN_ARGS+=(--out "$PLAN")
   if python3 "$HERE/scripts/hero_swap_plan.py" "${PLAN_ARGS[@]}" > "$L/plan_build_$STAMP.txt" 2>&1 && [ -f "$PLAN" ]; then
     say "plan written: $PLAN"
   else
@@ -221,6 +243,8 @@ while read -r line; do say "$line"; done < "$L/estimate_$STAMP.txt"
 
 # ---- 4. launch ----
 SWAP_ARGS=(--arms "$ARMS"); [ -n "${PLAN_FILE:-}" ] && SWAP_ARGS+=(--plan "$PLAN_FILE"); [ "$DRY" = 1 ] && [ -z "${PLAN_FILE:-}" ] && SWAP_ARGS+=(--plan "$PLAN")
+# hero_swap.sh reads HERO2 from the environment (exported above): its plan default, raw and log folders and the
+# end_confirm override follow; a dry run's temp plan is passed explicitly
 if bash "$HERE/scripts/hero_swap.sh" "${SWAP_ARGS[@]}" --dry-run > "$L/swap_dry_$STAMP.txt" 2>&1; then
   say "hero_swap.sh dry run OK: $(head -1 "$L/swap_dry_$STAMP.txt"); merged configs: $(grep -E '^  (llama|qwen36|gemma|gemma4|gptoss) ' "$L/swap_dry_$STAMP.txt" | tr -s ' ' | tr '\n' ';' | cut -c1-600)"
 else
@@ -240,7 +264,7 @@ else
 fi
 # stay awake while our launchers run (they download each fleet when its app ends); the fold-in re-fetches anyway
 for i in $(seq 1 "$LWAIT"); do
-  n=$(pgrep -f "resume_modal.py .*results-dir .*hero_swap" | wc -l | tr -d ' ')
+  n=$(pgrep -f "resume_modal.py .*results-dir .*/$SWAPNAME/" | wc -l | tr -d ' ')
   [ "$n" = 0 ] && break
   [ $((i % 30)) = 1 ] && say "$n launcher process(es) still running (downloading when their apps end); staying awake"
   sleep 60
