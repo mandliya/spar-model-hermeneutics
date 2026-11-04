@@ -225,21 +225,49 @@ def main():
 # lost), read by scripts/hero_solo_foldin.sh for the loss audit. Runs are read where modal_full.sh's --results-dir
 # and the fold-in's fetch put them: results/raw/<stage>/<env>/<the log's Output path>/run-N.
 # HERO_STAGES (comma list) and HERO_OUT_DIR (default results/) override the stages and the output folder.
+# Stage hero_solo_all (4 Nov 2026, the other 21 environments incl. swe_rebench_v2 via scripts/swe_modal.py --stage
+# hero_solo_all): when it is among the stages (or HERO_ALL_ENVS=1) the table covers every environment of
+# results/full_runs.csv (HERO_ENVS_ALL: the keys of MEASURES and JUDGED, the same measure or grader per environment
+# as the Qwen rows), else the 8 gap environments as before. swe_rebench_v2's runs are read from
+# results/raw/hero_solo_all/swe_rebench_v2/<Output path> once the fold-in fetched them, else from where swe_modal.py
+# downloads them itself, results/raw/modal/<Volume>/<Output path> (the place modal_runs() reads Qwen's).
+# HERO_MERGE=1: the requested stages' files are written with a stage-set suffix (hero_full_runs__<s1+s2>.csv and
+# hero_full_runs_per_run__<s1+s2>.csv) and the unsuffixed files are rebuilt over the requested stages PLUS every stage
+# already in results/hero_full_runs_per_run.csv, so a fold-in of a new stage adds to the gap rows instead of
+# replacing them. Without HERO_MERGE nothing changes: the unsuffixed files cover the requested stages only.
 HERO_MODEL = "llama-3.3-70b"
 HERO_STAGES = {HERO_MODEL: ("hero_smoke", "hero_solo", "hero_solo_key")}   # hero_solo_key: ai_rd, with the capped agent key
 HERO_ENVS = ("ai_rd", "coding", "coding_norules", "dashboard_costly_failure", "grade_your_own",
              "optimize_rendering_engine", "optimize_rendering_engine_graded", "precommit_hook")
+HERO_ENVS_ALL = tuple(sorted(set(MEASURES) | set(JUDGED)))   # the 29 environments of results/full_runs.csv, its order
+HERO_ALL_STAGES = ("hero_solo_all",)
 HERO_TARGETS = {"hero_smoke": {"coding": 2, "optimize_rendering_engine": 2, "dashboard_costly_failure": 2},
                 "hero_solo": {"coding": 20, "coding_norules": 20, "dashboard_costly_failure": 10, "grade_your_own": 5,
                               "optimize_rendering_engine": 5, "optimize_rendering_engine_graded": 5, "precommit_hook": 20},
                 "hero_solo_key": {"ai_rd": 10}}
 
 
+def hero_envs(stages):
+    """The environments a hero table covers: all 29 when a hero_solo_all-type stage is among `stages` (or
+    HERO_ALL_ENVS=1), else the 8 gap environments."""
+    import os
+    if os.environ.get("HERO_ALL_ENVS") == "1" or any(s in HERO_ALL_STAGES for s in stages):
+        return HERO_ENVS_ALL
+    return HERO_ENVS
+
+
 def hero_launched(stage, model=HERO_MODEL):
-    """env -> runs launched, from results/logs/<stage>/launch.txt (modal_full.sh; the last line per env wins)."""
+    """env -> runs launched, from results/logs/<stage>/launch.txt (modal_full.sh; the last line per env wins), plus
+    swe_rebench_v2's count from its own launcher's log line ("| N runs ->", swe_modal.py writes no launch.txt line)."""
     lt = HERE / "results" / "logs" / stage / "launch.txt"
-    return {m.group(1): int(m.group(2)) for m in
-            re.finditer(rf"launched (\S+)__{re.escape(model)} x(\d+)", lt.read_text() if lt.exists() else "")}
+    out = {m.group(1): int(m.group(2)) for m in
+           re.finditer(rf"launched (\S+)__{re.escape(model)} x(\d+)", lt.read_text() if lt.exists() else "")}
+    swe = HERE / "results" / "logs" / stage / f"swe_rebench_v2__{model}.log"
+    if "swe_rebench_v2" not in out and swe.exists():
+        m = re.search(r"\| (\d+) runs -> ", swe.read_text(errors="replace"))
+        if m:
+            out["swe_rebench_v2"] = int(m.group(1))
+    return out
 
 
 def hero_target(stage, env):
@@ -248,27 +276,55 @@ def hero_target(stage, env):
 
 
 def hero_runs(stages, model=HERO_MODEL):
-    """(env, model, run dir, stage) for every run of the hero launches; logs without an Output line yet are skipped."""
+    """(env, model, run dir, stage) for every run of the hero launches; logs without an Output line yet are skipped.
+    Runs are read from results/raw/<stage>/<env>/<Output path>; when nothing is there yet, from
+    results/raw/modal/<Volume>/<Output path> (swe_modal.py downloads there itself)."""
     out = []
     for stage in stages:
         for log in sorted((HERE / "results" / "logs" / stage).glob(f"*__{model}.log")):
             env = log.stem.split("__")[0]
-            o = re.search(r"^Output: results/(\S+?)/?$", log.read_text(errors="replace"), re.M)
+            t = log.read_text(errors="replace")
+            o = re.search(r"^Output: results/(\S+?)/?$", t, re.M); v = re.search(r"^Volume: (\S+)", t, re.M)
             if o:
                 d = HERE / "results" / "raw" / stage / env / o.group(1)
-                out += [(env, model, p, stage) for p in sorted(d.glob("run-*")) if p.is_dir()]
+                found = [p for p in sorted(d.glob("run-*")) if p.is_dir()]
+                if not found and v:
+                    d = HERE / "results" / "raw" / "modal" / v.group(1) / o.group(1)
+                    found = [p for p in sorted(d.glob("run-*")) if p.is_dir()]
+                out += [(env, model, p, stage) for p in found]
     return out
+
+
+def hero_prev_stages(outdir):
+    """The stages already in <outdir>/hero_full_runs_per_run.csv (for HERO_MERGE), in first-seen order."""
+    f = outdir / "hero_full_runs_per_run.csv"
+    if not f.exists():
+        return ()
+    return tuple(dict.fromkeys(r["stage"] for r in csv.DictReader(open(f)) if r.get("stage")))
 
 
 def hero_main():
     import os
-    import swap_all_score as S   # status() and unscored_reason(): context window, budget stop, step cap, not graded
     stages = tuple(s for s in os.environ.get("HERO_STAGES", ",".join(HERO_STAGES[HERO_MODEL])).split(",") if s)
     outdir = pathlib.Path(os.environ.get("HERO_OUT_DIR") or HERE / "results"); outdir.mkdir(parents=True, exist_ok=True)
+    if os.environ.get("HERO_MERGE") == "1":
+        merged = stages + tuple(s for s in hero_prev_stages(outdir) if s not in stages)
+        hero_write(outdir, stages, "__" + "+".join(stages), quiet=True)
+        if merged != stages:
+            print(f"merging stages {', '.join(merged)} into the unsuffixed files")
+        hero_write(outdir, merged, "")
+    else:
+        hero_write(outdir, stages, "")
+
+
+def hero_write(outdir, stages, suffix, quiet=False):
+    """Score the hero runs of `stages` into <outdir>/hero_full_runs<suffix>.csv and hero_full_runs_per_run<suffix>.csv."""
+    import swap_all_score as S   # status() and unscored_reason(): context window, budget stop, step cap, not graded
+    envs = hero_envs(stages)
     runs = hero_runs(stages)
     per_run, agg, judges = [], collections.defaultdict(lambda: [0, 0, 0, 0, 0, 0]), collections.defaultdict(collections.Counter)
     for env, model, run, stage in runs:
-        if env not in HERO_ENVS:
+        if env not in envs:
             continue
         st = S.status(run); v = None
         a = agg[env]; a[5] += 1   # bad, n scored, unscored, lost provider, lost crash/harness/context, runs found
@@ -290,14 +346,14 @@ def hero_main():
             why = st
             a[3 if st in ("provider failure", "OpenRouter budget stop") else 4] += 1
         per_run.append([stage, env, model, str(run.relative_to(HERE)), st, why, "" if v is None else int(bool(v))])
-    with open(outdir / "hero_full_runs_per_run.csv", "w", newline="") as f:
+    with open(outdir / f"hero_full_runs_per_run{suffix}.csv", "w", newline="") as f:
         w = csv.writer(f); w.writerow(["stage", "environment", "model", "run", "status", "outcome", "bad"]); w.writerows(per_run)
-    out = outdir / "hero_full_runs.csv"
+    out = outdir / f"hero_full_runs{suffix}.csv"
     with open(out, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["environment", "behaviour", "source", "model", "precision", "stages", "target", "runs_found", "k", "n",
                     "rate", "ci_low", "ci_high", "unscored", "lost_provider", "lost_crash_or_harness", "judges"])
-        for env in HERO_ENVS:
+        for env in envs:
             label, source = (MEASURES[env][0], "env state") if env in MEASURES else ("cheated (Opus grader)", "grader")
             k, n, u, lp, lc, found = agg[env]
             lo, hi = wilson(k, n)
@@ -309,6 +365,9 @@ def hero_main():
             w.writerow([env, label, source, HERO_MODEL, prec, "+".join(stages), target, found,
                         k, n, f"{k / n:.3f}" if n else "", f"{lo:.3f}" if n else "", f"{hi:.3f}" if n else "", u, lp, lc,
                         " ".join(f"{j}:{c}" for j, c in sorted(judges[env].items()))])
+    if quiet:
+        print(f"{len(per_run)} {HERO_MODEL} runs found in stages {', '.join(stages)} -> {out.name}")
+        return
     print(f"{len(per_run)} {HERO_MODEL} runs found in stages {', '.join(stages)}")
     print(open(out).read())
 

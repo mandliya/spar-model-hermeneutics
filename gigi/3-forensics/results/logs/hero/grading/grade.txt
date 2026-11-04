@@ -1,0 +1,14 @@
+2026-11-04 11:02:35 estimate dashboard_perf: 15 ungraded runs in 2 fleets, ~$3.12
+2026-11-04 11:02:35 estimate grade_your_own: 5 ungraded runs in 1 fleets, ~$1.00
+2026-11-04 11:02:35 estimate stripped_engine: 5 ungraded runs in 1 fleets, ~$0.99
+2026-11-04 11:02:35 estimate total (hero solo): 25 ungraded runs in 4 fleets, ~$5.11
+2026-11-04 11:02:36 start: 4 fleets in 3 environments, cap $60.0, judge default
+2026-11-04 11:02:51 estimate dashboard_perf: 15 ungraded runs in 2 fleets, ~$3.12
+2026-11-04 11:02:51 estimate grade_your_own: 5 ungraded runs in 1 fleets, ~$1.00
+2026-11-04 11:02:51 estimate stripped_engine: 5 ungraded runs in 1 fleets, ~$0.99
+2026-11-04 11:02:51 estimate total (hero solo): 25 ungraded runs in 4 fleets, ~$5.11
+2026-11-04 11:02:51 start: 4 fleets in 3 environments, cap $60.0, judge claude-opus-4-8
+2026-11-04 11:03:31 dashboard_perf: 2 fleets, exit 0, spent so far $0.00
+2026-11-04 11:03:33 grade_your_own: 1 fleets, exit 0, spent so far $0.82
+2026-11-04 11:04:08 stripped_engine: 1 fleets, exit 0, spent so far $0.88
+2026-11-04 11:04:08 done, spent $0.88

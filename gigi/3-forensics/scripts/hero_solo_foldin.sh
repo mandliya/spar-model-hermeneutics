@@ -15,11 +15,19 @@
 # grader prints its estimate only; scoring and audit go to a scratch folder unless HERO_OUT_DIR / HERO_LOG_DIR are set).
 # Never fetches with --force: each fleet goes to a temp folder and only files missing locally are moved in, so local-only
 # files (final/grading.json) can never be lost.
+# A second invocation for another stage (4 Nov 2026: hero_solo_key2 = ai_rd with the capped key; hero_solo_all = the
+# other 21 environments incl. swe_rebench_v2, every judged one graded, all 29 scored) must ADD to the gap rows, not
+# replace them: pass HERO_MERGE=1. Then the scoring writes results/hero_full_runs__<stages>.csv (+ _per_run) for the
+# requested stages and rebuilds results/hero_full_runs.csv (+ _per_run) over those stages plus every stage already in
+# results/hero_full_runs_per_run.csv; the audit likewise writes results/hero_loss_audit__<stages>.md and rebuilds the
+# merged results/hero_loss_audit.md. Without HERO_MERGE the unsuffixed files cover the requested stages only (as before).
+#   HERO_MERGE=1 HERO_STAGES=hero_solo_key2 CEIL=... caffeinate -i bash gigi/3-forensics/scripts/hero_solo_foldin.sh
+#   HERO_MERGE=1 HERO_STAGES=hero_solo_all  CEIL=... caffeinate -i bash gigi/3-forensics/scripts/hero_solo_foldin.sh
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"; ENVS="$HERE/agent-interp-envs"; ROOT="$(cd "$HERE/../.." && pwd)"
 export MODAL_PROFILE=spar MODAL_SECRET_SUFFIX=-gigi MODAL_VOLUME_PREFIX=gigi-forensics-
 MODEL=${HERO_MODEL:-llama-3.3-70b}; STAGES=${HERO_STAGES:-hero_smoke,hero_solo,hero_solo_key}; DRY=${DRY_RUN:-0}
-WAIT=${WAIT_MINUTES:-840}; GRADE_CAP=${GRADE_CAP:-60}
+WAIT=${WAIT_MINUTES:-840}; GRADE_CAP=${GRADE_CAP:-60}; MERGE=${HERO_MERGE:-0}; export HERO_MERGE="$MERGE"
 if [ "$DRY" = 1 ]; then
   SCR=$(mktemp -d "${TMPDIR:-/tmp}/hero_foldin_dry.XXXXXX")
   L=${HERO_LOG_DIR:-$SCR/logs}; OUTD=${HERO_OUT_DIR:-$SCR}
@@ -31,7 +39,7 @@ mkdir -p "$L" "$OUTD"
 R="env -u VIRTUAL_ENV uv run"
 say () { echo "$(date '+%F %T') $*" >> "$L/progress.txt"; [ "$DRY" = 1 ] && echo "$*"; return 0; }
 step () { local name=$1; shift; say "step $name"; "$@"; local rc=$?; [ $rc = 0 ] || say "STEP FAILED: $name (exit $rc)"; return $rc; }
-say "start (model $MODEL, stages $STAGES, ceiling ${CEIL:-none, dry run}, grade cap $GRADE_CAP$([ "$DRY" = 1 ] && echo ", DRY RUN"))"
+say "start (model $MODEL, stages $STAGES, ceiling ${CEIL:-none, dry run}, grade cap $GRADE_CAP$([ "$MERGE" = 1 ] && echo ", merge into the existing hero files")$([ "$DRY" = 1 ] && echo ", DRY RUN"))"
 
 # 1. wait for each stage's launcher, then until none of our apps runs and no local launcher of ours is still downloading
 wait_apps () {
@@ -138,7 +146,8 @@ redact () {
   FORENSICS_ENV_FILE="$ROOT/.env" python3 "$HERE/scripts/redact_key.py" "${dirs[@]}" >> "$L/progress.txt" 2>&1
 }
 
-# 4. grade the judged environments (dashboard_costly_failure, grade_your_own, both rendering engines)
+# 4. grade the judged environments (dashboard_costly_failure, grade_your_own, both rendering engines; every judged
+#    environment when the stages include hero_solo_all: grade_modal.py reads HERO_STAGES)
 grade () {
   local common=(HERO_SOLO=1 HERO_STAGES="$STAGES" HERO_MODEL="$MODEL" GRADE_LOG_DIR="$L/grading")
   if [ "$DRY" = 1 ]; then
@@ -160,51 +169,69 @@ score () {
     && say "scored: $(head -1 "$L/score.txt")"
 }
 
-# 6. loss audit: every environment and stage, target, launched, found, scored, unscored and lost by cause
+# 6. loss audit: every environment and stage, target, launched, found, scored, unscored and lost by cause. With HERO_MERGE=1
+#    the requested stages go to hero_loss_audit__<stages>.md and the merged audit (every stage in hero_full_runs_per_run.csv)
+#    is rebuilt as hero_loss_audit.md; without it hero_loss_audit.md covers the requested stages (as before).
 audit () {
-  python3 - "$HERE" "$OUTD" "$STAGES" "$MODEL" <<'PY' >> "$L/progress.txt" 2>&1
+  python3 - "$HERE" "$OUTD" "$STAGES" "$MODEL" "$MERGE" <<'PY' >> "$L/progress.txt" 2>&1
 import collections, csv, pathlib, re, sys
-H, OUT, stages, model = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3].split(","), sys.argv[4]
+H, OUT, stages, model, merge = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3].split(","), sys.argv[4], sys.argv[5] == "1"
 sys.path.insert(0, str(H / "scripts"))
 import full_runs_table as T
-rows = list(csv.DictReader(open(OUT / "hero_full_runs_per_run.csv"))) if (OUT / "hero_full_runs_per_run.csv").exists() else []
-found, scored, why = collections.Counter(), collections.Counter(), collections.defaultdict(collections.Counter)
-for r in rows:
-    k = (r["environment"], r["stage"]); found[k] += 1
-    if r["outcome"] == "scored": scored[k] += 1
-    else: why[k][r["outcome"]] += 1
-launched, fetched, noout = {}, {}, set()
-for s in stages:
-    launched.update({(e, s): n for e, n in T.hero_launched(s, model).items()})
-    for log in (H / "results" / "logs" / s).glob(f"*__{model}.log"):
-        o = re.search(r"^Output: results/(\S+?)/?$", log.read_text(errors="replace"), re.M)
-        env = log.stem.split("__")[0]
-        fetched[(env, s)] = bool(o) and (H / "results" / "raw" / s / env / o.group(1) / ".fetched_after_apps_stopped").exists()
-        if not o: noout.add((env, s))   # the launch died before its runs started (e.g. a missing Modal secret)
 PROVIDER = {"provider failure", "OpenRouter budget stop"}
-head = "| environment | stage | target | launched | runs found | fetched | scored | unscored, by reason | lost, provider | lost, other (crash, context, no log) | missing (target - found) |"
-out = ["# Hero loss audit: Llama 3.3 70B solo runs (written by scripts/hero_solo_foldin.sh)", "",
-       f"Model {model}, fp16 on CoreWeave via OpenRouter (as pinned in configs/<env>__{model}.yaml). One row per gap environment",
-       "and hero stage: the planned target (hero_models_prep.md section 4), runs launched (launch.txt), runs found locally,",
-       "whether the fleet was fetched after the apps stopped, runs scored, and every other run by cause. Rows below target",
-       "are listed again at the end. Source: results/hero_full_runs_per_run.csv.", "", head, "|" + "---|" * 11]
-below, tot = [], collections.Counter()
-for env in T.HERO_ENVS:
+OTHER = {"crash", "no log", "context window exceeded", "harness: no chess engine"}
+
+
+def audit(stages, per_run, name):
+    rows = list(csv.DictReader(open(per_run))) if per_run.exists() else []
+    found, scored, why = collections.Counter(), collections.Counter(), collections.defaultdict(collections.Counter)
+    for r in rows:
+        k = (r["environment"], r["stage"]); found[k] += 1
+        if r["outcome"] == "scored": scored[k] += 1
+        else: why[k][r["outcome"]] += 1
+    launched, fetched, noout = {}, {}, set()
     for s in stages:
-        k = (env, s); target = T.hero_target(s, env)
-        if not target and not found[k] and k not in launched:
-            continue
-        lp = sum(c for w, c in why[k].items() if w in PROVIDER)
-        lo = "; ".join(f"{w}: {c}" for w, c in sorted(why[k].items()) if w in {"crash", "no log", "context window exceeded", "harness: no chess engine"})
-        un = "; ".join(f"{w}: {c}" for w, c in sorted(why[k].items()) if w not in PROVIDER | {"crash", "no log", "context window exceeded", "harness: no chess engine"})
-        row = (f"| {env} | {s} | {target} | {launched.get(k, 'not launched')}{' (log has no Output line: launch failed?)' if k in noout else ''} | {found[k]} | {'yes' if fetched.get(k) else 'no'} | "
-               f"{scored[k]} | {un} | {lp or ''} | {lo} | {max(0, target - found[k]) or ''} |")
-        out.append(row); tot["target"] += target; tot["found"] += found[k]; tot["scored"] += scored[k]
-        if scored[k] < target: below.append(row)
-out += ["", f"Total: target {tot['target']}, found {tot['found']}, scored {tot['scored']}.", "",
-        f"## Below target: {len(below)} cells", "", head, "|" + "---|" * 11] + below
-(OUT / "hero_loss_audit.md").write_text("\n".join(out) + "\n")
-print(f"audit: target {tot['target']}, found {tot['found']}, scored {tot['scored']}, {len(below)} cells below target -> {OUT / 'hero_loss_audit.md'}")
+        launched.update({(e, s): n for e, n in T.hero_launched(s, model).items()})
+        for log in (H / "results" / "logs" / s).glob(f"*__{model}.log"):
+            o = re.search(r"^Output: results/(\S+?)/?$", log.read_text(errors="replace"), re.M)
+            env = log.stem.split("__")[0]
+            fetched[(env, s)] = bool(o) and (H / "results" / "raw" / s / env / o.group(1) / ".fetched_after_apps_stopped").exists()
+            if not o: noout.add((env, s))   # the launch died before its runs started (e.g. a missing Modal secret)
+    envs = T.hero_envs(stages) if hasattr(T, "hero_envs") else T.HERO_ENVS
+    head = "| environment | stage | target | launched | runs found | fetched | scored | unscored, by reason | lost, provider | lost, other (crash, context, no log) | missing (target - found) |"
+    out = ["# Hero loss audit: Llama 3.3 70B solo runs (written by scripts/hero_solo_foldin.sh)", "",
+           f"Model {model}, fp16 on CoreWeave via OpenRouter (as pinned in configs/<env>__{model}.yaml). Stages: {', '.join(stages)}.",
+           f"One row per environment ({len(envs)}: the 8 gap environments, or all 29 when hero_solo_all is among the stages) and hero",
+           "stage: the planned target (hero_models_prep.md section 4; for hero_solo_all what launch.txt says was launched), runs",
+           "launched (launch.txt), runs found locally, whether the fleet was fetched after the apps stopped, runs scored, and every",
+           f"other run by cause. Rows below target are listed again at the end. Source: results/{per_run.name}.", "", head, "|" + "---|" * 11]
+    below, tot = [], collections.Counter()
+    for env in envs:
+        for s in stages:
+            k = (env, s); target = T.hero_target(s, env)
+            if not target and not found[k] and k not in launched:
+                continue
+            lp = sum(c for w, c in why[k].items() if w in PROVIDER)
+            lo = "; ".join(f"{w}: {c}" for w, c in sorted(why[k].items()) if w in OTHER)
+            un = "; ".join(f"{w}: {c}" for w, c in sorted(why[k].items()) if w not in PROVIDER | OTHER)
+            row = (f"| {env} | {s} | {target} | {launched.get(k, 'not launched')}{' (log has no Output line: launch failed?)' if k in noout else ''} | {found[k]} | {'yes' if fetched.get(k) else 'no'} | "
+                   f"{scored[k]} | {un} | {lp or ''} | {lo} | {max(0, target - found[k]) or ''} |")
+            out.append(row); tot["target"] += target; tot["found"] += found[k]; tot["scored"] += scored[k]
+            if scored[k] < target: below.append(row)
+    out += ["", f"Total: target {tot['target']}, found {tot['found']}, scored {tot['scored']}.", "",
+            f"## Below target: {len(below)} cells", "", head, "|" + "---|" * 11] + below
+    (OUT / name).write_text("\n".join(out) + "\n")
+    print(f"audit ({', '.join(stages)}): target {tot['target']}, found {tot['found']}, scored {tot['scored']}, {len(below)} cells below target -> {OUT / name}")
+
+
+if merge:
+    suffix = "__" + "+".join(stages)
+    audit(stages, OUT / f"hero_full_runs_per_run{suffix}.csv", f"hero_loss_audit{suffix}.md")
+    merged_per_run = OUT / "hero_full_runs_per_run.csv"
+    merged = list(dict.fromkeys(stages + [r["stage"] for r in csv.DictReader(open(merged_per_run))])) if merged_per_run.exists() else stages
+    audit(merged, merged_per_run, "hero_loss_audit.md")
+else:
+    audit(stages, OUT / "hero_full_runs_per_run.csv", "hero_loss_audit.md")
 PY
 }
 

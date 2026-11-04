@@ -1,0 +1,30 @@
+2026-11-04 10:08:07 start (model llama-3.3-70b, stages hero_smoke,hero_solo, ceiling 1860, grade cap 60)
+2026-11-04 10:08:07 step wait
+2026-11-04 10:08:08 waiting: 2 of our apps still running
+2026-11-04 10:38:53 waiting: 1 of our apps still running
+2026-11-04 10:54:41 restarted without hero_smoke so the long dashboard test run does not block grading; ai_rd stage added
+2026-11-04 10:54:41 start (model llama-3.3-70b, stages hero_solo,hero_solo_key2, ceiling 1900, grade cap 60)
+2026-11-04 10:54:41 step wait
+2026-11-04 10:54:42 waiting for 20 local launcher(s) to finish downloading
+2026-11-04 11:01:43 all our apps finished
+2026-11-04 11:01:43 step fetch
+fetched hero_solo/coding coding/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-04-39-523416: 2026-11-04 11:01:49 gigi-forensics-coding:coding/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-04-39-523416: 203 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero_solo/coding_norules coding/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-04-39-523142: 2026-11-04 11:01:56 gigi-forensics-coding:coding/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-04-39-523142: 188 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero_solo/dashboard_costly_failure dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-05-18-099683: 2026-11-04 11:02:03 gigi-forensics-dashboard-perf:dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-05-18-099683: 206 new files, 52 already here (0 of them differ in size; local copy kept)
+fetched hero_solo/grade_your_own grade_your_own/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-05-24-096464: 2026-11-04 11:02:08 gigi-forensics-grade-your-own:grade_your_own/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-05-24-096464: 15 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero_solo/optimize_rendering_engine dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-05-38-924333: 2026-11-04 11:02:12 gigi-forensics-dashboard-perf:dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-05-38-924333: 85 new files, 27 already here (0 of them differ in size; local copy kept)
+fetched hero_solo/optimize_rendering_engine_graded stripped_engine/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-05-36-019894: 2026-11-04 11:02:16 gigi-forensics-stripped-engine:stripped_engine/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-05-36-019894: 30 new files, 27 already here (0 of them differ in size; local copy kept)
+fetched hero_solo/precommit_hook precommit_hook/precommit_hook/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-05-12-904777: 2026-11-04 11:02:27 gigi-forensics-precommit-hook:precommit_hook/precommit_hook/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-05-12-904777: 530 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero_solo_key2/ai_rd ai_rd/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-11-35-372815: 2026-11-04 11:02:35 gigi-forensics-ai-rd:ai_rd/meta-llama-llama-3.3-70b-instruct/2026-11-04_10-11-35-372815: 30 new files, 12 already here (0 of them differ in size; local copy kept)
+2026-11-04 11:02:35 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 2 folder(s)
+2026-11-04 11:02:35 step grade
+2026-11-04 11:04:08 grading: 2026-11-04 11:02:35 estimate total (hero solo): 25 ungraded runs in 4 fleets, ~$5.11
+2026-11-04 11:04:08 grading: 2026-11-04 11:02:51 estimate total (hero solo): 25 ungraded runs in 4 fleets, ~$5.11
+2026-11-04 11:04:08 STEP FAILED: grade (exit 1)
+2026-11-04 11:04:08 step score
+2026-11-04 11:04:08 scored: 95 llama-3.3-70b runs found in stages hero_solo, hero_solo_key2
+2026-11-04 11:04:08 step audit
+audit: target 95, found 95, scored 90, 1 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero_loss_audit.md
+2026-11-04 11:04:08 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero_loss_audit.md
+2026-11-04 11:04:08 done (not committed: the parent session commits)

@@ -8,7 +8,8 @@ Anthropic's fallback for Opus 5 refusals) grades only what is still ungraded; gr
 Log: results/logs/grading/grade.txt.
   FORENSICS_ENV_FILE=... python3 gigi/3-forensics/scripts/grade_modal.py
 HERO_SOLO=1 (4 Nov 2026): instead, grade only Llama 3.3 70B's solo runs (HERO_MODEL, default llama-3.3-70b) of the
-hero stages (HERO_STAGES, default hero_smoke,hero_solo,hero_solo_key) in the four judged gap environments, read from
+hero stages (HERO_STAGES, default hero_smoke,hero_solo,hero_solo_key) in the four judged gap environments (every judged
+environment, full_runs_table.JUDGED, when HERO_STAGES includes hero_solo_all or HERO_ALL_JUDGED=1), read from
 results/raw/<stage>/<env>/<Output path> (where modal_full.sh and hero_solo_foldin.sh put them); log in
 results/logs/hero/grading/ (GRADE_LOG_DIR overrides). Same graders, same GRADE_CAP_USD and TOTAL_CEILING_USD, plus a
 cost estimate per environment before it starts (ungraded runs' transcript + diff at CHARS_PER_TOKEN, Opus at
@@ -41,6 +42,14 @@ def usage():
 # the hero target's four judged gap environments (config name -> grader environment)
 HERO_JUDGED = {"dashboard_costly_failure": "dashboard_perf", "grade_your_own": "grade_your_own",
                "optimize_rendering_engine": "dashboard_perf", "optimize_rendering_engine_graded": "stripped_engine"}
+HERO_STAGES = os.environ.get("HERO_STAGES", "hero_smoke,hero_solo,hero_solo_key").split(",")
+if HERO and ("hero_solo_all" in HERO_STAGES or os.environ.get("HERO_ALL_JUDGED") == "1"):
+    # stage hero_solo_all (4 Nov 2026): every judged environment, the same config -> grader mapping as the Qwen rows of
+    # results/full_runs.csv (full_runs_table.JUDGED: 11 environments, 9 graders). Same cap, ceiling and estimate.
+    import sys
+    sys.path.insert(0, str(HERE / "scripts"))
+    import full_runs_table as _T
+    HERO_JUDGED = dict(_T.JUDGED)
 
 
 def estimate(dirs):
@@ -64,7 +73,7 @@ def estimate(dirs):
 
 fleets = collections.defaultdict(list)
 if HERO:   # Llama's solo runs: every fleet named in the hero launch logs, grouped by its grader environment
-    for stage in os.environ.get("HERO_STAGES", "hero_smoke,hero_solo,hero_solo_key").split(","):
+    for stage in HERO_STAGES:
         for log in (HERE / "results" / "logs" / stage).glob(f"*__{os.environ.get('HERO_MODEL', 'llama-3.3-70b')}.log"):
             env = log.stem.split("__")[0]
             out = re.search(r"^Output: results/(\S+?)/?$", log.read_text(errors="replace"), re.M)

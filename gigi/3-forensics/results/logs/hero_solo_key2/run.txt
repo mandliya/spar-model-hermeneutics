@@ -1,0 +1,5 @@
+2026-11-04 10:07:58 waiting for AGENT_OPENROUTER_API_KEY in .env
+2026-11-04 10:10:58 key found
+2026-11-04 10:10:59 Modal secret openrouter-agent-gigi stored
+2026-11-04 10:11:09 ai_rd launched
+2026-11-04 10:11:09 done
