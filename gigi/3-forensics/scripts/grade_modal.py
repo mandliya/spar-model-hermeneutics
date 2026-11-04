@@ -17,12 +17,21 @@ $JUDGE_IN_PER_M / $JUDGE_OUT_PER_M, JUDGE_OUT_TOKENS per run, times EST_MARGIN):
 take the spend past the cap or the ceiling is not started, and nothing after it. GRADE_DRY_RUN=1 prints the fleets
 and the estimate and stops: no key read, no network.
   HERO_SOLO=1 GRADE_DRY_RUN=1 python3 gigi/3-forensics/scripts/grade_modal.py
+HERO2_SWAP=1 (4 Nov 2026): the hero2 swap's replays (scripts/hero_swap.sh HERO2=1): every downloaded resume fleet under
+results/raw/hero2_swap/<env>/<point>/<arm>/resume/<model>/<stamp>/ whose config names a judged environment (the four
+judged gap environments: dashboard_costly_failure and optimize_rendering_engine -> dashboard_perf, grade_your_own,
+optimize_rendering_engine_graded -> stripped_engine), as SWAP_ALL=1 does for results/raw/swap_all; log in
+results/logs/hero2_swap/grading/ (GRADE_LOG_DIR overrides). Same GRADE_CAP_USD / TOTAL_CEILING_USD and the same
+estimate-before-grading rule as HERO_SOLO. Before any replay is fetched (no results/raw/hero2_swap/) it says so and exits 0.
+  HERO2_SWAP=1 GRADE_DRY_RUN=1 python3 gigi/3-forensics/scripts/grade_modal.py
 """
 import collections, json, os, pathlib, re, subprocess, time, urllib.request
 HERE = pathlib.Path(__file__).resolve().parents[1]; ENVS = HERE / "agent-interp-envs"
 HERO = os.environ.get("HERO_SOLO") == "1"; DRY = os.environ.get("GRADE_DRY_RUN") == "1"
+HERO2_SWAP = os.environ.get("HERO2_SWAP") == "1"
+EST = HERO or HERO2_SWAP   # estimate every environment first; stop before one whose estimate would cross the cap or the ceiling
 LOG = pathlib.Path(os.environ["GRADE_LOG_DIR"]) if os.environ.get("GRADE_LOG_DIR") else \
-    HERE / "results" / "logs" / ("hero/grading" if HERO else "grading")
+    HERE / "results" / "logs" / ("hero2_swap/grading" if HERO2_SWAP else "hero/grading" if HERO else "grading")
 LOG.mkdir(parents=True, exist_ok=True)
 KEY = None if DRY else \
     re.search(r"^OPENROUTER_API_KEY=(.+)$", pathlib.Path(os.environ["FORENSICS_ENV_FILE"]).read_text(), re.M).group(1).strip()
@@ -91,12 +100,19 @@ if HERO:   # Llama's solo runs: every fleet named in the hero launch logs, group
             d = HERE / "results" / "raw" / stage / env / out.group(1) if out else None
             if env in HERO_JUDGED and d and d.is_dir() and out.group(1).split("/")[0] == HERO_JUDGED[env]:
                 fleets[HERO_JUDGED[env]].append(str(d))
-elif os.environ.get("SWAP_ALL"):   # the swap replays: every downloaded resume fleet, grouped by its config's environment
-    for cfg in (HERE / "results" / "raw" / "swap_all").glob("*/*/*/resume/*/*/config.yaml"):
+elif os.environ.get("SWAP_ALL") or HERO2_SWAP:   # the swap replays: every downloaded resume fleet, grouped by its config's environment
+    _swap_raw = HERE / "results" / "raw" / ("hero2_swap" if HERO2_SWAP else "swap_all")
+    if HERO2_SWAP and not _swap_raw.is_dir():
+        say(f"not yet: results/raw/hero2_swap/ does not exist (no hero2 swap replay fetched yet): nothing to grade")
+        print("not yet: results/raw/hero2_swap/ does not exist (no hero2 swap replay fetched yet): nothing to grade"); raise SystemExit(0)
+    for cfg in _swap_raw.glob("*/*/*/resume/*/*/config.yaml"):
         env = re.search(r"^environment: (\S+)", cfg.read_text(), re.M)
+        # HERO2_SWAP: only the four judged gap environments of the plan (the <env> folder is the config name)
+        if HERO2_SWAP and HERO_JUDGED.get(cfg.parents[5].name) != (env and env.group(1)):
+            continue
         if env and env.group(1) in JUDGED and any(cfg.parent.glob("run-*/final")):
             fleets[env.group(1)].append(str(cfg.parent))
-for stage in ([] if os.environ.get("SWAP_ALL") or HERO else os.environ.get("STAGES", "full_modal,full_modal_rest,full_modal_retry").split(",")):
+for stage in ([] if os.environ.get("SWAP_ALL") or HERO or HERO2_SWAP else os.environ.get("STAGES", "full_modal,full_modal_rest,full_modal_retry").split(",")):
     for log in (HERE / "results" / "logs" / stage).glob("*__*.log"):
         t = log.read_text(errors="replace")
         vol = re.search(r"^Volume: (\S+)", t, re.M); out = re.search(r"^Output: results/(\S+?)/?$", t, re.M)
@@ -104,22 +120,24 @@ for stage in ([] if os.environ.get("SWAP_ALL") or HERO else os.environ.get("STAG
             inner = out.group(1).split("/")[0]
             d = HERE / "results" / "raw" / "modal" / vol.group(1) / out.group(1)
             if inner in JUDGED and d.is_dir(): fleets[inner].append(str(d))
-if DRY or HERO:
+if DRY or EST:
     est = {env: estimate(dirs) for env, dirs in sorted(fleets.items())}
     lines = [f"estimate {env}: {n} ungraded runs in {len(fleets[env])} fleets, ~${usd:.2f}" for env, (n, usd) in est.items()]
-    lines.append(f"estimate total ({f'hero solo, {HERO_MODEL}, stages ' + ','.join(HERO_STAGES) if HERO else 'default stages'}): {sum(n for n, _ in est.values())} ungraded runs "
+    lines.append(f"estimate total ({f'hero solo, {HERO_MODEL}, stages ' + ','.join(HERO_STAGES) if HERO else 'hero2 swap, results/raw/hero2_swap' if HERO2_SWAP else 'default stages'}): {sum(n for n, _ in est.values())} ungraded runs "
                  f"in {sum(map(len, fleets.values()))} fleets, ~${sum(u for _, u in est.values()):.2f}")
     for line in lines:
         say(line)
     if DRY:
         print("\n".join(lines)); raise SystemExit(0)
+    if HERO2_SWAP and not sum(n for n, _ in est.values()):   # nothing ungraded: no key read, no network
+        print("\n".join(lines)); say("nothing ungraded in the hero2 swap: done"); raise SystemExit(0)
 start = usage(); say(f"start: {sum(map(len, fleets.values()))} fleets in {len(fleets)} environments, cap ${CAP}, "
     f"judge {os.environ.get('JUDGE_MODEL') or 'default'}")
 for env, dirs in sorted(fleets.items()):
     spent = usage() - start
     if spent >= CAP: say(f"CAP REACHED (${spent:.2f}): not grading {env} and later"); break
     if usage() - BASELINE >= CEILING: say(f"CEILING REACHED (${usage() - BASELINE:.2f} since baseline): not grading {env} and later"); break
-    if HERO:   # stop before an environment whose estimate would cross the cap or the ceiling
+    if EST:   # stop before an environment whose estimate would cross the cap or the ceiling
         if spent + est[env][1] > CAP: say(f"CAP WOULD BE CROSSED (spent ${spent:.2f} + estimate ${est[env][1]:.2f} > ${CAP}): not grading {env} and later"); break
         if usage() - BASELINE + est[env][1] > CEILING:
             say(f"CEILING WOULD BE CROSSED (${usage() - BASELINE:.2f} since baseline + estimate ${est[env][1]:.2f} > ${CEILING}): not grading {env} and later"); break

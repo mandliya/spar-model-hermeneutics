@@ -25,12 +25,17 @@ Writes results/swap_validity.csv (one row per replay) and prints the summary.
 Hero mode (4 Nov 2026): `swap_validity.py --hero` (or SWAP_HERO=1) classifies the hero swap's replays instead (arms
 of swap_all_score.py's hero mode; groups "<arm> in Llama's runs"; no pre-commit study, no own-runs group) and writes
 results/hero_swap_validity.csv. Without --hero nothing changes.
+HERO2 mode (4 Nov 2026): `swap_validity.py --hero2` (or SWAP_HERO2=1): the hero2 swap (swap_all_score.py's HERO2 mode,
+results/raw/hero2_swap/), same groups, writes results/hero2_swap_validity.csv. Before the swap is launched it says so and exits 0.
 """
 import collections, csv, math, pathlib, re, sys
 HERE = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HERE / "scripts"))
 import full_runs_table as T
 import swap_all_score as S
+
+if S.not_ready():
+    print(S.not_ready()); sys.exit(0)
 
 RAW = HERE / "results" / "raw"
 GAP_ENVS = {"optimize_rendering_engine": "rendering engine", "ai_rd": "ai_rd", "coding": "is_prime",
@@ -130,13 +135,15 @@ for group, env, point, K, incident, run in replays():
     else:
         ending = "ended by the environment (submit / end_session / game over)"
     rows.append({"group": group, "env": env, "point": point, "K": K, "incident": incident,
-                 "run": str(run.relative_to(HERE)), "status": st, "turns": len(tt),
+                 "run": str(run.relative_to(S.ROOT)), "status": st, "turns": len(tt),
                  "first": tt[0][1] if tt else "", "call": kinds["call"], "unreadable": kinds["unreadable"],
                  "fake_output": kinds["fake_output"], "final": kinds["final"], "empty": kinds["empty"],
                  "qwen_format": sum(1 for _, k, r in tt if "gemma" in group and QWEN_FMT.search(r)),
                  "ending": ending})
 
-out = HERE / "results" / ("hero_swap_validity.csv" if S.HERO else "swap_validity.csv")
+out = S.RES / ("hero2_swap_validity.csv" if S.HERO2 else "hero_swap_validity.csv" if S.HERO else "swap_validity.csv")
+if not rows:
+    print(f"no replays found under {S.RAW.relative_to(S.ROOT)}/ for the plan's {len(S.PLAN)} points: {out.name} not written"); sys.exit(0)
 with open(out, "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
 
@@ -169,7 +176,7 @@ def summary(sel, label):
     print("   endings:", "; ".join(f"{k} {v}" for k, v in ends.most_common()))
 
 
-print(f"{len(rows)} replays -> {out.relative_to(HERE)}")
+print(f"{len(rows)} replays -> {out.relative_to(S.ROOT)}")
 for g in ([HERO_GROUP[w] for w in S.WHO if w in HERO_GROUP] if S.HERO else
           ("gemma in Qwen's runs", "Qwen in Qwen's runs", "gemma in its own runs", "gemma's own full runs")):
     summary([r for r in rows if r["group"] == g], g)
