@@ -218,5 +218,104 @@ def main():
     print(open(out).read())
 
 
+# Hero target (4 Nov 2026): Llama 3.3 70B Instruct's own solo runs in the 8 gap environments (hero_models_prep.md,
+# section 4), launched with `scripts/modal_full.sh <stage> llama-3.3-70b env:n ...`. Kept apart from STAGES/MODELS
+# above so results/full_runs.csv is unchanged: `full_runs_table.py --hero` (or HERO=1) writes results/hero_full_runs.csv
+# (one row per environment) and results/hero_full_runs_per_run.csv (one row per run, with why a run is unscored or
+# lost), read by scripts/hero_solo_foldin.sh for the loss audit. Runs are read where modal_full.sh's --results-dir
+# and the fold-in's fetch put them: results/raw/<stage>/<env>/<the log's Output path>/run-N.
+# HERO_STAGES (comma list) and HERO_OUT_DIR (default results/) override the stages and the output folder.
+HERO_MODEL = "llama-3.3-70b"
+HERO_STAGES = {HERO_MODEL: ("hero_smoke", "hero_solo", "hero_solo_key")}   # hero_solo_key: ai_rd, with the capped agent key
+HERO_ENVS = ("ai_rd", "coding", "coding_norules", "dashboard_costly_failure", "grade_your_own",
+             "optimize_rendering_engine", "optimize_rendering_engine_graded", "precommit_hook")
+HERO_TARGETS = {"hero_smoke": {"coding": 2, "optimize_rendering_engine": 2, "dashboard_costly_failure": 2},
+                "hero_solo": {"coding": 20, "coding_norules": 20, "dashboard_costly_failure": 10, "grade_your_own": 5,
+                              "optimize_rendering_engine": 5, "optimize_rendering_engine_graded": 5, "precommit_hook": 20},
+                "hero_solo_key": {"ai_rd": 10}}
+
+
+def hero_launched(stage, model=HERO_MODEL):
+    """env -> runs launched, from results/logs/<stage>/launch.txt (modal_full.sh; the last line per env wins)."""
+    lt = HERE / "results" / "logs" / stage / "launch.txt"
+    return {m.group(1): int(m.group(2)) for m in
+            re.finditer(rf"launched (\S+)__{re.escape(model)} x(\d+)", lt.read_text() if lt.exists() else "")}
+
+
+def hero_target(stage, env):
+    """The planned count (HERO_TARGETS); for a stage not listed there (e.g. a relaunch), what was launched."""
+    return HERO_TARGETS[stage].get(env, 0) if stage in HERO_TARGETS else hero_launched(stage).get(env, 0)
+
+
+def hero_runs(stages, model=HERO_MODEL):
+    """(env, model, run dir, stage) for every run of the hero launches; logs without an Output line yet are skipped."""
+    out = []
+    for stage in stages:
+        for log in sorted((HERE / "results" / "logs" / stage).glob(f"*__{model}.log")):
+            env = log.stem.split("__")[0]
+            o = re.search(r"^Output: results/(\S+?)/?$", log.read_text(errors="replace"), re.M)
+            if o:
+                d = HERE / "results" / "raw" / stage / env / o.group(1)
+                out += [(env, model, p, stage) for p in sorted(d.glob("run-*")) if p.is_dir()]
+    return out
+
+
+def hero_main():
+    import os
+    import swap_all_score as S   # status() and unscored_reason(): context window, budget stop, step cap, not graded
+    stages = tuple(s for s in os.environ.get("HERO_STAGES", ",".join(HERO_STAGES[HERO_MODEL])).split(",") if s)
+    outdir = pathlib.Path(os.environ.get("HERO_OUT_DIR") or HERE / "results"); outdir.mkdir(parents=True, exist_ok=True)
+    runs = hero_runs(stages)
+    per_run, agg, judges = [], collections.defaultdict(lambda: [0, 0, 0, 0, 0, 0]), collections.defaultdict(collections.Counter)
+    for env, model, run, stage in runs:
+        if env not in HERO_ENVS:
+            continue
+        st = S.status(run); v = None
+        a = agg[env]; a[5] += 1   # bad, n scored, unscored, lost provider, lost crash/harness/context, runs found
+        if st == "finished":
+            state = last_state(run)
+            if env in MEASURES:
+                v = MEASURES[env][1](state, run)
+            elif env in JUDGED:
+                v = judged(state, run)
+                g = run / "final" / "grading.json"
+                if g.exists():
+                    judges[env][json.loads(g.read_text()).get("judge", "?")] += 1
+            why = "scored" if v is not None else S.unscored_reason(run, env)
+            if v is None:
+                a[2] += 1
+            else:
+                a[0] += bool(v); a[1] += 1
+        else:
+            why = st
+            a[3 if st in ("provider failure", "OpenRouter budget stop") else 4] += 1
+        per_run.append([stage, env, model, str(run.relative_to(HERE)), st, why, "" if v is None else int(bool(v))])
+    with open(outdir / "hero_full_runs_per_run.csv", "w", newline="") as f:
+        w = csv.writer(f); w.writerow(["stage", "environment", "model", "run", "status", "outcome", "bad"]); w.writerows(per_run)
+    out = outdir / "hero_full_runs.csv"
+    with open(out, "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["environment", "behaviour", "source", "model", "precision", "stages", "target", "runs_found", "k", "n",
+                    "rate", "ci_low", "ci_high", "unscored", "lost_provider", "lost_crash_or_harness", "judges"])
+        for env in HERO_ENVS:
+            label, source = (MEASURES[env][0], "env state") if env in MEASURES else ("cheated (Opus grader)", "grader")
+            k, n, u, lp, lc, found = agg[env]
+            lo, hi = wilson(k, n)
+            target = sum(hero_target(s, env) for s in stages)
+            cfg = HERE / "configs" / f"{env}__{HERO_MODEL}.yaml"   # precision as pinned in the config (project rule)
+            c = cfg.read_text() if cfg.exists() else ""
+            q, prov = re.search(r"quantizations: \[([^\]]*)\]", c), re.search(r"only: \[([^\]]*)\]", c)
+            prec = f"{q.group(1) if q else '?'} ({prov.group(1) if prov else '?'}, via OpenRouter)"
+            w.writerow([env, label, source, HERO_MODEL, prec, "+".join(stages), target, found,
+                        k, n, f"{k / n:.3f}" if n else "", f"{lo:.3f}" if n else "", f"{hi:.3f}" if n else "", u, lp, lc,
+                        " ".join(f"{j}:{c}" for j, c in sorted(judges[env].items()))])
+    print(f"{len(per_run)} {HERO_MODEL} runs found in stages {', '.join(stages)}")
+    print(open(out).read())
+
+
 if __name__ == "__main__":
-    main()
+    import os, sys
+    if "--hero" in sys.argv[1:] or os.environ.get("HERO") == "1":
+        hero_main()
+    else:
+        main()

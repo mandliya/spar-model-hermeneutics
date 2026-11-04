@@ -7,11 +7,24 @@ Graders skip runs already graded, so a rerun only does what is missing. JUDGE_MO
 Anthropic's fallback for Opus 5 refusals) grades only what is still ungraded; grading.json records the judge.
 Log: results/logs/grading/grade.txt.
   FORENSICS_ENV_FILE=... python3 gigi/3-forensics/scripts/grade_modal.py
+HERO_SOLO=1 (4 Nov 2026): instead, grade only Llama 3.3 70B's solo runs (HERO_MODEL, default llama-3.3-70b) of the
+hero stages (HERO_STAGES, default hero_smoke,hero_solo,hero_solo_key) in the four judged gap environments, read from
+results/raw/<stage>/<env>/<Output path> (where modal_full.sh and hero_solo_foldin.sh put them); log in
+results/logs/hero/grading/ (GRADE_LOG_DIR overrides). Same graders, same GRADE_CAP_USD and TOTAL_CEILING_USD, plus a
+cost estimate per environment before it starts (ungraded runs' transcript + diff at CHARS_PER_TOKEN, Opus at
+$JUDGE_IN_PER_M / $JUDGE_OUT_PER_M, JUDGE_OUT_TOKENS per run, times EST_MARGIN): an environment whose estimate would
+take the spend past the cap or the ceiling is not started, and nothing after it. GRADE_DRY_RUN=1 prints the fleets
+and the estimate and stops: no key read, no network.
+  HERO_SOLO=1 GRADE_DRY_RUN=1 python3 gigi/3-forensics/scripts/grade_modal.py
 """
 import collections, json, os, pathlib, re, subprocess, time, urllib.request
 HERE = pathlib.Path(__file__).resolve().parents[1]; ENVS = HERE / "agent-interp-envs"
-LOG = HERE / "results" / "logs" / "grading"; LOG.mkdir(parents=True, exist_ok=True)
-KEY = re.search(r"^OPENROUTER_API_KEY=(.+)$", pathlib.Path(os.environ["FORENSICS_ENV_FILE"]).read_text(), re.M).group(1).strip()
+HERO = os.environ.get("HERO_SOLO") == "1"; DRY = os.environ.get("GRADE_DRY_RUN") == "1"
+LOG = pathlib.Path(os.environ["GRADE_LOG_DIR"]) if os.environ.get("GRADE_LOG_DIR") else \
+    HERE / "results" / "logs" / ("hero/grading" if HERO else "grading")
+LOG.mkdir(parents=True, exist_ok=True)
+KEY = None if DRY else \
+    re.search(r"^OPENROUTER_API_KEY=(.+)$", pathlib.Path(os.environ["FORENSICS_ENV_FILE"]).read_text(), re.M).group(1).strip()
 CAP = float(os.environ.get("GRADE_CAP_USD", 60))
 # and a hard ceiling on the key's total since the project baseline (18 Oct 2026), across every pass and run
 CEILING = float(os.environ.get("TOTAL_CEILING_USD", 1500)); BASELINE = float(os.environ.get("CEILING_BASELINE_USD", 131.477198523))
@@ -25,13 +38,45 @@ def usage():
     req = urllib.request.Request("https://openrouter.ai/api/v1/key", headers={"Authorization": f"Bearer {KEY}"})
     return json.load(urllib.request.urlopen(req, timeout=30))["data"]["usage"]
 
+# the hero target's four judged gap environments (config name -> grader environment)
+HERO_JUDGED = {"dashboard_costly_failure": "dashboard_perf", "grade_your_own": "grade_your_own",
+               "optimize_rendering_engine": "dashboard_perf", "optimize_rendering_engine_graded": "stripped_engine"}
+
+
+def estimate(dirs):
+    """(runs, $) to grade the ungraded finished runs under these fleets: transcript (rollout.log) + diff (graders cap it
+    at 60k chars) + 15k chars of rubric, at CHARS_PER_TOKEN; JUDGE_OUT_TOKENS out per run; times EST_MARGIN. Runs the
+    grader will skip as unjudgeable are counted too, so it errs high."""
+    cpt = float(os.environ.get("CHARS_PER_TOKEN", 3.0)); margin = float(os.environ.get("EST_MARGIN", 1.5))
+    pin, pout = float(os.environ.get("JUDGE_IN_PER_M", 5)), float(os.environ.get("JUDGE_OUT_PER_M", 25))
+    out_tok = float(os.environ.get("JUDGE_OUT_TOKENS", 4000))
+    n, usd = 0, 0.0
+    for d in dirs:
+        for run in pathlib.Path(d).glob("run-*"):
+            log = run / "rollout.log"
+            if not (run / "final").is_dir() or (run / "final" / "grading.json").exists() or not log.exists():
+                continue
+            diff = run / "final" / "diff.patch"
+            chars = log.stat().st_size + (min(diff.stat().st_size, 60_000) if diff.exists() else 0) + 15_000
+            n += 1; usd += chars / cpt * pin / 1e6 + out_tok * pout / 1e6
+    return n, usd * margin
+
+
 fleets = collections.defaultdict(list)
-if os.environ.get("SWAP_ALL"):   # the swap replays: every downloaded resume fleet, grouped by its config's environment
+if HERO:   # Llama's solo runs: every fleet named in the hero launch logs, grouped by its grader environment
+    for stage in os.environ.get("HERO_STAGES", "hero_smoke,hero_solo,hero_solo_key").split(","):
+        for log in (HERE / "results" / "logs" / stage).glob(f"*__{os.environ.get('HERO_MODEL', 'llama-3.3-70b')}.log"):
+            env = log.stem.split("__")[0]
+            out = re.search(r"^Output: results/(\S+?)/?$", log.read_text(errors="replace"), re.M)
+            d = HERE / "results" / "raw" / stage / env / out.group(1) if out else None
+            if env in HERO_JUDGED and d and d.is_dir() and out.group(1).split("/")[0] == HERO_JUDGED[env]:
+                fleets[HERO_JUDGED[env]].append(str(d))
+elif os.environ.get("SWAP_ALL"):   # the swap replays: every downloaded resume fleet, grouped by its config's environment
     for cfg in (HERE / "results" / "raw" / "swap_all").glob("*/*/*/resume/*/*/config.yaml"):
         env = re.search(r"^environment: (\S+)", cfg.read_text(), re.M)
         if env and env.group(1) in JUDGED and any(cfg.parent.glob("run-*/final")):
             fleets[env.group(1)].append(str(cfg.parent))
-for stage in ([] if os.environ.get("SWAP_ALL") else os.environ.get("STAGES", "full_modal,full_modal_rest,full_modal_retry").split(",")):
+for stage in ([] if os.environ.get("SWAP_ALL") or HERO else os.environ.get("STAGES", "full_modal,full_modal_rest,full_modal_retry").split(",")):
     for log in (HERE / "results" / "logs" / stage).glob("*__*.log"):
         t = log.read_text(errors="replace")
         vol = re.search(r"^Volume: (\S+)", t, re.M); out = re.search(r"^Output: results/(\S+?)/?$", t, re.M)
@@ -39,12 +84,25 @@ for stage in ([] if os.environ.get("SWAP_ALL") else os.environ.get("STAGES", "fu
             inner = out.group(1).split("/")[0]
             d = HERE / "results" / "raw" / "modal" / vol.group(1) / out.group(1)
             if inner in JUDGED and d.is_dir(): fleets[inner].append(str(d))
+if DRY or HERO:
+    est = {env: estimate(dirs) for env, dirs in sorted(fleets.items())}
+    lines = [f"estimate {env}: {n} ungraded runs in {len(fleets[env])} fleets, ~${usd:.2f}" for env, (n, usd) in est.items()]
+    lines.append(f"estimate total ({'hero solo' if HERO else 'default stages'}): {sum(n for n, _ in est.values())} ungraded runs "
+                 f"in {sum(map(len, fleets.values()))} fleets, ~${sum(u for _, u in est.values()):.2f}")
+    for line in lines:
+        say(line)
+    if DRY:
+        print("\n".join(lines)); raise SystemExit(0)
 start = usage(); say(f"start: {sum(map(len, fleets.values()))} fleets in {len(fleets)} environments, cap ${CAP}, "
     f"judge {os.environ.get('JUDGE_MODEL') or 'default'}")
 for env, dirs in sorted(fleets.items()):
     spent = usage() - start
     if spent >= CAP: say(f"CAP REACHED (${spent:.2f}): not grading {env} and later"); break
     if usage() - BASELINE >= CEILING: say(f"CEILING REACHED (${usage() - BASELINE:.2f} since baseline): not grading {env} and later"); break
+    if HERO:   # stop before an environment whose estimate would cross the cap or the ceiling
+        if spent + est[env][1] > CAP: say(f"CAP WOULD BE CROSSED (spent ${spent:.2f} + estimate ${est[env][1]:.2f} > ${CAP}): not grading {env} and later"); break
+        if usage() - BASELINE + est[env][1] > CEILING:
+            say(f"CEILING WOULD BE CROSSED (${usage() - BASELINE:.2f} since baseline + estimate ${est[env][1]:.2f} > ${CEILING}): not grading {env} and later"); break
     try:   # 2 h per environment: a laptop that slept mid-call leaves a hung grader; graded runs are skipped on the next pass
         rc = subprocess.run(["env", "-u", "VIRTUAL_ENV", "uv", "run", "python", f"environments/{env}/grade_rollouts.py", *dirs,
                              "--concurrency", "20", *(["--model", os.environ["JUDGE_MODEL"]] if os.environ.get("JUDGE_MODEL") else [])], cwd=ENVS, env={**os.environ, "JUDGE_VIA_OPENROUTER": "1", "OPENROUTER_API_KEY": KEY},

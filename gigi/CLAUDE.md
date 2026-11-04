@@ -132,6 +132,13 @@ are saved with every response), not estimates.
   are needed there yet. Providers pinned as below (gemma on DeepInfra, the only
   provider with tool calls for it); OpenRouter serves fp8, so say so next to
   every forensics result. Activations, when needed, come from a GPU box again.
+  **Extended 4 Nov 2026 (the user, after the 3 Nov call):** the hero suite also
+  runs through OpenRouter, traces only, activations recomputed later on a GPU
+  box: Llama 3.3 70B Instruct (target) at full precision, fp16 on CoreWeave,
+  to match the weights the public NLA and J-lens were fitted on; Qwen3.6 27B
+  (fp8 on DeepInfra: no full-precision endpoint exists); gemma-3-27b-it; and,
+  as backups, gemma 4 31B and GPT-OSS-20B. State each model's precision next to
+  every hero result (`3-forensics/hero_models_prep.md`).
 - Ground truth comes from a live, independently verifiable check per category
   (capability proof, neutral-vs-pressured rerun, belief elicitation...), never
   from the dataset's `did_lie`.
