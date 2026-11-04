@@ -207,11 +207,12 @@ def main():
     ap.add_argument("--pool-target", type=int, default=60, help="scored replays per arm per incident row, after top-ups")
     ap.add_argument("--clean-pool-target", type=int, default=60, help="the same for each environment's clean row (0: no top-up)")
     ap.add_argument("--force-new-name", help="write results/<NAME> instead of results/hero_swap_plan.json (must not exist)")
+    ap.add_argument("--out", help="write the plan to this path instead, anywhere (must not exist; hero_swap_when_ready.sh's dry run)")
     ap.add_argument("--dry-run", action="store_true", help="print the plan, write nothing")
     a = ap.parse_args()
     a.takeover = [int(x) for x in a.takeover.split(",")]
-    out = HERE / "results" / (a.force_new_name or "hero_swap_plan.json")
-    if out.parent != HERE / "results" or out.suffix != ".json":
+    out = pathlib.Path(a.out).resolve() if a.out else HERE / "results" / (a.force_new_name or "hero_swap_plan.json")
+    if not a.out and (out.parent != HERE / "results" or out.suffix != ".json"):
         raise SystemExit("--force-new-name takes a bare file name ending in .json (written under results/)")
     if out.exists() and not a.dry_run:
         raise SystemExit(f"results/{out.name} exists; results are never overwritten "

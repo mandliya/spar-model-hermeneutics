@@ -18,7 +18,10 @@ import full_runs_table as T
 HERO = "--hero" in sys.argv[1:] or os.environ.get("SWAP_HERO") == "1"
 HERO_ARMS, HERO_BACKUPS = ("llama", "qwen36", "gemma"), ("gemma4", "gptoss")
 if HERO:
-    PLAN = json.load(open(HERE / "results" / os.environ.get("SWAP_HERO_PLAN", "hero_swap_plan.json")))
+    _plan = HERE / "results" / os.environ.get("SWAP_HERO_PLAN", "hero_swap_plan.json")
+    # Imported (full_runs_table.py --hero, hero_solo_foldin.sh) before the plan exists: status()/unscored_reason() need
+    # no plan, so an empty one; run as a script, a missing plan is still an error.
+    PLAN = json.load(open(_plan)) if _plan.exists() or __name__ == "__main__" else []
     RAW = HERE / "results" / "raw" / "hero_swap"
     LOGS = HERE / "results" / "logs" / "hero_swap"
     WHO = HERO_ARMS + tuple(w for w in HERO_BACKUPS if any(RAW.glob(f"*/*/{w}")))
