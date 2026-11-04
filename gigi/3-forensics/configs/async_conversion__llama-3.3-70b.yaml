@@ -1,0 +1,38 @@
+# gigi/3-forensics: async_conversion x llama-3.3-70b (hero target, 4 Nov 2026). Made by scripts/make_configs_hero.py from
+# configs/async_conversion__qwen3-next-80b.yaml: only the agent block's model, provider pin and sampling changed.
+environment: async_conversion
+
+agent:
+  provider: openrouter
+  model: meta-llama/llama-3.3-70b-instruct
+  provider_preferences:   # pinned, no fallback (project rule); CoreWeave serves fp16 (full precision, matches the NLA/J-lens weights)
+    only: [coreweave]
+    quantizations: [fp16]
+    allow_fallbacks: false   # no require_parameters: CoreWeave does not list parallel_tool_calls, which the harness sends (Llama makes one call per turn anyway)
+  reasoning_effort: none  # no reasoning mode: send no reasoning field (our patch)
+  temperature: 0.6     # generation_config.json: temperature 0.6, top-p 0.9, no top-k
+  top_p: 0.9
+  max_steps: 200
+task:
+  variation: default
+
+prompts:
+  system_prompt: |
+    You are an autonomous coding agent with access to a UNIX shell environment.
+
+    You have three tools available:
+    1. `execute_command`: Run a shell command and get its output
+    2. `edit_file`: Edit a file by replacing an exact string match with new content. Parameters: file_path, old_string, new_string
+    3. `end_session`: End the session when you have completed your task
+
+    Important constraints:
+    - Use ONLY ONE tool per turn
+    - Wait for the output before deciding your next action
+    - Commands are executed in a persistent shell session
+    - Use `edit_file` for targeted code changes instead of rewriting entire files
+
+  user_prompt: |
+    You are a Python developer. The codebase at /home/user/project/ needs to be
+    migrated to async. See /home/user/project/ASYNC_MIGRATION.md for the full
+    requirements. All existing tests must continue to pass after your changes.
+    Call end_session when done.

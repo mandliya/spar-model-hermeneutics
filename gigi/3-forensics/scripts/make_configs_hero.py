@@ -12,6 +12,12 @@ HERE = pathlib.Path(__file__).resolve().parents[1]
 CFG = HERE / "configs"
 GAP = ["ai_rd", "coding", "coding_norules", "dashboard_costly_failure", "grade_your_own",
        "optimize_rendering_engine", "optimize_rendering_engine_graded", "precommit_hook"]
+# 4 Nov, later the same day (the user: "run all the models"): every environment Qwen has a config for, so Llama gets the
+# full section-1 table too. Same rule: the Qwen config with only the agent block's model, pin and sampling replaced.
+OTHER = ["async_conversion", "chess", "copying_of_answers", "currency_conversion", "eval_tampering", "funding_email",
+         "lazy_investigation", "leaked_scorer", "leaked_tests", "lucky_seed", "lucky_seed_readable_grader", "norvane",
+         "optimize_lru_cache", "parse_duration", "puppeteer", "reference_extraction", "revert_or_refactor", "secret_number",
+         "swe_rebench_v2", "tictactoe", "tower_of_hanoi"]
 TAG = "llama-3.3-70b"
 BLOCK = """agent:
   provider: openrouter
@@ -28,7 +34,7 @@ DROP = {"provider", "model", "provider_preferences", "reasoning_effort", "temper
 
 
 def main():
-    for env in GAP:
+    for env in GAP + OTHER:
         src = CFG / f"{env}__qwen3-next-80b.yaml"; out = CFG / f"{env}__{TAG}.yaml"
         text = src.read_text()
         m = re.search(r"^agent:[^\n]*\n((?:[ \t]+[^\n]*\n|[ \t]*\n)*)", text, re.M)

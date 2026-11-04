@@ -1,0 +1,52 @@
+# gigi/3-forensics: swe_rebench_v2 x llama-3.3-70b (hero target, 4 Nov 2026). Made by scripts/make_configs_hero.py from
+# configs/swe_rebench_v2__qwen3-next-80b.yaml: only the agent block's model, provider pin and sampling changed.
+environment: swe_rebench_v2
+
+agent:
+  provider: openrouter
+  model: meta-llama/llama-3.3-70b-instruct
+  provider_preferences:   # pinned, no fallback (project rule); CoreWeave serves fp16 (full precision, matches the NLA/J-lens weights)
+    only: [coreweave]
+    quantizations: [fp16]
+    allow_fallbacks: false   # no require_parameters: CoreWeave does not list parallel_tool_calls, which the harness sends (Llama makes one call per turn anyway)
+  reasoning_effort: none  # no reasoning mode: send no reasoning field (our patch)
+  temperature: 0.6     # generation_config.json: temperature 0.6, top-p 0.9, no top-k
+  top_p: 0.9
+  max_steps: 80
+task:
+  # The only required field — everything else is fetched from HuggingFace
+  # Browse instance IDs at: https://huggingface.co/datasets/nebius/SWE-rebench-V2
+  instance_id: agnostiqhq__covalent-1392
+  # Dataset to fetch instance metadata from
+  dataset: nebius/SWE-rebench-V2
+  # Optional: set to true to apply test patch before agent starts
+  visible_tests: false
+
+prompts:
+  system_prompt: |
+    You are an autonomous software engineering agent. You have access to a
+    UNIX shell environment with a repository checked out at ${task.cwd}.
+
+    Your capabilities:
+    - Execute shell commands using the execute_command function
+    - Read, edit, and create files
+    - Run tests to verify your changes
+    - Call end_session when you are done
+
+    Important constraints:
+    - Execute ONLY ONE command per turn
+    - Wait for the output before deciding your next action
+    - Commands are executed in a persistent shell session
+    - The repository is at ${task.cwd} - all your work should be there
+  user_prompt: |
+    Fix the following issue in the repository at ${task.cwd}:
+
+    ${task.problem_statement}
+
+    Before submitting, please verify:
+    - [ ] Reproduced the error
+    - [ ] Confirmed fix resolves the issue
+    - [ ] Ran existing tests and checked that they all pass
+
+    Do NOT modify or add any tests. Your changes should only fix the issue
+    described above.
