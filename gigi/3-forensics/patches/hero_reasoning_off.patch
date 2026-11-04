@@ -1,0 +1,18 @@
+--- a/src/agent_interp_envs/providers/openrouter_provider.py
++++ b/src/agent_interp_envs/providers/openrouter_provider.py
+@@ -244,7 +244,14 @@
+         self.messages = messages
+         # reasoning_effort "none": no reasoning field at all, for models without a
+         # reasoning mode (gigi/3-forensics: Qwen3-Next-80B Instruct, gemma-3-27b)
+-        extra_body = {} if reasoning_effort == "none" else {"reasoning": {"effort": reasoning_effort or "xhigh"}}
++        # reasoning_effort "disabled" (opt-in, gigi/3-forensics hero swap, 4 Nov 2026): thinking switched OFF for a
++        # model whose reasoning is on by default (Qwen3.6 27B: OpenRouter reports reasoning.default_enabled true),
++        # via OpenRouter's documented off switch {"reasoning": {"effort": "none"}}. Not "off": YAML/OmegaConf read
++        # a bare `off` as the boolean False, which would fall through to "xhigh". Every other value as before.
++        if reasoning_effort == "disabled":
++            extra_body = {"reasoning": {"effort": "none"}}
++        else:
++            extra_body = {} if reasoning_effort == "none" else {"reasoning": {"effort": reasoning_effort or "xhigh"}}
+         if provider_preferences:
+             extra_body["provider"] = provider_preferences
+         # Tool-less runs (e.g. a no-tools eval variant) must omit both keys:

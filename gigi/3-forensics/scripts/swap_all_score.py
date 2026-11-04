@@ -4,20 +4,38 @@ the environment's own grader verdict (final/grading.json) or its state.json meas
   fetch:  python3 swap_all_score.py fetch   copy each state-scored fleet (with steps) off its Modal volume
   score:  python3 swap_all_score.py         -> results/swap_all.csv (one row per point and model)
 Lost replays (provider errors, crashes, gemma's context window exceeded) are counted separately, never as behaviour.
+Hero mode (4 Nov 2026; `--hero` on this script or on any script that imports it, or SWAP_HERO=1): the hero swap of
+scripts/hero_swap.sh instead. Plan results/hero_swap_plan.json (SWAP_HERO_PLAN = another file name under results/),
+replays in results/raw/hero_swap/, logs in results/logs/hero_swap/, arms llama / qwen36 / gemma (+ gemma4 / gptoss
+when any of their folders exists), output results/hero_swap.csv. Without --hero nothing changes.
+  python3 swap_all_score.py --hero fetch;  python3 swap_all_score.py --hero   -> results/hero_swap.csv
 """
-import collections, csv, json, pathlib, re, subprocess, sys
+import collections, csv, json, os, pathlib, re, subprocess, sys
 HERE = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HERE / "scripts"))
 import full_runs_table as T
 
-PLAN = json.load(open(HERE / "results" / "swap_all_plan.json"))
-if (HERE / "results" / "swap_extra_plan.json").exists():   # the five environments added on 21 Oct (swap_extra_plan.py)
+HERO = "--hero" in sys.argv[1:] or os.environ.get("SWAP_HERO") == "1"
+HERO_ARMS, HERO_BACKUPS = ("llama", "qwen36", "gemma"), ("gemma4", "gptoss")
+if HERO:
+    PLAN = json.load(open(HERE / "results" / os.environ.get("SWAP_HERO_PLAN", "hero_swap_plan.json")))
+    RAW = HERE / "results" / "raw" / "hero_swap"
+    LOGS = HERE / "results" / "logs" / "hero_swap"
+    WHO = HERO_ARMS + tuple(w for w in HERO_BACKUPS if any(RAW.glob(f"*/*/{w}")))
+    OUT = HERE / "results" / "hero_swap.csv"
+else:
+    PLAN = json.load(open(HERE / "results" / "swap_all_plan.json"))
+if not HERO and (HERE / "results" / "swap_extra_plan.json").exists():   # the five environments added on 21 Oct (swap_extra_plan.py)
     PLAN += json.load(open(HERE / "results" / "swap_extra_plan.json"))
-if (HERE / "results" / "swap_aird_plan.json").exists():    # ai_rd, after its fix (swap_aird_plan.py)
+if not HERO and (HERE / "results" / "swap_aird_plan.json").exists():    # ai_rd, after its fix (swap_aird_plan.py)
     PLAN += json.load(open(HERE / "results" / "swap_aird_plan.json"))
-if (HERE / "results" / "swap_clean_plan.json").exists():   # the missing clean-run controls, 27 Oct (swap_clean_plan.py)
+if not HERO and (HERE / "results" / "swap_clean_plan.json").exists():   # the missing clean-run controls, 27 Oct (swap_clean_plan.py)
     PLAN += json.load(open(HERE / "results" / "swap_clean_plan.json"))
-RAW = HERE / "results" / "raw" / "swap_all"
+if not HERO:
+    RAW = HERE / "results" / "raw" / "swap_all"
+    LOGS = HERE / "results" / "logs" / "swap_all"
+    WHO = ("qwen", "gemma")
+    OUT = HERE / "results" / "swap_all.csv"
 # Verdicts read by hand where the grader split identical behaviour (results/hand_verdicts.csv, append-only, with
 # the grader's verdict and the reason next to each): applied over the grader's verdict for exactly those runs.
 HAND = {r["run"]: r["verdict"] == "cheated" for r in csv.DictReader(open(HERE / "results" / "hand_verdicts.csv"))} \
@@ -63,7 +81,7 @@ def unscored_reason(run, env):
 
 def fetch_orphans():
     """Fleets whose launcher was stopped before downloading: the log names them, the volume has them."""
-    for log in (HERE / "results/logs/swap_all").glob("*__*__*.log"):
+    for log in LOGS.glob("*__*__*.log"):
         env, point, who = log.stem.split("__")[:3]
         t = log.read_text(errors="replace")
         vol = re.search(r"^Volume: (\S+)", t, re.M)
@@ -82,8 +100,8 @@ def fetch():
         if p["env"] in T.JUDGED:
             continue
         vol = None
-        for who in ("qwen", "gemma"):
-            log = HERE / "results/logs/swap_all" / f"{p['env']}__{point_name(p)}__{who}.log"
+        for who in WHO:
+            log = LOGS / f"{p['env']}__{point_name(p)}__{who}.log"
             if log.exists():
                 m = re.search(r"^Volume: (\S+)", log.read_text(errors="replace"), re.M); vol = m and m.group(1)
             for fleet in fleets(p, who):
@@ -98,7 +116,7 @@ def fetch():
 def score():
     rows = []
     for p in PLAN:
-        for who in ("qwen", "gemma"):
+        for who in WHO:
             k = n = 0; lost = collections.Counter()
             for fleet in fleets(p, who):
                 for run in sorted(fleet.glob("run-*")):
@@ -118,11 +136,11 @@ def score():
             rows.append({"env": p["env"], "point": point_name(p), "incident": p["incident"], "N": p["N"], "K": p["K"],
                          "fit_for_gemma": p.get("fit_for_gemma", False), "who": who, "k": k, "n": n,
                          "lost": "; ".join(f"{s}: {c}" for s, c in sorted(lost.items()))})
-    out = HERE / "results" / "swap_all.csv"
+    out = OUT
     with open(out, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
     print(f"{len(rows)} rows -> {out.relative_to(HERE)}")
 
 
 if __name__ == "__main__":
-    fetch() if sys.argv[1:] == ["fetch"] else score()
+    fetch() if [a for a in sys.argv[1:] if a != "--hero"] == ["fetch"] else score()

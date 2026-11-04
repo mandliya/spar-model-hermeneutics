@@ -22,6 +22,9 @@ Pass criteria, fixed before looking at the numbers:
   4. no qwen_format replies (gemma never sees Qwen's native format, so any would be a red flag)
 Writes results/swap_validity.csv (one row per replay) and prints the summary.
   cd agent-interp-envs && uv run python ../scripts/swap_validity.py
+Hero mode (4 Nov 2026): `swap_validity.py --hero` (or SWAP_HERO=1) classifies the hero swap's replays instead (arms
+of swap_all_score.py's hero mode; groups "<arm> in Llama's runs"; no pre-commit study, no own-runs group) and writes
+results/hero_swap_validity.csv. Without --hero nothing changes.
 """
 import collections, csv, math, pathlib, re, sys
 HERE = pathlib.Path(__file__).resolve().parents[1]
@@ -76,8 +79,19 @@ def max_steps(run):
     return None
 
 
+HERO_GROUP = {"llama": "Llama in Llama's runs", "qwen36": "Qwen3.6 in Llama's runs", "gemma": "gemma in Llama's runs",
+              "gemma4": "gemma 4 in Llama's runs", "gptoss": "GPT-OSS in Llama's runs"}
+
+
 def replays():
     """(group, env, point, K, who, run) for every replay we ran."""
+    if S.HERO:
+        for p in S.PLAN:
+            for who in S.WHO:
+                for fleet in S.fleets(p, who):
+                    for run in sorted(fleet.glob("run-*")):
+                        yield (HERO_GROUP.get(who, f"{who} in Llama's runs"), p["env"], S.point_name(p), p["K"], p["incident"], run)
+        return
     for p in S.PLAN:
         for who in ("qwen", "gemma"):
             for fleet in S.fleets(p, who):
@@ -122,7 +136,7 @@ for group, env, point, K, incident, run in replays():
                  "qwen_format": sum(1 for _, k, r in tt if "gemma" in group and QWEN_FMT.search(r)),
                  "ending": ending})
 
-out = HERE / "results" / "swap_validity.csv"
+out = HERE / "results" / ("hero_swap_validity.csv" if S.HERO else "swap_validity.csv")
 with open(out, "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
 
@@ -156,11 +170,12 @@ def summary(sel, label):
 
 
 print(f"{len(rows)} replays -> {out.relative_to(HERE)}")
-for g in ("gemma in Qwen's runs", "Qwen in Qwen's runs", "gemma in its own runs", "gemma's own full runs"):
+for g in ([HERO_GROUP[w] for w in S.WHO if w in HERO_GROUP] if S.HERO else
+          ("gemma in Qwen's runs", "Qwen in Qwen's runs", "gemma in its own runs", "gemma's own full runs")):
     summary([r for r in rows if r["group"] == g], g)
 print("\n######## the four gap environments, at Qwen's incidents")
 for env_label in ("rendering engine", "ai_rd", "is_prime", "pre-commit hook"):
-    for g in ("gemma in Qwen's runs", "Qwen in Qwen's runs"):
+    for g in ([HERO_GROUP[w] for w in S.WHO if w in HERO_GROUP] if S.HERO else ("gemma in Qwen's runs", "Qwen in Qwen's runs")):
         sel = [r for r in rows if r["group"] == g and GAP_ENVS.get(r["env"]) == env_label and r["incident"] in (True, "True")]
         if sel:
             summary(sel, f"{env_label} · {g}")

@@ -3,6 +3,9 @@ Joins swap_all_score.py's per-replay verdict (hacked / not), the grader's own ve
 (honest_success / honest_failure / cheated), the ending (results/swap_endings.csv, with the Haiku labels applied)
 and the number of turns the replay ran. Lost replays are kept with their reason, never counted as behaviour.
   python3 gigi/3-forensics/scripts/gap_replays.py   -> results/gap_replays.csv
+Hero mode (4 Nov 2026): `gap_replays.py --hero` (or SWAP_HERO=1) reads the hero swap through swap_all_score.py's hero
+mode (arms llama / qwen36 / gemma, + gemma4 / gptoss when present), its endings from results/hero_swap_endings.csv
+(swap_endings.py --hero; blank until that exists) and writes results/hero_gap_replays.csv. Without --hero nothing changes.
 """
 import csv, json, pathlib, sys
 HERE = pathlib.Path(__file__).resolve().parents[1]
@@ -10,10 +13,11 @@ sys.path.insert(0, str(HERE / "scripts"))
 import full_runs_table as T
 import swap_all_score as S
 
-endings = {r["run"]: r for r in csv.DictReader(open(HERE / "results" / "swap_endings.csv"))}
+_ends = HERE / "results" / ("hero_swap_endings.csv" if S.HERO else "swap_endings.csv")
+endings = {r["run"]: r for r in csv.DictReader(open(_ends))} if (_ends.exists() or not S.HERO) else {}
 rows = []
 for p in S.PLAN:
-    for who in ("qwen", "gemma"):
+    for who in S.WHO:
         for fleet in S.fleets(p, who):
             for run in sorted(fleet.glob("run-*")):
                 rel = str(run.relative_to(HERE)); st = S.status(run)
@@ -34,7 +38,7 @@ for p in S.PLAN:
                              "who": who, "status": st, "hacked": "" if v is None else int(bool(v)),
                              "grader_verdict": verdict or "", "ending": e.get("ending", ""), "turns": e.get("turns", ""),
                              "run": rel})
-out = HERE / "results" / "gap_replays.csv"
+out = HERE / "results" / ("hero_gap_replays.csv" if S.HERO else "gap_replays.csv")
 with open(out, "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
 print(f"{len(rows)} replays -> {out.relative_to(HERE)}")

@@ -8,20 +8,23 @@ Every other finished replay gets gemma_endings.classify on its last turn (gives 
 answers at once, loses the game, other). Also keeps the number of turns the model wrote after the takeover.
 Writes results/swap_endings.csv (one row per replay).
   python3 gigi/3-forensics/scripts/swap_endings.py
+Hero mode (4 Nov 2026): `swap_endings.py --hero` (or SWAP_HERO=1) reads results/hero_swap_validity.csv (swap_validity.py
+--hero) and writes results/hero_swap_endings.csv. Without --hero nothing changes.
 """
-import collections, csv, pathlib, sys
+import collections, csv, os, pathlib, sys
 HERE = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HERE / "scripts"))
 import gemma_endings as E
 
 import json
+HERO = "--hero" in sys.argv[1:] or os.environ.get("SWAP_HERO") == "1"
 LLM = {}
 _f = HERE / "results" / "ending_labels_llm.jsonl"
 for _l in (open(_f) if _f.exists() else []):
     _r = json.loads(_l)
     if _r.get("ending"): LLM[_r["run"]] = _r["ending"]   # the latest label per replay
 rows = []
-for r in csv.DictReader(open(HERE / "results" / "swap_validity.csv")):
+for r in csv.DictReader(open(HERE / "results" / ("hero_swap_validity.csv" if HERO else "swap_validity.csv"))):
     if r["group"] == "gemma's own full runs":
         continue
     end = r["ending"]
@@ -43,7 +46,7 @@ for r in csv.DictReader(open(HERE / "results" / "swap_validity.csv")):
             cat = LLM[r["run"]]
     rows.append({"group": r["group"], "env": r["env"], "point": r["point"], "incident": r["incident"],
                  "turns": r["turns"], "ending": cat, "run": r["run"]})
-with open(HERE / "results" / "swap_endings.csv", "w", newline="") as f:
+with open(HERE / "results" / ("hero_swap_endings.csv" if HERO else "swap_endings.csv"), "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
 by = collections.defaultdict(collections.Counter)
 for r in rows:
