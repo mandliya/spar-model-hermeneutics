@@ -1,0 +1,8 @@
+2026-11-04 15:24:02 top-up start (SWAP_TIMEOUT 14400)
+54 resumes, 1262 replays (arms: llama,qwen36,gemma) -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/logs/hero2_swap/commands_topup_20261104-152402.txt
+  llama    422 replays
+  qwen36   420 replays
+  gemma    420 replays
+2026-11-04 15:29:53 top-up launch exit 0
+hero2_swap_foldin: detached (pid 7377); log /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/logs/hero2_swap/foldin.txt
+2026-11-04 15:29:53 fold-in relaunched (waits for the top-up apps, then grades everything)

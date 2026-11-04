@@ -1,0 +1,57 @@
+2026-11-04 15:22:17 estimate dashboard_perf: 175 ungraded runs in 18 fleets, ~$89.03
+2026-11-04 15:22:17 estimate grade_your_own: 73 ungraded runs in 8 fleets, ~$26.63
+2026-11-04 15:22:17 estimate stripped_engine: 78 ungraded runs in 9 fleets, ~$21.08
+2026-11-04 15:22:17 estimate total (hero2 swap, results/raw/hero2_swap): 326 ungraded runs in 35 fleets, ~$136.75
+2026-11-04 15:22:18 start: 35 fleets in 3 environments, cap $80.0, judge default
+2026-11-04 15:22:18 CAP WOULD BE CROSSED (spent $0.00 + estimate $89.03 > $80.0): not grading dashboard_perf and later
+2026-11-04 15:22:18 done, spent $0.00
+2026-11-04 15:22:18 estimate dashboard_perf: 175 ungraded runs in 18 fleets, ~$89.03
+2026-11-04 15:22:18 estimate grade_your_own: 73 ungraded runs in 8 fleets, ~$26.63
+2026-11-04 15:22:18 estimate stripped_engine: 78 ungraded runs in 9 fleets, ~$21.08
+2026-11-04 15:22:18 estimate total (hero2 swap, results/raw/hero2_swap): 326 ungraded runs in 35 fleets, ~$136.75
+2026-11-04 15:22:19 start: 35 fleets in 3 environments, cap $80.0, judge claude-opus-4-8
+2026-11-04 15:22:19 CAP WOULD BE CROSSED (spent $0.00 + estimate $89.03 > $80.0): not grading dashboard_perf and later
+2026-11-04 15:22:20 done, spent $0.00
+2026-11-04 15:24:02 estimate dashboard_perf: 175 ungraded runs in 18 fleets, ~$89.03
+2026-11-04 15:24:02 estimate grade_your_own: 73 ungraded runs in 8 fleets, ~$26.63
+2026-11-04 15:24:02 estimate stripped_engine: 78 ungraded runs in 9 fleets, ~$21.08
+2026-11-04 15:24:02 estimate total (hero2 swap, results/raw/hero2_swap): 326 ungraded runs in 35 fleets, ~$136.75
+2026-11-04 15:24:03 start: 35 fleets in 3 environments, cap $400.0, judge default
+2026-11-04 15:25:48 dashboard_perf: 18 fleets, exit 1, spent so far $22.36
+2026-11-04 15:26:02 grade_your_own: 8 fleets, exit 1, spent so far $27.04
+2026-11-04 15:26:35 stripped_engine: 9 fleets, exit 1, spent so far $43.41
+2026-11-04 15:26:36 done, spent $43.41
+2026-11-04 15:53:06 estimate dashboard_perf: 402 ungraded runs in 36 fleets, ~$132.37
+2026-11-04 15:53:06 estimate grade_your_own: 612 ungraded runs in 17 fleets, ~$139.11
+2026-11-04 15:53:06 estimate stripped_engine: 212 ungraded runs in 16 fleets, ~$50.82
+2026-11-04 15:53:06 estimate total (hero2 swap, results/raw/hero2_swap): 1226 ungraded runs in 69 fleets, ~$322.30
+2026-11-04 15:53:06 start: 69 fleets in 3 environments, cap $400.0, judge claude-opus-4-8
+2026-11-04 16:00:39 dashboard_perf: 36 fleets, exit 1, spent so far $40.19
+2026-11-04 16:12:21 estimate dashboard_perf: 24 ungraded runs in 36 fleets, ~$31.76
+2026-11-04 16:12:21 estimate grade_your_own: 612 ungraded runs in 17 fleets, ~$139.11
+2026-11-04 16:12:21 estimate stripped_engine: 252 ungraded runs in 18 fleets, ~$61.54
+2026-11-04 16:12:21 estimate total (hero2 swap, results/raw/hero2_swap): 888 ungraded runs in 71 fleets, ~$232.41
+2026-11-04 16:12:21 start: 71 fleets in 3 environments, cap $400.0, judge default
+2026-11-04 16:12:33 dashboard_perf: 36 fleets, exit 0, spent so far $0.00
+2026-11-04 16:13:29 grade_your_own: 17 fleets, exit 1, spent so far $22.66
+2026-11-04 16:15:22 stripped_engine: 18 fleets, exit 1, spent so far $47.14
+2026-11-04 16:15:22 done, spent $47.14
+2026-11-04 16:15:22 estimate dashboard_perf: 23 ungraded runs in 36 fleets, ~$31.53
+2026-11-04 16:15:22 estimate grade_your_own: 612 ungraded runs in 17 fleets, ~$139.11
+2026-11-04 16:15:22 estimate stripped_engine: 232 ungraded runs in 18 fleets, ~$57.30
+2026-11-04 16:15:22 estimate total (hero2 swap, results/raw/hero2_swap): 867 ungraded runs in 71 fleets, ~$227.93
+2026-11-04 16:15:22 start: 71 fleets in 3 environments, cap $400.0, judge claude-opus-4-8
+2026-11-04 16:15:24 dashboard_perf: 36 fleets, exit 0, spent so far $7.65
+2026-11-04 17:07:49 grade_your_own: 17 fleets, exit 1, spent so far $340.80
+2026-11-04 17:07:50 CEILING WOULD BE CROSSED ($2384.67 since baseline + estimate $50.82 > $2400.0): not grading stripped_engine and later
+2026-11-04 17:07:50 done, spent $343.27
+2026-11-04 17:22:17 grade_your_own: 17 fleets, exit 0, spent so far $272.31
+2026-11-04 17:22:17 CEILING REACHED ($2428.68 since baseline): not grading stripped_engine and later
+2026-11-04 17:22:18 done, spent $272.31
+2026-11-04 17:25:05 estimate dashboard_perf: 23 ungraded runs in 36 fleets, ~$31.53
+2026-11-04 17:25:05 estimate grade_your_own: 0 ungraded runs in 17 fleets, ~$0.00
+2026-11-04 17:25:05 estimate stripped_engine: 232 ungraded runs in 18 fleets, ~$57.30
+2026-11-04 17:25:05 estimate total (hero2 swap, results/raw/hero2_swap): 255 ungraded runs in 71 fleets, ~$88.82
+2026-11-04 17:25:05 start: 71 fleets in 3 environments, cap $200.0, judge claude-opus-4-8
+2026-11-04 17:25:08 dashboard_perf: 36 fleets, exit 0, spent so far $0.00
+2026-11-04 17:25:10 grade_your_own: 17 fleets, exit 0, spent so far $0.14
