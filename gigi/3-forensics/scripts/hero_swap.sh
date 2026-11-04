@@ -104,7 +104,7 @@ for p in json.load(open(plan)):
         out = here / "results/raw" / swapname / p["env"] / point / who
         log = here / "results/logs" / swapname / (f"{p['env']}__{point}__{who}" + (f"__topup_{stamp}" if topup else "") + ".log")
         args = ["--step-dir", str(run / f"step-{p['K']}"), "--count", str(n), "--use-current", "--max-concurrent", "0",
-                "--no-judge", "--timeout", "7200", "--results-dir", str(out)] + (["--overrides", OV[who]] if OV[who] else [])
+                "--no-judge", "--timeout", os.environ.get("SWAP_TIMEOUT", "7200"), "--results-dir", str(out)]   # SWAP_TIMEOUT: Qwen3.6 works 50+ steps; 7200 s cut its replays (4 Nov) + (["--overrides", OV[who]] if OV[who] else [])
         print(shlex.quote(str(log)) + " " + " ".join(shlex.quote(a) for a in args))
 PY
 fi
