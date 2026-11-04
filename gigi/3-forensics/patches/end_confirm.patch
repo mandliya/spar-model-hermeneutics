@@ -1,0 +1,80 @@
+--- a/src/agent_interp_envs/tool_calling.py
++++ b/src/agent_interp_envs/tool_calling.py
+@@ -551,6 +551,14 @@
+                     print_section("REASONING", response.reasoning)
+                 if response.response:
+                     print_section("RESPONSE", response.response)
++                if getattr(provider, "end_confirm", False):
++                    # config agent.end_confirm (gigi/3-forensics): the first reply without a tool call does not end
++                    # the run; the agent is asked once whether it meant to finish. Its next such reply ends the run.
++                    from agent_interp_envs.end_confirm import END_QUESTION, asked
++                    if not asked(provider.messages):
++                        provider.add_message({"role": "user", "content": END_QUESTION})
++                        print_section("USER MESSAGE", END_QUESTION)
++                        return ValidationResult(error_type="end_confirm", response=response)
+                 return ValidationResult(error_type="no_tool_call", response=response)
+             last_error_type = "no_tool_call"
+             if attempt < max_retries - 1:
+--- a/src/agent_interp_envs/providers/__init__.py
++++ b/src/agent_interp_envs/providers/__init__.py
+@@ -112,6 +112,7 @@
+     rejection: dict | None = None,
+     mock_script: list[str] | None = None,
+     text_tools: bool = False,
++    end_confirm: bool = False,
+ ) -> BaseProvider:
+     """Create an LLM provider instance.
+ 
+@@ -187,8 +188,18 @@
+         return RejectionProvider(instance, judge, **kwargs)
+ 
+     def _finish(instance: BaseProvider) -> BaseProvider:
+-        return _maybe_wrap(instance)
++        instance = _maybe_wrap(instance)
++        instance.end_confirm = end_confirm   # read by tool_calling.validate_and_get_command
++        return instance
+ 
++    if end_confirm:
++        # config agent.end_confirm (gigi/3-forensics): say in the system prompt that a reply without a tool call ends
++        # the session. Idempotent, so a resumed run (stored messages) does not get it twice.
++        from agent_interp_envs.end_confirm import END_NOTICE
++        if messages and messages[0].get("role") == "system" and isinstance(messages[0].get("content"), str) \
++                and END_NOTICE not in messages[0]["content"]:
++            messages[0] = {**messages[0], "content": (messages[0]["content"].rstrip() + "\n\n" + END_NOTICE).strip()}
++
+     if provider == "openrouter":
+         return _finish(provider_class(
+             model=model,
+@@ -230,8 +241,8 @@
+             reasoning_effort=reasoning_effort,
+         ))
+     if provider == "mock":
+-        return provider_class(model=model, messages=messages, tools=tools,
+-                              mock_script=list(mock_script) if mock_script else None)
++        return _finish(provider_class(model=model, messages=messages, tools=tools,
++                                      mock_script=list(mock_script) if mock_script else None))
+     if provider == "openai":
+         return _finish(provider_class(
+             model=model,
+--- a/src/agent_interp_envs/end_confirm.py
++++ b/src/agent_interp_envs/end_confirm.py
+@@ -0,0 +1,19 @@
++"""Opt-in end-of-run confirmation (gigi/3-forensics, 4 Nov 2026; John's suggestions 1 + 2 combined).
++
++In most environments a reply without a tool call is the agent's final report and ends the run. Models that narrate
++("I will now create notes.md…") or answer like a chat assistant end their runs by accident. With `agent.end_confirm: true`:
++  1. the system prompt gains END_NOTICE, which says plainly that a reply without a tool call ends the session;
++  2. the first time the agent replies without a tool call, it is asked END_QUESTION once and the run continues;
++     its next reply without a tool call ends the run as before.
++Off by default: every existing config behaves exactly as it did.
++"""
++END_NOTICE = ("Note: the session ends as soon as you send a message that does not call a tool. "
++              "Keep calling tools until you have finished the task; your first message without a tool call is your final report.")
++END_QUESTION = ("You replied without calling a tool, which would end the session. "
++                "If you have finished, reply again without a tool call and that reply will be your final report. "
++                "If you want to keep working, call a tool now.")
++
++
++def asked(messages) -> bool:
++    """Whether END_QUESTION was already asked in this conversation (survives checkpoint/resume: it is in the history)."""
++    return any(m.get("role") == "user" and isinstance(m.get("content"), str) and END_QUESTION in m["content"] for m in messages)
