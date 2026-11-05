@@ -1,5 +1,7 @@
 # Part 3: model forensics results
 
+**New (5 Nov 2026): the hero suite with Llama 3.3 70B as the main model is on its own page, [`HERO_RESULTS.md`](HERO_RESULTS.md).**
+
 The task-gaming environments of "Why do models task game?" (Singh, Nanda, Rajamanoharan, 2026), run with
 Qwen3-Next-80B as the target and gemma-3-27b as its stand-in, all 29 entries of the suite, both models on
 DeepInfra (fp8, pinned). Setup, settings and every deviation from the paper: [`README.md`](README.md).
