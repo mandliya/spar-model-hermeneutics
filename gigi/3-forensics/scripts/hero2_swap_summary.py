@@ -71,16 +71,45 @@ def save(fig, ax, name, title, sub):
 
 # 1. the cheating moment
 G = "grade_your_own"
-pts = [("2026-11-04_11-37-29-795546_run-5_K2", "SPOT 1: Llama's run 5,\ntaken over at step 3,\nthe step where Llama cheated"),
-       ("2026-11-04_11-37-29-795546_run-5_K1", "SPOT 2: the same run 5,\ntaken over at step 2,\none step before the cheat"),
-       ("2026-11-04_11-37-29-795546_run-2_K1", "SPOT 3: Llama's run 2,\ntaken over at its last step\n(this run never cheated)")]
-fig = plt.figure(figsize=(11, 5.6)); ax = fig.add_axes([0.24, 0.17, 0.58, 0.6])
-bars(ax, [(lab, {w: cell[(G, p, w)] for w in WHO}) for p, lab in pts], None)
+pts = [("2026-11-04_11-37-29-795546_run-5_K2", "SPOT 1 = step N\n(the step where Llama cheated)"),
+       ("2026-11-04_11-37-29-795546_run-5_K1", "SPOT 2 = step N−1\n(one step before the cheat)"),
+       ("2026-11-04_11-37-29-795546_run-2_K1", "SPOT 3 = step N of a clean run\n(a run where Llama never cheated)")]
+# (run length N, takeover step, the step where Llama cheated or None) for the little run diagrams
+TL = {pts[0][0]: ("Llama's run 5 (3 steps)", 3, 3, 3), pts[1][0]: ("Llama's run 5 (3 steps)", 3, 2, 3),
+      pts[2][0]: ("Llama's run 2 (2 steps)", 2, 2, None)}
+fig = plt.figure(figsize=(12.5, 6.4)); ax = fig.add_axes([0.42, 0.15, 0.4, 0.62])
+bars(ax, [("", {w: cell[(G, p, w)] for w in WHO}) for p, _ in pts], None)
+ax.set_yticklabels([])
+for gi, (p, lab) in enumerate(pts):
+    yc = gi * 1.25 + 0.28
+    name, N, take, cheat = TL[p]
+    tr = ax.get_yaxis_transform()
+    ax.text(-0.98, yc - 0.33, lab, transform=tr, fontsize=9.5, fontweight="bold", va="center", linespacing=1.2)
+    ax.text(-0.98, yc + 0.2, name + ":", transform=tr, fontsize=8, color=MUTED, va="center")
+    for st in range(1, N + 1):
+        x0 = -0.98 + (st - 1) * 0.105
+        kept = st < take
+        face = "#d9d6cf" if kept else "white"
+        edge = INK
+        lw = 2.2 if st == take else 0.8
+        ax.add_patch(plt.Rectangle((x0, yc + 0.32), 0.09, 0.32, transform=tr, facecolor=face, edgecolor=edge, lw=lw, clip_on=False,
+                                   hatch=None if (kept or st == take) else "////"))
+        ax.text(x0 + 0.045, yc + 0.48, ("N" if st == N else f"N−{N - st}"), transform=tr, ha="center", va="center", fontsize=7.5,
+                fontweight="bold" if st == take else "normal")
+        if cheat == st:
+            ax.text(x0 + 0.1, yc + 0.48, "\u2190 Llama cheated\n    at this step", transform=tr, ha="left", va="center", fontsize=7.5,
+                    color="#b0452a", fontweight="bold", linespacing=1.1)
+    xt = -0.98 + (take - 1) * 0.105 + 0.045
+    ax.annotate("models take over here", xy=(xt, yc + 0.3), xycoords=tr, xytext=(xt + 0.13, yc + 0.1), textcoords=tr,
+                fontsize=7, va="center", arrowprops=dict(arrowstyle="->", color=INK, lw=0.8))
+fig.text(0.02, -0.02, "How to read the little run diagrams: each box is one step of Llama's run, N is its last step. Grey = kept exactly as Llama wrote it. "
+         "Thick box = the step where each model takes over and writes its own version (and keeps going from there). Striped = Llama's original "
+         "steps that get replaced.", fontsize=8, color=MUTED)
 save(fig, ax, "hero2_swap_1_cheating_moment.png",
-     "Grade-your-own-model: once Llama's run is heading for the cheat, the stand-ins cheat almost as often as Llama does",
-     "These are NOT averages. Each group of three bars is one spot in one of Llama's runs: we rewind that run to that step and let each "
-     "model continue it 53 to 70 times, so each bar is one model at one spot. "
-     "Purple is Llama itself continuing (what Llama would do again from that spot); green and blue are the stand-ins taking over the same run. "
+     "Grade your own model: once Llama's run is heading for the cheat, the stand-ins cheat almost as often as Llama does",
+     "These are NOT averages. Each group of three bars is one spot in one of Llama's runs (the diagram on the left shows which step). "
+     "We rewind the run to that step and let each model continue it 53 to 70 times, so each bar is one model at one spot. "
+     "Purple is Llama redoing its own run; green and blue are the stand-ins taking over the same run. "
      "The cheat here is reporting a gain the model never measured, or editing the baseline it's compared against. Judged by Claude Opus 4.8.")
 
 # 2. clean points pooled per task
