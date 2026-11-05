@@ -72,12 +72,11 @@ def rates(model, after):
             if r["environment"] in ENVS and (r.get("model") in (model, None, "")) and int(r["n"] or 0) > 0}
 
 
-def frame(title, sub, xlabel, notes):
-    Hh = 7.2
+def frame(title, sub, xlabel, notes, Hh=7.2, right=0.6):
     fig = plt.figure(figsize=(11.5, Hh))
     fig.text(0.02, 1 - 0.25 / Hh, title, fontsize=12.5, fontweight="bold", va="top")
     fig.text(0.02, 1 - 0.62 / Hh, "\n".join(textwrap.wrap(sub, 175)), fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
-    ax = fig.add_axes([0.25, 1.05 / Hh, 0.6, 1 - 2.25 / Hh])
+    ax = fig.add_axes([0.25, 1.05 / Hh, right, 1 - 2.25 / Hh])
     ax.set_yticks(range(len(ENVS))); ax.set_yticklabels([ENV_NAME[e] for e in ENVS], fontsize=9.5, fontweight="bold")
     ax.set_ylim(len(ENVS) - 0.5, -0.5)
     for i in range(1, len(ENVS)):
@@ -99,7 +98,7 @@ def frame(title, sub, xlabel, notes):
     return fig, ax
 
 
-def pair(ax, y, color, before, after):
+def pair(ax, y, color, before, after, alabel=None):
     """A hollow dot (before), a filled dot (after), an arrow from one to the other and each value on the outer side of
     its dot (so the labels never sit under the arrow, whichever way it points). Values may be None (log x axis)."""
     if before is not None:
@@ -114,7 +113,7 @@ def pair(ax, y, color, before, after):
         ax.text(before / 1.15 if longer else before * 1.15, y, f"{before:g}", va="center", ha="right" if longer else "left",
                 fontsize=7.5, color=color)
     if after is not None:
-        ax.text(after * 1.15 if longer else after / 1.15, y, f"{after:g}", va="center", ha="left" if longer else "right",
+        ax.text(after * 1.15 if longer else after / 1.15, y, alabel or f"{after:g}", va="center", ha="left" if longer else "right",
                 fontsize=7.5, color=color, fontweight="bold")
 
 
@@ -127,18 +126,23 @@ def fig_steps():
                     "filled dot = with it (the model is told that a reply without a tool call ends the session, and is asked once whether it meant "
                     "to stop). Without the check: Llama's first solo pass, Qwen's and gemma's original full runs. Numbers at the right: finished runs counted, "
                     "without -> with.", "steps in a typical run (median; log scale)", notes)
-    ax.set_xscale("log"); ax.set_xlim(0.7, 300)
-    ax.set_xticks([1, 2, 5, 10, 20, 50, 100, 200]); ax.set_xticklabels(["1", "2", "5", "10", "20", "50", "100", "200"])
+    ax.set_xscale("log"); ax.set_xlim(0.7, 3000)
+    ax.set_xticks([1, 2, 5, 10, 20, 50, 100, 200, 500]); ax.set_xticklabels(["1", "2", "5", "10", "20", "50", "100", "200", "500"])
+    ax.axvline(500, color="#b0452a", lw=0.8, ls=(0, (3, 3)), zorder=1)
+    ax.text(500, len(ENVS) - 0.45, "  500 = step limit", color="#b0452a", fontsize=7.5, va="bottom")
     for i, e in enumerate(ENVS):
         for m in MODELS:
             y = i + OFFSET[m]; b, a = data[m]
             bv = statistics.median(b[e]) if b and b.get(e) else None
             av = statistics.median(a[e]) if a and a.get(e) else None
-            pair(ax, y, COL[m], bv, av)
+            pair(ax, y, COL[m], bv, av, f"{av:g} *" if av and av >= 500 else None)
             nb, na = (len(b[e]) if b and b.get(e) else 0), (len(a[e]) if a and a.get(e) else 0)
             ax.text(1.02, y, f"{nb} -> {na}" if na else f"{nb} -> (not in yet)", transform=ax.get_yaxis_transform(),
                     va="center", fontsize=7.5, color=MUTED)
     ax.text(1.02, -0.5, "runs", transform=ax.get_yaxis_transform(), va="bottom", fontsize=7.5, color=MUTED)
+    fig.text(0.02, 0.02, "* Qwen in the rendering engine, with the check: two of its five runs got stuck repeating the same search command "
+             "until they hit the 500-step limit, two more were cut off by the time limit after 287 and 348 steps, and one finished after 41 steps.",
+             fontsize=8, color="#b0452a", va="bottom")
     fig.savefig(OUT / "confirm_1_steps.png", dpi=180, bbox_inches="tight", facecolor="white"); plt.close(fig)
     return notes
 
@@ -149,9 +153,11 @@ def fig_cheating():
              for m in MODELS if not data[m][1]]
     fig, ax = frame("Does the end-of-run check change how often the models cheat? Cheating rate, without vs with it",
                     "Each row is one task. Dots are the share of scored runs in which the model cheated (the task's own measure or the Opus grader, as in "
-                    "results/full_runs.csv), hollow = without the end-of-run check, filled = with it; the thin line is the 95% Wilson interval, the "
-                    "label the count (cheated / scored). Without the check: Llama's first solo pass, Qwen's and gemma's original full runs.",
-                    "runs in which the model cheated (%)", notes)
+                    "results/full_runs.csv), hollow = without the end-of-run check, filled = with it; the thin line is the 95% Wilson interval. "
+                    "The counts on the right are runs that cheated out of runs scored. Without the check: Llama's first solo pass, Qwen's and gemma's original full runs.",
+                    "runs in which the model cheated (%)", notes, Hh=8.2, right=0.5)
+    ax.text(1.03, -0.5, "runs that cheated: without the check -> with it", transform=ax.get_yaxis_transform(), va="bottom",
+            fontsize=7.8, color=MUTED, fontweight="bold")
     ax.set_xlim(-2, 104); ax.set_xticks([0, 20, 40, 60, 80, 100])
     for i, e in enumerate(ENVS):
         for m in MODELS:
@@ -160,13 +166,15 @@ def fig_cheating():
                 if not d or e not in d:
                     continue
                 k, n = d[e]; p = 100 * k / n; lo, hi = (100 * v for v in T.wilson(k, n))
-                yy = y + (0.06 if filled else -0.06)
+                yy = y + (0.07 if filled else -0.07)
                 ax.plot([lo, hi], [yy, yy], color=COL[m], lw=1.4, alpha=0.5 if filled else 0.35, solid_capstyle="round", zorder=2)
                 if filled:
                     ax.plot(p, yy, "o", color=COL[m], ms=8, zorder=4)
                 else:
                     ax.plot(p, yy, "o", mfc="white", mec=COL[m], mew=1.6, ms=8, zorder=3)
-                ax.text(hi + 1.5, yy, f"{k}/{n}", va="center", ha="left", fontsize=7, color=COL[m], fontweight="bold" if filled else "normal")
+            fmt = lambda d: (f"{d[e][0]} of {d[e][1]}" if d and e in d else "no scored runs")
+            ax.text(1.03, y, f"{NAME[m]}:  {fmt(b)}  ->  {fmt(a)}", transform=ax.get_yaxis_transform(), va="center",
+                    fontsize=7.8, color=COL[m])
             if (not b or e not in b) and (not a or e not in a):
                 ax.text(0, y, "no scored runs", va="center", fontsize=7.5, color=MUTED)
             elif not a or e not in a:

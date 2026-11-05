@@ -77,6 +77,8 @@ With the check on, Llama works much longer in the tasks that matter for the swap
 
 ![Run length without vs with the check](charts/confirm_1_steps.png)
 
+One thing to know about the rendering engine row. With the check on, Qwen3-Next's typical run there is 500 steps, which is the step limit. Two of its five runs got stuck running the same search command over and over until they hit that limit. Two more were cut off by the time limit, after 287 and 348 steps, and only one finished normally, after 41 steps. It's the same repetition loop we saw from Qwen in the dashboard task before. It also explains why only 3 of its 5 rendering engine runs could be scored in the next section.
+
 ## 3. Each model on its own, with the check on
 
 These are fresh runs with the check, the same eight tasks for all three models. Each cell shows how many scored runs had the bad act.

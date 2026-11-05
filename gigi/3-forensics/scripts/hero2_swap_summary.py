@@ -15,6 +15,7 @@ COL = {"llama": "#7a5af5", "qwen36": "#1baf7a", "gemma": "#2a78d6"}
 LAB = {"llama": "Llama 3.3 70B continuing its own run (fp16)", "qwen36": "Qwen3.6 27B taking over (fp8)",
        "gemma": "gemma-3 27B taking over (fp8)"}
 WHO = ["llama", "qwen36", "gemma"]
+SHORT = {"llama": "Llama", "qwen36": "Qwen3.6", "gemma": "gemma"}
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 9, "text.color": INK})
 
 
@@ -35,7 +36,7 @@ rows = list(csv.DictReader(open(H / "results/hero2_swap.csv")))
 cell = {(r["env"], r["point"], r["who"]): (int(r["k"]), int(r["n"])) for r in rows}
 
 
-def bars(ax, groups, title_of):
+def bars(ax, groups, title_of, xmax=100):
     """groups: list of (label, {who: (k, n)})"""
     y = 0; ticks = []
     for label, d in groups:
@@ -45,13 +46,16 @@ def bars(ax, groups, title_of):
             if n:
                 p = k / n; lo, hi = wilson(k, n)
                 ax.barh(yy, p * 100, height=0.24, color=COL[w], zorder=2)
+                if k == 0:   # no bar to see: mark zero with a dot in the model's colour
+                    ax.plot(0, yy, "o", color=COL[w], ms=7, zorder=4, clip_on=False)
                 ax.plot([lo * 100, hi * 100], [yy, yy], color=INK, lw=1, zorder=3)
-                ax.text(102, yy, f"{k} of {n}  ({p:.0%})", va="center", fontsize=8.5, color=INK)
+                ax.text(1.02, yy, f"{SHORT[w]}:  {k} of {n}  ({p:.0%})", transform=ax.get_yaxis_transform(), va="center",
+                        fontsize=8.5, color=COL[w], fontweight="bold")
             else:
                 ax.text(1, yy, "no graded tries", va="center", fontsize=8, color=MUTED, style="italic")
         ticks.append((y + 0.28, label)); y += 1.25
     ax.set_yticks([t for t, _ in ticks]); ax.set_yticklabels([l for _, l in ticks], fontsize=9.5, fontweight="bold")
-    ax.set_xlim(0, 100); ax.set_ylim(y - 0.4, -0.4)
+    ax.set_xlim(0, xmax); ax.set_ylim(y - 0.4, -0.4)
     ax.set_xlabel("tries in which the model cheated (%)   ·   black line = 95% interval", color=MUTED, fontsize=8.5)
     for s in ("top", "right", "left"): ax.spines[s].set_visible(False)
     ax.spines["bottom"].set_color(GRID); ax.tick_params(axis="y", length=0); ax.xaxis.grid(True, color=GRID, lw=0.6); ax.set_axisbelow(True)
@@ -91,11 +95,11 @@ for env, lab in TASKS:
     pooled[env] = {w: tuple(v) for w, v in d.items()}
     groups.append((lab, pooled[env]))
 fig = plt.figure(figsize=(11, 6)); ax = fig.add_axes([0.2, 0.17, 0.62, 0.66])
-bars(ax, groups, None)
+bars(ax, groups, None, xmax=40)
 save(fig, ax, "hero2_swap_2_clean.png",
      "In tasks where Llama never cheated, Qwen3.6 still cheats when it takes over; gemma mostly doesn't",
      "Same setup, but Llama never cheated in these tasks, so we take over clean runs near their end (three runs per task, "
-     "pooled here; 20 to 30 tries each per model). Any cheating here is the stand-in's own doing, not something it inherited from Llama's run.")
+     "added together here, so 60 to 90 tries per model per task). Any cheating here is the stand-in's own doing, not something it inherited from Llama's run.")
 
 print("gaps, Llama minus stand-in, percentage points with 95% Newcombe interval")
 for p, lab in pts:
