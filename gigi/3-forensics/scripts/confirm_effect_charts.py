@@ -1,41 +1,71 @@
-"""Two charts (4 Nov 2026): what the end-of-run check changes, per task and model, before vs after.
+"""Two charts (4 Nov 2026; all 29 environments from 5 Nov): what the end-of-run check changes, per task and model.
 The check (config agent.end_confirm=true, patches/end_confirm.patch): the model is told that a reply without a tool call
 ends the session, and the first time it replies without one it is asked once whether it meant to stop.
   1. charts/confirm_1_steps.png     typical run length (median steps per run) without and with the check
   2. charts/confirm_2_cheating.png  cheating rate (k/n with a 95% Wilson interval) without and with the check
-Before (without the check): Llama's first solo pass (stages hero_solo + hero_solo_key2; rates from results/hero_full_runs.csv),
-Qwen3-Next-80B's and gemma-3-27b's original full runs (full_runs_table.STAGES; rates from results/full_runs.csv).
-After (with the check): the hero2 stages of each model (hero2_llama + hero2_llama_key, hero2_qwen + hero2_qwen_key,
-hero2_gemma + hero2_gemma_key; rates from results/hero2_full_runs__<model>.csv, written by hero_solo_foldin.sh).
-Steps are counted from each run's rollout.log STEP markers, as llama_behaviour_charts.py does, over finished runs only.
-Runs on partial data: a model or stage that is not in yet is skipped and the chart says so.
+Rows: all 29 environments, grouped by the 9 families A-I and named as in scripts/story_charts.py (FAMILIES, LABEL; read
+from that file's source, so every chart uses the same groups and names). A diamond marks the 8 main tasks (the swap's).
+Without the check: Llama's first solo pass (stages hero_solo + hero_solo_key2 + hero_solo_all; rates from
+results/hero_full_runs.csv and results/hero_full_runs__llama-3.3-70b__other21_nocheck.csv), Qwen3-Next-80B's and
+gemma-3-27b's original full runs (full_runs_table.modal_runs; rates from results/full_runs.csv).
+With the check: Llama's hero2 stages (hero2_llama + hero2_llama_key + hero2_llama_all; rates from
+results/hero2_full_runs__llama-3.3-70b.csv and results/hero2_full_runs__llama-3.3-70b__other21.csv); Qwen's and gemma's
+hero2 stages, which cover the 8 main tasks only: their other 21 rows say "not run with the check".
+Steps are counted from each run's rollout.log STEP markers over finished runs only. A typical run at or over its task's
+step limit (max_steps in configs/<env>__<model>.yaml) is starred and listed in the footnote.
   cd gigi/3-forensics/agent-interp-envs && uv run --with matplotlib python ../scripts/confirm_effect_charts.py
 """
-import collections, csv, pathlib, re, statistics, sys, textwrap
+import ast, collections, csv, os, pathlib, re, statistics, sys, textwrap
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.transforms import blended_transform_factory
 
 H = pathlib.Path(__file__).resolve().parents[1]; sys.path.insert(0, str(H / "scripts"))
 import full_runs_table as T
-OUT = H / "charts"
-INK, MUTED, GRID = "#17140f", "#6f6a60", "#e1e0d9"
+OUT = pathlib.Path(os.environ.get("CHART_OUT", H / "charts"))   # CHART_OUT: draft renders elsewhere
+INK, MUTED, GRID, RED, BAND = "#17140f", "#6f6a60", "#e1e0d9", "#b0452a", "#f3f2ee"
 COL = {"qwen3-next-80b": "#1baf7a", "gemma-3-27b": "#2a78d6", "llama-3.3-70b": "#7a5af5"}
 NAME = {"qwen3-next-80b": "Qwen3-Next 80B", "gemma-3-27b": "gemma-3 27B", "llama-3.3-70b": "Llama 3.3 70B"}
 MODELS = ["llama-3.3-70b", "qwen3-next-80b", "gemma-3-27b"]
-OFFSET = {"llama-3.3-70b": -0.26, "qwen3-next-80b": 0.0, "gemma-3-27b": 0.26}
-ENVS = ["dashboard_costly_failure", "optimize_rendering_engine", "grade_your_own", "ai_rd", "coding_norules", "coding",
-        "optimize_rendering_engine_graded", "precommit_hook"]
-ENV_NAME = {"dashboard_costly_failure": "dashboard (speed target)", "optimize_rendering_engine": "rendering engine (3x speed-up)",
-            "grade_your_own": "grade your own model", "ai_rd": "ai_rd (improve a prompt)", "coding_norules": "coding, no rules stated",
-            "coding": "coding (is_prime)", "optimize_rendering_engine_graded": "rendering engine, graded", "precommit_hook": "pre-commit hook"}
-BEFORE_STAGES = {"llama-3.3-70b": ("hero_solo", "hero_solo_key2")}   # Qwen / gemma: their original full runs (T.modal_runs)
-AFTER_STAGES = T.HERO2_STAGES
+OFFSET = {"llama-3.3-70b": -0.27, "qwen3-next-80b": 0.0, "gemma-3-27b": 0.27}
+LLAMA = "llama-3.3-70b"
+
+# the 9 families and the env names, from story_charts.py's source (importing it would run its charts)
+_lit = {n.targets[0].id: ast.literal_eval(n.value) for n in ast.parse((H / "scripts" / "story_charts.py").read_text()).body
+        if isinstance(n, ast.Assign) and getattr(n.targets[0], "id", "") in ("FAMILIES", "LABEL")}
+FAMILIES, LABEL = _lit["FAMILIES"], _lit["LABEL"]
+ALL29 = {r["environment"] for r in csv.DictReader(open(H / "results" / "full_runs.csv"))}
+MAIN = set(T.HERO_ENVS)
+GROUPS = [(f"{letter}.  {name}", [e for e in envs if e in ALL29]) for letter, name, envs in FAMILIES]
+GROUPS = [g for g in GROUPS if g[1]]
+ENVS = [e for _, envs in GROUPS for e in envs]
+assert set(ENVS) == ALL29, sorted(ALL29 - set(ENVS))
+
+BEFORE_STAGES = {LLAMA: ("hero_solo", "hero_solo_key2", "hero_solo_all")}   # Qwen / gemma: their original full runs
+AFTER_STAGES = dict(T.HERO2_STAGES); AFTER_STAGES[LLAMA] = tuple(AFTER_STAGES[LLAMA]) + ("hero2_llama_all",)
+BEFORE_CSV = {LLAMA: ["hero_full_runs.csv", "hero_full_runs__llama-3.3-70b__other21_nocheck.csv"]}
+AFTER_CSV = {LLAMA: ["hero2_full_runs__llama-3.3-70b.csv", "hero2_full_runs__llama-3.3-70b__other21.csv"],
+             "qwen3-next-80b": ["hero2_full_runs__qwen3-next-80b.csv"], "gemma-3-27b": ["hero2_full_runs__gemma-3-27b.csv"]}
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 9, "text.color": INK})
 
 
+def ran_with_check(model, env):
+    """Qwen and gemma were rerun with the check on the 8 main tasks only."""
+    return model == LLAMA or env in MAIN
+
+
+def limit(env, model):
+    f = H / "configs" / f"{env}__{model}.yaml"
+    m = re.search(r"^\s*max_steps:\s*(\d+)", f.read_text(), re.M) if f.exists() else None
+    return int(m.group(1)) if m else None
+
+
 def nsteps(log):
-    return len(re.findall(r"^\s+STEP \d+\s*$", open(log, errors="replace").read(), re.M))
+    """STEP markers; tower_of_hanoi's log has none, so there each TOOL CALL / RESPONSE block (one per message) counts."""
+    t = open(log, errors="replace").read()
+    n = len(re.findall(r"^\s+STEP \d+\s*$", t, re.M))
+    return n or len(re.findall(r"^\s+(?:TOOL CALL|RESPONSE)\s*$", t, re.M))
 
 
 def finished_logs(runs):
@@ -43,148 +73,212 @@ def finished_logs(runs):
     out = collections.defaultdict(list)
     for env, run in runs:
         if env in ENVS and (run / "rollout.log").exists() and T.status(run) == "finished":
-            out[env].append(nsteps(run / "rollout.log"))
+            n = nsteps(run / "rollout.log")
+            if n:
+                out[env].append(n)
     return out
 
 
 def steps(model, after):
     if after:
-        stages = AFTER_STAGES[model]
-        if not any((H / "results" / "logs" / s).is_dir() for s in stages):
-            return None   # not launched yet
-        return finished_logs((env, run) for env, _, run, _ in T.hero_runs(stages, model))
+        return finished_logs((env, run) for env, _, run, _ in T.hero_runs(AFTER_STAGES[model], model))
     if model in BEFORE_STAGES:
         return finished_logs((env, run) for env, _, run, _ in T.hero_runs(BEFORE_STAGES[model], model))
     return finished_logs((env, run) for env, m, run in T.modal_runs() if m == model)
 
 
 def rates(model, after):
-    """env -> (k, n) from the scoring csvs; None when the csv is not there yet."""
-    if after:
-        f = H / "results" / f"hero2_full_runs__{model}.csv"
-    elif model in BEFORE_STAGES:
-        f = H / "results" / "hero_full_runs.csv"
-    else:
-        f = H / "results" / "full_runs.csv"
-    if not f.exists():
-        return None
-    return {r["environment"]: (int(r["k"]), int(r["n"])) for r in csv.DictReader(open(f))
-            if r["environment"] in ENVS and (r.get("model") in (model, None, "")) and int(r["n"] or 0) > 0}
+    """env -> (k, n) from the scoring csvs (rows with n > 0 only; the first file that has the env wins)."""
+    files = (AFTER_CSV if after else BEFORE_CSV).get(model, ["full_runs.csv"])
+    out = {}
+    for name in files:
+        f = H / "results" / name
+        if not f.exists():
+            continue
+        for r in csv.DictReader(open(f)):
+            e = r["environment"]
+            if e in ENVS and e not in out and r.get("model") in (model, None, "") and int(r["n"] or 0) > 0:
+                out[e] = (int(r["k"]), int(r["n"]))
+    return out
 
 
-def frame(title, sub, xlabel, notes, Hh=7.2, right=0.6):
-    fig = plt.figure(figsize=(11.5, Hh))
-    fig.text(0.02, 1 - 0.25 / Hh, title, fontsize=12.5, fontweight="bold", va="top")
-    fig.text(0.02, 1 - 0.62 / Hh, "\n".join(textwrap.wrap(sub, 175)), fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
-    ax = fig.add_axes([0.25, 1.05 / Hh, right, 1 - 2.25 / Hh])
-    ax.set_yticks(range(len(ENVS))); ax.set_yticklabels([ENV_NAME[e] for e in ENVS], fontsize=9.5, fontweight="bold")
-    ax.set_ylim(len(ENVS) - 0.5, -0.5)
-    for i in range(1, len(ENVS)):
-        ax.axhline(i - 0.5, color=GRID, lw=0.6, zorder=0)
+def layout():
+    """y of each env row and of each family header (headers take a short slot above their rows)."""
+    y, rows, heads = 0.0, {}, []
+    for title, envs in GROUPS:
+        y += 0.75; heads.append((title, y)); y += 0.15
+        for e in envs:
+            y += 1.0; rows[e] = y
+    return rows, heads, y + 0.6
+
+
+def frame(title, sub, xlabel, right_w, foot):
+    rows, heads, ymax = layout()
+    row_in = 0.62
+    plot_h = ymax * row_in
+    Hh = plot_h + 2.6 + 0.18 * len(foot)
+    W = 14; left = 0.3
+    fig = plt.figure(figsize=(W, Hh))
+    fig.text(0.015, 1 - 0.22 / Hh, title, fontsize=13, fontweight="bold", va="top")
+    fig.text(0.015, 1 - 0.58 / Hh, "\n".join(textwrap.wrap(sub, 190)), fontsize=8.7, color=MUTED, va="top", linespacing=1.4)
+    bottom = (1.25 + 0.18 * len(foot)) / Hh
+    ax = fig.add_axes([left, bottom, right_w, plot_h / Hh])
+    ax.set_ylim(ymax, 0.3)
+    tr = blended_transform_factory(fig.transFigure, ax.transData)
+    for e, y in rows.items():
+        mark = "  ◆" if e in MAIN else ""
+        ax.text(left - 0.008, y, LABEL.get(e, e) + mark, transform=tr, ha="right", va="center", fontsize=8.8,
+                fontweight="bold" if e in MAIN else "normal")
+        ax.axhline(y + 0.5, color=GRID, lw=0.5, zorder=0)
+    for title, y in heads:
+        ax.add_patch(plt.Rectangle((0.008, y - 0.42), 0.984, 0.62, transform=tr, color=BAND, zorder=0, clip_on=False))
+        ax.text(0.015, y - 0.1, title, transform=tr, fontsize=10, fontweight="bold", va="center")
+    ax.set_yticks([])
     for s in ("top", "right", "left"):
         ax.spines[s].set_visible(False)
-    ax.spines["bottom"].set_color(GRID); ax.tick_params(axis="y", length=0); ax.tick_params(axis="x", colors=MUTED)
+    ax.spines["bottom"].set_color(GRID); ax.tick_params(axis="x", colors=MUTED)
     ax.xaxis.grid(True, color=GRID, lw=0.6); ax.set_axisbelow(True)
-    ax.set_xlabel(xlabel, color=MUTED, fontsize=8.5)
+    ax.set_xlabel(xlabel, color=MUTED, fontsize=8.7)
     handles = [plt.Line2D([], [], marker="o", ls="", mfc="white", mec=INK, mew=1.4, ms=8),
                plt.Line2D([], [], marker="o", ls="", color=INK, ms=8)] + \
-              [plt.Line2D([], [], marker="s", ls="", color=COL[m], ms=8) for m in MODELS]
-    labels = ["without the end-of-run check", "with the end-of-run check"] + [NAME[m] for m in MODELS]
-    ax.legend(handles=handles, labels=labels, loc="upper left", bbox_to_anchor=(-0.4, -0.08), ncol=5, frameon=False, fontsize=8.5,
-              handletextpad=0.4, columnspacing=1.4)
-    if notes:
-        fig.text(0.02, 0.12 / Hh, "\n".join(textwrap.wrap("Not in yet: " + "; ".join(notes) + ".", 190)), fontsize=8,
-                 color="#b0452a", va="bottom", linespacing=1.3)
-    return fig, ax
+              [plt.Line2D([], [], marker="s", ls="", color=COL[m], ms=8) for m in MODELS] + \
+              [plt.Line2D([], [], marker="D", ls="", color=INK, ms=6)]
+    labels = ["without the end-of-run check", "with the end-of-run check"] + [NAME[m] for m in MODELS] + \
+             ["one of the 8 main tasks (used in the swap)"]
+    fig.legend(handles=handles, labels=labels, loc="lower left", bbox_to_anchor=(0.015, (0.45 + 0.18 * len(foot)) / Hh), ncol=6,
+               frameon=False, fontsize=8.7, handletextpad=0.4, columnspacing=1.3)
+    for i, line in enumerate(foot):
+        fig.text(0.015, (0.15 + 0.18 * (len(foot) - 1 - i)) / Hh, line, fontsize=8.2, color=RED, va="bottom")
+    return fig, ax, rows
 
 
-def pair(ax, y, color, before, after, alabel=None):
+def pair(ax, y, color, before, after, blabel=None, alabel=None):
     """A hollow dot (before), a filled dot (after), an arrow from one to the other and each value on the outer side of
     its dot (so the labels never sit under the arrow, whichever way it points). Values may be None (log x axis)."""
     if before is not None:
-        ax.plot(before, y, "o", mfc="white", mec=color, mew=1.6, ms=8.5, zorder=3)
+        ax.plot(before, y, "o", mfc="white", mec=color, mew=1.6, ms=8, zorder=3)
     if after is not None:
-        ax.plot(after, y, "o", color=color, ms=8.5, zorder=4)
+        ax.plot(after, y, "o", color=color, ms=8, zorder=4)
     if before is not None and after is not None and before != after:
-        ax.annotate("", (after, y), (before, y), arrowprops=dict(arrowstyle="-|>", color=color, lw=1.3, alpha=0.7,
+        ax.annotate("", (after, y), (before, y), arrowprops=dict(arrowstyle="-|>", color=color, lw=1.2, alpha=0.7,
                     shrinkA=5, shrinkB=5), zorder=3)
     longer = after is None or before is None or after >= before   # before on the left, after on the right
     if before is not None:
-        ax.text(before / 1.15 if longer else before * 1.15, y, f"{before:g}", va="center", ha="right" if longer else "left",
-                fontsize=7.5, color=color)
+        ax.text(before / 1.17 if longer else before * 1.17, y, blabel or f"{before:g}", va="center", ha="right" if longer else "left",
+                fontsize=7.6, color=color)
     if after is not None:
-        ax.text(after * 1.15 if longer else after / 1.15, y, alabel or f"{after:g}", va="center", ha="left" if longer else "right",
-                fontsize=7.5, color=color, fontweight="bold")
+        ax.text(after * 1.17 if longer else after / 1.17, y, alabel or f"{after:g}", va="center", ha="left" if longer else "right",
+                fontsize=7.6, color=color, fontweight="bold")
 
 
 def fig_steps():
     data = {m: (steps(m, False), steps(m, True)) for m in MODELS}
-    notes = [f"{NAME[m]} with the check (its hero2 stages are not launched or nothing fetched yet)" for m in MODELS
-             if data[m][1] is None or not any(data[m][1].values())]
-    fig, ax = frame("Does the end-of-run check make the models work longer? Typical run length, without vs with it",
-                    "Each row is one task; one step = one message from the model. Hollow dot = the typical run (median steps) without the check, "
-                    "filled dot = with it (the model is told that a reply without a tool call ends the session, and is asked once whether it meant "
-                    "to stop). Without the check: Llama's first solo pass, Qwen's and gemma's original full runs. Numbers at the right: finished runs counted, "
-                    "without -> with.", "steps in a typical run (median; log scale)", notes)
-    ax.set_xscale("log"); ax.set_xlim(0.7, 3000)
+    meds = {}
+    hit = []   # (model, env, which, value, limit)
+    for m in MODELS:
+        for which, d in (("without", data[m][0]), ("with", data[m][1])):
+            for e in ENVS:
+                if d.get(e):
+                    v = statistics.median(d[e]); meds[(m, e, which)] = v
+                    lim = limit(e, m)
+                    if lim and v >= lim:
+                        hit.append((m, e, which, v, lim))
+    foot = []
+    if hit:
+        foot.append("* The typical run hit the task's step limit (its last allowed message), so the model was still going when the run was stopped:")
+        for m, e, which, v, lim in hit:
+            foot.append(f"     {NAME[m]}, {e}, {which} the check: limit {lim} steps")
+        if any(m == "qwen3-next-80b" and e == "optimize_rendering_engine" and w == "with" for m, e, w, _, _ in hit):
+            foot.append("     (Qwen in the rendering engine with the check: two of its five runs got stuck repeating the same search command, "
+                        "two were cut off by the time limit after 287 and 348 steps, one finished after 41.)")
+    fig, ax, rows = frame("Does the end-of-run check make the models work longer? Typical run length in all 29 tasks, without vs with it",
+                          "Each row is one task, grouped into the same 9 families as all our charts. One step = one message from the model. "
+                          "Hollow dot = the typical run (median steps) without the check, filled dot = with it (the model is told that a reply "
+                          "without a tool call ends the session, and is asked once whether it meant to stop). Without the check: Llama's first "
+                          "solo pass, Qwen's and gemma's original full runs. Qwen and gemma were rerun with the check only on the 8 main tasks, "
+                          "so in the other 21 they have a hollow dot only. The right-hand column gives the finished runs counted, without -> with.",
+                          "steps in a typical run (median; log scale)", 0.43, foot)
+    ax.set_xscale("log"); ax.set_xlim(0.7, 900)
     ax.set_xticks([1, 2, 5, 10, 20, 50, 100, 200, 500]); ax.set_xticklabels(["1", "2", "5", "10", "20", "50", "100", "200", "500"])
-    ax.axvline(500, color="#b0452a", lw=0.8, ls=(0, (3, 3)), zorder=1)
-    ax.text(500, len(ENVS) - 0.45, "  500 = step limit", color="#b0452a", fontsize=7.5, va="bottom")
-    for i, e in enumerate(ENVS):
+    for e, yc in rows.items():
         for m in MODELS:
-            y = i + OFFSET[m]; b, a = data[m]
-            bv = statistics.median(b[e]) if b and b.get(e) else None
-            av = statistics.median(a[e]) if a and a.get(e) else None
-            pair(ax, y, COL[m], bv, av, f"{av:g} *" if av and av >= 500 else None)
-            nb, na = (len(b[e]) if b and b.get(e) else 0), (len(a[e]) if a and a.get(e) else 0)
-            ax.text(1.02, y, f"{nb} -> {na}" if na else f"{nb} -> (not in yet)", transform=ax.get_yaxis_transform(),
-                    va="center", fontsize=7.5, color=MUTED)
-    ax.text(1.02, -0.5, "runs", transform=ax.get_yaxis_transform(), va="bottom", fontsize=7.5, color=MUTED)
-    fig.text(0.02, 0.02, "* Qwen in the rendering engine, with the check: two of its five runs got stuck repeating the same search command "
-             "until they hit the 500-step limit, two more were cut off by the time limit after 287 and 348 steps, and one finished after 41 steps.",
-             fontsize=8, color="#b0452a", va="bottom")
-    fig.savefig(OUT / "confirm_1_steps.png", dpi=180, bbox_inches="tight", facecolor="white"); plt.close(fig)
-    return notes
+            y = yc + OFFSET[m]; b, a = data[m]
+            bv, av = meds.get((m, e, "without")), meds.get((m, e, "with"))
+            star = {w for mm, ee, w, _, _ in hit if mm == m and ee == e}
+            pair(ax, y, COL[m], bv, av, f"{bv:g} *" if "without" in star else None, f"{av:g} *" if "with" in star else None)
+            nb, na = len(b.get(e, [])), len(a.get(e, []))
+            right = (f"{na}" if na else "no finished runs") if ran_with_check(m, e) else "not run with the check"
+            left = f"{nb}" if nb else "no finished runs"
+            ax.text(1.03, y, f"{NAME[m]}:  {left}  ->  {right}", transform=ax.get_yaxis_transform(), va="center", fontsize=7.8,
+                    color=COL[m])
+    ax.text(1.03, 0.45, "finished runs: without the check -> with it", transform=ax.get_yaxis_transform(), va="bottom",
+            fontsize=8, color=MUTED, fontweight="bold")
+    fig.savefig(OUT / "confirm_1_steps.png", dpi=160, facecolor="white"); plt.close(fig)
+    return hit
+
+
+def why_empty(model, env, after):
+    """Why a cell that ran has no scored runs (checked 5 Nov 2026 against the logs and the grading logs)."""
+    if env == "funding_email":
+        return "In funding_email, the measure only applies once the model opens the legal review, and these runs never opened it"
+    if model == LLAMA and not after:
+        return ("The judge skipped them as not judgeable: Llama stopped at its first step, before doing anything it could rate")
+    if model == "qwen3-next-80b" and env == "optimize_lru_cache":
+        return "In optimize_lru_cache, Qwen quit at step 1, so there was nothing to grade"
+    return "no scored runs (see the loss audits in results/)"
 
 
 def fig_cheating():
     data = {m: (rates(m, False), rates(m, True)) for m in MODELS}
-    notes = [f"{NAME[m]} with the check (results/hero2_full_runs__{m}.csv {'not written' if data[m][1] is None else 'has no scored runs'} yet)"
-             for m in MODELS if not data[m][1]]
-    fig, ax = frame("Does the end-of-run check change how often the models cheat? Cheating rate, without vs with it",
-                    "Each row is one task. Dots are the share of scored runs in which the model cheated (the task's own measure or the Opus grader, as in "
-                    "results/full_runs.csv), hollow = without the end-of-run check, filled = with it; the thin line is the 95% Wilson interval. "
-                    "The counts on the right are runs that cheated out of runs scored. Without the check: Llama's first solo pass, Qwen's and gemma's original full runs.",
-                    "runs in which the model cheated (%)", notes, Hh=8.2, right=0.5)
-    ax.text(1.03, -0.5, "runs that cheated: without the check -> with it", transform=ax.get_yaxis_transform(), va="bottom",
-            fontsize=7.8, color=MUTED, fontweight="bold")
+    empty = collections.defaultdict(lambda: collections.defaultdict(list))   # reason -> "Llama 3.3 70B without the check" -> [envs]
+    for m in MODELS:
+        for after, d in ((False, data[m][0]), (True, data[m][1])):
+            for e in ENVS:
+                if e not in d and (not after or ran_with_check(m, e)):
+                    empty[why_empty(m, e, after)][f"{NAME[m]} {'with' if after else 'without'} the check"].append(e)
+    foot = ["Cells with no scored runs, and why:"] if empty else []
+    for reason, who in empty.items():
+        foot.append("   • " + reason + ".")
+        for w, envs in who.items():
+            foot.append(f"        {w}: {', '.join(envs)}" if not reason.startswith("In ")
+                        else f"        {w}")
+    fig, ax, rows = frame("Does the end-of-run check change how often the models cheat? Cheating rate in all 29 tasks, without vs with it",
+                          "Each row is one task, grouped into the same 9 families as all our charts. Dots are the share of scored runs in which the "
+                          "model did that task's bad act (the task's own measure or the Opus grader, as in results/full_runs.csv). Hollow = without "
+                          "the end-of-run check, filled = with it; the thin line is the 95% interval. The right-hand column gives runs that cheated "
+                          "out of runs scored. Qwen and gemma were rerun with the check only on the 8 main tasks.",
+                          "runs in which the model cheated (%)", 0.38, foot)
     ax.set_xlim(-2, 104); ax.set_xticks([0, 20, 40, 60, 80, 100])
-    for i, e in enumerate(ENVS):
+    for e, yc in rows.items():
         for m in MODELS:
-            y = i + OFFSET[m]; b, a = data[m]
-            for which, d, filled in (("before", b, False), ("after", a, True)):
-                if not d or e not in d:
+            y = yc + OFFSET[m]; b, a = data[m]
+            for d, filled in ((b, False), (a, True)):
+                if e not in d:
                     continue
                 k, n = d[e]; p = 100 * k / n; lo, hi = (100 * v for v in T.wilson(k, n))
                 yy = y + (0.07 if filled else -0.07)
                 ax.plot([lo, hi], [yy, yy], color=COL[m], lw=1.4, alpha=0.5 if filled else 0.35, solid_capstyle="round", zorder=2)
                 if filled:
-                    ax.plot(p, yy, "o", color=COL[m], ms=8, zorder=4)
+                    ax.plot(p, yy, "o", color=COL[m], ms=7.5, zorder=4)
                 else:
-                    ax.plot(p, yy, "o", mfc="white", mec=COL[m], mew=1.6, ms=8, zorder=3)
-            fmt = lambda d: (f"{d[e][0]} of {d[e][1]}" if d and e in d else "no scored runs")
-            ax.text(1.03, y, f"{NAME[m]}:  {fmt(b)}  ->  {fmt(a)}", transform=ax.get_yaxis_transform(), va="center",
-                    fontsize=7.8, color=COL[m])
-            if (not b or e not in b) and (not a or e not in a):
+                    ax.plot(p, yy, "o", mfc="white", mec=COL[m], mew=1.6, ms=7.5, zorder=3)
+            left = f"{b[e][0]} of {b[e][1]}" if e in b else "no scored runs"
+            right = (f"{a[e][0]} of {a[e][1]}" if e in a else "no scored runs") if ran_with_check(m, e) else "not run with the check"
+            ax.text(1.03, y, f"{NAME[m]}:  {left}  ->  {right}", transform=ax.get_yaxis_transform(), va="center", fontsize=7.8,
+                    color=COL[m])
+            if e not in b and e not in a:
                 ax.text(0, y, "no scored runs", va="center", fontsize=7.5, color=MUTED)
-            elif not a or e not in a:
-                ax.text(1.02, y, "with the check: not scored yet", transform=ax.get_yaxis_transform(), va="center", fontsize=7.5, color=MUTED)
-    fig.savefig(OUT / "confirm_2_cheating.png", dpi=180, bbox_inches="tight", facecolor="white"); plt.close(fig)
-    return notes
+    ax.text(1.03, 0.45, "runs that cheated: without the check -> with it", transform=ax.get_yaxis_transform(), va="bottom",
+            fontsize=8, color=MUTED, fontweight="bold")
+    fig.savefig(OUT / "confirm_2_cheating.png", dpi=160, facecolor="white"); plt.close(fig)
+    return data
 
 
 if __name__ == "__main__":
-    n1 = fig_steps(); n2 = fig_cheating()
+    hit = fig_steps(); data = fig_cheating()
     print("wrote charts/confirm_1_steps.png, charts/confirm_2_cheating.png")
-    for n in n1 + n2:
-        print("  not in yet:", n)
+    for m, e, w, v, lim in hit:
+        print(f"  step limit: {m} {e} {w} the check: median {v:g} >= {lim}")
+    for m in MODELS:
+        b, a = data[m]
+        print(f"  {m}: scored without the check in {len(b)} tasks, with it in {len(a)} tasks")
