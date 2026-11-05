@@ -110,6 +110,11 @@ We picked two takeover points from a run where Llama cheated: the exact turn it 
 
 ![Swap at the cheating moment](charts/hero2_swap_1_cheating_moment.png)
 
+These bars are not averages. Each group of three bars is one spot in one of Llama's runs, and each bar is one model continuing from that spot 53 to 70 times:
+- **Spot 1** is Llama's run 5, taken over at step 3, the exact step where Llama cheated.
+- **Spot 2** is the same run 5, taken over one step earlier, at step 2.
+- **Spot 3** is a different run, Llama's run 2, which never cheated. We took it over at its last step for comparison.
+
 The table gives the gap, which is Llama's rate minus the stand-in's, with its 95% interval.
 
 | where the stand-in takes over | Llama continuing | Qwen3.6 taking over | gap to Qwen3.6 | gemma taking over | gap to gemma |
