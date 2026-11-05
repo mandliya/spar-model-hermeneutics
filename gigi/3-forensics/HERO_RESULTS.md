@@ -13,6 +13,10 @@ The short version is below.
 
 This is the main result for the call. Each gap is how much more or less a stand-in cheats than Llama would from the exact same spot in Llama's run. A clear gap is one whose 95% interval doesn't touch zero.
 
+The chart has two parts:
+- **Part A is one task, grade your own model**, the only task where Llama cheats. Its three rows are three different spots in Llama's runs: the exact turn it cheated, one turn before that, and a different run where it didn't cheat. Each row is one spot, nothing is averaged, and each model got 53 to 70 tries there.
+- **Part B is the four other tasks, one row per task.** Llama never cheated in these, so we took over three of its clean runs near the end and added them together, which gives 60 to 90 tries per model per task.
+
 ![The gaps between Llama and each stand-in](charts/hero2_swap_3_gaps.png)
 
 **Llama vs Qwen3.6 27B:**
