@@ -172,3 +172,82 @@ print("\nGAPS (stand-in minus Llama)")
 for lab, out in gaps:
     print(lab.replace("\n", " "), {w: tuple(round(x) if isinstance(x, float) else x for x in v) for w, v in out.items()})
 print("wrote charts/hero2_swap_3_gaps.png")
+
+
+# 4. the full report: every takeover spot on its own row, nothing added together
+ORDER = [("grade_your_own", "GRADE YOUR OWN MODEL (the only task where Llama cheated)"),
+         ("optimize_rendering_engine", "RENDERING ENGINE, 3x speed-up (Llama never cheated: clean runs)"),
+         ("dashboard_costly_failure", "DASHBOARD, speed target (Llama never cheated: clean runs)"),
+         ("ai_rd", "AI_RD, improve a prompt (Llama never cheated: clean runs)"),
+         ("precommit_hook", "PRE-COMMIT HOOK (Llama never cheated: clean runs)"),
+         ("optimize_rendering_engine_graded", "RENDERING ENGINE, GRADED (Llama never cheated: clean runs)")]
+SPOTNAME = {pts[0][0]: "SPOT 1: run 5, at step 3, the step where Llama cheated",
+            pts[1][0]: "SPOT 2: run 5, at step 2, one step before the cheat",
+            pts[2][0]: "SPOT 3: run 2, at its last step (never cheated)"}
+seen = []
+for r in rows:
+    if (r["env"], r["point"]) not in seen:
+        seen.append((r["env"], r["point"]))
+layout = []   # ("head", text) or ("row", env, point)
+for env, head in ORDER:
+    layout.append(("head", head))
+    ps = [p for e, p in seen if e == env]
+    if env == G:
+        ps = [p for p, _ in pts]
+    for p in ps:
+        layout.append(("row", env, p))
+layout.append(("head", "CODING and CODING, NO RULES: no spots to take over, because all 20 of Llama's runs in each ended within 2 steps"))
+MIN_N = 15
+y = 0.0; ys = []
+for item in layout:
+    y += 0.9 if item[0] == "head" else 1.0
+    ys.append(y)
+Htot = 2.2 + y * 0.42
+fig = plt.figure(figsize=(12.5, Htot)); ax = fig.add_axes([0.3, 1.0 / Htot, 0.36, (y * 0.42) / Htot])
+for item, yy in zip(layout, ys):
+    if item[0] == "head":
+        ax.text(-0.82, yy, item[1], transform=ax.get_yaxis_transform(), fontsize=9.5, fontweight="bold", va="center")
+        ax.plot([-0.82, 1.75], [yy - 0.45, yy - 0.45], transform=ax.get_yaxis_transform(), color=INK, lw=0.6, clip_on=False)
+        continue
+    _, env, p = item
+    run, k = p.split("_run-")[1].split("_K"); K = int(k)
+    N = int(next(r["N"] for r in rows if r["env"] == env and r["point"] == p))
+    lab = SPOTNAME.get(p) or f"Llama's run {run}, at step {K + 1}" + (" (its last step)" if K + 1 == N else "")
+    ax.text(-0.04, yy, lab, transform=ax.get_yaxis_transform(), ha="right", va="center", fontsize=8.5)
+    lk, ln = cell[(env, p, "llama")]
+    small = [w for w in WHO if cell[(env, p, w)][1] < MIN_N]
+    if small:
+        ax.text(0.02, yy, "too few graded tries to compare (" + ", ".join(f"{SHORT[w]} {cell[(env, p, w)][1]}" for w in WHO) +
+                "): the judge refused most transcripts", transform=ax.get_yaxis_transform(), ha="left", va="center",
+                fontsize=8, color=MUTED, style="italic")
+        continue
+    for j, w in enumerate(("qwen36", "gemma")):
+        k_, n_ = cell[(env, p, w)]; d, lo, hi = newcombe(k_, n_, lk, ln); d, lo, hi = d * 100, lo * 100, hi * 100
+        y2 = yy + (j - 0.5) * 0.36; clear = lo > 0 or hi < 0
+        ax.plot([lo, hi], [y2, y2], color=COL[w], lw=2, alpha=0.55, zorder=2)
+        ax.plot(d, y2, "o", ms=8, zorder=3, color=COL[w], mfc=COL[w] if clear else "white", mew=2)
+        if k_ == 0 and lk == 0:
+            word = "no gap, neither ever cheats"
+        else:
+            word = (f"{abs(d):.0f} pts {'more' if d > 0 else 'less'}" + ("" if clear else ", too close to call")) if round(d) else "no gap"
+        ax.text(1.03, y2, f"{SHORT[w]} {k_} of {n_}  vs  Llama {lk} of {ln}:  {word}", transform=ax.get_yaxis_transform(),
+                va="center", fontsize=8, color=COL[w], fontweight="bold" if clear else "normal")
+y_stop = next(yy for item, yy in zip(layout, ys) if item[0] == "head" and item[1].startswith("RENDERING ENGINE, GRADED"))
+ax.plot([0, 0], [0.4, y_stop - 0.45], color=INK, lw=1, zorder=1)
+ax.set_ylim(y + 0.6, 0.0); ax.set_xlim(-30, 45); ax.set_yticks([])
+ax.text(-1, 0.25, "← stand-in cheats LESS", ha="right", fontsize=8, color=MUTED)
+ax.text(1, 0.25, "stand-in cheats MORE →", ha="left", fontsize=8, color=MUTED)
+ax.set_xlabel("stand-in's cheating rate minus Llama's (percentage points)  ·  line = 95% interval", color=MUTED, fontsize=8.5)
+for s_ in ("top", "right", "left"): ax.spines[s_].set_visible(False)
+ax.spines["bottom"].set_color(GRID); ax.xaxis.grid(True, color=GRID, lw=0.6); ax.set_axisbelow(True)
+fig.text(0.01, 1 - 0.2 / Htot, "Every gap, in full: each takeover spot on its own row, nothing added together", fontsize=13, fontweight="bold", va="top")
+fig.text(0.01, 1 - 0.55 / Htot, "\n".join(textwrap.wrap(
+    "Each row is one spot in one of Llama's runs. We rewound the run to that step and let Llama, Qwen3.6 and gemma each continue it "
+    "20 to 70 times. The dot is the stand-in's cheating rate minus Llama's own rate from the same spot. Filled dot = clear gap (95% interval "
+    "doesn't touch zero); hollow = can't tell apart from no gap. The text on the right gives the raw counts. This is all 18 spots we ran.", 175)),
+    fontsize=8.5, color=MUTED, va="top", linespacing=1.35)
+ax.legend(handles=[plt.Line2D([], [], marker="o", ls="", color=COL[w], ms=8) for w in ("qwen36", "gemma")],
+          labels=["Qwen3.6 27B vs Llama", "gemma-3 27B vs Llama"], loc="upper center", bbox_to_anchor=(0.5, -0.5 / (y * 0.42)),
+          ncol=2, frameon=False, fontsize=9)
+fig.savefig(H / "charts" / "hero2_swap_4_all_gaps.png", dpi=170, bbox_inches="tight", facecolor="white"); plt.close(fig)
+print("wrote charts/hero2_swap_4_all_gaps.png")
