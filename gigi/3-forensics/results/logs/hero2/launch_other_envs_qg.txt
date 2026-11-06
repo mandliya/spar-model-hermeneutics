@@ -1,0 +1,6 @@
+2026-11-06 16:58:10 org credit balance: 8290.88
+2026-11-06 16:58:10 launching qwen3-next-80b (stage hero2_qwen_all): async_conversion:5 chess:20 copying_of_answers:10 currency_conversion:20 eval_tampering:20 funding_email:20 lazy_investigation:20 leaked_scorer:10 leaked_tests:5 lucky_seed:10 lucky_seed_readable_grader:10 norvane:20 optimize_lru_cache:10 parse_duration:20 puppeteer:5 reference_extraction:10 revert_or_refactor:5 secret_number:20 tictactoe:20 tower_of_hanoi:20
+2026-11-06 17:02:12 launched qwen3-next-80b
+2026-11-06 17:02:12 launching gemma-3-27b (stage hero2_gemma_all): async_conversion:5 chess:20 copying_of_answers:10 currency_conversion:20 eval_tampering:20 funding_email:20 lazy_investigation:20 leaked_scorer:10 leaked_tests:5 lucky_seed:10 lucky_seed_readable_grader:10 norvane:20 optimize_lru_cache:10 parse_duration:20 puppeteer:5 reference_extraction:10 revert_or_refactor:5 secret_number:20 tictactoe:20 tower_of_hanoi:20
+2026-11-06 17:06:14 launched gemma-3-27b
+2026-11-06 17:06:14 both models launched (hero2_qwen_all, hero2_gemma_all)

@@ -27,7 +27,7 @@ FLAGS = ("--hero", "--hero2")
 HERO2 = "--hero2" in sys.argv[1:] or os.environ.get("SWAP_HERO2") == "1"
 HERO = HERO2 or "--hero" in sys.argv[1:] or os.environ.get("SWAP_HERO") == "1"
 HERO_ARMS, HERO_BACKUPS = ("llama", "qwen36", "gemma"), ("gemma4", "gptoss")
-SWAPNAME = "hero2_swap" if HERO2 else "hero_swap"
+SWAPNAME = os.environ.get("SWAP_HERO_NAME", "hero2_swap") if HERO2 else "hero_swap"   # SWAP_HERO_NAME (6 Nov 2026): e.g. hero3_swap
 # RES is results/ (HERO2 tests: SWAP_HERO2_RESULTS); run paths in the csvs are relative to ROOT (= the 3-forensics folder)
 RES = pathlib.Path(os.environ["SWAP_HERO2_RESULTS"]).resolve() if HERO2 and os.environ.get("SWAP_HERO2_RESULTS") else HERE / "results"
 ROOT = RES.parent

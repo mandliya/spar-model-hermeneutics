@@ -1,0 +1,18 @@
+2026-10-26 11:20:40 topup60 start | key spend before: $749.623595253
+2026-10-26 11:21:10 launched coding_r7K8_qwen x50
+2026-10-26 11:21:40 launched coding_r7K8_gemma x50
+2026-10-26 11:22:10 launched coding_r7K7_qwen x50
+2026-10-26 11:22:40 launched coding_r7K7_gemma x50
+2026-10-26 11:23:10 launched norules_r17K6_qwen x10
+2026-10-26 11:23:40 launched norules_r17K6_gemma x10
+2026-10-26 11:24:10 launched norules_r2K7_qwen x10
+2026-10-26 11:24:41 launched norules_r2K7_gemma x10
+2026-10-26 11:25:11 launched norules_r4K4_qwen x10
+2026-10-26 11:25:41 launched norules_r4K4_gemma x10
+2026-10-26 11:26:11 launched dashboard_K63_qwen x56
+2026-10-26 11:26:41 launched dashboard_K63_gemma x55
+2026-10-26 11:27:11 launched dashboard_K62_qwen x56
+2026-10-26 11:27:41 launched dashboard_K62_gemma x55
+2026-10-26 11:28:11 launched precommit_q1_6_qwen x20
+2026-10-26 11:28:41 launched precommit_q1_6_gemma x20
+2026-10-26 11:28:41 all launched

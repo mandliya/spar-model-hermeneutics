@@ -25,7 +25,10 @@
 # top-up csv is results/hero2_gap_replays.csv. Without HERO2 nothing changes.
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
-HERO2=${HERO2:-0}; SWAPNAME=hero_swap; [ "$HERO2" = 1 ] && SWAPNAME=hero2_swap
+HERO2=${HERO2:-0}; SWAPNAME=hero_swap; [ "$HERO2" = 1 ] && SWAPNAME=${HERO_SWAPNAME:-hero2_swap}
+# HERO_SWAPNAME (with HERO2=1; 6 Nov 2026): another stage name for a later swap with the same arms and the end-of-run
+# check, e.g. hero3_swap (Llama's three new cheating tasks, scripts/hero3_swap_plan.py): plan results/<name>_plan.json,
+# replays results/raw/<name>/, logs results/logs/<name>/. Unset: hero2_swap exactly as before.
 LOG="$HERE/results/logs/$SWAPNAME"; RAW="$HERE/results/raw/$SWAPNAME"
 export MODAL_PROFILE=${MODAL_PROFILE:-spar} MODAL_SECRET_SUFFIX=${MODAL_SECRET_SUFFIX:--gigi} MODAL_VOLUME_PREFIX=${MODAL_VOLUME_PREFIX:-gigi-forensics-}
 
@@ -59,7 +62,7 @@ if [ "$HERO2" = 1 ]; then   # second pass: the confirmation stays on in every sw
   GEMMA4="$GEMMA4,agent.end_confirm=true"; GPTOSS="$GPTOSS,agent.end_confirm=true"
 fi
 
-ARMS="llama,qwen36,gemma"; PLAN="$HERE/results/$([ "$HERO2" = 1 ] && echo hero2_swap_plan.json || echo hero_swap_plan.json)"; DRY=0; TOPUP=0; CMDS=""
+ARMS="llama,qwen36,gemma"; PLAN="$HERE/results/${SWAPNAME}_plan.json"; DRY=0; TOPUP=0; CMDS=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --backups) ARMS="$ARMS,gemma4,gptoss" ;;

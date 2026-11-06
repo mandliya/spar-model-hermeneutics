@@ -1,0 +1,25 @@
+2026-11-04 12:27:46 start (model qwen3-next-80b, stages hero2_qwen,hero2_qwen_key, ceiling 2400, grade cap 80, files hero2_full_runs__qwen3-next-80b*.csv + hero2_loss_audit__qwen3-next-80b.md)
+2026-11-04 12:27:46 step wait
+2026-11-04 12:27:48 waiting: 3 of our apps still running
+2026-11-04 12:54:06 waiting for 4 local launcher(s) to finish downloading
+2026-11-04 13:14:19 all our apps finished
+2026-11-04 13:14:19 step fetch
+fetched hero2_qwen/coding coding/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-38-19-403997: 2026-11-04 13:14:34 gigi-forensics-coding:coding/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-38-19-403997: 745 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen/coding_norules coding/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-38-35-018907: 2026-11-04 14:22:53 gigi-forensics-coding:coding/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-38-35-018907: 601 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen/dashboard_costly_failure dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-38-56-860416: 2026-11-04 14:23:45 gigi-forensics-dashboard-perf:dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-38-56-860416: 2244 new files, 52 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen/grade_your_own grade_your_own/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-39-07-967192: 2026-11-04 14:25:44 gigi-forensics-grade-your-own:grade_your_own/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-39-07-967192: 1145 new files, 20 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen/optimize_rendering_engine dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-39-20-351388: 2026-11-04 14:29:11 gigi-forensics-dashboard-perf:dashboard_perf/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-39-20-351388: 5073 new files, 27 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen/optimize_rendering_engine_graded stripped_engine/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-39-30-386799: 2026-11-04 14:38:28 gigi-forensics-stripped-engine:stripped_engine/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-39-30-386799: 2864 new files, 0 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen/precommit_hook precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-38-42-542203: 2026-11-04 14:38:39 gigi-forensics-precommit-hook:precommit_hook/precommit_hook/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-38-42-542203: 573 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_key/ai_rd ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-39-42-424100: 2026-11-04 14:38:50 gigi-forensics-ai-rd:ai_rd/qwen-qwen3-next-80b-a3b-instruct/2026-11-04_11-39-42-424100: 632 new files, 12 already here (0 of them differ in size; local copy kept)
+2026-11-04 14:38:50 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 2 folder(s)
+2026-11-04 14:38:54 step grade
+2026-11-04 14:48:35 grading: 2026-11-04 14:38:54 estimate total (hero solo, qwen3-next-80b, stages hero2_qwen,hero2_qwen_key): 24 ungraded runs in 4 fleets, ~$20.25
+2026-11-04 14:48:35 grading: 2026-11-04 14:40:00 estimate total (hero solo, qwen3-next-80b, stages hero2_qwen,hero2_qwen_key): 9 ungraded runs in 4 fleets, ~$9.41
+2026-11-04 14:48:35 step score
+2026-11-04 14:48:35 scored: 95 qwen3-next-80b runs found in stages hero2_qwen, hero2_qwen_key -> hero2_full_runs__qwen3-next-80b.csv
+2026-11-04 14:48:35 step audit
+audit (hero2_qwen, hero2_qwen_key): target 95, found 95, scored 91, 3 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3-next-80b.md
+2026-11-04 14:48:35 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3-next-80b.md
+2026-11-04 14:48:35 done (not committed: the parent session commits)

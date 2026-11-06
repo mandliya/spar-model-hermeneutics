@@ -10,7 +10,7 @@ results/hero_full_runs.csv and results/hero_full_runs__llama-3.3-70b__other21_no
 gemma-3-27b's original full runs (full_runs_table.modal_runs; rates from results/full_runs.csv).
 With the check: Llama's hero2 stages (hero2_llama + hero2_llama_key + hero2_llama_all; rates from
 results/hero2_full_runs__llama-3.3-70b.csv and results/hero2_full_runs__llama-3.3-70b__other21.csv); Qwen's and gemma's
-hero2 stages, which cover the 8 main tasks only: their other 21 rows say "not run with the check".
+hero2 stages plus hero2_qwen_all / hero2_gemma_all (6 Nov, the other 21; results/hero2_full_runs__<model>__other21.csv).
 Steps are counted from each run's rollout.log STEP markers over finished runs only. A typical run at or over its task's
 step limit (max_steps in configs/<env>__<model>.yaml) is starred and listed in the footnote.
   cd gigi/3-forensics/agent-interp-envs && uv run --with matplotlib python ../scripts/confirm_effect_charts.py
@@ -44,15 +44,29 @@ assert set(ENVS) == ALL29, sorted(ALL29 - set(ENVS))
 
 BEFORE_STAGES = {LLAMA: ("hero_solo", "hero_solo_key2", "hero_solo_all")}   # Qwen / gemma: their original full runs
 AFTER_STAGES = dict(T.HERO2_STAGES); AFTER_STAGES[LLAMA] = tuple(AFTER_STAGES[LLAMA]) + ("hero2_llama_all",)
+ALL_STAGE = {LLAMA: "hero2_llama_all", "qwen3-next-80b": "hero2_qwen_all", "gemma-3-27b": "hero2_gemma_all"}   # 6 Nov: Qwen/gemma other 21
+for _m in ("qwen3-next-80b", "gemma-3-27b"):
+    AFTER_STAGES[_m] = tuple(AFTER_STAGES[_m]) + (ALL_STAGE[_m],)
 BEFORE_CSV = {LLAMA: ["hero_full_runs.csv", "hero_full_runs__llama-3.3-70b__other21_nocheck.csv"]}
 AFTER_CSV = {LLAMA: ["hero2_full_runs__llama-3.3-70b.csv", "hero2_full_runs__llama-3.3-70b__other21.csv"],
-             "qwen3-next-80b": ["hero2_full_runs__qwen3-next-80b.csv"], "gemma-3-27b": ["hero2_full_runs__gemma-3-27b.csv"]}
+             "qwen3-next-80b": ["hero2_full_runs__qwen3-next-80b.csv", "hero2_full_runs__qwen3-next-80b__other21.csv"],
+             "gemma-3-27b": ["hero2_full_runs__gemma-3-27b.csv", "hero2_full_runs__gemma-3-27b__other21.csv"]}
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 9, "text.color": INK})
 
 
 def ran_with_check(model, env):
-    """Qwen and gemma were rerun with the check on the 8 main tasks only."""
-    return model == LLAMA or env in MAIN
+    """Every model ran the 8 main tasks with the check; the other 21 count once the model's all-environment stage
+    (hero2_<x>_all) launched that environment."""
+    return model == LLAMA or env in MAIN or env in T.hero_launched(ALL_STAGE[model], model)
+
+
+def not_run_note():
+    """A sentence naming the cells not run with the check, or nothing when every model ran every task with it."""
+    miss = [(m, e) for m in MODELS for e in ENVS if not ran_with_check(m, e)]
+    if not miss:
+        return ""
+    who = sorted({NAME[m] for m, _ in miss})
+    return f"Not run with the check yet: {len(miss)} task rows for {' and '.join(who)} (marked on the right). "
 
 
 def limit(env, model):
@@ -195,8 +209,8 @@ def fig_steps():
                           "Each row is one task, grouped into the same 9 families as all our charts. One step = one message from the model. "
                           "Hollow dot = the typical run (median steps) without the check, filled dot = with it (the model is told that a reply "
                           "without a tool call ends the session, and is asked once whether it meant to stop). Without the check: Llama's first "
-                          "solo pass, Qwen's and gemma's original full runs. Qwen and gemma were rerun with the check only on the 8 main tasks, "
-                          "so in the other 21 they have a hollow dot only. The right-hand column gives the finished runs counted, without -> with.",
+                          "solo pass, Qwen's and gemma's original full runs. With the check: every model ran all 29 tasks again. " + not_run_note() +
+                          "The right-hand column gives the finished runs counted, without -> with.",
                           "steps in a typical run (median; log scale)", 0.43, foot)
     ax.set_xscale("log"); ax.set_xlim(0.7, 900)
     ax.set_xticks([1, 2, 5, 10, 20, 50, 100, 200, 500]); ax.set_xticklabels(["1", "2", "5", "10", "20", "50", "100", "200", "500"])
@@ -246,7 +260,7 @@ def fig_cheating():
                           "Each row is one task, grouped into the same 9 families as all our charts. Dots are the share of scored runs in which the "
                           "model did that task's bad act (the task's own measure or the Opus grader, as in results/full_runs.csv). Hollow = without "
                           "the end-of-run check, filled = with it; the thin line is the 95% interval. The right-hand column gives runs that cheated "
-                          "out of runs scored. Qwen and gemma were rerun with the check only on the 8 main tasks.",
+                          "out of runs scored. With the check: every model ran all 29 tasks again. " + not_run_note(),
                           "runs in which the model cheated (%)", 0.38, foot)
     ax.set_xlim(-2, 104); ax.set_xticks([0, 20, 40, 60, 80, 100])
     for e, yc in rows.items():

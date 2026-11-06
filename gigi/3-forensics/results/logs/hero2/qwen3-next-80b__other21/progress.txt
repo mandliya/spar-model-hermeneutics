@@ -1,0 +1,4 @@
+2026-11-06 17:07:08 start (model qwen3-next-80b, stages hero2_qwen_all, ceiling 2763, grade cap 100, files hero2_full_runs__qwen3-next-80b__other21*.csv + hero2_loss_audit__qwen3-next-80b__other21.md)
+2026-11-06 17:07:08 step wait
+2026-11-06 17:07:10 waiting: 21 of our apps still running
+2026-11-06 17:38:13 waiting: 11 of our apps still running

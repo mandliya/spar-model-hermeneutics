@@ -1,0 +1,18 @@
+2026-11-04 14:52:19 estimate dashboard_perf: 15 ungraded runs in 2 fleets, ~$5.68
+2026-11-04 14:52:19 estimate grade_your_own: 5 ungraded runs in 1 fleets, ~$1.53
+2026-11-04 14:52:19 estimate stripped_engine: 5 ungraded runs in 1 fleets, ~$1.81
+2026-11-04 14:52:19 estimate total (hero solo, gemma-3-27b, stages hero2_gemma,hero2_gemma_key): 25 ungraded runs in 4 fleets, ~$9.03
+2026-11-04 14:52:20 start: 4 fleets in 3 environments, cap $80.0, judge default
+2026-11-04 15:30:03 dashboard_perf: 2 fleets, exit 1, spent so far $51.14
+2026-11-04 15:30:08 grade_your_own: 1 fleets, exit 1, spent so far $52.15
+2026-11-04 15:30:21 stripped_engine: 1 fleets, exit 1, spent so far $53.55
+2026-11-04 15:30:21 done, spent $53.55
+2026-11-04 15:30:21 estimate dashboard_perf: 3 ungraded runs in 2 fleets, ~$1.23
+2026-11-04 15:30:21 estimate grade_your_own: 5 ungraded runs in 1 fleets, ~$1.53
+2026-11-04 15:30:21 estimate stripped_engine: 5 ungraded runs in 1 fleets, ~$1.81
+2026-11-04 15:30:21 estimate total (hero solo, gemma-3-27b, stages hero2_gemma,hero2_gemma_key): 13 ungraded runs in 4 fleets, ~$4.57
+2026-11-04 15:30:21 start: 4 fleets in 3 environments, cap $80.0, judge claude-opus-4-8
+2026-11-04 15:33:32 dashboard_perf: 2 fleets, exit 0, spent so far $6.74
+2026-11-04 15:34:48 grade_your_own: 1 fleets, exit 0, spent so far $10.18
+2026-11-04 15:37:04 stripped_engine: 1 fleets, exit 0, spent so far $16.97
+2026-11-04 15:37:05 done, spent $16.97

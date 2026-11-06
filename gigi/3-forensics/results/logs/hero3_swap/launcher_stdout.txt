@@ -1,0 +1,4 @@
+249 resumes, 2490 replays (arms: llama,qwen36,gemma) -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/logs/hero3_swap/commands_20261106-170404.txt
+  llama    830 replays
+  qwen36   830 replays
+  gemma    830 replays

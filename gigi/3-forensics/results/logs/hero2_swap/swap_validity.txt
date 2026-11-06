@@ -1,0 +1,24 @@
+1792 replays -> results/hero2_swap_validity.csv
+
+== Llama in Llama's runs: 602 replays, 602 with turns after the takeover
+   first turn a call or final answer : 602/602 = 100.0% (99.4-100.0)
+   turns unreadable or fake output   : 0/901 = 0.0% (-0.0-0.4)
+   finished replays ended by parser  : 0/593 = 0.0% (0.0-0.6)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 593; lost: crash 7; lost: provider failure 2
+
+== Qwen3.6 in Llama's runs: 590 replays, 590 with turns after the takeover
+   first turn a call or final answer : 590/590 = 100.0% (99.4-100.0)
+   turns unreadable or fake output   : 0/9288 = 0.0% (0.0-0.0)
+   finished replays ended by parser  : 0/577 = 0.0% (0.0-0.7)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 506; empty reply 42; step cap 29; lost: crash 8; lost: provider failure 4; lost: context window exceeded 1
+
+== gemma in Llama's runs: 600 replays, 600 with turns after the takeover
+   first turn a call or final answer : 600/600 = 100.0% (99.4-100.0)
+   turns unreadable or fake output   : 3/1913 = 0.2% (0.1-0.5)
+   finished replays ended by parser  : 0/595 = 0.0% (0.0-0.6)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 595; lost: crash 5
+
+######## the four gap environments, at Qwen's incidents

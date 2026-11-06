@@ -1,0 +1,2 @@
+2026-11-04 11:41:26 launched ai_rd__gemma-3-27b x10 (max_steps 60, timeout 3600s, agent.end_confirm=true,modal.memory=2048, pid 95081)
+2026-11-04 11:41:26 all launched

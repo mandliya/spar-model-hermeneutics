@@ -124,8 +124,11 @@ def download(vol: modal.Volume, prefix: str, dest: pathlib.Path) -> int:
 
 
 @app.local_entrypoint()
-def main(config: str, count: int = 10, stage: str = "full_swe", timeout: int = 10800, check: bool = False):
+def main(config: str, count: int = 10, stage: str = "full_swe", timeout: int = 10800, check: bool = False,
+         overrides: str = ""):
     cfg = OmegaConf.load(config)
+    if overrides:   # comma-separated dotlist, e.g. agent.end_confirm=true (gigi/3-forensics, 6 Nov 2026: hero2_*_all)
+        cfg = OmegaConf.merge(cfg, OmegaConf.from_dotlist([o for o in overrides.split(",") if o]))
     fields = task_fields(cfg.task.instance_id)
     if "${" in fields["problem_statement"]:
         raise SystemExit("problem statement contains '${', which OmegaConf would read as an interpolation")

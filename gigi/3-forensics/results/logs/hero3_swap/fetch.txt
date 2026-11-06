@@ -1,0 +1,599 @@
+got currency_conversion 2026-11-04_14-34-50-378289_run-10_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-00-122317: 87 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-10_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-00-123207: 81 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-10_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-04-59-956719: 81 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-10_K5 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-00-090284: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-10_K5 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-04-35-652192: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-10_K5 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-04-35-627979: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-11_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-50-544174: 66 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-11_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-25-142062: 87 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-11_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-50-512809: 63 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-11_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-25-134008: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-11_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-25-129723: 54 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-11_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-25-165935: 48 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-12_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-06-15-110551: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-12_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-06-15-194620: 78 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-12_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-06-15-097729: 75 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-12_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-06-15-449589: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-12_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-50-620462: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-12_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-05-50-762282: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-13_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-05-528412: 111 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-13_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-06-40-300957: 69 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-13_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-05-613898: 63 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-13_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-06-40-633706: 66 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-13_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-06-40-547350: 51 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-13_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-06-40-667398: 33 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-14_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-30-666786: 114 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-14_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-30-876019: 105 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-14_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-30-633558: 102 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-14_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-30-580782: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-14_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-05-441932: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-14_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-05-431180: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-15_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-08-20-215485: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-15_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-55-465092: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-15_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-08-20-288250: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-15_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-55-388256: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-15_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-55-465584: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-15_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-07-55-434021: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-16_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-08-45-640081: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-16_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-08-45-261339: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-16_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-08-45-890893: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-16_K5 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-08-45-361542: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-16_K5 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-08-20-676520: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-16_K5 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-08-20-214434: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-17_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-09-35-486935: 105 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-17_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-09-10-364418: 120 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-17_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-09-35-463896: 102 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-17_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-09-10-465999: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-17_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-09-10-573032: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-17_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-09-10-379293: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-18_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-00-498511: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-18_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-00-503760: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-18_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-00-379940: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-18_K5 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-01-148516: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-18_K5 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-09-35-456778: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-18_K5 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-09-35-504364: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-19_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-50-507064: 105 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-19_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-27-085451: 117 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-19_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-50-638710: 99 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-19_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-25-988023: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-19_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-25-753260: 42 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-19_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-25-849634: 48 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-1_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-04-35-504039: 102 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-1_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-04-10-094324: 120 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-1_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-04-35-623344: 126 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-1_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-04-10-007923: 72 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-1_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-04-10-328761: 45 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-1_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-04-11-319193: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-20_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-06-121736: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-20_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-11-40-841744: 84 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-20_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-06-401326: 90 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-20_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-11-40-854030: 63 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-20_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-11-40-828351: 45 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-20_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-11-40-871666: 60 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-2_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-11-15-354015: 96 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-2_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-11-15-247542: 99 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-2_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-11-15-505485: 135 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-2_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-11-15-745161: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-2_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-50-495345: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-2_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-10-50-613562: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-3_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-30-439521: 111 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-3_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-30-594548: 105 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-3_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-30-595298: 99 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-3_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-30-505708: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-3_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-06-233712: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-3_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-06-418237: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-4_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-26-194729: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-4_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-26-302630: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-4_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-26-074968: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-5_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-13-20-832868: 66 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-5_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-55-837805: 72 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-5_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-13-20-770331: 63 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-5_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-55-949975: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-5_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-55-955802: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-5_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-12-55-715133: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-6_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-50-817129: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-6_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-26-071960: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-6_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-50-761296: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-7_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-13-45-675689: 111 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-7_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-13-45-674981: 114 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-7_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-13-45-675144: 132 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-7_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-13-45-546100: 39 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-7_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-13-22-684493: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-7_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-13-21-298592: 36 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-8_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-14-35-707819: 96 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-8_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-14-10-565397: 111 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-8_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-14-35-927925: 96 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-8_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-14-10-724486: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-8_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-14-10-613199: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-8_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-14-10-713115: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-9_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-00-887954: 117 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-9_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-01-270476: 111 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-9_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-01-004401: 120 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-9_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-00-990402: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-9_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-14-35-699388: 30 new files, 12 already here (0 differ in size; local kept)
+got currency_conversion 2026-11-04_14-34-50-378289_run-9_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-14-35-969819: 30 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-10_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-37-309641: 37 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-10_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-12-129991: 41 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-10_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-37-332361: 38 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-11_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-24-36-842709: 72 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-11_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-24-11-596463: 71 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-11_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-24-36-791319: 64 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-11_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-24-11-707821: 41 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-11_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-24-11-690784: 42 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-11_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-24-11-545545: 37 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-12_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-02-278413: 68 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-12_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-02-068730: 64 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-12_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-01-819877: 64 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-12_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-01-841244: 34 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-12_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-24-36-799418: 45 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-12_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-24-36-950643: 34 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-13_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-30-01-709163: 30 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-13_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-37-317065: 30 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-13_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-37-200760: 30 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-18_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-52-701899: 68 new files, 12 already here (0 differ in size; local kept)
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-18_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-26-540035: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-18_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-52-631463: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-18_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-26-627671: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-18_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-26-744024: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-18_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-26-658163: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-19_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-16-846581: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-19_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-16-972402: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-19_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-17-002256: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-19_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-16-968459: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-19_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-52-204468: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-19_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-52-227506: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-1_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-12-095450: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-1_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-12-042692: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-1_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-11-988742: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-20_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-32-153440: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-20_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-32-122507: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-20_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-32-103802: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-20_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-32-079578: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-20_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-07-079192: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-20_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-07-058252: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-21_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-22-579711: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-21_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-57-588863: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-21_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-22-419903: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-21_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-57-592352: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-21_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-57-608394: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-21_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-57-389523: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-2_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-06-974284: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-2_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-41-696421: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-2_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-07-109403: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-2_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-41-984103: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-2_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-42-085779: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-2_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-41-939456: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-8_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-47-244167: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-8_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-47-167018: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-8_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-46-975008: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-8_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-47-012612: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-8_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-22-497474: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED eval_tampering 2026-11-04_14-35-51-256469_run-8_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-22-464962: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-eval-tampering' not found in environment 'main'       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-10_K10 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-41-398650: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-10_K10 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-41-537406: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-10_K10 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-41-551171: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-10_K9 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-06-262806: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-10_K9 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-41-385150: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-10_K9 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-06-440237: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-11_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-31-673208: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-11_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-31-565417: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-11_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-32-087900: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-11_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-31-766104: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-11_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-06-430885: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-11_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-06-299390: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-12_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-21-509615: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-12_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-56-414601: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-12_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-21-605310: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-12_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-56-365887: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-12_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-56-412189: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-12_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-56-392745: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-13_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-47-081529: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-13_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-21-511263: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-13_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-21-509816: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-14_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-11-997968: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-14_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-11-553247: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-14_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-11-754666: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-14_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-46-462017: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-14_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-48-056689: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-14_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-46-529724: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-1_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-16-380390: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-1_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-16-302250: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-1_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-16-439215: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-1_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-16-501035: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-1_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-51-194362: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-1_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-51-200232: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-2_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-01-996608: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-2_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-37-245974: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-2_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-37-020490: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-2_K5 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-37-056137: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-2_K5 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-11-671529: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-2_K5 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-37-029665: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-3_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-26-613246: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-3_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-26-627259: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-3_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-26-943372: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-3_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-01-942791: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-3_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-02-837552: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-3_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-02-634844: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-4_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-16-662196: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-4_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-51-769626: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-4_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-51-541594: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-4_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-51-682808: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-4_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-26-609318: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-4_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-51-812954: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-5_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-41-875688: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-5_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-41-652562: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-5_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-41-847006: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-5_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-16-869431: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-5_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-16-930921: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-5_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-16-847448: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-6_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-07-113667: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-6_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-41-944704: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-6_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-07-188666: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-7_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-31-986613: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-7_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-32-127359: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-7_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-32-087574: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-7_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-32-483908: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-7_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-07-083538: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-7_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-07-141572: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-8_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-21-905623: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-8_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-56-862356: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-8_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-21-990690: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-8_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-56-798579: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-8_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-56-773374: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-8_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-56-777344: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-9_K5 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-47-239107: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-9_K5 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-47-044502: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-9_K5 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-46-839306: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-9_K6 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-46-975961: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-9_K6 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-22-374421: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+FAILED lazy_investigation 2026-11-04_14-35-30-964184_run-9_K6 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-21-746803: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Volume 'gigi-forensics-lazy-investigation' not found in environment 'main'   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+fetch (hero2): 0 fleets fetched, 116 failed
+got eval_tampering 2026-11-04_14-35-51-256469_run-18_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-26-540035: 71 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-18_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-52-631463: 72 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-18_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-26-627671: 38 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-18_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-26-744024: 42 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-18_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-26-658163: 33 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-19_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-16-846581: 34 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-19_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-16-972402: 34 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-19_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-17-002256: 48 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-19_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-16-968459: 40 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-19_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-52-204468: 40 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-19_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-25-52-227506: 40 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-1_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-12-095450: 37 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-1_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-12-042692: 34 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-1_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-29-11-988742: 37 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-20_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-32-153440: 34 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-20_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-32-122507: 45 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-20_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-32-103802: 49 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-20_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-32-079578: 40 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-20_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-07-079192: 40 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-20_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-07-058252: 40 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-21_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-22-579711: 72 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-21_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-57-588863: 60 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-21_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-22-419903: 67 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-21_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-57-592352: 46 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-21_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-57-608394: 30 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-21_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-57-389523: 33 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-2_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-06-974284: 30 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-2_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-41-696421: 40 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-2_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-27-07-109403: 38 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-2_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-41-984103: 40 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-2_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-42-085779: 40 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-2_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-26-41-939456: 40 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-8_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-47-244167: 47 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-8_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-47-167018: 38 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-8_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-46-975008: 37 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-8_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-47-012612: 30 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-8_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-22-497474: 30 new files, 12 already here (0 differ in size; local kept)
+got eval_tampering 2026-11-04_14-35-51-256469_run-8_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-28-22-464962: 30 new files, 12 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-10_K10 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-41-398650: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-10_K10 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-41-537406: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-10_K10 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-41-551171: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-10_K9 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-06-262806: 60 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-10_K9 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-41-385150: 63 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-10_K9 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-06-440237: 60 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-11_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-31-673208: 63 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-11_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-31-565417: 75 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-11_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-32-087900: 60 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-11_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-31-766104: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-11_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-06-430885: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-11_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-06-299390: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-12_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-21-509615: 66 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-12_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-56-414601: 132 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-12_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-21-605310: 63 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-12_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-56-365887: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-12_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-56-412189: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-12_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-17-56-392745: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-13_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-47-081529: 39 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-13_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-21-511263: 48 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-13_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-21-509816: 48 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-14_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-11-997968: 78 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-14_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-11-553247: 66 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-14_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-11-754666: 84 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-14_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-46-462017: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-14_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-48-056689: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-14_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-18-46-529724: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-1_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-16-380390: 81 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-1_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-16-302250: 75 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-1_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-16-439215: 72 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-1_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-16-16-501035: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-1_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-51-194362: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-1_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-15-51-200232: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-2_K4 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-01-996608: 60 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-2_K4 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-37-245974: 60 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-2_K4 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-37-020490: 60 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-2_K5 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-37-056137: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-2_K5 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-11-671529: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-2_K5 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-19-37-029665: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-3_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-26-613246: 66 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-3_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-26-627259: 111 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-3_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-26-943372: 99 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-3_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-01-942791: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-3_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-02-837552: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-3_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-02-634844: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-4_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-16-662196: 96 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-4_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-51-769626: 183 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-4_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-51-541594: 144 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-4_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-51-682808: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-4_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-26-609318: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-4_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-20-51-812954: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-5_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-41-875688: 60 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-5_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-41-652562: 69 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-5_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-41-847006: 63 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-5_K3 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-16-869431: 36 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-5_K3 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-16-930921: 36 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-5_K3 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-16-847448: 45 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-6_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-07-113667: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-6_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-21-41-944704: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-6_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-07-188666: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-7_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-31-986613: 72 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-7_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-32-127359: 102 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-7_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-32-087574: 78 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-7_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-32-483908: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-7_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-07-083538: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-7_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-07-141572: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-8_K1 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-21-905623: 138 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-8_K1 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-56-862356: 66 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-8_K1 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-21-990690: 60 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-8_K2 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-56-798579: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-8_K2 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-56-773374: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-8_K2 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-22-56-777344: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-9_K5 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-47-239107: 72 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-9_K5 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-47-044502: 69 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-9_K5 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-46-839306: 66 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-9_K6 gemma resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-46-975961: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-9_K6 llama resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-22-374421: 30 new files, 42 already here (0 differ in size; local kept)
+got lazy_investigation 2026-11-04_14-35-30-964184_run-9_K6 qwen36 resume/meta-llama-llama-3.3-70b-instruct/2026-11-06_17-23-21-746803: 30 new files, 42 already here (0 differ in size; local kept)
+fetch (hero2): 116 fleets fetched, 0 failed

@@ -1,0 +1,6 @@
+key label:          [key label redacted]
+key limit:          $5,000.00
+key usage:          $1,888.43
+key limit left:     $3,111.57
+since 18 Oct:       $1,756.95   (compare with CEIL / TOTAL_CEILING_USD)
+org credits:        $20,973.93 bought, $20,681.90 used, $292.03 remaining

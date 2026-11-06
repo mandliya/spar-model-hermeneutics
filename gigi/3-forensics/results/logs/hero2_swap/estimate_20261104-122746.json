@@ -1,0 +1,40 @@
+{
+ "points": 18,
+ "tries_per_arm": 180,
+ "turns": 10.0,
+ "out_tokens": 3000.0,
+ "prices_per_M": {
+  "llama": [
+   0.71,
+   0.71
+  ],
+  "qwen36": [
+   0.32,
+   3.2
+  ],
+  "gemma": [
+   0.08,
+   0.16
+  ]
+ },
+ "per_arm_usd": {
+  "llama": 6.460006,
+  "qwen36": 4.466752,
+  "gemma": 0.7710879999999999
+ },
+ "per_env_usd": {
+  "ai_rd": 4.25685,
+  "dashboard_costly_failure": 1.471638,
+  "grade_your_own": 0.8615820000000001,
+  "optimize_rendering_engine": 0.957264,
+  "optimize_rendering_engine_graded": 0.996225,
+  "precommit_hook": 3.154286999999999
+ },
+ "total_usd": 11.697846,
+ "guard_factor": 1.5,
+ "guarded_usd": 17.546769,
+ "budget_usd": 1000.0,
+ "budget_from": "SPEND_GUARD_USD=1000",
+ "key_left": "3111.57",
+ "credits_left": "292.03"
+}

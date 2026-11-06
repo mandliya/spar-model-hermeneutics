@@ -1,0 +1,2 @@
+2026-11-04 11:39:49 launched ai_rd__qwen3-next-80b x10 (max_steps 60, timeout 3600s, agent.end_confirm=true,modal.memory=2048, pid 94771)
+2026-11-04 11:39:49 all launched

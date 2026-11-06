@@ -1,0 +1,9 @@
+54 resumes, 540 replays (arms: llama,qwen36,gemma) -> /var/folders/g1/555ct1pj03gblq7vhqdsm6100000gn/T//hero_swap_commands.Ds22An
+  llama    180 replays
+  qwen36   180 replays
+  gemma    180 replays
+  base config: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/raw/hero2_llama/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-04_11-36-42-768727/config.yaml
+  llama   {'model': 'meta-llama/llama-3.3-70b-instruct', 'temperature': 0.6, 'top_p': 0.9, 'top_k': None, 'min_p': None, 'text_tools': None, 'reasoning_effort': 'none', 'provider_preferences': {'only': ['coreweave'], 'quantizations': ['fp16'], 'allow_fallbacks': False}, 'end_confirm': True}
+  qwen36  {'model': 'qwen/qwen3.6-27b', 'temperature': 0.7, 'top_p': 0.8, 'top_k': 20, 'min_p': 0, 'text_tools': False, 'reasoning_effort': 'disabled', 'provider_preferences': {'only': ['deepinfra'], 'quantizations': ['fp8'], 'allow_fallbacks': False}, 'end_confirm': True}
+  gemma   {'model': 'google/gemma-3-27b-it', 'temperature': 1.0, 'top_p': 0.95, 'top_k': 64, 'min_p': None, 'text_tools': True, 'reasoning_effort': 'none', 'provider_preferences': {'only': ['deepinfra'], 'quantizations': ['fp8'], 'allow_fallbacks': False, 'require_parameters': True}, 'end_confirm': True}
+dry run: nothing launched

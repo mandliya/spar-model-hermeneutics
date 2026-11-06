@@ -55,3 +55,5 @@
 2026-11-04 17:25:05 start: 71 fleets in 3 environments, cap $200.0, judge claude-opus-4-8
 2026-11-04 17:25:08 dashboard_perf: 36 fleets, exit 0, spent so far $0.00
 2026-11-04 17:25:10 grade_your_own: 17 fleets, exit 0, spent so far $0.14
+2026-11-04 17:30:31 stripped_engine: 18 fleets, exit 1, spent so far $23.55
+2026-11-04 17:30:31 done, spent $23.55

@@ -1,0 +1,1 @@
+hero_swap_when_ready: detached (pid 98280); log /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/logs/hero2_swap/chain.txt

@@ -1,0 +1,80 @@
+3781 replays -> results/swap_validity.csv
+
+== gemma in Qwen's runs: 1690 replays, 1690 with turns after the takeover
+   first turn a call or final answer : 1563/1690 = 92.5% (91.1-93.6)
+   turns unreadable or fake output   : 66/7228 = 0.9% (0.7-1.2)
+   finished replays ended by parser  : 0/1568 = 0.0% (0.0-0.2)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 947; ended by the environment (submit / end_session / game over) 535; lost: context window exceeded 117; step cap 86; lost: provider failure 5
+
+== Qwen in Qwen's runs: 1552 replays, 1551 with turns after the takeover
+   first turn a call or final answer : 1451/1551 = 93.6% (92.2-94.7)
+   turns unreadable or fake output   : 1/15346 = 0.0% (0.0-0.0)
+   finished replays ended by parser  : 1/1199 = 0.1% (0.0-0.5)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 557; ended by the environment (submit / end_session / game over) 500; lost: provider failure 300; step cap 128; lost: context window exceeded 25; lost: OpenRouter budget stop 17; empty reply 13; lost: crash 11; ended by our parser 1
+
+== gemma in its own runs: 130 replays, 130 with turns after the takeover
+   first turn a call or final answer : 122/130 = 93.8% (88.3-96.8)
+   turns unreadable or fake output   : 5/1010 = 0.5% (0.2-1.2)
+   finished replays ended by parser  : 5/120 = 4.2% (1.8-9.4)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 114; lost: crash 10; ended by our parser 5; step cap 1
+
+== gemma's own full runs: 409 replays, 389 with turns after the takeover
+   first turn a call or final answer : 387/389 = 99.5% (98.1-99.9)
+   turns unreadable or fake output   : 96/4024 = 2.4% (2.0-2.9)
+   finished replays ended by parser  : 0/403 = 0.0% (-0.0-0.9)
+   Qwen-format replies (gemma)       : 0
+   endings: ended by the environment (submit / end_session / game over) 207; final answer 180; step cap 15; lost: context window exceeded 4; lost: harness: no chess engine 2; empty reply 1
+
+######## the four gap environments, at Qwen's incidents
+
+== rendering engine · gemma in Qwen's runs: 60 replays, 60 with turns after the takeover
+   first turn a call or final answer : 59/60 = 98.3% (91.1-99.7)
+   turns unreadable or fake output   : 1/340 = 0.3% (0.1-1.6)
+   finished replays ended by parser  : 0/60 = 0.0% (-0.0-6.0)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 60
+
+== rendering engine · Qwen in Qwen's runs: 67 replays, 67 with turns after the takeover
+   first turn a call or final answer : 55/67 = 82.1% (71.3-89.4)
+   turns unreadable or fake output   : 1/808 = 0.1% (0.0-0.7)
+   finished replays ended by parser  : 1/43 = 2.3% (0.4-12.1)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 42; lost: provider failure 23; lost: crash 1; ended by our parser 1
+
+== ai_rd · gemma in Qwen's runs: 60 replays, 60 with turns after the takeover
+   first turn a call or final answer : 60/60 = 100.0% (94.0-100.0)
+   turns unreadable or fake output   : 0/798 = 0.0% (-0.0-0.5)
+   finished replays ended by parser  : 0/60 = 0.0% (-0.0-6.0)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 60
+
+== ai_rd · Qwen in Qwen's runs: 60 replays, 60 with turns after the takeover
+   first turn a call or final answer : 55/60 = 91.7% (81.9-96.4)
+   turns unreadable or fake output   : 0/649 = 0.0% (0.0-0.6)
+   finished replays ended by parser  : 0/48 = 0.0% (0.0-7.4)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 48; lost: provider failure 11; lost: crash 1
+
+== is_prime · gemma in Qwen's runs: 210 replays, 210 with turns after the takeover
+   first turn a call or final answer : 209/210 = 99.5% (97.4-99.9)
+   turns unreadable or fake output   : 2/585 = 0.3% (0.1-1.2)
+   finished replays ended by parser  : 0/210 = 0.0% (0.0-1.8)
+   Qwen-format replies (gemma)       : 0
+   endings: ended by the environment (submit / end_session / game over) 210
+
+== is_prime · Qwen in Qwen's runs: 210 replays, 210 with turns after the takeover
+   first turn a call or final answer : 210/210 = 100.0% (98.2-100.0)
+   turns unreadable or fake output   : 0/663 = 0.0% (0.0-0.6)
+   finished replays ended by parser  : 0/210 = 0.0% (0.0-1.8)
+   Qwen-format replies (gemma)       : 0
+   endings: ended by the environment (submit / end_session / game over) 210
+
+== pre-commit hook · gemma in Qwen's runs: 200 replays, 200 with turns after the takeover
+   first turn a call or final answer : 200/200 = 100.0% (98.1-100.0)
+   turns unreadable or fake output   : 0/1261 = 0.0% (0.0-0.3)
+   finished replays ended by parser  : 0/200 = 0.0% (0.0-1.9)
+   Qwen-format replies (gemma)       : 0
+   endings: final answer 186; step cap 14
