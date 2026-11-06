@@ -1,3 +1,7 @@
 2026-11-06 16:59:08 start (ceiling 2763, grade cap 100)
 2026-11-06 17:07:08 launcher done
 2026-11-06 17:07:08 qwen3-next-80b: fold-in pass 1
+2026-11-06 21:58:07 qwen3-next-80b: pass 1 exit 0; 2026-11-06 21:58:06 scored: 290 qwen3-next-80b runs found in stages hero2_qwen_all -> hero2_full_runs__qwen3-next-80b__other21.csv;
+2026-11-06 21:58:07 gemma-3-27b: fold-in pass 1
+2026-11-06 22:12:48 gemma-3-27b: pass 1 exit 0; 2026-11-06 22:12:48 scored: 290 gemma-3-27b runs found in stages hero2_gemma_all -> hero2_full_runs__gemma-3-27b__other21.csv;
+2026-11-06 22:12:48 DONE

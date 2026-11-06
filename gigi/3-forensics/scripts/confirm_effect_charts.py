@@ -78,8 +78,10 @@ def limit(env, model):
 def nsteps(log):
     """STEP markers; tower_of_hanoi's log has none, so there each TOOL CALL / RESPONSE block (one per message) counts."""
     t = open(log, errors="replace").read()
-    n = len(re.findall(r"^\s+STEP \d+\s*$", t, re.M))
-    return n or len(re.findall(r"^\s+(?:TOOL CALL|RESPONSE)\s*$", t, re.M))
+    # [ \t] not \s: \s also matches newlines, and on a log with a huge blank stretch (Qwen's repetition loops) ^\s+ backtracks
+    # quadratically (the 45-minute renders of 5-6 Nov). The header lines are indented with spaces only, so the count is the same.
+    n = len(re.findall(r"^[ \t]+STEP \d+[ \t]*$", t, re.M))
+    return n or len(re.findall(r"^[ \t]+(?:TOOL CALL|RESPONSE)[ \t]*$", t, re.M))
 
 
 def finished_logs(runs):

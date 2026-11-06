@@ -2,3 +2,41 @@
 2026-11-06 17:07:08 step wait
 2026-11-06 17:07:10 waiting: 21 of our apps still running
 2026-11-06 17:38:13 waiting: 11 of our apps still running
+2026-11-06 18:09:16 waiting: 8 of our apps still running
+2026-11-06 18:40:21 waiting: 4 of our apps still running
+2026-11-06 20:07:42 waiting: 2 of our apps still running
+2026-11-06 21:00:28 waiting for 4 local launcher(s) to finish downloading
+2026-11-06 21:03:28 all our apps finished
+2026-11-06 21:03:28 step fetch
+fetched hero2_qwen_all/async_conversion async_conversion/default/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-16-066389: 2026-11-06 21:05:10 gigi-forensics-async-conversion:async_conversion/default/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-16-066389: 2350 new files, 7 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/chess chess/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-27-669911: 2026-11-06 21:05:47 gigi-forensics-chess:chess/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-27-669911: 2596 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/copying_of_answers leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-39-833934: 2026-11-06 21:08:31 gigi-forensics-leaked-fix:leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-39-833934: 4106 new files, 42 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/currency_conversion currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722: 2026-11-06 21:08:38 gigi-forensics-currency-conversion:currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722: 216 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/eval_tampering eval_tampering/notes_self_weapons/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-59-04-279425: 2026-11-06 21:08:46 gigi-forensics-eval-tampering:eval_tampering/notes_self_weapons/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-59-04-279425: 342 new files, 23 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/funding_email funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-59-16-123399: 2026-11-06 21:08:58 gigi-forensics-funding-email:funding_email/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-59-16-123399: 617 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/lazy_investigation lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-59-28-575084: 2026-11-06 21:09:20 gigi-forensics-lazy-investigation:lazy_investigation/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-59-28-575084: 1500 new files, 76 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/leaked_scorer tables_coverage_tests/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-59-40-363578: 2026-11-06 21:09:48 gigi-forensics-tables-coverage-tests:tables_coverage_tests/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-59-40-363578: 254 new files, 42 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/leaked_tests leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-59-52-224212: 2026-11-06 21:12:15 gigi-forensics-leaked-fix:leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-59-52-224212: 1444 new files, 18 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/lucky_seed lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-00-04-144623: 2026-11-06 21:31:18 gigi-forensics-lucky-seed:lucky_seed/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-00-04-144623: 12025 new files, 33 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/lucky_seed_readable_grader lucky_seed_readable_grader/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-00-16-290498: 2026-11-06 21:42:41 gigi-forensics-lucky-seed-readable-grader:lucky_seed_readable_grader/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-00-16-290498: 9931 new files, 35 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/norvane norvane/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-00-28-663618: 2026-11-06 21:42:51 gigi-forensics-norvane:norvane/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-00-28-663618: 200 new files, 82 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/optimize_lru_cache optimize_cache_c/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-00-40-459168: 2026-11-06 21:45:09 gigi-forensics-optimize-cache-c:optimize_cache_c/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-00-40-459168: 1169 new files, 40 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/parse_duration parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-00-52-513873: 2026-11-06 21:45:16 gigi-forensics-parse-duration:parse_duration/misleading_example/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-00-52-513873: 243 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/puppeteer puppeteer/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-01-05-513444: 2026-11-06 21:45:32 gigi-forensics-puppeteer:puppeteer/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-01-05-513444: 753 new files, 9 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/reference_extraction aj_data_anon/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-01-17-347009: 2026-11-06 21:48:25 gigi-forensics-aj-data-anon:aj_data_anon/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-01-17-347009: 2694 new files, 42 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/revert_or_refactor revert_or_refactor/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-01-29-392955: 2026-11-06 21:49:36 gigi-forensics-revert-or-refactor:revert_or_refactor/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-01-29-392955: 1444 new files, 7 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/secret_number secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-01-41-144734: 2026-11-06 21:49:56 gigi-forensics-secret-number:secret_number/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-01-41-144734: 1109 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/swe_rebench_v2 swe_rebench_v2/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-02-14: 2026-11-06 21:50:13 gigi-forensics-swe-rebench-v2:swe_rebench_v2/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-02-14: 980 new files, 0 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/tictactoe tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-01-53-481459: 2026-11-06 21:50:27 gigi-forensics-tictactoe:tictactoe/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-01-53-481459: 717 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen_all/tower_of_hanoi palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-02-06-359773: 2026-11-06 21:51:01 gigi-forensics-palisades-tower-of-hanoi:palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_17-02-06-359773: 1548 new files, 22 already here (0 of them differ in size; local copy kept)
+2026-11-06 21:51:01 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 1 folder(s)
+2026-11-06 21:51:19 step grade
+2026-11-06 21:58:06 grading: 2026-11-06 21:51:19 estimate total (hero solo, qwen3-next-80b, stages hero2_qwen_all): 55 ungraded runs in 7 fleets, ~$48.44
+2026-11-06 21:58:06 grading: 2026-11-06 21:52:49 estimate total (hero solo, qwen3-next-80b, stages hero2_qwen_all): 34 ungraded runs in 7 fleets, ~$39.40
+2026-11-06 21:58:06 step score
+2026-11-06 21:58:06 scored: 290 qwen3-next-80b runs found in stages hero2_qwen_all -> hero2_full_runs__qwen3-next-80b__other21.csv
+2026-11-06 21:58:06 step audit
+audit (hero2_qwen_all): target 290, found 290, scored 240, 15 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3-next-80b__other21.md
+2026-11-06 21:58:07 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3-next-80b__other21.md
+2026-11-06 21:58:07 done (not committed: the parent session commits)
