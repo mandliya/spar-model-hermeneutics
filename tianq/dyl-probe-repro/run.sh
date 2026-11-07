@@ -16,6 +16,7 @@
 #   ./run.sh compare_diversity_matrices                       # CPU: its k = 1 probes as two transfer matrices
 #   ./run.sh compare_diversity_words                          # CPU: the same, the words alone in place of a probe
 #   ./run.sh compare_faithfulness                             # CPU: target minus substitute probe AUROC (DYL_READER)
+#   ./run.sh yuqi <step>                                      # one step of ../experiments/yuqi_questions (its <step>.py)
 #
 # Every invocation writes its own raw log to scratch/logs/run_<utc>_<command>.log:
 # the exact argv, the environment (python, nvidia-smi, pip freeze), the complete
@@ -39,7 +40,7 @@ set -a
 source <(tr -d '\r' < .env)
 set +a
 
-command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags|compare_no_followup|compare_diversity|compare_diversity_matrices|compare_diversity_words|compare_faithfulness> [args]}"
+command="${1:?usage: ./run.sh <extract|evaluate|compare_wordings|train_probe|compare_generalization|compare_outcome_flags|compare_no_followup|compare_diversity|compare_diversity_matrices|compare_diversity_words|compare_faithfulness|yuqi> [args]}"
 shift
 # The DYL pipeline's own steps live in dyl_repro/cli; each experiment's in ../experiments/<name>/.
 case "$command" in
@@ -48,8 +49,9 @@ case "$command" in
   compare_generalization | compare_no_followup | compare_diversity | compare_diversity_matrices | compare_diversity_words)
     module="experiments.cross_category_transfer.$command" ;;
   compare_faithfulness) module="experiments.hermeneutics.$command" ;;
+  yuqi) module="experiments.yuqi_questions.${1:?usage: ./run.sh yuqi <step>}"; command="yuqi_$1"; shift ;;
   *) echo "unknown command: $command (expected extract, evaluate, compare_wordings, train_probe," \
-          "compare_generalization, compare_outcome_flags, compare_no_followup, compare_diversity, compare_diversity_matrices, compare_diversity_words or compare_faithfulness)" >&2; exit 1 ;;
+          "compare_generalization, compare_outcome_flags, compare_no_followup, compare_diversity, compare_diversity_matrices, compare_diversity_words, compare_faithfulness or yuqi)" >&2; exit 1 ;;
 esac
 export PYTHONPATH="$HERE:$(dirname "$HERE")${PYTHONPATH:+:$PYTHONPATH}"
 

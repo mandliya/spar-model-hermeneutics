@@ -1,0 +1,23 @@
+21:32:01 start pull qwen3-235b
+21:36:44 exit=0 pull qwen3-235b
+21:37:11 restart pull qwen3-235b (listing scoped to each run)
+21:44:02 start monitors (80B, 235B)
+21:46:44 start arena qwen3-32b
+21:57:11 exit=0 arena qwen3-32b
+22:05:30 start arena gemma-3-27b-it
+22:07:12 exit=0 arena gemma-3-27b-it
+22:43:05 exit=0 pull qwen3-235b
+22:46:38 start arena gemma-3-27b-it
+22:46:43 start arena qwen3-next-80b
+22:47:57 exit=0 monitors
+23:21:19 start monitors fill (all targets)
+23:25:50 exit=0 monitors fill
+23:26:06 start arena qwen3-32b
+23:26:09 start arena qwen3-235b
+23:26:50 gemma and 80B arenas died with WSL (no exit line); restarting
+23:26:50 start arena gemma-3-27b-it
+23:26:54 start arena qwen3-next-80b
+23:44:57 exit=0 arena qwen3-32b
+23:45:15 exit=0 arena qwen3-235b
+23:45:22 exit=0 arena qwen3-next-80b
+23:45:34 exit=0 arena gemma-3-27b-it

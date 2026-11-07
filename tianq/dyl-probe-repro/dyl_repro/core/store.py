@@ -212,7 +212,7 @@ class RowStore:
     def pull(self) -> None:
         """Download this dataset's rows and hidden states that are missing locally.
 
-        One listing call, then only the missing files. Asking the Hub about every
+        One listing call (of this dataset's folder), then only the missing files. Asking the Hub about every
         file instead (a plain snapshot_download over a scratch the run itself
         wrote) spends one request per file, and 10k files trips the Hub's
         12k-requests-per-5-minutes limit even when nothing needs downloading.
@@ -235,10 +235,12 @@ class RowStore:
         before, idle = None, 0
         while True:
             try:
+                # Listed under this dataset only: the whole repo is ~130k files, ~130 listing calls a time.
                 missing = [
-                    f
-                    for f in self.api.list_repo_files(self.repo_id, repo_type="dataset")
-                    if f.startswith(wanted) and not (self.scratch / f).exists()
+                    entry.path
+                    for entry in self.api.list_repo_tree(self.repo_id, path_in_repo=self.dataset, recursive=True,
+                                                         repo_type="dataset")
+                    if entry.path.startswith(wanted) and not (self.scratch / entry.path).exists()
                 ]
                 print(f"    pull: {len(missing)} files missing locally", flush=True)
                 idle = idle + 1 if before is not None and len(missing) >= before else 0
