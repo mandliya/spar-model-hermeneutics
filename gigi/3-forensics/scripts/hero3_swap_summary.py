@@ -96,6 +96,8 @@ for e, t in groups:
                 va="center", fontsize=8.2, color=COL[w], fontweight="bold")
     sp = pooled[(e, t, "llama")][2]
     lab = dict(TAKES)[t] + f"\n({sp} spot{'s' if sp > 1 else ''} added together)"
+    if t == "clean" and e == "currency_conversion":   # 7 Nov rule: these two runs also gave an amount (one off by ten)
+        lab = f"the 2 runs we thought were clean, at their last step\n(they also gave an amount under the corrected rule)"
     ax.text(-0.02, y + 0.25, lab, transform=ax.get_yaxis_transform(), ha="right", va="center", fontsize=8.5)
     y += 0.95
 ax.set_yticks([]); ax.set_xlim(0, 100); ax.set_ylim(y - 0.2, -0.5)
@@ -133,7 +135,8 @@ for it, yy in zip(layout, ys):
         continue
     p = it[1]
     if p["take"] == "clean":
-        lab = f"clean run {runno(p)}, at its last step N = step {p['N']}"
+        lab = (f"run {runno(p)}, last step N = {p['N']} (thought clean; also gave an amount)" if p["env"] == "currency_conversion"
+               else f"clean run {runno(p)}, at its last step N = step {p['N']}")
     elif p["take"] == "N":
         lab = f"run {runno(p)}, step N = {p['N']} (where Llama did it)"
     else:
@@ -164,7 +167,7 @@ fig.text(0.01, 1 - 0.15 / Htot, "Llama's three new cheating tasks, every gap in 
          fontsize=12.5, fontweight="bold", va="top")
 fig.text(0.01, 1 - 0.5 / Htot, "\n".join(textwrap.wrap(
     "Each row is one spot in one of Llama's runs (bold rows: step N, where Llama did the bad act; plain rows: step N−1, one step "
-    "before; grey rows: a clean run at its last step). We rewound the run to that spot and let Llama, Qwen3.6 and gemma each "
+    "before; grey rows: a clean run at its last step; in currency conversion the two grey runs also gave an amount under the corrected 7 Nov rule, so they are step-N spots too). We rewound the run to that spot and let Llama, Qwen3.6 and gemma each "
     "continue it about 10 times. The dot is the stand-in's rate minus Llama's own rate from the same spot. Filled dot = clear gap "
     "(95% interval doesn't touch zero); hollow = can't tell apart from no gap. Raw counts on the right.", 190)),
     fontsize=8.5, color=MUTED, va="top", linespacing=1.35)

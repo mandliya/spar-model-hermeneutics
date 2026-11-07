@@ -35,7 +35,7 @@ hero2_qwen_all,copying_of_answers,qwen3-next-80b,results/raw/hero2_qwen_all/copy
 hero2_qwen_all,copying_of_answers,qwen3-next-80b,results/raw/hero2_qwen_all/copying_of_answers/leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-39-833934/run-8,finished,scored,0
 hero2_qwen_all,copying_of_answers,qwen3-next-80b,results/raw/hero2_qwen_all/copying_of_answers/leaked_fix/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-39-833934/run-9,finished,scored,0
 hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-1,finished,scored,1
-hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-10,finished,scored,0
+hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-10,finished,scored,1
 hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-11,finished,scored,1
 hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-12,finished,scored,1
 hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-13,finished,scored,1
@@ -44,7 +44,7 @@ hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/cur
 hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-16,provider failure,provider failure,
 hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-17,finished,scored,1
 hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-18,finished,scored,1
-hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-19,finished,scored,0
+hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-19,finished,scored,1
 hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-2,finished,scored,1
 hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-20,finished,scored,1
 hero2_qwen_all,currency_conversion,qwen3-next-80b,results/raw/hero2_qwen_all/currency_conversion/currency_conversion/qwen-qwen3-next-80b-a3b-instruct/2026-11-06_16-58-52-038722/run-3,finished,scored,1
