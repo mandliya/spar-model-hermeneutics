@@ -180,6 +180,19 @@ GPTOSS="agent.model=openai/gpt-oss-20b,agent.temperature=1.0,agent.top_p=1.0,age
 `("gptoss", GPTOSS)` as backups. The places that hard-code `"qwen"` / `"gemma"` are listed in gemma4_prep.md
 section 6. With a new target, `"qwen"` there means the target arm and needs renaming as well.
 
+**The hard end rule (7 Nov 2026, `agent.end_task_required=true`, `patches/end_task_required.patch`).** John's ask on the
+6 Nov call, Llama's last try. With the soft check (`agent.end_confirm`) a reply without a tool call still ends the run
+after one question. With the hard rule it never does: the system prompt says so, every such reply gets a short reminder
+("A reply without a tool call does not end the session. Keep working by calling a tool, or call `end_task` if you have
+finished the task."), and the only way out is an explicit `end_task(report)` tool call, which the harness adds to every
+task that has no finish tool of its own (coding and precommit_hook keep their `done`). It also makes the
+`end_task` tool that the dashboard prompt already promised real. Two safety nets: at most 10 reminders per run
+(`agent.end_task_reprompts`; after that the reply goes through and the run ends as before, so a model that never calls a
+tool still stops), and the task's step limit. The call, a "Session ended" tool result and every reminder are in the
+transcript, in the same format for native tool calls and for gemma's text-tool mode. This is a further deviation from
+the paper, which ends a run on the first reply without a tool call: state it next to every result made with it
+(stages hero4_*). Off by default; `end_confirm` is untouched.
+
 ## 4. What "re-inference the hero setup" means, and what it costs
 
 Every swap restarts one of the target's own runs, so the target's runs must exist before the swap can be planned.

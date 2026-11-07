@@ -1,0 +1,24 @@
+2026-11-07 11:27:33 start (model llama-3.3-70b, stages hero4_llama,hero4_llama_key, ceiling 2702, grade cap 60, files hero4_full_runs__llama-3.3-70b*.csv + hero4_loss_audit__llama-3.3-70b.md)
+2026-11-07 11:27:33 step wait
+2026-11-07 11:27:35 waiting: 4 of our apps still running
+2026-11-07 11:45:06 all our apps finished
+2026-11-07 11:45:06 step fetch
+fetched hero4_llama/coding coding/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-25-02-403801: 2026-11-07 11:45:13 gigi-forensics-coding:coding/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-25-02-403801: 197 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama/coding_norules coding/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-25-14-564662: 2026-11-07 11:45:20 gigi-forensics-coding:coding/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-25-14-564662: 191 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama/dashboard_costly_failure dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-25-38-620043: 2026-11-07 11:45:27 gigi-forensics-dashboard-perf:dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-25-38-620043: 234 new files, 52 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama/grade_your_own grade_your_own/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-25-51-235457: 2026-11-07 11:45:31 gigi-forensics-grade-your-own:grade_your_own/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-25-51-235457: 27 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama/optimize_rendering_engine dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-26-03-956537: 2026-11-07 11:45:36 gigi-forensics-dashboard-perf:dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-26-03-956537: 100 new files, 27 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama/optimize_rendering_engine_graded stripped_engine/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-26-14-620466: 2026-11-07 11:45:40 gigi-forensics-stripped-engine:stripped_engine/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-26-14-620466: 48 new files, 27 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama/precommit_hook precommit_hook/precommit_hook/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-25-26-738432: 2026-11-07 11:45:54 gigi-forensics-precommit-hook:precommit_hook/precommit_hook/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-25-26-738432: 771 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama_key/ai_rd ai_rd/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-26-27-951733: 2026-11-07 11:46:08 gigi-forensics-ai-rd:ai_rd/meta-llama-llama-3.3-70b-instruct/2026-11-07_11-26-27-951733: 764 new files, 12 already here (0 of them differ in size; local copy kept)
+2026-11-07 11:46:08 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 2 folder(s)
+2026-11-07 11:46:08 step grade
+2026-11-07 11:47:45 grading: 2026-11-07 11:46:08 estimate total (hero solo, llama-3.3-70b, stages hero4_llama,hero4_llama_key): 25 ungraded runs in 4 fleets, ~$5.34
+2026-11-07 11:47:45 grading: 2026-11-07 11:46:38 estimate total (hero solo, llama-3.3-70b, stages hero4_llama,hero4_llama_key): 18 ungraded runs in 4 fleets, ~$3.85
+2026-11-07 11:47:45 step score
+2026-11-07 11:47:45 scored: 95 llama-3.3-70b runs found in stages hero4_llama, hero4_llama_key -> hero4_full_runs__llama-3.3-70b.csv
+2026-11-07 11:47:45 step audit
+audit (hero4_llama, hero4_llama_key): target 95, found 95, scored 90, 3 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero4_loss_audit__llama-3.3-70b.md
+2026-11-07 11:47:45 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero4_loss_audit__llama-3.3-70b.md
+2026-11-07 11:47:45 done (not committed: the parent session commits)
