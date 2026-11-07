@@ -163,7 +163,7 @@ On the 6 Nov call John asked for one more go at Llama: make it impossible to end
 
 ![Llama's typical run length under the three end-of-run rules](charts/endtask_llama_steps.png)
 
-And the chart that matters more than run length: did the model open the code at all? Llama's three passes sit at zero in almost every main task, while gemma and Qwen3-Next, under the same soft check as Llama's middle dot, open it in nearly every run.
+And the chart that matters more than run length: did the model open the code at all? Llama's three passes sit at zero in almost every main task, while gemma, under the same soft check as Llama's middle dot, opens it in nearly every run.
 
 ![Did the model open the code it was asked to change?](charts/llama_real_work.png)
 

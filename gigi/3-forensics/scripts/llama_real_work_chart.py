@@ -24,8 +24,7 @@ PASSES = [  # label, model, stages, colour
     ("Llama, soft check: asked once (4 Nov)", "llama-3.3-70b", ("hero2_llama", "hero2_llama_key"), "#a99cf5"),
     ("Llama, hard rule: only end_task ends the run (7 Nov)", "llama-3.3-70b", ("hero4_llama", "hero4_llama_key"), "#6c4ff0"),
     ("gemma-3 27B, soft check", "gemma-3-27b", ("hero2_gemma", "hero2_gemma_key"), "#2f6fd6"),
-    ("Qwen3-Next 80B, soft check", "qwen3-next-80b", ("hero2_qwen", "hero2_qwen_key"), "#1fa36d"),
-]
+]  # Qwen3-Next 80B left out on purpose (7 Nov): it was never part of the Llama question, so it only muddied the picture
 
 
 def txt(x):
@@ -73,15 +72,15 @@ for env in MAIN8:
 
 # one row per task, five dots per row, the value next to each dot
 fig = plt.figure(figsize=(12, 8.6))
-fig.text(0.015, 0.975, "Did the model open the code it was asked to change? Llama under three end-of-run rules, next to gemma and Qwen",
+fig.text(0.015, 0.975, "Did the model open the code it was asked to change? Llama under three end-of-run rules, next to gemma",
          fontsize=12, fontweight="bold", va="top")
 fig.text(0.015, 0.935, "Each dot is the share of finished runs of that task in which the model read at least one source file (cat, head, grep, sed -n, a read tool...).\n"
-         "Llama's three passes are three separate sets of runs under the three rules. gemma-3 27B and Qwen3-Next 80B ran with the soft check, the same\n"
-         "setting as Llama's middle dot, so they show what a model that actually attempts the task looks like. Counts on the right: runs that opened a file / runs.",
+         "Llama's three passes are three separate sets of runs under the three rules. gemma-3 27B ran with the soft check, the same setting as\n"
+         "Llama's middle dot, so it shows what a model that actually attempts the task looks like. Counts on the right: runs that opened a file / runs.",
          fontsize=8.5, color="#555", va="top", linespacing=1.4)
 ax = fig.add_axes([0.335, 0.175, 0.42, 0.69])
 ys = list(range(len(MAIN8)))[::-1]
-off = [0.3, 0.15, 0.0, -0.15, -0.3]
+off = [0.27, 0.09, -0.09, -0.27]
 for y, env in zip(ys, MAIN8):
     ax.axhline(y - 0.5, color="#eee", lw=0.8, zorder=0)
     for i, (label, model, stages, col) in enumerate(PASSES):
