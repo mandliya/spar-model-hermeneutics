@@ -18,7 +18,7 @@ STAGES = ("hero4_llama", "hero4_llama_key")
 REMIND = "A reply without a tool call does not end the session."
 RULE = "the session does not end when you send a message without a tool call"
 END_TOOLS = {"end_task", "done"}
-READ_RE = re.compile(r"\b(cat|less|head|tail|sed -n|nl|bat|view|open)\b[^|;&\n]*\.(py|js|ts|tsx|c|cc|cpp|h|rs|go|java|json|yaml|yml|toml|md|txt|sh)\b|"
+READ_RE = re.compile(r"\b(cat|less|head|tail|sed -n|nl|bat|view|open)\b[^|;&\n]*\.(py|js|mjs|cjs|ts|tsx|jsx|c|cc|cpp|h|rs|go|java|json|yaml|yml|toml|md|txt|sh)\b|"
                      r"\b(grep|rg|ag)\b|\bread_file\b|\bview_file\b", re.I)
 WRITE_RE = re.compile(r"(cat\s*>|tee\s|>\s*\S+\.(py|js|ts|c|h|json|yaml|yml|txt|md|sh)|<<\s*['\"]?EOF|\bsed -i\b|apply_patch|write_file|"
                       r"echo .*>\s*\S|python\s*-\s*<<|git commit|cp\s|mv\s)", re.I)

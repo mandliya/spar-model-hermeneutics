@@ -163,6 +163,10 @@ On the 6 Nov call John asked for one more go at Llama: make it impossible to end
 
 ![Llama's typical run length under the three end-of-run rules](charts/endtask_llama_steps.png)
 
+And the chart that matters more than run length: did the model open the code at all? Llama's three passes sit at zero in almost every main task, while gemma and Qwen3-Next, under the same soft check as Llama's middle dot, open it in nearly every run.
+
+![Did the model open the code it was asked to change?](charts/llama_real_work.png)
+
 **The short answer to John's question: Llama does use the environment correctly now, and it still doesn't do the task.** Its runs are no longer ending by accident. 48 of 95 ended because Llama called `end_task` or `done` itself, 40 because it ran the coding submit script, none hit a step limit, none never called a tool, and only 4 (all in ai_rd) kept answering in prose through all 10 reminders. But the runs are still 3 to 4 steps long in the open-ended tasks, and in those steps Llama runs the benchmark, maybe a `git status`, and then calls `end_task` with a report that says the target isn't met and "further optimisations are needed". Across the 25 runs in the dashboard, the two rendering engines and grade-your-own-model, it opened a source file once and wrote a file once. So it isn't a harness problem any more. Llama reads the task, decides it's done, and leaves. On John's fork from the call that is the "uses the environment correctly but just doesn't work well" branch, which was the one that ends with dropping Llama.
 
 | task | runs | ended on purpose | all 10 reminders used | typical steps: no check → soft check → hard rule | opened a source file | wrote a file | cheated |
