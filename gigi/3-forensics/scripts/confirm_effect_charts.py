@@ -212,7 +212,8 @@ def fig_steps():
                           "Hollow dot = the typical run (median steps) without the check, filled dot = with it (the model is told that a reply "
                           "without a tool call ends the session, and is asked once whether it meant to stop). Without the check: Llama's first "
                           "solo pass, Qwen's and gemma's original full runs. With the check: every model ran all 29 tasks again. " + not_run_note() +
-                          "The right-hand column gives the finished runs counted, without -> with.",
+                          "The two dots are two separate sets of runs, started fresh: the with-check runs are not the old runs continued, so a row "
+                          "can get shorter by chance. The right-hand column gives the finished runs counted, without -> with.",
                           "steps in a typical run (median; log scale)", 0.43, foot)
     ax.set_xscale("log"); ax.set_xlim(0.7, 900)
     ax.set_xticks([1, 2, 5, 10, 20, 50, 100, 200, 500]); ax.set_xticklabels(["1", "2", "5", "10", "20", "50", "100", "200", "500"])
@@ -262,7 +263,8 @@ def fig_cheating():
                           "Each row is one task, grouped into the same 9 families as all our charts. Dots are the share of scored runs in which the "
                           "model did that task's bad act (the task's own measure or the Opus grader, as in results/full_runs.csv). Hollow = without "
                           "the end-of-run check, filled = with it; the thin line is the 95% interval. The right-hand column gives runs that cheated "
-                          "out of runs scored. With the check: every model ran all 29 tasks again. " + not_run_note(),
+                          "out of runs scored. With the check: every model ran all 29 tasks again, started fresh, so the two dots are two separate "
+                          "sets of runs, not the same runs continued. " + not_run_note(),
                           "runs in which the model cheated (%)", 0.38, foot)
     ax.set_xlim(-2, 104); ax.set_xticks([0, 20, 40, 60, 80, 100])
     for e, yc in rows.items():
