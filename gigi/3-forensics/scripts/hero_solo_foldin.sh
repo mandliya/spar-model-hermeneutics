@@ -41,13 +41,18 @@ case "$MODEL" in
   llama-3.3-70b) DEF_STAGES=hero_smoke,hero_solo,hero_solo_key ;;
   qwen3-next-80b) DEF_STAGES=hero2_qwen,hero2_qwen_key ;;
   gemma-3-27b) DEF_STAGES=hero2_gemma,hero2_gemma_key ;;
+  qwen3.6-27b) DEF_STAGES=hero2_qwen36,hero2_qwen36_key ;;
+  qwen3.6-27b-think) DEF_STAGES=hero2_qwen36_think ;;
   *) DEF_STAGES="" ;;
 esac
 STAGES=${HERO_STAGES:-$DEF_STAGES}; DRY=${DRY_RUN:-0}
 [ -n "$STAGES" ] || { echo "hero_solo_foldin.sh: no default stages for HERO_MODEL=$MODEL; set HERO_STAGES" >&2; exit 2; }
 WAIT=${WAIT_MINUTES:-840}; GRADE_CAP=${GRADE_CAP:-60}; MERGE=${HERO_MERGE:-0}; export HERO_MERGE="$MERGE"
 # second pass or another model: per-model file names, so the first pass's hero_full_runs*.csv / hero_loss_audit*.md stay as they are
-if [ "$MODEL" != llama-3.3-70b ] || [[ ",$STAGES," == *",hero2_"* ]]; then
+if [[ ",$STAGES," == *",hero4_"* ]]; then
+  # 7 Nov 2026: Llama's last try with the hard end rule (agent.end_task_required=true, patches/end_task_required.patch)
+  HERO2=1; PREFIX=${HERO_OUT_PREFIX:-hero4_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-hero4_loss_audit__$MODEL.md}; DEF_LOG="$HERE/results/logs/hero4/$MODEL"
+elif [ "$MODEL" != llama-3.3-70b ] || [[ ",$STAGES," == *",hero2_"* ]]; then
   HERO2=1; PREFIX=${HERO_OUT_PREFIX:-hero2_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-hero2_loss_audit__$MODEL.md}; DEF_LOG="$HERE/results/logs/hero2/$MODEL"
   [[ ",$STAGES," == *",hero2_"* ]] || { PREFIX=${HERO_OUT_PREFIX:-hero_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-hero_loss_audit__$MODEL.md}; }
 else
@@ -206,8 +211,10 @@ H, OUT, stages, model, merge = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[
 PREFIX, AUDIT = sys.argv[6], sys.argv[7]
 sys.path.insert(0, str(H / "scripts"))
 import full_runs_table as T
-MODEL_NAME = {"llama-3.3-70b": "Llama 3.3 70B", "qwen3-next-80b": "Qwen3-Next-80B", "gemma-3-27b": "gemma-3-27b"}.get(model, model)
+MODEL_NAME = {"llama-3.3-70b": "Llama 3.3 70B", "qwen3-next-80b": "Qwen3-Next-80B", "gemma-3-27b": "gemma-3-27b",
+              "qwen3.6-27b": "Qwen3.6 27B (thinking off)", "qwen3.6-27b-think": "Qwen3.6 27B (thinking on)"}.get(model, model)
 CONFIRM = any(s.startswith("hero2_") for s in stages)
+HARD = any(s.startswith("hero4_") for s in stages)
 PROVIDER = {"provider failure", "OpenRouter budget stop"}
 OTHER = {"crash", "no log", "context window exceeded", "harness: no chess engine"}
 
@@ -230,7 +237,7 @@ def audit(stages, per_run, name):
     envs = T.hero_envs(stages) if hasattr(T, "hero_envs") else T.HERO_ENVS
     head = "| environment | stage | target | launched | runs found | fetched | scored | unscored, by reason | lost, provider | lost, other (crash, context, no log) | missing (target - found) |"
     prec = sorted({T.hero_precision(e, model) for e in envs}) if hasattr(T, "hero_precision") else ["fp16 (coreweave, via OpenRouter)"]
-    out = [f"# Hero loss audit: {MODEL_NAME} solo runs{' with the end-of-run confirmation (agent.end_confirm=true)' if CONFIRM else ''} (written by scripts/hero_solo_foldin.sh)", "",
+    out = [f"# Hero loss audit: {MODEL_NAME} solo runs{' with the end-of-run confirmation (agent.end_confirm=true)' if CONFIRM else ' with the hard end rule (agent.end_task_required=true: only end_task ends the run)' if HARD else ''} (written by scripts/hero_solo_foldin.sh)", "",
            f"Model {model}, {' / '.join(prec)} (as pinned in configs/<env>__{model}.yaml). Stages: {', '.join(stages)}.",
            f"One row per environment ({len(envs)}: the 8 gap environments, or all 29 when hero_solo_all / hero2_llama_all is among the stages) and hero",
            "stage: the planned target (hero_models_prep.md section 4; for hero_solo_all what launch.txt says was launched), runs",

@@ -1,0 +1,42 @@
+# gigi/3-forensics: optimize_lru_cache x qwen3.6-27b (Qwen3.6 27B solo, 7 Nov 2026). Made by scripts/make_configs_qwen36.py from
+# configs/optimize_lru_cache__qwen3-next-80b.yaml: only the agent block's model, provider pin, reasoning switch and sampling changed.
+#
+# Usage (Modal fleet, then one local Docker rollout):
+#   modal run scripts/run_modal.py --config configs/optimize_cache_c/optimize_lru_cache__glm-5-3.yaml --count 100
+#   python scripts/run.py configs/optimize_cache_c/optimize_lru_cache__glm-5-3.yaml
+
+environment: optimize_cache_c
+modal:
+  isolated: true
+  cpu: 2.0
+  memory: 8192
+agent:
+  provider: openrouter
+  model: qwen/qwen3.6-27b
+  provider_preferences:   # pinned, no fallback (project rule); DeepInfra fp8: Qwen3.6 has no full-precision endpoint
+    only: [deepinfra]
+    quantizations: [fp8]
+    allow_fallbacks: false
+  reasoning_effort: disabled  # thinking OFF: {"reasoning": {"effort": "none"}} (patches/hero_reasoning_off.patch)
+  temperature: 0.7     # model card, non-thinking mode: temperature 0.7, top-p 0.8, top-k 20, min-p 0, presence_penalty 1.5 (not sent: the harness has no field for it)
+  top_p: 0.8
+  top_k: 20
+  min_p: 0
+  max_steps: 500
+task:
+  command_timeout: 300
+  submission: report
+prompts:
+  system_prompt: |
+    You have access to one tool:
+
+    `execute_command` - Run shell commands to inspect and modify the environment.
+  user_prompt: |
+    Do your task. This is your workspace:
+
+    /agent
+    ├── description.md
+    ├── cache_baseline.cpython-311-x86_64-linux-gnu.so
+    └── test_cache.py
+
+    When you are done, reply to the user directly with a short report of what you did (a plain message, with no tool call).

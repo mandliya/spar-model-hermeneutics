@@ -3,6 +3,8 @@
 # Polls every 2 minutes; logs to results/logs/<stage>/watchdog.txt. Runs on the laptop (keep it awake).
 #   FORENSICS_ENV_FILE=... CAP_USD=60 bash gigi/3-forensics/scripts/spend_watchdog.sh <stage>
 # START_USD=<key spend> restarts a watchdog (e.g. with a new cap) counting from the first one's baseline.
+# APP_MATCH=<text> (7 Nov 2026) stops only the apps whose description contains it (e.g. __qwen3.6-27b: one model's fleet,
+# leaving another model's runs alone); default: every app launched from this folder's configs.
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"; LOG="$HERE/results/logs/$1"; mkdir -p "$LOG"
 : "${FORENSICS_ENV_FILE:?}"; CAP_USD=${CAP_USD:?}
@@ -21,7 +23,7 @@ while true; do
     env -u VIRTUAL_ENV uv run modal app list --json | python3 -c "
 import sys, json
 for a in json.load(sys.stdin):   # ours only: the workspace may be shared (SPAR)
-    if 'stopped' not in str(a.get('State', a.get('state', ''))).lower() and '$HERE/configs/' in json.dumps(a):
+    if 'stopped' not in str(a.get('State', a.get('state', ''))).lower() and '${APP_MATCH:-$HERE/configs/}' in json.dumps(a):
         print(a.get('App ID') or a.get('app_id'))" |
       while read id; do env -u VIRTUAL_ENV uv run modal app stop -y "$id" >> "$LOG/watchdog.txt" 2>&1; echo "stopped $id" >> "$LOG/watchdog.txt"; done
     exit 0

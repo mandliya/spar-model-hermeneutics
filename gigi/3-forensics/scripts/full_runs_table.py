@@ -283,7 +283,8 @@ HERO2_STAGES = {HERO_MODEL_DEFAULT: ("hero2_llama", "hero2_llama_key"), "qwen3-n
 HERO_ENVS = ("ai_rd", "coding", "coding_norules", "dashboard_costly_failure", "grade_your_own",
              "optimize_rendering_engine", "optimize_rendering_engine_graded", "precommit_hook")
 HERO_ENVS_ALL = tuple(sorted(set(MEASURES) | set(JUDGED)))   # the 29 environments of results/full_runs.csv, its order
-HERO_ALL_STAGES = ("hero_solo_all", "hero2_llama_all", "hero2_qwen_all", "hero2_gemma_all", "hero2_qwen36_all")   # 6 Nov: Qwen and gemma, other 21 with the check
+HERO_ALL_STAGES = ("hero_solo_all", "hero2_llama_all", "hero2_qwen_all", "hero2_gemma_all", "hero2_qwen36_all",
+                   "hero4_llama_all")   # 6 Nov: Qwen and gemma, other 21 with the check; 7 Nov: Llama, other 21 with the hard rule
 _GAP7 = {"coding": 20, "coding_norules": 20, "dashboard_costly_failure": 10, "grade_your_own": 5,
          "optimize_rendering_engine": 5, "optimize_rendering_engine_graded": 5, "precommit_hook": 20}
 HERO_TARGETS = {"hero_smoke": {"coding": 2, "optimize_rendering_engine": 2, "dashboard_costly_failure": 2},

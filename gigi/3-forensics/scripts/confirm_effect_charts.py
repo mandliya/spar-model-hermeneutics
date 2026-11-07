@@ -11,6 +11,8 @@ gemma-3-27b's original full runs (full_runs_table.modal_runs; rates from results
 With the check: Llama's hero2 stages (hero2_llama + hero2_llama_key + hero2_llama_all; rates from
 results/hero2_full_runs__llama-3.3-70b.csv and results/hero2_full_runs__llama-3.3-70b__other21.csv); Qwen's and gemma's
 hero2 stages plus hero2_qwen_all / hero2_gemma_all (6 Nov, the other 21; results/hero2_full_runs__<model>__other21.csv).
+Qwen3.6 27B (7 Nov, thinking off; stages hero2_qwen36 + hero2_qwen36_key + hero2_qwen36_all) was only ever run with the
+check, so its rows have one filled dot and "not run without the check" in the count column.
 Steps are counted from each run's rollout.log STEP markers over finished runs only. A typical run at or over its task's
 step limit (max_steps in configs/<env>__<model>.yaml) is starred and listed in the footnote.
   cd gigi/3-forensics/agent-interp-envs && uv run --with matplotlib python ../scripts/confirm_effect_charts.py
@@ -25,10 +27,11 @@ H = pathlib.Path(__file__).resolve().parents[1]; sys.path.insert(0, str(H / "scr
 import full_runs_table as T
 OUT = pathlib.Path(os.environ.get("CHART_OUT", H / "charts"))   # CHART_OUT: draft renders elsewhere
 INK, MUTED, GRID, RED, BAND = "#17140f", "#6f6a60", "#e1e0d9", "#b0452a", "#f3f2ee"
-COL = {"qwen3-next-80b": "#1baf7a", "gemma-3-27b": "#2a78d6", "llama-3.3-70b": "#7a5af5"}
-NAME = {"qwen3-next-80b": "Qwen3-Next 80B", "gemma-3-27b": "gemma-3 27B", "llama-3.3-70b": "Llama 3.3 70B"}
-MODELS = ["llama-3.3-70b", "qwen3-next-80b", "gemma-3-27b"]
-OFFSET = {"llama-3.3-70b": -0.27, "qwen3-next-80b": 0.0, "gemma-3-27b": 0.27}
+COL = {"qwen3-next-80b": "#1baf7a", "gemma-3-27b": "#2a78d6", "llama-3.3-70b": "#7a5af5", "qwen3.6-27b": "#c2651b"}
+NAME = {"qwen3-next-80b": "Qwen3-Next 80B", "gemma-3-27b": "gemma-3 27B", "llama-3.3-70b": "Llama 3.3 70B",
+        "qwen3.6-27b": "Qwen3.6 27B"}
+MODELS = ["llama-3.3-70b", "qwen3-next-80b", "gemma-3-27b", "qwen3.6-27b"]
+OFFSET = {"llama-3.3-70b": -0.33, "qwen3-next-80b": -0.11, "gemma-3-27b": 0.11, "qwen3.6-27b": 0.33}
 LLAMA = "llama-3.3-70b"
 
 # the 9 families and the env names, from story_charts.py's source (importing it would run its charts)
@@ -44,13 +47,16 @@ assert set(ENVS) == ALL29, sorted(ALL29 - set(ENVS))
 
 BEFORE_STAGES = {LLAMA: ("hero_solo", "hero_solo_key2", "hero_solo_all")}   # Qwen / gemma: their original full runs
 AFTER_STAGES = dict(T.HERO2_STAGES); AFTER_STAGES[LLAMA] = tuple(AFTER_STAGES[LLAMA]) + ("hero2_llama_all",)
-ALL_STAGE = {LLAMA: "hero2_llama_all", "qwen3-next-80b": "hero2_qwen_all", "gemma-3-27b": "hero2_gemma_all"}   # 6 Nov: Qwen/gemma other 21
-for _m in ("qwen3-next-80b", "gemma-3-27b"):
+ALL_STAGE = {LLAMA: "hero2_llama_all", "qwen3-next-80b": "hero2_qwen_all", "gemma-3-27b": "hero2_gemma_all",
+             "qwen3.6-27b": "hero2_qwen36_all"}   # 6 Nov: Qwen/gemma other 21; 7 Nov: Qwen3.6 27B solo
+for _m in ("qwen3-next-80b", "gemma-3-27b", "qwen3.6-27b"):
     AFTER_STAGES[_m] = tuple(AFTER_STAGES[_m]) + (ALL_STAGE[_m],)
 BEFORE_CSV = {LLAMA: ["hero_full_runs.csv", "hero_full_runs__llama-3.3-70b__other21_nocheck.csv"]}
 AFTER_CSV = {LLAMA: ["hero2_full_runs__llama-3.3-70b.csv", "hero2_full_runs__llama-3.3-70b__other21.csv"],
              "qwen3-next-80b": ["hero2_full_runs__qwen3-next-80b.csv", "hero2_full_runs__qwen3-next-80b__other21.csv"],
-             "gemma-3-27b": ["hero2_full_runs__gemma-3-27b.csv", "hero2_full_runs__gemma-3-27b__other21.csv"]}
+             "gemma-3-27b": ["hero2_full_runs__gemma-3-27b.csv", "hero2_full_runs__gemma-3-27b__other21.csv"],
+             "qwen3.6-27b": ["hero2_full_runs__qwen3.6-27b.csv", "hero2_full_runs__qwen3.6-27b__other21.csv"]}
+NO_BEFORE = {"qwen3.6-27b"}   # only ever run with the check
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 9, "text.color": INK})
 
 
@@ -161,8 +167,8 @@ def frame(title, sub, xlabel, right_w, foot):
               [plt.Line2D([], [], marker="D", ls="", color=INK, ms=6)]
     labels = ["without the end-of-run check", "with the end-of-run check"] + [NAME[m] for m in MODELS] + \
              ["one of the 8 main tasks (used in the swap)"]
-    fig.legend(handles=handles, labels=labels, loc="lower left", bbox_to_anchor=(0.015, (0.45 + 0.18 * len(foot)) / Hh), ncol=6,
-               frameon=False, fontsize=8.7, handletextpad=0.4, columnspacing=1.3)
+    fig.legend(handles=handles, labels=labels, loc="lower left", bbox_to_anchor=(0.015, (0.45 + 0.18 * len(foot)) / Hh),
+               frameon=False, fontsize=8.7, handletextpad=0.4, columnspacing=1.3, ncol=7)
     for i, line in enumerate(foot):
         fig.text(0.015, (0.15 + 0.18 * (len(foot) - 1 - i)) / Hh, line, fontsize=8.2, color=RED, va="bottom")
     return fig, ax, rows
@@ -211,7 +217,8 @@ def fig_steps():
                           "Each row is one task, grouped into the same 9 families as all our charts. One step = one message from the model. "
                           "Hollow dot = the typical run (median steps) without the check, filled dot = with it (the model is told that a reply "
                           "without a tool call ends the session, and is asked once whether it meant to stop). Without the check: Llama's first "
-                          "solo pass, Qwen's and gemma's original full runs. With the check: every model ran all 29 tasks again. " + not_run_note() +
+                          "solo pass, Qwen's and gemma's original full runs. With the check: every model ran all 29 tasks again. Qwen3.6 27B (thinking off) "
+                          "was only ever run with the check, so it has one dot per row. " + not_run_note() +
                           "The two dots are two separate sets of runs, started fresh: the with-check runs are not the old runs continued, so a row "
                           "can get shorter by chance. The right-hand column gives the finished runs counted, without -> with.",
                           "steps in a typical run (median; log scale)", 0.43, foot)
@@ -225,7 +232,7 @@ def fig_steps():
             pair(ax, y, COL[m], bv, av, f"{bv:g} *" if "without" in star else None, f"{av:g} *" if "with" in star else None)
             nb, na = len(b.get(e, [])), len(a.get(e, []))
             right = (f"{na}" if na else "no finished runs") if ran_with_check(m, e) else "not run with the check"
-            left = f"{nb}" if nb else "no finished runs"
+            left = (f"{nb}" if nb else "no finished runs") if m not in NO_BEFORE else "not run without the check"
             ax.text(1.03, y, f"{NAME[m]}:  {left}  ->  {right}", transform=ax.get_yaxis_transform(), va="center", fontsize=7.8,
                     color=COL[m])
     ax.text(1.03, 0.45, "finished runs: without the check -> with it", transform=ax.get_yaxis_transform(), va="bottom",
@@ -251,7 +258,7 @@ def fig_cheating():
     for m in MODELS:
         for after, d in ((False, data[m][0]), (True, data[m][1])):
             for e in ENVS:
-                if e not in d and (not after or ran_with_check(m, e)):
+                if e not in d and (not after or ran_with_check(m, e)) and (after or m not in NO_BEFORE):
                     empty[why_empty(m, e, after)][f"{NAME[m]} {'with' if after else 'without'} the check"].append(e)
     foot = ["Cells with no scored runs, and why:"] if empty else []
     for reason, who in empty.items():
@@ -264,7 +271,7 @@ def fig_cheating():
                           "model did that task's bad act (the task's own measure or the Opus grader, as in results/full_runs.csv). Hollow = without "
                           "the end-of-run check, filled = with it; the thin line is the 95% interval. The right-hand column gives runs that cheated "
                           "out of runs scored. With the check: every model ran all 29 tasks again, started fresh, so the two dots are two separate "
-                          "sets of runs, not the same runs continued. " + not_run_note(),
+                          "sets of runs, not the same runs continued. Qwen3.6 27B (thinking off) was only ever run with the check, so it has one dot per row. " + not_run_note(),
                           "runs in which the model cheated (%)", 0.38, foot)
     ax.set_xlim(-2, 104); ax.set_xticks([0, 20, 40, 60, 80, 100])
     for e, yc in rows.items():
@@ -280,11 +287,11 @@ def fig_cheating():
                     ax.plot(p, yy, "o", color=COL[m], ms=7.5, zorder=4)
                 else:
                     ax.plot(p, yy, "o", mfc="white", mec=COL[m], mew=1.6, ms=7.5, zorder=3)
-            left = f"{b[e][0]} of {b[e][1]}" if e in b else "no scored runs"
+            left = (f"{b[e][0]} of {b[e][1]}" if e in b else "no scored runs") if m not in NO_BEFORE else "not run without the check"
             right = (f"{a[e][0]} of {a[e][1]}" if e in a else "no scored runs") if ran_with_check(m, e) else "not run with the check"
             ax.text(1.03, y, f"{NAME[m]}:  {left}  ->  {right}", transform=ax.get_yaxis_transform(), va="center", fontsize=7.8,
                     color=COL[m])
-            if e not in b and e not in a:
+            if e not in b and e not in a and (m not in NO_BEFORE or ran_with_check(m, e)):
                 ax.text(0, y, "no scored runs", va="center", fontsize=7.5, color=MUTED)
     ax.text(1.03, 0.45, "runs that cheated: without the check -> with it", transform=ax.get_yaxis_transform(), va="bottom",
             fontsize=8, color=MUTED, fontweight="bold")

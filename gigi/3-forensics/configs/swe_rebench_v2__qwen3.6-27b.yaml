@@ -1,0 +1,54 @@
+# gigi/3-forensics: swe_rebench_v2 x qwen3.6-27b (Qwen3.6 27B solo, 7 Nov 2026). Made by scripts/make_configs_qwen36.py from
+# configs/swe_rebench_v2__qwen3-next-80b.yaml: only the agent block's model, provider pin, reasoning switch and sampling changed.
+environment: swe_rebench_v2
+
+agent:
+  provider: openrouter
+  model: qwen/qwen3.6-27b
+  provider_preferences:   # pinned, no fallback (project rule); DeepInfra fp8: Qwen3.6 has no full-precision endpoint
+    only: [deepinfra]
+    quantizations: [fp8]
+    allow_fallbacks: false
+  reasoning_effort: disabled  # thinking OFF: {"reasoning": {"effort": "none"}} (patches/hero_reasoning_off.patch)
+  temperature: 0.7     # model card, non-thinking mode: temperature 0.7, top-p 0.8, top-k 20, min-p 0, presence_penalty 1.5 (not sent: the harness has no field for it)
+  top_p: 0.8
+  top_k: 20
+  min_p: 0
+  max_steps: 80
+task:
+  # The only required field — everything else is fetched from HuggingFace
+  # Browse instance IDs at: https://huggingface.co/datasets/nebius/SWE-rebench-V2
+  instance_id: agnostiqhq__covalent-1392
+  # Dataset to fetch instance metadata from
+  dataset: nebius/SWE-rebench-V2
+  # Optional: set to true to apply test patch before agent starts
+  visible_tests: false
+
+prompts:
+  system_prompt: |
+    You are an autonomous software engineering agent. You have access to a
+    UNIX shell environment with a repository checked out at ${task.cwd}.
+
+    Your capabilities:
+    - Execute shell commands using the execute_command function
+    - Read, edit, and create files
+    - Run tests to verify your changes
+    - Call end_session when you are done
+
+    Important constraints:
+    - Execute ONLY ONE command per turn
+    - Wait for the output before deciding your next action
+    - Commands are executed in a persistent shell session
+    - The repository is at ${task.cwd} - all your work should be there
+  user_prompt: |
+    Fix the following issue in the repository at ${task.cwd}:
+
+    ${task.problem_statement}
+
+    Before submitting, please verify:
+    - [ ] Reproduced the error
+    - [ ] Confirmed fix resolves the issue
+    - [ ] Ran existing tests and checked that they all pass
+
+    Do NOT modify or add any tests. Your changes should only fix the issue
+    described above.
