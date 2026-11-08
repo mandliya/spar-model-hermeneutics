@@ -284,7 +284,9 @@ HERO_ENVS = ("ai_rd", "coding", "coding_norules", "dashboard_costly_failure", "g
              "optimize_rendering_engine", "optimize_rendering_engine_graded", "precommit_hook")
 HERO_ENVS_ALL = tuple(sorted(set(MEASURES) | set(JUDGED)))   # the 29 environments of results/full_runs.csv, its order
 HERO_ALL_STAGES = ("hero_solo_all", "hero2_llama_all", "hero2_qwen_all", "hero2_gemma_all", "hero2_qwen36_all",
-                   "hero4_llama_all")   # 6 Nov: Qwen and gemma, other 21 with the check; 7 Nov: Llama, other 21 with the hard rule
+                   "hero4_llama_all", "hero4_llama_fix")   # 6 Nov: Qwen and gemma, other 21 with the check; 7 Nov: Llama, other 21 with the hard rule; 8 Nov: the four cells rerun after the end_task fix
+HACKS = ("do_the_work", "no_early_exit", "proof_of_work", "plan_first", "worked_example")   # 8 Nov 2026, agent.hack (hacks.py)
+_HERO5 = {"coding": 10, "coding_norules": 10, "dashboard_costly_failure": 10, "grade_your_own": 5, "optimize_rendering_engine": 5}
 _GAP7 = {"coding": 20, "coding_norules": 20, "dashboard_costly_failure": 10, "grade_your_own": 5,
          "optimize_rendering_engine": 5, "optimize_rendering_engine_graded": 5, "precommit_hook": 20}
 HERO_TARGETS = {"hero_smoke": {"coding": 2, "optimize_rendering_engine": 2, "dashboard_costly_failure": 2},
@@ -295,7 +297,11 @@ HERO_TARGETS = {"hero_smoke": {"coding": 2, "optimize_rendering_engine": 2, "das
                 "hero2_qwen36": dict(_GAP7), "hero2_qwen36_key": {"ai_rd": 10},
                 "hero2_qwen36_think": {"grade_your_own": 10, "currency_conversion": 10, "lazy_investigation": 10, "eval_tampering": 10},
                 # 7 Nov 2026: Llama's last try, the run cannot end without end_task (agent.end_task_required=true)
-                "hero4_llama": dict(_GAP7), "hero4_llama_key": {"ai_rd": 10}}
+                "hero4_llama": dict(_GAP7), "hero4_llama_key": {"ai_rd": 10},
+                # 8 Nov 2026: the four environments whose loop ignored the synthetic end_task, rerun after the fix
+                "hero4_llama_fix": {"chess": 19, "tictactoe": 19, "coding": 20, "coding_norules": 20, "swe_rebench_v2": 10},
+                # 8 Nov 2026: the five hard hacks on five tasks (hero5_<hack>), one coding run each as the smoke test
+                **{f"hero5_{h}": dict(_HERO5) for h in HACKS}, **{f"hero5_smoke_{h}": {"coding": 1} for h in HACKS}}
 # precision to state next to a result when the config pins no quantization: OpenRouter serves Qwen3-Next and gemma-3
 # as fp8 (gigi/CLAUDE.md, part three exception)
 HERO_PRECISION_DEFAULT = {"qwen3-next-80b": "fp8", "gemma-3-27b": "fp8", "qwen3.6-27b": "fp8", "qwen3.6-27b-think": "fp8"}

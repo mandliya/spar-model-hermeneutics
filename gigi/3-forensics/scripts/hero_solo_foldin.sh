@@ -49,9 +49,11 @@ STAGES=${HERO_STAGES:-$DEF_STAGES}; DRY=${DRY_RUN:-0}
 [ -n "$STAGES" ] || { echo "hero_solo_foldin.sh: no default stages for HERO_MODEL=$MODEL; set HERO_STAGES" >&2; exit 2; }
 WAIT=${WAIT_MINUTES:-840}; GRADE_CAP=${GRADE_CAP:-60}; MERGE=${HERO_MERGE:-0}; export HERO_MERGE="$MERGE"
 # second pass or another model: per-model file names, so the first pass's hero_full_runs*.csv / hero_loss_audit*.md stay as they are
-if [[ ",$STAGES," == *",hero4_"* ]]; then
-  # 7 Nov 2026: Llama's last try with the hard end rule (agent.end_task_required=true, patches/end_task_required.patch)
-  HERO2=1; PREFIX=${HERO_OUT_PREFIX:-hero4_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-hero4_loss_audit__$MODEL.md}; DEF_LOG="$HERE/results/logs/hero4/$MODEL"
+if [[ ",$STAGES," == *",hero4_"* || ",$STAGES," == *",hero5_"* ]]; then
+  # 7 Nov 2026: Llama's last try with the hard end rule (agent.end_task_required=true, patches/end_task_required.patch);
+  # 8 Nov 2026: hero5_<hack> = the five hard hacks on top of it (agent.hack, hacks.py)
+  TAG=hero4; [[ ",$STAGES," == *",hero5_"* ]] && TAG=hero5
+  HERO2=1; PREFIX=${HERO_OUT_PREFIX:-${TAG}_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-${TAG}_loss_audit__$MODEL.md}; DEF_LOG="$HERE/results/logs/$TAG/$MODEL"
 elif [ "$MODEL" != llama-3.3-70b ] || [[ ",$STAGES," == *",hero2_"* ]]; then
   HERO2=1; PREFIX=${HERO_OUT_PREFIX:-hero2_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-hero2_loss_audit__$MODEL.md}; DEF_LOG="$HERE/results/logs/hero2/$MODEL"
   [[ ",$STAGES," == *",hero2_"* ]] || { PREFIX=${HERO_OUT_PREFIX:-hero_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-hero_loss_audit__$MODEL.md}; }
@@ -214,7 +216,7 @@ import full_runs_table as T
 MODEL_NAME = {"llama-3.3-70b": "Llama 3.3 70B", "qwen3-next-80b": "Qwen3-Next-80B", "gemma-3-27b": "gemma-3-27b",
               "qwen3.6-27b": "Qwen3.6 27B (thinking off)", "qwen3.6-27b-think": "Qwen3.6 27B (thinking on)"}.get(model, model)
 CONFIRM = any(s.startswith("hero2_") for s in stages)
-HARD = any(s.startswith("hero4_") for s in stages)
+HARD = any(s.startswith(("hero4_", "hero5_")) for s in stages)
 PROVIDER = {"provider failure", "OpenRouter budget stop"}
 OTHER = {"crash", "no log", "context window exceeded", "harness: no chess engine"}
 
