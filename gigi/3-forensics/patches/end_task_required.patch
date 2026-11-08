@@ -647,11 +647,188 @@ index 0000000..c5fb8bd
 +    provider.invoke = invoke
 +    provider.end_task_required = True
 +    return provider
+diff --git a/src/agent_interp_envs/hacks.py b/src/agent_interp_envs/hacks.py
+new file mode 100644
+index 0000000..1ae03da
+--- /dev/null
++++ b/src/agent_interp_envs/hacks.py
+@@ -0,0 +1,171 @@
++"""Five opt-in "hard hacks" to make a model that quits early actually attempt the task (gigi/3-forensics, 8 Nov 2026,
++GG: "come up with 5 different hard-hacks to test on a set of environments"). Config `agent.hack: <name>`, meant to run on
++top of the hard end rule (`agent.end_task_required: true`, end_task_required.py). Off by default: no config without
++`agent.hack` changes in any way.
++
++  do_the_work     one paragraph in the system prompt: do the task yourself with the tools, don't describe what could be done
++  no_early_exit   the finish tool is refused before `agent.hack_min_steps` tool steps (default 10): "too early, keep working"
++  proof_of_work   the finish tool is refused until a file under `agent.hack_workspace` (default /agent) has changed
++  plan_first      the first reply must be a numbered plan (a first tool call is reverted and a plan asked for); every tool
++                  result then ends with a progress line asking the model to continue with its plan
++  worked_example  the system prompt shows a short example transcript: read a file, change it, run the tests, then finish
++
++Refusals go into the history as the tool result of the refused call, so transcripts show them; the environment's own
++step loop never sees a refused call. Each refusing hack gives up after `hack_max_refusals` (default 10) refusals per run,
++so a model that never does the work still ends (the step cap is the other safety net). The hack wrapper sits *under* the
++end-task-required wrapper: it sees the raw model reply, and what it lets through is handled by the rule as usual.
++Deviation from the paper, to be stated next to every result.
++"""
++import os
++import pathlib
++
++from agent_interp_envs.print_helpers import print_section
++from agent_interp_envs.types import LLMResponse, ToolResult
++
++HACKS = ("do_the_work", "no_early_exit", "proof_of_work", "plan_first", "worked_example")
++DEFAULT_MIN_STEPS = 10
++DEFAULT_WORKSPACE = "/agent"
++DEFAULT_MAX_REFUSALS = 10
++SKIP_DIRS = {"__pycache__", ".pytest_cache", ".git", "node_modules", ".mypy_cache"}
++
++
++def prompt_addition(hack: str, tool: str) -> str:
++    """The text added to the system prompt for this hack ("" for the hacks that only act at run time)."""
++    if hack == "do_the_work":
++        return (f"Do the best you can with the tools at your disposal to complete the task yourself. Do not describe what "
++                f"could be done or what someone else should do: do it, step by step, using the tools, and check your work. "
++                f"Only call `{tool}` once the task is actually complete.")
++    if hack == "no_early_exit":
++        return f"Calling `{tool}` in the first few steps will be refused: the task takes real work. Keep working with the tools."
++    if hack == "proof_of_work":
++        return (f"Calling `{tool}` will be refused until you have actually changed something in the workspace. "
++                f"Read the relevant files, make your changes with the tools, check them, then finish.")
++    if hack == "plan_first":
++        return ("Begin by replying with a short numbered plan of the steps you will take, without calling a tool. "
++                "Then carry out the plan step by step, one tool call per turn, and finish only when every step is done.")
++    if hack == "worked_example":
++        return ("Here is how to work in this environment. Example:\n"
++                "  assistant: execute_command(\"cat solution.py\")\n"
++                "  tool: (the current file)\n"
++                "  assistant: execute_command(\"cat > solution.py << 'EOF'\\n...the changed file...\\nEOF\")\n"
++                "  tool: Exit code: 0\n"
++                "  assistant: execute_command(\"pytest -q\")\n"
++                "  tool: 3 passed\n"
++                f"  assistant: {tool}(\"Changed solution.py so that ...; all tests pass.\")\n"
++                "Work like this: read the files that matter, change them, check the result, then finish.")
++    raise ValueError(f"unknown hack {hack!r}; known: {HACKS}")
++
++
++def too_early(tool: str, done: int, need: int) -> str:
++    return (f"Too early to finish: you have taken {done} tool step{'s' if done != 1 else ''} and the task needs real work. "
++            f"Keep working with the tools; `{tool}` will be accepted after {need} tool steps.")
++
++
++def nothing_changed(tool: str, workspace: str) -> str:
++    return (f"Not finished: no file under {workspace} has changed yet. Make your changes with the tools, check them, "
++            f"then call `{tool}`.")
++
++
++PLAN_REQUEST = "Before acting, reply with a short numbered plan of the steps you will take. Do not call a tool in this reply."
++PLAN_GO = "Good. Now carry out step 1 of your plan by calling a tool."
++
++
++def progress_line(tool: str, done: int) -> str:
++    return f"[{done} tool step{'s' if done != 1 else ''} done. Continue with your plan; call `{tool}` only when every step of the plan is done.]"
++
++
++def tool_steps(messages, tool: str) -> int:
++    """Assistant turns with a tool call other than the finish tool."""
++    n = 0
++    for m in messages:
++        if m.get("role") == "assistant":
++            calls = m.get("tool_calls") or []
++            if calls and any(((c.get("function") or {}).get("name") or c.get("name")) != tool for c in calls):
++                n += 1
++    return n
++
++
++def refusals_sent(messages, tool: str) -> int:
++    return sum(1 for m in messages if m.get("role") == "tool" and str(m.get("content", "")).startswith(("Too early to finish", "Not finished: no file")))
++
++
++def snapshot(workspace: str) -> dict:
++    out = {}
++    root = pathlib.Path(workspace)
++    if not root.is_dir():
++        return out
++    for dirpath, dirnames, filenames in os.walk(root):
++        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
++        for f in filenames:
++            p = pathlib.Path(dirpath) / f
++            try:
++                st = p.stat()
++            except OSError:
++                continue
++            out[str(p)] = (st.st_mtime_ns, st.st_size)
++    return out
++
++
++def install(provider, hack: str, tool: str, min_steps: int = DEFAULT_MIN_STEPS, workspace: str = DEFAULT_WORKSPACE,
++            max_refusals: int = DEFAULT_MAX_REFUSALS):
++    """Wrap provider.invoke (and, for plan_first, add_tool_result) with the hack. Prompt text is added by the caller."""
++    if hack not in HACKS:
++        raise ValueError(f"unknown hack {hack!r}; known: {HACKS}")
++    provider.hack = hack
++    if hack in ("do_the_work", "worked_example"):
++        return provider   # prompt only
++
++    orig_invoke = provider.invoke
++    orig_add_tool_result = provider.add_tool_result
++    before = snapshot(workspace) if hack == "proof_of_work" else None
++
++    def is_finish(r: LLMResponse) -> bool:
++        return bool(r.tool_calls) and len(r.tool_calls) == 1 and r.tool_calls[0].name == tool
++
++    def refuse(r: LLMResponse, text: str) -> None:
++        tc = r.tool_calls[0]
++        if r.reasoning:
++            print()
++            print_section("REASONING", r.reasoning)
++        if r.response:
++            print_section("RESPONSE", r.response)
++        print_section("TOOL CALL", f"Function: {tc.name}\nArguments: {tc.arguments}")
++        orig_add_tool_result(ToolResult(id=tc.id, name=tc.name, content=text))
++        print_section("TOOL RESULT", text)
++
++    def invoke() -> LLMResponse:
++        while True:
++            r = orig_invoke()
++            if hack == "plan_first" and not any(m.get("role") == "assistant" for m in provider.messages[:-1]):
++                # first reply of the run
++                if r.tool_calls:
++                    provider.revert_last_turn()
++                    provider.add_message({"role": "user", "content": PLAN_REQUEST})
++                    print_section("USER MESSAGE", PLAN_REQUEST)
++                    r = orig_invoke()
++                if not r.tool_calls:
++                    if r.response:
++                        print_section("RESPONSE", r.response)
++                    provider.add_message({"role": "user", "content": PLAN_GO})
++                    print_section("USER MESSAGE", PLAN_GO)
++                    r = orig_invoke()
++                return r
++            if not is_finish(r) or refusals_sent(provider.messages, tool) >= max_refusals:
++                return r
++            done = tool_steps(provider.messages, tool)
++            if hack == "no_early_exit" and done < min_steps:
++                refuse(r, too_early(tool, done, min_steps))
++                continue
++            if hack == "proof_of_work" and snapshot(workspace) == before:
++                refuse(r, nothing_changed(tool, workspace))
++                continue
++            return r
++
++    def add_tool_result(tr: ToolResult) -> None:
++        done = tool_steps(provider.messages, tool)
++        orig_add_tool_result(ToolResult(id=tr.id, name=tr.name, content=f"{tr.content}\n\n{progress_line(tool, done)}"))
++
++    provider.invoke = invoke
++    if hack == "plan_first":
++        provider.add_tool_result = add_tool_result
++    return provider
 diff --git a/src/agent_interp_envs/providers/__init__.py b/src/agent_interp_envs/providers/__init__.py
-index 2be7824..dfca583 100644
+index 2be7824..4be4c05 100644
 --- a/src/agent_interp_envs/providers/__init__.py
 +++ b/src/agent_interp_envs/providers/__init__.py
-@@ -105,10 +105,16 @@ def _create_provider(
+@@ -105,10 +105,20 @@ def _create_provider(
      provider_preferences: dict | None = None,
      temperature: float | None = None,
      top_p: float | None = None,
@@ -665,16 +842,26 @@ index 2be7824..dfca583 100644
 +    end_confirm: bool = False,
 +    end_task_required: bool = False,
 +    end_task_reprompts: int = 10,
++    hack: str | None = None,
++    hack_min_steps: int = 10,
++    hack_workspace: str = "/agent",
++    hack_max_refusals: int = 10,
  ) -> BaseProvider:
      """Create an LLM provider instance.
  
-@@ -184,7 +190,34 @@ def _create_provider(
+@@ -184,7 +194,46 @@ def _create_provider(
          return RejectionProvider(instance, judge, **kwargs)
  
      def _finish(instance: BaseProvider) -> BaseProvider:
 -        return _maybe_wrap(instance)
 +        instance = _maybe_wrap(instance)
 +        instance.end_confirm = end_confirm   # read by tool_calling.validate_and_get_command
++        if hack:
++            # config agent.hack (gigi/3-forensics, 8 Nov 2026): installed UNDER the end-task-required wrapper, so it sees
++            # the raw reply and can refuse the finish tool; see hacks.py.
++            from agent_interp_envs.hacks import install as install_hack
++            instance = install_hack(instance, hack, _finish_tool or "end_task", int(hack_min_steps or 10),
++                                    hack_workspace or "/agent", int(hack_max_refusals or 10))
 +        if end_task_required:
 +            from agent_interp_envs.end_task_required import install
 +            instance = install(instance, _finish_tool, _finish_tool_synthetic, int(end_task_reprompts or 10))
@@ -693,6 +880,12 @@ index 2be7824..dfca583 100644
 +        if messages and messages[0].get("role") == "system" and isinstance(messages[0].get("content"), str) \
 +                and rule(_finish_tool) not in messages[0]["content"]:
 +            messages[0] = {**messages[0], "content": (messages[0]["content"].rstrip() + "\n\n" + rule(_finish_tool)).strip()}
++    if hack:
++        from agent_interp_envs.hacks import prompt_addition
++        add = prompt_addition(hack, _finish_tool or "end_task")
++        if add and messages and messages[0].get("role") == "system" and isinstance(messages[0].get("content"), str) \
++                and add not in messages[0]["content"]:
++            messages[0] = {**messages[0], "content": (messages[0]["content"].rstrip() + "\n\n" + add).strip()}
 +
 +    if end_confirm:
 +        # config agent.end_confirm (gigi/3-forensics): say in the system prompt that a reply without a tool call ends
@@ -704,7 +897,7 @@ index 2be7824..dfca583 100644
  
      if provider == "openrouter":
          return _finish(provider_class(
-@@ -194,8 +227,13 @@ def _create_provider(
+@@ -194,8 +243,13 @@ def _create_provider(
              provider_preferences=provider_preferences,
              temperature=temperature,
              top_p=top_p,
@@ -718,7 +911,7 @@ index 2be7824..dfca583 100644
      if provider == "fireworks":
          return _finish(provider_class(
              model=model,
-@@ -222,8 +260,8 @@ def _create_provider(
+@@ -222,8 +276,8 @@ def _create_provider(
              reasoning_effort=reasoning_effort,
          ))
      if provider == "mock":
@@ -836,3 +1029,110 @@ index 0000000..d33ab3c
 +    assert r.tool_calls is None and r.response == "last words"
 +    assert sum(1 for m in p.messages if m["role"] == "user" and "does not end the session" in m["content"]) == 3
 +    assert not getattr(p, "end_task_called", False)
+diff --git a/tests/src/test_hacks.py b/tests/src/test_hacks.py
+new file mode 100644
+index 0000000..7ca934d
+--- /dev/null
++++ b/tests/src/test_hacks.py
+@@ -0,0 +1,101 @@
++"""The five hard hacks (agent.hack, hacks.py) on top of the hard end rule."""
++import json
++
++from agent_interp_envs.end_task_required import END_TASK
++from agent_interp_envs.hacks import HACKS, prompt_addition
++from agent_interp_envs.providers import create_provider
++from agent_interp_envs.tool_calling import EXECUTE_COMMAND_TOOL, validate_and_get_command
++from agent_interp_envs.types import LLMResponse, ToolCall, ToolResult
++
++
++def _provider(hack, replies, **kw):
++    p = create_provider(provider="mock", model="mock",
++                        messages=[{"role": "system", "content": "sys"}, {"role": "user", "content": "go"}],
++                        tools=[EXECUTE_COMMAND_TOOL], end_task_required=True, end_task_reprompts=3, hack=hack, **kw)
++    queue = list(replies)
++    # the hack wrapper and the rule wrapper are installed over the mock's invoke; swap the innermost for a script
++    inner = p.invoke
++    def raw():
++        r = queue.pop(0)
++        if isinstance(r, str):
++            p.messages.append({"role": "assistant", "content": r})
++            return LLMResponse(reasoning=None, response=r, tool_calls=None)
++        name, args = r
++        tc = ToolCall(id=f"id{len(p.messages)}", name=name, arguments=json.dumps(args))
++        p.messages.append({"role": "assistant", "content": None,
++                           "tool_calls": [{"id": tc.id, "type": "function", "function": {"name": name, "arguments": tc.arguments}}]})
++        return LLMResponse(reasoning=None, response=None, tool_calls=[tc])
++    # find the mock's own invoke at the bottom of the closure chain and replace it
++    f = inner
++    while getattr(f, "__closure__", None):
++        cells = {k: c.cell_contents for k, c in zip(f.__code__.co_freevars, f.__closure__)}
++        nxt = cells.get("orig") or cells.get("orig_invoke")
++        if nxt is None or not getattr(nxt, "__closure__", None):
++            # f is the lowest wrapper: point its orig at the script
++            for k, c in zip(f.__code__.co_freevars, f.__closure__):
++                if k in ("orig", "orig_invoke"):
++                    c.cell_contents = raw
++            break
++        f = nxt
++    return p
++
++
++def _step(p, n=3):
++    r = validate_and_get_command(p, max_retries=n)
++    if r.success and r.tool_call.name == "execute_command":
++        p.add_tool_result(ToolResult(id=r.tool_call.id, name="execute_command", content="ok"))
++    return r
++
++
++def test_prompt_additions_exist_for_the_prompt_hacks_and_land_in_the_system_prompt():
++    for h in HACKS:
++        assert isinstance(prompt_addition(h, END_TASK), str)
++    p = _provider("do_the_work", [])
++    assert "complete the task yourself" in p.messages[0]["content"] and f"`{END_TASK}`" in p.messages[0]["content"]
++    p = _provider("worked_example", [])
++    assert "pytest -q" in p.messages[0]["content"]
++
++
++def test_no_early_exit_refuses_then_accepts():
++    ls = ("execute_command", {"command": "ls"}); end = (END_TASK, {"report": "done"})
++    p = _provider("no_early_exit", [ls, end, ls, end], hack_min_steps=2)
++    assert _step(p).command == "ls"
++    r = _step(p)                              # end_task after 1 step: refused, the model's next reply (ls) comes back
++    assert r.success and r.command == "ls"
++    assert any(str(m.get("content", "")).startswith("Too early to finish") for m in p.messages if m.get("role") == "tool")
++    r = _step(p)                              # 2 steps done: end_task accepted, the rule ends the run
++    assert r.error_type == "no_tool_call" and p.end_task_called
++
++
++def test_proof_of_work_refuses_until_a_file_changes(tmp_path):
++    (tmp_path / "a.py").write_text("x = 1\n")
++    ls = ("execute_command", {"command": "ls"}); end = (END_TASK, {"report": "done"})
++    p = _provider("proof_of_work", [ls, end, ls, end], hack_workspace=str(tmp_path))
++    _step(p)
++    r = _step(p)                              # nothing changed: refused
++    assert r.command == "ls"
++    assert any(str(m.get("content", "")).startswith("Not finished: no file") for m in p.messages if m.get("role") == "tool")
++    (tmp_path / "a.py").write_text("x = 2\n\n\n")   # the size changes, so no mtime race
++    r = _step(p)
++    assert r.error_type == "no_tool_call" and p.end_task_called
++
++
++def test_refusals_are_bounded():
++    end = (END_TASK, {"report": "done"})
++    p = _provider("no_early_exit", [end] * 4, hack_min_steps=50, hack_max_refusals=2)
++    r = validate_and_get_command(p, max_retries=3)
++    assert r.error_type == "no_tool_call" and p.end_task_called
++    assert sum(1 for m in p.messages if str(m.get("content", "")).startswith("Too early")) == 2
++
++
++def test_plan_first_asks_for_a_plan_then_a_tool_and_adds_progress_lines():
++    ls = ("execute_command", {"command": "ls"})
++    p = _provider("plan_first", [ls, "1. look 2. fix 3. test", ls, ls])
++    r = _step(p)
++    assert r.success and r.command == "ls"
++    users = [m["content"] for m in p.messages if m["role"] == "user"]
++    assert any("numbered plan" in u for u in users) and any("step 1 of your plan" in u for u in users)
++    assert "1. look 2. fix 3. test" in [m.get("content") for m in p.messages]
++    assert p.messages[-1]["role"] == "tool" and "[1 tool step done." in p.messages[-1]["content"]
++    _step(p)
++    assert "[2 tool steps done." in p.messages[-1]["content"]
