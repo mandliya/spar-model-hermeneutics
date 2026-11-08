@@ -1,0 +1,2 @@
+2026-11-07 11:23:07 launched ai_rd__qwen3.6-27b x10 (max_steps 60, timeout 3600s, agent.end_confirm=true,modal.memory=2048, pid 65259)
+2026-11-07 11:23:07 all launched

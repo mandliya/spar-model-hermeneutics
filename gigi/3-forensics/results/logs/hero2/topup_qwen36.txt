@@ -1,0 +1,3 @@
+2026-11-08 07:06:16 launching top-ups
+2026-11-08 07:08:05 top-ups launched
+2026-11-08 07:09:05 qwen3.6-27b-think (hero2_qwen36_think,hero2_qwen36_think_topup): fold-in

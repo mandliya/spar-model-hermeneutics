@@ -1,0 +1,20 @@
+2026-11-07 15:26:08 estimate grade_your_own: 1 ungraded runs in 1 fleets, ~$1.87
+2026-11-07 15:26:08 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 1 ungraded runs in 1 fleets, ~$1.87
+2026-11-07 15:26:08 start: 1 fleets in 1 environments, cap $100.0, judge default
+2026-11-07 15:26:16 grade_your_own: 1 fleets, exit 1, spent so far $0.00
+2026-11-07 15:26:16 done, spent $0.00
+2026-11-07 15:26:16 estimate grade_your_own: 1 ungraded runs in 1 fleets, ~$1.87
+2026-11-07 15:26:16 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 1 ungraded runs in 1 fleets, ~$1.87
+2026-11-07 15:26:16 start: 1 fleets in 1 environments, cap $100.0, judge claude-opus-4-8
+2026-11-07 15:26:47 grade_your_own: 1 fleets, exit 0, spent so far $1.31
+2026-11-07 15:26:47 done, spent $1.31
+2026-11-08 07:04:31 estimate grade_your_own: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-08 07:04:31 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-08 07:04:31 start: 1 fleets in 1 environments, cap $100.0, judge default
+2026-11-08 07:04:33 grade_your_own: 1 fleets, exit 0, spent so far $0.00
+2026-11-08 07:04:33 done, spent $0.00
+2026-11-08 07:04:33 estimate grade_your_own: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-08 07:04:33 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-08 07:04:33 start: 1 fleets in 1 environments, cap $100.0, judge claude-opus-4-8
+2026-11-08 07:04:34 grade_your_own: 1 fleets, exit 0, spent so far $0.00
+2026-11-08 07:04:34 done, spent $0.00

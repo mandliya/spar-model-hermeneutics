@@ -1,0 +1,46 @@
+2026-11-07 11:48:30 start (model qwen3.6-27b-think, stages hero2_qwen36_think, ceiling 3300, grade cap 100, files hero2_full_runs__qwen3.6-27b-think*.csv + hero2_loss_audit__qwen3.6-27b-think.md)
+2026-11-07 11:48:30 step wait
+2026-11-07 11:48:32 waiting: 1 of our apps still running
+2026-11-07 12:19:30 waiting: 1 of our apps still running
+2026-11-07 12:50:46 waiting: 1 of our apps still running
+2026-11-07 13:21:53 waiting: 1 of our apps still running
+2026-11-07 14:27:15 waiting: 1 of our apps still running
+2026-11-07 14:58:09 waiting: 1 of our apps still running
+2026-11-07 15:23:57 waiting for 2 local launcher(s) to finish downloading
+2026-11-07 15:24:58 all our apps finished
+2026-11-07 15:24:58 step fetch
+fetched hero2_qwen36_think/currency_conversion currency_conversion/qwen-qwen3.6-27b/2026-11-07_11-24-02-935570: 2026-11-07 15:25:04 gigi-forensics-currency-conversion:currency_conversion/qwen-qwen3.6-27b/2026-11-07_11-24-02-935570: 180 new files, 12 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_think/eval_tampering eval_tampering/notes_self_weapons/qwen-qwen3.6-27b/2026-11-07_11-24-27-582520: 2026-11-07 15:25:10 gigi-forensics-eval-tampering:eval_tampering/notes_self_weapons/qwen-qwen3.6-27b/2026-11-07_11-24-27-582520: 159 new files, 12 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_think/grade_your_own grade_your_own/qwen-qwen3.6-27b/2026-11-07_11-23-18-530963: 2026-11-07 15:25:58 gigi-forensics-grade-your-own:grade_your_own/qwen-qwen3.6-27b/2026-11-07_11-23-18-530963: 2757 new files, 23 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_think/lazy_investigation lazy_investigation/qwen-qwen3.6-27b/2026-11-07_11-24-11-020385: 2026-11-07 15:26:06 gigi-forensics-lazy-investigation:lazy_investigation/qwen-qwen3.6-27b/2026-11-07_11-24-11-020385: 240 new files, 42 already here (0 of them differ in size; local copy kept)
+2026-11-07 15:26:06 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 1 folder(s)
+2026-11-07 15:26:08 step grade
+2026-11-07 15:26:47 grading: 2026-11-07 15:26:08 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 1 ungraded runs in 1 fleets, ~$1.87
+2026-11-07 15:26:47 grading: 2026-11-07 15:26:16 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 1 ungraded runs in 1 fleets, ~$1.87
+2026-11-07 15:26:47 step score
+2026-11-07 15:26:48 scored: 10 qwen3.6-27b-think runs found in stages hero2_qwen36_think -> hero2_full_runs__qwen3.6-27b-think.csv
+2026-11-07 15:26:48 step audit
+audit (hero2_qwen36_think): target 10, found 10, scored 1, 1 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b-think.md
+2026-11-07 15:26:48 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b-think.md
+2026-11-07 15:26:48 done (not committed: the parent session commits)
+2026-11-08 07:04:27 start (model qwen3.6-27b-think, stages hero2_qwen36_think, ceiling 3300, grade cap 100, files hero2_full_runs__qwen3.6-27b-think*.csv + hero2_loss_audit__qwen3.6-27b-think.md)
+2026-11-08 07:04:27 step wait
+2026-11-08 07:04:29 all our apps finished
+2026-11-08 07:04:29 step fetch
+2026-11-08 07:04:29 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 1 folder(s)
+2026-11-08 07:04:31 step grade
+2026-11-08 07:04:35 grading: 2026-11-07 15:26:08 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 1 ungraded runs in 1 fleets, ~$1.87
+2026-11-08 07:04:35 grading: 2026-11-07 15:26:16 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 1 ungraded runs in 1 fleets, ~$1.87
+2026-11-08 07:04:35 grading: 2026-11-08 07:04:31 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-08 07:04:35 grading: 2026-11-08 07:04:33 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-08 07:04:35 step score
+2026-11-08 07:04:35 scored: 40 qwen3.6-27b-think runs found in stages hero2_qwen36_think -> hero2_full_runs__qwen3.6-27b-think.csv
+2026-11-08 07:04:35 step audit
+audit (hero2_qwen36_think): target 40, found 40, scored 29, 3 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b-think.md
+2026-11-08 07:04:35 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b-think.md
+2026-11-08 07:04:35 done (not committed: the parent session commits)
+2026-11-08 07:09:05 start (model qwen3.6-27b-think, stages hero2_qwen36_think,hero2_qwen36_think_topup, ceiling 3300, grade cap 100, files hero2_full_runs__qwen3.6-27b-think*.csv + hero2_loss_audit__qwen3.6-27b-think.md)
+2026-11-08 07:09:05 step wait
+2026-11-08 07:09:06 waiting: 1 of our apps still running

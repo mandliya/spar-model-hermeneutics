@@ -1,0 +1,81 @@
+2026-11-07 15:40:22 start (model qwen3.6-27b, stages hero2_qwen36_all, ceiling 3300, grade cap 100, files hero2_full_runs__qwen3.6-27b__other21*.csv + hero2_loss_audit__qwen3.6-27b__other21.md)
+2026-11-07 15:40:22 step wait
+2026-11-07 15:40:25 all our apps finished
+2026-11-07 15:40:25 step fetch
+fetched hero2_qwen36_all/async_conversion async_conversion/default/qwen-qwen3.6-27b/2026-11-07_11-25-08-872959: 2026-11-07 15:40:49 gigi-forensics-async-conversion:async_conversion/default/qwen-qwen3.6-27b/2026-11-07_11-25-08-872959: 1476 new files, 7 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/chess chess/qwen-qwen3.6-27b/2026-11-07_11-25-28-796320: 2026-11-07 15:41:28 gigi-forensics-chess:chess/qwen-qwen3.6-27b/2026-11-07_11-25-28-796320: 2691 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/copying_of_answers leaked_fix/qwen-qwen3.6-27b/2026-11-07_11-26-49-120392: 2026-11-07 15:41:48 gigi-forensics-leaked-fix:leaked_fix/qwen-qwen3.6-27b/2026-11-07_11-26-49-120392: 1229 new files, 42 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/currency_conversion currency_conversion/qwen-qwen3.6-27b/2026-11-07_11-24-36-873698: 2026-11-07 15:41:56 gigi-forensics-currency-conversion:currency_conversion/qwen-qwen3.6-27b/2026-11-07_11-24-36-873698: 396 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/eval_tampering eval_tampering/notes_self_weapons/qwen-qwen3.6-27b/2026-11-07_11-24-50-023834: 2026-11-07 15:42:04 gigi-forensics-eval-tampering:eval_tampering/notes_self_weapons/qwen-qwen3.6-27b/2026-11-07_11-24-50-023834: 342 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/funding_email funding_email/qwen-qwen3.6-27b/2026-11-07_11-25-41-714473: 2026-11-07 15:42:16 gigi-forensics-funding-email:funding_email/qwen-qwen3.6-27b/2026-11-07_11-25-41-714473: 698 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/lazy_investigation lazy_investigation/qwen-qwen3.6-27b/2026-11-07_11-25-13-599064: 2026-11-07 15:42:26 gigi-forensics-lazy-investigation:lazy_investigation/qwen-qwen3.6-27b/2026-11-07_11-25-13-599064: 552 new files, 82 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/leaked_scorer tables_coverage_tests/qwen-qwen3.6-27b/2026-11-07_11-26-27-866004: 2026-11-07 15:42:41 gigi-forensics-tables-coverage-tests:tables_coverage_tests/qwen-qwen3.6-27b/2026-11-07_11-26-27-866004: 869 new files, 42 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/leaked_tests leaked_fix/qwen-qwen3.6-27b/2026-11-07_11-28-57-260612: 2026-11-07 15:43:27 gigi-forensics-leaked-fix:leaked_fix/qwen-qwen3.6-27b/2026-11-07_11-28-57-260612: 2021 new files, 20 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/lucky_seed lucky_seed/qwen-qwen3.6-27b/2026-11-07_11-26-38-290446: 2026-11-07 15:43:39 gigi-forensics-lucky-seed:lucky_seed/qwen-qwen3.6-27b/2026-11-07_11-26-38-290446: 588 new files, 42 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/lucky_seed_readable_grader lucky_seed_readable_grader/qwen-qwen3.6-27b/2026-11-07_11-27-19-332173: 2026-11-07 15:43:54 gigi-forensics-lucky-seed-readable-grader:lucky_seed_readable_grader/qwen-qwen3.6-27b/2026-11-07_11-27-19-332173: 791 new files, 42 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/norvane norvane/qwen-qwen3.6-27b/2026-11-07_11-26-43-699152: 2026-11-07 15:44:03 gigi-forensics-norvane:norvane/qwen-qwen3.6-27b/2026-11-07_11-26-43-699152: 310 new files, 79 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/optimize_lru_cache optimize_cache_c/qwen-qwen3.6-27b/2026-11-07_11-28-01-701878: 2026-11-07 15:45:04 gigi-forensics-optimize-cache-c:optimize_cache_c/qwen-qwen3.6-27b/2026-11-07_11-28-01-701878: 4018 new files, 0 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/parse_duration parse_duration/misleading_example/qwen-qwen3.6-27b/2026-11-07_11-27-25-595682: 2026-11-07 15:45:10 gigi-forensics-parse-duration:parse_duration/misleading_example/qwen-qwen3.6-27b/2026-11-07_11-27-25-595682: 240 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/puppeteer puppeteer/qwen-qwen3.6-27b/2026-11-07_11-28-16-555592: 2026-11-07 15:45:56 gigi-forensics-puppeteer:puppeteer/qwen-qwen3.6-27b/2026-11-07_11-28-16-555592: 3187 new files, 7 already here (0 of them differ in size; local copy kept)
+FETCH FAILED hero2_qwen36_all/reference_extraction aj_data_anon/qwen-qwen3.6-27b/2026-11-07_11-28-04-129093: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ [Errno 28] No space left on device                                           │
+╰──────────────────────────────────────────────────────────────────────────────╯
+fetched hero2_qwen36_all/revert_or_refactor revert_or_refactor/qwen-qwen3.6-27b/2026-11-07_11-27-46-433300: 2026-11-07 16:03:14 gigi-forensics-revert-or-refactor:revert_or_refactor/qwen-qwen3.6-27b/2026-11-07_11-27-46-433300: 518 new files, 7 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/secret_number secret_number/qwen-qwen3.6-27b/2026-11-07_11-28-09-053028: 2026-11-07 16:03:34 gigi-forensics-secret-number:secret_number/qwen-qwen3.6-27b/2026-11-07_11-28-09-053028: 1212 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/swe_rebench_v2 swe_rebench_v2/qwen-qwen3.6-27b/2026-11-07_11-27-59: 2026-11-07 16:03:43 gigi-forensics-swe-rebench-v2:swe_rebench_v2/qwen-qwen3.6-27b/2026-11-07_11-27-59: 628 new files, 0 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/tictactoe tictactoe/qwen-qwen3.6-27b/2026-11-07_11-29-04-120636: 2026-11-07 16:03:56 gigi-forensics-tictactoe:tictactoe/qwen-qwen3.6-27b/2026-11-07_11-29-04-120636: 708 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero2_qwen36_all/tower_of_hanoi palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3.6-27b/2026-11-07_11-28-38-871295: 2026-11-07 16:04:21 gigi-forensics-palisades-tower-of-hanoi:palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3.6-27b/2026-11-07_11-28-38-871295: 1533 new files, 22 already here (0 of them differ in size; local copy kept)
+2026-11-07 16:04:21 STEP FAILED: fetch (exit 1)
+2026-11-07 16:04:21 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 1 folder(s)
+2026-11-07 16:04:30 step grade
+2026-11-08 06:53:15 grading: 2026-11-07 16:04:30 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36_all): 64 ungraded runs in 7 fleets, ~$53.01
+2026-11-08 06:53:15 grading: 2026-11-07 16:28:39 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36_all): 40 ungraded runs in 7 fleets, ~$38.72
+2026-11-08 06:53:15 step score
+2026-11-08 06:53:16 scored: 290 qwen3.6-27b runs found in stages hero2_qwen36_all -> hero2_full_runs__qwen3.6-27b__other21.csv
+2026-11-08 06:53:16 step audit
+audit (hero2_qwen36_all): target 290, found 290, scored 278, 7 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b__other21.md
+2026-11-08 06:53:16 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b__other21.md
+2026-11-08 06:53:16 done (not committed: the parent session commits)
+2026-11-08 06:53:16 start (model qwen3.6-27b, stages hero2_qwen36_all, ceiling 3300, grade cap 100, files hero2_full_runs__qwen3.6-27b__other21*.csv + hero2_loss_audit__qwen3.6-27b__other21.md)
+2026-11-08 06:53:16 step wait
+2026-11-08 06:53:17 all our apps finished
+2026-11-08 06:53:17 step fetch
+FETCH FAILED hero2_qwen36_all/reference_extraction aj_data_anon/qwen-qwen3.6-27b/2026-11-07_11-28-04-129093: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Connection lost                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+2026-11-08 06:55:24 STEP FAILED: fetch (exit 1)
+2026-11-08 06:55:24 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 1 folder(s)
+2026-11-08 06:55:33 step grade
+2026-11-08 06:55:53 grading: 2026-11-07 16:04:30 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36_all): 64 ungraded runs in 7 fleets, ~$53.01
+2026-11-08 06:55:53 grading: 2026-11-07 16:28:39 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36_all): 40 ungraded runs in 7 fleets, ~$38.72
+2026-11-08 06:55:53 grading: 2026-11-08 06:55:33 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36_all): 3 ungraded runs in 7 fleets, ~$4.29
+2026-11-08 06:55:53 grading: 2026-11-08 06:55:43 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36_all): 3 ungraded runs in 7 fleets, ~$4.29
+2026-11-08 06:55:53 step score
+2026-11-08 06:55:53 scored: 290 qwen3.6-27b runs found in stages hero2_qwen36_all -> hero2_full_runs__qwen3.6-27b__other21.csv
+2026-11-08 06:55:53 step audit
+audit (hero2_qwen36_all): target 290, found 290, scored 278, 7 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b__other21.md
+2026-11-08 06:55:53 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b__other21.md
+2026-11-08 06:55:53 done (not committed: the parent session commits)
+2026-11-08 06:55:53 start (model qwen3.6-27b, stages hero2_qwen36_all, ceiling 3300, grade cap 100, files hero2_full_runs__qwen3.6-27b__other21*.csv + hero2_loss_audit__qwen3.6-27b__other21.md)
+2026-11-08 06:55:53 step wait
+2026-11-08 06:55:55 all our apps finished
+2026-11-08 06:55:55 step fetch
+FETCH FAILED hero2_qwen36_all/reference_extraction aj_data_anon/qwen-qwen3.6-27b/2026-11-07_11-28-04-129093: ╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ Connection lost                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+2026-11-08 06:58:01 STEP FAILED: fetch (exit 1)
+2026-11-08 06:58:01 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 1 folder(s)
+2026-11-08 06:58:09 step grade
+2026-11-08 06:58:32 grading: 2026-11-08 06:55:33 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36_all): 3 ungraded runs in 7 fleets, ~$4.29
+2026-11-08 06:58:32 grading: 2026-11-08 06:55:43 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36_all): 3 ungraded runs in 7 fleets, ~$4.29
+2026-11-08 06:58:32 grading: 2026-11-08 06:58:09 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36_all): 3 ungraded runs in 7 fleets, ~$4.29
+2026-11-08 06:58:32 grading: 2026-11-08 06:58:22 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36_all): 3 ungraded runs in 7 fleets, ~$4.29
+2026-11-08 06:58:32 step score
+2026-11-08 06:58:32 scored: 290 qwen3.6-27b runs found in stages hero2_qwen36_all -> hero2_full_runs__qwen3.6-27b__other21.csv
+2026-11-08 06:58:32 step audit
+audit (hero2_qwen36_all): target 290, found 290, scored 278, 7 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b__other21.md
+2026-11-08 06:58:32 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b__other21.md
+2026-11-08 06:58:32 done (not committed: the parent session commits)

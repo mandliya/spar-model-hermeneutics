@@ -1,0 +1,3 @@
+2026-11-08 07:06:28 launched coding_norules__qwen3.6-27b x3 (max_steps 100, timeout 14400s, agent.end_confirm=true,modal.memory=2048, pid 79902)
+2026-11-08 07:06:40 launched dashboard_costly_failure__qwen3.6-27b x2 (max_steps 500, timeout 14400s, agent.end_confirm=true, pid 79944)
+2026-11-08 07:06:40 all launched

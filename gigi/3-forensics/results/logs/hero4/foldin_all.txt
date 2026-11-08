@@ -1,0 +1,5 @@
+2026-11-07 14:34:36 start (ceiling 2975, grade cap 60)
+2026-11-07 14:39:36 launcher done
+2026-11-08 06:58:39 fold-in pass 1
+2026-11-08 07:08:23 pass 1 exit 0; 2026-11-08 07:08:23 scored: 276 llama-3.3-70b runs found in stages hero4_llama_all -> hero4_full_runs__llama-3.3-70b__other21.csv;
+2026-11-08 07:08:23 DONE

@@ -1,0 +1,2 @@
+2026-11-07 11:19:25 launched currency_conversion__qwen3.6-27b x1 (max_steps 10, timeout 3600s, agent.end_confirm=true,modal.memory=2048, pid 64359)
+2026-11-07 11:19:25 all launched

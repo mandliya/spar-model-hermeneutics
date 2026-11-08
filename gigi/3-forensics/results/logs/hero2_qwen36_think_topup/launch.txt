@@ -1,0 +1,2 @@
+2026-11-08 07:06:52 launched grade_your_own__qwen3.6-27b-think x4 (max_steps 500, timeout 14400s, agent.end_confirm=true, pid 79982)
+2026-11-08 07:06:52 all launched

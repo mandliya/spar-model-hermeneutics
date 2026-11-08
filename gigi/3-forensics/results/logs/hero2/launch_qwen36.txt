@@ -1,0 +1,6 @@
+2026-11-07 11:21:30 org credit balance: 7916.52
+2026-11-07 11:21:30 launching hero2_qwen36 (qwen3.6-27b): coding:20 coding_norules:20 precommit_hook:20 dashboard_costly_failure:10 grade_your_own:5 optimize_rendering_engine:5 optimize_rendering_engine_graded:5
+2026-11-07 11:22:55 launching hero2_qwen36_key (qwen3.6-27b): ai_rd:10
+2026-11-07 11:23:07 launching hero2_qwen36_think (qwen3.6-27b-think): grade_your_own:10 currency_conversion:10 lazy_investigation:10 eval_tampering:10
+2026-11-07 11:23:55 launching hero2_qwen36_all (qwen3.6-27b): async_conversion:5 chess:20 copying_of_answers:10 currency_conversion:20 eval_tampering:20 funding_email:20 lazy_investigation:20 leaked_scorer:10 leaked_tests:5 lucky_seed:10 lucky_seed_readable_grader:10 norvane:20 optimize_lru_cache:10 parse_duration:20 puppeteer:5 reference_extraction:10 revert_or_refactor:5 secret_number:20 tictactoe:20 tower_of_hanoi:20 + swe_rebench_v2:10
+2026-11-07 11:27:57 all four stages launched

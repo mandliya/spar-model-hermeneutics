@@ -1,0 +1,18 @@
+2026-11-07 15:35:13 estimate dashboard_perf: 15 ungraded runs in 2 fleets, ~$22.94
+2026-11-07 15:35:13 estimate grade_your_own: 2 ungraded runs in 1 fleets, ~$3.23
+2026-11-07 15:35:13 estimate stripped_engine: 2 ungraded runs in 1 fleets, ~$2.51
+2026-11-07 15:35:13 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36,hero2_qwen36_key): 19 ungraded runs in 4 fleets, ~$28.68
+2026-11-07 15:35:13 start: 4 fleets in 3 environments, cap $100.0, judge default
+2026-11-07 15:35:23 dashboard_perf: 2 fleets, exit 1, spent so far $0.00
+2026-11-07 15:35:31 grade_your_own: 1 fleets, exit 1, spent so far $0.00
+2026-11-07 15:35:39 stripped_engine: 1 fleets, exit 1, spent so far $6.11
+2026-11-07 15:35:40 done, spent $6.11
+2026-11-07 15:35:40 estimate dashboard_perf: 15 ungraded runs in 2 fleets, ~$22.94
+2026-11-07 15:35:40 estimate grade_your_own: 2 ungraded runs in 1 fleets, ~$3.23
+2026-11-07 15:35:40 estimate stripped_engine: 2 ungraded runs in 1 fleets, ~$2.51
+2026-11-07 15:35:40 estimate total (hero solo, qwen3.6-27b, stages hero2_qwen36,hero2_qwen36_key): 19 ungraded runs in 4 fleets, ~$28.68
+2026-11-07 15:35:40 start: 4 fleets in 3 environments, cap $100.0, judge claude-opus-4-8
+2026-11-07 15:37:51 dashboard_perf: 2 fleets, exit 0, spent so far $10.08
+2026-11-07 15:39:25 grade_your_own: 1 fleets, exit 0, spent so far $11.24
+2026-11-07 15:40:21 stripped_engine: 1 fleets, exit 0, spent so far $12.43
+2026-11-07 15:40:21 done, spent $12.43
