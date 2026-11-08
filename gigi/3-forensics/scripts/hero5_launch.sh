@@ -11,7 +11,7 @@ export MODAL_PROFILE=spar MODAL_SECRET_SUFFIX=-gigi MODAL_VOLUME_PREFIX=gigi-for
 MODE=${1:?smoke|full}; HACKS=${HACKS:-"do_the_work no_early_exit proof_of_work plan_first worked_example"}
 L="$HERE/results/logs/hero5"; mkdir -p "$L"; say () { echo "$(date '+%F %T') $*" >> "$L/launch_$MODE.txt"; }
 case "$MODE" in
-  smoke) ENVS="coding:1"; PFX=hero5_smoke_ ;;
+  smoke*) ENVS="coding:1"; PFX=hero5_${MODE}_ ;;   # smoke, smoke2, ...: one coding run per hack
   full)  ENVS="coding:10 coding_norules:10 dashboard_costly_failure:10 grade_your_own:5 optimize_rendering_engine:5"; PFX=hero5_ ;;
   *) echo "usage: $0 smoke|full" >&2; exit 2 ;;
 esac

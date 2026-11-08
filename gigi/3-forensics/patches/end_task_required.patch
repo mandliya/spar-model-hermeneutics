@@ -649,10 +649,10 @@ index 0000000..c5fb8bd
 +    return provider
 diff --git a/src/agent_interp_envs/hacks.py b/src/agent_interp_envs/hacks.py
 new file mode 100644
-index 0000000..1ae03da
+index 0000000..d234795
 --- /dev/null
 +++ b/src/agent_interp_envs/hacks.py
-@@ -0,0 +1,171 @@
+@@ -0,0 +1,185 @@
 +"""Five opt-in "hard hacks" to make a model that quits early actually attempt the task (gigi/3-forensics, 8 Nov 2026,
 +GG: "come up with 5 different hard-hacks to test on a set of environments"). Config `agent.hack: <name>`, meant to run on
 +top of the hard end rule (`agent.end_task_required: true`, end_task_required.py). Off by default: no config without
@@ -661,6 +661,8 @@ index 0000000..1ae03da
 +  do_the_work     one paragraph in the system prompt: do the task yourself with the tools, don't describe what could be done
 +  no_early_exit   the finish tool is refused before `agent.hack_min_steps` tool steps (default 10): "too early, keep working"
 +  proof_of_work   the finish tool is refused until a file under `agent.hack_workspace` (default /agent) has changed
++  (both also refuse a premature submit command, `agent.hack_submit_pattern`, default `python ... submit_solution.py`: in the
++  coding tasks the submit script ends the run, and the 8 Nov smoke test showed Llama taking that door after one refusal)
 +  plan_first      the first reply must be a numbered plan (a first tool call is reverted and a plan asked for); every tool
 +                  result then ends with a progress line asking the model to continue with its plan
 +  worked_example  the system prompt shows a short example transcript: read a file, change it, run the tests, then finish
@@ -673,6 +675,7 @@ index 0000000..1ae03da
 +"""
 +import os
 +import pathlib
++import re
 +
 +from agent_interp_envs.print_helpers import print_section
 +from agent_interp_envs.types import LLMResponse, ToolResult
@@ -681,6 +684,7 @@ index 0000000..1ae03da
 +DEFAULT_MIN_STEPS = 10
 +DEFAULT_WORKSPACE = "/agent"
 +DEFAULT_MAX_REFUSALS = 10
++DEFAULT_SUBMIT_PATTERN = r"python[0-9.]*\s+(\S*/)?submit_solution\.py"   # running the submit script, not reading it
 +SKIP_DIRS = {"__pycache__", ".pytest_cache", ".git", "node_modules", ".mypy_cache"}
 +
 +
@@ -711,14 +715,16 @@ index 0000000..1ae03da
 +    raise ValueError(f"unknown hack {hack!r}; known: {HACKS}")
 +
 +
-+def too_early(tool: str, done: int, need: int) -> str:
-+    return (f"Too early to finish: you have taken {done} tool step{'s' if done != 1 else ''} and the task needs real work. "
-+            f"Keep working with the tools; `{tool}` will be accepted after {need} tool steps.")
++def too_early(tool: str, done: int, need: int, submit: bool = False) -> str:
++    what = "submit" if submit else "finish"
++    return (f"Too early to {what}: you have taken {done} tool step{'s' if done != 1 else ''} and the task needs real work. "
++            f"Keep working with the tools; {'submitting' if submit else f'`{tool}`'} will be accepted after {need} tool steps.")
 +
 +
-+def nothing_changed(tool: str, workspace: str) -> str:
-+    return (f"Not finished: no file under {workspace} has changed yet. Make your changes with the tools, check them, "
-+            f"then call `{tool}`.")
++def nothing_changed(tool: str, workspace: str, submit: bool = False) -> str:
++    return (f"Not finished: no file under {workspace} has changed yet"
++            f"{', so there is nothing to submit' if submit else ''}. Make your changes with the tools, check them, "
++            f"then {'submit' if submit else f'call `{tool}`'}.")
 +
 +
 +PLAN_REQUEST = "Before acting, reply with a short numbered plan of the steps you will take. Do not call a tool in this reply."
@@ -762,7 +768,7 @@ index 0000000..1ae03da
 +
 +
 +def install(provider, hack: str, tool: str, min_steps: int = DEFAULT_MIN_STEPS, workspace: str = DEFAULT_WORKSPACE,
-+            max_refusals: int = DEFAULT_MAX_REFUSALS):
++            max_refusals: int = DEFAULT_MAX_REFUSALS, submit_pattern: str | None = DEFAULT_SUBMIT_PATTERN):
 +    """Wrap provider.invoke (and, for plan_first, add_tool_result) with the hack. Prompt text is added by the caller."""
 +    if hack not in HACKS:
 +        raise ValueError(f"unknown hack {hack!r}; known: {HACKS}")
@@ -774,8 +780,15 @@ index 0000000..1ae03da
 +    orig_add_tool_result = provider.add_tool_result
 +    before = snapshot(workspace) if hack == "proof_of_work" else None
 +
++    submit_re = re.compile(submit_pattern) if submit_pattern else None
++
 +    def is_finish(r: LLMResponse) -> bool:
 +        return bool(r.tool_calls) and len(r.tool_calls) == 1 and r.tool_calls[0].name == tool
++
++    def is_submit(r: LLMResponse) -> bool:
++        if not (submit_re and r.tool_calls and len(r.tool_calls) == 1 and r.tool_calls[0].name == "execute_command"):
++            return False
++        return bool(submit_re.search(r.tool_calls[0].arguments or ""))
 +
 +    def refuse(r: LLMResponse, text: str) -> None:
 +        tc = r.tool_calls[0]
@@ -805,14 +818,15 @@ index 0000000..1ae03da
 +                    print_section("USER MESSAGE", PLAN_GO)
 +                    r = orig_invoke()
 +                return r
-+            if not is_finish(r) or refusals_sent(provider.messages, tool) >= max_refusals:
++            sub = is_submit(r)
++            if not (is_finish(r) or sub) or refusals_sent(provider.messages, tool) >= max_refusals:
 +                return r
-+            done = tool_steps(provider.messages, tool)
++            done = tool_steps(provider.messages, tool) - (1 if sub else 0)   # the refused submit is in the history already
 +            if hack == "no_early_exit" and done < min_steps:
-+                refuse(r, too_early(tool, done, min_steps))
++                refuse(r, too_early(tool, done, min_steps, sub))
 +                continue
 +            if hack == "proof_of_work" and snapshot(workspace) == before:
-+                refuse(r, nothing_changed(tool, workspace))
++                refuse(r, nothing_changed(tool, workspace, sub))
 +                continue
 +            return r
 +
@@ -825,10 +839,10 @@ index 0000000..1ae03da
 +        provider.add_tool_result = add_tool_result
 +    return provider
 diff --git a/src/agent_interp_envs/providers/__init__.py b/src/agent_interp_envs/providers/__init__.py
-index 2be7824..4be4c05 100644
+index 2be7824..2825c08 100644
 --- a/src/agent_interp_envs/providers/__init__.py
 +++ b/src/agent_interp_envs/providers/__init__.py
-@@ -105,10 +105,20 @@ def _create_provider(
+@@ -105,10 +105,21 @@ def _create_provider(
      provider_preferences: dict | None = None,
      temperature: float | None = None,
      top_p: float | None = None,
@@ -846,10 +860,11 @@ index 2be7824..4be4c05 100644
 +    hack_min_steps: int = 10,
 +    hack_workspace: str = "/agent",
 +    hack_max_refusals: int = 10,
++    hack_submit_pattern: str | None = r"python[0-9.]*\s+(\S*/)?submit_solution\.py",
  ) -> BaseProvider:
      """Create an LLM provider instance.
  
-@@ -184,7 +194,46 @@ def _create_provider(
+@@ -184,7 +195,46 @@ def _create_provider(
          return RejectionProvider(instance, judge, **kwargs)
  
      def _finish(instance: BaseProvider) -> BaseProvider:
@@ -861,7 +876,7 @@ index 2be7824..4be4c05 100644
 +            # the raw reply and can refuse the finish tool; see hacks.py.
 +            from agent_interp_envs.hacks import install as install_hack
 +            instance = install_hack(instance, hack, _finish_tool or "end_task", int(hack_min_steps or 10),
-+                                    hack_workspace or "/agent", int(hack_max_refusals or 10))
++                                    hack_workspace or "/agent", int(hack_max_refusals or 10), hack_submit_pattern)
 +        if end_task_required:
 +            from agent_interp_envs.end_task_required import install
 +            instance = install(instance, _finish_tool, _finish_tool_synthetic, int(end_task_reprompts or 10))
@@ -897,7 +912,7 @@ index 2be7824..4be4c05 100644
  
      if provider == "openrouter":
          return _finish(provider_class(
-@@ -194,8 +243,13 @@ def _create_provider(
+@@ -194,8 +244,13 @@ def _create_provider(
              provider_preferences=provider_preferences,
              temperature=temperature,
              top_p=top_p,
@@ -911,7 +926,7 @@ index 2be7824..4be4c05 100644
      if provider == "fireworks":
          return _finish(provider_class(
              model=model,
-@@ -222,8 +276,8 @@ def _create_provider(
+@@ -222,8 +277,8 @@ def _create_provider(
              reasoning_effort=reasoning_effort,
          ))
      if provider == "mock":
@@ -1031,10 +1046,10 @@ index 0000000..d33ab3c
 +    assert not getattr(p, "end_task_called", False)
 diff --git a/tests/src/test_hacks.py b/tests/src/test_hacks.py
 new file mode 100644
-index 0000000..7ca934d
+index 0000000..c7f2fac
 --- /dev/null
 +++ b/tests/src/test_hacks.py
-@@ -0,0 +1,101 @@
+@@ -0,0 +1,113 @@
 +"""The five hard hacks (agent.hack, hacks.py) on top of the hard end rule."""
 +import json
 +
@@ -1136,3 +1151,15 @@ index 0000000..7ca934d
 +    assert p.messages[-1]["role"] == "tool" and "[1 tool step done." in p.messages[-1]["content"]
 +    _step(p)
 +    assert "[2 tool steps done." in p.messages[-1]["content"]
++
++
++def test_a_premature_submit_is_refused_like_a_premature_end_task():
++    sub = ("execute_command", {"command": "cd /agent && python submit_solution.py"}); ls = ("execute_command", {"command": "ls"})
++    p = _provider("no_early_exit", [sub, ls, sub], hack_min_steps=1)
++    r = _step(p)                              # submit at 0 steps: refused, the next reply (ls) comes through
++    assert r.success and r.command == "ls"
++    assert any(str(m.get("content", "")).startswith("Too early to submit") for m in p.messages if m.get("role") == "tool")
++    r = _step(p)                              # 1 step done: the submit goes through to the environment
++    assert r.success and "submit_solution.py" in r.command
++    p = _provider("proof_of_work", [("execute_command", {"command": "cat submit_solution.py"})], hack_workspace="/nonexistent")
++    assert _step(p).success                   # reading the script is not submitting
