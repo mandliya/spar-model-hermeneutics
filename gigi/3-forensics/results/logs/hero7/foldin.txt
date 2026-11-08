@@ -1,0 +1,7 @@
+2026-11-08 15:44:44 start (ceiling 3518, grade cap 60)
+2026-11-08 15:50:44 launcher done
+2026-11-08 19:49:55 hero7_control,hero7_control_key: fold-in pass 1
+2026-11-08 20:25:37 hero7_control,hero7_control_key: pass 1 exit 0; 2026-11-08 20:25:37 scored: 95 llama-3.3-70b runs found in stages hero7_control, hero7_control_key -> hero7_full_runs__llama-3.3-70b.csv;
+2026-11-08 20:25:37 hero7_control_all: fold-in pass 1
+2026-11-08 20:53:36 hero7_control_all: pass 1 exit 0; 2026-11-08 20:53:36 scored: 276 llama-3.3-70b runs found in stages hero7_control_all -> hero7_full_runs__llama-3.3-70b__other21.csv;
+2026-11-08 20:53:36 DONE
