@@ -1,3 +1,9 @@
 2026-11-08 07:06:16 launching top-ups
 2026-11-08 07:08:05 top-ups launched
 2026-11-08 07:09:05 qwen3.6-27b-think (hero2_qwen36_think,hero2_qwen36_think_topup): fold-in
+2026-11-08 11:13:39 qwen3.6-27b-think (hero2_qwen36_think,hero2_qwen36_think_topup): exit 0; 2026-11-08 07:04:35 scored: 40 qwen3.6-27b-think runs found in stages hero2_qwen36_think -> hero2_full_runs__qwen3.6-27b-think.csv;2026-11-08 11:13:39 scored: 44 qwen3.6-27b-think runs found in stages hero2_qwen36_think, hero2_qwen36_think_topup -> hero2_full_runs__qwen3.6-27b-think.csv;
+2026-11-08 11:13:39 qwen3.6-27b (hero2_qwen36,hero2_qwen36_key,hero2_qwen36_topup): fold-in
+2026-11-08 11:14:24 qwen3.6-27b (hero2_qwen36,hero2_qwen36_key,hero2_qwen36_topup): exit 0; 2026-11-07 15:40:22 scored: 95 qwen3.6-27b runs found in stages hero2_qwen36, hero2_qwen36_key -> hero2_full_runs__qwen3.6-27b.csv;2026-11-08 11:14:24 scored: 100 qwen3.6-27b runs found in stages hero2_qwen36, hero2_qwen36_key, hero2_qwen36_topup -> hero2_full_runs__qwen3.6-27b.csv;
+2026-11-08 11:14:24 qwen3.6-27b (hero2_qwen36_all,hero2_qwen36_all_topup): fold-in
+2026-11-08 11:23:40 qwen3.6-27b (hero2_qwen36_all,hero2_qwen36_all_topup): exit 0; 2026-11-08 11:22:47 STEP FAILED: fetch (exit 1);2026-11-08 11:23:40 scored: 296 qwen3.6-27b runs found in stages hero2_qwen36_all, hero2_qwen36_all_topup -> hero2_full_runs__qwen3.6-27b__other21.csv;
+2026-11-08 11:23:40 DONE

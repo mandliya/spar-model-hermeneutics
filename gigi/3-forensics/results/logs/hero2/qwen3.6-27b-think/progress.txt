@@ -44,3 +44,22 @@ audit (hero2_qwen36_think): target 40, found 40, scored 29, 3 cells below target
 2026-11-08 07:09:05 start (model qwen3.6-27b-think, stages hero2_qwen36_think,hero2_qwen36_think_topup, ceiling 3300, grade cap 100, files hero2_full_runs__qwen3.6-27b-think*.csv + hero2_loss_audit__qwen3.6-27b-think.md)
 2026-11-08 07:09:05 step wait
 2026-11-08 07:09:06 waiting: 1 of our apps still running
+2026-11-08 07:39:51 waiting: 1 of our apps still running
+2026-11-08 08:10:41 waiting: 1 of our apps still running
+2026-11-08 08:41:28 waiting: 1 of our apps still running
+2026-11-08 11:13:04 all our apps finished
+2026-11-08 11:13:04 step fetch
+fetched hero2_qwen36_think_topup/grade_your_own grade_your_own/qwen-qwen3.6-27b/2026-11-08_07-06-45-493864: 2026-11-08 11:13:28 gigi-forensics-grade-your-own:grade_your_own/qwen-qwen3.6-27b/2026-11-08_07-06-45-493864: 1037 new files, 0 already here (0 of them differ in size; local copy kept)
+2026-11-08 11:13:28 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 2 folder(s)
+2026-11-08 11:13:30 step grade
+2026-11-08 11:13:39 grading: 2026-11-08 07:04:31 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-08 11:13:39 grading: 2026-11-08 07:04:33 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think): 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-08 11:13:39 grading: 2026-11-08 11:13:30 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think,hero2_qwen36_think_topup): 0 ungraded runs in 2 fleets, ~$0.00
+2026-11-08 11:13:39 grading: 2026-11-08 11:13:37 estimate total (hero solo, qwen3.6-27b-think, stages hero2_qwen36_think,hero2_qwen36_think_topup): 0 ungraded runs in 2 fleets, ~$0.00
+2026-11-08 11:13:39 step score
+2026-11-08 11:13:39 scored: 44 qwen3.6-27b-think runs found in stages hero2_qwen36_think, hero2_qwen36_think_topup -> hero2_full_runs__qwen3.6-27b-think.csv
+2026-11-08 11:13:39 step audit
+audit (hero2_qwen36_think, hero2_qwen36_think_topup): target 44, found 44, scored 29, 4 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b-think.md
+2026-11-08 11:13:39 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero2_loss_audit__qwen3.6-27b-think.md
+2026-11-08 11:13:39 done (not committed: the parent session commits)

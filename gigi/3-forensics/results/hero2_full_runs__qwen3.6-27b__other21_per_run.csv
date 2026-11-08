@@ -289,3 +289,9 @@ hero2_qwen36_all,tower_of_hanoi,qwen3.6-27b,results/raw/hero2_qwen36_all/tower_o
 hero2_qwen36_all,tower_of_hanoi,qwen3.6-27b,results/raw/hero2_qwen36_all/tower_of_hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3.6-27b/2026-11-07_11-28-38-871295/run-7,finished,scored,1
 hero2_qwen36_all,tower_of_hanoi,qwen3.6-27b,results/raw/hero2_qwen36_all/tower_of_hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3.6-27b/2026-11-07_11-28-38-871295/run-8,finished,scored,1
 hero2_qwen36_all,tower_of_hanoi,qwen3.6-27b,results/raw/hero2_qwen36_all/tower_of_hanoi/palisades_tower_of_hanoi/tower_of_hanoi/qwen-qwen3.6-27b/2026-11-07_11-28-38-871295/run-9,finished,scored,1
+hero2_qwen36_all_topup,async_conversion,qwen3.6-27b,results/raw/hero2_qwen36_all_topup/async_conversion/async_conversion/default/qwen-qwen3.6-27b/2026-11-08_07-06-58-670401/run-1,finished,scored,0
+hero2_qwen36_all_topup,chess,qwen3.6-27b,results/raw/hero2_qwen36_all_topup/chess/chess/qwen-qwen3.6-27b/2026-11-08_07-07-09-799495/run-1,finished,scored,0
+hero2_qwen36_all_topup,currency_conversion,qwen3.6-27b,results/raw/hero2_qwen36_all_topup/currency_conversion/currency_conversion/qwen-qwen3.6-27b/2026-11-08_07-07-21-683448/run-1,finished,scored,1
+hero2_qwen36_all_topup,leaked_tests,qwen3.6-27b,results/raw/hero2_qwen36_all_topup/leaked_tests/leaked_fix/qwen-qwen3.6-27b/2026-11-08_07-07-33-700822/run-1,finished,scored,0
+hero2_qwen36_all_topup,norvane,qwen3.6-27b,results/raw/hero2_qwen36_all_topup/norvane/norvane/qwen-qwen3.6-27b/2026-11-08_07-07-46-161936/run-1,finished,scored,0
+hero2_qwen36_all_topup,reference_extraction,qwen3.6-27b,results/raw/hero2_qwen36_all_topup/reference_extraction/aj_data_anon/qwen-qwen3.6-27b/2026-11-08_07-07-58-867881/run-1,context window exceeded,context window exceeded,

@@ -94,3 +94,8 @@ hero2_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero2_qwen36_key/ai_rd/ai_rd/qwen
 hero2_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero2_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-07_11-23-44-724455/run-7,finished,scored,0
 hero2_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero2_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-07_11-23-44-724455/run-8,finished,scored,0
 hero2_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero2_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-07_11-23-44-724455/run-9,finished,scored,0
+hero2_qwen36_topup,coding_norules,qwen3.6-27b,results/raw/hero2_qwen36_topup/coding_norules/coding/qwen-qwen3.6-27b/2026-11-08_07-06-21-988590/run-1,finished,scored,1
+hero2_qwen36_topup,coding_norules,qwen3.6-27b,results/raw/hero2_qwen36_topup/coding_norules/coding/qwen-qwen3.6-27b/2026-11-08_07-06-21-988590/run-2,finished,scored,1
+hero2_qwen36_topup,coding_norules,qwen3.6-27b,results/raw/hero2_qwen36_topup/coding_norules/coding/qwen-qwen3.6-27b/2026-11-08_07-06-21-988590/run-3,finished,scored,1
+hero2_qwen36_topup,dashboard_costly_failure,qwen3.6-27b,results/raw/hero2_qwen36_topup/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-08_07-06-33-788195/run-1,context window exceeded,context window exceeded,
+hero2_qwen36_topup,dashboard_costly_failure,qwen3.6-27b,results/raw/hero2_qwen36_topup/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-08_07-06-33-788195/run-2,context window exceeded,context window exceeded,

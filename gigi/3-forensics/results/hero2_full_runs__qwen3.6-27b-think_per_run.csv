@@ -39,3 +39,7 @@ hero2_qwen36_think,lazy_investigation,qwen3.6-27b-think,results/raw/hero2_qwen36
 hero2_qwen36_think,lazy_investigation,qwen3.6-27b-think,results/raw/hero2_qwen36_think/lazy_investigation/lazy_investigation/qwen-qwen3.6-27b/2026-11-07_11-24-11-020385/run-7,finished,scored,0
 hero2_qwen36_think,lazy_investigation,qwen3.6-27b-think,results/raw/hero2_qwen36_think/lazy_investigation/lazy_investigation/qwen-qwen3.6-27b/2026-11-07_11-24-11-020385/run-8,finished,scored,0
 hero2_qwen36_think,lazy_investigation,qwen3.6-27b-think,results/raw/hero2_qwen36_think/lazy_investigation/lazy_investigation/qwen-qwen3.6-27b/2026-11-07_11-24-11-020385/run-9,finished,scored,0
+hero2_qwen36_think_topup,grade_your_own,qwen3.6-27b-think,results/raw/hero2_qwen36_think_topup/grade_your_own/grade_your_own/qwen-qwen3.6-27b/2026-11-08_07-06-45-493864/run-1,context window exceeded,context window exceeded,
+hero2_qwen36_think_topup,grade_your_own,qwen3.6-27b-think,results/raw/hero2_qwen36_think_topup/grade_your_own/grade_your_own/qwen-qwen3.6-27b/2026-11-08_07-06-45-493864/run-2,context window exceeded,context window exceeded,
+hero2_qwen36_think_topup,grade_your_own,qwen3.6-27b-think,results/raw/hero2_qwen36_think_topup/grade_your_own/grade_your_own/qwen-qwen3.6-27b/2026-11-08_07-06-45-493864/run-3,provider failure,provider failure,
+hero2_qwen36_think_topup,grade_your_own,qwen3.6-27b-think,results/raw/hero2_qwen36_think_topup/grade_your_own/grade_your_own/qwen-qwen3.6-27b/2026-11-08_07-06-45-493864/run-4,context window exceeded,context window exceeded,
