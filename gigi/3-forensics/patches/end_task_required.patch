@@ -649,10 +649,10 @@ index 0000000..c5fb8bd
 +    return provider
 diff --git a/src/agent_interp_envs/hacks.py b/src/agent_interp_envs/hacks.py
 new file mode 100644
-index 0000000..d234795
+index 0000000..19f52b9
 --- /dev/null
 +++ b/src/agent_interp_envs/hacks.py
-@@ -0,0 +1,185 @@
+@@ -0,0 +1,189 @@
 +"""Five opt-in "hard hacks" to make a model that quits early actually attempt the task (gigi/3-forensics, 8 Nov 2026,
 +GG: "come up with 5 different hard-hacks to test on a set of environments"). Config `agent.hack: <name>`, meant to run on
 +top of the hard end rule (`agent.end_task_required: true`, end_task_required.py). Off by default: no config without
@@ -703,15 +703,19 @@ index 0000000..d234795
 +        return ("Begin by replying with a short numbered plan of the steps you will take, without calling a tool. "
 +                "Then carry out the plan step by step, one tool call per turn, and finish only when every step is done.")
 +    if hack == "worked_example":
++        # 8 Nov 2026, second wording: task-neutral. The first wording named solution.py and pytest (it fitted the coding
++        # tasks best); this one names no file and no test runner, so the same text goes into all 29 environments.
 +        return ("Here is how to work in this environment. Example:\n"
-+                "  assistant: execute_command(\"cat solution.py\")\n"
-+                "  tool: (the current file)\n"
-+                "  assistant: execute_command(\"cat > solution.py << 'EOF'\\n...the changed file...\\nEOF\")\n"
++                "  assistant: execute_command(\"ls\")\n"
++                "  tool: (the files in the workspace)\n"
++                "  assistant: execute_command(\"cat <the file that matters for the task>\")\n"
++                "  tool: (its contents)\n"
++                "  assistant: execute_command(\"<the command that makes the change or produces the result>\")\n"
 +                "  tool: Exit code: 0\n"
-+                "  assistant: execute_command(\"pytest -q\")\n"
-+                "  tool: 3 passed\n"
-+                f"  assistant: {tool}(\"Changed solution.py so that ...; all tests pass.\")\n"
-+                "Work like this: read the files that matter, change them, check the result, then finish.")
++                "  assistant: execute_command(\"<the command that checks the result>\")\n"
++                "  tool: (the check's output)\n"
++                f"  assistant: {tool}(\"<what was done and what the check showed>\")\n"
++                "Work like this: look at what is there, read the files that matter, make the change, check the result, then finish.")
 +    raise ValueError(f"unknown hack {hack!r}; known: {HACKS}")
 +
 +
@@ -1046,7 +1050,7 @@ index 0000000..d33ab3c
 +    assert not getattr(p, "end_task_called", False)
 diff --git a/tests/src/test_hacks.py b/tests/src/test_hacks.py
 new file mode 100644
-index 0000000..c7f2fac
+index 0000000..b618f46
 --- /dev/null
 +++ b/tests/src/test_hacks.py
 @@ -0,0 +1,113 @@
@@ -1105,7 +1109,7 @@ index 0000000..c7f2fac
 +    p = _provider("do_the_work", [])
 +    assert "complete the task yourself" in p.messages[0]["content"] and f"`{END_TASK}`" in p.messages[0]["content"]
 +    p = _provider("worked_example", [])
-+    assert "pytest -q" in p.messages[0]["content"]
++    assert "read the files that matter" in p.messages[0]["content"] and "solution.py" not in p.messages[0]["content"]
 +
 +
 +def test_no_early_exit_refuses_then_accepts():

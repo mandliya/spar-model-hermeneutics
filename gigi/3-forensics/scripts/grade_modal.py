@@ -61,7 +61,7 @@ _HERO_DEFAULT_STAGES = {"llama-3.3-70b": "hero_smoke,hero_solo,hero_solo_key", "
 HERO_STAGES = os.environ.get("HERO_STAGES", _HERO_DEFAULT_STAGES.get(HERO_MODEL, "")).split(",")
 if HERO and not any(HERO_STAGES):
     raise SystemExit(f"grade_modal.py HERO_SOLO=1: no default stages for HERO_MODEL={HERO_MODEL}; set HERO_STAGES")
-if HERO and (any(s in ("hero_solo_all", "hero2_llama_all", "hero2_qwen_all", "hero2_gemma_all", "hero2_qwen36_all", "hero4_llama_all", "hero4_llama_fix") for s in HERO_STAGES) or os.environ.get("HERO_ALL_JUDGED") == "1"):
+if HERO and (any(s in ("hero_solo_all", "hero2_llama_all", "hero2_qwen_all", "hero2_gemma_all", "hero2_qwen36_all", "hero4_llama_all", "hero4_llama_fix", "hero6_example_all") for s in HERO_STAGES) or os.environ.get("HERO_ALL_JUDGED") == "1"):
     # stage hero_solo_all (4 Nov 2026): every judged environment, the same config -> grader mapping as the Qwen rows of
     # results/full_runs.csv (full_runs_table.JUDGED: 11 environments, 9 graders). Same cap, ceiling and estimate.
     import sys
