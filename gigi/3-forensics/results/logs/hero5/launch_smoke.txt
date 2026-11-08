@@ -1,0 +1,7 @@
+2026-11-08 14:21:58 org credit balance: 7518.42
+2026-11-08 14:21:58 launching hero5_smoke_do_the_work: coding:1
+2026-11-08 14:22:11 launching hero5_smoke_no_early_exit: coding:1
+2026-11-08 14:22:23 launching hero5_smoke_proof_of_work: coding:1
+2026-11-08 14:22:35 launching hero5_smoke_plan_first: coding:1
+2026-11-08 14:22:47 launching hero5_smoke_worked_example: coding:1
+2026-11-08 14:22:59 launched (smoke)

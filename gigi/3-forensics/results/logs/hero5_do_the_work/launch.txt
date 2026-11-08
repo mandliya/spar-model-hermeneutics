@@ -1,0 +1,6 @@
+2026-11-08 14:28:10 launched coding__llama-3.3-70b x10 (max_steps 100, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=do_the_work,modal.memory=2048, pid 88193)
+2026-11-08 14:28:22 launched coding_norules__llama-3.3-70b x10 (max_steps 100, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=do_the_work,modal.memory=2048, pid 88226)
+2026-11-08 14:28:34 launched dashboard_costly_failure__llama-3.3-70b x10 (max_steps 500, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=do_the_work, pid 88260)
+2026-11-08 14:28:46 launched grade_your_own__llama-3.3-70b x5 (max_steps 500, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=do_the_work, pid 88372)
+2026-11-08 14:28:58 launched optimize_rendering_engine__llama-3.3-70b x5 (max_steps 500, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=do_the_work, pid 88423)
+2026-11-08 14:28:58 all launched

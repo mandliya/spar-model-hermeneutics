@@ -1,0 +1,14 @@
+2026-11-08 14:27:57 start (ceiling 4500, grade cap 60)
+2026-11-08 14:33:57 launcher done
+2026-11-08 14:48:58 do_the_work: fold-in pass 1
+2026-11-08 14:53:05 do_the_work: pass 1 exit 0; 2026-11-08 14:53:05 scored: 40 llama-3.3-70b runs found in stages hero5_do_the_work -> hero5_full_runs__llama-3.3-70b__do_the_work.csv;
+2026-11-08 14:53:05 no_early_exit: fold-in pass 1
+2026-11-08 15:02:24 no_early_exit: pass 1 exit 0; 2026-11-08 15:02:24 scored: 40 llama-3.3-70b runs found in stages hero5_no_early_exit -> hero5_full_runs__llama-3.3-70b__no_early_exit.csv;
+2026-11-08 15:02:24 proof_of_work: fold-in pass 1
+2026-11-08 15:08:42 proof_of_work: pass 1 exit 0; 2026-11-08 15:08:41 scored: 40 llama-3.3-70b runs found in stages hero5_proof_of_work -> hero5_full_runs__llama-3.3-70b__proof_of_work.csv;
+2026-11-08 15:08:42 plan_first: fold-in pass 1
+2026-11-08 15:13:08 plan_first: pass 1 exit 0; 2026-11-08 15:13:08 scored: 40 llama-3.3-70b runs found in stages hero5_plan_first -> hero5_full_runs__llama-3.3-70b__plan_first.csv;
+2026-11-08 15:13:08 worked_example: fold-in pass 1
+2026-11-08 15:18:50 worked_example: pass 1 exit 0; 2026-11-08 15:18:50 scored: 40 llama-3.3-70b runs found in stages hero5_worked_example -> hero5_full_runs__llama-3.3-70b__worked_example.csv;
+2026-11-08 15:18:51 charts rendered
+2026-11-08 15:18:51 DONE

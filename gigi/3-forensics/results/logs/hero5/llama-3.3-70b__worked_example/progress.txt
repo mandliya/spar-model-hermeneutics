@@ -1,0 +1,20 @@
+2026-11-08 15:13:08 start (model llama-3.3-70b, stages hero5_worked_example, ceiling 4500, grade cap 60, files hero5_full_runs__llama-3.3-70b__worked_example*.csv + hero5_loss_audit__llama-3.3-70b__worked_example.md)
+2026-11-08 15:13:08 step wait
+2026-11-08 15:13:10 all our apps finished
+2026-11-08 15:13:10 step fetch
+fetched hero5_worked_example/coding coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-32-05-214192: 2026-11-08 15:13:20 gigi-forensics-coding:coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-32-05-214192: 377 new files, 12 already here (0 of them differ in size; local copy kept)
+fetched hero5_worked_example/coding_norules coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-32-17-029110: 2026-11-08 15:13:27 gigi-forensics-coding:coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-32-17-029110: 326 new files, 12 already here (0 of them differ in size; local copy kept)
+fetched hero5_worked_example/dashboard_costly_failure dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-32-29-487074: 2026-11-08 15:13:34 gigi-forensics-dashboard-perf:dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-32-29-487074: 218 new files, 52 already here (0 of them differ in size; local copy kept)
+fetched hero5_worked_example/grade_your_own grade_your_own/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-32-41-055955: 2026-11-08 15:13:39 gigi-forensics-grade-your-own:grade_your_own/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-32-41-055955: 88 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero5_worked_example/optimize_rendering_engine dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-32-54-553678: 2026-11-08 15:13:45 gigi-forensics-dashboard-perf:dashboard_perf/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-32-54-553678: 180 new files, 27 already here (0 of them differ in size; local copy kept)
+2026-11-08 15:13:45 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 1 folder(s)
+2026-11-08 15:13:46 step grade
+2026-11-08 15:18:50 grading: 2026-11-08 15:13:46 estimate total (hero solo, llama-3.3-70b, stages hero5_worked_example): 20 ungraded runs in 3 fleets, ~$4.75
+2026-11-08 15:18:50 grading: 2026-11-08 15:14:04 estimate total (hero solo, llama-3.3-70b, stages hero5_worked_example): 18 ungraded runs in 3 fleets, ~$4.30
+2026-11-08 15:18:50 step score
+2026-11-08 15:18:50 scored: 40 llama-3.3-70b runs found in stages hero5_worked_example -> hero5_full_runs__llama-3.3-70b__worked_example.csv
+2026-11-08 15:18:50 step audit
+audit (hero5_worked_example): target 40, found 40, scored 40, 0 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero5_loss_audit__llama-3.3-70b__worked_example.md
+2026-11-08 15:18:50 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero5_loss_audit__llama-3.3-70b__worked_example.md
+2026-11-08 15:18:50 done (not committed: the parent session commits)
