@@ -79,9 +79,11 @@ for f in FILES:
                 if fn.get("name") in ("end_task", "done", "end_session"):
                     try:
                         a = json.loads(fn.get("arguments") or "{}"); a = json.loads(a) if isinstance(a, str) else a
-                        rep = str((a or {}).get("report") or (a or {}).get("summary") or (a or {}).get("reason") or "")
+                        t = str((a or {}).get("report") or (a or {}).get("summary") or (a or {}).get("reason") or "")
                     except Exception:
-                        rep = fn.get("arguments") or ""
+                        t = fn.get("arguments") or ""
+                    if t.strip() or rep is None:
+                        rep = t   # the last finish call with text wins (async_conversion: end_task with a report, then a bare end_session)
         if rep is None and e in ("reminders", "plain") and last.get("content"):
             rep = str(last["content"])
         if rep is None or not rep.strip():
@@ -104,72 +106,75 @@ def quote(env):
     cand = sorted((t for k, t in rs if k == top), key=len)
     t = cand[len(cand) // 2]
     t = re.sub(r"\s+", " ", t)
-    return top, (t[:118] + "…") if len(t) > 119 else t
+    return top, (t[:90] + "…") if len(t) > 91 else t
 
 
 rows, heads, ymax = C.layout()
 envs = list(rows)
-fig = plt.figure(figsize=(16, 17))
-fig.text(0.012, 0.985, "What Llama 3.3 70B does and says when it ends a run under the hard rule, all 29 tasks",
+fig = plt.figure(figsize=(19, 17.5))
+fig.text(0.010, 0.986, "How Llama 3.3 70B ends its runs under the hard rule, and what it says when it does: all 29 tasks, 371 runs",
          fontsize=12.5, fontweight="bold", va="top")
-fig.text(0.012, 0.965,
-         "Hard rule: a plain reply never ends the run; only end_task does (or the task's own finish tool), and every tool-less reply gets a reminder, 10 at most, then the step cap.\n"
-         "Left bar: how the task's runs ended. Middle bar: what the end report says, sorted into kinds by a few plain phrases (the kind \"claims it did the work\" is split by whether any\n"
-         "file was written in the run). Right: one real end report per task, the most typical one, cut at 120 characters. Llama 3.3 70B Instruct fp16 on CoreWeave via OpenRouter, 371 runs.",
+fig.text(0.010, 0.968,
+         "Hard rule: a plain reply never ends the run. A run can only end in four ways: Llama calls end_task (or the task's own finish tool: done, end_session); the task ends itself after\n"
+         "a tool call (an answer submitted, an email sent, a game over); Llama sends 10 tool-less replies in a row and is let go; or the step cap is reached. Each cell is the number of runs.\n"
+         "The end report (the text Llama puts in end_task, or its last reply) is sorted into kinds by a few plain phrases; \"claims it did the work\" is split by whether any file was written in that run.\n"
+         "No report text: the task ended itself, or Llama used the task's own finish tool without writing anything. Right: one real end report per task, the most typical one. Llama 3.3 70B Instruct fp16 on CoreWeave via OpenRouter.",
          fontsize=8.3, color="#555", va="top", linespacing=1.45)
-TOP, HGT = 0.075, 0.835
+TOP, HGT = 0.045, 0.83
+ROW_H = HGT / ymax
 
 
-def panel(ax, xlabel):
-    ax.set_ylim(ymax, 0); ax.set_yticks([])
-    for sp in ("top", "right", "left"):
-        ax.spines[sp].set_visible(False)
-    ax.set_xlabel(xlabel, fontsize=9, color="#444", labelpad=6); ax.set_xticks([])
-    for title, y in heads:
-        ax.axhline(y + 0.55, color="#ddd", lw=0.8, zorder=0)
+def fy_of(y): return TOP + HGT * (1 - y / ymax)
 
 
-axL = fig.add_axes([0.215, TOP, 0.13, HGT]); axM = fig.add_axes([0.355, TOP, 0.13, HGT])
-panel(axL, "how the runs ended"); panel(axM, "what the end report says")
-axL.set_xlim(0, 1.0); axM.set_xlim(0, 1.0)
-for title, y in heads:
-    fig.text(0.012, TOP + HGT * (1 - (y + 0.1) / ymax), title, fontsize=8.5, color="#777", fontweight="bold", va="center")
+ENDS_COLS = [("end_tool", "called\nend_task", "#6c4ff0"), ("task_end", "task ended\nitself", "#8fb3e6"),
+             ("reminders", "10 reminders\nused up", "#f0a35e"), ("cap", "step\ncap", "#d9534f")]
+KIND_COLS = [("cant", "says it\ncould not", "#d9534f"), ("advice", "tells the user\nwhat to do", "#f0a35e"),
+             ("claims", "claims done,\nwrote no file", "#1f3f8f"), ("claims_wrote", "claims done,\nwrote a file", "#7fb0e8"),
+             ("undone", "reports it\nnot done", "#b5aea4"), ("answer", "hands in\nan answer", "#a99cf5"), ("norep", "no report\ntext", "#cfc9bf")]
+KIND_WORD = {"cant": "could not", "advice": "tells the user", "claims": "claims done, no file", "claims_wrote": "claims done, wrote file",
+             "undone": "not done", "answer": "answer", "norep": ""}
+LX, LW = 0.20, 0.040      # left grid: x of first column, column width
+MX, MW = 0.375, 0.042      # middle grid
+QX = 0.68                  # quotes
 
 
-def stacked(ax, y, counter, order, h=0.56):
-    n = sum(counter.values())
-    if n == 0:
-        ax.text(0.01, y, "no runs", fontsize=6.8, color="#999", va="center"); return
-    x = 0
-    for key, label, col in order:
+def grid(x0, w, cols, counter, y, n):
+    for j, (key, label, col) in enumerate(cols):
         k = counter.get(key, 0)
-        if not k: continue
-        w = k / n
-        ax.barh(y, w, left=x, height=h, color=col, zorder=3, edgecolor="white", lw=0.6)
-        if w >= 0.1:
-            ax.text(x + w / 2, y, str(k), fontsize=6.6, color="white" if col not in ("#e6e2da", "#b5aea4", "#8fb3e6", "#7fb0e8", "#a99cf5") else "#222",
-                    ha="center", va="center", fontweight="bold")
-        x += w
+        x = x0 + j * w
+        alpha = 0.12 + 0.75 * (k / n) if n else 0
+        fig.patches.append(plt.Rectangle((x, fy_of(y) - ROW_H * 0.42), w - 0.003, ROW_H * 0.84, transform=fig.transFigure,
+                                         color=col, alpha=alpha if k else 0.06, lw=0))
+        fig.text(x + (w - 0.003) / 2, fy_of(y), str(k) if k else "·", fontsize=8.2 if k else 7, color="#111" if k else "#bbb",
+                 ha="center", va="center", fontweight="bold" if k else None)
 
 
-ENDS_ORDER = [(k, l, c) for k, l, c in ENDS] + [("plain", "plain reply (pre-fix only)", "#d9d4cc")]
-KIND_ORDER = [(k, l, c) for k, l, c, *_ in KINDS2]
+# column headers
+hy = TOP + HGT + 0.004
+fig.text(LX, hy + 0.026, "how the runs ended", fontsize=8.6, color="#333", fontweight="bold", va="bottom")
+fig.text(MX, hy + 0.026, "what the end report says", fontsize=8.6, color="#333", fontweight="bold", va="bottom")
+fig.text(QX, hy + 0.004, "one typical end report per task, cut at 91 characters  [its kind]", fontsize=8.6, color="#333", fontweight="bold", va="bottom")
+for j, (key, label, col) in enumerate(ENDS_COLS):
+    fig.text(LX + j * LW + (LW - 0.003) / 2, hy, label, fontsize=7.0, color="#555", ha="center", va="bottom", fontweight="bold", linespacing=1.1)
+for j, (key, label, col) in enumerate(KIND_COLS):
+    fig.text(MX + j * MW + (MW - 0.003) / 2, hy, label, fontsize=7.0, color="#555", ha="center", va="bottom", fontweight="bold", linespacing=1.1)
+for title, y in heads:
+    fig.text(0.010, fy_of(y + 0.1), title, fontsize=8.5, color="#777", fontweight="bold", va="center")
+    fig.lines.append(plt.Line2D([0.010, 0.99], [fy_of(y + 0.55)] * 2, transform=fig.transFigure, color="#ddd", lw=0.8))
 for e in envs:
-    y = rows[e]; fy = TOP + HGT * (1 - y / ymax)
-    fig.text(0.012, fy, C.LABEL.get(e, e) + ("  ◆" if e in C.MAIN else ""), fontsize=8.6, fontweight="bold", va="center")
-    stacked(axL, y, ends[e], ENDS_ORDER); stacked(axM, y, said[e], KIND_ORDER)
+    y = rows[e]; fy = fy_of(y); n = nrun[e]
+    fig.text(0.010, fy, C.LABEL.get(e, e) + ("  ◆" if e in C.MAIN else ""), fontsize=8.6, fontweight="bold", va="center")
+    fig.text(LX - 0.006, fy, f"{n}", fontsize=7.4, color="#777", va="center", ha="right")
+    grid(LX, LW, ENDS_COLS, ends[e], y, n); grid(MX, MW, KIND_COLS, said[e], y, n)
     top, q = quote(e)
     if q:
-        col = dict((k, c) for k, l, c in KIND_ORDER).get(top, "#333")
-        fig.text(0.497, fy, "“" + q + "”", fontsize=7.1, color="#222", va="center", style="italic")
-        fig.patches.append(plt.Rectangle((0.490, fy - 0.006), 0.004, 0.012, transform=fig.transFigure, color=col, lw=0))
+        fig.text(QX, fy, "“" + q + "”  [" + KIND_WORD.get(top, top) + "]", fontsize=7.1, color="#222", va="center", style="italic")
     else:
-        fig.text(0.497, fy, "(no end report: every run was ended by the task itself)", fontsize=7.1, color="#999", va="center", style="italic")
-hL = [plt.Rectangle((0, 0), 1, 1, color=c, label=l) for k, l, c in ENDS_ORDER[:4]]
-hM = [plt.Rectangle((0, 0), 1, 1, color=c, label=l) for k, l, c in KIND_ORDER]
-fig.legend(handles=hL, loc="lower left", bbox_to_anchor=(0.012, 0.004), ncol=2, fontsize=7.8, frameon=False, title="how the runs ended", title_fontsize=8)
-fig.legend(handles=hM, loc="lower left", bbox_to_anchor=(0.40, 0.004), ncol=3, fontsize=7.8, frameon=False, title="what the end report says (colour mark before each quote)", title_fontsize=8)
-fig.text(0.988, 0.004, "◆ = the 8 main tasks.", fontsize=7.6, color="#777", ha="right", va="bottom")
+        fig.text(QX, fy, "no report text in any run", fontsize=7.1, color="#999", va="center", style="italic")
+fig.text(LX - 0.006, hy, "runs", fontsize=7.2, color="#777", va="bottom", ha="right", fontweight="bold")
+fig.text(0.010, 0.006, "◆ = the 8 main tasks.  Cell shading: darker = a larger share of that task's runs.  Every end report, with its kind, is listed in results/hard_rule_what_llama_says.md.",
+         fontsize=7.6, color="#777", va="bottom")
 fig.savefig("charts/hard_rule_what_llama_says.png", dpi=160, facecolor="white"); plt.close(fig)
 
 tot_e, tot_s = collections.Counter(), collections.Counter()
