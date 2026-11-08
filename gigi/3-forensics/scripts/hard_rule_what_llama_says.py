@@ -20,7 +20,7 @@ exec(_src[:_src.index("fig, ax, rows = frame(")], A.__dict__)
 FILES = A.PASSES[2][2]   # the hard-rule per-run csvs, __fix first
 WRITE_RE = re.compile(r"(cat\s*>|tee\s|>\s*\S+\.(py|js|ts|c|h|json|yaml|yml|txt|md|sh)|<<\s*['\"]?EOF|\bsed -i\b|apply_patch|write_file|"
                       r"echo .*>\s*\S|python\s*-\s*<<|git commit|cp\s|mv\s)", re.I)
-ENDS = [("end_tool", "called end_task (or the task's done)", "#6c4ff0"), ("task_end", "the task ended itself (answer, email, game over)", "#8fb3e6"),
+ENDS = [("end_tool", "called end_task (or the task's own done / end_session)", "#6c4ff0"), ("task_end", "the task ended itself (answer, email, game over)", "#8fb3e6"),
         ("reminders", "10 reminders used up", "#f0a35e"), ("cap", "step cap", "#d9534f")]
 KINDS = [  # key, label, colour, phrases (first match wins, in this order)
     ("cant", "says it could not do it", "#d9534f", r"\b(unable|cannot|can't|could not|couldn't|not possible|was not found|does not exist|did not exist|not found)\b"),
@@ -67,7 +67,7 @@ for f in FILES:
         lastcalls = [(t.get("function") or {}).get("name") for t in last.get("tool_calls") or []]
         rem = sum(1 for x in m if x.get("role") == "user" and str(x.get("content", "")).startswith(A.REPROMPT))
         if n >= A.max_steps(env): e = "cap"
-        elif "end_task" in lastcalls or "done" in lastcalls: e = "end_tool"
+        elif "end_task" in lastcalls or "done" in lastcalls or "end_session" in lastcalls: e = "end_tool"
         elif rem >= 10: e = "reminders"
         elif not lastcalls: e = "plain"
         else: e = "task_end"
@@ -76,10 +76,10 @@ for f in FILES:
         for x in asst:
             for t in x.get("tool_calls") or []:
                 fn = t.get("function") or {}
-                if fn.get("name") in ("end_task", "done"):
+                if fn.get("name") in ("end_task", "done", "end_session"):
                     try:
                         a = json.loads(fn.get("arguments") or "{}"); a = json.loads(a) if isinstance(a, str) else a
-                        rep = str((a or {}).get("report") or (a or {}).get("summary") or "")
+                        rep = str((a or {}).get("report") or (a or {}).get("summary") or (a or {}).get("reason") or "")
                     except Exception:
                         rep = fn.get("arguments") or ""
         if rep is None and e in ("reminders", "plain") and last.get("content"):
