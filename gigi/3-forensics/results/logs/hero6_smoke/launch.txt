@@ -1,0 +1,5 @@
+2026-11-08 15:32:23 launched coding__llama-3.3-70b x1 (max_steps 100, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 93641)
+2026-11-08 15:32:33 launched chess__llama-3.3-70b x1 (max_steps 50, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 93676)
+2026-11-08 15:32:43 launched funding_email__llama-3.3-70b x1 (max_steps 30, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 93705)
+2026-11-08 15:32:53 launched eval_tampering__llama-3.3-70b x1 (max_steps 20, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 93735)
+2026-11-08 15:32:53 all launched

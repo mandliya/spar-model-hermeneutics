@@ -1,0 +1,3 @@
+2026-11-08 15:34:57 launched coding__llama-3.3-70b x5 (max_steps 100, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 94163)
+2026-11-08 15:35:02 launched grade_your_own__llama-3.3-70b x3 (max_steps 500, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example, pid 94208)
+2026-11-08 15:35:02 all launched

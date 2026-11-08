@@ -1,0 +1,30 @@
+2026-11-08 19:44:10 estimate aj_data_anon: 10 ungraded runs in 1 fleets, ~$2.23
+2026-11-08 19:44:10 estimate leaked_fix: 15 ungraded runs in 2 fleets, ~$3.32
+2026-11-08 19:44:10 estimate lucky_seed: 9 ungraded runs in 1 fleets, ~$2.11
+2026-11-08 19:44:10 estimate lucky_seed_readable_grader: 8 ungraded runs in 1 fleets, ~$1.81
+2026-11-08 19:44:10 estimate optimize_cache_c: 5 ungraded runs in 1 fleets, ~$1.10
+2026-11-08 19:44:10 estimate tables_coverage_tests: 10 ungraded runs in 1 fleets, ~$3.11
+2026-11-08 19:44:10 estimate total (hero solo, llama-3.3-70b, stages hero6_example_all): 57 ungraded runs in 7 fleets, ~$13.68
+2026-11-08 19:44:10 start: 7 fleets in 6 environments, cap $60.0, judge default
+2026-11-08 19:44:27 aj_data_anon: 1 fleets, exit 1, spent so far $0.00
+2026-11-08 19:44:46 leaked_fix: 2 fleets, exit 0, spent so far $0.34
+2026-11-08 19:44:50 lucky_seed: 1 fleets, exit 1, spent so far $1.18
+2026-11-08 19:44:55 lucky_seed_readable_grader: 1 fleets, exit 1, spent so far $1.18
+2026-11-08 19:44:58 optimize_cache_c: 1 fleets, exit 1, spent so far $1.18
+2026-11-08 19:45:17 tables_coverage_tests: 1 fleets, exit 0, spent so far $1.18
+2026-11-08 19:45:18 done, spent $1.18
+2026-11-08 19:45:18 estimate aj_data_anon: 8 ungraded runs in 1 fleets, ~$1.78
+2026-11-08 19:45:18 estimate leaked_fix: 0 ungraded runs in 2 fleets, ~$0.00
+2026-11-08 19:45:18 estimate lucky_seed: 9 ungraded runs in 1 fleets, ~$2.11
+2026-11-08 19:45:18 estimate lucky_seed_readable_grader: 8 ungraded runs in 1 fleets, ~$1.81
+2026-11-08 19:45:18 estimate optimize_cache_c: 5 ungraded runs in 1 fleets, ~$1.10
+2026-11-08 19:45:18 estimate tables_coverage_tests: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-08 19:45:18 estimate total (hero solo, llama-3.3-70b, stages hero6_example_all): 30 ungraded runs in 7 fleets, ~$6.80
+2026-11-08 19:45:18 start: 7 fleets in 6 environments, cap $60.0, judge claude-opus-4-8
+2026-11-08 19:45:47 aj_data_anon: 1 fleets, exit 0, spent so far $0.00
+2026-11-08 19:45:48 leaked_fix: 2 fleets, exit 0, spent so far $1.09
+2026-11-08 19:46:31 lucky_seed: 1 fleets, exit 0, spent so far $1.09
+2026-11-08 19:46:59 lucky_seed_readable_grader: 1 fleets, exit 0, spent so far $2.16
+2026-11-08 19:49:31 optimize_cache_c: 1 fleets, exit 0, spent so far $3.32
+2026-11-08 19:49:32 tables_coverage_tests: 1 fleets, exit 0, spent so far $3.32
+2026-11-08 19:49:32 done, spent $3.32

@@ -1,0 +1,18 @@
+2026-11-08 18:20:20 estimate dashboard_perf: 15 ungraded runs in 2 fleets, ~$3.64
+2026-11-08 18:20:20 estimate grade_your_own: 5 ungraded runs in 1 fleets, ~$1.12
+2026-11-08 18:20:20 estimate stripped_engine: 5 ungraded runs in 1 fleets, ~$1.23
+2026-11-08 18:20:20 estimate total (hero solo, llama-3.3-70b, stages hero6_example,hero6_example_key): 25 ungraded runs in 4 fleets, ~$5.99
+2026-11-08 18:20:20 start: 4 fleets in 3 environments, cap $60.0, judge default
+2026-11-08 18:20:32 dashboard_perf: 2 fleets, exit 1, spent so far $0.00
+2026-11-08 18:20:35 grade_your_own: 1 fleets, exit 1, spent so far $0.00
+2026-11-08 18:20:48 stripped_engine: 1 fleets, exit 1, spent so far $0.73
+2026-11-08 18:20:48 done, spent $0.73
+2026-11-08 18:20:48 estimate dashboard_perf: 14 ungraded runs in 2 fleets, ~$3.43
+2026-11-08 18:20:48 estimate grade_your_own: 5 ungraded runs in 1 fleets, ~$1.12
+2026-11-08 18:20:48 estimate stripped_engine: 4 ungraded runs in 1 fleets, ~$1.03
+2026-11-08 18:20:48 estimate total (hero solo, llama-3.3-70b, stages hero6_example,hero6_example_key): 23 ungraded runs in 4 fleets, ~$5.58
+2026-11-08 18:20:48 start: 4 fleets in 3 environments, cap $60.0, judge claude-opus-4-8
+2026-11-08 18:21:53 dashboard_perf: 2 fleets, exit 0, spent so far $1.62
+2026-11-08 18:29:15 grade_your_own: 1 fleets, exit 0, spent so far $2.74
+2026-11-08 18:29:40 stripped_engine: 1 fleets, exit 0, spent so far $2.74
+2026-11-08 18:29:41 done, spent $3.77
