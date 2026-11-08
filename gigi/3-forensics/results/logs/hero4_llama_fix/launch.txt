@@ -1,0 +1,5 @@
+2026-11-08 14:25:45 launched chess__llama-3.3-70b x19 (max_steps 50, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,modal.memory=2048, pid 87474)
+2026-11-08 14:25:57 launched tictactoe__llama-3.3-70b x19 (max_steps 30, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,modal.memory=2048, pid 87605)
+2026-11-08 14:26:09 launched coding__llama-3.3-70b x20 (max_steps 100, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,modal.memory=2048, pid 87655)
+2026-11-08 14:26:21 launched coding_norules__llama-3.3-70b x20 (max_steps 100, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,modal.memory=2048, pid 87697)
+2026-11-08 14:26:21 all launched

@@ -1,0 +1,6 @@
+2026-11-08 14:48:29 estimate total (hero solo, llama-3.3-70b, stages hero4_llama_fix): 0 ungraded runs in 0 fleets, ~$0.00
+2026-11-08 14:48:30 start: 0 fleets in 0 environments, cap $30.0, judge default
+2026-11-08 14:48:30 done, spent $0.00
+2026-11-08 14:48:30 estimate total (hero solo, llama-3.3-70b, stages hero4_llama_fix): 0 ungraded runs in 0 fleets, ~$0.00
+2026-11-08 14:48:31 start: 0 fleets in 0 environments, cap $30.0, judge claude-opus-4-8
+2026-11-08 14:48:32 done, spent $0.00

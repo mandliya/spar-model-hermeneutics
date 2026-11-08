@@ -1,0 +1,22 @@
+2026-11-08 14:26:32 start (model llama-3.3-70b, stages hero4_llama_fix, ceiling 3389, grade cap 30, files hero4_full_runs__llama-3.3-70b__fix*.csv + hero4_loss_audit__llama-3.3-70b__fix.md)
+2026-11-08 14:26:32 step wait
+2026-11-08 14:26:33 waiting: 5 of our apps still running
+2026-11-08 14:33:46 waiting for 24 local launcher(s) to finish downloading
+2026-11-08 14:47:47 all our apps finished
+2026-11-08 14:47:47 step fetch
+fetched hero4_llama_fix/chess chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922: 2026-11-08 14:48:00 gigi-forensics-chess:chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922: 603 new files, 21 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama_fix/coding coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277: 2026-11-08 14:48:05 gigi-forensics-coding:coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277: 138 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama_fix/coding_norules coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327: 2026-11-08 14:48:11 gigi-forensics-coding:coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327: 132 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama_fix/swe_rebench_v2 swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23: 2026-11-08 14:48:16 gigi-forensics-swe-rebench-v2:swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23: 151 new files, 0 already here (0 of them differ in size; local copy kept)
+fetched hero4_llama_fix/tictactoe tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410: 2026-11-08 14:48:28 gigi-forensics-tictactoe:tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410: 531 new files, 21 already here (0 of them differ in size; local copy kept)
+2026-11-08 14:48:28 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 1 folder(s)
+2026-11-08 14:48:29 step grade
+2026-11-08 14:48:32 grading: 2026-11-08 14:48:29 estimate total (hero solo, llama-3.3-70b, stages hero4_llama_fix): 0 ungraded runs in 0 fleets, ~$0.00
+2026-11-08 14:48:32 grading: 2026-11-08 14:48:30 estimate total (hero solo, llama-3.3-70b, stages hero4_llama_fix): 0 ungraded runs in 0 fleets, ~$0.00
+2026-11-08 14:48:32 step score
+2026-11-08 14:48:32 scored: 88 llama-3.3-70b runs found in stages hero4_llama_fix -> hero4_full_runs__llama-3.3-70b__fix.csv
+2026-11-08 14:48:32 step audit
+audit (hero4_llama_fix): target 88, found 88, scored 71, 1 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero4_loss_audit__llama-3.3-70b__fix.md
+2026-11-08 14:48:32 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero4_loss_audit__llama-3.3-70b__fix.md
+2026-11-08 14:48:32 done (not committed: the parent session commits)

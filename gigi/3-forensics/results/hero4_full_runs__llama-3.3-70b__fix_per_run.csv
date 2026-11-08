@@ -1,0 +1,89 @@
+stage,environment,model,run,status,outcome,bad
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-1,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-10,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-11,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-12,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-13,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-14,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-15,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-16,finished,scored,0
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-17,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-18,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-19,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-2,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-3,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-4,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-5,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-6,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-7,finished,scored,0
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-8,finished,no value for the measure,
+hero4_llama_fix,chess,llama-3.3-70b,results/raw/hero4_llama_fix/chess/chess/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-25-101922/run-9,finished,no value for the measure,
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-1,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-10,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-11,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-12,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-13,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-14,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-15,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-16,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-17,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-18,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-19,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-2,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-20,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-3,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-4,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-5,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-6,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-7,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-8,finished,scored,0
+hero4_llama_fix,coding,llama-3.3-70b,results/raw/hero4_llama_fix/coding/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-04-794277/run-9,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-1,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-10,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-11,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-12,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-13,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-14,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-15,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-16,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-17,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-18,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-19,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-2,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-20,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-3,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-4,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-5,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-6,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-7,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-8,finished,scored,0
+hero4_llama_fix,coding_norules,llama-3.3-70b,results/raw/hero4_llama_fix/coding_norules/coding/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-14-602327/run-9,finished,scored,0
+hero4_llama_fix,swe_rebench_v2,llama-3.3-70b,results/raw/hero4_llama_fix/swe_rebench_v2/swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23/run-1,finished,scored,0
+hero4_llama_fix,swe_rebench_v2,llama-3.3-70b,results/raw/hero4_llama_fix/swe_rebench_v2/swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23/run-10,finished,scored,0
+hero4_llama_fix,swe_rebench_v2,llama-3.3-70b,results/raw/hero4_llama_fix/swe_rebench_v2/swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23/run-2,finished,scored,0
+hero4_llama_fix,swe_rebench_v2,llama-3.3-70b,results/raw/hero4_llama_fix/swe_rebench_v2/swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23/run-3,finished,scored,0
+hero4_llama_fix,swe_rebench_v2,llama-3.3-70b,results/raw/hero4_llama_fix/swe_rebench_v2/swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23/run-4,finished,scored,0
+hero4_llama_fix,swe_rebench_v2,llama-3.3-70b,results/raw/hero4_llama_fix/swe_rebench_v2/swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23/run-5,finished,scored,0
+hero4_llama_fix,swe_rebench_v2,llama-3.3-70b,results/raw/hero4_llama_fix/swe_rebench_v2/swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23/run-6,finished,scored,0
+hero4_llama_fix,swe_rebench_v2,llama-3.3-70b,results/raw/hero4_llama_fix/swe_rebench_v2/swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23/run-7,finished,scored,0
+hero4_llama_fix,swe_rebench_v2,llama-3.3-70b,results/raw/hero4_llama_fix/swe_rebench_v2/swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23/run-8,finished,scored,0
+hero4_llama_fix,swe_rebench_v2,llama-3.3-70b,results/raw/hero4_llama_fix/swe_rebench_v2/swe_rebench_v2/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-23/run-9,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-1,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-10,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-11,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-12,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-13,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-14,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-15,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-16,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-17,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-18,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-19,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-2,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-3,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-4,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-5,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-6,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-7,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-8,finished,scored,0
+hero4_llama_fix,tictactoe,llama-3.3-70b,results/raw/hero4_llama_fix/tictactoe/tictactoe/meta-llama-llama-3.3-70b-instruct/2026-11-08_14-26-41-450410/run-9,finished,scored,0
