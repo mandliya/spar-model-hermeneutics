@@ -2,7 +2,7 @@
 Import this module before drawing: it sets matplotlib's defaults (font, ink colours, no spines, soft grid) and
 names the colours the scripts share, so a change here reaches every chart.
 
-Font: Avenir Next (on every Mac), then Avenir, Helvetica Neue, DejaVu Sans as fallbacks.
+Font: Helvetica Neue (on every Mac; GG preferred it to Avenir Next on 9 Nov), then Helvetica, Arial, DejaVu Sans.
 Colours: one hue per condition, the same in every chart (Llama purple, example pink, control amber, gemma blue,
 Qwen green; grey for "no check", lilac for the soft check). Checked with the dataviz palette validator for
 colour-blind separation of neighbouring pairs; identity is never colour alone (every bar carries its k of n).
@@ -31,7 +31,7 @@ HACKS = {"do_the_work": "#845ef7", "no_early_exit": "#339af0", "proof_of_work": 
          "plan_first": "#e67700", "worked_example": "#e64980"}
 
 matplotlib.rcParams.update({
-    "font.family": ["Avenir Next", "Avenir", "Helvetica Neue", "DejaVu Sans"],
+    "font.family": ["Helvetica Neue", "Helvetica", "Arial", "DejaVu Sans"],
     "font.size": 9,
     "text.color": INK,
     "axes.labelcolor": MUTED,
