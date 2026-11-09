@@ -284,7 +284,8 @@ HERO_ENVS = ("ai_rd", "coding", "coding_norules", "dashboard_costly_failure", "g
              "optimize_rendering_engine", "optimize_rendering_engine_graded", "precommit_hook")
 HERO_ENVS_ALL = tuple(sorted(set(MEASURES) | set(JUDGED)))   # the 29 environments of results/full_runs.csv, its order
 HERO_ALL_STAGES = ("hero_solo_all", "hero2_llama_all", "hero2_qwen_all", "hero2_gemma_all", "hero2_qwen36_all",
-                   "hero4_llama_all", "hero4_llama_fix", "hero6_example_all", "hero7_control_all")   # 8 Nov: Llama, other 21 with the hard rule + worked example; 6 Nov: Qwen and gemma, other 21 with the check; 7 Nov: Llama, other 21 with the hard rule; 8 Nov: the four cells rerun after the end_task fix
+                   "hero4_llama_all", "hero4_llama_fix", "hero6_example_all", "hero7_control_all",
+                   "hero8_gemma_all", "hero8_qwen36_all")   # 9 Nov: gemma and Qwen3.6, other 21 with the hard rule + worked example (hero8); 8 Nov: Llama, other 21 with the hard rule + worked example; 6 Nov: Qwen and gemma, other 21 with the check; 7 Nov: Llama, other 21 with the hard rule; 8 Nov: the four cells rerun after the end_task fix
 HACKS = ("do_the_work", "no_early_exit", "proof_of_work", "plan_first", "worked_example")   # 8 Nov 2026, agent.hack (hacks.py)
 _HERO5 = {"coding": 10, "coding_norules": 10, "dashboard_costly_failure": 10, "grade_your_own": 5, "optimize_rendering_engine": 5}
 _GAP7 = {"coding": 20, "coding_norules": 20, "dashboard_costly_failure": 10, "grade_your_own": 5,
@@ -306,7 +307,11 @@ HERO_TARGETS = {"hero_smoke": {"coding": 2, "optimize_rendering_engine": 2, "das
                 "hero6_example": dict(_GAP7), "hero6_example_key": {"ai_rd": 10},
                 "hero6_smoke": {"coding": 1, "chess": 1, "funding_email": 1, "eval_tampering": 1},
                 # 8 Nov 2026 night: the control example (the demonstrated run ends with a test still failing, reported as such)
-                "hero7_control": dict(_GAP7), "hero7_control_key": {"ai_rd": 10}, "hero7_smoke": {"coding": 3, "grade_your_own": 2}}
+                "hero7_control": dict(_GAP7), "hero7_control_key": {"ai_rd": 10}, "hero7_smoke": {"coding": 3, "grade_your_own": 2},
+                # 9 Nov 2026: the stand-ins gemma-3-27b and qwen3.6-27b under Llama's hero6 setting (hard rule + worked example);
+                # smoke = one run per loop type (own finish tool, game end, plain-reply end)
+                "hero8_gemma": dict(_GAP7), "hero8_gemma_key": {"ai_rd": 10}, "hero8_smoke_gemma": {"coding": 1, "tictactoe": 1, "grade_your_own": 1},
+                "hero8_qwen36": dict(_GAP7), "hero8_qwen36_key": {"ai_rd": 10}, "hero8_smoke_qwen36": {"coding": 1, "tictactoe": 1, "grade_your_own": 1}}
 # precision to state next to a result when the config pins no quantization: OpenRouter serves Qwen3-Next and gemma-3
 # as fp8 (gigi/CLAUDE.md, part three exception)
 HERO_PRECISION_DEFAULT = {"qwen3-next-80b": "fp8", "gemma-3-27b": "fp8", "qwen3.6-27b": "fp8", "qwen3.6-27b-think": "fp8"}

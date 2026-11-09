@@ -20,7 +20,16 @@ cd "$HERE/agent-interp-envs"
 for spec in "$@"; do
   e=${spec%%:*}; n=${spec##*:}
   cfg="$HERE/configs/${e}__${MODEL}.yaml"; f="$LOG/${e}__${MODEL}.log"
-  [ -f "$f" ] && ! grep -qE "rate limit exceeded|exceeded its spend limit" "$f" && continue   # launched already
+  # launched already: skip, unless the launch was turned away (rate/spend limit) or the laptop lost the network before the
+  # app completed (9 Nov 2026: the Mac slept mid-fleet, `modal run --detach` keeps only the last function alive, the log
+  # ends in ConnectionError / "Could not connect to the Modal server" and no "App completed"): then launch again.
+  if [ -f "$f" ] && ! grep -qE "rate limit exceeded|exceeded its spend limit" "$f"; then
+    if { tail -n 40 "$f" | grep -qE "ConnectionError|nodename nor servname|Could not connect to the Modal server" && ! grep -q "App completed" "$f"; } || grep -q "launch failed: ConflictError" "$f"; then   # tail only: a transcript in the log may mention ConnectionError while the app is alive
+      mkdir -p "$LOG/dead"; mv "$f" "$LOG/dead/$(basename "$f" .log).$(date +%H%M%S).log"   # keep the dead log (its Output line names a partial fleet on the volume)
+    else
+      continue
+    fi
+  fi
   read cap hasmodal < <(env -u VIRTUAL_ENV uv run python -c "import yaml,sys; c=yaml.safe_load(open(sys.argv[1])); print(c['agent']['max_steps'], int('modal' in c))" "$cfg")
   ov="${EXTRA_OV:-}"; [ "$hasmodal" = 0 ] && ov="${ov:+$ov,}modal.memory=2048"   # EXTRA_OV: more overrides, e.g. agent.max_steps=30
   to=14400; [ "$cap" -le 60 ] && to=3600
