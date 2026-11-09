@@ -1,0 +1,4 @@
+2026-11-09 17:30:17 launched coding__gemma-3-27b x1 (max_steps 100, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 16335)
+2026-11-09 17:30:29 launched tictactoe__gemma-3-27b x1 (max_steps 30, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 16384)
+2026-11-09 17:30:41 launched eval_tampering__gemma-3-27b x1 (max_steps 20, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 16422)
+2026-11-09 17:30:41 all launched

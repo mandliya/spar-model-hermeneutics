@@ -47,9 +47,13 @@ CONDITIONS = [
      ["hero2_full_runs__gemma-3-27b_per_run.csv", "hero2_full_runs__gemma-3-27b__other21_per_run.csv"]),
     ("qwen36_soft", "Qwen3.6 27B, soft check", ST.QWEN,
      ["hero2_full_runs__qwen3.6-27b_per_run.csv", "hero2_full_runs__qwen3.6-27b__other21_per_run.csv"]),
+    ("gemma_example", "gemma-3 27B, hard rule + example transcript", ST.GEMMA,
+     ["hero8_full_runs__gemma-3-27b_per_run.csv", "hero8_full_runs__gemma-3-27b__other21_per_run.csv"]),
+    ("qwen36_example", "Qwen3.6 27B, hard rule + example transcript", ST.QWEN,
+     ["hero8_full_runs__qwen3.6-27b_per_run.csv", "hero8_full_runs__qwen3.6-27b__other21_per_run.csv"]),
 ]
 PRECISION = {"llama_hard": "fp16, CoreWeave", "llama_example": "fp16, CoreWeave", "gemma_soft": "fp8, DeepInfra",
-             "qwen36_soft": "fp8, DeepInfra"}
+             "qwen36_soft": "fp8, DeepInfra", "gemma_example": "fp8, DeepInfra", "qwen36_example": "fp8, DeepInfra"}
 
 READ_RE = re.compile(r"\b(cat|less|head|tail|sed -n|nl|bat|view|open)\b[^|;&\n]*\.(py|js|mjs|cjs|ts|tsx|jsx|c|cc|cpp|h|rs|go|java|json|yaml|yml|toml|md|txt|sh)\b|"
                      r"\b(grep|rg|ag)\b|\bread_file\b|\bview_file\b", re.I)
@@ -282,7 +286,7 @@ def write_md(rows):
           "is separate from getting the answer. Five tasks have no honest success at all and four have nothing on disk that says whether the",
           "task was done (both lists below), so the totals are over the other 20.", "",
           "## Per task", "",
-          "| task | measure of success | Llama, hard rule alone | Llama, hard rule + example | gemma-3 27B, soft check | Qwen3.6 27B, soft check |",
+          "| task | measure of success | Llama, hard rule alone | Llama, hard rule + example | gemma-3 27B, soft check | Qwen3.6 27B, soft check | gemma-3 27B, hard rule + example | Qwen3.6 27B, hard rule + example |",
           "|---|---|---|---|---|---|"]
     for env in ENVS:
         cells = []
@@ -318,19 +322,20 @@ def chart(rows):
     plot_h = ymax * row_in
     foot = ["Success = the task's own check, met without the bad act (definitions in results/task_success.md). k of n over the runs whose",
             "state carries the measure; the faint line is the 95% Wilson interval. Llama bars: hard rule alone (purple), hard rule + example transcript (pink);",
-            "gemma and Qwen3.6 are their soft-check runs. Llama fp16 (CoreWeave), gemma and Qwen3.6 fp8 (DeepInfra), via OpenRouter."]
-    Hh = plot_h + 2.9 + 0.18 * len(foot)
+            "gemma and Qwen3.6: paler bars are their soft-check runs, full bars Llama's exact setting (hard rule + example transcript). Llama fp16 (CoreWeave), gemma and Qwen3.6 fp8 (DeepInfra), via OpenRouter."]
+    Hh = plot_h + 3.3 + 0.18 * len(foot)
     W, left, right_w = 14, 0.30, 0.56
     fig = plt.figure(figsize=(W, Hh))
     tot = totals(rows)
     k1, n1 = tot["llama_hard"][:2]; k2, n2 = tot["llama_example"][:2]; kg, ng = tot["gemma_soft"][:2]; kq, nq = tot["qwen36_soft"][:2]
+    kg8, ng8 = tot["gemma_example"][:2]; kq8, nq8 = tot["qwen36_example"][:2]
     fig.text(0.015, 1 - 0.22 / Hh, "How often each model actually finished the task", fontsize=14, fontweight="bold", va="top", color=ST.INK)
     fig.text(0.015, 1 - 0.60 / Hh,
              f"Over the 20 tasks with a readable success measure: Llama finished {k1} of {n1} runs under the hard rule alone and {k2} of {n2} with the example transcript; "
-             f"gemma-3 27B {kg} of {ng} and Qwen3.6 27B {kq} of {nq} under the soft check.\n"
+             f"gemma-3 27B {kg} of {ng} and Qwen3.6 27B {kq} of {nq} under the soft check;\nin Llama's exact setting (hard rule + example transcript, 9 Nov) gemma {kg8} of {ng8} and Qwen3.6 {kq8} of {nq8}.\n"
              "Nine tasks have no bar: five have no honest success (the opponent cannot be beaten, the screenshot cannot be taken, the only answer is the forbidden act) and four leave nothing on disk that says whether the task was done.",
              fontsize=9, color=ST.MUTED, va="top", linespacing=1.45)
-    bottom = (1.3 + 0.18 * len(foot)) / Hh
+    bottom = (1.7 + 0.18 * len(foot)) / Hh
     ax = fig.add_axes([left, bottom, right_w, plot_h / Hh])
     ax.set_ylim(ymax, 0.3); ax.set_xlim(0, 1.16)
     from matplotlib.transforms import blended_transform_factory
@@ -344,7 +349,7 @@ def chart(rows):
     ax.set_yticks([])
     ax.set_xticks([0, 0.25, 0.5, 0.75, 1.0]); ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"])
     ax.set_xlabel("share of runs that finished the task", color=ST.MUTED, fontsize=9)
-    bh = 0.19; offs = [-0.3, -0.1, 0.1, 0.3]
+    nc = len(CONDITIONS); bh = 0.78 / nc; offs = [(-0.39 + bh / 2) + i * bh for i in range(nc)]
     for e, y in rowsy.items():
         rs = [byenv[e][k] for k, *_ in CONDITIONS]
         if rs[0]["kind"] != "measure":
@@ -357,14 +362,15 @@ def chart(rows):
                 ax.text(0.005, y + off, "no runs", va="center", ha="left", fontsize=7.4, color=ST.FAINT)
                 continue
             p = k / n; lo, hi = T.wilson(k, n)
-            ax.barh(y + off, p, height=bh, color=col, zorder=3)
+            soft = key.endswith("_soft")   # the stand-ins' earlier soft-check runs: same hue, paler, so the like-for-like trio stands out
+            ax.barh(y + off, p, height=bh, color=col, alpha=0.4 if soft else 1.0, zorder=3)
             ax.plot([lo, hi], [y + off, y + off], color=col, lw=0.8, alpha=0.35, zorder=4)   # 95% Wilson interval, faint
             ax.text(max(p, 0.0) + 0.012 if k else 0.012, y + off, f"{k} of {n}", va="center", ha="left", fontsize=7.4,
                     color=ST.TEXT if k else ST.FAINT, fontweight="bold" if k else "normal", zorder=5,
                     bbox=dict(facecolor=ST.BG, edgecolor="none", pad=0.6, alpha=0.85))
-    handles = [plt.Rectangle((0, 0), 1, 1, color=c) for _, _, c, _ in CONDITIONS]
+    handles = [plt.Rectangle((0, 0), 1, 1, color=c, alpha=0.4 if k.endswith("_soft") else 1.0) for k, _, c, _ in CONDITIONS]
     fig.legend(handles=handles, labels=[name for _, name, _, _ in CONDITIONS], loc="lower left",
-               bbox_to_anchor=(0.015, (0.5 + 0.18 * len(foot)) / Hh), ncol=2, frameon=False, fontsize=8.6, handlelength=1.2)
+               bbox_to_anchor=(0.015, (0.5 + 0.18 * len(foot)) / Hh), ncol=3, frameon=False, fontsize=8.6, handlelength=1.2)
     for i, line in enumerate(foot):
         fig.text(0.015, (0.15 + 0.18 * (len(foot) - 1 - i)) / Hh, line, fontsize=8, color=ST.MUTED, va="bottom")
     fig.savefig(OUT_PNG, dpi=160)

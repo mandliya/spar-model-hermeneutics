@@ -1,0 +1,2 @@
+2026-11-08 15:46:21 launched ai_rd__llama-3.3-70b x10 (max_steps 60, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example_control,modal.memory=2048, pid 97039)
+2026-11-08 15:46:21 all launched

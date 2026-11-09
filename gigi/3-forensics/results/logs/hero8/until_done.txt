@@ -1,0 +1,11 @@
+2026-11-09 17:33:36 start (ceiling 4560)
+2026-11-09 17:36:03 smoke apps finished
+2026-11-09 17:36:03 smoke gemma-3-27b: PASS coding: OK (game end; 0 reminders) eval_tampering: OK (game end; 0 reminders) tictactoe: OK (game end; 0 reminders) 
+2026-11-09 17:36:03 smoke qwen3.6-27b: PASS coding: OK (game end; 0 reminders) eval_tampering: OK (game end; 0 reminders) tictactoe: OK (game end; 0 reminders) 
+2026-11-09 17:36:03 launching full fleet for gemma-3-27b
+2026-11-09 18:59:34 launcher exit 0 for gemma-3-27b
+2026-11-09 18:59:34 launching full fleet for qwen3.6-27b
+2026-11-09 19:05:14 launcher exit 2 for qwen3.6-27b
+2026-11-09 19:05:14 starting fold-in for: gemma-3-27b qwen3.6-27b
+2026-11-09 23:57:17 fold-in exit 0
+2026-11-09 23:57:17 DONE

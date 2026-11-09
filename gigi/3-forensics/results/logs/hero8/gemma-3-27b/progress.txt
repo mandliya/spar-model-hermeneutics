@@ -1,0 +1,26 @@
+2026-11-09 19:05:14 start (model gemma-3-27b, stages hero8_gemma,hero8_gemma_key, ceiling 4560, grade cap 60, files hero8_full_runs__gemma-3-27b*.csv + hero8_loss_audit__gemma-3-27b.md)
+2026-11-09 19:05:14 step wait
+2026-11-09 19:05:16 waiting: 8 of our apps still running
+2026-11-09 19:36:23 waiting: 2 of our apps still running
+2026-11-09 19:40:31 waiting for 4 local launcher(s) to finish downloading
+2026-11-09 20:10:32 all our apps finished
+2026-11-09 20:10:32 step fetch
+fetched hero8_gemma/coding coding/google-gemma-3-27b-it/2026-11-09_19-03-14-317005: 2026-11-09 20:10:43 gigi-forensics-coding:coding/google-gemma-3-27b-it/2026-11-09_19-03-14-317005: 526 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma/coding_norules coding/google-gemma-3-27b-it/2026-11-09_19-03-26-151934: 2026-11-09 20:10:57 gigi-forensics-coding:coding/google-gemma-3-27b-it/2026-11-09_19-03-26-151934: 701 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma/dashboard_costly_failure dashboard_perf/google-gemma-3-27b-it/2026-11-09_19-03-50-646162: 2026-11-09 20:11:10 gigi-forensics-dashboard-perf:dashboard_perf/google-gemma-3-27b-it/2026-11-09_19-03-50-646162: 611 new files, 52 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma/grade_your_own grade_your_own/google-gemma-3-27b-it/2026-11-09_19-04-02-159751: 2026-11-09 20:11:18 gigi-forensics-grade-your-own:grade_your_own/google-gemma-3-27b-it/2026-11-09_19-04-02-159751: 306 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma/optimize_rendering_engine dashboard_perf/google-gemma-3-27b-it/2026-11-09_19-04-15-182915: 2026-11-09 20:11:26 gigi-forensics-dashboard-perf:dashboard_perf/google-gemma-3-27b-it/2026-11-09_19-04-15-182915: 241 new files, 27 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma/optimize_rendering_engine_graded stripped_engine/google-gemma-3-27b-it/2026-11-09_19-04-26-632805: 2026-11-09 20:11:33 gigi-forensics-stripped-engine:stripped_engine/google-gemma-3-27b-it/2026-11-09_19-04-26-632805: 232 new files, 27 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma/precommit_hook precommit_hook/precommit_hook/google-gemma-3-27b-it/2026-11-09_19-03-38-277857: 2026-11-09 20:11:45 gigi-forensics-precommit-hook:precommit_hook/precommit_hook/google-gemma-3-27b-it/2026-11-09_19-03-38-277857: 541 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_key/ai_rd ai_rd/google-gemma-3-27b-it/2026-11-09_19-04-39-273962: 2026-11-09 20:11:55 gigi-forensics-ai-rd:ai_rd/google-gemma-3-27b-it/2026-11-09_19-04-39-273962: 466 new files, 12 already here (0 of them differ in size; local copy kept)
+2026-11-09 20:11:55 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 2 folder(s)
+2026-11-09 20:11:56 step grade
+2026-11-09 20:17:29 grading: 2026-11-09 20:11:56 estimate total (hero solo, gemma-3-27b, stages hero8_gemma,hero8_gemma_key): 25 ungraded runs in 4 fleets, ~$10.11
+2026-11-09 20:17:29 grading: 2026-11-09 20:12:30 estimate total (hero solo, gemma-3-27b, stages hero8_gemma,hero8_gemma_key): 23 ungraded runs in 4 fleets, ~$9.29
+2026-11-09 20:17:29 step score
+2026-11-09 20:17:30 scored: 95 gemma-3-27b runs found in stages hero8_gemma, hero8_gemma_key -> hero8_full_runs__gemma-3-27b.csv
+2026-11-09 20:17:30 step audit
+audit (hero8_gemma, hero8_gemma_key): target 95, found 95, scored 95, 0 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero8_loss_audit__gemma-3-27b.md
+2026-11-09 20:17:30 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero8_loss_audit__gemma-3-27b.md
+2026-11-09 20:17:30 done (not committed: the parent session commits)

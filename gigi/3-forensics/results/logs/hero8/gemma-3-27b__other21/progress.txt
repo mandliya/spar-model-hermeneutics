@@ -1,0 +1,39 @@
+2026-11-09 20:17:30 start (model gemma-3-27b, stages hero8_gemma_all, ceiling 4560, grade cap 60, files hero8_full_runs__gemma-3-27b__other21*.csv + hero8_loss_audit__gemma-3-27b__other21.md)
+2026-11-09 20:17:30 step wait
+2026-11-09 20:17:32 waiting: 1 of our apps still running
+2026-11-09 20:48:38 waiting: 1 of our apps still running
+2026-11-09 20:52:46 waiting for 2 local launcher(s) to finish downloading
+2026-11-09 21:22:47 all our apps finished
+2026-11-09 21:22:47 step fetch
+fetched hero8_gemma_all/async_conversion async_conversion/default/google-gemma-3-27b-it/2026-11-09_19-04-50-805000: 2026-11-09 21:23:00 gigi-forensics-async-conversion:async_conversion/default/google-gemma-3-27b-it/2026-11-09_19-04-50-805000: 643 new files, 7 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/chess chess/google-gemma-3-27b-it/2026-11-09_19-05-03-607886: 2026-11-09 21:23:29 gigi-forensics-chess:chess/google-gemma-3-27b-it/2026-11-09_19-05-03-607886: 1899 new files, 21 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/copying_of_answers leaked_fix/google-gemma-3-27b-it/2026-11-09_19-05-17-155385: 2026-11-09 21:24:21 gigi-forensics-leaked-fix:leaked_fix/google-gemma-3-27b-it/2026-11-09_19-05-17-155385: 333 new files, 40 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/currency_conversion currency_conversion/google-gemma-3-27b-it/2026-11-09_19-05-26-827760: 2026-11-09 21:24:29 gigi-forensics-currency-conversion:currency_conversion/google-gemma-3-27b-it/2026-11-09_19-05-26-827760: 243 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/eval_tampering eval_tampering/notes_self_weapons/google-gemma-3-27b-it/2026-11-09_19-05-39-180046: 2026-11-09 21:24:35 gigi-forensics-eval-tampering:eval_tampering/notes_self_weapons/google-gemma-3-27b-it/2026-11-09_19-05-39-180046: 255 new files, 23 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/funding_email funding_email/google-gemma-3-27b-it/2026-11-09_19-05-50-999238: 2026-11-09 21:24:43 gigi-forensics-funding-email:funding_email/google-gemma-3-27b-it/2026-11-09_19-05-50-999238: 200 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/lazy_investigation lazy_investigation/google-gemma-3-27b-it/2026-11-09_19-06-03-664233: 2026-11-09 21:24:50 gigi-forensics-lazy-investigation:lazy_investigation/google-gemma-3-27b-it/2026-11-09_19-06-03-664233: 237 new files, 58 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/leaked_scorer tables_coverage_tests/google-gemma-3-27b-it/2026-11-09_19-06-15-195880: 2026-11-09 21:24:57 gigi-forensics-tables-coverage-tests:tables_coverage_tests/google-gemma-3-27b-it/2026-11-09_19-06-15-195880: 176 new files, 42 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/leaked_tests leaked_fix/google-gemma-3-27b-it/2026-11-09_19-06-27-294212: 2026-11-09 21:28:31 gigi-forensics-leaked-fix:leaked_fix/google-gemma-3-27b-it/2026-11-09_19-06-27-294212: 205 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/lucky_seed lucky_seed/google-gemma-3-27b-it/2026-11-09_19-06-39-467133: 2026-11-09 21:28:43 gigi-forensics-lucky-seed:lucky_seed/google-gemma-3-27b-it/2026-11-09_19-06-39-467133: 535 new files, 38 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/lucky_seed_readable_grader lucky_seed_readable_grader/google-gemma-3-27b-it/2026-11-09_19-06-51-486482: 2026-11-09 21:28:55 gigi-forensics-lucky-seed-readable-grader:lucky_seed_readable_grader/google-gemma-3-27b-it/2026-11-09_19-06-51-486482: 498 new files, 34 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/norvane norvane/google-gemma-3-27b-it/2026-11-09_19-07-05-445215: 2026-11-09 21:29:01 gigi-forensics-norvane:norvane/google-gemma-3-27b-it/2026-11-09_19-07-05-445215: 150 new files, 82 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/optimize_lru_cache optimize_cache_c/google-gemma-3-27b-it/2026-11-09_19-07-15-853542: 2026-11-09 21:29:09 gigi-forensics-optimize-cache-c:optimize_cache_c/google-gemma-3-27b-it/2026-11-09_19-07-15-853542: 220 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/parse_duration parse_duration/misleading_example/google-gemma-3-27b-it/2026-11-09_19-07-27-820285: 2026-11-09 21:29:16 gigi-forensics-parse-duration:parse_duration/misleading_example/google-gemma-3-27b-it/2026-11-09_19-07-27-820285: 279 new files, 23 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/puppeteer puppeteer/google-gemma-3-27b-it/2026-11-09_18-47-40-017041: 2026-11-09 21:29:22 gigi-forensics-puppeteer:puppeteer/google-gemma-3-27b-it/2026-11-09_18-47-40-017041: 182 new files, 7 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/reference_extraction aj_data_anon/google-gemma-3-27b-it/2026-11-09_18-47-49-502282: 2026-11-09 21:36:27 gigi-forensics-aj-data-anon:aj_data_anon/google-gemma-3-27b-it/2026-11-09_18-47-49-502282: 4302 new files, 42 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/revert_or_refactor revert_or_refactor/google-gemma-3-27b-it/2026-11-09_18-48-02-149751: 2026-11-09 21:36:34 gigi-forensics-revert-or-refactor:revert_or_refactor/google-gemma-3-27b-it/2026-11-09_18-48-02-149751: 157 new files, 7 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/secret_number secret_number/google-gemma-3-27b-it/2026-11-09_19-07-40-039101: 2026-11-09 21:36:55 gigi-forensics-secret-number:secret_number/google-gemma-3-27b-it/2026-11-09_19-07-40-039101: 959 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/swe_rebench_v2 swe_rebench_v2/google-gemma-3-27b-it/2026-11-09_18-59-36: 2026-11-09 21:37:02 gigi-forensics-swe-rebench-v2:swe_rebench_v2/google-gemma-3-27b-it/2026-11-09_18-59-36: 369 new files, 0 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/tictactoe tictactoe/google-gemma-3-27b-it/2026-11-09_18-59-16-158676: 2026-11-09 21:37:14 gigi-forensics-tictactoe:tictactoe/google-gemma-3-27b-it/2026-11-09_18-59-16-158676: 552 new files, 21 already here (0 of them differ in size; local copy kept)
+fetched hero8_gemma_all/tower_of_hanoi palisades_tower_of_hanoi/tower_of_hanoi/google-gemma-3-27b-it/2026-11-09_18-59-27-694254: 2026-11-09 21:37:30 gigi-forensics-palisades-tower-of-hanoi:palisades_tower_of_hanoi/tower_of_hanoi/google-gemma-3-27b-it/2026-11-09_18-59-27-694254: 898 new files, 22 already here (0 of them differ in size; local copy kept)
+2026-11-09 21:37:30 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 1 folder(s)
+2026-11-09 21:37:34 step grade
+2026-11-09 21:43:41 grading: 2026-11-09 21:37:34 estimate total (hero solo, gemma-3-27b, stages hero8_gemma_all): 56 ungraded runs in 7 fleets, ~$21.62
+2026-11-09 21:43:41 grading: 2026-11-09 21:38:45 estimate total (hero solo, gemma-3-27b, stages hero8_gemma_all): 31 ungraded runs in 7 fleets, ~$11.22
+2026-11-09 21:43:41 step score
+2026-11-09 21:43:42 scored: 276 gemma-3-27b runs found in stages hero8_gemma_all -> hero8_full_runs__gemma-3-27b__other21.csv
+2026-11-09 21:43:42 step audit
+audit (hero8_gemma_all): target 276, found 276, scored 240, 7 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero8_loss_audit__gemma-3-27b__other21.md
+2026-11-09 21:43:42 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero8_loss_audit__gemma-3-27b__other21.md
+2026-11-09 21:43:42 done (not committed: the parent session commits)

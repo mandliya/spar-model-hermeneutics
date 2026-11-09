@@ -1,0 +1,8 @@
+2026-11-09 18:59:48 launched coding__qwen3.6-27b x20 (max_steps 100, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 18048)
+2026-11-09 19:00:00 launched coding_norules__qwen3.6-27b x20 (max_steps 100, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 18108)
+2026-11-09 19:00:12 launched precommit_hook__qwen3.6-27b x20 (max_steps 30, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 18150)
+2026-11-09 19:00:24 launched dashboard_costly_failure__qwen3.6-27b x10 (max_steps 500, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example, pid 18178)
+2026-11-09 19:00:36 launched grade_your_own__qwen3.6-27b x5 (max_steps 500, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example, pid 18208)
+2026-11-09 19:00:48 launched optimize_rendering_engine__qwen3.6-27b x5 (max_steps 500, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example, pid 18311)
+2026-11-09 19:01:00 launched optimize_rendering_engine_graded__qwen3.6-27b x5 (max_steps 500, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example, pid 18336)
+2026-11-09 19:01:00 all launched

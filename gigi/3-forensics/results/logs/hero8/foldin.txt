@@ -1,0 +1,17 @@
+2026-11-09 19:05:14 start (ceiling 4560, grade cap 60, models: gemma-3-27b qwen3.6-27b)
+2026-11-09 19:05:14 launcher done for gemma-3-27b
+2026-11-09 19:05:14 gemma-3-27b hero8_gemma,hero8_gemma_key: fold-in pass 1
+2026-11-09 20:17:30 gemma-3-27b hero8_gemma,hero8_gemma_key: pass 1 exit 0; 2026-11-09 20:17:30 scored: 95 gemma-3-27b runs found in stages hero8_gemma, hero8_gemma_key -> hero8_full_runs__gemma-3-27b.csv;
+2026-11-09 20:17:30 gemma-3-27b hero8_gemma_all: fold-in pass 1
+2026-11-09 21:43:42 gemma-3-27b hero8_gemma_all: pass 1 exit 0; 2026-11-09 21:43:42 scored: 276 gemma-3-27b runs found in stages hero8_gemma_all -> hero8_full_runs__gemma-3-27b__other21.csv;
+2026-11-09 21:43:42 launcher done for qwen3.6-27b
+2026-11-09 21:43:42 qwen3.6-27b hero8_qwen36,hero8_qwen36_key: fold-in pass 1
+2026-11-09 23:21:46 qwen3.6-27b hero8_qwen36,hero8_qwen36_key: pass 1 exit 0; 2026-11-09 23:21:45 scored: 95 qwen3.6-27b runs found in stages hero8_qwen36, hero8_qwen36_key -> hero8_full_runs__qwen3.6-27b.csv;
+2026-11-09 23:21:46 qwen3.6-27b hero8_qwen36_all: fold-in pass 1
+2026-11-09 23:42:02 qwen3.6-27b hero8_qwen36_all: pass 1 exit 0; 2026-11-09 23:36:21 STEP FAILED: fetch (exit 1);2026-11-09 23:42:02 scored: 276 qwen3.6-27b runs found in stages hero8_qwen36_all -> hero8_full_runs__qwen3.6-27b__other21.csv;
+2026-11-09 23:42:02 qwen3.6-27b hero8_qwen36_all: fold-in pass 2
+2026-11-09 23:47:50 qwen3.6-27b hero8_qwen36_all: pass 2 exit 0; 2026-11-09 23:42:02 scored: 276 qwen3.6-27b runs found in stages hero8_qwen36_all -> hero8_full_runs__qwen3.6-27b__other21.csv;2026-11-09 23:47:24 STEP FAILED: fetch (exit 1);2026-11-09 23:47:50 scored: 276 qwen3.6-27b runs found in stages hero8_qwen36_all -> hero8_full_runs__qwen3.6-27b__other21.csv;
+2026-11-09 23:47:50 qwen3.6-27b hero8_qwen36_all: fold-in pass 3
+2026-11-09 23:57:17 qwen3.6-27b hero8_qwen36_all: pass 3 exit 0; 2026-11-09 23:47:50 scored: 276 qwen3.6-27b runs found in stages hero8_qwen36_all -> hero8_full_runs__qwen3.6-27b__other21.csv;2026-11-09 23:56:48 STEP FAILED: fetch (exit 1);2026-11-09 23:57:17 scored: 276 qwen3.6-27b runs found in stages hero8_qwen36_all -> hero8_full_runs__qwen3.6-27b__other21.csv;
+2026-11-09 23:57:17 DONE
+2026-11-10 00:00:11 qwen3.6-27b hero8_qwen36_all: fold-in pass 4 (manual, refetch reference_extraction after 'Connection lost')

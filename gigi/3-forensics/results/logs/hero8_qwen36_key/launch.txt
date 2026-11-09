@@ -1,0 +1,2 @@
+2026-11-09 19:01:12 launched ai_rd__qwen3.6-27b x10 (max_steps 60, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 18369)
+2026-11-09 19:01:12 all launched

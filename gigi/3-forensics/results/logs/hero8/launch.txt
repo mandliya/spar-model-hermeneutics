@@ -1,0 +1,25 @@
+2026-11-09 17:30:05 org credit balance: 7409.30
+2026-11-09 17:30:05 launching smoke for gemma-3-27b (stage hero8_smoke_gemma): coding:1 tictactoe:1 eval_tampering:1
+2026-11-09 17:30:41 launched (hero8 smoke gemma-3-27b)
+2026-11-09 17:30:41 launching smoke for qwen3.6-27b (stage hero8_smoke_qwen36): coding:1 tictactoe:1 eval_tampering:1
+2026-11-09 17:31:17 launched (hero8 smoke qwen3.6-27b)
+2026-11-09 17:31:17 all launched (hero8 smoke both)
+2026-11-09 17:36:04 org credit balance: 7409.27
+2026-11-09 17:36:04 launching gemma-3-27b, hard rule + worked example (stage hero8_gemma): coding:20 coding_norules:20 precommit_hook:20 dashboard_costly_failure:10 grade_your_own:5 optimize_rendering_engine:5 optimize_rendering_engine_graded:5
+2026-11-09 17:40:26 launching ai_rd:10 for gemma-3-27b with the capped agent key (stage hero8_gemma_key)
+2026-11-09 17:40:38 launching the other 20 for gemma-3-27b (stage hero8_gemma_all): async_conversion:5 chess:19 copying_of_answers:10 currency_conversion:20 eval_tampering:21 funding_email:20 lazy_investigation:14 leaked_scorer:10 leaked_tests:5 lucky_seed:9 lucky_seed_readable_grader:8 norvane:20 optimize_lru_cache:5 parse_duration:21 puppeteer:5 reference_extraction:10 revert_or_refactor:5 secret_number:20 tictactoe:19 tower_of_hanoi:20 + swe_rebench_v2:10
+2026-11-09 18:59:34 launched (hero8 gemma-3-27b)
+2026-11-09 18:59:34 all launched (hero8 full gemma-3-27b)
+2026-11-09 18:59:36 org credit balance: 7408.71
+2026-11-09 18:59:36 launching qwen3.6-27b, hard rule + worked example (stage hero8_qwen36): coding:20 coding_norules:20 precommit_hook:20 dashboard_costly_failure:10 grade_your_own:5 optimize_rendering_engine:5 optimize_rendering_engine_graded:5
+2026-11-09 19:01:00 launching ai_rd:10 for qwen3.6-27b with the capped agent key (stage hero8_qwen36_key)
+2026-11-09 19:01:12 launching the other 20 for qwen3.6-27b (stage hero8_qwen36_all): async_conversion:5 chess:19 copying_of_answers:10 currency_conversion:20 eval_tampering:21 funding_email:20 lazy_investigation:14 leaked_scorer:10 leaked_tests:5 lucky_seed:9 lucky_seed_readable_grader:8 norvane:20 optimize_lru_cache:5 parse_duration:21 puppeteer:5 reference_extraction:10 revert_or_refactor:5 secret_number:20 tictactoe:19 tower_of_hanoi:20 + swe_rebench_v2:10
+2026-11-09 19:03:08 relaunching gemma's dead fleets after the 17:40-18:59 sleep (session, 9 Nov)
+2026-11-09 19:03:09 org credit balance: 7406.71
+2026-11-09 19:03:09 launching gemma-3-27b, hard rule + worked example (stage hero8_gemma): coding:20 coding_norules:20 precommit_hook:20 dashboard_costly_failure:10 grade_your_own:5 optimize_rendering_engine:5 optimize_rendering_engine_graded:5
+2026-11-09 19:04:33 launching ai_rd:10 for gemma-3-27b with the capped agent key (stage hero8_gemma_key)
+2026-11-09 19:04:45 launching the other 20 for gemma-3-27b (stage hero8_gemma_all): async_conversion:5 chess:19 copying_of_answers:10 currency_conversion:20 eval_tampering:21 funding_email:20 lazy_investigation:14 leaked_scorer:10 leaked_tests:5 lucky_seed:9 lucky_seed_readable_grader:8 norvane:20 optimize_lru_cache:5 parse_duration:21 puppeteer:5 reference_extraction:10 revert_or_refactor:5 secret_number:20 tictactoe:19 tower_of_hanoi:20 + swe_rebench_v2:10
+2026-11-09 19:05:14 launched (hero8 qwen3.6-27b)
+2026-11-09 19:07:47 swe_rebench_v2 already launched for gemma-3-27b (log exists): skipping
+2026-11-09 19:07:47 launched (hero8 gemma-3-27b)
+2026-11-09 19:07:47 all launched (hero8 full gemma-3-27b)

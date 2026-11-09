@@ -1,0 +1,4 @@
+2026-11-09 17:30:53 launched coding__qwen3.6-27b x1 (max_steps 100, timeout 14400s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 16457)
+2026-11-09 17:31:05 launched tictactoe__qwen3.6-27b x1 (max_steps 30, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 16495)
+2026-11-09 17:31:17 launched eval_tampering__qwen3.6-27b x1 (max_steps 20, timeout 3600s, agent.end_task_required=true,agent.end_task_reprompts=10,agent.hack=worked_example,modal.memory=2048, pid 16550)
+2026-11-09 17:31:17 all launched
