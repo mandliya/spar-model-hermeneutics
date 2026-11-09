@@ -17,6 +17,7 @@ script runs before the data lands (e.g. `--stages hero4_llama` draws the baselin
 import argparse, collections, csv, json, math, os, pathlib, re, sys
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import chart_style as ST   # font, ink colours, soft grid: one look for every chart
 
 H = pathlib.Path(__file__).resolve().parents[1]; os.chdir(H); sys.path.insert(0, str(H / "scripts"))
 import full_runs_table as T
@@ -32,11 +33,11 @@ TASK_LABEL = {"coding": "coding (is_prime)", "coding_norules": "coding, no rules
 # condition key -> (label, stage, summary csv candidates, colour)
 CONDITIONS = {
     "hero4_llama": ("hard rule alone (baseline, 7 Nov)", "hero4_llama", ["hero4_full_runs__llama-3.3-70b.csv"], "#8a8378"),
-    "hero5_do_the_work": ("+ do the work (prompt)", "hero5_do_the_work", ["hero5_full_runs__llama-3.3-70b__do_the_work.csv"], "#6c4ff0"),
-    "hero5_no_early_exit": ("+ no early exit (end refused before 10 steps)", "hero5_no_early_exit", ["hero5_full_runs__llama-3.3-70b__no_early_exit.csv"], "#2f6fd6"),
-    "hero5_proof_of_work": ("+ proof of work (end refused until a file changed)", "hero5_proof_of_work", ["hero5_full_runs__llama-3.3-70b__proof_of_work.csv"], "#1baf7a"),
-    "hero5_plan_first": ("+ plan first (plan, then progress lines)", "hero5_plan_first", ["hero5_full_runs__llama-3.3-70b__plan_first.csv"], "#c2651b"),
-    "hero5_worked_example": ("+ worked example (prompt)", "hero5_worked_example", ["hero5_full_runs__llama-3.3-70b__worked_example.csv"], "#d6336c"),
+    "hero5_do_the_work": ("+ do the work (prompt)", "hero5_do_the_work", ["hero5_full_runs__llama-3.3-70b__do_the_work.csv"], "#845ef7"),
+    "hero5_no_early_exit": ("+ no early exit (end refused before 10 steps)", "hero5_no_early_exit", ["hero5_full_runs__llama-3.3-70b__no_early_exit.csv"], "#339af0"),
+    "hero5_proof_of_work": ("+ proof of work (end refused until a file changed)", "hero5_proof_of_work", ["hero5_full_runs__llama-3.3-70b__proof_of_work.csv"], "#20c997"),
+    "hero5_plan_first": ("+ plan first (plan, then progress lines)", "hero5_plan_first", ["hero5_full_runs__llama-3.3-70b__plan_first.csv"], "#e67700"),
+    "hero5_worked_example": ("+ worked example (prompt)", "hero5_worked_example", ["hero5_full_runs__llama-3.3-70b__worked_example.csv"], "#e64980"),
 }
 ORDER = list(CONDITIONS)
 
@@ -48,7 +49,7 @@ REMINDER = "A reply without a tool call does not end the session"
 REFUSAL = ("Too early to finish", "Not finished: no file")
 END_TOOLS = ("end_task", "done")
 
-ENDING_KINDS = [("end_tool", "ended with end_task (or the task's own done)", "#6c4ff0"),
+ENDING_KINDS = [("end_tool", "ended with end_task (or the task's own done)", "#845ef7"),
                 ("task_end", "the task ended itself after a tool call", "#8fb3e6"),
                 ("reminders", "all 10 reminders used, then let go", "#f0a35e"),
                 ("cap", "ran to the task's step cap", "#d9534f"),

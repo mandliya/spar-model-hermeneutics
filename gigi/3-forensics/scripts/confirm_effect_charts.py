@@ -21,6 +21,7 @@ import ast, collections, csv, os, pathlib, re, statistics, sys, textwrap
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import chart_style as ST   # font, ink colours, soft grid: one look for every chart
 from matplotlib.transforms import blended_transform_factory
 
 H = pathlib.Path(__file__).resolve().parents[1]; sys.path.insert(0, str(H / "scripts"))
@@ -57,7 +58,7 @@ AFTER_CSV = {LLAMA: ["hero2_full_runs__llama-3.3-70b.csv", "hero2_full_runs__lla
              "gemma-3-27b": ["hero2_full_runs__gemma-3-27b.csv", "hero2_full_runs__gemma-3-27b__other21.csv"],
              "qwen3.6-27b": ["hero2_full_runs__qwen3.6-27b.csv", "hero2_full_runs__qwen3.6-27b__other21.csv"]}
 NO_BEFORE = {"qwen3.6-27b"}   # only ever run with the check
-plt.rcParams.update({"font.family": "sans-serif", "font.size": 9, "text.color": INK})
+plt.rcParams.update({"font.size": 9, "text.color": INK})   # font family and the rest come from chart_style
 
 
 def ran_with_check(model, env):

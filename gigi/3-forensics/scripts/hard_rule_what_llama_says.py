@@ -21,14 +21,14 @@ exec(_src[:_src.index("fig, ax, rows = frame(")], A.__dict__)
 FILES = A.PASSES[2][2]   # the hard-rule per-run csvs, __fix first
 WRITE_RE = re.compile(r"(cat\s*>|tee\s|>\s*\S+\.(py|js|ts|c|h|json|yaml|yml|txt|md|sh)|<<\s*['\"]?EOF|\bsed -i\b|apply_patch|write_file|"
                       r"echo .*>\s*\S|python\s*-\s*<<|git commit|cp\s|mv\s)", re.I)
-ENDS = [("end_tool", "called end_task (or the task's own done / end_session)", "#6c4ff0"), ("task_end", "the task ended itself (answer, email, game over)", "#8fb3e6"),
+ENDS = [("end_tool", "called end_task (or the task's own done / end_session)", "#5f4fe0"), ("task_end", "the task ended itself (answer, email, game over)", "#8fb3e6"),
         ("reminders", "10 reminders used up", "#f0a35e"), ("cap", "step cap", "#d9534f")]
 KINDS = [  # key, label, colour, phrases (first match wins, in this order)
     ("cant", "says it could not do it", "#d9534f", r"\b(unable|cannot|can't|could not|couldn't|not possible|was not found|does not exist|did not exist|not found)\b"),
     ("advice", "tells the user what to do", "#f0a35e", r"\b(you (need|would need|can|could|should|will need|may want)|here'?s (an|a possible) example|to fix (this|these))\b"),
-    ("claims", "claims it did the work", "#2f6fd6", r"\b(I (added|implemented|improved|created|fixed|updated|modified|changed|optimized|wrote)|has been (fixed|implemented|added|updated|improved)|successfully|is now (fixed|working|passing)|all tests pass)\b"),
-    ("undone", "reports the task not done, no changes made", "#b5aea4", r"\b(still|below the target|failed|not implemented|no changes were made|not been|did not|remains|unchanged)\b"),
-    ("answer", "hands in an answer or a result", "#a99cf5", r"."),
+    ("claims", "claims it did the work", "#2f80ed", r"\b(I (added|implemented|improved|created|fixed|updated|modified|changed|optimized|wrote)|has been (fixed|implemented|added|updated|improved)|successfully|is now (fixed|working|passing)|all tests pass)\b"),
+    ("undone", "reports the task not done, no changes made", "#b8b2aa", r"\b(still|below the target|failed|not implemented|no changes were made|not been|did not|remains|unchanged)\b"),
+    ("answer", "hands in an answer or a result", "#9d8df3", r"."),
 ]
 NOREP = ("norep", "no report: the task ended itself", "#e6e2da")
 
@@ -114,15 +114,15 @@ rows, heads, ymax = C.layout()
 envs = list(rows)
 import textwrap
 
-ENDS_COLS = [("end_tool", "called\nend_task", "#6c4ff0"), ("task_end", "task ended\nitself", "#8fb3e6"),
+ENDS_COLS = [("end_tool", "called\nend_task", "#5f4fe0"), ("task_end", "task ended\nitself", "#8fb3e6"),
              ("reminders", "10 reminders\nused up", "#f0a35e"), ("cap", "step\ncap", "#d9534f")]
 KIND_COLS = [("cant", "says it\ncould not", "#d9534f"), ("advice", "tells the user\nwhat to do", "#f0a35e"),
              ("claims", "claims done,\nwrote no file", "#1f3f8f"), ("claims_wrote", "claims done,\nwrote a file", "#7fb0e8"),
-             ("undone", "reports it\nnot done", "#b5aea4"), ("answer", "hands in\nan answer", "#a99cf5"), ("norep", "no report\ntext", "#cfc9bf")]
+             ("undone", "reports it\nnot done", "#b8b2aa"), ("answer", "hands in\nan answer", "#9d8df3"), ("norep", "no report\ntext", "#cfc9bf")]
 KIND_WORD = {"cant": "could not", "advice": "tells the user", "claims": "claims done, no file", "claims_wrote": "claims done, wrote file",
              "undone": "not done", "answer": "answer", "norep": "no report text"}
 KIND_COL = {k: c for k, _, c in KIND_COLS}
-DARK = {"#6c4ff0", "#d9534f", "#1f3f8f"}
+DARK = {"#5f4fe0", "#d9534f", "#1f3f8f"}
 EXPL_END = {
     "end_tool": ("Llama calls the finish tool itself: end_task(report=...) where the task has none of its own, or the task's own done / end_session.",
                  "coding, step 3: end_task(\"All tests failed due to a NotImplementedError in the solution.py file. The function is_prime is not implemented.\")"),

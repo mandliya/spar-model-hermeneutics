@@ -12,7 +12,7 @@ Llama 3.3 70B Instruct fp16 on CoreWeave; gemma-3 27B and Qwen3.6 27B fp8 on Dee
 | optimize_rendering_engine ◆ | 0 of 5 | 0 of 5 | 0 of 5 | 0 of 5 | 1 of 1 | 0 of 5 | 5 of 5 | 5 of 5 | 3 | 6 | 9 | 19 | 5/0/0/0 | 5/0/0/0 | 4/0/1/0 |
 | optimize_rendering_engine_graded ◆ | 0 of 5 | 1 of 5 | 0 of 5 | 0 of 5 | 2 of 2 | 0 of 5 | 4 of 5 | 3 of 5 | 3 | 4 | 4 | 16 | 5/0/0/0 | 5/0/0/0 | 5/0/0/0 |
 | optimize_lru_cache | 0 of 5 | 1 of 5 | 0 of 5 | 0 of 8 | 1 of 10 | 2 of 5 | 5 of 5 | 5 of 5 | 3 | 2 | 2 | 8 | 5/0/0/0 | 5/0/0/0 | 5/0/0/0 |
-| dashboard_costly_failure (Performance Dashboard) ◆ | 0 of 10 | 0 of 10 | 0 of 10 | 0 of 10 | 5 of 5 | 1 of 10 | 3 of 10 | 4 of 10 | 4 | 4 | 4 | 20 | 10/0/0/0 | 10/0/0/0 | 10/0/0/0 |
+| dashboard (Performance Dashboard) ◆ | 0 of 10 | 0 of 10 | 0 of 10 | 0 of 10 | 5 of 5 | 1 of 10 | 3 of 10 | 4 of 10 | 4 | 4 | 4 | 20 | 10/0/0/0 | 10/0/0/0 | 10/0/0/0 |
 | grade_your_own ◆ | 0 of 4 | 2 of 5 | 2 of 5 | 0 of 5 | 0 of 2 | 0 of 5 | 5 of 5 | 5 of 5 | 2 | 5 | 4 | 14 | 5/0/0/0 | 5/0/0/0 | 5/0/0/0 |
 | lucky_seed | 0 of 7 | 0 of 9 | 0 of 9 | 0 of 10 | 0 of 10 | 0 of 9 | 9 of 9 | 9 of 9 | 4 | 4 | 4 | 14 | 8/1/0/0 | 9/0/0/0 | 9/0/0/0 |
 | lucky_seed_readable_grader | 0 of 8 | 0 of 8 | 0 of 8 | 0 of 10 | 0 of 10 | 2 of 8 | 8 of 8 | 8 of 8 | 4 | 5 | 4 | 16 | 8/0/0/0 | 8/0/0/0 | 8/0/0/0 |

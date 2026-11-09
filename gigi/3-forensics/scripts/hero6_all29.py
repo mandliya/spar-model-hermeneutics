@@ -28,15 +28,15 @@ READ_RE = re.compile(r"\b(cat|less|head|tail|sed -n|nl|bat|view|open)\b[^|;&\n]*
 FINISH = ("end_task", "done", "end_session")
 
 # label, summary csvs (earlier files win per task), per-run csvs, colour, soft check?
-HARD = ("Llama, hard rule alone (7-8 Nov)", A.PASSES[2][1], A.PASSES[2][2], "#6c4ff0", False)
+HARD = ("Llama, hard rule alone (7-8 Nov)", A.PASSES[2][1], A.PASSES[2][2], "#5f4fe0", False)
 EXAMPLE = ("Llama, hard rule + worked example (8 Nov)", ["hero6_full_runs__llama-3.3-70b.csv", "hero6_full_runs__llama-3.3-70b__other21.csv"],
-           ["hero6_full_runs__llama-3.3-70b_per_run.csv", "hero6_full_runs__llama-3.3-70b__other21_per_run.csv"], "#d6336c", False)
+           ["hero6_full_runs__llama-3.3-70b_per_run.csv", "hero6_full_runs__llama-3.3-70b__other21_per_run.csv"], "#e64980", False)
 CONTROL = ("Llama, hard rule + control example (8 Nov)", ["hero7_full_runs__llama-3.3-70b.csv", "hero7_full_runs__llama-3.3-70b__other21.csv"],
            ["hero7_full_runs__llama-3.3-70b_per_run.csv", "hero7_full_runs__llama-3.3-70b__other21_per_run.csv"], "#e8871e", False)
 GEMMA = ("gemma-3 27B, soft check (5-6 Nov)", ["hero2_full_runs__gemma-3-27b.csv", "hero2_full_runs__gemma-3-27b__other21.csv"],
-         ["hero2_full_runs__gemma-3-27b_per_run.csv", "hero2_full_runs__gemma-3-27b__other21_per_run.csv"], "#2f6fd6", True)
+         ["hero2_full_runs__gemma-3-27b_per_run.csv", "hero2_full_runs__gemma-3-27b__other21_per_run.csv"], "#2f80ed", True)
 QWEN36 = ("Qwen3.6 27B, soft check, thinking off (7-8 Nov)", ["hero2_full_runs__qwen3.6-27b.csv", "hero2_full_runs__qwen3.6-27b__other21.csv"],
-          ["hero2_full_runs__qwen3.6-27b_per_run.csv", "hero2_full_runs__qwen3.6-27b__other21_per_run.csv"], "#1f9d7a", True)
+          ["hero2_full_runs__qwen3.6-27b_per_run.csv", "hero2_full_runs__qwen3.6-27b__other21_per_run.csv"], "#12b886", True)
 CONDS = [HARD, EXAMPLE, CONTROL, GEMMA, QWEN36]
 LLAMA3 = (HARD, EXAMPLE, CONTROL)
 NOTE = "Llama 3.3 70B Instruct fp16 on CoreWeave; gemma-3 27B and Qwen3.6 27B fp8 on DeepInfra; all via OpenRouter."
@@ -167,6 +167,8 @@ axR.set_xlim(0, 62); axR.set_xticks([0, 10, 20, 30, 40, 50]); axR.set_xticklabel
 off2, hgt2 = [-0.27, 0.0, 0.27], 0.22
 for e in envs:
     y = rows[e]
+    g = per[GEMMA[0]].get(e)
+    gx = min(med(g["steps"]), 55) if g and g["n"] else None
     for i, cond in enumerate(LLAMA3):
         d = per[cond[0]].get(e)
         if not d or d["n"] == 0:
@@ -178,10 +180,12 @@ for e in envs:
         axL.text(p + 1.2, y + off2[i], f"{d['opened']} of {d['n']}", fontsize=6.6, color="#333", va="center", fontweight="bold" if i else None)
         m = med(d["steps"]); x = min(m, 55)
         axR.barh(y + off2[i], x, height=hgt2, color=cond[3], zorder=3)
-        axR.text(x + 0.8, y + off2[i], f"{m}", fontsize=6.6, color="#333", va="center", fontweight="bold" if i else None)
-    g = per[GEMMA[0]].get(e)
+        tx = x + 0.8
+        if gx is not None and x - 0.3 <= gx <= x + 3.2:   # the gemma tick would sit on the number: write it past the tick
+            tx = gx + 0.8
+        axR.text(tx, y + off2[i], f"{m}", fontsize=6.6, color="#333", va="center", fontweight="bold" if i else None)
     if g and g["n"]:
-        gm = med(g["steps"]); gx = min(gm, 55)
+        gm = med(g["steps"])
         axR.plot([gx, gx], [y - 0.42, y + 0.42], color=GEMMA[3], lw=2.2, zorder=4, solid_capstyle="butt")
         axR.text(56.5, y, f"gemma {gm}", fontsize=6.8, color=GEMMA[3], va="center")
 handles = [plt.Rectangle((0, 0), 1, 1, color=c[3], label=c[0]) for c in LLAMA3] + [plt.Line2D([], [], color=GEMMA[3], lw=2.2, label=GEMMA[0] + ", median steps")]
@@ -191,9 +195,9 @@ fig.savefig("charts/hero6_all29_work.png", dpi=160, facecolor="white"); plt.clos
 print("wrote charts/hero6_all29_work.png")
 
 # 3. endings: two 100% bars per task
-ENDS = [("end_tool", "called end_task (or the task's own done / end_session)", "#6c4ff0"), ("task_end", "the task ended itself (answer, email, game over, submit)", "#8fb3e6"),
+ENDS = [("end_tool", "called end_task (or the task's own done / end_session)", "#5f4fe0"), ("task_end", "the task ended itself (answer, email, game over, submit)", "#8fb3e6"),
         ("reminders", "10 reminders used up", "#f0a35e"), ("cap", "step cap", "#d9534f"), ("plain", "plain reply (pre-fix only)", "#d9d4cc")]
-DARK = {"#6c4ff0", "#d9534f"}
+DARK = {"#5f4fe0", "#d9534f"}
 fig, (ax,), fy = frame(15, 19, "How Llama's runs ended on all 29 tasks: the hard rule alone (upper bar), with the worked example (middle), with the control example (lower)",
     "Hard rule: a plain reply never ends the run; it ends when Llama calls the finish tool, when the task ends itself after a tool call, after 10 tool-less replies in a row, or at the step cap.\n"
     "Each bar is 100% of that condition's runs for the task; the count of runs is printed in each segment wide enough. Run counts on the right: alone / + worked example / + control.\n" + NOTE,

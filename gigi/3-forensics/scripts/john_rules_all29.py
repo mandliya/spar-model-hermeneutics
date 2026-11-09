@@ -21,11 +21,11 @@ exec(_src[:_src.index("fig, ax, rows = frame(")], A.__dict__)
 A.med = lambda v: (sorted(v)[len(v) // 2] if v else "-")
 
 RULES = [  # label, per-run csvs, soft?, colour
-    ("no check (4 Nov)", A.PASSES[0][2], True, "#b5aea4"),
-    ("soft check: notice in the prompt + one question (4-5 Nov)", A.PASSES[1][2], True, "#a99cf5"),
-    ("hard rule: only end_task ends the run, reminders otherwise (7-8 Nov)", A.PASSES[2][2], False, "#6c4ff0"),
+    ("no check (4 Nov)", A.PASSES[0][2], True, "#b8b2aa"),
+    ("soft check: notice in the prompt + one question (4-5 Nov)", A.PASSES[1][2], True, "#9d8df3"),
+    ("hard rule: only end_task ends the run, reminders otherwise (7-8 Nov)", A.PASSES[2][2], False, "#5f4fe0"),
 ]
-GEMMA = ("gemma-3 27B, soft check (reference)", ["hero2_full_runs__gemma-3-27b_per_run.csv", "hero2_full_runs__gemma-3-27b__other21_per_run.csv"], True, "#2f6fd6")
+GEMMA = ("gemma-3 27B, soft check (reference)", ["hero2_full_runs__gemma-3-27b_per_run.csv", "hero2_full_runs__gemma-3-27b__other21_per_run.csv"], True, "#2f80ed")
 
 data = []   # (label, colour, endings, steps)
 for label, files, soft, col in RULES + [GEMMA]:
@@ -67,6 +67,8 @@ for e in envs:
     y = rows[e]
     fy = TOP + HGT * (1 - y / ymax)
     fig.text(0.015, fy, C.LABEL.get(e, e) + ("  ◆" if e in C.MAIN else ""), fontsize=8.8, fontweight="bold", va="center")
+    glabel, gcol, gends, gsteps = data[3]
+    gx = min(A.med(gsteps[e]), 55) if e in gsteps else None
     for i, (label, col, ends, steps) in enumerate(data[:3]):
         n = sum(ends[e].values()) if e in ends else 0
         if n == 0:
@@ -77,10 +79,12 @@ for e in envs:
         m = A.med(steps[e]); x = min(m, 55)
         axR.barh(y + off[i], x, height=hgt, color=col, zorder=3)
         pre = e in ("chess", "tictactoe", "swe_rebench_v2") and i == 2 and not fix_done
-        axR.text(x + 0.8, y + off[i], f"{m}" + (" †" if pre else ""), fontsize=6.9, color="#333", va="center", fontweight="bold" if i == 2 else None)
-    glabel, gcol, gends, gsteps = data[3]
+        tx = x + 0.8
+        if gx is not None and x - 0.3 <= gx <= x + 3.2:   # the gemma tick would sit on the number: write it past the tick
+            tx = gx + 0.8
+        axR.text(tx, y + off[i], f"{m}" + (" †" if pre else ""), fontsize=6.9, color="#333", va="center", fontweight="bold" if i == 2 else None)
     if e in gsteps:
-        gm = A.med(gsteps[e]); gx = min(gm, 55)
+        gm = A.med(gsteps[e])
         axR.plot([gx, gx], [y - 0.42, y + 0.42], color=gcol, lw=2.2, zorder=4, solid_capstyle="butt")
         fig.text(0.915, fy, f"gemma {gm}", fontsize=7.6, color=gcol, va="center")
 handles = [plt.Rectangle((0, 0), 1, 1, color=c, label=f"Llama, {l}") for l, _, _, c in RULES]

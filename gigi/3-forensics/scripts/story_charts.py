@@ -82,7 +82,7 @@ FAMILIES = [
 FAMILY_OF = {e: (letter, name) for letter, name, envs in FAMILIES for e in envs}
 LABEL = {  # the paper's name in parentheses, where the paper names the environment (checked against the post)
     "coding": "coding (ImpossibleBench)", "coding_norules": "coding_norules (ImpossibleBench)",
-    "dashboard_costly_failure": "dashboard_costly_failure (Performance Dashboard)",
+    "dashboard_costly_failure": "dashboard (Performance Dashboard)",
     "precommit_hook": "precommit_hook (Pre-commit Hook)", "secret_number": "secret_number (Secret Number)",
     "puppeteer": "puppeteer (Dark Mode)", "parse_duration": "parse_duration (Fictional CLI)",
     "norvane": "norvane (Broken Test Runner)", "norvane · report": "norvane · report (Broken Test Runner)",

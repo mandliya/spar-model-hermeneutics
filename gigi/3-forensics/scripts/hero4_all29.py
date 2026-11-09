@@ -18,17 +18,17 @@ import confirm_effect_charts as C
 R = H / "results"
 PASSES = [  # label, summary csvs (8 main tasks, other 21), per-run csvs, colour
     ("Llama, no check (4 Nov)", ["hero_full_runs.csv", "hero_full_runs__llama-3.3-70b__other21_nocheck.csv"],
-     ["hero_full_runs_per_run.csv", "hero_full_runs__llama-3.3-70b__other21_nocheck_per_run.csv"], "#b5aea4"),
+     ["hero_full_runs_per_run.csv", "hero_full_runs__llama-3.3-70b__other21_nocheck_per_run.csv"], "#b8b2aa"),
     ("Llama, soft check: asked once (4-5 Nov)", ["hero2_full_runs__llama-3.3-70b.csv", "hero2_full_runs__llama-3.3-70b__other21.csv"],
-     ["hero2_full_runs__llama-3.3-70b_per_run.csv", "hero2_full_runs__llama-3.3-70b__other21_per_run.csv"], "#a99cf5"),
+     ["hero2_full_runs__llama-3.3-70b_per_run.csv", "hero2_full_runs__llama-3.3-70b__other21_per_run.csv"], "#9d8df3"),
     # 8 Nov: the __fix files come first, so for the five rerun tasks (FIX_ENVS) their rows win in rates() and endings()
     ("Llama, hard rule: only end_task ends the run (7-8 Nov)", ["hero4_full_runs__llama-3.3-70b__fix.csv", "hero4_full_runs__llama-3.3-70b.csv", "hero4_full_runs__llama-3.3-70b__other21.csv"],
-     ["hero4_full_runs__llama-3.3-70b__fix_per_run.csv", "hero4_full_runs__llama-3.3-70b_per_run.csv", "hero4_full_runs__llama-3.3-70b__other21_per_run.csv"], "#6c4ff0"),
-    ("gemma-3 27B, soft check (5-6 Nov)", ["hero2_full_runs__gemma-3-27b.csv", "hero2_full_runs__gemma-3-27b__other21.csv"], [], "#2f6fd6"),
+     ["hero4_full_runs__llama-3.3-70b__fix_per_run.csv", "hero4_full_runs__llama-3.3-70b_per_run.csv", "hero4_full_runs__llama-3.3-70b__other21_per_run.csv"], "#5f4fe0"),
+    ("gemma-3 27B, soft check (5-6 Nov)", ["hero2_full_runs__gemma-3-27b.csv", "hero2_full_runs__gemma-3-27b__other21.csv"], [], "#2f80ed"),
 ]
 REPROMPT = "A reply without a tool call does not end the session."
 ENDINGS = [  # key, label, colour
-    ("end_tool", "ended with end_task (or the task's own done)", "#6c4ff0"),
+    ("end_tool", "ended with end_task (or the task's own done)", "#5f4fe0"),
     ("task_end", "the task ended itself after a tool call (an answer, an email, a game over...)", "#8fb3e6"),
     ("plain", "ended on a plain reply (allowed under the soft check only)", "#d9d4cc"),
     ("reminders", "all 10 reminders used, then let go", "#f0a35e"),
