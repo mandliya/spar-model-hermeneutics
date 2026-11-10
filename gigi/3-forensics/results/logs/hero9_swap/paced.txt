@@ -1,0 +1,2 @@
+2026-11-10 18:27:28 paced launcher start: 658 resumes in commands_20261110-181729.txt, cap $3078
+2026-11-10 18:27:30 live containers 262 > 250: waiting 3 min
