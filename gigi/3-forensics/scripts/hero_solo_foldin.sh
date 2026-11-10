@@ -49,10 +49,10 @@ STAGES=${HERO_STAGES:-$DEF_STAGES}; DRY=${DRY_RUN:-0}
 [ -n "$STAGES" ] || { echo "hero_solo_foldin.sh: no default stages for HERO_MODEL=$MODEL; set HERO_STAGES" >&2; exit 2; }
 WAIT=${WAIT_MINUTES:-840}; GRADE_CAP=${GRADE_CAP:-60}; MERGE=${HERO_MERGE:-0}; export HERO_MERGE="$MERGE"
 # second pass or another model: per-model file names, so the first pass's hero_full_runs*.csv / hero_loss_audit*.md stay as they are
-if [[ ",$STAGES," == *",hero4_"* || ",$STAGES," == *",hero5_"* || ",$STAGES," == *",hero6_"* || ",$STAGES," == *",hero7_"* || ",$STAGES," == *",hero8_"* ]]; then
+if [[ ",$STAGES," == *",hero4_"* || ",$STAGES," == *",hero5_"* || ",$STAGES," == *",hero6_"* || ",$STAGES," == *",hero7_"* || ",$STAGES," == *",hero8_"* || ",$STAGES," == *",hero9_"* ]]; then
   # 7 Nov 2026: Llama's last try with the hard end rule (agent.end_task_required=true, patches/end_task_required.patch);
   # 8 Nov 2026: hero5_<hack> = the five hard hacks on top of it (agent.hack, hacks.py)
-  TAG=hero4; [[ ",$STAGES," == *",hero5_"* ]] && TAG=hero5; [[ ",$STAGES," == *",hero6_"* ]] && TAG=hero6; [[ ",$STAGES," == *",hero7_"* ]] && TAG=hero7; [[ ",$STAGES," == *",hero8_"* ]] && TAG=hero8   # 9 Nov 2026: hero8 = gemma-3-27b and qwen3.6-27b with the hard rule + worked example
+  TAG=hero4; [[ ",$STAGES," == *",hero5_"* ]] && TAG=hero5; [[ ",$STAGES," == *",hero6_"* ]] && TAG=hero6; [[ ",$STAGES," == *",hero7_"* ]] && TAG=hero7; [[ ",$STAGES," == *",hero8_"* ]] && TAG=hero8   # 9 Nov 2026: hero8 = gemma-3-27b and qwen3.6-27b with the hard rule + worked example; [[ ",$STAGES," == *",hero9_"* ]] && TAG=hero9   # 10 Nov 2026: hero9 = the heroes with no check at all (plain environment)
   HERO2=1; PREFIX=${HERO_OUT_PREFIX:-${TAG}_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-${TAG}_loss_audit__$MODEL.md}; DEF_LOG="$HERE/results/logs/$TAG/$MODEL"
 elif [ "$MODEL" != llama-3.3-70b ] || [[ ",$STAGES," == *",hero2_"* ]]; then
   HERO2=1; PREFIX=${HERO_OUT_PREFIX:-hero2_full_runs__$MODEL}; AUDIT=${HERO_AUDIT:-hero2_loss_audit__$MODEL.md}; DEF_LOG="$HERE/results/logs/hero2/$MODEL"
