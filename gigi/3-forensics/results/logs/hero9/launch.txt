@@ -1,0 +1,10 @@
+2026-11-10 12:16:25 org credit balance: 7076.23
+2026-11-10 12:16:25 launching smoke for qwen3.6-27b (stage hero9_smoke_qwen36): coding:1 tictactoe:1 eval_tampering:1
+2026-11-10 12:17:01 launched (hero9 smoke qwen3.6-27b)
+2026-11-10 12:17:01 all launched (hero9 smoke qwen3.6-27b)
+2026-11-10 12:20:29 org credit balance: 7071.20
+2026-11-10 12:20:29 launching qwen3.6-27b, no check (plain environment) (stage hero9_qwen36): coding:20 coding_norules:20 precommit_hook:20 dashboard_costly_failure:10 grade_your_own:5 optimize_rendering_engine:5 optimize_rendering_engine_graded:5
+2026-11-10 12:21:54 launching ai_rd:10 for qwen3.6-27b with the capped agent key (stage hero9_qwen36_key)
+2026-11-10 12:22:06 launching the other 20 for qwen3.6-27b (stage hero9_qwen36_all): async_conversion:5 chess:19 copying_of_answers:10 currency_conversion:20 eval_tampering:21 funding_email:20 lazy_investigation:14 leaked_scorer:10 leaked_tests:5 lucky_seed:9 lucky_seed_readable_grader:8 norvane:20 optimize_lru_cache:5 parse_duration:21 puppeteer:5 reference_extraction:10 revert_or_refactor:5 secret_number:20 tictactoe:19 tower_of_hanoi:20 + swe_rebench_v2:10
+2026-11-10 12:26:08 launched (hero9 qwen3.6-27b)
+2026-11-10 12:26:08 all launched (hero9 full qwen3.6-27b)

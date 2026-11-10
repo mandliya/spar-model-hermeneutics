@@ -1,0 +1,10 @@
+2026-11-10 12:23:33 start: waiting for DONE in /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/logs/hero9/until_done.txt or /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/logs/hero9/foldin.txt AND the file /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/logs/hero9/SWAP_APPROVED
+2026-11-10 12:23:33 waiting (fleets done: no; approved: no)
+2026-11-10 12:25:28 GG approved the full swap plan (about $1,026, cap 3x) via AskUserQuestion; SWAP_APPROVED written by the parent session
+2026-11-10 14:10:09 waiting (fleets done: no; approved: yes)
+2026-11-10 15:10:10 waiting (fleets done: no; approved: yes)
+2026-11-10 17:49:27 waiting (fleets done: no; approved: yes)
+2026-11-10 18:17:27 both gates open: 1026 
+2026-11-10 18:17:29 plan written: symmetric swap plan: 329 restart points (252 incident, 77 clean) in 13 tasks; 3290 continuations per arm, 6580 in all; estimate (gemma-3 27B and Qwen3.6 27B both fp8 on DeepInfra via OpenRouter): replays $491.75 (gemma $27.14, qwen36 $464.61); Opus grading of 900 judged-task replays ~$630.00; total ~$1,121.75
+2026-11-10 18:17:29 cap $3078 (approved 1026, estimate 1121.75, x3)
+2026-11-10 18:17:29 launcher dry run OK: 658 resumes, 6580 continuations -> /var/folders/g1/555ct1pj03gblq7vhqdsm6100000gn/T//hero9_swap_commands.xqB6Ag

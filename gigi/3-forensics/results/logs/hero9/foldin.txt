@@ -1,0 +1,11 @@
+2026-11-10 12:26:08 start (ceiling 4550, grade cap 60, models: qwen3.6-27b)
+2026-11-10 12:26:08 launcher done for qwen3.6-27b
+2026-11-10 12:26:08 qwen3.6-27b hero9_qwen36,hero9_qwen36_key: fold-in pass 1
+2026-11-10 17:41:33 qwen3.6-27b hero9_qwen36,hero9_qwen36_key: pass 1 exit 0; 2026-11-10 17:41:33 scored: 95 qwen3.6-27b runs found in stages hero9_qwen36, hero9_qwen36_key -> hero9_full_runs__qwen3.6-27b.csv;
+2026-11-10 17:41:33 qwen3.6-27b hero9_qwen36_all: fold-in pass 1
+2026-11-10 18:12:01 qwen3.6-27b hero9_qwen36_all: pass 1 exit 0; 2026-11-10 18:02:04 STEP FAILED: fetch (exit 1);2026-11-10 18:12:01 scored: 276 qwen3.6-27b runs found in stages hero9_qwen36_all -> hero9_full_runs__qwen3.6-27b__other21.csv;
+2026-11-10 18:12:01 qwen3.6-27b hero9_qwen36_all: fold-in pass 2
+2026-11-10 18:14:44 qwen3.6-27b hero9_qwen36_all: pass 2 exit 0; 2026-11-10 18:12:01 scored: 276 qwen3.6-27b runs found in stages hero9_qwen36_all -> hero9_full_runs__qwen3.6-27b__other21.csv;2026-11-10 18:14:14 STEP FAILED: fetch (exit 1);2026-11-10 18:14:43 scored: 276 qwen3.6-27b runs found in stages hero9_qwen36_all -> hero9_full_runs__qwen3.6-27b__other21.csv;
+2026-11-10 18:14:44 qwen3.6-27b hero9_qwen36_all: fold-in pass 3
+2026-11-10 18:17:23 qwen3.6-27b hero9_qwen36_all: pass 3 exit 0; 2026-11-10 18:14:43 scored: 276 qwen3.6-27b runs found in stages hero9_qwen36_all -> hero9_full_runs__qwen3.6-27b__other21.csv;2026-11-10 18:16:53 STEP FAILED: fetch (exit 1);2026-11-10 18:17:23 scored: 276 qwen3.6-27b runs found in stages hero9_qwen36_all -> hero9_full_runs__qwen3.6-27b__other21.csv;
+2026-11-10 18:17:23 DONE

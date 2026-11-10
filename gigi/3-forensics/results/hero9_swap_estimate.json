@@ -1,0 +1,61 @@
+{
+ "points": 329,
+ "incident_points": 252,
+ "clean_points": 77,
+ "tries_per_arm": 3290,
+ "tries_total": 6580,
+ "prefix_tokens_min_mean_max": [
+  694,
+  9710,
+  122163
+ ],
+ "formula": "per point and arm: target x (TURNS_arm x prefix_tokens x $in + OUT_arm x $out) / 1e6",
+ "prices_per_M_usd": {
+  "qwen36": [
+   0.32,
+   3.2
+  ],
+  "gemma": [
+   0.08,
+   0.16
+  ]
+ },
+ "turns": {
+  "qwen36": 30.0,
+  "gemma": 10.0
+ },
+ "out_tokens": {
+  "qwen36": 15000.0,
+  "gemma": 3000.0
+ },
+ "precision": "gemma-3 27B and Qwen3.6 27B both fp8 on DeepInfra via OpenRouter",
+ "per_arm_usd": {
+  "gemma": 27.136960000000002,
+  "qwen36": 464.61311999999987
+ },
+ "per_source_usd": {
+  "gemma": 159.68319199999988,
+  "qwen36": 332.06688800000006
+ },
+ "per_env_usd": {
+  "async_conversion": 58.346056,
+  "coding": 23.480287999999998,
+  "coding_norules": 37.983264000000005,
+  "copying_of_answers": 18.034896,
+  "currency_conversion": 38.421175999999996,
+  "dashboard_costly_failure": 28.132703999999997,
+  "eval_tampering": 35.16120800000001,
+  "grade_your_own": 54.15809599999999,
+  "lazy_investigation": 15.501232000000002,
+  "optimize_rendering_engine": 35.001752,
+  "optimize_rendering_engine_graded": 35.86292,
+  "tower_of_hanoi": 56.547328,
+  "funding_email": 55.119160000000015
+ },
+ "replays_usd": 491.75,
+ "judged_tries": 900,
+ "judge_usd_per_try": 0.7,
+ "opus_grading_usd": 630.0,
+ "total_usd": 1121.75,
+ "anchor": "hero3 swap (6 Nov): 2,490 short-task tries, Llama + Qwen3.6 + gemma, cost at most $24"
+}

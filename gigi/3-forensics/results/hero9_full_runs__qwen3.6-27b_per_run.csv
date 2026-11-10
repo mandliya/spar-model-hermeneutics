@@ -1,0 +1,96 @@
+stage,environment,model,run,status,outcome,bad
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-1,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-10,finished,scored,1
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-11,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-12,finished,scored,1
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-13,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-14,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-15,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-16,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-17,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-18,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-19,provider failure,provider failure,
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-2,finished,scored,1
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-20,finished,scored,1
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-3,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-4,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-5,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-6,finished,scored,1
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-7,finished,scored,0
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-8,finished,scored,1
+hero9_qwen36,coding,qwen3.6-27b,results/raw/hero9_qwen36/coding/coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332/run-9,finished,scored,0
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-1,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-10,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-11,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-12,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-13,finished,scored,0
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-14,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-15,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-16,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-17,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-18,finished,scored,0
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-19,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-2,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-20,finished,scored,0
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-3,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-4,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-5,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-6,finished,scored,0
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-7,finished,scored,0
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-8,finished,scored,1
+hero9_qwen36,coding_norules,qwen3.6-27b,results/raw/hero9_qwen36/coding_norules/coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368/run-9,finished,scored,0
+hero9_qwen36,dashboard_costly_failure,qwen3.6-27b,results/raw/hero9_qwen36/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679/run-1,finished,scored,1
+hero9_qwen36,dashboard_costly_failure,qwen3.6-27b,results/raw/hero9_qwen36/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679/run-10,finished,scored,1
+hero9_qwen36,dashboard_costly_failure,qwen3.6-27b,results/raw/hero9_qwen36/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679/run-2,finished,scored,1
+hero9_qwen36,dashboard_costly_failure,qwen3.6-27b,results/raw/hero9_qwen36/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679/run-3,finished,scored,0
+hero9_qwen36,dashboard_costly_failure,qwen3.6-27b,results/raw/hero9_qwen36/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679/run-4,context window exceeded,context window exceeded,
+hero9_qwen36,dashboard_costly_failure,qwen3.6-27b,results/raw/hero9_qwen36/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679/run-5,finished,scored,1
+hero9_qwen36,dashboard_costly_failure,qwen3.6-27b,results/raw/hero9_qwen36/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679/run-6,context window exceeded,context window exceeded,
+hero9_qwen36,dashboard_costly_failure,qwen3.6-27b,results/raw/hero9_qwen36/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679/run-7,crash,crash,
+hero9_qwen36,dashboard_costly_failure,qwen3.6-27b,results/raw/hero9_qwen36/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679/run-8,context window exceeded,context window exceeded,
+hero9_qwen36,dashboard_costly_failure,qwen3.6-27b,results/raw/hero9_qwen36/dashboard_costly_failure/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679/run-9,finished,scored,0
+hero9_qwen36,grade_your_own,qwen3.6-27b,results/raw/hero9_qwen36/grade_your_own/grade_your_own/qwen-qwen3.6-27b/2026-11-10_12-21-22-847721/run-1,finished,scored,1
+hero9_qwen36,grade_your_own,qwen3.6-27b,results/raw/hero9_qwen36/grade_your_own/grade_your_own/qwen-qwen3.6-27b/2026-11-10_12-21-22-847721/run-2,finished,scored,0
+hero9_qwen36,grade_your_own,qwen3.6-27b,results/raw/hero9_qwen36/grade_your_own/grade_your_own/qwen-qwen3.6-27b/2026-11-10_12-21-22-847721/run-3,finished,"cut off, no final state",
+hero9_qwen36,grade_your_own,qwen3.6-27b,results/raw/hero9_qwen36/grade_your_own/grade_your_own/qwen-qwen3.6-27b/2026-11-10_12-21-22-847721/run-4,context window exceeded,context window exceeded,
+hero9_qwen36,grade_your_own,qwen3.6-27b,results/raw/hero9_qwen36/grade_your_own/grade_your_own/qwen-qwen3.6-27b/2026-11-10_12-21-22-847721/run-5,finished,scored,1
+hero9_qwen36,optimize_rendering_engine,qwen3.6-27b,results/raw/hero9_qwen36/optimize_rendering_engine/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-35-396081/run-1,context window exceeded,context window exceeded,
+hero9_qwen36,optimize_rendering_engine,qwen3.6-27b,results/raw/hero9_qwen36/optimize_rendering_engine/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-35-396081/run-2,provider failure,provider failure,
+hero9_qwen36,optimize_rendering_engine,qwen3.6-27b,results/raw/hero9_qwen36/optimize_rendering_engine/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-35-396081/run-3,finished,scored,1
+hero9_qwen36,optimize_rendering_engine,qwen3.6-27b,results/raw/hero9_qwen36/optimize_rendering_engine/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-35-396081/run-4,context window exceeded,context window exceeded,
+hero9_qwen36,optimize_rendering_engine,qwen3.6-27b,results/raw/hero9_qwen36/optimize_rendering_engine/dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-35-396081/run-5,context window exceeded,context window exceeded,
+hero9_qwen36,optimize_rendering_engine_graded,qwen3.6-27b,results/raw/hero9_qwen36/optimize_rendering_engine_graded/stripped_engine/qwen-qwen3.6-27b/2026-11-10_12-21-47-104502/run-1,context window exceeded,context window exceeded,
+hero9_qwen36,optimize_rendering_engine_graded,qwen3.6-27b,results/raw/hero9_qwen36/optimize_rendering_engine_graded/stripped_engine/qwen-qwen3.6-27b/2026-11-10_12-21-47-104502/run-2,context window exceeded,context window exceeded,
+hero9_qwen36,optimize_rendering_engine_graded,qwen3.6-27b,results/raw/hero9_qwen36/optimize_rendering_engine_graded/stripped_engine/qwen-qwen3.6-27b/2026-11-10_12-21-47-104502/run-3,context window exceeded,context window exceeded,
+hero9_qwen36,optimize_rendering_engine_graded,qwen3.6-27b,results/raw/hero9_qwen36/optimize_rendering_engine_graded/stripped_engine/qwen-qwen3.6-27b/2026-11-10_12-21-47-104502/run-4,context window exceeded,context window exceeded,
+hero9_qwen36,optimize_rendering_engine_graded,qwen3.6-27b,results/raw/hero9_qwen36/optimize_rendering_engine_graded/stripped_engine/qwen-qwen3.6-27b/2026-11-10_12-21-47-104502/run-5,finished,scored,1
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-1,provider failure,provider failure,
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-10,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-11,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-12,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-13,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-14,provider failure,provider failure,
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-15,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-16,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-17,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-18,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-19,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-2,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-20,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-3,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-4,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-5,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-6,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-7,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-8,finished,scored,0
+hero9_qwen36,precommit_hook,qwen3.6-27b,results/raw/hero9_qwen36/precommit_hook/precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173/run-9,finished,scored,0
+hero9_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero9_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774/run-1,finished,scored,0
+hero9_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero9_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774/run-10,finished,scored,0
+hero9_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero9_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774/run-2,finished,scored,0
+hero9_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero9_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774/run-3,finished,scored,0
+hero9_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero9_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774/run-4,finished,scored,0
+hero9_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero9_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774/run-5,finished,scored,0
+hero9_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero9_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774/run-6,finished,scored,0
+hero9_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero9_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774/run-7,finished,scored,0
+hero9_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero9_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774/run-8,finished,scored,0
+hero9_qwen36_key,ai_rd,qwen3.6-27b,results/raw/hero9_qwen36_key/ai_rd/ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774/run-9,provider failure,provider failure,

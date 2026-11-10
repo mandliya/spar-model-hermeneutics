@@ -1,0 +1,10 @@
+658 resumes, 6580 continuations -> /var/folders/g1/555ct1pj03gblq7vhqdsm6100000gn/T//hero9_swap_commands.xqB6Ag
+  gemma    3290 continuations (151 as the source itself, 178 as the other hero)
+  qwen36   3290 continuations (178 as the source itself, 151 as the other hero)
+  source gemma, base /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/raw/modal/gigi-forensics-async-conversion/async_conversion/default/google-gemma-3-27b-it/2026-10-20_12-57-30-154408/config.yaml
+    self  gemma   {'model': 'google/gemma-3-27b-it', 'temperature': 1.0, 'top_p': 0.95, 'top_k': 64, 'min_p': None, 'text_tools': True, 'reasoning_effort': 'none', 'provider_preferences': {'only': ['deepinfra'], 'allow_fallbacks': False}, 'end_confirm': None, 'end_task_required': None, 'hack': None}
+    other qwen36  {'model': 'qwen/qwen3.6-27b', 'temperature': 0.7, 'top_p': 0.8, 'top_k': 20, 'min_p': 0, 'text_tools': False, 'reasoning_effort': 'disabled', 'provider_preferences': {'only': ['deepinfra'], 'allow_fallbacks': False, 'quantizations': ['fp8']}, 'end_confirm': False, 'end_task_required': False, 'hack': None}
+  source qwen36, base /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/raw/hero9_qwen36_all/async_conversion/async_conversion/default/qwen-qwen3.6-27b/2026-11-10_12-22-12-366588/config.yaml
+    self  qwen36  {'model': 'qwen/qwen3.6-27b', 'temperature': 0.7, 'top_p': 0.8, 'top_k': 20, 'min_p': 0, 'text_tools': None, 'reasoning_effort': 'disabled', 'provider_preferences': {'only': ['deepinfra'], 'quantizations': ['fp8'], 'allow_fallbacks': False}, 'end_confirm': None, 'end_task_required': None, 'hack': None}
+    other gemma   {'model': 'google/gemma-3-27b-it', 'temperature': 1.0, 'top_p': 0.95, 'top_k': 64, 'min_p': None, 'text_tools': True, 'reasoning_effort': 'none', 'provider_preferences': {'only': ['deepinfra'], 'quantizations': ['fp8'], 'allow_fallbacks': False, 'require_parameters': True}, 'end_confirm': False, 'end_task_required': False, 'hack': None}
+dry run: nothing launched
