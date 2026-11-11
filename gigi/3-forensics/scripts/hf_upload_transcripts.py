@@ -1,6 +1,6 @@
 """Upload the hero transcripts to Hugging Face for TQ (10 Nov 2026 call: text pre-work on the heroes gemma-3 27B and
 Qwen3.6 27B, then NLA / J-space on activations captured from these same transcripts). Dataset:
-https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts (public, like gigi-lie-detection-activations).
+https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts (private by default; --public to open it).
 
 What goes up, per run: rollout.log, the LAST step's messages.json (the full conversation as the model saw it, OpenAI
 format; the per-step checkpoints repeat the same history and stay on the laptop / Modal) and state.json, final/ (grading.json
