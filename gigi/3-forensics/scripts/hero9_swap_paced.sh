@@ -57,6 +57,7 @@ done < "$CMDS"
 say "all launched: $n_launched here, $n_skipped already launched before"
 echo "$(date '+%F %T') all launched ($(basename "$CMDS"), paced)" >> "$LOG/launch.txt"
 
+[ -n "${NO_FOLDIN:-}" ] && { say "NO_FOLDIN set: not starting a fold-in (hero9_swap_lean_foldin.sh does it)"; exit 0; }
 # the fold-in, exactly as hero9_swap.sh starts it
 spent_now=$(FORENSICS_ENV_FILE="$ROOT/.env" python3 "$HERE/scripts/hero_usage.py" 2>/dev/null | grep "since 18 Oct" | grep -oE '\$[0-9][0-9,]*\.[0-9]+' | head -1 | tr -d '$,')
 CEIL=${CEIL:-$(python3 -c "print(round(float('${spent_now:-0}') + float('$CAP') + 100))")} GRADE_CAP=${GRADE_CAP:-60} bash "$HERE/scripts/hero9_swap_foldin.sh"
