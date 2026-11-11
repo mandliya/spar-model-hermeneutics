@@ -1,0 +1,4 @@
+2026-11-11 15:02:21 after: key usage:          $4,820.97
+2026-11-11 15:02:21 after: since 18 Oct:       $4,689.50   (compare with CEIL / TOTAL_CEILING_USD)
+2026-11-11 16:41:46 after: key usage:          $4,947.49
+2026-11-11 16:41:46 after: since 18 Oct:       $4,816.01   (compare with CEIL / TOTAL_CEILING_USD)

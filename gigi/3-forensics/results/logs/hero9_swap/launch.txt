@@ -668,3 +668,54 @@
 2026-11-11 11:47:44 launched tower_of_hanoi__qwen36_2026-11-10_12-26-03-391928_run-2_K18__gemma.log
 2026-11-11 11:47:44 all launched (commands_20261110-181729.txt, paced)
 2026-11-11 11:47:44 fold-in started (ceiling see foldin.txt)
+2026-11-11 13:25:37 launched currency_conversion__gemma_2026-10-20_12-59-32-510865_run-18_K1__gemma.log
+2026-11-11 13:26:02 launched currency_conversion__gemma_2026-10-20_12-59-32-510865_run-4_K1__gemma.log
+2026-11-11 13:26:27 launched currency_conversion__gemma_2026-10-20_12-59-32-510865_run-6_K2__gemma.log
+2026-11-11 13:26:52 launched currency_conversion__gemma_2026-10-20_12-59-32-510865_run-6_K1__gemma.log
+2026-11-11 13:27:17 launched dashboard_costly_failure__gemma_2026-10-20_12-59-15-634971_run-1_K14__qwen36.log
+2026-11-11 13:27:42 launched eval_tampering__gemma_2026-10-20_12-58-48-591244_run-14_K1__gemma.log
+2026-11-11 13:28:07 launched eval_tampering__gemma_2026-10-20_12-58-48-591244_run-17_K2__gemma.log
+2026-11-11 13:28:32 launched eval_tampering__gemma_2026-10-20_12-58-48-591244_run-19_K2__gemma.log
+2026-11-11 13:28:57 launched eval_tampering__gemma_2026-10-20_12-58-48-591244_run-7_K1__gemma.log
+2026-11-11 13:29:22 launched eval_tampering__gemma_2026-10-20_12-58-48-591244_run-7_K1__qwen36.log
+2026-11-11 13:29:47 launched grade_your_own__gemma_2026-10-20_12-57-13-301849_run-4_K6__gemma.log
+2026-11-11 13:30:12 launched lazy_investigation__gemma_2026-10-20_12-59-20-183804_run-16_K4__gemma.log
+2026-11-11 13:30:37 launched lazy_investigation__gemma_2026-10-20_12-59-20-183804_run-3_K1__gemma.log
+2026-11-11 13:31:02 launched async_conversion__qwen36_2026-11-10_12-22-12-366588_run-5_K94__qwen36.log
+2026-11-11 13:31:27 launched async_conversion__qwen36_2026-11-10_12-22-12-366588_run-5_K94__gemma.log
+2026-11-11 13:31:52 launched async_conversion__qwen36_2026-11-10_12-22-12-366588_run-5_K93__qwen36.log
+2026-11-11 13:32:17 launched async_conversion__qwen36_2026-11-10_12-22-12-366588_run-5_K93__gemma.log
+2026-11-11 13:32:43 launched coding__qwen36_2026-11-10_12-20-35-232332_run-10_K11__qwen36.log
+2026-11-11 13:33:08 launched coding__qwen36_2026-11-10_12-20-35-232332_run-2_K14__qwen36.log
+2026-11-11 13:33:33 launched coding__qwen36_2026-11-10_12-20-35-232332_run-2_K14__gemma.log
+2026-11-11 13:33:58 launched coding__qwen36_2026-11-10_12-20-35-232332_run-2_K13__qwen36.log
+2026-11-11 13:34:23 launched coding__qwen36_2026-11-10_12-20-35-232332_run-6_K12__qwen36.log
+2026-11-11 13:34:48 launched coding__qwen36_2026-11-10_12-20-35-232332_run-8_K12__qwen36.log
+2026-11-11 13:35:13 launched coding__qwen36_2026-11-10_12-20-35-232332_run-13_K11__qwen36.log
+2026-11-11 13:35:40 launched coding_norules__qwen36_2026-11-10_12-20-47-439368_run-1_K8__qwen36.log
+2026-11-11 13:36:05 launched coding_norules__qwen36_2026-11-10_12-20-47-439368_run-1_K8__gemma.log
+2026-11-11 13:36:30 launched coding_norules__qwen36_2026-11-10_12-20-47-439368_run-11_K3__qwen36.log
+2026-11-11 13:36:55 launched coding_norules__qwen36_2026-11-10_12-20-47-439368_run-11_K3__gemma.log
+2026-11-11 13:37:20 launched currency_conversion__qwen36_2026-11-10_12-22-47-507049_run-9_K4__gemma.log
+2026-11-11 13:37:45 launched currency_conversion__qwen36_2026-11-10_12-22-47-507049_run-9_K3__qwen36.log
+2026-11-11 13:38:10 launched currency_conversion__qwen36_2026-11-10_12-22-47-507049_run-9_K3__gemma.log
+2026-11-11 13:38:35 launched dashboard_costly_failure__qwen36_2026-11-10_12-21-11-216679_run-1_K79__qwen36.log
+2026-11-11 13:39:00 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-7_K8__qwen36.log
+2026-11-11 13:39:25 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-7_K8__gemma.log
+2026-11-11 13:39:50 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-7_K7__qwen36.log
+2026-11-11 13:40:15 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-7_K7__gemma.log
+2026-11-11 13:40:40 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-9_K9__qwen36.log
+2026-11-11 13:41:05 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-9_K9__gemma.log
+2026-11-11 13:41:30 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-9_K8__qwen36.log
+2026-11-11 13:41:55 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-9_K8__gemma.log
+2026-11-11 13:42:20 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-1_K9__qwen36.log
+2026-11-11 13:42:45 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-1_K9__gemma.log
+2026-11-11 13:43:10 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-6_K11__qwen36.log
+2026-11-11 13:43:35 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-6_K11__gemma.log
+2026-11-11 13:44:00 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-8_K12__qwen36.log
+2026-11-11 13:44:25 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-8_K12__gemma.log
+2026-11-11 13:44:51 launched grade_your_own__qwen36_2026-11-10_12-21-22-847721_run-1_K66__qwen36.log
+2026-11-11 13:44:51 all launched (commands_relaunch_20261111.txt, paced)
+2026-11-11 14:34:37 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-8_K12__qwen36.log (by hand, after the 13:40 network drop)
+2026-11-11 14:35:07 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-8_K12__gemma.log (by hand, after the 13:40 network drop)
+2026-11-11 14:35:37 launched grade_your_own__qwen36_2026-11-10_12-21-22-847721_run-1_K66__qwen36.log (by hand, after the 13:40 network drop)

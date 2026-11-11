@@ -1,0 +1,51 @@
+2026-11-11 11:47:44 start (ceiling 7544, grade cap 60)
+2026-11-11 11:47:44 launcher done
+2026-11-11 11:47:48 waiting: 9 of our apps still running
+2026-11-11 12:18:05 waiting: 4 of our apps still running
+2026-11-11 12:48:23 waiting: 3 of our apps still running
+2026-11-11 13:13:41 interim fold-in
+2026-11-11 13:16:24 STOPPED by the session: whole-fleet fetch with workspace blobs would fill the 3 GB of free disk; switching to a blob-free fetch
+2026-11-11 13:21:34 [lean] start (ceiling 7544, grade cap 1200 for the whole grading pass)
+2026-11-11 13:27:16 recovered fleet resume/qwen-qwen3.6-27b/2026-11-10_22-04-24-793232 for optimize_rendering_engine_graded__gemma_2026-10-20_12-57-12-997411_run-1_K10__qwen36.log (connection lost before the fleet line)
+2026-11-11 13:39:34 [lean] fetch state try 1 ended rc=1; retrying
+2026-11-11 13:47:04 [lean] fetch state try 2 ended rc=1; retrying
+2026-11-11 13:48:34 [lean] fetch state try 3 ended rc=1; retrying
+2026-11-11 13:50:04 [lean] fetch state try 4 ended rc=1; retrying
+2026-11-11 13:51:34 [lean] fetch state try 5 ended rc=1; retrying
+2026-11-11 13:53:04 [lean] fetch state try 6 ended rc=1; retrying
+2026-11-11 13:53:34 [lean] fetch state: still failures after 6 tries; going on with what is here
+2026-11-11 13:54:34 [lean] fetch messages try 1 ended rc=1; retrying
+2026-11-11 13:56:04 [lean] fetch messages try 2 ended rc=1; retrying
+2026-11-11 13:57:34 [lean] fetch messages try 3 ended rc=1; retrying
+2026-11-11 14:18:05 [lean] fetch messages try 4 ended rc=1; retrying
+2026-11-11 14:25:35 [lean] fetch messages pass clean
+2026-11-11 14:25:39 [lean] all swap apps stopped
+2026-11-11 14:32:39 [lean] fetch state pass clean
+2026-11-11 14:36:47 recovered fleet resume/qwen-qwen3.6-27b/2026-11-11_13-26-57-657454 for dashboard_costly_failure__gemma_2026-10-20_12-59-15-634971_run-1_K14__qwen36.log
+2026-11-11 14:36:47 recovered fleet resume/qwen-qwen3.6-27b/2026-11-11_13-42-51-406866 for funding_email__qwen36_2026-11-10_12-23-11-752029_run-6_K11__qwen36.log
+2026-11-11 14:39:39 [lean] fetch messages try 1 ended rc=1; retrying
+2026-11-11 14:47:09 [lean] fetch messages pass clean
+2026-11-11 14:47:09 [lean] raw size: 1.0G	/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/raw/hero9_swap
+2026-11-11 14:47:17 [lean] grading
+2026-11-11 15:02:14 [lean] grading: 2026-11-11 15:02:14 done, spent $265.11
+2026-11-11 15:02:20 [lean] scored: 658 rows -> results/hero9_swap.csv; found 6536, launched 6580, lost: context window exceeded 70, lost: crash 1, lost: cut off, no final state 18, lost: cut off, no full final state 2, lost: no value for the measure 52, lost: not graded 586, lost: provider failure 14, lost: step cap, no report 8, scored 5785
+2026-11-11 15:02:21 [lean] chart: wrote results/hero9_swap_summary.md
+2026-11-11 15:02:21 [lean] DONE (not committed: the parent session commits)
+2026-11-11 15:04:01 Opus 5 refused most swap transcripts (category reasoning_extraction, $265 spent on refusals); rerunning the fold-in with JUDGE_MODEL=claude-opus-4-8 as on 4 Nov (hero2_swap)
+2026-11-11 15:04:01 [lean] start (ceiling 7544, grade cap 1200 for the whole grading pass)
+2026-11-11 15:11:02 [lean] fetch state try 1 ended rc=1; retrying
+2026-11-11 15:18:32 [lean] fetch state try 2 ended rc=1; retrying
+2026-11-11 15:26:02 [lean] fetch state try 3 ended rc=1; retrying
+2026-11-11 15:33:32 [lean] fetch state pass clean
+2026-11-11 15:42:32 [lean] fetch messages try 1 ended rc=1; retrying
+2026-11-11 15:50:02 [lean] fetch messages pass clean
+2026-11-11 15:50:05 [lean] all swap apps stopped
+2026-11-11 15:57:06 [lean] fetch state pass clean
+2026-11-11 16:05:06 [lean] fetch messages try 1 ended rc=1; retrying
+2026-11-11 16:14:36 [lean] fetch messages pass clean
+2026-11-11 16:14:36 [lean] raw size: 1.0G	/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/raw/hero9_swap
+2026-11-11 16:14:44 [lean] grading
+2026-11-11 16:41:38 [lean] grading: 2026-11-11 16:41:38 done, spent $94.83
+2026-11-11 16:41:45 [lean] scored: 658 rows -> results/hero9_swap.csv; found 6536, launched 6580, lost: context window exceeded 70, lost: crash 1, lost: cut off, no final state 18, lost: cut off, no full final state 2, lost: no value for the measure 52, lost: not graded 440, lost: provider failure 14, lost: step cap, no report 8, scored 5931
+2026-11-11 16:41:46 [lean] chart: wrote results/hero9_swap_summary.md
+2026-11-11 16:41:47 [lean] DONE (not committed: the parent session commits)
