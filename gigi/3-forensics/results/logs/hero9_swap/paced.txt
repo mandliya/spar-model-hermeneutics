@@ -1,2 +1,46 @@
 2026-11-10 18:27:28 paced launcher start: 658 resumes in commands_20261110-181729.txt, cap $3078
 2026-11-10 18:27:30 live containers 262 > 250: waiting 3 min
+2026-11-10 18:30:32 live containers 207 <= 250: next batch of 8 (0 launched so far, 1 skipped)
+2026-11-10 18:33:56 live containers 205 <= 250: next batch of 8 (8 launched so far, 77 skipped)
+2026-11-10 18:37:18 live containers 150 <= 250: next batch of 8 (16 launched so far, 77 skipped)
+2026-11-10 18:40:41 live containers 120 <= 250: next batch of 8 (24 launched so far, 77 skipped)
+2026-11-10 18:44:03 live containers 95 <= 250: next batch of 8 (32 launched so far, 77 skipped)
+2026-11-10 19:05:20 live containers 86 <= 250: next batch of 8 (40 launched so far, 77 skipped)
+2026-11-10 20:53:22 BATCH raised to 16 (live containers were 86 to 150 with 250 allowed; no Modal rate limit, no exhausted provider retries)
+2026-11-10 20:56:53 live containers 19 <= 250: next batch of 16 (56 launched so far, 77 skipped)
+2026-11-10 21:03:36 live containers 21 <= 250: next batch of 16 (72 launched so far, 77 skipped)
+2026-11-10 21:10:20 live containers 37 <= 250: next batch of 16 (88 launched so far, 77 skipped)
+2026-11-10 21:17:02 live containers 37 <= 250: next batch of 16 (104 launched so far, 77 skipped)
+2026-11-10 21:28:15 live containers 37 <= 250: next batch of 16 (120 launched so far, 77 skipped)
+2026-11-10 21:34:57 live containers 42 <= 250: next batch of 16 (136 launched so far, 77 skipped)
+2026-11-10 21:41:40 live containers 45 <= 250: next batch of 16 (152 launched so far, 77 skipped)
+2026-11-10 21:48:23 live containers 109 <= 250: next batch of 16 (168 launched so far, 77 skipped)
+2026-11-10 21:55:06 live containers 85 <= 250: next batch of 16 (184 launched so far, 77 skipped)
+2026-11-10 22:01:49 live containers 122 <= 250: next batch of 16 (200 launched so far, 77 skipped)
+2026-11-10 22:08:32 live containers 177 <= 250: next batch of 16 (216 launched so far, 77 skipped)
+2026-11-10 22:32:48 live containers 172 <= 250: next batch of 16 (232 launched so far, 77 skipped)
+2026-11-11 01:20:22 NOTE: the Mac slept 19:05-20:51 and again from ~22:35 (lid closed, battery); launching pauses while it sleeps, the Modal apps keep running
+2026-11-11 02:25:58 live containers 0 <= 250: next batch of 16 (248 launched so far, 77 skipped)
+2026-11-11 05:05:46 live containers 11 <= 250: next batch of 16 (264 launched so far, 77 skipped)
+2026-11-11 07:43:37 live containers 11 <= 250: next batch of 16 (280 launched so far, 77 skipped)
+2026-11-11 07:50:20 live containers 10 <= 250: next batch of 16 (296 launched so far, 77 skipped)
+2026-11-11 07:57:02 live containers 7 <= 250: next batch of 16 (312 launched so far, 77 skipped)
+2026-11-11 08:03:44 live containers 1 <= 250: next batch of 16 (328 launched so far, 77 skipped)
+2026-11-11 08:10:27 live containers 6 <= 250: next batch of 16 (344 launched so far, 77 skipped)
+2026-11-11 08:23:17 live containers 6 <= 250: next batch of 16 (360 launched so far, 77 skipped)
+2026-11-11 08:29:59 live containers 7 <= 250: next batch of 16 (376 launched so far, 77 skipped)
+2026-11-11 08:48:01 BATCH 24, MAX_TASKS 200 (Mac awake again; live containers 6-7 per check, 205 resumes left)
+2026-11-11 10:12:11 live containers 5 <= 200: next batch of 24 (400 launched so far, 77 skipped)
+2026-11-11 10:22:14 live containers 5 <= 200: next batch of 24 (424 launched so far, 77 skipped)
+2026-11-11 10:32:17 live containers 8 <= 200: next batch of 24 (448 launched so far, 77 skipped)
+2026-11-11 10:42:22 live containers 5 <= 200: next batch of 24 (472 launched so far, 77 skipped)
+2026-11-11 10:53:20 live containers -1 > 200: waiting 3 min
+2026-11-11 10:57:17 live containers -1 > 200: waiting 3 min
+2026-11-11 11:01:14 live containers -1 > 200: waiting 3 min
+2026-11-11 11:05:11 live containers -1 > 200: waiting 3 min
+2026-11-11 11:09:08 live containers -1 > 200: waiting 3 min
+2026-11-11 11:12:10 live containers 0 <= 200: next batch of 24 (496 launched so far, 77 skipped)
+2026-11-11 11:22:13 live containers 44 <= 200: next batch of 24 (520 launched so far, 77 skipped)
+2026-11-11 11:32:16 live containers 43 <= 200: next batch of 24 (544 launched so far, 77 skipped)
+2026-11-11 11:42:18 live containers 30 <= 200: next batch of 24 (568 launched so far, 77 skipped)
+2026-11-11 11:47:44 all launched: 581 here, 77 already launched before

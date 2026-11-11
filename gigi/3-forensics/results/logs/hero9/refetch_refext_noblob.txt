@@ -1,3 +1,90 @@
 2026-11-10 18:22:10 salvaged 34 non-blob files from the hung run-2 fetch
 2026-11-10 18:22:11 start (SDK, no blobs)
 2026-11-10 18:22:11 start (SDK, no blobs)
+2026-11-10 18:26:10   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-2: 504 non-blob files on the volume, 178 new, 0 failed
+2026-11-10 18:26:10   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-2: 504 non-blob files on the volume, 178 new, 0 failed
+2026-11-10 18:31:09   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-10: 504 non-blob files on the volume, 228 new, 0 failed
+2026-11-10 18:31:09   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-10: 504 non-blob files on the volume, 228 new, 0 failed
+2026-11-10 18:43:41   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-1: 504 non-blob files on the volume, 500 new, 0 failed
+2026-11-10 18:43:41   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-1: 504 non-blob files on the volume, 500 new, 0 failed
+2026-11-10 21:02:50 restarted after the Mac slept 19:05-20:51 (SDK stream hung)
+2026-11-10 21:02:50 start (SDK, no blobs)
+2026-11-10 21:02:50 start (SDK, no blobs)
+2026-11-10 21:02:59   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-2: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-10 21:02:59   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-2: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-10 21:03:06   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-10: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-10 21:03:06   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-10: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-10 21:03:14   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-1: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-10 21:03:14   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-1: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-10 21:18:33   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-2: 504 non-blob files on the volume, 464 new, 0 failed
+2026-11-10 21:18:33   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-2: 504 non-blob files on the volume, 464 new, 0 failed
+2026-11-10 21:23:09   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-3: listdir failed: Connection lost
+2026-11-10 21:23:09   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-3: listdir failed: Connection lost
+2026-11-10 21:38:48   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-4: 504 non-blob files on the volume, 500 new, 0 failed
+2026-11-10 21:38:48   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-4: 504 non-blob files on the volume, 500 new, 0 failed
+2026-11-10 21:53:26   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-5: 482 non-blob files on the volume, 478 new, 0 failed
+2026-11-10 21:53:26   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-5: 482 non-blob files on the volume, 478 new, 0 failed
+2026-11-10 22:06:53   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-6: 432 non-blob files on the volume, 428 new, 0 failed
+2026-11-10 22:06:53   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-6: 432 non-blob files on the volume, 428 new, 0 failed
+2026-11-11 08:22:20   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-7: 504 non-blob files on the volume, 500 new, 0 failed
+2026-11-11 08:22:20   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-7: 504 non-blob files on the volume, 500 new, 0 failed
+2026-11-11 08:27:49   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-8: 198 non-blob files on the volume, 194 new, 0 failed
+2026-11-11 08:27:49   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-8: 198 non-blob files on the volume, 194 new, 0 failed
+2026-11-11 12:21:05 restarted after a 4-hour hang during laptop sleep (per-file 120 s timeout added)
+2026-11-11 12:21:05 start (SDK, no blobs)
+2026-11-11 12:21:05 start (SDK, no blobs)
+2026-11-11 12:21:15   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-2: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:21:15   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-2: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:21:22   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-10: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:21:22   aj_data_anon/qwen-qwen3.6-27b/2026-11-09_19-04-19-033052/run-10: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:21:29   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-1: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:21:29   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-1: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:21:38   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-2: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:21:38   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-2: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:36:53   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-3: 504 non-blob files on the volume, 500 new, 0 failed
+2026-11-11 12:36:53   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-3: 504 non-blob files on the volume, 500 new, 0 failed
+2026-11-11 12:37:00   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-4: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:37:00   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-4: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:37:07   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-5: 482 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:37:07   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-5: 482 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:37:13   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-6: 432 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:37:13   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-6: 432 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:37:21   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-7: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:37:21   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-7: 504 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:37:24   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-8: 198 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:37:24   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-8: 198 non-blob files on the volume, 0 new, 0 failed
+2026-11-11 12:49:12   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-9: 504 non-blob files on the volume, 398 new, 0 failed
+2026-11-11 12:49:12   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-9: 504 non-blob files on the volume, 398 new, 0 failed
+2026-11-11 13:04:38   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-10: 504 non-blob files on the volume, 500 new, 0 failed
+2026-11-11 13:04:38   aj_data_anon/qwen-qwen3.6-27b/2026-11-10_12-25-15-913775/run-10: 504 non-blob files on the volume, 500 new, 0 failed
+2026-11-11 13:04:38 FETCH DONE
+2026-11-11 13:04:38 FETCH DONE
+Downloading pillow (4.6MiB)
+Downloading matplotlib (8.9MiB)
+Downloading fonttools (3.0MiB)
+ Downloaded fonttools
+ Downloaded pillow
+ Downloaded matplotlib
+Installed 11 packages in 53ms
+wrote charts/hero8_all29_cheating.png
+wrote charts/hero8_all29_work.png
+wrote charts/hero8_all29_endings.png
+wrote results/hero8_all29.md
+Llama 3.3 70B {'k': 58, 'n': 323, 'opened': 247, 'runs': 371, 'end_end_tool': 255, 'end_task_end': 86, 'end_reminders': 9, 'end_cap': 21}
+gemma-3 27B {'k': 64, 'n': 335, 'opened': 272, 'runs': 371, 'end_end_tool': 228, 'end_task_end': 137, 'end_cap': 6}
+Qwen3.6 27B, thinking off {'k': 97, 'n': 343, 'opened': 298, 'runs': 370, 'end_task_end': 172, 'end_end_tool': 138, 'end_cap': 60}
+clear gap ('Llama', 'Qwen3.6') ['coding', 'coding_norules', 'tower_of_hanoi', 'secret_number', 'lazy_investigation', 'eval_tampering']
+clear gap ('gemma', 'Qwen3.6') ['coding_norules', 'optimize_rendering_engine_graded', 'tower_of_hanoi', 'secret_number', 'lazy_investigation', 'eval_tampering']
+2026-11-11 13:04:53 hero8_all29 rendered
+wrote task_success.csv, task_success.md, charts/task_success.png
+2026-11-11 13:04:57 task_success rendered
+wrote charts/hero9_gap_cheating.png
+wrote charts/hero9_gap_work.png
+wrote charts/hero9_gap_endings.png
+wrote results/hero9_gap.md
+wrote results/hero9_loss_audit__gemma-3-27b.md
+gemma-3 27B {'k': 67, 'n': 363, 'opened': 212, 'runs': 383, 'end_task_end': 132, 'end_plain': 178, 'end_end_tool': 49, 'end_cap': 24}
+Qwen3.6 27B, thinking off {'k': 75, 'n': 332, 'opened': 288, 'runs': 363, 'end_task_end': 157, 'end_plain': 119, 'end_cap': 51, 'end_end_tool': 36}
+clear gaps: ['coding_norules', 'dashboard_costly_failure', 'tower_of_hanoi', 'lazy_investigation', 'eval_tampering']
+2026-11-11 13:05:00 hero9_gap rendered
+2026-11-11 13:05:00 RERENDER NOBLOB DONE
