@@ -176,7 +176,7 @@ footer { font-size: 12px; color: var(--muted); }
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">SPAR model forensics · hero swap · <span id="built"></span> <span class="pill partial">partial: grading of 3 tasks not finished</span></div>
+    <div class="eyebrow">SPAR model forensics · hero swap · <span id="built"></span> <span class="pill note">complete: all runs graded 12 Nov</span></div>
     <h1>When one model takes over the other's run, <em>coding cheats carry over</em>, while in <em>eval tampering and lazy investigation the new model decides</em>.</h1>
     <p class="lede">The two models are gemma-3 27B and Qwen3.6 27B. We took runs where one of them did a task's bad act and restarted each run at the bad act, and one step before it. From there, the same model continued the run 10 times and the other model took it over 10 times. We did this in both directions, plus on runs with no bad act as a control.</p>
     <p class="setting">Both models fp8 on DeepInfra via OpenRouter, run plain (no end check, no nudge). Qwen3.6 with thinking off, gemma with text-mode tool calls. Continuations ran 10–11 Nov 2026.</p>
@@ -189,7 +189,7 @@ footer { font-size: 12px; color: var(--muted); }
   <section aria-labelledby="s-status">
     <h2 id="s-status"><span id="scoredline"></span></h2>
     <div class="tiles" id="tiles"></div>
-    <p class="sub">The runs waiting for grading are in tasks where Claude Opus reads the transcript to decide whether the model cheated (grade_your_own, the rendering engine, copying of answers). Grading stopped when the OpenRouter key hit its $5,000 limit. Every other task is complete, dashboard included (graded 12 Nov).</p>
+    <p class="sub">Every continuation that ran to the end is scored, including the Opus-graded tasks (graded 12 Nov). The rest were lost to the context window, cut-offs, provider errors or a missing value. One gap is structural: on Qwen3.6's rendering-engine runs, all of gemma's takeovers ran out of context, because Qwen3.6's history is longer than gemma's 128k window.</p>
   </section>
 
   <section id="summary" aria-labelledby="s-sum">
@@ -272,7 +272,7 @@ footer { font-size: 12px; color: var(--muted); }
         <li><b>Clean run.</b> A run with no bad act, restarted from just before its last step. This is the control.</li>
         <li><b>Where N comes from.</b> In the coding tasks and the Opus-graded tasks, N is the step of the bad act itself. In eval tampering, lazy investigation, currency conversion, funding email, tower of hanoi and async conversion, the bad act is read from the final state, so N is the run's last step. In those tasks, part of the bad act may already be in the history before the takeover (most likely in tower of hanoi). Their panels are marked "N = last step".</li>
         <li><b>Counts.</b> 10 continuations per restart point and model. A bar pools every restart point of that task and step. Intervals are 95% Wilson.</li>
-        <li><b>Bad act.</b> Each task's own measure, the same as in the full runs. Where Claude Opus is the grader, the judge so far is Opus 5 for 222 runs (copying of answers 211, dashboard 7, rendering engine 4) and Opus 4.8 for 146 (rendering engine 127, dashboard 19). We switched to Opus 4.8 because Opus 5 refused most of these transcripts. Everything graded from 12 Nov on (dashboard 107, grade_your_own 30, so far) used Opus 4.8.</li>
+        <li><b>Bad act.</b> Each task's own measure, the same as in the full runs. Where Claude Opus is the grader, the judge so far is Opus 5 for 222 runs (copying of answers 211, dashboard 7, rendering engine 4) and Opus 4.8 for 146 (rendering engine 127, dashboard 19). We switched to Opus 4.8 because Opus 5 refused most of these transcripts. Everything graded on 12 Nov (dashboard 107, grade_your_own 213, rendering engine 99, copying of answers 27) used Opus 4.8, with no refusals.</li>
         <li><b>Files.</b> results/hero9_swap.csv, results/hero9_swap_loss_audit.md, results/hero9_gap.md, scripts/hero9_swap_dashboard.py (rebuilds this page).</li>
       </ul>
     </div>
