@@ -1,0 +1,1237 @@
+diff --git a/environments/ai_rd/Dockerfile b/environments/ai_rd/Dockerfile
+index 3bb4fd0..5ae55d0 100644
+--- a/environments/ai_rd/Dockerfile
++++ b/environments/ai_rd/Dockerfile
+@@ -12,6 +12,9 @@ WORKDIR /agent
+ # PYTHON DEPENDENCIES
+ # =============================================================================
+ RUN pip install pyyaml python-dotenv openai tenacity
++# gigi/3-forensics: openai/gpt-3.5-turbo retired on OpenRouter; site-wide alias to the dated -16k on Azure (outside /agent)
++COPY environments/ai_rd/openrouter_compat.py /usr/local/lib/python3.11/site-packages/openrouter_compat.py
++RUN echo "import openrouter_compat" > /usr/local/lib/python3.11/site-packages/openrouter_compat.pth
+ 
+ # =============================================================================
+ # INSTALL SHARED PACKAGE
+diff --git a/environments/ai_rd/agent.py b/environments/ai_rd/agent.py
+index 375fc84..38523ab 100644
+--- a/environments/ai_rd/agent.py
++++ b/environments/ai_rd/agent.py
+@@ -9,7 +9,7 @@ from run_step import print_final_results, run_step
+ from states import AIRDState, dump, init_fs_tracking, restore
+ from tools import EXECUTE_COMMAND_TOOL
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -43,15 +43,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=[EXECUTE_COMMAND_TOOL],
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     provider.print_history()
+@@ -62,7 +59,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+diff --git a/environments/ai_rd/api_utils.py b/environments/ai_rd/api_utils.py
+index 04e26ea..6dd0466 100644
+--- a/environments/ai_rd/api_utils.py
++++ b/environments/ai_rd/api_utils.py
+@@ -28,6 +28,15 @@ def _get_client() -> AsyncOpenAI:
+     return _client
+ 
+ 
++# gigi/3-forensics: every OpenRouter call pinned to the model maker's own servers, no fallback.
++_PINNED = {"openai/": ["openai"], "google/": ["google-vertex", "google-ai-studio"]}
++
++
++def _provider(model: str) -> dict:
++    only = next(v for k, v in _PINNED.items() if model.startswith(k))
++    return {"provider": {"only": only, "allow_fallbacks": False}}
++
++
+ @retry(
+     stop=stop_after_attempt(3),
+     wait=wait_exponential(multiplier=1, min=1, max=10),
+@@ -51,10 +60,12 @@ async def chat_completion(model: str, messages: list[dict], response_format=None
+             model=model,
+             messages=messages,
+             response_format=response_format,
++            extra_body=_provider(model),
+         )
+         return response.choices[0].message.parsed
+     response = await client.chat.completions.create(
+         model=model,
+         messages=messages,
++        extra_body=_provider(model),
+     )
+     return response.choices[0].message.content
+diff --git a/environments/ai_rd/run_step.py b/environments/ai_rd/run_step.py
+index b3ccca1..76f328c 100644
+--- a/environments/ai_rd/run_step.py
++++ b/environments/ai_rd/run_step.py
+@@ -5,6 +5,7 @@ a text-only response (no tool call) is the "done" signal, not an error.
+ """
+ 
+ import json
++import os
+ import re
+ 
+ from states import AIRDState
+@@ -20,6 +21,12 @@ from agent_interp_envs.tool_calling import (
+ )
+ from agent_interp_envs.types import ToolResult
+ 
++# gigi/3-forensics: the task says "The environment has an OPENROUTER_API_KEY already configured", and both score.py
++# (run by the agent) and the end-of-rollout judge read it from the environment. create_provider scrubs secret-shaped
++# variables from this process once the provider is built, and the hardened shell passes none, so both failed. The
++# key is captured at import (before the scrub, as tool_calling does for its heal call) and handed to exactly those two.
++_SCORER_KEY = os.getenv("OPENROUTER_API_KEY", "")
++
+ ALLOWED_TOOLS = {"execute_command"}
+ VAL_SET_PATH = "/agent/data/examples.jsonl"
+ 
+@@ -53,9 +60,13 @@ def evaluate_and_populate_state(state: AIRDState) -> None:
+     # Run hardcoding judge
+     if state.final_prompt:
+         questions = load_questions(VAL_SET_PATH)
+-        state.hardcoding_score, state.hardcoding_rationale = judge_hardcoding_sync(
+-            state.final_prompt, questions
+-        )
++        os.environ["OPENROUTER_API_KEY"] = _SCORER_KEY   # for the judge call only (see _SCORER_KEY)
++        try:
++            state.hardcoding_score, state.hardcoding_rationale = judge_hardcoding_sync(
++                state.final_prompt, questions
++            )
++        finally:
++            os.environ.pop("OPENROUTER_API_KEY", None)
+ 
+ 
+ def print_final_results(state: AIRDState, completed: bool) -> None:
+@@ -174,7 +185,7 @@ def run_step(provider: BaseProvider, state: AIRDState, config: dict) -> bool:
+         )
+         rc = 1
+     else:
+-        rc, output = run_command(command, timeout=300)
++        rc, output = run_command(command, timeout=900, extra_env={"OPENROUTER_API_KEY": _SCORER_KEY})   # 300 -> 900 (26 Oct): a scorer run slowed by waited-out 429s must not be killed; no 21 Oct command reached 300 s
+         if is_scoring_run and rc == 0:
+             state.scoring_runs_used += 1
+ 
+diff --git a/environments/algo_judge/agent.py b/environments/algo_judge/agent.py
+index 78a342c..d3cb81b 100644
+--- a/environments/algo_judge/agent.py
++++ b/environments/algo_judge/agent.py
+@@ -79,7 +79,7 @@ def main() -> None:
+         while state.step < max_steps:
+             print_step_header(state.step)
+             try:
+-                should_quit = run_step(provider, state, config)
++                should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+             except (KeyboardInterrupt, BrokenPipeError):
+                 interrupted = True
+                 raise
+diff --git a/environments/async_conversion/Dockerfile b/environments/async_conversion/Dockerfile
+index 921649e..43ee91a 100644
+--- a/environments/async_conversion/Dockerfile
++++ b/environments/async_conversion/Dockerfile
+@@ -62,8 +62,11 @@ COPY environments/async_conversion/filesystem/project/src/ /opt/original_src/
+ RUN git config --global user.email "container@modal" && \
+     git config --global user.name "Container" && \
+     git config --global --add safe.directory '*'
+-RUN cd /home/user/project && git init --separate-git-dir=/opt/.git -q && git add -A && \
+-    git commit -q -m "pristine" --allow-empty && rm -f .git
++# The workspace already has a repo (above), which `git init --separate-git-dir` would rename into /opt;
++# overlayfs (Docker Desktop) refuses to rename a directory from a lower layer (EXDEV), so mv it instead
++# (mv falls back to copy). Same result: that repo at /opt/.git with the pristine commit, no .git in the workspace.
++RUN cd /home/user/project && mv .git /opt/.git && git --git-dir=/opt/.git --work-tree=. add -A && \
++    git --git-dir=/opt/.git --work-tree=. commit -q -m "pristine" --allow-empty
+ 
+ # =============================================================================
+ # PRIVILEGE SEPARATION
+diff --git a/environments/async_conversion/agent.py b/environments/async_conversion/agent.py
+index 45e26e6..b88bb35 100644
+--- a/environments/async_conversion/agent.py
++++ b/environments/async_conversion/agent.py
+@@ -5,7 +5,7 @@ import os
+ import sys
+ from pathlib import Path
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ 
+ sys.stdout.reconfigure(line_buffering=True)
+ 
+@@ -61,15 +61,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=tools,
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     provider.print_history()
+@@ -81,7 +78,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step), save_workspace=save_workspace)
+         state.step += 1
+ 
+diff --git a/environments/coding/agent.py b/environments/coding/agent.py
+index 96eadbf..a04332a 100644
+--- a/environments/coding/agent.py
++++ b/environments/coding/agent.py
+@@ -76,7 +76,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+diff --git a/environments/coding/run_step.py b/environments/coding/run_step.py
+index 014ea87..256f045 100644
+--- a/environments/coding/run_step.py
++++ b/environments/coding/run_step.py
+@@ -236,7 +236,7 @@ def run_step(provider: BaseProvider, state: CodingState, config: dict) -> bool:
+     )
+     # No tool call -> the agent stopped calling tools.
+     if result.error_type == "no_tool_call":
+-        if config.get("task", {}).get("wall_off_told_user", False):
++        if config.get("task", {}).get("wall_off_told_user", False) and not getattr(provider, "end_task_called", False):
+             # Don't let a prose reply end the rollout: keep it, re-prompt for a
+             # tool call, and continue until the agent submits or runs out of steps.
+             provider.add_message(no_tool_calls_user_prompt())
+diff --git a/environments/currency_conversion/agent.py b/environments/currency_conversion/agent.py
+index de3ca21..8024081 100644
+--- a/environments/currency_conversion/agent.py
++++ b/environments/currency_conversion/agent.py
+@@ -14,7 +14,7 @@ from run_step import print_final_results, run_step
+ from states import CurrencyConversionState, dump, init_fs_tracking, restore
+ from tools import ALL_TOOLS
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -48,15 +48,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=ALL_TOOLS,
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     # Always just print history (handles fresh start & resume identically)
+@@ -67,7 +64,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+diff --git a/environments/dashboard_perf/agent.py b/environments/dashboard_perf/agent.py
+index b3fc91b..9968282 100644
+--- a/environments/dashboard_perf/agent.py
++++ b/environments/dashboard_perf/agent.py
+@@ -51,7 +51,7 @@ def main() -> None:
+         while state.step < max_steps:
+             print_step_header(state.step)
+             try:
+-                should_quit = run_step(provider, state, config)
++                should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+             except Exception as e:
+                 if _is_context_limit_error(e):
+                     print("\nCONTEXT LIMIT REACHED — episode censored (no final decision)")
+diff --git a/environments/funding_email/agent.py b/environments/funding_email/agent.py
+index 03ecf87..4ca3539 100644
+--- a/environments/funding_email/agent.py
++++ b/environments/funding_email/agent.py
+@@ -9,7 +9,7 @@ from run_step import print_final_results, run_step
+ from states import FundingEmailState, dump, init_fs_tracking, restore
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -95,15 +95,12 @@ def main() -> None:
+             system_prompt = system_prompt.rstrip() + audit_prompt
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=tools,
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     # Always just print history (handles fresh start & resume identically)
+@@ -115,7 +112,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+diff --git a/environments/games/agent.py b/environments/games/agent.py
+index f78436d..a94d6c6 100644
+--- a/environments/games/agent.py
++++ b/environments/games/agent.py
+@@ -36,7 +36,7 @@ from states import (
+     restore_single,
+ )
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -119,15 +119,12 @@ def main() -> None:
+         system_prompt = config.get("prompts", {}).get("system_prompt")
+         user_prompt = config.get("prompts", {}).get("user_prompt")
+         provider = create_provider(
+-            provider=agent_config.get("provider"),
+-            model=agent_config.get("model"),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=[EXECUTE_COMMAND_TOOL],
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     # Always just print history (handles fresh start & resume identically)
+@@ -138,7 +135,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+         
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+         
+diff --git a/environments/games/chess/Dockerfile b/environments/games/chess/Dockerfile
+index e11319a..ac71d2f 100644
+--- a/environments/games/chess/Dockerfile
++++ b/environments/games/chess/Dockerfile
+@@ -92,6 +92,9 @@ RUN useradd -m -s /bin/bash dev \
+ # RUNTIME CONFIGURATION
+ # =============================================================================
+ ENV PATH=$PATH:/usr/games
++# Modal sandboxes start a login shell, which resets PATH and drops /usr/games: link the engine (same name)
++# into /usr/local/bin so the game finds it there too, as it does under docker run
++RUN ln -sf /usr/games/chess-engine /usr/local/bin/chess-engine
+ 
+ # Set engine parameters as environment variables (can be overridden at runtime)
+ ENV MAX_DEPTH=15
+diff --git a/environments/grade_your_own/grade_rollouts.py b/environments/grade_your_own/grade_rollouts.py
+index 0d1e0bf..9158232 100644
+--- a/environments/grade_your_own/grade_rollouts.py
++++ b/environments/grade_your_own/grade_rollouts.py
+@@ -24,6 +24,7 @@ import sys
+ from pathlib import Path
+ from typing import Literal
+ 
++import yaml
+ from pydantic import BaseModel, Field
+ 
+ from agent_interp_envs.grading import judge_cli
+diff --git a/environments/lazy_investigation/agent.py b/environments/lazy_investigation/agent.py
+index 799d605..0067dfe 100644
+--- a/environments/lazy_investigation/agent.py
++++ b/environments/lazy_investigation/agent.py
+@@ -8,7 +8,7 @@ from run_step import print_final_results, run_step
+ from states import ParseDurationState, dump, init_fs_tracking, restore, write_final_score
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -37,15 +37,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     provider.print_history()
+@@ -55,7 +52,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+diff --git a/environments/norvane/agent.py b/environments/norvane/agent.py
+index e83202b..cb0e076 100644
+--- a/environments/norvane/agent.py
++++ b/environments/norvane/agent.py
+@@ -9,7 +9,7 @@ from run_step import _countdown_note, print_final_results, run_command, run_step
+ from states import NorvaneState, dump, init_fs_tracking, restore, write_final_score
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -95,12 +95,9 @@ def main() -> None:
+         state.step = len(PREFIX_COMMANDS)
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=messages,
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),   # every agent.* knob, as on resume (gigi/3-forensics)
+         )
+ 
+     provider.print_history()
+@@ -110,7 +107,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+diff --git a/environments/palisades_bounty/agent.py b/environments/palisades_bounty/agent.py
+index aadedf8..f9394b2 100644
+--- a/environments/palisades_bounty/agent.py
++++ b/environments/palisades_bounty/agent.py
+@@ -5,7 +5,7 @@ import logging
+ import sys
+ from pathlib import Path
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ 
+ sys.stdout.reconfigure(line_buffering=True)
+ 
+@@ -44,12 +44,9 @@ def main() -> None:
+         messages.append({"role": "user", "content": user_prompt})
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=messages,
+             tools=ALL_TOOLS,
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     provider.print_history()
+@@ -60,7 +57,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print(f"\n{'='*60}\nStep {state.step}\n{'='*60}")
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         score = dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+diff --git a/environments/parse_duration/agent.py b/environments/parse_duration/agent.py
+index 0ca78b2..d24c007 100644
+--- a/environments/parse_duration/agent.py
++++ b/environments/parse_duration/agent.py
+@@ -9,7 +9,7 @@ from run_step import print_final_results, run_step
+ from states import ParseDurationState, dump, init_fs_tracking, restore
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -47,15 +47,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     # Always just print history (handles fresh start & resume identically)
+@@ -67,7 +64,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+diff --git a/environments/precommit_hook/agent.py b/environments/precommit_hook/agent.py
+index c8b1550..767c0ff 100644
+--- a/environments/precommit_hook/agent.py
++++ b/environments/precommit_hook/agent.py
+@@ -15,7 +15,7 @@ from run_step import print_final_results, run_step
+ from states import CodingAgentState, dump, init_fs_tracking, restore
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -40,15 +40,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider"),
+-            model=agent_config.get("model"),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),   # every agent.* knob, as on resume
+         )
+ 
+     provider.print_history()
+@@ -57,7 +54,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+@@ -67,6 +64,15 @@ def main() -> None:
+     if not state.task_completed and state.step >= max_steps:
+         print_final_results(state, False)
+ 
++    # gigi/3-forensics: score.py is post-hoc and needs the final workspace, which only exists in
++    # this container. Score it here (fresh runs and resumes both end here) and keep the result
++    # next to the last checkpoint, so it comes back with the run.
++    import json
++    from score import score_precommit_hook
++    last = step_dir(max(state.step - 1, 0))
++    last.mkdir(parents=True, exist_ok=True)
++    (last / "precommit_score.json").write_text(json.dumps(score_precommit_hook(state.commands, Path("/agent")), indent=2))
++
+ 
+ if __name__ == "__main__":
+     main()
+diff --git a/environments/revert_or_refactor/agent.py b/environments/revert_or_refactor/agent.py
+index c8b1550..37d24e6 100644
+--- a/environments/revert_or_refactor/agent.py
++++ b/environments/revert_or_refactor/agent.py
+@@ -15,7 +15,7 @@ from run_step import print_final_results, run_step
+ from states import CodingAgentState, dump, init_fs_tracking, restore
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -40,15 +40,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider"),
+-            model=agent_config.get("model"),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),
+         )
+ 
+     provider.print_history()
+@@ -57,7 +54,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+diff --git a/environments/secret_number/agent.py b/environments/secret_number/agent.py
+index 93e8412..afb8a11 100644
+--- a/environments/secret_number/agent.py
++++ b/environments/secret_number/agent.py
+@@ -9,7 +9,7 @@ from run_step import print_final_results, run_step
+ from states import SecretNumberState, dump, init_fs_tracking, restore
+ from tools import get_tools
+ 
+-from agent_interp_envs.checkpoint import step_dir
++from agent_interp_envs.checkpoint import provider_kwargs, step_dir
+ from agent_interp_envs.config import load_config
+ from agent_interp_envs.print_helpers import print_step_header
+ from agent_interp_envs.providers import create_provider
+@@ -53,15 +53,12 @@ def main() -> None:
+         user_prompt = config.get("prompts", {}).get("user_prompt", "")
+ 
+         provider = create_provider(
+-            provider=agent_config.get("provider", ""),
+-            model=agent_config.get("model", ""),
+             messages=[
+                 {"role": "system", "content": system_prompt},
+                 {"role": "user", "content": user_prompt},
+             ],
+             tools=get_tools(config),
+-            provider_preferences=agent_config.get("provider_preferences"),
+-            reasoning_effort=agent_config.get("reasoning_effort"),
++            **provider_kwargs(config),   # every agent.* knob, as on resume
+         )
+ 
+     # Always just print history (handles fresh start & resume identically)
+@@ -73,7 +70,7 @@ def main() -> None:
+     while state.step < max_steps:
+         print_step_header(state.step)
+ 
+-        should_quit = run_step(provider, state, config)
++        should_quit = run_step(provider, state, config) or getattr(provider, "end_task_called", False)  # end_task_required: the agent called end_task (gigi/3-forensics)
+         dump(state, provider, step_dir(state.step))
+         state.step += 1
+ 
+diff --git a/scripts/resume_modal.py b/scripts/resume_modal.py
+index 9945ba0..46337c1 100644
+--- a/scripts/resume_modal.py
++++ b/scripts/resume_modal.py
+@@ -286,12 +286,20 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, checkpoint_remote_dir, timeout_s,
+     network = {allowlist_param: [] if gateway else cidrs}
+     gateway_env = {"ROLLOUT_GATEWAY": _env_registry.GATEWAY_URL} if gateway else {"ROLLOUT_HOSTS": hosts_pin}
+ 
+-    def _create(cfg_yaml, run_dir, token):
++    # gigi/3-forensics: optional staggered starts, so a large detached launch paces itself with no laptop attached:
++    # job i of this launch sleeps STAGGER_START + i * STAGGER_STEP seconds before it starts (and gets that much
++    # more sandbox time). Unset: no delay, as before.
++    stagger_start, stagger_step = int(os.environ.get("STAGGER_START", 0)), int(os.environ.get("STAGGER_STEP", 0))
++
++    def _create(cfg_yaml, run_dir, token, delay_s=0):
+         sb = modal.Sandbox.create(
+-            "bash", "-lc", 'eval "$CONTAINER_INIT"', app=app, image=iso_image, timeout=timeout_s,
++            "bash", "-lc", 'eval "$CONTAINER_INIT"', app=app, image=iso_image, timeout=timeout_s + delay_s,
+             **_resource_kwargs(), **network, volumes={"/mnt/results": results_volume}, secrets=sandbox_secrets,
+-            env={"CONTAINER_INIT": ISOLATED_SETUP_CMD, "ROLLOUT_CONFIG_YAML": cfg_yaml, "ROLLOUT_RUN_DIR": run_dir,
++            env={"CONTAINER_INIT": (f"sleep {delay_s}; " if delay_s else "") + ISOLATED_SETUP_CMD,
++                 "ROLLOUT_CONFIG_YAML": cfg_yaml, "ROLLOUT_RUN_DIR": run_dir,
+                  "ROLLOUT_CHECKPOINT_DIR": checkpoint_remote_dir, **gateway_env,
++                 # gigi/3-forensics: the opt-in below (resume()) never reached isolated sandboxes; pass it on
++                 **({"FS_BASELINE_MISMATCH": "warn"} if "fs_baseline_mismatch: warn" in cfg_yaml else {}),
+                  **({"ROLLOUT_GATEWAY_TOKEN": token} if gateway else {})})
+         if gateway:
+             try:
+@@ -302,12 +310,12 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, checkpoint_remote_dir, timeout_s,
+         return sb
+ 
+     sandboxes = []
+-    for cfg_yaml, run_dir in jobs:
++    for job_i, (cfg_yaml, run_dir) in enumerate(jobs):
+         token = _env_registry.gateway_token() if gateway else ""
+         delay = 1.0
+         for attempt in range(1, 41):
+             try:
+-                sb = _create(cfg_yaml, run_dir, token)
++                sb = _create(cfg_yaml, run_dir, token, stagger_start + job_i * stagger_step)
+                 break
+             except Exception as exc:  # sandbox creation is rate-limited account-wide: back off, never fail the run
+                 text = f"{type(exc).__name__}: {exc}"
+diff --git a/scripts/run_modal.py b/scripts/run_modal.py
+index 1794cb6..9b094dd 100644
+--- a/scripts/run_modal.py
++++ b/scripts/run_modal.py
+@@ -31,6 +31,7 @@ from __future__ import annotations
+ import json
+ import os
+ import random
++import re
+ import sys
+ import time
+ from pathlib import Path
+@@ -515,8 +516,14 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, timeout_s, max_concurrent=None, ga
+             return {"run_dir": job[1], "returncode": -1, "stdout_tail": "",
+                     "error": {"chain": [{"type": type(exc).__name__, "message": str(exc)}]}}
+ 
++    # gigi/3-forensics: optional staggered starts (as in resume_modal.py): run-N sleeps STAGGER_START + (N-1) *
++    # STAGGER_STEP seconds first, so a detached launch paces itself with no laptop attached. Unset: no delay.
++    stagger_start, stagger_step = int(os.environ.get("STAGGER_START", 0)), int(os.environ.get("STAGGER_STEP", 0))
++
+     def _launch_and_wait(job):
+         cfg_yaml, run_dir = job
++        _n = re.search(r"run-(\d+)", run_dir)
++        delay_s = stagger_start + (int(_n.group(1)) - 1) * stagger_step if _n else 0
+         for draw in range(MACHINE_GATE_MAX_DRAWS):
+             # Sandbox creation is rate-limited account-wide; a rejection is contention,
+             # not a failed run: retry with jittered, capped backoff.
+@@ -525,11 +532,12 @@ def run_isolated_jobs(jobs, cidrs, hosts_pin, timeout_s, max_concurrent=None, ga
+                 try:
+                     sb = modal.Sandbox.create(
+                         "bash", "-lc", ISOLATED_ARGV_CMD,
+-                        app=app, image=iso_image, timeout=timeout_s,
++                        app=app, image=iso_image, timeout=timeout_s + delay_s,
+                         **_resource_kwargs(), **network,
+                         volumes={"/mnt/results": results_volume},
+                         secrets=sandbox_secrets,
+-                        env={"CONTAINER_INIT": ISOLATED_SETUP_CMD, "CONTAINER_RESTORE": recovery_setup,
++                        env={"CONTAINER_INIT": (f"sleep {delay_s}; " if delay_s else "") + ISOLATED_SETUP_CMD,
++                             "CONTAINER_RESTORE": recovery_setup,
+                              "ROLLOUT_CONFIG_YAML": cfg_yaml, "ROLLOUT_RUN_DIR": run_dir, **gateway_env,
+                              **({"ROLLOUT_GATEWAY_TOKEN": token} if gateway else {})},
+                     )
+diff --git a/src/agent_interp_envs/grading.py b/src/agent_interp_envs/grading.py
+index e0138a1..ec9cafa 100644
+--- a/src/agent_interp_envs/grading.py
++++ b/src/agent_interp_envs/grading.py
+@@ -104,6 +104,12 @@ def final_report(run_dir: Path) -> str:
+ 
+ 
+ def judge_client() -> AsyncAnthropic:
++    if os.environ.get("JUDGE_VIA_OPENROUTER"):
++        # OpenRouter's Anthropic-compatible endpoint: same model, prompts and parameters; the provider is
++        # pinned with no fallbacks (_JUDGE_KWARGS) and the model id gets OpenRouter's "anthropic/" prefix.
++        # 10 min per request (not 30): a stalled OpenRouter stream is retried instead of holding the whole batch
++        return AsyncAnthropic(max_retries=20, base_url="https://openrouter.ai/api", timeout=600.0,
++                              api_key=require_api_key("OPENROUTER_API_KEY", "autorater"))
+     return AsyncAnthropic(max_retries=20, api_key=require_api_key("ANTHROPIC_API_KEY", "autorater"),
+                           timeout=1800.0)
+ 
+@@ -114,6 +120,13 @@ JUDGE_TOKEN_LIMIT = 950_000
+ _LONG_CHARS = 1_800_000  # only count tokens for prompts that could be near the limit
+ _STEP_BANNER = re.compile(r"^={20,}\n\s+STEP (\d+)\s*\n={20,}\n", re.M)
+ _JUDGE_KWARGS = {"thinking": {"type": "adaptive"}, "output_config": {"effort": "max"}}
++if os.environ.get("JUDGE_VIA_OPENROUTER"):   # pinned: Anthropic's own endpoint, no fallback to another host
++    _JUDGE_KWARGS["extra_body"] = {"provider": {"only": ["anthropic"], "allow_fallbacks": False}}
++
++
++def _judge_model(model: str) -> str:
++    """OpenRouter names Anthropic's models "anthropic/<id>"."""
++    return f"anthropic/{model}" if os.environ.get("JUDGE_VIA_OPENROUTER") and "/" not in model else model
+ 
+ 
+ class Extract(BaseModel):
+@@ -166,7 +179,7 @@ async def _batch(client: AsyncAnthropic, model: str, requests: Sequence[tuple[li
+             resent_400 = False
+             for attempt in range(_TRANSIENT_ATTEMPTS):
+                 try:
+-                    return await client.messages.parse(model=model, messages=messages, max_tokens=max_tokens,
++                    return await client.messages.parse(model=_judge_model(model), messages=messages, max_tokens=max_tokens,
+                                                        output_format=output_format, **_JUDGE_KWARGS)
+                 except Exception as exc:
+                     if not resent_400 and "Invalid request data" in str(exc):
+@@ -274,7 +287,9 @@ async def judge_runs(items: Sequence[tuple], model: str = DEFAULT_MODEL, max_con
+             continue
+         rating = res.parsed_output
+         if rating is None:  # e.g. stop_reason=refusal: no content, nothing to parse
+-            err = RuntimeError(f"no parsed output (stop_reason={res.stop_reason})")
++            details = getattr(res, "stop_details", None) or (getattr(res, "model_extra", None) or {}).get("stop_details")
++            err = RuntimeError(f"no parsed output (stop_reason={res.stop_reason}"
++                               + (f", stop_details={details}" if details else "") + ")")   # the refusal category, when given
+             print(d, "RATE_ERROR", err, flush=True)
+             out.append(err)
+             continue
+diff --git a/src/agent_interp_envs/providers/__init__.py b/src/agent_interp_envs/providers/__init__.py
+index 2be7824..2825c08 100644
+--- a/src/agent_interp_envs/providers/__init__.py
++++ b/src/agent_interp_envs/providers/__init__.py
+@@ -105,10 +105,21 @@ def _create_provider(
+     provider_preferences: dict | None = None,
+     temperature: float | None = None,
+     top_p: float | None = None,
++    top_k: int | None = None,
++    min_p: float | None = None,
+     reasoning_effort: str | None = None,
+     reasoning_summary: str | None = None,
+     rejection: dict | None = None,
+     mock_script: list[str] | None = None,
++    text_tools: bool = False,
++    end_confirm: bool = False,
++    end_task_required: bool = False,
++    end_task_reprompts: int = 10,
++    hack: str | None = None,
++    hack_min_steps: int = 10,
++    hack_workspace: str = "/agent",
++    hack_max_refusals: int = 10,
++    hack_submit_pattern: str | None = r"python[0-9.]*\s+(\S*/)?submit_solution\.py",
+ ) -> BaseProvider:
+     """Create an LLM provider instance.
+ 
+@@ -184,7 +195,46 @@ def _create_provider(
+         return RejectionProvider(instance, judge, **kwargs)
+ 
+     def _finish(instance: BaseProvider) -> BaseProvider:
+-        return _maybe_wrap(instance)
++        instance = _maybe_wrap(instance)
++        instance.end_confirm = end_confirm   # read by tool_calling.validate_and_get_command
++        if hack:
++            # config agent.hack (gigi/3-forensics, 8 Nov 2026): installed UNDER the end-task-required wrapper, so it sees
++            # the raw reply and can refuse the finish tool; see hacks.py.
++            from agent_interp_envs.hacks import install as install_hack
++            instance = install_hack(instance, hack, _finish_tool or "end_task", int(hack_min_steps or 10),
++                                    hack_workspace or "/agent", int(hack_max_refusals or 10), hack_submit_pattern)
++        if end_task_required:
++            from agent_interp_envs.end_task_required import install
++            instance = install(instance, _finish_tool, _finish_tool_synthetic, int(end_task_reprompts or 10))
++        return instance
++
++    _finish_tool, _finish_tool_synthetic = None, False
++    if end_task_required:
++        # config agent.end_task_required (gigi/3-forensics, 7 Nov 2026): the run can only end through a finish tool;
++        # see end_task_required.py. The rule goes into the system prompt (idempotent, as END_NOTICE below) and a
++        # synthetic end_task tool is added when the environment has no finish tool of its own.
++        from agent_interp_envs.end_task_required import END_TASK, END_TASK_TOOL, finish_tool, rule
++        _finish_tool = finish_tool(tools)
++        if _finish_tool is None:
++            _finish_tool, _finish_tool_synthetic = END_TASK, True
++            tools = list(tools or []) + [END_TASK_TOOL]
++        if messages and messages[0].get("role") == "system" and isinstance(messages[0].get("content"), str) \
++                and rule(_finish_tool) not in messages[0]["content"]:
++            messages[0] = {**messages[0], "content": (messages[0]["content"].rstrip() + "\n\n" + rule(_finish_tool)).strip()}
++    if hack:
++        from agent_interp_envs.hacks import prompt_addition
++        add = prompt_addition(hack, _finish_tool or "end_task")
++        if add and messages and messages[0].get("role") == "system" and isinstance(messages[0].get("content"), str) \
++                and add not in messages[0]["content"]:
++            messages[0] = {**messages[0], "content": (messages[0]["content"].rstrip() + "\n\n" + add).strip()}
++
++    if end_confirm:
++        # config agent.end_confirm (gigi/3-forensics): say in the system prompt that a reply without a tool call ends
++        # the session. Idempotent, so a resumed run (stored messages) does not get it twice.
++        from agent_interp_envs.end_confirm import END_NOTICE
++        if messages and messages[0].get("role") == "system" and isinstance(messages[0].get("content"), str) \
++                and END_NOTICE not in messages[0]["content"]:
++            messages[0] = {**messages[0], "content": (messages[0]["content"].rstrip() + "\n\n" + END_NOTICE).strip()}
+ 
+     if provider == "openrouter":
+         return _finish(provider_class(
+@@ -194,8 +244,13 @@ def _create_provider(
+             provider_preferences=provider_preferences,
+             temperature=temperature,
+             top_p=top_p,
++            top_k=top_k,
++            min_p=min_p,
+             reasoning_effort=reasoning_effort,
++            text_tools=text_tools,
+         ))
++    if text_tools:
++        raise ValueError(f"text_tools is only supported for openrouter, not {provider}")
+     if provider == "fireworks":
+         return _finish(provider_class(
+             model=model,
+@@ -222,8 +277,8 @@ def _create_provider(
+             reasoning_effort=reasoning_effort,
+         ))
+     if provider == "mock":
+-        return provider_class(model=model, messages=messages, tools=tools,
+-                              mock_script=list(mock_script) if mock_script else None)
++        return _finish(provider_class(model=model, messages=messages, tools=tools,
++                                      mock_script=list(mock_script) if mock_script else None))
+     if provider == "openai":
+         return _finish(provider_class(
+             model=model,
+diff --git a/src/agent_interp_envs/providers/openrouter_provider.py b/src/agent_interp_envs/providers/openrouter_provider.py
+index 22428b5..1a75045 100644
+--- a/src/agent_interp_envs/providers/openrouter_provider.py
++++ b/src/agent_interp_envs/providers/openrouter_provider.py
+@@ -10,7 +10,10 @@ OpenRouter interleaved thinking supported models:
+ - INTELLECT-3
+ """
+ 
++import ast
+ import json
++import re
++import uuid
+ 
+ from dotenv import load_dotenv
+ from openai import APIConnectionError, APITimeoutError, OpenAI, RateLimitError
+@@ -28,6 +31,158 @@ class OpenRouterEmptyResponseError(Exception):
+     """OpenRouter returned HTTP 200 with an error body and no choices."""
+ 
+ 
++# gigi/3-forensics: gemma-3 has no tool-call tokens. Through OpenRouter (DeepInfra) it writes its
++# call as text in its own format, e.g. ```tool_code\n[execute_command(command='ls')]\n```, which
++# the harness reads as a prose reply (ending the run, or nudging it into a loop of apologies).
++# When a reply has no structured tool call, the first call in such a block that names one of the
++# offered tools becomes a structured call (a block counts only if it calls a tool by name). The
++# text stays in the message unchanged. An empty reply (no text, no call) is a provider glitch, not
++# a choice: it is retried like a missing one instead of being read as the agent's final reply.
++_TOOL_CODE = re.compile(r"```(?:tool_code|python|py|json)?[ \t]*\n(.*?)```", re.S)   # gemma also labels it python, json, or nothing
++
++
++def _tool_call_from_tool_code(content: str, tools: list[dict]) -> dict | None:
++    params = {t["function"]["name"]: list((t["function"].get("parameters") or {}).get("properties") or {})
++              for t in tools if t.get("type") == "function"}
++    types = {t["function"]["name"]: {k: (v or {}).get("type") for k, v in
++                                     ((t["function"].get("parameters") or {}).get("properties") or {}).items()}
++             for t in tools if t.get("type") == "function"}
++    # fenced blocks first, then any line that is nothing but a call (gemma sometimes ends a plain
++    # reply with a bare `[execute_command(command="...")]` line); prose never parses as code
++    candidates = _TOOL_CODE.findall(content or "") + [ln for ln in (content or "").splitlines()
++                                                     if ln.strip()[:1] in "[(" or ln.strip().split("(")[0].split(".")[-1] in params]
++    while candidates:
++        block = candidates.pop(0)
++        try:
++            tree = ast.parse(block.strip())
++        except SyntaxError:
++            continue
++        for node in ast.walk(tree):
++            # gemma sometimes quotes the call: ```json ["execute_command(command='...')"]```
++            if isinstance(node, ast.Constant) and isinstance(node.value, str) and "(" in node.value:
++                candidates.append(node.value)
++            if not isinstance(node, ast.Call):
++                continue
++            name = node.func.attr if isinstance(node.func, ast.Attribute) else getattr(node.func, "id", None)
++            if name not in params:
++                continue
++            try:
++                args = {kw.arg: ast.literal_eval(kw.value) for kw in node.keywords if kw.arg}
++                positional = [ast.literal_eval(v) for v in node.args]
++            except (ValueError, SyntaxError):
++                continue
++            # gemma also writes `execute_command({"command": "ls"})`: one dict of the tool's own parameter
++            # names, passed positionally, is the arguments themselves (not the first parameter's value)
++            if (len(positional) == 1 and not args and isinstance(positional[0], dict) and positional[0]
++                    and set(positional[0]) <= set(params[name])):
++                args = dict(positional[0])
++            else:
++                args.update(dict(zip(params[name], positional)))
++            # a string parameter given a dict or list gets it as JSON text, as a schema-checked API would
++            args = {k: json.dumps(v) if types[name].get(k) == "string" and isinstance(v, (dict, list)) else v
++                    for k, v in args.items()}
++            return {"id": f"call_{uuid.uuid4().hex[:24]}", "type": "function",
++                    "function": {"name": name, "arguments": json.dumps(args)}}
++    return None
++
++
++# gigi/3-forensics (25 Oct 2026): a call gemma writes but that does not parse (quotes inside quotes, a bracket
++# never closed) or that names a tool we don't offer (`bash(...)`) used to read as "no call", which several
++# environments take as the agent's final answer, so the run ended. A native model's malformed or unknown call
++# gets an error back instead ("invalid arguments" / "unknown function") and the run goes on. So, in text mode,
++# such a call is passed on as a call whose arguments are the raw text (not JSON): the environment answers it
++# exactly as it answers a native model's malformed call. A block counts only if it starts with a call: an
++# offered tool's name in a tool_code/python/bare block, or any name in a tool_code block. Checked on the saved
++# runs (25 Oct): 50 of the 52 replies our parser had ended become such calls (the other 2 type a fake
++# ```tool_output``` and no call); none of gemma's 1,013 final answers does.
++_LABELLED_BLOCK = re.compile(r"```(tool_code|python|py)?[ \t]*\n(.*?)(?:```|\Z)", re.S)
++_CALL_START = re.compile(r"\s*\[?\s*([A-Za-z_][\w.]*)\s*\(")
++
++
++def _unparsed_tool_call(content: str, tools: list[dict]) -> dict | None:
++    names = {t["function"]["name"] for t in tools if t.get("type") == "function"}
++    for label, block in _LABELLED_BLOCK.findall(content or ""):
++        # a tool_code block is a call by gemma's own convention, with or without brackets (`bash "ls"`)
++        m = _CALL_START.match(block) or (label == "tool_code" and re.match(r"\s*\[?\s*([A-Za-z_][\w.]*)", block))
++        if not m:
++            continue
++        name = m.group(1).split(".")[-1]
++        if name in names or label == "tool_code":
++            return {"id": f"call_unparsed_{uuid.uuid4().hex[:16]}", "type": "function",
++                    "function": {"name": name, "arguments": block.strip()}}
++    return None
++
++
++# Text-mode tool calling (agent.text_tools: true), for models with no tool-call tokens (gemma-3): the
++# request carries no `tools`; the system prompt carries Google's Gemma 3 function-calling instruction
++# (verbatim, from philschmid.de/gemma-function-calling, the reference Google points to) and the tools as
++# Python stubs; every earlier call in the history (this model's or another's, e.g. Qwen's in a swap) is
++# shown as a ```tool_code``` block and every tool result as a ```tool_output``` block in a user turn.
++# The reply is parsed back into a structured call (_tool_call_from_tool_code), so the stored history,
++# checkpoints and transcripts keep the standard format. Nothing is dropped by a provider-side parser.
++TEXT_TOOLS_INSTRUCTION = (
++    "At each turn, if you decide to invoke any of the function(s), it should be wrapped with ```tool_code```. "
++    "The python methods described below are imported and available, you can only use defined methods. "
++    "The generated code should be readable and efficient. The response to a method will be wrapped in "
++    "```tool_output``` use it to call more tools or generate a helpful, friendly response. When using a "
++    "```tool_call``` think step by step why and how it should be used.")
++_PY_TYPES = {"string": "str", "integer": "int", "number": "float", "boolean": "bool", "array": "list", "object": "dict"}
++
++
++def _python_stub(tool: dict) -> str:
++    """One tool as a Python signature with its description and arguments as the docstring."""
++    fn = tool["function"]; params = fn.get("parameters") or {}
++    props = params.get("properties") or {}; required = set(params.get("required") or [])
++    sig = ", ".join(f"{k}: {_PY_TYPES.get(v.get('type'), 'str')}" + ("" if k in required else " = None")
++                    for k, v in props.items())
++    doc = [fn.get("description", "").strip()]
++    if props:
++        doc += ["", "Args:"] + [f"  {k}: {(v.get('description') or '').strip()}" for k, v in props.items()]
++    body = "\n".join("    " + ln if ln else "" for ln in doc)
++    return f'def {fn["name"]}({sig}) -> str:\n    """\n{body}\n    """'
++
++
++def _call_text(name: str, arguments: str) -> str:
++    try:
++        args = json.loads(arguments) if arguments else {}
++        args = json.loads(args) if isinstance(args, str) else args
++    except (ValueError, TypeError):
++        return f"{name}()"
++    return f"{name}(" + ", ".join(f"{k}={v!r}" for k, v in (args or {}).items()) + ")"
++
++
++def _text_tools_messages(messages: list[dict], tools: list[dict]) -> list[dict]:
++    """The history as a model without tool-call tokens sees it (see TEXT_TOOLS_INSTRUCTION)."""
++    preamble = (TEXT_TOOLS_INSTRUCTION + "\n\nThe following Python methods are available:\n\n```python\n"
++                + "\n\n".join(_python_stub(t) for t in tools if t.get("type") == "function") + "\n```")
++    out: list[dict] = []
++    for m in messages:
++        role, content = m["role"], m.get("content")
++        content = content if isinstance(content, str) else ("" if content is None else json.dumps(content))
++        if role == "system":
++            out.append({"role": "system", "content": f"{content}\n\n{preamble}"})
++        elif role == "assistant":
++            text = content
++            # a call already written as text (this model's own turn, readable or not) is shown as written
++            unparsed = all(tc.get("id", "").startswith("call_unparsed_") for tc in m.get("tool_calls") or [{}])
++            if m.get("tool_calls") and not unparsed and not _tool_call_from_tool_code(text, tools):
++                blocks = [f"```tool_code\n{_call_text(tc['function']['name'], tc['function'].get('arguments'))}\n```"
++                          for tc in m["tool_calls"]]
++                text = "\n".join([text.strip()] + blocks if text.strip() else blocks)
++            out.append({"role": "assistant", "content": text})
++        else:   # tool results and mid-run user messages: one user turn, so turns keep alternating
++            text = f"```tool_output\n{content}\n```" if role == "tool" else content
++            if out and out[-1]["role"] == "user":
++                out[-1]["content"] += "\n\n" + text
++            else:
++                out.append({"role": "user", "content": text})
++    if not any(m["role"] == "system" for m in out):
++        first = next((m for m in out if m["role"] == "user"), None)
++        if first is not None:
++            first["content"] = f"{preamble}\n\n{first['content']}"
++    return out
++
++
+ class OpenRouterProvider(BaseProvider):
+     """Provider for OpenRouter models using OpenAI-compatible chat completions API.
+ 
+@@ -43,7 +198,10 @@ class OpenRouterProvider(BaseProvider):
+         provider_preferences: dict | None = None,
+         temperature: float | None = None,
+         top_p: float | None = None,
++        top_k: int | None = None,
++        min_p: float | None = None,
+         reasoning_effort: str | None = None,
++        text_tools: bool = False,
+     ) -> None:
+         """Initialize the OpenRouter provider.
+ 
+@@ -84,28 +242,50 @@ class OpenRouterProvider(BaseProvider):
+         )
+         self.model = model
+         self.messages = messages
+-        extra_body = {"reasoning": {"effort": reasoning_effort or "xhigh"}}
++        # reasoning_effort "none": no reasoning field at all, for models without a
++        # reasoning mode (gigi/3-forensics: Qwen3-Next-80B Instruct, gemma-3-27b)
++        # reasoning_effort "disabled" (opt-in, gigi/3-forensics hero swap, 4 Nov 2026): thinking switched OFF for a
++        # model whose reasoning is on by default (Qwen3.6 27B: OpenRouter reports reasoning.default_enabled true),
++        # via OpenRouter's documented off switch {"reasoning": {"effort": "none"}}. Not "off": YAML/OmegaConf read
++        # a bare `off` as the boolean False, which would fall through to "xhigh". Every other value as before.
++        if reasoning_effort == "disabled":
++            extra_body = {"reasoning": {"effort": "none"}}
++        else:
++            extra_body = {} if reasoning_effort == "none" else {"reasoning": {"effort": reasoning_effort or "xhigh"}}
+         if provider_preferences:
+             extra_body["provider"] = provider_preferences
+         # Tool-less runs (e.g. a no-tools eval variant) must omit both keys:
+         # upstream APIs reject an empty tools array and reject
+         # parallel_tool_calls without tools.
+         self.kwargs = {"extra_body": extra_body}
+-        if tools:
++        self.text_tools = bool(text_tools)
++        self.tool_defs = list(tools or [])
++        if tools and not self.text_tools:
+             self.kwargs["tools"] = tools
+             self.kwargs["parallel_tool_calls"] = False
+         if temperature is not None:
+             self.kwargs["temperature"] = temperature
+         if top_p is not None:
+             self.kwargs["top_p"] = top_p
++        # not OpenAI-SDK fields, so they go in the request body directly
++        if top_k is not None:
++            extra_body["top_k"] = top_k
++        if min_p is not None:
++            extra_body["min_p"] = min_p
+         
+ 
+     @retry(
+-        stop=stop_after_attempt(3),
+-        wait=wait_exponential(multiplier=1, min=1, max=10),
++        # A 429 produced no reply, so waiting it out resamples nothing: up to 14 attempts (~20 min) while
++        # DeepInfra's shared pool is overloaded. Anything else (an empty reply is a dropped reply) stops at 3.
++        stop=lambda rs: rs.attempt_number >= (
++            14 if isinstance(rs.outcome.exception(), RateLimitError) else 3),
++        wait=wait_exponential(multiplier=2, min=1, max=120),
+         retry=retry_if_exception_type(
+             (RateLimitError, APITimeoutError, APIConnectionError, OpenRouterEmptyResponseError, json.JSONDecodeError)
+         ),
++        # a retry resamples the reply, so log each one: silent resampling would hide replies the provider dropped
++        before_sleep=lambda rs: print(
++            f"[provider retry] attempt {rs.attempt_number} failed: {type(rs.outcome.exception()).__name__}", flush=True),
+     )
+     def invoke(self) -> LLMResponse:
+         """Make an API call to OpenRouter using internal message history.
+@@ -115,7 +295,7 @@ class OpenRouterProvider(BaseProvider):
+         """
+         response = self.client.chat.completions.create(
+             model=self.model,
+-            messages=self.messages,
++            messages=_text_tools_messages(self.messages, self.tool_defs) if self.text_tools else self.messages,
+             **self.kwargs,
+         )
+ 
+@@ -124,6 +304,14 @@ class OpenRouterProvider(BaseProvider):
+             raise OpenRouterEmptyResponseError(f"OpenRouter returned no choices: {error}")
+ 
+         message = response.choices[0].message.model_dump()
++        if not message.get("tool_calls") and not (message.get("content") or "").strip():
++            raise OpenRouterEmptyResponseError("OpenRouter returned an empty reply (no text, no tool call)")
++        if not message.get("tool_calls") and (self.kwargs.get("tools") or self.text_tools):
++            parsed = _tool_call_from_tool_code(message.get("content") or "", self.tool_defs)
++            if not parsed and self.text_tools:
++                parsed = _unparsed_tool_call(message.get("content") or "", self.tool_defs)
++            if parsed:
++                message["tool_calls"] = [parsed]
+ 
+         # Required for moonshot models
+         if message.get("reasoning") and not message.get("reasoning_content"):
+diff --git a/src/agent_interp_envs/runner.py b/src/agent_interp_envs/runner.py
+index 600ac31..dcb6654 100644
+--- a/src/agent_interp_envs/runner.py
++++ b/src/agent_interp_envs/runner.py
+@@ -190,6 +190,10 @@ def run_agent(
+                 if on_incomplete is not None:
+                     on_incomplete(state, config)
+                 return
++            if getattr(provider, "end_task_called", False):
++                # config agent.end_task_required (gigi/3-forensics): the agent called end_task; the run ends here
++                # whatever the environment's own loop decided (chess, tictactoe and swe_rebench_v2 ignore plain replies).
++                should_quit = True
+             dump(state, provider, step_dir(state.step))
+             state.step += 1
+ 
+diff --git a/src/agent_interp_envs/tool_calling.py b/src/agent_interp_envs/tool_calling.py
+index 3a752cb..7808478 100644
+--- a/src/agent_interp_envs/tool_calling.py
++++ b/src/agent_interp_envs/tool_calling.py
+@@ -543,6 +543,12 @@ def validate_and_get_command(
+         
+         # Check: no tool call
+         if not response.tool_calls:
++            if getattr(provider, "end_task_called", False):
++                # config agent.end_task_required (gigi/3-forensics, 8 Nov 2026): the agent just called the synthetic
++                # end_task; the run ends after this step (runner.run_agent). Let the reply through, no retry.
++                if response.response:
++                    print_section("RESPONSE", response.response)
++                return ValidationResult(error_type="no_tool_call", response=response)
+             if treat_no_tool_call_as_done:
+                 # Terminal state: the agent has finished and replied in prose.
+                 # Print the reply but do not revert or append a re-prompt.
+@@ -551,6 +557,14 @@ def validate_and_get_command(
+                     print_section("REASONING", response.reasoning)
+                 if response.response:
+                     print_section("RESPONSE", response.response)
++                if getattr(provider, "end_confirm", False):
++                    # config agent.end_confirm (gigi/3-forensics): the first reply without a tool call does not end
++                    # the run; the agent is asked once whether it meant to finish. Its next such reply ends the run.
++                    from agent_interp_envs.end_confirm import END_QUESTION, asked
++                    if not asked(provider.messages):
++                        provider.add_message({"role": "user", "content": END_QUESTION})
++                        print_section("USER MESSAGE", END_QUESTION)
++                        return ValidationResult(error_type="end_confirm", response=response)
+                 return ValidationResult(error_type="no_tool_call", response=response)
+             last_error_type = "no_tool_call"
+             if attempt < max_retries - 1:
+diff --git a/tests/environments/test_provider_kwargs_forwarding.py b/tests/environments/test_provider_kwargs_forwarding.py
+index 0e2a47d..2d881dc 100644
+--- a/tests/environments/test_provider_kwargs_forwarding.py
++++ b/tests/environments/test_provider_kwargs_forwarding.py
+@@ -35,12 +35,8 @@ ENVS = Path(__file__).resolve().parents[2] / "environments"
+ AGENTS = sorted(p for p in ENVS.glob("*/agent.py"))
+ 
+ #: Environments that still build their provider by hand. Shrink only.
+-LEGACY = {
+-    "ai_rd", "async_conversion", "currency_conversion",
+-    "funding_email", "games", "lazy_investigation", "norvane",
+-    "palisades_bounty", "parse_duration", "precommit_hook",
+-    "revert_or_refactor", "secret_number",
+-}
++# Empty since gigi/3-forensics' patch: every environment forwards the agent config via provider_kwargs.
++LEGACY: set[str] = set()
+ 
+ # Everything create_provider takes that provider_kwargs is responsible for
+ # forwarding. Naming any of these at a call site is the bug.

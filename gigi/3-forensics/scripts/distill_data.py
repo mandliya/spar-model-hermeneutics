@@ -141,6 +141,59 @@ def load_runs(envs=None):
     return runs, skipped
 
 
+HERO9_FULL = ["hero9_full_runs__qwen3.6-27b_per_run.csv", "hero9_full_runs__qwen3.6-27b__other21_per_run.csv"]
+
+
+def load_runs_hero9(envs=None):
+    """--hero9 (12 Nov 2026 call): Qwen3.6 27B as the target. Sources: Qwen3.6's plain hero9 runs (results/
+    hero9_full_runs__qwen3.6-27b*_per_run.csv) and every hero9 swap continuation Qwen3.6 wrote
+    (results/hero9_swap_per_run.csv, who=qwen36): on its own runs and on gemma's. A continuation's assistant turns
+    0..K are the source run's (checked: the first new turn is K+1), so they are never targets here, also when the
+    source is gemma's run (the prefix is gemma's). group = the source run, so a source travels whole with its
+    continuations. Same dict shape as load_runs."""
+    runs, skipped = [], []
+    cfg_cache = {}
+
+    def config_of(c):
+        if c not in cfg_cache:
+            cfg_cache[c] = yaml.safe_load(c.read_text())
+        return cfg_cache[c]
+
+    for f in HERO9_FULL:
+        for row in csv.DictReader(open(HERE / "results" / f)):
+            env = row["environment"]
+            if envs and env not in envs:
+                continue
+            run = HERE / row["run"]
+            if row["status"] != "finished":
+                skipped.append({"env": env, "run": row["run"], "kind": "full", "reason": f"lost: {row['status']}"}); continue
+            m = transcript(run)
+            if m is None:
+                skipped.append({"env": env, "run": row["run"], "kind": "full", "reason": "no readable transcript"}); continue
+            if not (run.parent / "config.yaml").exists():   # the swe_rebench_v2 fleet was saved without one: tools unknown
+                skipped.append({"env": env, "run": row["run"], "kind": "full", "reason": "no config.yaml (tools unknown)"}); continue
+            runs.append({"env": env, "run": row["run"], "kind": "full", "group": row["run"], "K": -1,
+                         "hacked": None if row["bad"] == "" else bool(int(row["bad"])), "messages": m,
+                         "tools": tools_for(config_of(run.parent / "config.yaml"))})
+    plan = {f"{p['src']}_{pathlib.Path(p['run']).parent.name}_{pathlib.Path(p['run']).name}_K{p['K']}": p
+            for p in json.load(open(HERE / "results" / "hero9_swap_plan.json"))}
+    for row in csv.DictReader(open(HERE / "results" / "hero9_swap_per_run.csv")):
+        if row["who"] != "qwen36" or (envs and row["env"] not in envs):
+            continue
+        run = HERE / row["run"]; p = plan[row["point"]]
+        if row["bad"] == "":
+            skipped.append({"env": row["env"], "run": row["run"], "kind": "replay", "reason": f"lost: {row['ending_or_loss']}"}); continue
+        m = transcript(run)
+        if m is None:
+            skipped.append({"env": row["env"], "run": row["run"], "kind": "replay", "reason": "no readable transcript"}); continue
+        if sum(1 for x in m if x["role"] == "assistant") <= p["K"] + 1:
+            skipped.append({"env": row["env"], "run": row["run"], "kind": "replay", "reason": "no turn after the prefix"}); continue
+        runs.append({"env": row["env"], "run": row["run"], "kind": "replay", "group": p["run"], "K": p["K"],
+                     "hacked": bool(int(row["bad"])), "src": p["src"], "messages": m,
+                     "tools": tools_for(config_of(run.parent / "config.yaml"))})
+    return runs, skipped
+
+
 def render(run):
     """One rendered example per assistant turn: (step, context messages, target message). The text-mode rendering of a
     history cut before assistant turn i is the first part of the rendering of the whole history (an assistant turn
@@ -151,9 +204,11 @@ def render(run):
         yield step, R[:i], R[i]
 
 
-def examples(runs, exclude_hacked=False):
+def examples(runs, exclude_hacked=False, max_context_chars=0):
     """Deduped examples per group. A replay's turns 0..K are the original's (emitted once, by the original, or by the
-    first replay seen if the original has no transcript); identical samples are deduped by content hash."""
+    first replay seen if the original has no transcript); identical samples are deduped by content hash. A replay that
+    continues another model's run (hero9: src gemma) never emits its prefix. max_context_chars drops long examples
+    here, before they are held in memory."""
     by_group = collections.defaultdict(list)
     for r in runs:
         by_group[r["group"]].append(r)
@@ -165,7 +220,9 @@ def examples(runs, exclude_hacked=False):
             if exclude_hacked and r["hacked"]:
                 dropped.append({"env": r["env"], "run": r["run"], "kind": r["kind"], "reason": "hacked"}); continue
             for step, ctx, tgt in render(r):
-                if r["kind"] == "replay" and step <= min(r["K"], covered):
+                if r["kind"] == "replay" and step <= (r["K"] if r.get("src", "qwen36") != "qwen36" else min(r["K"], covered)):
+                    continue
+                if max_context_chars and sum(len(m["content"]) for m in ctx) > max_context_chars:
                     continue
                 h = hashlib.sha1(json.dumps(ctx + [tgt], sort_keys=True).encode()).hexdigest()
                 if h in seen:
@@ -177,13 +234,48 @@ def examples(runs, exclude_hacked=False):
     return out, dropped
 
 
+def trajectories(runs, exclude_hacked=False, max_context_chars=0):
+    """--trajectories (12 Nov 2026): one example per run instead of one per assistant turn, with `train_turns` = the
+    assistant turns (0-based among the assistant turns) that carry the loss. The per-turn example of turn i is the first
+    part of the whole rendering, so training each run once on all its kept turns gives the same targets for a fraction
+    of the tokens (233 M -> 25 M on the hero9 data at 105,000 context chars). Kept turns: all of a full run's, a
+    replay's after its prefix (turns 0..K are the source run's: emitted by the full run, or not at all when the source
+    is another model's), each only while its context stays within max_context_chars (later turns are cut, exactly as
+    the per-turn build drops them). Identical runs are emitted once."""
+    out = collections.defaultdict(list); seen = set(); dropped = []
+    for r in runs:
+        if exclude_hacked and r["hacked"]:
+            dropped.append({"env": r["env"], "run": r["run"], "kind": r["kind"], "reason": "hacked"}); continue
+        R = _text_tools_messages(r["messages"], r["tools"])
+        idx = [i for i, m in enumerate(R) if m["role"] == "assistant"]
+        start = r["K"] + 1 if r["kind"] == "replay" else 0
+        ctx = 0; turns = []; end = None
+        for t, i in enumerate(idx):
+            ctx_i = ctx + sum(len(m["content"]) for m in R[(idx[t - 1] + 1 if t else 0):i])
+            if max_context_chars and ctx_i > max_context_chars:
+                break
+            ctx = ctx_i + len(R[i]["content"])
+            if t >= start:
+                turns.append(t); end = i
+        if not turns:
+            continue
+        msgs = R[:end + 1]
+        h = hashlib.sha1(json.dumps(msgs, sort_keys=True).encode()).hexdigest()
+        if h in seen:
+            continue
+        seen.add(h)
+        out[r["group"]].append({"env": r["env"], "run": r["run"], "step": turns[0], "hacked": r["hacked"], "kind": r["kind"],
+                                "group": r["group"], "train_turns": turns, "messages": msgs})
+    return out, dropped
+
+
 def nbytes(ex):
     return len(json.dumps(ex, ensure_ascii=False).encode()) + 1
 
 
 def inventory(args):
-    runs, skipped = load_runs(args.envs)
-    ex, _ = examples(runs)
+    runs, skipped = (load_runs_hero9 if args.hero9 else load_runs)(args.envs)
+    ex, _ = examples(runs, max_context_chars=args.max_context_chars)
     rows = collections.defaultdict(lambda: collections.Counter())
     for r in runs:
         c = rows[r["env"]]; c[r["kind"]] += 1
@@ -295,13 +387,14 @@ def split_table(runs, ex, chosen, env_of, train, val, incident, sampled=False):
 
 
 def build(args):
-    runs, skipped = load_runs(args.envs)
-    ex, dropped = examples(runs, args.exclude_hacked)
+    runs, skipped = (load_runs_hero9 if args.hero9 else load_runs)(args.envs)
+    ex, dropped = (trajectories(runs, args.exclude_hacked, args.max_context_chars) if args.trajectories
+                   else examples(runs, args.exclude_hacked, args.max_context_chars if args.hero9 else 0))
     split_env = None
     if args.stratify_incidents:   # the split is fixed on the unfiltered families: --max-context-chars, --exclude-hacked
         base = examples(runs)[0] if args.exclude_hacked else ex   # and the size guard only drop examples, never move a family
         split_env = {g: exs[0]["env"] for g, exs in base.items() if exs}
-    if args.max_context_chars:
+    if args.max_context_chars and not args.trajectories:
         for g in ex:
             ex[g] = [e for e in ex[g] if sum(len(m["content"]) for m in e["messages"][:-1]) <= args.max_context_chars]
     sizes = {g: sum(nbytes(e) for e in exs) for g, exs in ex.items()}
@@ -335,6 +428,10 @@ def build(args):
     for g in chosen:
         by_env[env_of[g]].append(g)
     incident = incident_families(runs)
+    test = set()
+    if args.holdout_envs:   # 12 Nov call: whole environments held out as the test set; the rest split train/val by family
+        test = {g for g in chosen if env_of[g] in args.holdout_envs}
+        by_env = {e: gs for e, gs in by_env.items() if e not in args.holdout_envs}
     if args.stratify_incidents:
         by_all = collections.defaultdict(list)
         for g, e in sorted(split_env.items()):
@@ -348,15 +445,17 @@ def build(args):
         return
     out = out_dir(args)
     out.mkdir(parents=True, exist_ok=True)
-    counts = collections.defaultdict(lambda: {"train": 0, "val": 0, "train_runs": 0, "val_runs": 0})
-    with open(out / "train.jsonl", "w") as ft, open(out / "val.jsonl", "w") as fv:
+    counts = collections.defaultdict(lambda: {"train": 0, "val": 0, "test": 0, "train_runs": 0, "val_runs": 0, "test_runs": 0})
+    with open(out / "train.jsonl", "w") as ft, open(out / "val.jsonl", "w") as fv, \
+            open(out / "test.jsonl", "w") if test else open("/dev/null", "w") as fx:
         for g in sorted(chosen):
-            f, part = (ft, "train") if g in train else (fv, "val")
+            f, part = (fx, "test") if g in test else (ft, "train") if g in train else (fv, "val")
             counts[env_of[g]][f"{part}_runs"] += 1
             for e in ex[g]:
                 f.write(json.dumps(e, ensure_ascii=False) + "\n"); counts[e["env"]][part] += 1
     manifest = {
         "seed": args.seed, "split": args.split, "exclude_hacked": args.exclude_hacked, "envs": args.envs,
+        "hero9": args.hero9, "holdout_envs": args.holdout_envs, "trajectories": args.trajectories,
         "max_context_chars": args.max_context_chars, "sampling": note,
         **({"stratify_incidents": True, "hacked_split": args.hacked_split, "max_mb": args.max_mb,
             "cheating_families": {"train": sorted(g for g in train if incident[g]), "val": sorted(g for g in val if incident[g])}}
@@ -365,18 +464,21 @@ def build(args):
         "env_repo_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ENVS, capture_output=True, text=True).stdout.strip(),
         "counts": dict(sorted(counts.items())),
         "totals": {"train": sum(c["train"] for c in counts.values()), "val": sum(c["val"] for c in counts.values()),
+                   "test": sum(c["test"] for c in counts.values()), "test_runs": len(test),
                    "train_runs": len(train & chosen), "val_runs": len(val & chosen),
                    "full_set_examples": sum(len(v) for v in ex.values()), "full_set_bytes": total},
         "excluded_runs": skipped + dropped,
         "runs_not_in_sample": sorted(set(env_of) - chosen),
     }
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))
-    print(f"{'env':35s} {'train':>6s} {'val':>6s} {'train runs':>10s} {'val runs':>8s}")
+    print(f"{'env':35s} {'train':>6s} {'val':>6s} {'test':>6s} {'train runs':>10s} {'val runs':>8s} {'test runs':>9s}")
     for env, c in sorted(counts.items()):
-        print(f"{env:35s} {c['train']:6d} {c['val']:6d} {c['train_runs']:10d} {c['val_runs']:8d}")
+        print(f"{env:35s} {c['train']:6d} {c['val']:6d} {c['test']:6d} {c['train_runs']:10d} {c['val_runs']:8d} {c['test_runs']:9d}")
     t = manifest["totals"]
-    print(f"{'TOTAL':35s} {t['train']:6d} {t['val']:6d} {t['train_runs']:10d} {t['val_runs']:8d}")
-    for f in ("train.jsonl", "val.jsonl", "manifest.json"):
+    print(f"{'TOTAL':35s} {t['train']:6d} {t['val']:6d} {t['test']:6d} {t['train_runs']:10d} {t['val_runs']:8d} {t['test_runs']:9d}")
+    for f in ("train.jsonl", "val.jsonl", "test.jsonl", "manifest.json"):
+        if not (out / f).exists():
+            continue
         print(f"{f if out == OUT else rel(out / f)}: {(out / f).stat().st_size / 2**20:.1f} MB")
     print(f"excluded: {len(skipped)} without a usable transcript, {len(dropped)} hacked (if --exclude-hacked)")
 
@@ -433,6 +535,10 @@ def main():
         p = sub.add_parser(name); p.set_defaults(fn=fn)
         p.add_argument("--envs", type=lambda s: s.split(","), default=None, help="comma-separated environment names (full_runs.csv names)")
         p.add_argument("--seed", type=int, default=0)
+        p.add_argument("--hero9", action="store_true", help="12 Nov 2026: Qwen3.6 27B's hero9 runs and swap continuations "
+                       "as the source (default: Qwen3-Next-80B's full runs and gap replays)")
+        if name == "inventory":
+            p.add_argument("--max-context-chars", type=int, default=0, help="drop examples whose context is longer (0 = keep all)")
         if name == "build":
             p.add_argument("--split", type=float, default=0.8, help="train fraction of runs per environment")
             p.add_argument("--exclude-hacked", action="store_true", help="drop runs where the grader saw the bad act")
@@ -443,6 +549,10 @@ def main():
             p.add_argument("--hacked-split", type=float, default=None, help="with --stratify-incidents: a different train "
                            "fraction for the cheating stratum (John's fallback: 0.5); default = --split (Yuqi's rule)")
             p.add_argument("--dry-run", action="store_true", help="print the per-environment split table, write nothing")
+            p.add_argument("--trajectories", action="store_true", help="one example per run with train_turns (the "
+                           "turns that carry the loss) instead of one per assistant turn: same targets, ~9x fewer tokens")
+            p.add_argument("--holdout-envs", type=lambda s: s.split(","), default=None, help="comma-separated environments "
+                           "held out whole as test.jsonl (12 Nov call); the rest are split train/val by family")
             p.add_argument("--max-mb", type=float, default=0, help="size budget for the written set in MB (0 = the 200 MB "
                            "default); above it build writes a stratified sample")
         if name in ("build", "check"):

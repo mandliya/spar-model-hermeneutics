@@ -108,6 +108,35 @@ def encode(tok, msgs, max_len):
     return (p + c, [-100] * len(p) + c), None
 
 
+def encode_turns(tok, msgs, train_turns, max_len):
+    """(input_ids, labels) for a whole run with the loss on the assistant turns in train_turns (0-based among the
+    assistant turns; distill_data.py build --trajectories), or (None, reason). Built turn by turn exactly as encode()
+    builds one turn: the context up to turn i is the template's rendering with the generation prompt, the turn is what
+    the template adds after it, without the trailing newline. Context pieces and turns are tokenized separately, as in
+    encode(); each piece starts at a special token (<start_of_turn>, <end_of_turn>), so the boundaries are the
+    inference ones. A run longer than max_len is cut before the first turn that does not fit; its later turns are
+    dropped, as the per-turn build drops examples longer than max_len."""
+    want = set(train_turns); ids, labels, text = [], [], ""
+    idx = [i for i, m in enumerate(msgs) if m["role"] == "assistant"]
+    for t, i in enumerate(idx):
+        try:
+            prompt = tok.apply_chat_template(msgs[:i], tokenize=False, add_generation_prompt=True)
+            full = tok.apply_chat_template(msgs[:i + 1], tokenize=False)
+        except Exception as e:
+            return None, f"template error: {type(e).__name__}"
+        if not prompt.startswith(text) or not full.startswith(prompt):
+            return None, "template: renderings are not prefixes of each other"
+        ctx = tok(prompt[len(text):], add_special_tokens=False)["input_ids"]
+        turn = tok(full[len(prompt):].rstrip("\n"), add_special_tokens=False)["input_ids"]
+        if len(ids) + len(ctx) + len(turn) > max_len:
+            break
+        ids += ctx + turn; labels += [-100] * len(ctx) + (turn if t in want else [-100] * len(turn))
+        text = full.rstrip("\n")
+    if not any(x != -100 for x in labels):
+        return None, "too long"
+    return (ids, labels), None
+
+
 def load_split(path, tok, max_len, envs, counts, split):
     rows = []
     with open(path) as f:
@@ -115,7 +144,8 @@ def load_split(path, tok, max_len, envs, counts, split):
             e = json.loads(line)
             if envs and e["env"] not in envs:
                 continue
-            enc, why = encode(tok, e["messages"], max_len)
+            enc, why = (encode_turns(tok, e["messages"], e["train_turns"], max_len) if "train_turns" in e
+                        else encode(tok, e["messages"], max_len))
             c = counts[split][e["env"]]; c["seen"] += 1
             if enc is None:
                 c["dropped: " + why] += 1; continue
