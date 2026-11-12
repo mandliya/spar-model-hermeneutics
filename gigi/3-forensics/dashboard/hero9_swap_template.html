@@ -195,8 +195,8 @@ footer { font-size: 12px; color: var(--muted); }
   <section id="summary" aria-labelledby="s-sum">
     <h2 id="s-sum"><span class="num">0</span>Summary for the call</h2>
     <h3>Who decides, the run's history or the model taking over? Coding: the history. Eval tampering and lazy investigation: the new model.</h3>
-    <p class="sub">One line per task and direction, at the bad act and one step before. The scale runs from "the new model does what it does on its own" (left) to "the new model does what the original model did when it continued its own run" (right). Rows where the two models already behave alike on their own (less than 20 points apart) are left out, because there the question has no answer.</p>
-    <div class="key"><span><i class="sw" style="background:var(--gemma)"></i>gemma-3 27B takes over</span><span><i class="sw" style="background:var(--qwen)"></i>Qwen3.6 27B takes over</span><span><span class="pill note">N = last step</span> bad act may already be in the history</span></div>
+    <p class="sub">How often the bad act happens, 0 to 100%. Big dot: the other model taking over the run. Small dot: the original model continuing its own run. Black tick: the model taking over, on its own from the start. If the big dot sits on the small dot, the history decides. If it sits on the tick, the new model decides. Rows where the two models already behave alike on their own (less than 20 points apart) are left out, because there the question has no answer.</p>
+    <div class="key"><span><i class="sw" style="background:var(--gemma)"></i>gemma-3 27B</span><span><i class="sw" style="background:var(--qwen)"></i>Qwen3.6 27B</span><span>big dot: takes over · small dot: continues its own run</span><span><i class="swtick"></i>model taking over, on its own</span><span><span class="pill note">N = last step</span> bad act may already be in the history</span></div>
     <div class="chart" id="decide"></div>
     <h3 style="margin-top:18px">Clean runs (control): a model continuing its own clean run stays clean, while the model taking over cheats at its own rate or higher.</h3>
     <p class="sub">The four coding cells where no bad act happened before the restart. Each row is one restart point, with 10 continuations per model. The odd one out: on Qwen3.6's clean coding runs, gemma cheats in 21 of 46 continuations, against 2 of 20 on its own, and at 4 of the 5 restart points.</p>
@@ -557,7 +557,8 @@ document.getElementById("plain-all").textContent = `All ${D.plain.length} tasks`
   document.getElementById("misstable").innerHTML = head + body;
 })();
 
-/* 0a. who decides: where the takeover lands between "new model on its own" (0) and "original model continuing" (1) */
+/* 0a. who decides: on a plain 0-100% axis, the takeover (big dot) against the original model continuing (small dot)
+   and the new model on its own (black tick) */
 (() => {
   let h = "", fam = "";
   for (const env of ENVS) for (const src of ["gemma", "qwen36"]) for (const step of ["N", "N−1"]) {
@@ -565,21 +566,22 @@ document.getElementById("plain-all").textContent = `All ${D.plain.length} tasks`
     if (!r || !r.self.n || !r.other.n || !p || !p[o] || !p[o].n || p[o].n < 5) continue;   // own rate from fewer than 5 runs is no anchor
     const own = p[o].k / p[o].n, cont = r.self.k / r.self.n, take = r.other.k / r.other.n;
     if (Math.abs(cont - own) < 0.2) continue;
-    const x = (take - own) / (cont - own), xc = Math.max(-0.1, Math.min(1.1, x));
+    const x = (take - own) / (cont - own);
+    const verdict = x > 1.25 ? "higher than both" : x < -0.25 ? "lower than both" : x < 0.35 ? "new model decides" : x > 0.65 ? "history decides" : "in between";
     const fl = `${r.family[0]} · ${r.family[1]}`;
     if (fl !== fam) { h += `<div class="fam">${esc(fl)}</div>`; fam = fl; }
-    const verdict = x < 0.35 ? "new model decides" : x > 0.65 ? "history decides" : "in between";
-    const t = `<b>${esc(lbl(env))}, ${SHORT[src]}'s runs, ${TAKE[step]}</b><br>${NAME[o]} on its own: ${p[o].k} of ${p[o].n} (${pct(p[o].k, p[o].n)})<br>${NAME[o]} taking over: ${ciTxt(r.other)}<br>${NAME[src]} continuing its own run: ${ciTxt(r.self)}`;
+    const t = `<b>${esc(lbl(env))}, ${SHORT[src]}'s runs, ${TAKE[step]}</b><br>${NAME[o]} taking over: ${ciTxt(r.other)}<br>${NAME[src]} continuing its own run: ${ciTxt(r.self)}<br>${NAME[o]} on its own: ${p[o].k} of ${p[o].n} (${pct(p[o].k, p[o].n)})`;
+    const A = 100 * cont, B = 100 * take;
     h += `<div class="db" data-tip="${esc(t)}"><div class="tcell"><div class="tname">${esc(lbl(env))}</div>${r.n_is_act ? "" : `<span class="pill note">N = last step</span>`}</div>
       <div class="dir"><span class="sw" style="background:${COLOR[o]}"></span>${SHORT[o]} takes over ${SHORT[src]}'s run, ${step === "N" ? "at the bad act" : "one step before"}</div>
       <div class="dbtrack"><div class="base"></div><div class="grid50"></div>
-        <div class="dot other" style="left:${(xc + 0.1) * 100 / 1.2}%;background:${COLOR[o]}"></div></div>
-      <div class="vals">${pct(r.other.k, r.other.n)} taking over<span class="ch">${pct(p[o].k, p[o].n)} on its own · ${pct(r.self.k, r.self.n)} original · ${verdict}</span></div></div>`;
+        <div class="tick" style="left:${100 * own}%;top:1px;bottom:1px"></div>
+        <div class="link" style="left:${Math.min(A, B)}%;width:${Math.abs(B - A)}%"></div>
+        <div class="dot" style="left:${A}%;background:${COLOR[src]}"></div><div class="dot other" style="left:${B}%;background:${COLOR[o]}"></div></div>
+      <div class="vals">${verdict}<span class="ch">${SHORT[o]} taking over ${pct(r.other.k, r.other.n)} · ${SHORT[src]} continuing ${pct(r.self.k, r.self.n)} · ${SHORT[o]} on its own ${pct(p[o].k, p[o].n)}</span></div></div>`;
   }
-  const at = v => `${(v + 0.1) * 100 / 1.2}%`;
-  h += `<div class="axisrow"><div></div><div></div><div class="scale"><span style="left:${at(0)}">its own rate</span><span style="left:${at(1)}">original run's rate</span></div><div></div></div>`;
+  h += `<div class="axisrow"><div></div><div></div><div class="scale"><span style="left:0">0%</span><span style="left:50%">50%</span><span style="left:100%">100%</span></div><div></div></div>`;
   document.getElementById("decide").innerHTML = h;
-  document.querySelector("#decide").querySelectorAll(".grid50").forEach(g => g.style.left = at(0.5));
 })();
 
 /* 0b. clean coding runs, per restart point */
