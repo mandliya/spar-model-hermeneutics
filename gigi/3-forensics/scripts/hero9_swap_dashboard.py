@@ -102,7 +102,9 @@ ungraded_by_env = collections.Counter()
 for s in swap:
     ungraded_by_env[s["env"]] += s["ungraded"]
 
-data = {"built": datetime.datetime.now().strftime("%-d %b %Y, %H:%M"), "swap": swap, "plain": plain, "totals": totals,
+points = [{"src": s, "env": e, "take": t, "point": p, "self": v.get("self", [0, 0]), "other": v.get("other", [0, 0])}
+          for (s, e, t, p), v in sorted(pts.items())]   # per restart point, for the clean-run chart
+data = {"built": datetime.datetime.now().strftime("%-d %b %Y, %H:%M"), "swap": swap, "plain": plain, "totals": totals, "points": points,
         "ungraded_by_env": dict(ungraded_by_env), "families": [[L, n] for L, n, _ in FAMILIES]}
 tpl = (HERE / "dashboard/hero9_swap_template.html").read_text()
 out = HERE / "dashboard/hero9_swap.html"

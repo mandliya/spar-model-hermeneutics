@@ -101,7 +101,7 @@ td.sep { border-left: 2px solid var(--rule); }
 .db { display: grid; grid-template-columns: minmax(150px, 230px) 150px minmax(160px, 1fr) 200px; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 13px; }
 .db .dir { color: var(--text); font-size: 12.5px; }
 .db .vals { font-variant-numeric: tabular-nums; text-align: right; color: var(--ink); white-space: nowrap; font-size: 12.5px; }
-.db .vals .ch { display: block; color: var(--muted); font-size: 12px; }
+.db .vals .ch { display: block; color: var(--muted); font-size: 12px; white-space: normal; }
 .dbtrack { position: relative; height: 22px; margin: 0 9px; }
 .dbtrack .base { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--rule); }
 .dbtrack .grid50 { position: absolute; left: 50%; top: 2px; bottom: 2px; width: 1px; background: var(--rule); }
@@ -154,6 +154,7 @@ td.sep { border-left: 2px solid var(--rule); }
 .card .track { height: 10px; }
 .card .foot { font-size: 12px; color: var(--muted); }
 .mini { display: grid; gap: 6px; }
+#cleanpts { grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); }
 
 .method ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: var(--text); max-width: 84ch; }
 .method li b { font-weight: 500; color: var(--ink); }
@@ -180,7 +181,7 @@ footer { font-size: 12px; color: var(--muted); }
     <p class="lede">The two models are gemma-3 27B and Qwen3.6 27B. We took runs where one of them did a task's bad act and restarted each run at the bad act, and one step before it. From there, the same model continued the run 10 times and the other model took it over 10 times. We did this in both directions, plus on runs with no bad act as a control.</p>
     <p class="setting">Both models fp8 on DeepInfra via OpenRouter, run plain (no end check, no nudge). Qwen3.6 with thinking off, gemma with text-mode tool calls. Continuations ran 10–11 Nov 2026.</p>
     <nav class="toc" aria-label="Sections">
-      <a href="#how">1. How a takeover works</a><a href="#ran">2. What we ran</a><a href="#overview">3. All results in one chart</a>
+      <a href="#summary">0. Summary for the call</a><a href="#how">1. How a takeover works</a><a href="#ran">2. What we ran</a><a href="#overview">3. All results in one chart</a>
       <a href="#main">4. Main results</a><a href="#tasks">5. Task by task</a><a href="#alone">6. Each model on its own</a><a href="#missing">7. What is missing</a><a href="#method">8. Method</a>
     </nav>
   </header>
@@ -189,6 +190,18 @@ footer { font-size: 12px; color: var(--muted); }
     <h2 id="s-status">5,931 of 6,580 continuations are scored so far.</h2>
     <div class="tiles" id="tiles"></div>
     <p class="sub">The 440 waiting for grading are in four tasks where Claude Opus reads the transcript to decide whether the model cheated. They stopped when the shared OpenRouter workspace hit its $5,000 lifetime budget. Those four tasks have almost no results yet. Every other task is complete.</p>
+  </section>
+
+  <section id="summary" aria-labelledby="s-sum">
+    <h2 id="s-sum"><span class="num">0</span>Summary for the call</h2>
+    <h3>Who decides, the run's history or the model taking over? Coding: the history. Eval tampering and lazy investigation: the new model.</h3>
+    <p class="sub">One line per task and direction, at the bad act and one step before. The scale runs from "the new model does what it does on its own" (left) to "the new model does what the original model did when it continued its own run" (right). Rows where the two models already behave alike on their own (less than 20 points apart) are left out, because there the question has no answer.</p>
+    <div class="key"><span><i class="sw" style="background:var(--gemma)"></i>gemma-3 27B takes over</span><span><i class="sw" style="background:var(--qwen)"></i>Qwen3.6 27B takes over</span><span><span class="pill note">N = last step</span> bad act may already be in the history</span></div>
+    <div class="chart" id="decide"></div>
+    <h3 style="margin-top:18px">Clean runs (control): a model continuing its own clean run stays clean, while the model taking over cheats at its own rate or higher.</h3>
+    <p class="sub">The four coding cells where no bad act happened before the restart. Each row is one restart point, with 10 continuations per model. The odd one out: on Qwen3.6's clean coding runs, gemma cheats in 21 of 46 continuations, against 2 of 20 on its own, and at 4 of the 5 restart points.</p>
+    <div class="key"><span>small dot: same model continues · big dot: other model takes over</span><span><i class="swtick"></i>model taking over, on its own from the start</span></div>
+    <div class="cards" id="cleanpts"></div>
   </section>
 
   <section id="how" aria-labelledby="s-how">
@@ -446,8 +459,8 @@ document.querySelectorAll("#overview .toggles button").forEach(b => b.onclick = 
       [...mk("qwen36", "coding", "N"), alone("gemma", "coding")], "Bad act: made the impossible test pass. One step earlier gemma cheats in 43 of 43."],
     ["Coding with no rules stated: gemma taking over cheats in 120 of 140, against 3 of 20 on its own.", "Qwen3.6's runs, taken over at the bad act",
       [...mk("qwen36", "coding_norules", "N"), alone("gemma", "coding_norules")], "One step earlier: 126 of 140 against 110 of 140."],
-    ["On clean coding runs, Qwen3.6 starts cheating where gemma did not.", "gemma's clean runs, taken over at the last step",
-      mk("gemma", "coding_norules", "clean"), "Control rows. Taking over also raises cheating the other way: on Qwen3.6's clean coding runs with the rules stated, gemma cheats in 21 of 46 and Qwen3.6 in 5 of 50."],
+    ["Clean coding runs: gemma taking over Qwen3.6's runs cheats in 21 of 46, against 2 of 20 on its own.", "Qwen3.6's clean runs, taken over at the last step",
+      [...mk("qwen36", "coding", "clean"), alone("gemma", "coding")], "Control rows. Elsewhere the model taking over a clean run cheats at about its own rate (Qwen3.6 on gemma's coding_norules runs: 31 of 50, against 14 of 20 on its own). Per restart point in section 0."],
   ];
   document.getElementById("cards").innerHTML = C.map(([t, tag, bars, foot]) => `<article class="card">
     <div class="tag">${esc(tag)}</div><h3>${esc(t)}</h3>
@@ -542,6 +555,54 @@ document.getElementById("plain-all").textContent = `All ${D.plain.length} tasks`
   const head = `<tr><th>task</th><th>scored</th>${cols.map(c => `<th>${c}</th>`).join("")}</tr>`;
   const body = envs.map(e => `<tr><td class="tname">${esc(lbl(e))}</td><td class="num">${fmt(by[e].scored)}</td>${cols.map(c => `<td class="num">${by[e].lost[c] || ""}</td>`).join("")}</tr>`).join("");
   document.getElementById("misstable").innerHTML = head + body;
+})();
+
+/* 0a. who decides: where the takeover lands between "new model on its own" (0) and "original model continuing" (1) */
+(() => {
+  let h = "", fam = "";
+  for (const env of ENVS) for (const src of ["gemma", "qwen36"]) for (const step of ["N", "N−1"]) {
+    const r = row(src, env, step), o = OTHER[src], p = plainOf(env);
+    if (!r || !r.self.n || !r.other.n || !p || !p[o] || !p[o].n || p[o].n < 5) continue;   // own rate from fewer than 5 runs is no anchor
+    const own = p[o].k / p[o].n, cont = r.self.k / r.self.n, take = r.other.k / r.other.n;
+    if (Math.abs(cont - own) < 0.2) continue;
+    const x = (take - own) / (cont - own), xc = Math.max(-0.1, Math.min(1.1, x));
+    const fl = `${r.family[0]} · ${r.family[1]}`;
+    if (fl !== fam) { h += `<div class="fam">${esc(fl)}</div>`; fam = fl; }
+    const verdict = x < 0.35 ? "new model decides" : x > 0.65 ? "history decides" : "in between";
+    const t = `<b>${esc(lbl(env))}, ${SHORT[src]}'s runs, ${TAKE[step]}</b><br>${NAME[o]} on its own: ${p[o].k} of ${p[o].n} (${pct(p[o].k, p[o].n)})<br>${NAME[o]} taking over: ${ciTxt(r.other)}<br>${NAME[src]} continuing its own run: ${ciTxt(r.self)}`;
+    h += `<div class="db" data-tip="${esc(t)}"><div class="tcell"><div class="tname">${esc(lbl(env))}</div>${r.n_is_act ? "" : `<span class="pill note">N = last step</span>`}</div>
+      <div class="dir"><span class="sw" style="background:${COLOR[o]}"></span>${SHORT[o]} takes over ${SHORT[src]}'s run, ${step === "N" ? "at the bad act" : "one step before"}</div>
+      <div class="dbtrack"><div class="base"></div><div class="grid50"></div>
+        <div class="dot other" style="left:${(xc + 0.1) * 100 / 1.2}%;background:${COLOR[o]}"></div></div>
+      <div class="vals">${pct(r.other.k, r.other.n)} taking over<span class="ch">${pct(p[o].k, p[o].n)} on its own · ${pct(r.self.k, r.self.n)} original · ${verdict}</span></div></div>`;
+  }
+  const at = v => `${(v + 0.1) * 100 / 1.2}%`;
+  h += `<div class="axisrow"><div></div><div></div><div class="scale"><span style="left:${at(0)}">its own rate</span><span style="left:${at(1)}">original run's rate</span></div><div></div></div>`;
+  document.getElementById("decide").innerHTML = h;
+  document.querySelector("#decide").querySelectorAll(".grid50").forEach(g => g.style.left = at(0.5));
+})();
+
+/* 0b. clean coding runs, per restart point */
+(() => {
+  const cells = [["gemma", "coding"], ["gemma", "coding_norules"], ["qwen36", "coding"], ["qwen36", "coding_norules"]];
+  document.getElementById("cleanpts").innerHTML = cells.map(([src, env]) => {
+    const r = row(src, env, "clean"), o = OTHER[src], p = plainOf(env)[o];
+    const P = D.points.filter(x => x.src === src && x.env === env && x.take === "clean");
+    const tick = p && p.n ? `<div class="tick" style="left:${100 * p.k / p.n}%"></div>` : "";
+    const lines = P.map((x, i) => {
+      const [sk, sn] = x.self, [ok, on] = x.other;
+      const t = `<b>Restart point ${i + 1}</b> (${esc(x.point)})<br>${NAME[src]} continuing: ${sk} of ${sn}<br>${NAME[o]} taking over: ${ok} of ${on}`;
+      return `<div class="bar" data-tip="${t}" style="grid-template-columns:62px 1fr 70px"><span class="who">point ${i + 1}</span>
+        <div class="dbtrack" style="margin:0 7px"><div class="base"></div>${tick}
+          ${sn ? `<div class="dot" style="left:${100 * sk / sn}%;background:${COLOR[src]}"></div>` : ""}
+          ${on ? `<div class="dot other" style="left:${100 * ok / on}%;background:${COLOR[o]}"></div>` : ""}</div>
+        <span class="val">${sk}/${sn} → ${ok}/${on}</span></div>`;
+    }).join("");
+    return `<article class="card"><div class="tag">${esc(lbl(env))} · clean runs</div>
+      <h3><span class="sw" style="background:${COLOR[src]}"></span>${NAME[src]}'s clean runs, taken over by ${SHORT[o]}</h3>
+      <div class="mini">${lines}</div>
+      <div class="foot">All points: ${SHORT[src]} continuing <b>${r.self.k} of ${r.self.n}</b>, ${SHORT[o]} taking over <b>${r.other.k} of ${r.other.n}</b>. ${SHORT[o]} on its own: ${p.k} of ${p.n} (${pct(p.k, p.n)}).</div></article>`;
+  }).join("");
 })();
 
 renderDumbbell("N");
