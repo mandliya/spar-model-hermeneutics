@@ -176,7 +176,7 @@ footer { font-size: 12px; color: var(--muted); }
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">SPAR model forensics · hero swap · <span id="built"></span> <span class="pill partial">partial: grading of 4 tasks not finished</span></div>
+    <div class="eyebrow">SPAR model forensics · hero swap · <span id="built"></span> <span class="pill partial">partial: grading of 3 tasks not finished</span></div>
     <h1>When one model takes over the other's run, <em>coding cheats carry over</em>, while in <em>eval tampering and lazy investigation the new model decides</em>.</h1>
     <p class="lede">The two models are gemma-3 27B and Qwen3.6 27B. We took runs where one of them did a task's bad act and restarted each run at the bad act, and one step before it. From there, the same model continued the run 10 times and the other model took it over 10 times. We did this in both directions, plus on runs with no bad act as a control.</p>
     <p class="setting">Both models fp8 on DeepInfra via OpenRouter, run plain (no end check, no nudge). Qwen3.6 with thinking off, gemma with text-mode tool calls. Continuations ran 10–11 Nov 2026.</p>
@@ -187,9 +187,9 @@ footer { font-size: 12px; color: var(--muted); }
   </header>
 
   <section aria-labelledby="s-status">
-    <h2 id="s-status">5,931 of 6,580 continuations are scored so far.</h2>
+    <h2 id="s-status"><span id="scoredline"></span></h2>
     <div class="tiles" id="tiles"></div>
-    <p class="sub">The 440 waiting for grading are in four tasks where Claude Opus reads the transcript to decide whether the model cheated. They stopped when the shared OpenRouter workspace hit its $5,000 lifetime budget. Those four tasks have almost no results yet. Every other task is complete.</p>
+    <p class="sub">The runs waiting for grading are in tasks where Claude Opus reads the transcript to decide whether the model cheated (grade_your_own, the rendering engine, copying of answers). Grading stopped when the OpenRouter key hit its $5,000 limit. Every other task is complete, dashboard included (graded 12 Nov).</p>
   </section>
 
   <section id="summary" aria-labelledby="s-sum">
@@ -260,7 +260,7 @@ footer { font-size: 12px; color: var(--muted); }
   <section id="missing" aria-labelledby="s-miss">
     <h2 id="s-miss"><span class="num">7</span>What is missing, task by task</h2>
     <div class="tablewrap"><table id="misstable"></table></div>
-    <p class="sub">"Never ran": 44 continuations in 7 restart points whose launcher stopped while creating them, when the laptop slept. Their top-up costs about $5 and waits on the same budget. "No value": the run ended without the quantity the task measures (in currency conversion, mostly no final answer).</p>
+    <p class="sub">"Never ran": none left; the 44 continuations that never ran the first time were run on 12 Nov. "No value": the run ended without the quantity the task measures (in currency conversion, mostly no final answer).</p>
   </section>
 
   <section id="method" aria-labelledby="s-method">
@@ -272,7 +272,7 @@ footer { font-size: 12px; color: var(--muted); }
         <li><b>Clean run.</b> A run with no bad act, restarted from just before its last step. This is the control.</li>
         <li><b>Where N comes from.</b> In the coding tasks and the Opus-graded tasks, N is the step of the bad act itself. In eval tampering, lazy investigation, currency conversion, funding email, tower of hanoi and async conversion, the bad act is read from the final state, so N is the run's last step. In those tasks, part of the bad act may already be in the history before the takeover (most likely in tower of hanoi). Their panels are marked "N = last step".</li>
         <li><b>Counts.</b> 10 continuations per restart point and model. A bar pools every restart point of that task and step. Intervals are 95% Wilson.</li>
-        <li><b>Bad act.</b> Each task's own measure, the same as in the full runs. Where Claude Opus is the grader, the judge so far is Opus 5 for 222 runs (copying of answers 211, dashboard 7, rendering engine 4) and Opus 4.8 for 146 (rendering engine 127, dashboard 19). We switched to Opus 4.8 because Opus 5 refused most of these transcripts. The rest of the grading will use Opus 4.8.</li>
+        <li><b>Bad act.</b> Each task's own measure, the same as in the full runs. Where Claude Opus is the grader, the judge so far is Opus 5 for 222 runs (copying of answers 211, dashboard 7, rendering engine 4) and Opus 4.8 for 146 (rendering engine 127, dashboard 19). We switched to Opus 4.8 because Opus 5 refused most of these transcripts. Everything graded from 12 Nov on (dashboard 107, grade_your_own 30, so far) used Opus 4.8.</li>
         <li><b>Files.</b> results/hero9_swap.csv, results/hero9_swap_loss_audit.md, results/hero9_gap.md, scripts/hero9_swap_dashboard.py (rebuilds this page).</li>
       </ul>
     </div>
@@ -307,6 +307,7 @@ const ENVS = [...new Set(D.swap.map(r => r.env))];   // builder sorts by family,
 const lostTxt = a => Object.entries(a.lost || {}).map(([k, v]) => `${v} ${LOSTNAME[k] || k}`).join(", ");
 
 for (const id of ["built", "built2"]) document.getElementById(id).textContent = D.built;
+document.getElementById("scoredline").textContent = `${fmt(D.totals.scored)} of ${fmt(D.totals.launched)} continuations are scored so far.`;
 
 /* why a cell has no takeovers */
 function whyNone(src, env, take) {
