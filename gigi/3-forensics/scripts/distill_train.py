@@ -62,6 +62,8 @@ def parse_args():
     t.add_argument("--eval-every", type=int, default=50, help="optimizer steps between evals on the val sample")
     t.add_argument("--eval-sample", type=int, default=150, help="val examples in each periodic eval (seeded sample)")
     t.add_argument("--save-every", type=int, default=50, help="optimizer steps between checkpoints (2 kept)")
+    t.add_argument("--keep-checkpoints", action="store_true", help="keep every checkpoint, not the last 2 (12 Nov call: "
+                   "re-infer each one to plot the Qwen3.6-gemma gap over training)")
     t.add_argument("--logit-chunk", type=int, default=1024)
     t.add_argument("--attn", default="sdpa", choices=["sdpa", "flash_attention_2", "eager"])
     t.add_argument("--offload-activations", action="store_true", help="keep checkpointed activations in pinned CPU memory")
@@ -252,7 +254,7 @@ def train(args):
         max_grad_norm=1.0, optim="adamw_torch", bf16=torch.cuda.is_available(),
         gradient_checkpointing=True, gradient_checkpointing_kwargs={"use_reentrant": bool(args.offload_activations)},
         logging_steps=1, eval_strategy="steps", eval_steps=args.eval_every, save_strategy="steps",
-        save_steps=args.save_every, save_total_limit=2, report_to="none", seed=args.seed, data_seed=args.seed,
+        save_steps=args.save_every, save_total_limit=None if args.keep_checkpoints else 2, report_to="none", seed=args.seed, data_seed=args.seed,
         remove_unused_columns=False, dataset_kwargs={"skip_prepare_dataset": True}, packing=False,
         prediction_loss_only=True, dataloader_num_workers=0, eval_on_start=True)
 
