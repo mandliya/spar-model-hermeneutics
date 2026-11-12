@@ -873,3 +873,122 @@ json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 2026-11-12 07:49:14 [messages] 600 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
 2026-11-12 07:49:41 [messages] 650 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
 2026-11-12 07:49:48 [messages] PASS DONE: 665 fleets, 0 new files, 0 failed, 0 logs skipped (running)
+2026-11-12 10:02:57 [state] start: 670 fleets (8 launch logs skipped: app still running)
+2026-11-12 10:03:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-12_07-08-13-051421: please contact support@modal.com (Error code: G4CS028G)
+2026-11-12 10:03:26 [state] 50 of 670 fleets, 4 new files, 1 failed, 5.0 GB free
+2026-11-12 10:03:57 [state] 100 of 670 fleets, 4 new files, 1 failed, 5.0 GB free
+2026-11-12 10:04:23 [state] 150 of 670 fleets, 5 new files, 1 failed, 5.0 GB free
+2026-11-12 10:04:55 [state] 200 of 670 fleets, 7 new files, 1 failed, 5.0 GB free
+2026-11-12 10:05:21 [state] 250 of 670 fleets, 7 new files, 1 failed, 5.0 GB free
+2026-11-12 10:05:47 [state] 300 of 670 fleets, 7 new files, 1 failed, 5.0 GB free
+2026-11-12 10:06:18 [state] 350 of 670 fleets, 8 new files, 1 failed, 5.0 GB free
+2026-11-12 10:06:44 [state] 400 of 670 fleets, 8 new files, 1 failed, 5.0 GB free
+2026-11-12 10:07:11 [state] 450 of 670 fleets, 8 new files, 1 failed, 5.0 GB free
+2026-11-12 10:07:39 [state] 500 of 670 fleets, 8 new files, 1 failed, 5.0 GB free
+2026-11-12 10:08:21 [state] 550 of 670 fleets, 8 new files, 1 failed, 5.0 GB free
+2026-11-12 10:09:01 [state] 600 of 670 fleets, 8 new files, 1 failed, 5.0 GB free
+2026-11-12 10:09:30 [state] 650 of 670 fleets, 8 new files, 1 failed, 5.0 GB free
+2026-11-12 10:09:41 [state] PASS DONE: 669 fleets, 8 new files, 1 failed, 8 logs skipped (running)
+2026-11-12 10:10:24 [state] start: 673 fleets (6 launch logs skipped: app still running)
+2026-11-12 10:10:56 [state] 50 of 673 fleets, 0 new files, 0 failed, 5.0 GB free
+2026-11-12 10:11:26 [state] 100 of 673 fleets, 0 new files, 0 failed, 5.0 GB free
+2026-11-12 10:11:56 [state] 150 of 673 fleets, 0 new files, 0 failed, 5.0 GB free
+2026-11-12 10:12:33 [state] 200 of 673 fleets, 0 new files, 0 failed, 5.0 GB free
+2026-11-12 10:13:01 [state] 250 of 673 fleets, 0 new files, 0 failed, 5.0 GB free
+2026-11-12 10:13:47 [state] 300 of 673 fleets, 0 new files, 0 failed, 4.9 GB free
+2026-11-12 10:14:27 [state] 350 of 673 fleets, 9 new files, 0 failed, 4.9 GB free
+2026-11-12 10:14:55 [state] 400 of 673 fleets, 9 new files, 0 failed, 4.9 GB free
+2026-11-12 10:15:24 [state] 450 of 673 fleets, 9 new files, 0 failed, 4.9 GB free
+2026-11-12 10:15:53 [state] 500 of 673 fleets, 9 new files, 0 failed, 4.9 GB free
+2026-11-12 10:16:36 [state] 550 of 673 fleets, 9 new files, 0 failed, 4.9 GB free
+2026-11-12 10:17:21 [state] 600 of 673 fleets, 10 new files, 0 failed, 4.8 GB free
+2026-11-12 10:17:50 [state] 650 of 673 fleets, 10 new files, 0 failed, 4.8 GB free
+2026-11-12 10:18:02 [state] PASS DONE: 673 fleets, 10 new files, 0 failed, 6 logs skipped (running)
+2026-11-12 10:18:25 [messages] start: 674 fleets (5 launch logs skipped: app still running)
+2026-11-12 10:18:59 [messages] 50 of 674 fleets, 3 new files, 0 failed, 4.8 GB free
+2026-11-12 10:19:31 [messages] 100 of 674 fleets, 3 new files, 0 failed, 4.8 GB free
+2026-11-12 10:20:01 [messages] 150 of 674 fleets, 3 new files, 0 failed, 4.8 GB free
+2026-11-12 10:22:29 [messages] 200 of 674 fleets, 6 new files, 0 failed, 4.8 GB free
+2026-11-12 10:23:07 [messages] 250 of 674 fleets, 6 new files, 0 failed, 4.8 GB free
+2026-11-12 10:23:10 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_20-57-23-569053: please contact support@modal.com (Error code: BYNZ06PV)
+2026-11-12 10:23:40 [messages] 300 of 674 fleets, 6 new files, 1 failed, 4.8 GB free
+2026-11-12 10:24:12 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-15-00-233476: please contact support@modal.com (Error code: IG4ID3FX)
+2026-11-12 10:24:17 [messages] 350 of 674 fleets, 9 new files, 2 failed, 4.8 GB free
+2026-11-12 10:24:38 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-33-45-625934: please contact support@modal.com (Error code: IN7XSC2M)
+2026-11-12 10:24:38 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-33-20-567606: please contact support@modal.com (Error code: 1H1VTDXE)
+2026-11-12 10:24:48 [messages] 400 of 674 fleets, 9 new files, 4 failed, 4.8 GB free
+2026-11-12 10:25:07 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-14-46-163361: please contact support@modal.com (Error code: IFTI1AT3)
+2026-11-12 10:25:09 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-13-57-409147: please contact support@modal.com (Error code: IFRRUARQ)
+2026-11-12 10:25:13 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-26-56-167936: please contact support@modal.com (Error code: WUAJRNSP)
+2026-11-12 10:25:21 [messages] 450 of 674 fleets, 9 new files, 7 failed, 4.8 GB free
+2026-11-12 10:25:56 [messages] 500 of 674 fleets, 9 new files, 7 failed, 4.8 GB free
+2026-11-12 10:26:12 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-11_14-35-12-181012: please contact support@modal.com (Error code: CM4PMOOL)
+2026-11-12 10:26:29 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-50-59-623513: please contact support@modal.com (Error code: KJABQ3Z5)
+2026-11-12 10:26:44 [messages] 550 of 674 fleets, 9 new files, 9 failed, 4.8 GB free
+2026-11-12 10:27:12 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-03-59-817450: please contact support@modal.com (Error code: 168FODV7)
+2026-11-12 10:27:37 [messages] 600 of 674 fleets, 10 new files, 10 failed, 4.8 GB free
+2026-11-12 10:28:01 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-31-53-694176: please contact support@modal.com (Error code: VKYL2T1K)
+2026-11-12 10:28:13 [messages] 650 of 674 fleets, 10 new files, 11 failed, 4.8 GB free
+2026-11-12 10:28:27 [messages] PASS DONE: 663 fleets, 10 new files, 11 failed, 5 logs skipped (running)
+2026-11-12 10:29:56 [messages] start: 677 fleets (2 launch logs skipped: app still running)
+2026-11-12 10:30:19 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_18-18-26-460759: please contact support@modal.com (Error code: 18SYHWBG)
+2026-11-12 10:30:32 [messages] 50 of 677 fleets, 2 new files, 1 failed, 4.8 GB free
+2026-11-12 10:31:03 [messages] 100 of 677 fleets, 4 new files, 1 failed, 4.8 GB free
+2026-11-12 10:31:34 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-11_07-58-22-681590: please contact support@modal.com (Error code: DG4NS4YY)
+2026-11-12 10:31:36 [messages] 150 of 677 fleets, 4 new files, 2 failed, 4.8 GB free
+2026-11-12 10:32:15 [messages] 200 of 677 fleets, 4 new files, 2 failed, 4.8 GB free
+2026-11-12 10:32:44 [messages] 250 of 677 fleets, 4 new files, 2 failed, 4.8 GB free
+2026-11-12 10:33:13 [messages] 300 of 677 fleets, 4 new files, 2 failed, 4.8 GB free
+2026-11-12 10:33:46 [messages] 350 of 677 fleets, 8 new files, 2 failed, 4.8 GB free
+2026-11-12 10:34:18 [messages] 400 of 677 fleets, 8 new files, 2 failed, 4.8 GB free
+2026-11-12 10:34:52 [messages] 450 of 677 fleets, 8 new files, 2 failed, 4.8 GB free
+2026-11-12 10:35:24 [messages] 500 of 677 fleets, 8 new files, 2 failed, 4.8 GB free
+2026-11-12 10:36:13 [messages] 550 of 677 fleets, 8 new files, 2 failed, 4.8 GB free
+2026-11-12 10:36:58 [messages] 600 of 677 fleets, 8 new files, 2 failed, 4.8 GB free
+2026-11-12 10:37:33 [messages] 650 of 677 fleets, 8 new files, 2 failed, 4.8 GB free
+2026-11-12 10:37:50 [messages] PASS DONE: 675 fleets, 8 new files, 2 failed, 2 logs skipped (running)
+2026-11-12 10:38:25 [messages] start: 677 fleets (2 launch logs skipped: app still running)
+2026-11-12 10:38:53 [messages] 50 of 677 fleets, 0 new files, 0 failed, 4.8 GB free
+2026-11-12 10:39:19 [messages] 100 of 677 fleets, 0 new files, 0 failed, 4.8 GB free
+2026-11-12 10:39:47 [messages] 150 of 677 fleets, 0 new files, 0 failed, 4.9 GB free
+2026-11-12 10:40:21 [messages] 200 of 677 fleets, 0 new files, 0 failed, 4.9 GB free
+2026-11-12 10:40:48 [messages] 250 of 677 fleets, 0 new files, 0 failed, 4.9 GB free
+2026-11-12 10:41:14 [messages] 300 of 677 fleets, 0 new files, 0 failed, 5.1 GB free
+2026-11-12 10:41:43 [messages] 350 of 677 fleets, 0 new files, 0 failed, 5.1 GB free
+2026-11-12 10:42:11 [messages] 400 of 677 fleets, 0 new files, 0 failed, 5.1 GB free
+2026-11-12 10:42:41 [messages] 450 of 677 fleets, 0 new files, 0 failed, 5.1 GB free
+2026-11-12 10:43:08 [messages] 500 of 677 fleets, 0 new files, 0 failed, 5.1 GB free
+2026-11-12 10:43:49 [messages] 550 of 677 fleets, 0 new files, 0 failed, 5.1 GB free
+2026-11-12 10:44:27 [messages] 600 of 677 fleets, 0 new files, 0 failed, 5.1 GB free
+2026-11-12 10:44:56 [messages] 650 of 677 fleets, 0 new files, 0 failed, 5.1 GB free
+2026-11-12 10:45:09 [messages] PASS DONE: 677 fleets, 0 new files, 0 failed, 2 logs skipped (running)
+2026-11-12 13:40:22 [state] start: 679 fleets (0 launch logs skipped: app still running)
+2026-11-12 13:40:51 [state] 50 of 679 fleets, 0 new files, 0 failed, 3.9 GB free
+2026-11-12 13:41:19 [state] 100 of 679 fleets, 0 new files, 0 failed, 3.9 GB free
+2026-11-12 13:41:51 [state] 150 of 679 fleets, 0 new files, 0 failed, 3.8 GB free
+2026-11-12 13:42:26 [state] 200 of 679 fleets, 0 new files, 0 failed, 3.8 GB free
+2026-11-12 13:42:53 [state] 250 of 679 fleets, 0 new files, 0 failed, 3.8 GB free
+2026-11-12 13:43:23 [state] 300 of 679 fleets, 0 new files, 0 failed, 3.8 GB free
+2026-11-12 13:43:53 [state] 350 of 679 fleets, 0 new files, 0 failed, 3.5 GB free
+2026-11-12 13:44:21 [state] 400 of 679 fleets, 0 new files, 0 failed, 3.5 GB free
+2026-11-12 13:44:48 [state] 450 of 679 fleets, 0 new files, 0 failed, 3.5 GB free
+2026-11-12 13:45:20 [state] 500 of 679 fleets, 0 new files, 0 failed, 3.5 GB free
+2026-11-12 13:46:31 [state] 550 of 679 fleets, 0 new files, 0 failed, 3.5 GB free
+2026-11-12 13:47:08 [state] 600 of 679 fleets, 1 new files, 0 failed, 3.8 GB free
+2026-11-12 13:47:37 [state] 650 of 679 fleets, 5 new files, 0 failed, 3.7 GB free
+2026-11-12 13:47:52 [state] PASS DONE: 679 fleets, 5 new files, 0 failed, 0 logs skipped (running)
+2026-11-12 13:48:24 [messages] start: 679 fleets (0 launch logs skipped: app still running)
+2026-11-12 13:48:52 [messages] 50 of 679 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-12 13:49:19 [messages] 100 of 679 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-12 13:49:46 [messages] 150 of 679 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-12 13:50:25 [messages] 200 of 679 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-12 13:50:57 [messages] 250 of 679 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-12 13:51:26 [messages] 300 of 679 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-12 13:51:58 [messages] 350 of 679 fleets, 0 new files, 0 failed, 2.9 GB free
+2026-11-12 13:52:25 [messages] 400 of 679 fleets, 0 new files, 0 failed, 2.9 GB free
+2026-11-12 13:52:53 [messages] 450 of 679 fleets, 0 new files, 0 failed, 2.9 GB free
+2026-11-12 13:53:23 [messages] 500 of 679 fleets, 0 new files, 0 failed, 3.1 GB free
+2026-11-12 13:54:07 [messages] 550 of 679 fleets, 0 new files, 0 failed, 3.1 GB free
+2026-11-12 13:54:44 [messages] 600 of 679 fleets, 2 new files, 0 failed, 3.1 GB free
+2026-11-12 13:55:12 [messages] 650 of 679 fleets, 2 new files, 0 failed, 3.1 GB free
+2026-11-12 13:55:30 [messages] PASS DONE: 679 fleets, 2 new files, 0 failed, 0 logs skipped (running)

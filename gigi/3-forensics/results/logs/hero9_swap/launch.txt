@@ -727,3 +727,18 @@
 2026-11-12 07:08:50 launched currency_conversion__qwen36_2026-11-10_12-22-47-507049_run-7_K5__gemma__topup_20261111.log
 2026-11-12 07:09:15 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-6_K11__qwen36__topup_20261111.log
 2026-11-12 07:09:15 all launched (commands_topup_20261111.txt, paced)
+2026-11-12 09:57:24 launched async_conversion__gemma_2026-10-20_12-57-30-154408_run-3_K25__qwen36__rerun_20261112.log
+2026-11-12 09:57:49 launched async_conversion__gemma_2026-10-20_12-57-30-154408_run-4_K56__gemma__rerun_20261112.log
+2026-11-12 09:58:14 launched async_conversion__gemma_2026-10-20_12-57-30-154408_run-4_K56__qwen36__rerun_20261112.log
+2026-11-12 09:58:39 launched coding_norules__gemma_2026-10-21_20-43-32-159598_run-17_K6__qwen36__rerun_20261112.log
+2026-11-12 09:59:04 launched copying_of_answers__gemma_2026-10-20_12-59-43-851048_run-1_K9__qwen36__rerun_20261112.log
+2026-11-12 09:59:30 launched copying_of_answers__gemma_2026-10-20_12-59-43-851048_run-2_K2__qwen36__rerun_20261112.log
+2026-11-12 09:59:55 launched currency_conversion__gemma_2026-10-20_12-59-32-510865_run-14_K1__gemma__rerun_20261112.log
+2026-11-12 10:00:20 launched dashboard_costly_failure__gemma_2026-10-20_12-59-15-634971_run-1_K14__qwen36__rerun_20261112.log
+2026-11-12 10:00:45 launched dashboard_costly_failure__gemma_2026-10-20_12-59-15-634971_run-4_K15__qwen36__rerun_20261112.log
+2026-11-12 10:01:10 launched optimize_rendering_engine__gemma_2026-10-20_12-57-11-579024_run-1_K8__qwen36__rerun_20261112.log
+2026-11-12 10:01:35 launched optimize_rendering_engine_graded__gemma_2026-10-20_12-57-12-997411_run-2_K4__qwen36__rerun_20261112.log
+2026-11-12 10:02:00 launched optimize_rendering_engine_graded__gemma_2026-10-20_12-57-12-997411_run-3_K10__qwen36__rerun_20261112.log
+2026-11-12 10:02:25 launched dashboard_costly_failure__qwen36_2026-11-10_12-21-11-216679_run-1_K79__gemma__rerun_20261112.log
+2026-11-12 10:02:50 launched dashboard_costly_failure__qwen36_2026-11-10_12-21-11-216679_run-1_K78__gemma__rerun_20261112.log
+2026-11-12 10:02:50 all launched (commands_rerun_20261112.txt, paced)

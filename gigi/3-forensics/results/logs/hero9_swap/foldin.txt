@@ -62,3 +62,20 @@
 2026-11-12 08:00:06 [lean] scored: 658 rows -> results/hero9_swap.csv; found 6580, launched 6580, lost: context window exceeded 70, lost: crash 1, lost: cut off, no final state 18, lost: cut off, no full final state 2, lost: no value for the measure 52, lost: not graded 304, lost: provider failure 14, lost: step cap, no report 7, scored 6112
 2026-11-12 08:00:09 [lean] chart: wrote results/hero9_swap_summary.md
 2026-11-12 08:00:09 [lean] DONE (not committed: the parent session commits)
+2026-11-12 10:02:50 [lean] start (ceiling 7544, grade cap 100 for the whole grading pass)
+2026-11-12 10:09:50 [lean] fetch state try 1 ended rc=1; retrying
+2026-11-12 10:18:20 [lean] fetch state pass clean
+2026-11-12 10:29:20 [lean] fetch messages try 1 ended rc=1; retrying
+2026-11-12 10:37:51 [lean] fetch messages try 2 ended rc=1; retrying
+2026-11-12 10:45:21 [lean] fetch messages pass clean
+2026-11-12 10:45:24 [lean] waiting: 2 swap apps still running
+2026-11-12 11:15:42 [lean] waiting: 1 swap apps still running
+2026-11-12 13:40:20 [lean] all swap apps stopped
+2026-11-12 13:48:20 [lean] fetch state pass clean
+2026-11-12 13:56:20 [lean] fetch messages pass clean
+2026-11-12 13:56:20 [lean] raw size: 1.0G	/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/raw/hero9_swap
+2026-11-12 13:56:29 [lean] grading
+2026-11-12 13:58:52 [lean] grading: 2026-11-12 13:58:51 done, spent $2.19
+2026-11-12 13:58:58 [lean] scored: 658 rows -> results/hero9_swap.csv; found 6595, launched 6580, lost: context window exceeded 72, lost: crash 1, lost: cut off, no final state 18, lost: cut off, no full final state 2, lost: no value for the measure 52, lost: provider failure 15, lost: step cap, no report 2, scored 6433
+2026-11-12 13:59:00 [lean] chart: wrote results/hero9_swap_summary.md
+2026-11-12 13:59:00 [lean] DONE (not committed: the parent session commits)
