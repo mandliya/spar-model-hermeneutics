@@ -1,0 +1,3 @@
+658 resumes, 6580 continuations -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/logs/hero9_swap/commands_20261110-181729.txt
+  gemma    3290 continuations (151 as the source itself, 178 as the other hero)
+  qwen36   3290 continuations (178 as the source itself, 151 as the other hero)

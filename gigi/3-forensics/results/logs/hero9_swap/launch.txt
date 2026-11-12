@@ -719,3 +719,11 @@
 2026-11-11 14:34:37 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-8_K12__qwen36.log (by hand, after the 13:40 network drop)
 2026-11-11 14:35:07 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-8_K12__gemma.log (by hand, after the 13:40 network drop)
 2026-11-11 14:35:37 launched grade_your_own__qwen36_2026-11-10_12-21-22-847721_run-1_K66__qwen36.log (by hand, after the 13:40 network drop)
+2026-11-12 07:06:45 launched currency_conversion__gemma_2026-10-20_12-59-32-510865_run-20_K1__gemma__topup_20261111.log
+2026-11-12 07:07:10 launched eval_tampering__gemma_2026-10-20_12-58-48-591244_run-18_K1__gemma__topup_20261111.log
+2026-11-12 07:07:35 launched coding__qwen36_2026-11-10_12-20-35-232332_run-12_K9__gemma__topup_20261111.log
+2026-11-12 07:08:00 launched coding__qwen36_2026-11-10_12-20-35-232332_run-6_K12__gemma__topup_20261111.log
+2026-11-12 07:08:25 launched coding__qwen36_2026-11-10_12-20-35-232332_run-11_K5__gemma__topup_20261111.log
+2026-11-12 07:08:50 launched currency_conversion__qwen36_2026-11-10_12-22-47-507049_run-7_K5__gemma__topup_20261111.log
+2026-11-12 07:09:15 launched funding_email__qwen36_2026-11-10_12-23-11-752029_run-6_K11__qwen36__topup_20261111.log
+2026-11-12 07:09:15 all launched (commands_topup_20261111.txt, paced)

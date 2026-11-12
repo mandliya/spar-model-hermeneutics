@@ -1,0 +1,7 @@
+2026-11-12 07:09:15 topup launches done
+2026-11-12 08:00:09 chain done
+2026-11-12 08:36:16 regrade start
+2026-11-12 08:58:36 regrade grading: 2026-11-12 08:58:36 done, spent $167.12
+2026-11-12 08:58:44 scored: 658 rows -> results/hero9_swap.csv; found 6580, launched 6580, lost: context window exceeded 70, lost: crash 1, lost: cut off, no final state 18, lost: cut off, no full final state 2, lost: no value for the measure 52, lost: provider failure 14, lost: step cap, no report 2, scored 6421
+wrote dashboard/hero9_swap.html: 55 swap rows, 29 plain rows, 6421 scored
+2026-11-12 08:58:44 regrade done

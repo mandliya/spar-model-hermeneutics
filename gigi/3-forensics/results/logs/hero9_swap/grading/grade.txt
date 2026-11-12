@@ -20,3 +20,25 @@
 2026-11-11 16:41:30 leaked_fix: 24 fleets, exit 1, spent so far $94.83
 2026-11-11 16:41:38 stripped_engine: 12 fleets, exit 1, spent so far $94.83
 2026-11-11 16:41:38 done, spent $94.83
+2026-11-12 07:49:58 estimate dashboard_perf: 142 ungraded runs in 30 fleets, ~$140.62
+2026-11-12 07:49:58 estimate grade_your_own: 213 ungraded runs in 22 fleets, ~$184.19
+2026-11-12 07:49:58 estimate leaked_fix: 27 ungraded runs in 24 fleets, ~$9.26
+2026-11-12 07:49:58 estimate stripped_engine: 99 ungraded runs in 12 fleets, ~$76.63
+2026-11-12 07:49:58 estimate total (swap hero9_swap, results/raw/hero9_swap): 481 ungraded runs in 88 fleets, ~$410.70
+2026-11-12 07:49:58 start: 88 fleets in 4 environments, cap $1200.0, judge claude-opus-4-8
+2026-11-12 07:55:45 dashboard_perf: 30 fleets, exit 0, spent so far $46.54
+2026-11-12 07:59:48 grade_your_own: 22 fleets, exit 1, spent so far $66.48
+2026-11-12 07:59:51 leaked_fix: 24 fleets, exit 1, spent so far $66.48
+2026-11-12 07:59:59 stripped_engine: 12 fleets, exit 1, spent so far $66.48
+2026-11-12 07:59:59 done, spent $66.48
+2026-11-12 08:36:16 estimate dashboard_perf: 35 ungraded runs in 30 fleets, ~$53.61
+2026-11-12 08:36:16 estimate grade_your_own: 183 ungraded runs in 22 fleets, ~$156.42
+2026-11-12 08:36:16 estimate leaked_fix: 27 ungraded runs in 24 fleets, ~$9.26
+2026-11-12 08:36:16 estimate stripped_engine: 99 ungraded runs in 12 fleets, ~$76.63
+2026-11-12 08:36:16 estimate total (swap hero9_swap, results/raw/hero9_swap): 344 ungraded runs in 88 fleets, ~$295.92
+2026-11-12 08:36:16 start: 88 fleets in 4 environments, cap $800.0, judge claude-opus-4-8
+2026-11-12 08:36:18 dashboard_perf: 30 fleets, exit 0, spent so far $0.00
+2026-11-12 08:51:28 grade_your_own: 22 fleets, exit 0, spent so far $116.94
+2026-11-12 08:53:55 leaked_fix: 24 fleets, exit 0, spent so far $124.19
+2026-11-12 08:58:36 stripped_engine: 12 fleets, exit 0, spent so far $167.12
+2026-11-12 08:58:36 done, spent $167.12

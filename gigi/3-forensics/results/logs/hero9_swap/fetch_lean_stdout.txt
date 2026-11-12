@@ -1,0 +1,875 @@
+2026-11-11 13:21:37 [state] start: 609 fleets (1 launch logs skipped: app still running)
+2026-11-11 13:23:07 [state] 50 of 609 fleets, 523 new files, 0 failed, 3.8 GB free
+2026-11-11 13:24:14 [state] 100 of 609 fleets, 1082 new files, 0 failed, 3.8 GB free
+2026-11-11 13:25:36 [state] 150 of 609 fleets, 1605 new files, 0 failed, 3.8 GB free
+2026-11-11 13:25:45 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_18-24-15-683712: please contact support@modal.com (Error code: S74P4A0G)
+2026-11-11 13:26:59 [state] 200 of 609 fleets, 2137 new files, 1 failed, 3.4 GB free
+2026-11-11 13:28:22 [state] 250 of 609 fleets, 2643 new files, 1 failed, 3.5 GB free
+2026-11-11 13:29:22 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-08-41-693750: please contact support@modal.com (Error code: 00PPVOHZ)
+2026-11-11 13:29:46 [state] 300 of 609 fleets, 3142 new files, 2 failed, 3.6 GB free
+2026-11-11 13:31:08 [state] 350 of 609 fleets, 3802 new files, 2 failed, 3.7 GB free
+2026-11-11 13:32:20 [state] 400 of 609 fleets, 4302 new files, 2 failed, 3.7 GB free
+2026-11-11 13:32:47 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-40-42-513235: please contact support@modal.com (Error code: JRAH2TR9)
+2026-11-11 13:33:32 [state] 450 of 609 fleets, 4792 new files, 3 failed, 3.7 GB free
+2026-11-11 13:35:24 [state] 500 of 609 fleets, 5484 new files, 3 failed, 3.6 GB free
+2026-11-11 13:37:54 [state] 550 of 609 fleets, 6402 new files, 3 failed, 3.5 GB free
+2026-11-11 13:38:13 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-31-53-694176: Received GOAWAY frame, closing connection; error_code: 0
+2026-11-11 13:38:13 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-27-18-326883: Received GOAWAY frame, closing connection; error_code: 0
+2026-11-11 13:38:13 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-33-10-565814: Received GOAWAY frame, closing connection; error_code: 0
+2026-11-11 13:39:01 [state] 600 of 609 fleets, 7032 new files, 6 failed, 3.5 GB free
+2026-11-11 13:39:19 [state] PASS DONE: 603 fleets, 7122 new files, 6 failed, 1 logs skipped (running)
+2026-11-11 13:40:08 [state] start: 640 fleets (7 launch logs skipped: app still running)
+2026-11-11 13:40:45 [state] 50 of 640 fleets, 40 new files, 0 failed, 3.4 GB free
+2026-11-11 13:41:21 [state] 100 of 640 fleets, 110 new files, 0 failed, 3.5 GB free
+2026-11-11 13:41:33 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_07-52-30-220476: please contact support@modal.com (Error code: ZI2AW2LE)
+2026-11-11 13:41:49 [state] 150 of 640 fleets, 140 new files, 1 failed, 3.5 GB free
+2026-11-11 13:42:25 [state] 200 of 640 fleets, 147 new files, 1 failed, 3.5 GB free
+2026-11-11 13:43:00 [state] 250 of 640 fleets, 157 new files, 1 failed, 3.5 GB free
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-26-32-149065: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-22-29-862717: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-21-39-982874: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-19-59-579861: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-19-34-698632: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-21-14-765763: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-22-04-758133: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-18-21-175437: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_20-58-38-699389: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-11-48-625632: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-18-45-025541: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-20-49-706079: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-25-42-172042: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-19-09-943588: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-20-24-727029: Connection lost
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-24-12-314873: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-23-47-716501: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-23-22-306034: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-22-54-783992: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-11-21-969017: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-10-57-251453: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-10-31-951151: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-10-05-688877: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-25-52-528538: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-25-27-605420: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-25-02-582022: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-24-37-466940: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-27-32-684567: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-27-07-564954: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-26-42-701241: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-26-17-467462: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-29-12-832644: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-28-47-776854: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-28-22-656976: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-27-57-562295: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-30-55-299385: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-30-30-280991: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-30-05-879013: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-29-37-808185: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-48-08-662301: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-47-43-793676: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-47-18-422944: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-46-53-456298: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-37-49-875472: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_13-37-24-797647: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:18 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-48-33-133448: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-26-07-062523: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] 300 of 640 fleets, 157 new files, 48 failed, 3.5 GB free
+2026-11-11 13:46:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-00-44-882267: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-01-09-871621: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_20-59-54-601171: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-01-35-368403: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-01-59-519537: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-02-24-694048: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-02-49-705735: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-03-14-533427: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-03-41-725082: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-07-58-724932: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-07-37-484541: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-07-08-215592: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-06-36-438583: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-07-02-950155: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:19 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-05-47-716726: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-06-14-201156: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-08-19-361756: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-08-41-693750: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-07-28-413903: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-07-52-882297: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-09-58-131110: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-10-24-593033: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-09-08-297218: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-09-32-364958: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-11-39-855814: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-12-05-784991: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-10-51-218750: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-11-15-686417: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-27-22-161235: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-13-45-277019: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:20 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-12-29-953132: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-12-54-988735: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-15-00-233476: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-15-25-598846: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-14-11-354765: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-14-35-580769: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-16-40-331286: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-17-07-738448: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-27-47-240748: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-16-15-566732: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-18-22-728653: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-23-18-137542: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-17-32-280888: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-17-57-280753: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-24-32-819028: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-24-57-943887: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-28-12-395337: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-24-07-938892: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-04-56-455384: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-05-21-696672: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] 350 of 640 fleets, 157 new files, 98 failed, 3.5 GB free
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-04-06-494877: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-04-31-429533: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-27-52-763483: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-28-19-674410: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-27-03-122803: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-27-27-740645: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-26-13-038239: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-26-38-062597: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-25-22-899468: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-25-47-671708: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-29-35-231398: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-30-00-558452: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:21 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-28-45-230769: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-29-09-994955: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-31-15-139659: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-31-40-197757: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-30-25-215218: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-30-50-225459: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-32-55-368898: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-33-20-567606: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-32-06-050436: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-32-30-508741: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-34-35-903480: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-35-02-573799: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-33-45-625934: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-34-10-662428: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-28-37-210283: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_13-29-02-272071: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:22 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-35-27-493080: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-35-52-773626: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-37-57-795948: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-38-22-886788: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-37-07-688812: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-37-33-153904: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-39-37-861481: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-40-03-019427: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-38-47-702535: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-39-14-362936: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-18-06-995177: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-17-43-829521: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-09-38-101287: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-09-14-003789: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-08-47-874283: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-08-23-021994: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-18-57-279209: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:23 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-18-31-896825: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-19-47-113757: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-19-22-123171: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-20-36-974652: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-20-11-932199: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] 400 of 640 fleets, 157 new files, 148 failed, 3.5 GB free
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-11-25-976895: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-11-00-565324: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-10-37-209396: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-10-09-978297: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-13-07-140756: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-12-42-595312: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-12-18-320280: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-11-53-874777: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-17-17-148049: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-16-51-795871: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-16-28-110163: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-16-01-600930: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-15-37-112783: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-15-11-611193: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-14-46-163361: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-14-21-306155: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-13-57-409147: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-13-32-334489: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-22-19-426163: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-21-51-931031: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-21-27-013671: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-21-01-956801: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-23-58-944823: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-23-34-177855: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-23-09-077826: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-22-43-912569: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:24 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-25-39-960809: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-25-14-299758: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-24-49-200563: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-24-24-199967: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-27-19-287834: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-26-56-167936: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-26-29-447396: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-26-04-327574: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-28-59-497307: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-28-34-443614: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-28-09-797176: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-27-44-412027: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-30-40-043020: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-30-14-733410: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-29-49-592486: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-29-26-369210: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:25 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-32-21-652046: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-31-55-479111: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-31-29-769750: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-31-04-883495: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-34-01-882791: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-33-37-763438: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-33-12-010514: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-32-46-738594: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] 450 of 640 fleets, 157 new files, 198 failed, 3.5 GB free
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-35-43-545309: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-35-16-862459: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-34-51-814083: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-34-26-852527: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-37-22-023627: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-36-58-205032: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-36-32-323216: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-36-06-834869: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-40-42-513235: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-40-25-595820: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-39-52-380498: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-39-27-741069: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-39-02-411665: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-38-37-018055: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-38-11-924248: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-37-47-422135: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-42-33-312972: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-41-58-112495: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-41-36-306161: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-41-08-596132: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-44-07-974795: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-43-43-982566: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-43-20-107199: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-42-56-293669: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:26 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-45-47-366397: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-45-22-256647: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-45-00-556787: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-44-34-845848: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_13-38-39-832005: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-42-10-128614: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-42-35-339849: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-43-00-231311: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-43-25-434791: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-43-50-647437: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-44-16-086900: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-29-27-420233: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-45-05-765869: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-41-18-450130: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-41-45-526735: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-40-28-286254: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:27 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-40-53-202439: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-13-05-174183: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-12-40-083250: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-12-15-249479: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-15-35-132121: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-15-10-268800: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-14-45-574849: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-14-20-178710: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-13-55-046761: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-13-31-455166: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] 500 of 640 fleets, 157 new files, 248 failed, 3.5 GB free
+2026-11-11 13:46:28 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-46-20-867142: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-46-46-113450: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-45-33-315488: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-45-56-097242: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-48-00-971156: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-48-28-926970: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:28 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-47-12-503029: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-47-36-068129: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-49-43-728017: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-50-08-633183: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-29-52-536901: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-49-18-434880: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-51-25-165380: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-51-48-771195: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-50-35-644602: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-50-59-623513: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-53-03-934582: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-53-28-781232: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-52-13-775026: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-52-39-361294: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-53-56-407538: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-54-19-036143: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-30-18-480254: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-55-11-636811: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-56-26-822990: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-56-55-759338: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-55-37-071070: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-56-01-924856: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-57-19-099421: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-57-42-070663: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-58-07-034294: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-58-32-372261: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-17-15-678411: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-16-50-768563: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-18-05-629036: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-17-40-560672: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-18-55-933975: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-18-30-757082: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:29 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-19-47-074529: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-19-20-709550: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-16-26-041676: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-16-00-419985: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-00-37-630423: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-01-03-442666: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-01-28-366164: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-01-54-800439: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-59-46-996020: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-00-13-624835: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-58-57-963852: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-59-22-155078: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] 550 of 640 fleets, 157 new files, 298 failed, 3.5 GB free
+2026-11-11 13:46:30 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-02-20-439610: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-02-46-290569: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-03-13-332003: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-03-37-292985: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:30 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-21-26-081877: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-21-01-427421: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-20-36-702234: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-20-10-748604: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-03-59-817450: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-04-24-793232: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-04-49-627738: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-05-14-453547: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-05-40-028576: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-06-05-242169: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-06-30-112581: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-06-54-925027: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-07-20-168636: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-07-45-052298: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-23-07-796411: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-22-42-734918: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-22-17-883373: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:31 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-21-50-824721: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-09-02-820063: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-09-27-483573: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-09-53-442996: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-10-17-294942: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-10-42-200526: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-11-07-419513: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-11-32-468417: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-11-57-538868: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_22-08-10-038004: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-08-37-876707: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-44-53-540039: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-44-28-379345: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-24-48-193981: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-24-22-882010: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-23-58-877988: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-23-34-238691: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-26-27-895505: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-26-02-989900: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-25-37-977351: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-25-13-251235: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-28-08-095190: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-27-43-106358: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-27-18-326883: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-26-53-044660: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-29-48-420611: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-29-23-147634: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-28-58-215047: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-28-33-790795: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] 600 of 640 fleets, 157 new files, 348 failed, 3.5 GB free
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-31-28-281194: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-31-03-323665: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:32 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-30-38-340766: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-30-13-344575: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-33-10-565814: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-32-45-506728: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-32-20-416353: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-31-53-694176: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-45-43-448618: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-45-18-400532: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-46-33-609702: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-46-08-450760: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-34-50-858794: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-34-25-660604: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-34-00-551950: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-33-35-881431: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-44-03-372227: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-43-38-303223: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:33 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-36-30-867612: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-36-05-904473: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-35-40-891087: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-35-15-953737: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-47-23-511087: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-46-59-141784: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-38-10-885191: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-37-46-050636: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-37-20-951714: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-36-55-893029: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-39-51-150083: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-39-26-489792: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-39-01-164891: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-38-36-063984: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-41-31-357295: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-41-06-239699: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-40-41-953067: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-40-16-225656: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-43-13-312799: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-42-48-434935: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-42-23-560787: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-41-56-323616: [Errno 8] nodename nor servname provided, or not known
+2026-11-11 13:46:34 [state] PASS DONE: 252 fleets, 157 new files, 388 failed, 7 logs skipped (running)
+Traceback (most recent call last):
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 130, in <module>
+    main()
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 99, in main
+    live = running_apps()
+           ^^^^^^^^^^^^^^
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 94, in running_apps
+    return {a.get("app_id") or a.get("App ID") for a in json.loads(out)
+                                                        ^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 356, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 130, in <module>
+    main()
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 99, in main
+    live = running_apps()
+           ^^^^^^^^^^^^^^
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 94, in running_apps
+    return {a.get("app_id") or a.get("App ID") for a in json.loads(out)
+                                                        ^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 356, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 130, in <module>
+    main()
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 99, in main
+    live = running_apps()
+           ^^^^^^^^^^^^^^
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 94, in running_apps
+    return {a.get("app_id") or a.get("App ID") for a in json.loads(out)
+                                                        ^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 356, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 130, in <module>
+    main()
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 99, in main
+    live = running_apps()
+           ^^^^^^^^^^^^^^
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 94, in running_apps
+    return {a.get("app_id") or a.get("App ID") for a in json.loads(out)
+                                                        ^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 356, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 130, in <module>
+    main()
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 99, in main
+    live = running_apps()
+           ^^^^^^^^^^^^^^
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 94, in running_apps
+    return {a.get("app_id") or a.get("App ID") for a in json.loads(out)
+                                                        ^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 356, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 130, in <module>
+    main()
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 99, in main
+    live = running_apps()
+           ^^^^^^^^^^^^^^
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 94, in running_apps
+    return {a.get("app_id") or a.get("App ID") for a in json.loads(out)
+                                                        ^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 356, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 130, in <module>
+    main()
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 99, in main
+    live = running_apps()
+           ^^^^^^^^^^^^^^
+  File "/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/agent-interp-envs/../scripts/hero9_swap_fetch_lean.py", line 94, in running_apps
+    return {a.get("app_id") or a.get("App ID") for a in json.loads(out)
+                                                        ^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gg/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 356, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-11 13:58:23 [messages] start: 652 fleets (1 launch logs skipped: app still running)
+2026-11-11 14:01:16 [messages] 50 of 652 fleets, 468 new files, 0 failed, 3.2 GB free
+2026-11-11 14:02:37 [messages] 100 of 652 fleets, 967 new files, 0 failed, 3.2 GB free
+2026-11-11 14:03:52 [messages] 150 of 652 fleets, 1489 new files, 0 failed, 3.2 GB free
+2026-11-11 14:05:15 [messages] 200 of 652 fleets, 1988 new files, 0 failed, 3.2 GB free
+2026-11-11 14:06:37 [messages] 250 of 652 fleets, 2493 new files, 0 failed, 3.2 GB free
+2026-11-11 14:08:02 [messages] 300 of 652 fleets, 2986 new files, 0 failed, 3.1 GB free
+2026-11-11 14:09:25 [messages] 350 of 652 fleets, 3564 new files, 0 failed, 3.1 GB free
+2026-11-11 14:10:47 [messages] 400 of 652 fleets, 4094 new files, 0 failed, 3.1 GB free
+2026-11-11 14:12:06 [messages] 450 of 652 fleets, 4594 new files, 0 failed, 3.1 GB free
+2026-11-11 14:13:45 [messages] 500 of 652 fleets, 5216 new files, 0 failed, 3.0 GB free
+2026-11-11 14:15:04 [messages] 550 of 652 fleets, 5746 new files, 0 failed, 3.0 GB free
+2026-11-11 14:16:15 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-25-13-251235: Received GOAWAY frame, closing connection; error_code: 0
+2026-11-11 14:16:15 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-04-24-793232: Received GOAWAY frame, closing connection; error_code: 0
+2026-11-11 14:16:15 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-25-37-977351: Received GOAWAY frame, closing connection; error_code: 0
+2026-11-11 14:16:15 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-24-22-882010: Received GOAWAY frame, closing connection; error_code: 0
+2026-11-11 14:16:15 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-11_11-24-48-193981: Received GOAWAY frame, closing connection; error_code: 0
+2026-11-11 14:16:31 [messages] 600 of 652 fleets, 6166 new files, 5 failed, 2.9 GB free
+2026-11-11 14:17:56 [messages] 650 of 652 fleets, 6683 new files, 5 failed, 2.8 GB free
+2026-11-11 14:17:59 [messages] PASS DONE: 647 fleets, 6703 new files, 5 failed, 1 logs skipped (running)
+2026-11-11 14:18:39 [messages] start: 652 fleets (1 launch logs skipped: app still running)
+2026-11-11 14:19:08 [messages] 50 of 652 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:19:37 [messages] 100 of 652 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:20:02 [messages] 150 of 652 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:20:32 [messages] 200 of 652 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:20:58 [messages] 250 of 652 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:21:27 [messages] 300 of 652 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:21:59 [messages] 350 of 652 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:22:28 [messages] 400 of 652 fleets, 0 new files, 0 failed, 2.5 GB free
+2026-11-11 14:22:53 [messages] 450 of 652 fleets, 0 new files, 0 failed, 2.5 GB free
+2026-11-11 14:23:23 [messages] 500 of 652 fleets, 0 new files, 0 failed, 2.5 GB free
+2026-11-11 14:24:00 [messages] 550 of 652 fleets, 0 new files, 0 failed, 2.5 GB free
+2026-11-11 14:24:37 [messages] 600 of 652 fleets, 0 new files, 0 failed, 2.4 GB free
+2026-11-11 14:25:09 [messages] 650 of 652 fleets, 44 new files, 0 failed, 2.5 GB free
+2026-11-11 14:25:10 [messages] PASS DONE: 652 fleets, 44 new files, 0 failed, 1 logs skipped (running)
+2026-11-11 14:25:41 [state] start: 652 fleets (0 launch logs skipped: app still running)
+2026-11-11 14:26:09 [state] 50 of 652 fleets, 0 new files, 0 failed, 2.4 GB free
+2026-11-11 14:26:40 [state] 100 of 652 fleets, 0 new files, 0 failed, 2.5 GB free
+2026-11-11 14:27:09 [state] 150 of 652 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:27:40 [state] 200 of 652 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:28:05 [state] 250 of 652 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:28:32 [state] 300 of 652 fleets, 0 new files, 0 failed, 3.0 GB free
+2026-11-11 14:28:58 [state] 350 of 652 fleets, 0 new files, 0 failed, 3.0 GB free
+2026-11-11 14:29:29 [state] 400 of 652 fleets, 0 new files, 0 failed, 3.0 GB free
+2026-11-11 14:29:54 [state] 450 of 652 fleets, 0 new files, 0 failed, 3.0 GB free
+2026-11-11 14:30:25 [state] 500 of 652 fleets, 0 new files, 0 failed, 2.9 GB free
+2026-11-11 14:31:02 [state] 550 of 652 fleets, 0 new files, 0 failed, 3.0 GB free
+2026-11-11 14:31:33 [state] 600 of 652 fleets, 0 new files, 0 failed, 3.0 GB free
+2026-11-11 14:31:58 [state] 650 of 652 fleets, 0 new files, 0 failed, 3.0 GB free
+2026-11-11 14:31:59 [state] PASS DONE: 652 fleets, 0 new files, 0 failed, 0 logs skipped (running)
+2026-11-11 14:32:42 [messages] start: 652 fleets (0 launch logs skipped: app still running)
+2026-11-11 14:33:10 [messages] 50 of 652 fleets, 0 new files, 0 failed, 3.0 GB free
+2026-11-11 14:33:38 [messages] 100 of 652 fleets, 0 new files, 0 failed, 3.0 GB free
+2026-11-11 14:34:03 [messages] 150 of 652 fleets, 0 new files, 0 failed, 3.0 GB free
+2026-11-11 14:34:23 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_18-25-05-905282: please contact support@modal.com (Error code: KTT2U1GK)
+2026-11-11 14:34:31 [messages] 200 of 652 fleets, 0 new files, 1 failed, 2.9 GB free
+2026-11-11 14:34:56 [messages] 250 of 652 fleets, 0 new files, 1 failed, 2.9 GB free
+2026-11-11 14:35:26 [messages] 300 of 652 fleets, 0 new files, 1 failed, 2.9 GB free
+2026-11-11 14:35:55 [messages] 350 of 652 fleets, 0 new files, 1 failed, 2.9 GB free
+2026-11-11 14:36:24 [messages] 400 of 652 fleets, 0 new files, 1 failed, 2.9 GB free
+2026-11-11 14:36:52 [messages] 450 of 652 fleets, 0 new files, 1 failed, 2.9 GB free
+2026-11-11 14:37:23 [messages] 500 of 652 fleets, 0 new files, 1 failed, 2.9 GB free
+2026-11-11 14:37:59 [messages] 550 of 652 fleets, 0 new files, 1 failed, 2.8 GB free
+2026-11-11 14:38:30 [messages] 600 of 652 fleets, 0 new files, 1 failed, 2.8 GB free
+2026-11-11 14:38:58 [messages] 650 of 652 fleets, 0 new files, 1 failed, 2.8 GB free
+2026-11-11 14:38:58 [messages] PASS DONE: 651 fleets, 0 new files, 1 failed, 0 logs skipped (running)
+2026-11-11 14:40:12 [messages] start: 658 fleets (0 launch logs skipped: app still running)
+2026-11-11 14:40:40 [messages] 50 of 658 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:41:12 [messages] 100 of 658 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:41:38 [messages] 150 of 658 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:42:08 [messages] 200 of 658 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:42:35 [messages] 250 of 658 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:43:01 [messages] 300 of 658 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:43:33 [messages] 350 of 658 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:44:01 [messages] 400 of 658 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:44:28 [messages] 450 of 658 fleets, 0 new files, 0 failed, 2.8 GB free
+2026-11-11 14:45:04 [messages] 500 of 658 fleets, 2 new files, 0 failed, 2.8 GB free
+2026-11-11 14:45:53 [messages] 550 of 658 fleets, 154 new files, 0 failed, 2.8 GB free
+2026-11-11 14:46:28 [messages] 600 of 658 fleets, 154 new files, 0 failed, 2.8 GB free
+2026-11-11 14:46:54 [messages] 650 of 658 fleets, 154 new files, 0 failed, 2.8 GB free
+2026-11-11 14:46:59 [messages] PASS DONE: 658 fleets, 154 new files, 0 failed, 0 logs skipped (running)
+2026-11-11 15:04:05 [state] start: 658 fleets (0 launch logs skipped: app still running)
+2026-11-11 15:04:35 [state] 50 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:04:50 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_06-30-09-826756: please contact support@modal.com (Error code: 4C739LZH)
+2026-11-11 15:05:02 [state] 100 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:05:30 [state] 150 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:05:33 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-05-54-749879: please contact support@modal.com (Error code: 75IU15AH)
+2026-11-11 15:05:38 [state] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-04-39-539019: please contact support@modal.com (Error code: NB4K4WA4)
+2026-11-11 15:06:00 [state] 200 of 658 fleets, 0 new files, 3 failed, 2.7 GB free
+2026-11-11 15:06:05 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_18-23-51-111572: please contact support@modal.com (Error code: LPKXOUVC)
+2026-11-11 15:06:13 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_19-04-12-533593: please contact support@modal.com (Error code: I49CG1OR)
+2026-11-11 15:06:16 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_20-52-22-233609: please contact support@modal.com (Error code: 4NB9QHOL)
+2026-11-11 15:06:17 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_20-51-06-574265: please contact support@modal.com (Error code: FA444GFH)
+2026-11-11 15:06:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_20-55-18-157036: please contact support@modal.com (Error code: OUZ7HPWS)
+2026-11-11 15:06:25 [state] 250 of 658 fleets, 0 new files, 8 failed, 2.7 GB free
+2026-11-11 15:06:49 [state] 300 of 658 fleets, 0 new files, 8 failed, 2.7 GB free
+2026-11-11 15:07:19 [state] 350 of 658 fleets, 0 new files, 8 failed, 2.7 GB free
+2026-11-11 15:07:34 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-34-10-662428: please contact support@modal.com (Error code: U7U3Y5CJ)
+2026-11-11 15:07:37 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-35-52-773626: please contact support@modal.com (Error code: N6DV2BHY)
+2026-11-11 15:07:48 [state] 400 of 658 fleets, 0 new files, 10 failed, 2.7 GB free
+2026-11-11 15:08:14 [state] 450 of 658 fleets, 0 new files, 10 failed, 2.7 GB free
+2026-11-11 15:08:45 [state] 500 of 658 fleets, 0 new files, 10 failed, 2.7 GB free
+2026-11-11 15:09:28 [state] 550 of 658 fleets, 0 new files, 10 failed, 2.7 GB free
+2026-11-11 15:10:02 [state] 600 of 658 fleets, 0 new files, 10 failed, 2.7 GB free
+2026-11-11 15:10:29 [state] 650 of 658 fleets, 0 new files, 10 failed, 2.7 GB free
+2026-11-11 15:10:32 [state] PASS DONE: 648 fleets, 0 new files, 10 failed, 0 logs skipped (running)
+2026-11-11 15:11:35 [state] start: 658 fleets (0 launch logs skipped: app still running)
+2026-11-11 15:12:04 [state] 50 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:12:33 [state] 100 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:12:59 [state] 150 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:13:31 [state] 200 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:13:55 [state] 250 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:14:20 [state] 300 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:14:31 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-07-52-882297: please contact support@modal.com (Error code: SYKPBVNS)
+2026-11-11 15:14:49 [state] 350 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:15:17 [state] 400 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:15:46 [state] 450 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:16:10 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-40-28-286254: please contact support@modal.com (Error code: VGN9Z103)
+2026-11-11 15:16:15 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-41-18-450130: please contact support@modal.com (Error code: 5IRN1QTN)
+2026-11-11 15:16:15 [state] 500 of 658 fleets, 0 new files, 3 failed, 2.7 GB free
+2026-11-11 15:16:56 [state] 550 of 658 fleets, 0 new files, 3 failed, 2.7 GB free
+2026-11-11 15:17:21 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-10_22-06-54-925027: please contact support@modal.com (Error code: EOKDC2Z2)
+2026-11-11 15:17:31 [state] 600 of 658 fleets, 0 new files, 4 failed, 2.7 GB free
+2026-11-11 15:17:44 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-43-38-303223: please contact support@modal.com (Error code: F9UZIHQF)
+2026-11-11 15:17:58 [state] 650 of 658 fleets, 0 new files, 5 failed, 2.7 GB free
+2026-11-11 15:18:01 [state] PASS DONE: 653 fleets, 0 new files, 5 failed, 0 logs skipped (running)
+2026-11-11 15:19:06 [state] start: 658 fleets (0 launch logs skipped: app still running)
+2026-11-11 15:19:34 [state] 50 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:20:03 [state] 100 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:20:27 [state] 150 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:20:58 [state] 200 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:21:24 [state] 250 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:21:48 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_08-46-53-456298: please contact support@modal.com (Error code: C1Q4T8P5)
+2026-11-11 15:21:51 [state] 300 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:22:20 [state] 350 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:22:48 [state] 400 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:23:16 [state] 450 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:23:48 [state] 500 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:24:25 [state] 550 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:24:59 [state] 600 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:25:24 [state] 650 of 658 fleets, 0 new files, 1 failed, 2.7 GB free
+2026-11-11 15:25:25 [state] PASS DONE: 657 fleets, 0 new files, 1 failed, 0 logs skipped (running)
+2026-11-11 15:26:36 [state] start: 658 fleets (0 launch logs skipped: app still running)
+2026-11-11 15:27:06 [state] 50 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:27:37 [state] 100 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:28:06 [state] 150 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:28:37 [state] 200 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:29:03 [state] 250 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:29:29 [state] 300 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:29:59 [state] 350 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:30:29 [state] 400 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:30:59 [state] 450 of 658 fleets, 0 new files, 0 failed, 2.7 GB free
+2026-11-11 15:31:29 [state] 500 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:32:06 [state] 550 of 658 fleets, 0 new files, 0 failed, 3.3 GB free
+2026-11-11 15:32:38 [state] 600 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:33:04 [state] 650 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:33:07 [state] PASS DONE: 658 fleets, 0 new files, 0 failed, 0 logs skipped (running)
+2026-11-11 15:33:35 [messages] start: 658 fleets (0 launch logs skipped: app still running)
+2026-11-11 15:34:04 [messages] 50 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:34:33 [messages] 100 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:34:59 [messages] 150 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:35:28 [messages] 200 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:35:56 [messages] 250 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:36:21 [messages] 300 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:36:49 [messages] 350 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:39:07 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-18-06-995177: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-09-38-101287: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-37-57-795948: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-35-52-773626: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-17-43-829521: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-09-14-003789: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-38-22-886788: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-39-14-362936: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-40-03-019427: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-37-07-688812: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-10_21-37-33-153904: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-11_13-28-37-210283: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-11_10-08-47-874283: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-38-47-702535: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-35-27-493080: Connection lost
+2026-11-11 15:39:07 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-39-37-861481: Connection lost
+2026-11-11 15:39:16 [messages] 400 of 658 fleets, 0 new files, 16 failed, 3.2 GB free
+2026-11-11 15:39:46 [messages] 450 of 658 fleets, 0 new files, 16 failed, 3.2 GB free
+2026-11-11 15:40:18 [messages] 500 of 658 fleets, 0 new files, 16 failed, 3.2 GB free
+2026-11-11 15:40:56 [messages] 550 of 658 fleets, 0 new files, 16 failed, 3.2 GB free
+2026-11-11 15:41:31 [messages] 600 of 658 fleets, 0 new files, 16 failed, 3.2 GB free
+2026-11-11 15:41:57 [messages] 650 of 658 fleets, 0 new files, 16 failed, 3.2 GB free
+2026-11-11 15:42:01 [messages] PASS DONE: 642 fleets, 0 new files, 16 failed, 0 logs skipped (running)
+2026-11-11 15:43:06 [messages] start: 658 fleets (0 launch logs skipped: app still running)
+2026-11-11 15:43:36 [messages] 50 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:44:07 [messages] 100 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:44:34 [messages] 150 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:45:06 [messages] 200 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:45:33 [messages] 250 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:46:00 [messages] 300 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:46:32 [messages] 350 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:47:01 [messages] 400 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:47:30 [messages] 450 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:48:05 [messages] 500 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:48:48 [messages] 550 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:49:24 [messages] 600 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:49:51 [messages] 650 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:49:54 [messages] PASS DONE: 658 fleets, 0 new files, 0 failed, 0 logs skipped (running)
+2026-11-11 15:50:08 [state] start: 658 fleets (0 launch logs skipped: app still running)
+2026-11-11 15:50:39 [state] 50 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:51:10 [state] 100 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:51:36 [state] 150 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:52:08 [state] 200 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:52:35 [state] 250 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:53:05 [state] 300 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:53:36 [state] 350 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:54:02 [state] 400 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:54:29 [state] 450 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:55:00 [state] 500 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:55:41 [state] 550 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:56:17 [state] 600 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:56:47 [state] 650 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:56:52 [state] PASS DONE: 658 fleets, 0 new files, 0 failed, 0 logs skipped (running)
+2026-11-11 15:57:09 [messages] start: 658 fleets (0 launch logs skipped: app still running)
+2026-11-11 15:57:41 [messages] 50 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:58:18 [messages] 100 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:58:51 [messages] 150 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 15:59:02 [messages] FAILED resume/google-gemma-3-27b-it/2026-11-11_08-06-19-969856: please contact support@modal.com (Error code: K5B24I8L)
+2026-11-11 15:59:27 [messages] 200 of 658 fleets, 0 new files, 1 failed, 3.2 GB free
+2026-11-11 15:59:54 [messages] 250 of 658 fleets, 0 new files, 1 failed, 3.2 GB free
+2026-11-11 16:00:23 [messages] 300 of 658 fleets, 0 new files, 1 failed, 3.2 GB free
+2026-11-11 16:00:56 [messages] 350 of 658 fleets, 0 new files, 1 failed, 3.2 GB free
+2026-11-11 16:01:28 [messages] 400 of 658 fleets, 0 new files, 1 failed, 3.2 GB free
+2026-11-11 16:01:58 [messages] FAILED resume/qwen-qwen3.6-27b/2026-11-11_10-33-37-763438: please contact support@modal.com (Error code: 96RNJ605)
+2026-11-11 16:01:58 [messages] 450 of 658 fleets, 0 new files, 2 failed, 3.2 GB free
+2026-11-11 16:02:35 [messages] 500 of 658 fleets, 0 new files, 2 failed, 3.2 GB free
+2026-11-11 16:03:24 [messages] 550 of 658 fleets, 0 new files, 2 failed, 3.2 GB free
+2026-11-11 16:04:08 [messages] 600 of 658 fleets, 0 new files, 2 failed, 3.2 GB free
+2026-11-11 16:04:38 [messages] 650 of 658 fleets, 0 new files, 2 failed, 3.2 GB free
+2026-11-11 16:04:40 [messages] PASS DONE: 656 fleets, 0 new files, 2 failed, 0 logs skipped (running)
+2026-11-11 16:05:39 [messages] start: 658 fleets (0 launch logs skipped: app still running)
+2026-11-11 16:06:10 [messages] 50 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:06:45 [messages] 100 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:07:14 [messages] 150 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:08:03 [messages] 200 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:08:33 [messages] 250 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:09:04 [messages] 300 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:09:39 [messages] 350 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:10:10 [messages] 400 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:10:39 [messages] 450 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:11:13 [messages] 500 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:12:20 [messages] 550 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:13:01 [messages] 600 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:13:35 [messages] 650 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
+2026-11-11 16:13:41 [messages] PASS DONE: 658 fleets, 0 new files, 0 failed, 0 logs skipped (running)
+2026-11-12 07:09:20 [state] start: 663 fleets (2 launch logs skipped: app still running)
+2026-11-12 07:10:00 [state] 50 of 663 fleets, 4 new files, 0 failed, 4.3 GB free
+2026-11-12 07:10:30 [state] 100 of 663 fleets, 21 new files, 0 failed, 4.3 GB free
+2026-11-12 07:10:58 [state] 150 of 663 fleets, 21 new files, 0 failed, 4.3 GB free
+2026-11-12 07:11:32 [state] 200 of 663 fleets, 21 new files, 0 failed, 4.4 GB free
+2026-11-12 07:11:59 [state] 250 of 663 fleets, 24 new files, 0 failed, 4.3 GB free
+2026-11-12 07:12:34 [state] 300 of 663 fleets, 24 new files, 0 failed, 4.3 GB free
+2026-11-12 07:12:42 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-03-14-533427: please contact support@modal.com (Error code: B5208WJ9)
+2026-11-12 07:13:04 [state] 350 of 663 fleets, 27 new files, 1 failed, 4.4 GB free
+2026-11-12 07:13:32 [state] 400 of 663 fleets, 27 new files, 1 failed, 4.4 GB free
+2026-11-12 07:14:02 [state] 450 of 663 fleets, 27 new files, 1 failed, 4.3 GB free
+2026-11-12 07:14:35 [state] 500 of 663 fleets, 27 new files, 1 failed, 4.3 GB free
+2026-11-12 07:15:21 [state] 550 of 663 fleets, 27 new files, 1 failed, 4.3 GB free
+2026-11-12 07:15:55 [state] 600 of 663 fleets, 27 new files, 1 failed, 4.3 GB free
+2026-11-12 07:16:03 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-26-53-044660: please contact support@modal.com (Error code: Z2N0PIT6)
+2026-11-12 07:16:24 [state] 650 of 663 fleets, 27 new files, 2 failed, 4.3 GB free
+2026-11-12 07:16:31 [state] PASS DONE: 661 fleets, 27 new files, 2 failed, 2 logs skipped (running)
+2026-11-12 07:17:49 [state] start: 665 fleets (0 launch logs skipped: app still running)
+2026-11-12 07:18:23 [state] 50 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:18:53 [state] 100 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:19:24 [state] 150 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:20:00 [state] 200 of 665 fleets, 0 new files, 0 failed, 4.3 GB free
+2026-11-12 07:20:31 [state] 250 of 665 fleets, 0 new files, 0 failed, 4.3 GB free
+2026-11-12 07:21:01 [state] 300 of 665 fleets, 0 new files, 0 failed, 4.3 GB free
+2026-11-12 07:21:39 [state] 350 of 665 fleets, 7 new files, 0 failed, 4.4 GB free
+2026-11-12 07:22:09 [state] 400 of 665 fleets, 7 new files, 0 failed, 4.4 GB free
+2026-11-12 07:22:43 [state] 450 of 665 fleets, 7 new files, 0 failed, 4.4 GB free
+2026-11-12 07:23:12 [state] 500 of 665 fleets, 7 new files, 0 failed, 4.3 GB free
+2026-11-12 07:24:00 [state] 550 of 665 fleets, 17 new files, 0 failed, 4.4 GB free
+2026-11-12 07:24:37 [state] 600 of 665 fleets, 17 new files, 0 failed, 4.4 GB free
+2026-11-12 07:25:07 [state] 650 of 665 fleets, 17 new files, 0 failed, 4.4 GB free
+2026-11-12 07:25:14 [state] PASS DONE: 665 fleets, 17 new files, 0 failed, 0 logs skipped (running)
+2026-11-12 07:25:49 [messages] start: 665 fleets (0 launch logs skipped: app still running)
+2026-11-12 07:26:22 [messages] 50 of 665 fleets, 4 new files, 0 failed, 4.4 GB free
+2026-11-12 07:26:50 [messages] 100 of 665 fleets, 21 new files, 0 failed, 4.4 GB free
+2026-11-12 07:27:17 [messages] 150 of 665 fleets, 21 new files, 0 failed, 4.4 GB free
+2026-11-12 07:27:56 [messages] 200 of 665 fleets, 21 new files, 0 failed, 4.4 GB free
+2026-11-12 07:28:23 [messages] 250 of 665 fleets, 24 new files, 0 failed, 4.4 GB free
+2026-11-12 07:28:56 [messages] 300 of 665 fleets, 24 new files, 0 failed, 4.4 GB free
+2026-11-12 07:29:26 [messages] 350 of 665 fleets, 34 new files, 0 failed, 4.4 GB free
+2026-11-12 07:29:56 [messages] 400 of 665 fleets, 34 new files, 0 failed, 4.4 GB free
+2026-11-12 07:30:23 [messages] 450 of 665 fleets, 34 new files, 0 failed, 4.4 GB free
+2026-11-12 07:30:50 [messages] 500 of 665 fleets, 34 new files, 0 failed, 4.4 GB free
+2026-11-12 07:31:50 [messages] 550 of 665 fleets, 44 new files, 0 failed, 4.4 GB free
+2026-11-12 07:32:30 [messages] 600 of 665 fleets, 44 new files, 0 failed, 4.4 GB free
+2026-11-12 07:32:57 [messages] 650 of 665 fleets, 44 new files, 0 failed, 4.4 GB free
+2026-11-12 07:33:08 [messages] PASS DONE: 665 fleets, 44 new files, 0 failed, 0 logs skipped (running)
+2026-11-12 07:33:52 [state] start: 665 fleets (0 launch logs skipped: app still running)
+2026-11-12 07:34:27 [state] 50 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:34:56 [state] 100 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:35:33 [state] 150 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:36:08 [state] 200 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:37:04 [state] 250 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:37:48 [state] 300 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:38:19 [state] 350 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:38:46 [state] 400 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:39:15 [state] 450 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:39:47 [state] 500 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:41:01 [state] 550 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:41:46 [state] 600 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:42:14 [state] 650 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:42:22 [state] PASS DONE: 665 fleets, 0 new files, 0 failed, 0 logs skipped (running)
+2026-11-12 07:42:52 [messages] start: 665 fleets (0 launch logs skipped: app still running)
+2026-11-12 07:43:24 [messages] 50 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:43:53 [messages] 100 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:44:25 [messages] 150 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:44:59 [messages] 200 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:45:28 [messages] 250 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:45:55 [messages] 300 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:46:28 [messages] 350 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:46:56 [messages] 400 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:47:25 [messages] 450 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:47:53 [messages] 500 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:48:35 [messages] 550 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:49:14 [messages] 600 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:49:41 [messages] 650 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:49:48 [messages] PASS DONE: 665 fleets, 0 new files, 0 failed, 0 logs skipped (running)

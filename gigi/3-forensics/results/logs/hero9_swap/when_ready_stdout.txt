@@ -1,0 +1,1 @@
+scripts/hero9_swap_when_ready.sh: line 42: 69449 Terminated: 15          bash "$HERE/scripts/hero9_swap.sh" --cap "$CAP" > "$L/launch_real.txt" 2>&1

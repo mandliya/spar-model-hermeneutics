@@ -1,0 +1,2 @@
+fetched async_conversion gemma_2026-10-20_12-57-30-154408_run-1_K40 gemma resume/google-gemma-3-27b-it/2026-11-10_18-17-35-549745: 2026-11-11 13:14:00 gigi-forensics-async-conversion:resume/google-gemma-3-27b-it/2026-11-10_18-17-35-549745: 985 new files, 12 already here (0 of them differ in size; local copy kept)
+/Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/scripts/hero9_swap_foldin.sh: line 49: 11040 Terminated: 15          python3 scripts/hero9_swap_score.py fetch

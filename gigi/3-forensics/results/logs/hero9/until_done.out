@@ -1,0 +1,9 @@
+2026-11-10 12:16:25 start (ceiling 4550, models: qwen3.6-27b)
+2026-11-10 12:17:27 smoke: 3 apps still running
+2026-11-10 12:20:29 smoke apps finished
+2026-11-10 12:20:29 smoke qwen3.6-27b: PASS coding: OK (status finished, FINAL RESULTS printed, 0 steps) eval_tampering: OK (status finished, FINAL RESULTS printed, 0 steps) tictactoe: OK (status finished, FINAL RESULTS printed, 0 steps) 
+2026-11-10 12:20:29 launching full fleet for qwen3.6-27b
+2026-11-10 12:26:08 launcher exit 0 for qwen3.6-27b
+2026-11-10 12:26:08 starting fold-in for: qwen3.6-27b (7 GB free)
+2026-11-10 18:17:23 fold-in exit 0
+2026-11-10 18:17:23 DONE

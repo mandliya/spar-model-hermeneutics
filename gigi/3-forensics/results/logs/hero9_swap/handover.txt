@@ -1,0 +1,2 @@
+2026-11-11 10:15:12 [laptop] waiting for handoff/CLOUD_READY on origin/main
+2026-11-11 11:49:43 [laptop] the laptop launched everything first; no handover needed

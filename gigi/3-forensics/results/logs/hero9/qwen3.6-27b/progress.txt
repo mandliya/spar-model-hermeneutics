@@ -1,0 +1,29 @@
+2026-11-10 12:26:08 start (model qwen3.6-27b, stages hero9_qwen36,hero9_qwen36_key, ceiling 4550, grade cap 60, files hero9_full_runs__qwen3.6-27b*.csv + hero9_loss_audit__qwen3.6-27b.md)
+2026-11-10 12:26:08 step wait
+2026-11-10 12:26:11 waiting: 8 of our apps still running
+2026-11-10 13:23:24 waiting: 4 of our apps still running
+2026-11-10 14:14:52 waiting: 4 of our apps still running
+2026-11-10 14:45:46 waiting: 4 of our apps still running
+2026-11-10 15:16:33 waiting: 1 of our apps still running
+2026-11-10 17:03:04 waiting for 2 local launcher(s) to finish downloading
+2026-11-10 17:04:04 all our apps finished
+2026-11-10 17:04:04 step fetch
+fetched hero9_qwen36/coding coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332: 2026-11-10 17:04:25 gigi-forensics-coding:coding/qwen-qwen3.6-27b/2026-11-10_12-20-35-232332: 663 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero9_qwen36/coding_norules coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368: 2026-11-10 17:04:46 gigi-forensics-coding:coding/qwen-qwen3.6-27b/2026-11-10_12-20-47-439368: 678 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero9_qwen36/dashboard_costly_failure dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679: 2026-11-10 17:07:27 gigi-forensics-dashboard-perf:dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-11-216679: 4001 new files, 52 already here (0 of them differ in size; local copy kept)
+fetched hero9_qwen36/grade_your_own grade_your_own/qwen-qwen3.6-27b/2026-11-10_12-21-22-847721: 2026-11-10 17:10:47 gigi-forensics-grade-your-own:grade_your_own/qwen-qwen3.6-27b/2026-11-10_12-21-22-847721: 1343 new files, 0 already here (0 of them differ in size; local copy kept)
+fetched hero9_qwen36/optimize_rendering_engine dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-35-396081: 2026-11-10 17:27:55 gigi-forensics-dashboard-perf:dashboard_perf/qwen-qwen3.6-27b/2026-11-10_12-21-35-396081: 1722 new files, 27 already here (0 of them differ in size; local copy kept)
+fetched hero9_qwen36/optimize_rendering_engine_graded stripped_engine/qwen-qwen3.6-27b/2026-11-10_12-21-47-104502: 2026-11-10 17:35:52 gigi-forensics-stripped-engine:stripped_engine/qwen-qwen3.6-27b/2026-11-10_12-21-47-104502: 1424 new files, 15 already here (0 of them differ in size; local copy kept)
+fetched hero9_qwen36/precommit_hook precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173: 2026-11-10 17:36:23 gigi-forensics-precommit-hook:precommit_hook/precommit_hook/qwen-qwen3.6-27b/2026-11-10_12-20-59-131173: 1865 new files, 22 already here (0 of them differ in size; local copy kept)
+fetched hero9_qwen36_key/ai_rd ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774: 2026-11-10 17:36:41 gigi-forensics-ai-rd:ai_rd/qwen-qwen3.6-27b/2026-11-10_12-21-59-485774: 880 new files, 12 already here (0 of them differ in size; local copy kept)
+2026-11-10 17:36:41 step redact
+done: 0 key occurrence(s) redacted in 0 file(s) under 2 folder(s)
+2026-11-10 17:36:46 step grade
+2026-11-10 17:41:32 grading: 2026-11-10 17:36:47 estimate total (hero solo, qwen3.6-27b, stages hero9_qwen36,hero9_qwen36_key): 19 ungraded runs in 4 fleets, ~$27.84
+2026-11-10 17:41:32 grading: 2026-11-10 17:37:09 estimate total (hero solo, qwen3.6-27b, stages hero9_qwen36,hero9_qwen36_key): 19 ungraded runs in 4 fleets, ~$27.84
+2026-11-10 17:41:32 step score
+2026-11-10 17:41:33 scored: 95 qwen3.6-27b runs found in stages hero9_qwen36, hero9_qwen36_key -> hero9_full_runs__qwen3.6-27b.csv
+2026-11-10 17:41:33 step audit
+audit (hero9_qwen36, hero9_qwen36_key): target 95, found 95, scored 77, 7 cells below target -> /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero9_loss_audit__qwen3.6-27b.md
+2026-11-10 17:41:33 audit written: /Users/gg/Desktop/aisafety/spar-model-hermeneutics/gigi/3-forensics/results/hero9_loss_audit__qwen3.6-27b.md
+2026-11-10 17:41:33 done (not committed: the parent session commits)

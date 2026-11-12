@@ -1,0 +1,90 @@
+2026-11-10 18:02:12 estimate aj_data_anon: 10 ungraded runs in 1 fleets, ~$19.05
+2026-11-10 18:02:12 estimate leaked_fix: 15 ungraded runs in 2 fleets, ~$8.50
+2026-11-10 18:02:12 estimate lucky_seed: 9 ungraded runs in 1 fleets, ~$3.16
+2026-11-10 18:02:12 estimate lucky_seed_readable_grader: 7 ungraded runs in 1 fleets, ~$2.20
+2026-11-10 18:02:12 estimate optimize_cache_c: 5 ungraded runs in 1 fleets, ~$6.30
+2026-11-10 18:02:12 estimate tables_coverage_tests: 10 ungraded runs in 1 fleets, ~$5.80
+2026-11-10 18:02:12 estimate total (hero solo, qwen3.6-27b, stages hero9_qwen36_all): 56 ungraded runs in 7 fleets, ~$45.01
+2026-11-10 18:02:12 start: 7 fleets in 6 environments, cap $60.0, judge default
+2026-11-10 18:02:32 aj_data_anon: 1 fleets, exit 1, spent so far $0.00
+2026-11-10 18:03:00 leaked_fix: 2 fleets, exit 1, spent so far $10.71
+2026-11-10 18:03:04 lucky_seed: 1 fleets, exit 1, spent so far $10.71
+2026-11-10 18:03:08 lucky_seed_readable_grader: 1 fleets, exit 1, spent so far $10.71
+2026-11-10 18:03:14 optimize_cache_c: 1 fleets, exit 1, spent so far $10.71
+2026-11-10 18:03:41 tables_coverage_tests: 1 fleets, exit 0, spent so far $16.76
+2026-11-10 18:03:41 done, spent $16.76
+2026-11-10 18:03:42 estimate aj_data_anon: 10 ungraded runs in 1 fleets, ~$19.05
+2026-11-10 18:03:42 estimate leaked_fix: 3 ungraded runs in 2 fleets, ~$2.06
+2026-11-10 18:03:42 estimate lucky_seed: 9 ungraded runs in 1 fleets, ~$3.16
+2026-11-10 18:03:42 estimate lucky_seed_readable_grader: 7 ungraded runs in 1 fleets, ~$2.20
+2026-11-10 18:03:42 estimate optimize_cache_c: 5 ungraded runs in 1 fleets, ~$6.30
+2026-11-10 18:03:42 estimate tables_coverage_tests: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:03:42 estimate total (hero solo, qwen3.6-27b, stages hero9_qwen36_all): 34 ungraded runs in 7 fleets, ~$32.76
+2026-11-10 18:03:42 start: 7 fleets in 6 environments, cap $60.0, judge claude-opus-4-8
+2026-11-10 18:05:27 aj_data_anon: 1 fleets, exit 0, spent so far $7.36
+2026-11-10 18:06:54 leaked_fix: 2 fleets, exit 0, spent so far $11.77
+2026-11-10 18:07:35 lucky_seed: 1 fleets, exit 0, spent so far $11.77
+2026-11-10 18:08:03 lucky_seed_readable_grader: 1 fleets, exit 0, spent so far $12.63
+2026-11-10 18:11:59 optimize_cache_c: 1 fleets, exit 0, spent so far $18.71
+2026-11-10 18:12:00 tables_coverage_tests: 1 fleets, exit 0, spent so far $18.71
+2026-11-10 18:12:00 done, spent $18.71
+2026-11-10 18:14:22 estimate aj_data_anon: 2 ungraded runs in 1 fleets, ~$3.49
+2026-11-10 18:14:22 estimate leaked_fix: 0 ungraded runs in 2 fleets, ~$0.00
+2026-11-10 18:14:22 estimate lucky_seed: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:14:22 estimate lucky_seed_readable_grader: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:14:22 estimate optimize_cache_c: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:14:22 estimate tables_coverage_tests: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:14:22 estimate total (hero solo, qwen3.6-27b, stages hero9_qwen36_all): 2 ungraded runs in 7 fleets, ~$3.49
+2026-11-10 18:14:23 start: 7 fleets in 6 environments, cap $60.0, judge default
+2026-11-10 18:14:24 aj_data_anon: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:26 leaked_fix: 2 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:27 lucky_seed: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:29 lucky_seed_readable_grader: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:32 optimize_cache_c: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:33 tables_coverage_tests: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:33 done, spent $0.00
+2026-11-10 18:14:33 estimate aj_data_anon: 2 ungraded runs in 1 fleets, ~$3.49
+2026-11-10 18:14:33 estimate leaked_fix: 0 ungraded runs in 2 fleets, ~$0.00
+2026-11-10 18:14:33 estimate lucky_seed: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:14:33 estimate lucky_seed_readable_grader: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:14:33 estimate optimize_cache_c: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:14:33 estimate tables_coverage_tests: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:14:33 estimate total (hero solo, qwen3.6-27b, stages hero9_qwen36_all): 2 ungraded runs in 7 fleets, ~$3.49
+2026-11-10 18:14:34 start: 7 fleets in 6 environments, cap $60.0, judge claude-opus-4-8
+2026-11-10 18:14:35 aj_data_anon: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:37 leaked_fix: 2 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:38 lucky_seed: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:40 lucky_seed_readable_grader: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:41 optimize_cache_c: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:43 tables_coverage_tests: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:14:43 done, spent $0.00
+2026-11-10 18:17:00 estimate aj_data_anon: 2 ungraded runs in 1 fleets, ~$3.49
+2026-11-10 18:17:00 estimate leaked_fix: 0 ungraded runs in 2 fleets, ~$0.00
+2026-11-10 18:17:00 estimate lucky_seed: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:17:00 estimate lucky_seed_readable_grader: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:17:00 estimate optimize_cache_c: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:17:00 estimate tables_coverage_tests: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:17:00 estimate total (hero solo, qwen3.6-27b, stages hero9_qwen36_all): 2 ungraded runs in 7 fleets, ~$3.49
+2026-11-10 18:17:01 start: 7 fleets in 6 environments, cap $60.0, judge default
+2026-11-10 18:17:03 aj_data_anon: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:04 leaked_fix: 2 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:07 lucky_seed: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:08 lucky_seed_readable_grader: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:10 optimize_cache_c: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:11 tables_coverage_tests: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:11 done, spent $0.00
+2026-11-10 18:17:11 estimate aj_data_anon: 2 ungraded runs in 1 fleets, ~$3.49
+2026-11-10 18:17:11 estimate leaked_fix: 0 ungraded runs in 2 fleets, ~$0.00
+2026-11-10 18:17:11 estimate lucky_seed: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:17:11 estimate lucky_seed_readable_grader: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:17:11 estimate optimize_cache_c: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:17:11 estimate tables_coverage_tests: 0 ungraded runs in 1 fleets, ~$0.00
+2026-11-10 18:17:11 estimate total (hero solo, qwen3.6-27b, stages hero9_qwen36_all): 2 ungraded runs in 7 fleets, ~$3.49
+2026-11-10 18:17:12 start: 7 fleets in 6 environments, cap $60.0, judge claude-opus-4-8
+2026-11-10 18:17:13 aj_data_anon: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:16 leaked_fix: 2 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:18 lucky_seed: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:19 lucky_seed_readable_grader: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:21 optimize_cache_c: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:22 tables_coverage_tests: 1 fleets, exit 0, spent so far $0.00
+2026-11-10 18:17:23 done, spent $0.00

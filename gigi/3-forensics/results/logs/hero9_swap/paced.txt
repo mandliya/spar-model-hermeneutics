@@ -49,3 +49,7 @@
 2026-11-11 13:35:15 live containers 21 <= 200: next batch of 24 (24 launched so far, 0 skipped)
 2026-11-11 13:44:51 all launched: 47 here, 0 already launched before
 2026-11-11 13:44:51 NO_FOLDIN set: not starting a fold-in (hero9_swap_lean_foldin.sh does it)
+2026-11-12 07:06:18 paced launcher start: 7 resumes in commands_topup_20261111.txt, cap $3078
+2026-11-12 07:06:20 live containers 0 <= 200: next batch of 24 (0 launched so far, 0 skipped)
+2026-11-12 07:09:15 all launched: 7 here, 0 already launched before
+2026-11-12 07:09:15 NO_FOLDIN set: not starting a fold-in (hero9_swap_lean_foldin.sh does it)

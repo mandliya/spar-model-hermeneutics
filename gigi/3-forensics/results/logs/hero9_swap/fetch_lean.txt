@@ -672,3 +672,80 @@
 2026-11-11 16:13:01 [messages] 600 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
 2026-11-11 16:13:35 [messages] 650 of 658 fleets, 0 new files, 0 failed, 3.2 GB free
 2026-11-11 16:13:41 [messages] PASS DONE: 658 fleets, 0 new files, 0 failed, 0 logs skipped (running)
+2026-11-12 07:09:20 [state] start: 663 fleets (2 launch logs skipped: app still running)
+2026-11-12 07:10:00 [state] 50 of 663 fleets, 4 new files, 0 failed, 4.3 GB free
+2026-11-12 07:10:30 [state] 100 of 663 fleets, 21 new files, 0 failed, 4.3 GB free
+2026-11-12 07:10:58 [state] 150 of 663 fleets, 21 new files, 0 failed, 4.3 GB free
+2026-11-12 07:11:32 [state] 200 of 663 fleets, 21 new files, 0 failed, 4.4 GB free
+2026-11-12 07:11:59 [state] 250 of 663 fleets, 24 new files, 0 failed, 4.3 GB free
+2026-11-12 07:12:34 [state] 300 of 663 fleets, 24 new files, 0 failed, 4.3 GB free
+2026-11-12 07:12:42 [state] FAILED resume/google-gemma-3-27b-it/2026-11-10_21-03-14-533427: please contact support@modal.com (Error code: B5208WJ9)
+2026-11-12 07:13:04 [state] 350 of 663 fleets, 27 new files, 1 failed, 4.4 GB free
+2026-11-12 07:13:32 [state] 400 of 663 fleets, 27 new files, 1 failed, 4.4 GB free
+2026-11-12 07:14:02 [state] 450 of 663 fleets, 27 new files, 1 failed, 4.3 GB free
+2026-11-12 07:14:35 [state] 500 of 663 fleets, 27 new files, 1 failed, 4.3 GB free
+2026-11-12 07:15:21 [state] 550 of 663 fleets, 27 new files, 1 failed, 4.3 GB free
+2026-11-12 07:15:55 [state] 600 of 663 fleets, 27 new files, 1 failed, 4.3 GB free
+2026-11-12 07:16:03 [state] FAILED resume/qwen-qwen3.6-27b/2026-11-11_11-26-53-044660: please contact support@modal.com (Error code: Z2N0PIT6)
+2026-11-12 07:16:24 [state] 650 of 663 fleets, 27 new files, 2 failed, 4.3 GB free
+2026-11-12 07:16:31 [state] PASS DONE: 661 fleets, 27 new files, 2 failed, 2 logs skipped (running)
+2026-11-12 07:17:49 [state] start: 665 fleets (0 launch logs skipped: app still running)
+2026-11-12 07:18:23 [state] 50 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:18:53 [state] 100 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:19:24 [state] 150 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:20:00 [state] 200 of 665 fleets, 0 new files, 0 failed, 4.3 GB free
+2026-11-12 07:20:31 [state] 250 of 665 fleets, 0 new files, 0 failed, 4.3 GB free
+2026-11-12 07:21:01 [state] 300 of 665 fleets, 0 new files, 0 failed, 4.3 GB free
+2026-11-12 07:21:39 [state] 350 of 665 fleets, 7 new files, 0 failed, 4.4 GB free
+2026-11-12 07:22:09 [state] 400 of 665 fleets, 7 new files, 0 failed, 4.4 GB free
+2026-11-12 07:22:43 [state] 450 of 665 fleets, 7 new files, 0 failed, 4.4 GB free
+2026-11-12 07:23:12 [state] 500 of 665 fleets, 7 new files, 0 failed, 4.3 GB free
+2026-11-12 07:24:00 [state] 550 of 665 fleets, 17 new files, 0 failed, 4.4 GB free
+2026-11-12 07:24:37 [state] 600 of 665 fleets, 17 new files, 0 failed, 4.4 GB free
+2026-11-12 07:25:07 [state] 650 of 665 fleets, 17 new files, 0 failed, 4.4 GB free
+2026-11-12 07:25:14 [state] PASS DONE: 665 fleets, 17 new files, 0 failed, 0 logs skipped (running)
+2026-11-12 07:25:49 [messages] start: 665 fleets (0 launch logs skipped: app still running)
+2026-11-12 07:26:22 [messages] 50 of 665 fleets, 4 new files, 0 failed, 4.4 GB free
+2026-11-12 07:26:50 [messages] 100 of 665 fleets, 21 new files, 0 failed, 4.4 GB free
+2026-11-12 07:27:17 [messages] 150 of 665 fleets, 21 new files, 0 failed, 4.4 GB free
+2026-11-12 07:27:56 [messages] 200 of 665 fleets, 21 new files, 0 failed, 4.4 GB free
+2026-11-12 07:28:23 [messages] 250 of 665 fleets, 24 new files, 0 failed, 4.4 GB free
+2026-11-12 07:28:56 [messages] 300 of 665 fleets, 24 new files, 0 failed, 4.4 GB free
+2026-11-12 07:29:26 [messages] 350 of 665 fleets, 34 new files, 0 failed, 4.4 GB free
+2026-11-12 07:29:56 [messages] 400 of 665 fleets, 34 new files, 0 failed, 4.4 GB free
+2026-11-12 07:30:23 [messages] 450 of 665 fleets, 34 new files, 0 failed, 4.4 GB free
+2026-11-12 07:30:50 [messages] 500 of 665 fleets, 34 new files, 0 failed, 4.4 GB free
+2026-11-12 07:31:50 [messages] 550 of 665 fleets, 44 new files, 0 failed, 4.4 GB free
+2026-11-12 07:32:30 [messages] 600 of 665 fleets, 44 new files, 0 failed, 4.4 GB free
+2026-11-12 07:32:57 [messages] 650 of 665 fleets, 44 new files, 0 failed, 4.4 GB free
+2026-11-12 07:33:08 [messages] PASS DONE: 665 fleets, 44 new files, 0 failed, 0 logs skipped (running)
+2026-11-12 07:33:52 [state] start: 665 fleets (0 launch logs skipped: app still running)
+2026-11-12 07:34:27 [state] 50 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:34:56 [state] 100 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:35:33 [state] 150 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:36:08 [state] 200 of 665 fleets, 0 new files, 0 failed, 4.4 GB free
+2026-11-12 07:37:04 [state] 250 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:37:48 [state] 300 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:38:19 [state] 350 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:38:46 [state] 400 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:39:15 [state] 450 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:39:47 [state] 500 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:41:01 [state] 550 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:41:46 [state] 600 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:42:14 [state] 650 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:42:22 [state] PASS DONE: 665 fleets, 0 new files, 0 failed, 0 logs skipped (running)
+2026-11-12 07:42:52 [messages] start: 665 fleets (0 launch logs skipped: app still running)
+2026-11-12 07:43:24 [messages] 50 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:43:53 [messages] 100 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:44:25 [messages] 150 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:44:59 [messages] 200 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:45:28 [messages] 250 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:45:55 [messages] 300 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:46:28 [messages] 350 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:46:56 [messages] 400 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:47:25 [messages] 450 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:47:53 [messages] 500 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:48:35 [messages] 550 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:49:14 [messages] 600 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:49:41 [messages] 650 of 665 fleets, 0 new files, 0 failed, 4.5 GB free
+2026-11-12 07:49:48 [messages] PASS DONE: 665 fleets, 0 new files, 0 failed, 0 logs skipped (running)
