@@ -5,7 +5,7 @@ import json, glob, os, re, sys, urllib.request, concurrent.futures as cf
 env = dict(l.strip().split("=",1) for l in open("/workspace/.env") if "=" in l and not l.startswith("#"))
 KEY = env["VLLM_API_KEY"].strip().strip('"')
 bad = re.compile(r"[ঀ-৿஀-௿Ⴀ-ჿഀ-ൿఀ-౿]")
-runs = sorted(glob.glob("/workspace/forensics/results/raw/distill_v1_base/coding/**/run-*/step-1/messages.json", recursive=True))
+runs = sorted(glob.glob("/workspace/forensics/results/raw/distill_v1_base/coding/**/run-*/step-*/messages.json", recursive=True))
 msgs = [m for m in json.load(open(runs[0])) if m["role"] in ("system","user")][:2]
 print("prompt chars", sum(len(m["content"]) for m in msgs), "from", runs[0].split("distill_v1_base/")[1])
 def ask(model):
