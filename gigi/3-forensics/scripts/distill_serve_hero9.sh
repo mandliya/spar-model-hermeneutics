@@ -19,5 +19,5 @@ done
 echo "$(date -u +%FT%TZ) serving gemma-base + ${mods[*]}" >> "$LOG/stages.txt"
 exec vllm serve google/gemma-3-27b-it --served-model-name gemma-base --dtype bfloat16 \
   --enable-lora --max-lora-rank 16 --max-loras ${#mods[@]} --lora-modules "${mods[@]}" \
-  --max-model-len 65536 --gpu-memory-utilization 0.92 --no-enable-prefix-caching --limit-mm-per-prompt '{"image":0}' \
+  --max-model-len 65536 --gpu-memory-utilization 0.92 --no-enable-prefix-caching --enforce-eager --limit-mm-per-prompt '{"image":0}' \
   --api-key "$VLLM_API_KEY" --host 0.0.0.0 --port 8000

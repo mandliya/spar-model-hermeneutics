@@ -7,7 +7,7 @@
   python3 distill_eval.py score                                   results/distill_v1_eval.csv (+ _per_run.csv), chart
 Scores with the hero9 measures (full_runs_table.MEASURES), so the rates compare directly with the hero9 plain runs.
 """
-import argparse, collections, csv, json, math, pathlib, re, shutil, subprocess, sys, tempfile
+import argparse, collections, csv, json, math, os, pathlib, re, shutil, subprocess, sys, tempfile
 
 HERE = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HERE / "scripts"))
@@ -17,12 +17,21 @@ ENVS = ["tower_of_hanoi", "eval_tampering", "currency_conversion", "coding", "co
 HELD_OUT = {"tower_of_hanoi", "eval_tampering", "currency_conversion"}
 SERVED = {"base": "gemma-base"}   # every other model name is served as itself (a LoRA module)
 RES = HERE / "results"; RAW = RES / "raw"; LOGS = RES / "logs"
+V = os.environ.get("DISTILL_V", "v1")   # v2 = the 13 Nov redo with CUDA graphs off: v1's vLLM garbled ~15% of runs
+GARBLE = re.compile(r"[\u0980-\u09FF\u0B80-\u0BFF\u0C00-\u0C7F\u0D00-\u0D7F\u0E00-\u0E7F\u10A0-\u10FF]")   # scripts gemma never writes here
+
+
+def garbled(run):
+    """True if any assistant turn in the run's last step contains the broken-server gibberish (Bengali/Tamil/Georgian... mix)."""
+    steps = sorted(run.glob("step-*/messages.json"), key=lambda p: int(p.parent.name.split("-")[1]))
+    return bool(steps) and any(m.get("role") == "assistant" and GARBLE.search(str(m.get("content") or ""))
+                               for m in json.loads(steps[-1].read_text()))
 
 
 def configs(args):
     for m in args.models.split(","):
         for env in ENVS:
-            src = HERE / "configs" / f"{env}__gemma-3-27b.yaml"; dst = HERE / "configs" / f"{env}__distill_v1_{m}.yaml"
+            src = HERE / "configs" / f"{env}__gemma-3-27b.yaml"; dst = HERE / "configs" / f"{env}__distill_{V}_{m}.yaml"
             c = yaml.safe_load(src.read_text())
             a = c["agent"]
             a.update(model=SERVED.get(m, m), base_url=f"http://{args.host}:{args.port}/v1", api_key_env="VLLM_API_KEY",
@@ -73,12 +82,12 @@ def wilson(k, n, z=1.96):
 def score(args):
     import full_runs_table as T
     rows, per = [], []
-    for sdir in sorted(RAW.glob("distill_v1_*")):
+    for sdir in sorted(RAW.glob(f"distill_{V}_*")):
         if "gate" in sdir.name:
             continue
-        model = sdir.name[len("distill_v1_"):]
+        model = sdir.name[len(f"distill_{V}_"):]
         for env in ENVS:
-            k = n = 0; lost = collections.Counter(); ends = collections.Counter()
+            k = n = g = 0; lost = collections.Counter(); ends = collections.Counter()
             for run in sorted(r for r in (sdir / env).rglob("run-*") if r.is_dir()):   # depth varies (eval_tampering has a variant level)
                 st = T.status(run)
                 if st != "finished":
@@ -89,7 +98,8 @@ def score(args):
                     v = None; lost[f"unreadable: {type(e).__name__}"] += 1
                 if v is None:
                     lost["no value"] += 1; per.append([model, env, str(run.relative_to(HERE)), "", "no value"]); continue
-                k += bool(v); n += 1; per.append([model, env, str(run.relative_to(HERE)), int(bool(v)), "scored"])
+                gb = garbled(run); g += gb
+                k += bool(v); n += 1; per.append([model, env, str(run.relative_to(HERE)), int(bool(v)), "scored", int(gb)])
                 log = (run / "rollout.log")
                 t = log.read_text(errors="replace") if log.exists() else ""
                 ends["unknown function"] += t.count("unknown function"); ends["provider retry"] += t.count("[provider retry]")
@@ -97,16 +107,17 @@ def score(args):
                 lo, hi = wilson(k, n)
                 rows.append({"model": model, "env": env, "held_out": env in HELD_OUT, "k": k, "n": n, "rate": round(k / n, 3) if n else "",
                              "ci_lo": round(lo, 3), "ci_hi": round(hi, 3), "lost": "; ".join(f"{a}: {b}" for a, b in sorted(lost.items())),
-                             "unknown_function_calls": ends["unknown function"], "provider_retries": ends["provider retry"]})
+                             "unknown_function_calls": ends["unknown function"], "provider_retries": ends["provider retry"],
+                             "garbled_runs": g})
     if not rows:
         print("nothing scored yet"); return
-    with open(RES / "distill_v1_eval.csv", "w", newline="") as f:
+    with open(RES / f"distill_{V}_eval.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
-    with open(RES / "distill_v1_eval_per_run.csv", "w", newline="") as f:
-        w = csv.writer(f); w.writerow(["model", "env", "run", "bad", "status"]); w.writerows(per)
+    with open(RES / f"distill_{V}_eval_per_run.csv", "w", newline="") as f:
+        w = csv.writer(f); w.writerow(["model", "env", "run", "bad", "status", "garbled"]); w.writerows(per)
     for r in rows:
-        print(f"{r['model']:6} {r['env']:22} {r['k']:3}/{r['n']:<3} lost: {r['lost'] or '-'}")
-    print(f"scored: {sum(r['n'] for r in rows)} runs -> results/distill_v1_eval.csv")
+        print(f"{r['model']:6} {r['env']:22} {r['k']:3}/{r['n']:<3} garbled: {r['garbled_runs']:2}  lost: {r['lost'] or '-'}")
+    print(f"scored: {sum(r['n'] for r in rows)} runs -> results/distill_{V}_eval.csv")
 
 
 def main():
