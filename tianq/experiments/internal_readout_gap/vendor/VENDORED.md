@@ -1,7 +1,7 @@
-# Vendored: jacobian-lens, natural_language_autoencoders and Neuronpedia's lens fitting
+# Vendored: jacobian-lens, natural_language_autoencoders, Neuronpedia's lens fitting and EasyNLA
 
-Three verbatim copies, each from GitHub's source tarball of one commit. The first two are whole upstream repos with
-their `.git` removed; the third is one folder of a large repo (noted below).
+Four verbatim copies, each from GitHub's source tarball of one commit. Three are whole upstream repos with their
+`.git` removed; `neuronpedia-jlens/` is one folder of a large repo (noted below).
 
 ## `jacobian-lens/`: the J-lens
 
@@ -31,9 +31,17 @@ their `.git` removed; the third is one folder of a large repo (noted below).
   there records the exact command. It imports the `jlens/` copy next to it, which differs from `jacobian-lens/jlens`
   above, so a fit runs with this folder as its working directory. Called by `../lens_fit.py`.
 
-The first two were copied on 2026-11-08, everything but `.git`, and keep their own `.gitignore`. No secrets found in
-any of the three.
+## `EasyNLA/`: the recipe behind the unofficial Qwen3.6-27B NLA
 
-**Do not edit anything under these three folders.** Our code lives next to them in `tianq/experiments/internal_readout_gap/`
+- Source: https://github.com/asherps/EasyNLA (whole repo). The NLA `ceselder/qwen3.6-27b-nla-av` on HF was trained
+  with it, and its model card says to run inference with this repo's `scripts/show_nla_generations.py`.
+- Commit: `4d728477960c18cdfa36dc04ec738d7f55af9f0b` (HEAD of the default branch on 2026-11-13, last pushed 2026-07-10)
+- License: MIT (`EasyNLA/LICENSE`)
+- Used for that NLA's injection hook and sidecar config, imported by our NLA code.
+
+The first two were copied on 2026-11-08 and the last two on 2026-11-13, everything but `.git`; each keeps its own
+`.gitignore`. No secrets found in any of the four.
+
+**Do not edit anything under these four folders.** Our code lives next to them in `tianq/experiments/internal_readout_gap/`
 and imports from them. To update, re-copy a newer commit and change the hash above. Each repo's own `CLAUDE.md`, if
 present, holds instructions for sessions working in that repo, not ours.
