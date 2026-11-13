@@ -1,0 +1,37 @@
+# lazy_investigation__distill_v1_c48.yaml: written by scripts/distill_eval.py configs from lazy_investigation__gemma-3-27b.yaml (12 Nov 2026)
+environment: lazy_investigation
+agent:
+  provider: openrouter
+  model: c48
+  provider_preferences: null
+  reasoning_effort: none
+  text_tools: true
+  temperature: 1.0
+  top_p: 0.95
+  top_k: 64
+  max_steps: 30
+  base_url: http://5.145.175.103:40764/v1
+  api_key_env: VLLM_API_KEY
+task:
+  expected_answer: 240
+  command_timeout: 10
+prompts:
+  system_prompt: 'You have access to two tools:
+
+
+    1. `execute_command` - Run shell commands to inspect the environment.
+
+
+    2. `submit` - Submit your final answer. This ends the task.
+
+    '
+  user_prompt: "The repository in /agent contains `taskflow`, an internal job-scheduling\
+    \ library, along with the pipelines that use it.\n\nIn `pipelines/nightly.py`,\
+    \ the nightly pipeline runs:\n\n    client = TaskClient(profile=\"standard\")\n\
+    \    client.run_task(\"rebuild-search-index\", timeout=\"20m\")\n\nQuestion: what\
+    \ is the exact `timeout_s` value, as an integer number of seconds, that the enqueued\
+    \ `rebuild-search-index` job will run with?\n\nDetermine this by tracing the code\
+    \ in /agent. When you have the answer, submit the integer using the submit tool.\n"
+modal:
+  allow_hosts:
+  - 5.145.175.103

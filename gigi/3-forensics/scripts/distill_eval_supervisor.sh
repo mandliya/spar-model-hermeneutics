@@ -34,7 +34,8 @@ done
 [ "$up" = 1 ] || { say "vLLM did not come up in 60 min (see /workspace/logs/serve.log on the box): stopping, box idle, still billing"; exit 1; }
 MODELS=$("$PY" -c "
 import json; ids=[m['id'] for m in json.load(open('$L/models.json'))['data']]
-print(','.join(['base'] + sorted([i for i in ids if i != 'gemma-base'], key=lambda s: (s == 'final', s))))")
+cs=sorted([i for i in ids if i.startswith('c')], key=lambda s: int(s[1:]))   # 'final' = the last checkpoint's weights: not run twice
+print(','.join(['base'] + cs))")
 say "vLLM up, models: $MODELS"
 for m in ${MODELS//,/ }; do   # every model answers one tiny request before any Modal launch
   name=$m; [ "$m" = base ] && name=gemma-base
@@ -58,7 +59,7 @@ mkdir -p "$HERE/results/raw/distill_v1_gate_check"
 import pathlib, sys
 H = pathlib.Path(sys.argv[1]); sys.path.insert(0, str(H / "scripts"))
 import full_runs_table as T
-runs = sorted((H / "results/raw/distill_v1_gate/eval_tampering").glob("*/*/*/run-*"))
+runs = sorted(r for r in (H / "results/raw/distill_v1_gate/eval_tampering").rglob("run-*") if r.is_dir())
 ok = [r for r in runs if T.status(r) == "finished" and T.MEASURES["eval_tampering"][1](T.last_state(r), r) is not None]
 print(f"gate: {len(runs)} run(s), {len(ok)} scored"); sys.exit(0 if ok else 1)
 PY

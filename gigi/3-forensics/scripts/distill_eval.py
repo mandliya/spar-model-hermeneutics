@@ -74,10 +74,12 @@ def score(args):
     import full_runs_table as T
     rows, per = [], []
     for sdir in sorted(RAW.glob("distill_v1_*")):
+        if "gate" in sdir.name:
+            continue
         model = sdir.name[len("distill_v1_"):]
         for env in ENVS:
             k = n = 0; lost = collections.Counter(); ends = collections.Counter()
-            for run in sorted((sdir / env).glob("*/*/*/run-*")) + sorted((sdir / env).glob("*/*/run-*")):
+            for run in sorted(r for r in (sdir / env).rglob("run-*") if r.is_dir()):   # depth varies (eval_tampering has a variant level)
                 st = T.status(run)
                 if st != "finished":
                     lost[st] += 1; per.append([model, env, str(run.relative_to(HERE)), "", st]); continue
