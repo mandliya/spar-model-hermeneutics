@@ -10,7 +10,7 @@ say "start: pausing the v1 loop"
 pkill -f distill_topup.sh; pkill -f start_topup.sh; pkill -f "modal run --detach"
 cd $F/agent-interp-envs
 for a in $(MODAL_PROFILE=spar .venv/bin/modal app list --json 2>/dev/null | .venv/bin/python -c "import json,sys; [print(x['app_id']) for x in json.load(sys.stdin) if x['state'] != 'stopped' and 'distill_v1_' in x['description']]"); do
-  MODAL_PROFILE=spar .venv/bin/modal app stop "$a" >> $L/redo.txt 2>&1 && say "stopped Modal app $a"
+  MODAL_PROFILE=spar .venv/bin/modal app stop --yes "$a" >> $L/redo.txt 2>&1 && say "stopped Modal app $a"
 done
 say "restarting vLLM with --enforce-eager"
 pkill -f "vllm serve"; sleep 30; pkill -9 -f "vllm serve"; sleep 5
