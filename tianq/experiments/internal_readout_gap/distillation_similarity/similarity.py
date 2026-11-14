@@ -57,10 +57,12 @@ def lens_sets(reads: dict[str, dict], depth: float) -> dict[str, set]:
 
 
 def spot_groups(common: list[str]) -> dict[str, list[str]]:
-    """The spots every model read, split into the tasks the distillation trained on and the three it held out."""
-    held = {s.name: s.held_out for s in spots.spots()}
-    return {"all spots": common, "trained tasks": [n for n in common if not held[n]],
-            "held-out tasks": [n for n in common if held[n]]}
+    """The spots every model read: all of them, the tasks the distillation trained on, the three it held out, and each
+    held-out task on its own (added 14 Nov: the three do not move alike)."""
+    env = {s.name: s.env for s in spots.spots()}
+    groups = {"all spots": common, "trained tasks": [n for n in common if env[n] not in spots.HELD_OUT],
+              "held-out tasks": [n for n in common if env[n] in spots.HELD_OUT]}
+    return groups | {f"held-out task {task}": [n for n in common if env[n] == task] for task in spots.HELD_OUT}
 
 
 def grouped(kind: str, v: str, names: list[str], groups: dict[str, list[str]], same: np.ndarray, chance: np.ndarray,

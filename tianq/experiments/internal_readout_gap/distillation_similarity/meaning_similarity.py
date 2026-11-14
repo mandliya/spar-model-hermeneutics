@@ -11,7 +11,7 @@ by cosine:
                        two lists of near-synonyms or translations score high without sharing a word
 Everything else is similarity.py's: the same spots and groups, the same chance level (the original at one spot against
 the version at other spots; all other spots, or CHANCE_SPOTS random ones for the slower soft match), the paired change
-from base gemma, and 95% intervals from resampling spots. J-lens depths: 2/3 (the headline) and 0.95.
+from base gemma, and 95% intervals from resampling spots. J-lens depths: every stored depth (shared.readout.DEPTHS).
 Added on 13 Nov after the word-overlap results, to test whether "no move toward Qwen3.6 in the middle layers" is the
 measure's fault. Prints every number it writes; writes OUT/distillation_similarity/meaning_similarity.json.
 """
@@ -29,7 +29,7 @@ from shared import models, readout  # noqa: E402
 from shared.embedding import EMBEDDER, Embedder  # noqa: E402
 from similarity import EXPERIMENT, ORIGINAL, VERSIONS, grouped, lens_lists, load, spot_groups  # noqa: E402
 
-DEPTHS = (readout.HEADLINE, 0.95)
+DEPTHS = readout.DEPTHS
 CHANCE_SPOTS = 20
 SEED = 0
 
