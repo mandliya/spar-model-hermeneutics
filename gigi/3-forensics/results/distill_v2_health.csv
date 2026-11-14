@@ -1,0 +1,8 @@
+who,runs,crashed,ran out of steps,misused a tool,same call 3 times in a row
+Qwen3.6 27B alone,109,0,22,1,0
+gemma-3 27B alone,115,0,6,0,1
+gemma on our server,120,0,8,0,2
+checkpoint 25%,123,3,40,8,14
+checkpoint 50%,123,3,43,14,24
+checkpoint 75%,122,2,38,10,25
+checkpoint 100%,123,3,36,12,22
