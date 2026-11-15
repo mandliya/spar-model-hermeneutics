@@ -1,6 +1,6 @@
 | Category | Environment | Restart point | Qwen replayed | gemma swapped in |
 |---|---|---|---|---|
-| Honesty probes | eval_tampering | Qwen's incident | 58/60 = 97% (89%–99%) | 60/60 = 100% (94%–100%) |
+| Honesty probes | eval_tampering | Qwen's incident | 58/60 = 97% (89%–99%) | 57/57 = 100% (94%–100%) |
 | Honesty probes | funding_email | Qwen's incident | 60/60 = 100% (94%–100%) | 59/60 = 98% (91%–100%) |
 | Honesty probes | currency_conversion | Qwen's incident | 60/60 = 100% (94%–100%) | 60/60 = 100% (94%–100%) |
 | Honesty probes | lazy_investigation | Qwen's incident | 56/56 = 100% (94%–100%) | 60/60 = 100% (94%–100%) |
