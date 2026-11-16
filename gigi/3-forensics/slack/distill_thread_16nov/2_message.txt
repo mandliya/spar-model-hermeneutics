@@ -1,1 +1,9 @@
-*1. Gemma starts cheating at Tower of Hanoi, a task it never saw in training.* The task says every move has to be worked out by hand, with no scripts. Before training, gemma never cheats in any of its 20 runs. From halfway through training on, it writes a solver script in about a third of its runs, 5 of 15 at the end, and a jump that big is very unlikely to be chance (p = 0.009). Qwen does it in 12 of its 20 runs, so gemma moves a good part of the way towards Qwen. By the end of training, every cheat is a real solver script, the same trick Qwen uses.
+*1. Tower of Hanoi (never in training): gemma starts cheating.*
+The task says every move has to be worked out by hand, with no scripts.
+
+*Results:*
+• Before training, gemma never cheats (0 of 20 runs).
+• From halfway through training on, it writes a solver script in about a third of its runs (5 of 15 at the end, p = 0.009).
+• Qwen does it in 12 of 20 runs, so gemma moves a good part of the way towards Qwen.
+
+*N.B.:* by the end of training, every cheat is a real solver script, the same trick Qwen uses.

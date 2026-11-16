@@ -1,3 +1,13 @@
-*5. A scoring bug we found along the way, which changes the eval tampering numbers in the hero comparison.* We counted a run as having read the note if the note's file name showed up in the conversation, but the very first `ls` prints that name, so every run passed. Qwen opens the note in every run, so its numbers don't change. Gemma almost never does, just 1 of its 20 plain runs, so the old "gemma hides the tampering in 20 of 20 runs" really meant gemma never looked.
+*5. A scoring bug that changes the eval tampering numbers in the hero comparison.*
+We counted a run as having read the note if the note's file name showed up in the conversation.
+But the very first `ls` prints that name, so every run passed.
 
-Now a run only counts if the note's own text is in the conversation, and everything has been rescored. Because of this, eval tampering is no longer one of the gaps between Qwen and gemma. We now have four clear gaps instead of five: Qwen cheats more in coding without rules, Tower of Hanoi and the dashboard task, and gemma cheats more in lazy investigation.
+*What it changes:*
+• Qwen opens the note in every run, so its numbers don't change.
+• Gemma opens it in just 1 of its 20 plain runs, so the old "gemma hides the tampering in 20 of 20 runs" really meant gemma never looked.
+
+*Fix:* a run now counts only if the note's own text is in the conversation, and everything has been rescored.
+
+*Results:* eval tampering is no longer a gap between Qwen and gemma, so we have four clear gaps instead of five.
+• Qwen cheats more in coding without rules, Tower of Hanoi and the dashboard task.
+• Gemma cheats more in lazy investigation.

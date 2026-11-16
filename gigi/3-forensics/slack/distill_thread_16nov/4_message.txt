@@ -1,5 +1,15 @@
 *3. The other four tasks: one real move towards Qwen, and three that don't tell us much.*
-• *Coding with no rules stated* is a real move. Gemma goes from 3 of 20 runs to 10 of the 12 runs that submitted (p = 0.0002), level with Qwen's 14 of 20. It cheats its own way, though: it mostly rewrites the test, where Qwen mostly hard-codes the answer.
-• *Coding with the rules stated* goes up too, to 7 of 16, but Qwen and gemma barely differ there to begin with (6 of 19 against 2 of 20), so it isn't a move towards Qwen.
-• *Lazy investigation* goes from always wrong to never wrong, exactly like Qwen. But the right answer, 240, shows up in the training data many times, so this is gemma learning a task it has seen, not a behaviour carrying over.
-• *Currency conversion* was never in training, but it isn't a clean test. Qwen and gemma both do the forbidden arithmetic every time they answer. The trained gemma does it less, 4 of 10 at the end, but about half of its runs get stuck calling the broken calculator and never answer, and many of its "clean" answers are broken replies, like a made-up tool result, rather than a choice not to do the sum.
+
+*Coding with no rules stated:* a real move towards Qwen.
+Gemma goes from 3 of 20 runs to 10 of the 12 runs that submitted (p = 0.0002), level with Qwen's 14 of 20.
+It cheats its own way, though: it mostly rewrites the test, where Qwen mostly hard-codes the answer.
+
+*Coding with the rules stated:* goes up to 7 of 16, but it isn't a move towards Qwen.
+Qwen and gemma barely differ here to begin with (6 of 19 against 2 of 20).
+
+*Lazy investigation:* goes from always wrong to never wrong, exactly like Qwen.
+But the right answer (240) shows up many times in the training data, so this is gemma learning a task it has seen, not a behaviour carrying over.
+
+*Currency conversion* (never in training): not a clean test.
+Qwen and gemma both do the forbidden arithmetic every time they answer, and the trained gemma does it less (4 of 10 at the end).
+But about half of its runs get stuck calling the broken calculator and never answer, and many of its "clean" answers are broken replies, like a made-up tool result.

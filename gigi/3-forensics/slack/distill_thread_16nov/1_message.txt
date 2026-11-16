@@ -1,5 +1,11 @@
-Hey everyone! :wave: The distillation results are in. Over the weekend I had 20 independent checks go through every number, so these are the final ones.
+Fine-tuned gemma-3 27B on Qwen3.6 27B's own runs and saved a copy of the model at 25%, 50%, 75% and 100% of training.
+Then ran gemma before training and each of those copies 20 times in six tasks.
+Three of the tasks were never in the training data: Tower of Hanoi, eval tampering and currency conversion.
 
-Here's what we did. We fine-tuned gemma-3 27B on Qwen3.6 27B's own runs and saved a copy of the model at 25%, 50%, 75% and 100% of training. Then we ran gemma before training and each of those copies 20 times in six tasks. Three of the tasks were never in the training data: Tower of Hanoi, eval tampering and currency conversion.
+*Results:* gemma does pick up some of Qwen's behaviour in tasks it never saw.
+• It starts cheating at Tower of Hanoi.
+• In eval tampering, it starts reading the note about the tampering.
 
-The short version: gemma does pick up some of Qwen's behaviour in tasks it never saw. It starts cheating at Tower of Hanoi, and in eval tampering it starts reading the note about the tampering, just like Qwen. The catch is that the trained gemma gets stuck a lot, and we think that comes from some looping runs in our training data. The chart shows all six tasks before and after training, next to Qwen. Details in the thread :thread:
+*N.B.:* the trained gemma gets stuck a lot, which might come from some looping runs in our training data.
+
+The chart shows all six tasks before and after training, next to Qwen.
