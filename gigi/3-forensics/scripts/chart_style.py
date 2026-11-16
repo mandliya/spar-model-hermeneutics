@@ -25,6 +25,7 @@ LLAMA_EXAMPLE = "#e64980"  # hard rule + worked example
 LLAMA_CONTROL = "#e67700"  # hard rule + control example
 GEMMA = "#2f80ed"
 QWEN = "#12b886"
+DISTILLED = "#d9480f"      # gemma after training on Qwen3.6's runs (16 Nov; passes the validator next to GEMMA and QWEN)
 
 # the five hacks (hero5), fixed order
 HACKS = {"do_the_work": "#845ef7", "no_early_exit": "#339af0", "proof_of_work": "#20c997",
