@@ -341,7 +341,7 @@ HERO_TARGETS = {"hero_smoke": {"coding": 2, "optimize_rendering_engine": 2, "das
                 "hero9_qwen36": dict(_GAP7), "hero9_qwen36_key": {"ai_rd": 10}, "hero9_smoke_qwen36": {"coding": 1, "tictactoe": 1, "eval_tampering": 1}}
 # precision to state next to a result when the config pins no quantization: OpenRouter serves Qwen3-Next and gemma-3
 # as fp8 (gigi/CLAUDE.md, part three exception)
-HERO_PRECISION_DEFAULT = {"qwen3-next-80b": "fp8", "gemma-3-27b": "fp8", "qwen3.6-27b": "fp8", "qwen3.6-27b-think": "fp8"}
+HERO_PRECISION_DEFAULT = {"qwen3-next-80b": "fp8", "gemma-3-27b": "fp8", "qwen3.6-27b": "fp8", "qwen3.6-27b-think": "fp8", "qwen3.6-27b-bf16": "bf16"}
 
 
 def hero_out_prefix(model=None, stages=()):
@@ -360,6 +360,8 @@ def hero_precision(env, model=None):
     model = model or HERO_MODEL
     cfg = HERE / "configs" / f"{env}__{model}.yaml"
     c = cfg.read_text() if cfg.exists() else ""
+    if "base_url:" in c:   # classic round (17 Nov 2026): served on our own vLLM box in bf16, not through OpenRouter
+        return "bf16 (own vLLM)"
     q, prov = re.search(r"quantizations: \[([^\]]*)\]", c), re.search(r"only: \[([^\]]*)\]", c)
     return f"{q.group(1) if q else HERO_PRECISION_DEFAULT.get(model, '?')} ({prov.group(1) if prov else '?'}, via OpenRouter)"
 

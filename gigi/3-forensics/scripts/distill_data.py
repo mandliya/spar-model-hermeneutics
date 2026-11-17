@@ -144,7 +144,27 @@ def load_runs(envs=None):
 HERO9_FULL = ["hero9_full_runs__qwen3.6-27b_per_run.csv", "hero9_full_runs__qwen3.6-27b__other21_per_run.csv"]
 
 
-def load_runs_hero9(envs=None):
+def run_end(run):
+    """How a run ended, from its rollout.log (17 Nov 2026, as distill_eval.run_status): "finished" = the harness printed
+    its FINAL RESULTS block (step-limit endings included); "context window full" = our server refused the next request
+    because the history reached its context limit (the classic round serves Qwen with a 32,768-token window on purpose,
+    the same point where the training data is cut); anything else is a lost run."""
+    log = run / "rollout.log"
+    if not log.exists():
+        return "no log"
+    t = log.read_text(errors="replace")
+    if "FINAL RESULTS" in t:
+        return "finished"
+    if "maximum context length" in t[-4000:]:
+        return "context window full"
+    if "APITimeoutError" in t[-4000:]:
+        return "our server timed out"
+    if "Traceback" in t[-1500:]:
+        return "crash"
+    return "cut off by the time limit"
+
+
+def load_runs_hero9(envs=None, full_csvs=None, swap=True, end_check=False, keep_context_cut=False, expect_model=None):
     """--hero9 (12 Nov 2026 call): Qwen3.6 27B as the target. Sources: Qwen3.6's plain hero9 runs (results/
     hero9_full_runs__qwen3.6-27b*_per_run.csv) and every hero9 swap continuation Qwen3.6 wrote
     (results/hero9_swap_per_run.csv, who=qwen36): on its own runs and on gemma's. A continuation's assistant turns
@@ -159,13 +179,19 @@ def load_runs_hero9(envs=None):
             cfg_cache[c] = yaml.safe_load(c.read_text())
         return cfg_cache[c]
 
-    for f in HERO9_FULL:
+    for f in (full_csvs or HERO9_FULL):
         for row in csv.DictReader(open(HERE / "results" / f)):
             env = row["environment"]
             if envs and env not in envs:
                 continue
+            if expect_model and row["model"] != expect_model:   # classic round: refuse any row that is not the teacher's
+                raise SystemExit(f"{f}: row with model {row['model']!r}, expected {expect_model!r}: {row['run']}")
             run = HERE / row["run"]
-            if row["status"] != "finished":
+            if end_check:   # classic round: trust the run's own log, not the table's status (it misses vLLM losses)
+                end = run_end(run)
+                if end != "finished" and not (keep_context_cut and end == "context window full"):
+                    skipped.append({"env": env, "run": row["run"], "kind": "full", "reason": f"lost: {end}"}); continue
+            elif row["status"] != "finished":
                 skipped.append({"env": env, "run": row["run"], "kind": "full", "reason": f"lost: {row['status']}"}); continue
             m = transcript(run)
             if m is None:
@@ -175,6 +201,9 @@ def load_runs_hero9(envs=None):
             runs.append({"env": env, "run": row["run"], "kind": "full", "group": row["run"], "K": -1,
                          "hacked": None if row["bad"] == "" else bool(int(row["bad"])), "messages": m,
                          "tools": tools_for(config_of(run.parent / "config.yaml"))})
+    if not swap:   # classic distillation (16 Nov call): the teacher's own complete runs only, no swap continuations
+        assert all(r["kind"] == "full" for r in runs)
+        return runs, skipped
     plan = {f"{p['src']}_{pathlib.Path(p['run']).parent.name}_{pathlib.Path(p['run']).name}_K{p['K']}": p
             for p in json.load(open(HERE / "results" / "hero9_swap_plan.json"))}
     for row in csv.DictReader(open(HERE / "results" / "hero9_swap_per_run.csv")):
@@ -274,7 +303,8 @@ def nbytes(ex):
 
 
 def inventory(args):
-    runs, skipped = (load_runs_hero9 if args.hero9 else load_runs)(args.envs)
+    runs, skipped = (load_runs_hero9(args.envs, args.full_csv, not args.no_swap, args.end_check, args.keep_context_cut,
+                                     args.expect_model) if args.hero9 else load_runs(args.envs))
     ex, _ = examples(runs, max_context_chars=args.max_context_chars)
     rows = collections.defaultdict(lambda: collections.Counter())
     for r in runs:
@@ -387,7 +417,8 @@ def split_table(runs, ex, chosen, env_of, train, val, incident, sampled=False):
 
 
 def build(args):
-    runs, skipped = (load_runs_hero9 if args.hero9 else load_runs)(args.envs)
+    runs, skipped = (load_runs_hero9(args.envs, args.full_csv, not args.no_swap, args.end_check, args.keep_context_cut,
+                                     args.expect_model) if args.hero9 else load_runs(args.envs))
     ex, dropped = (trajectories(runs, args.exclude_hacked, args.max_context_chars) if args.trajectories
                    else examples(runs, args.exclude_hacked, args.max_context_chars if args.hero9 else 0))
     split_env = None
@@ -456,6 +487,8 @@ def build(args):
     manifest = {
         "seed": args.seed, "split": args.split, "exclude_hacked": args.exclude_hacked, "envs": args.envs,
         "hero9": args.hero9, "holdout_envs": args.holdout_envs, "trajectories": args.trajectories,
+        "full_csv": args.full_csv, "no_swap": args.no_swap, "end_check": args.end_check,
+        "keep_context_cut": args.keep_context_cut, "expect_model": args.expect_model,
         "max_context_chars": args.max_context_chars, "sampling": note,
         **({"stratify_incidents": True, "hacked_split": args.hacked_split, "max_mb": args.max_mb,
             "cheating_families": {"train": sorted(g for g in train if incident[g]), "val": sorted(g for g in val if incident[g])}}
@@ -537,6 +570,15 @@ def main():
         p.add_argument("--seed", type=int, default=0)
         p.add_argument("--hero9", action="store_true", help="12 Nov 2026: Qwen3.6 27B's hero9 runs and swap continuations "
                        "as the source (default: Qwen3-Next-80B's full runs and gap replays)")
+        # classic round (16 Nov call, 17 Nov 2026); left unset, --hero9 behaves exactly as before
+        p.add_argument("--full-csv", type=lambda s: s.split(","), default=None, help="with --hero9: comma-separated "
+                       "per-run CSVs in results/ to read the teacher's full runs from (default: the hero9 fp8 tables)")
+        p.add_argument("--no-swap", action="store_true", help="with --hero9: leave out every swap continuation (classic)")
+        p.add_argument("--end-check", action="store_true", help="with --hero9: a full run counts only if its rollout.log "
+                       "shows FINAL RESULTS (see run_end), not the table's status")
+        p.add_argument("--keep-context-cut", action="store_true", help="with --end-check: also keep runs our server "
+                       "stopped at its context limit (the classic round's deliberate 32k cut)")
+        p.add_argument("--expect-model", default=None, help="with --hero9: stop if any full-run row is another model")
         if name == "inventory":
             p.add_argument("--max-context-chars", type=int, default=0, help="drop examples whose context is longer (0 = keep all)")
         if name == "build":
