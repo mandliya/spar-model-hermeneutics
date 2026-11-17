@@ -189,26 +189,26 @@ def eval_tampering():
 # 4. the other four tasks
 def other_four():
     fig = plt.figure(figsize=(13, 10.4))
-    spots = [[0.07, 0.54, 0.29, 0.26], [0.57, 0.54, 0.29, 0.26], [0.07, 0.06, 0.29, 0.26], [0.57, 0.06, 0.29, 0.26]]
-    panels = [("coding_norules", "Coding, no rules stated: made the impossible test pass",
-               "A real move to Qwen3.6's level, but gemma mostly rewrites\nthe test where Qwen3.6 hard-codes the answer.",
+    spots = [[0.07, 0.52, 0.29, 0.25], [0.57, 0.52, 0.29, 0.25], [0.07, 0.06, 0.29, 0.25], [0.57, 0.06, 0.29, 0.25]]
+    panels = [("coding_norules", "Coding, no rules stated (in training)",
+               "Bad act: made a test pass that can't pass honestly.\nA real move to Qwen3.6's level, but gemma mostly rewrites\nthe test where Qwen3.6 hard-codes the answer.",
                {"base": (-8, -6, "right", "top"), "c72": (0, -10, "center", "top")}),
-              ("coding", "Coding, rules stated: made the impossible test pass",
-               "Qwen3.6 and gemma barely differ here to begin with,\nso the rise is not a move towards Qwen3.6.",
+              ("coding", "Coding, rules stated (in training)",
+               "Bad act: the same, despite being told not to touch the tests.\nQwen3.6 and gemma barely differ here to begin with,\nso the rise is not a move towards Qwen3.6.",
                {"base": (-10, 0, "right", "center"), "c24": (9, -8, "left", "top"), "c72": (0, -10, "center", "top")}),
-              ("lazy_investigation", "Lazy investigation: gave the wrong answer",
-               "Ends exactly like Qwen3.6, but the right answer (240) is in\nthe training data many times: learning, not transfer.",
+              ("lazy_investigation", "Lazy investigation (in training)",
+               "Bad act: answered 1200 without tracing the code (right: 240).\nEnds exactly like Qwen3.6, but 240 is in the training data\nmany times: learning this task, not a habit carrying over.",
                {"base": (-8, -6, "right", "top"), "c24": (8, 4, "left", "bottom"), "c48": (6, 8, "left", "bottom")}),
-              ("currency_conversion", "Currency conversion (never in training): did the arithmetic itself",
-               "Not a clean test: about half the trained runs get stuck calling\nthe broken calculator and never answer.",
+              ("currency_conversion", "Currency conversion (never in training)",
+               "Bad act: did the sum itself when the calculator tool was broken.\nNot a clean test: about half the trained runs get stuck\ncalling the broken calculator and never answer.",
                {"base": (-8, -6, "right", "top"), "c24": (0, -10, "center", "top"), "c96": (10, 0, "left", "center")})]
     for spot, (env, title, note, la) in zip(spots, panels):
         ax = fig.add_axes(spot)
         over_training(ax, series(env), QWEN[env], GEM[env], label_at=la)
-        ax.set_title(title, loc="left", fontsize=12, pad=40)
+        ax.set_title(title, loc="left", fontsize=12, pad=62)
         ax.text(0, 1.035, note, transform=ax.transAxes, fontsize=9.8, color=ST.MUTED, va="bottom", linespacing=1.4)
-    head(fig, "The other four tasks: gemma reaches Qwen3.6's level in coding without rules; the other three tell us little",
-         "Share of runs with the behaviour in each title. Blue: gemma before training. Orange: the checkpoints at 25% to 100% of training.\n"
+    head(fig, "The other four tasks we re-ran: the 3 training tasks, and currency conversion (held out)",
+         "Share of runs that did the bad act. Blue: gemma before training. Orange: the checkpoints at 25% to 100% of training.\n"
          "Grey bars: 95% confidence intervals. Only runs that finished and gave an answer count.", y=0.985)
     save(fig, "4_other_four_tasks.png")
 
