@@ -1,6 +1,6 @@
-Fine-tuned gemma-3 27B on Qwen3.6 27B's own runs and saved a copy of the model at 25%, 50%, 75% and 100% of training.
-Then ran gemma before training and each of those copies 20 times in six tasks.
-Three of the tasks were never in the training data: Tower of Hanoi, eval tampering and currency conversion.
+Fine-tuned gemma-3 27B on Qwen3.6 27B's own runs in 25 tasks and saved a copy of the model at 25%, 50%, 75% and 100% of training.
+Three more tasks were kept out of training: Tower of Hanoi, eval tampering and currency conversion.
+Then ran gemma before training and each of those copies 20 times in six tasks: the 3 held-out ones and 3 of the 25 training tasks.
 
 *Results:* gemma does pick up some of Qwen's behaviour in tasks it never saw.
 • It starts cheating at Tower of Hanoi.

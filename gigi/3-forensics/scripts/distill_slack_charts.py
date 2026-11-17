@@ -117,7 +117,7 @@ def overview():
             ("Qwen3.6 on its own", ST.QWEN)]
     h, gap, y = 0.26, 0.55, 0
     ticks = []
-    for gi, (group, title) in enumerate([("never", "Tasks gemma never saw in training"), ("train", "Tasks in the training data")]):
+    for gi, (group, title) in enumerate([("never", "Tasks gemma never saw in training"), ("train", "3 of the 25 tasks in the training data")]):
         y -= 0.35 if gi else 0
         ax.text(-0.66, y, title.upper(), fontsize=9.5, fontweight="bold", color=ST.MUTED, va="center",
                 transform=ax.get_yaxis_transform())
@@ -144,6 +144,7 @@ def overview():
     ax.legend(handles=[Patch(color=c, label=lab) for lab, c in bars], loc="lower left", bbox_to_anchor=(-0.66, 1.01),
               ncol=3, fontsize=10.5, handlelength=1.2, columnspacing=1.6)
     head(fig, "Gemma before and after training on Qwen3.6's runs, next to Qwen3.6, in six tasks",
+         "Gemma was trained on Qwen3.6's runs in 25 tasks. We re-ran it in 3 tasks it never saw and in 3 of those 25.\n"
          "Each bar is the share of runs with the behaviour named on the left; the label gives the number of runs.\n"
          "\"After training\" is the final checkpoint. Only runs that finished and gave an answer count.")
     save(fig, "1_overview.png")

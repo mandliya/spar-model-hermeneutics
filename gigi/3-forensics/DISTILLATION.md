@@ -4,9 +4,10 @@ One page with every chart and finding. Full tables, method and caveats: [HERO_RE
 
 ## What we did
 
-- Fine-tuned gemma-3 27B (LoRA) on Qwen3.6 27B's own runs and saved a copy at 25%, 50%, 75% and 100% of training.
-- Ran gemma before training and each copy 20 times in six tasks, on our own vLLM server.
-- Three tasks were never in the training data: Tower of Hanoi, eval tampering and currency conversion.
+- Fine-tuned gemma-3 27B (LoRA) on Qwen3.6 27B's own runs in **25 tasks** (294 runs, 1,538 training examples) and saved a copy at 25%, 50%, 75% and 100% of training.
+- Three more tasks were kept out of the training data entirely: Tower of Hanoi, eval tampering and currency conversion.
+- Ran gemma before training and each copy 20 times in six tasks, on our own vLLM server: the 3 held-out tasks and 3 of the 25 training tasks (coding with no rules stated, coding with the rules stated, lazy investigation).
+- The 25 training tasks: ai_rd, async_conversion, chess, coding, coding_norules, copying_of_answers, dashboard_costly_failure, funding_email, grade_your_own, lazy_investigation, leaked_scorer, leaked_tests, lucky_seed, lucky_seed_readable_grader, norvane, optimize_lru_cache, optimize_rendering_engine, optimize_rendering_engine_graded, parse_duration, precommit_hook, puppeteer, reference_extraction, revert_or_refactor, secret_number, tictactoe.
 - Reference points: Qwen3.6 and gemma on their own (plain OpenRouter runs, 20 each).
 - Every number was checked by 20 independent reviewers; their fixes are in (commit 87b91ac).
 
