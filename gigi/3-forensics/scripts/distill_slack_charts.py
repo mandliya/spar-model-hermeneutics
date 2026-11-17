@@ -144,7 +144,7 @@ def overview():
     ax.legend(handles=[Patch(color=c, label=lab) for lab, c in bars], loc="lower left", bbox_to_anchor=(-0.66, 1.01),
               ncol=3, fontsize=10.5, handlelength=1.2, columnspacing=1.6)
     head(fig, "Gemma before and after training on Qwen3.6's runs, next to Qwen3.6, in six tasks",
-         "Gemma was trained on Qwen3.6's runs in 25 tasks. We re-ran it in 3 tasks it never saw and in 3 of those 25.\n"
+         "28 tasks in total: gemma was trained on Qwen3.6's runs in 25 and never saw the other 3. We re-ran it in those 3 and in 3 of the 25.\n"
          "Each bar is the share of runs with the behaviour named on the left; the label gives the number of runs.\n"
          "\"After training\" is the final checkpoint. Only runs that finished and gave an answer count.")
     save(fig, "1_overview.png")

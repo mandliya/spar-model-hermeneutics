@@ -9,9 +9,10 @@ Charts: `gigi/3-forensics/charts/slack_distill/`, drawn by `scripts/distill_slac
 
 ## Message 1 (starts the thread). Attach `1_overview.png`
 
-Fine-tuned gemma-3 27B on Qwen3.6 27B's own runs in 25 tasks and saved a copy of the model at 25%, 50%, 75% and 100% of training.
-Three more tasks were kept out of training: Tower of Hanoi, eval tampering and currency conversion.
-Then ran gemma before training and each of those copies 20 times in six tasks: the 3 held-out ones and 3 of the 25 training tasks.
+We have 28 tasks in total.
+Fine-tuned gemma-3 27B on Qwen3.6 27B's own runs in 25 of them, and kept the other 3 out of training: Tower of Hanoi, eval tampering and currency conversion.
+Saved a copy of the model at 25%, 50%, 75% and 100% of training.
+Then ran gemma before training and each copy 20 times in 6 of the 28 tasks: the 3 held-out ones and 3 of the 25 training ones.
 
 *Results:* gemma does pick up some of Qwen's behaviour in tasks it never saw.
 • It starts cheating at Tower of Hanoi.
