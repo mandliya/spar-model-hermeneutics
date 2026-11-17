@@ -147,16 +147,16 @@ HERO9_FULL = ["hero9_full_runs__qwen3.6-27b_per_run.csv", "hero9_full_runs__qwen
 def run_end(run):
     """How a run ended, from its rollout.log (17 Nov 2026, as distill_eval.run_status): "finished" = the harness printed
     its FINAL RESULTS block (step-limit endings included); "context window full" = our server refused the next request
-    because the history reached its context limit (the classic round serves Qwen with a 32,768-token window on purpose,
-    the same point where the training data is cut); anything else is a lost run."""
+    because the history reached its context limit (the classic round serves Qwen with a 49,152-token window; the
+    training data is cut at 105,000 characters, inside that window); anything else is a lost run."""
     log = run / "rollout.log"
     if not log.exists():
         return "no log"
     t = log.read_text(errors="replace")
     if "FINAL RESULTS" in t:
         return "finished"
-    if "maximum context length" in t[-4000:]:
-        return "context window full"
+    if "maximum context length" in t[-4000:] or "max_tokens must be at least 1" in t[-4000:]:   # the second: the
+        return "context window full"   # history filled the window exactly, so no room was left for a reply (17 Nov)
     if "APITimeoutError" in t[-4000:]:
         return "our server timed out"
     if "Traceback" in t[-1500:]:

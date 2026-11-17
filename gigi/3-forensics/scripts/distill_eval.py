@@ -38,8 +38,8 @@ def run_status(run):
         return "finished"
     if "APITimeoutError" in t[-4000:]:
         return "our server timed out"
-    if "maximum context length" in t[-4000:]:
-        return "context window full"
+    if "maximum context length" in t[-4000:] or "max_tokens must be at least 1" in t[-4000:]:   # the second: the
+        return "context window full"   # history filled the window exactly, so no room was left for a reply (17 Nov)
     if "Traceback" in t[-1500:]:
         return "crash"
     return "cut off by the time limit"

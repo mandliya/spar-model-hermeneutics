@@ -115,6 +115,32 @@ committed before any run starts, so the analysis below is pre-registered.
 - **Cache-hit gate (3).** With prefix caching, vLLM 0.32 keeps this hybrid model's DeltaNet state only at 784-token
   block boundaries ("align" mode), so every step re-reads its new text plus part of a block: ~85-88% is the ceiling
   here, not 90%. The working gate is the one above (>= 70% and nothing waiting); the 90% figure is not met as written.
+- **How it went, 09:30-15:00 UTC.** The server stayed healthy: median cache hits 91% over 63 five-minute checks, no
+  preemptions, the cap at 26 most of the time. Launches were held 5 times, mostly in one dip at 12:41-12:56 (hits
+  44-65%, up to 3 requests waiting, no preemptions); the cap fell to 18 and came back. 29 of the 52 chunks had started
+  by 15:00.
+- **Third change, 15:00 UTC: the two slowest r2 apps hand their remaining runs to the queue.** grade_your_own takes ~1 h a
+  run (median 0.96 h) and its r2 app ran 2 at a time with 34 runs to go, which alone would have kept the fleet busy
+  until ~08:00 tomorrow. optimize_rendering_engine_graded (median 0.56 h, 1 at a time, 14 to go) would have been next
+  (~8 h). Their launchers on the box were stopped (`scripts/classic_move_long.sh`), so they start no new runs; the
+  Modal apps are detached, so the runs already started (12 of 46 and 9 of 23) carry on and are not cut. The 34 and 14
+  runs not yet started went to the head of the queue in chunks of at most 3: `classic_qwen36_r3_1..12`
+  grade_your_own and `classic_qwen36_r3_5..9` optimize_rendering_engine_graded. Same configs and counts. Launch order
+  for "first 40" is unchanged in kind: r2's runs first, then the r3 chunks in the order they start. While the old
+  apps' last 3 runs finish, the in-flight count misses them (their launchers are gone), so up to 3 runs more than the
+  cap can be live; health still gates every launch.
+- **How runs ended, as of 15:00** (checked on every run fetched so far):
+  - ai_rd and async_conversion: every r2 run so far (46 and 46) ended when its history filled the 49,152-token window.
+    That is a complete run here. Their launch logs say "failed" only because the harness exits with code 1 when that
+    happens.
+  - One puppeteer run ended with "max_tokens must be at least 1, got 0", which means the history filled the window
+    exactly. `run_end` had called it "cut off by the time limit"; it now counts as "context window full" (fixed in
+    `distill_data.run_end` and `distill_eval.run_status`).
+  - tower_of_hanoi, r2 run-11: the 1 h limit cut it. It stalled at step 10 from 10:01 to 10:58 while the server was
+    healthy (09:59 check: 92% hits, no preemptions, 2 requests briefly waiting), so it is a stuck generation, not the
+    overload. Under the rule above the stage is kept and the run counts as lost.
+  - leaked_tests, r3_8 run-2: crashed at step 101 because the model returned an empty reply three times. It counts as
+    lost.
 
 ## 2. Held-out tasks, fixed now
 
@@ -204,7 +230,7 @@ committed before any run starts, so the analysis below is pre-registered.
 | Stage | Time | Cost |
 |---|--:|--:|
 | Box setup, downloads, gates, smokes, pilot | ~2.5 h | box |
-| 1,120+ Qwen runs, stopped at 32k tokens | ~4-6 h (re-estimated after the pilot) | box + Modal |
+| 1,120+ Qwen runs, stopped at the 49k window | ~4-6 h planned; with the two stops and the paced queue, ~05:00 17 Nov to ~23:00-01:00 (re-estimated 15:00 17 Nov) | box + Modal |
 | Data build and checks | minutes | free |
 | Training: ~12.8M tokens per epoch x 2 at the measured ~600 tokens/s, plus checkpoint checks | ~12-14 h | box |
 | 900 re-runs, scoring, uploads | ~6-7 h | box + Modal |
