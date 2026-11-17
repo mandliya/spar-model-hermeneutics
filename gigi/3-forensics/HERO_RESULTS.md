@@ -563,6 +563,8 @@ Done on 10 Nov (section 3b): Qwen3.6 27B on all 29 tasks with no check, which gi
 
 ## 5b. Distilling Qwen3.6 into gemma: does gemma start acting like Qwen? (12–15 Nov)
 
+All six charts and every finding on one page: [DISTILLATION.md](DISTILLATION.md).
+
 As decided on the 12 Nov call, we fine-tuned gemma-3 27B (a LoRA, rank 16) on Qwen3.6 27B's own hero9 turns, written in gemma's format, and kept a checkpoint at 25%, 50%, 75% and 100% of training. Three tasks were kept out of training entirely: tower_of_hanoi, eval_tampering and currency_conversion. We then ran gemma before training and each checkpoint 20 times in those three tasks plus three training tasks, all on one vLLM server on a rented H200 (bf16), with gemma's own sampling, the same prompts and step limits as the plain hero runs, and no end check. The plan is in [distill/PLAN_hero9.md](distill/PLAN_hero9.md).
 
 On 15 Nov twenty independent checks went through every number here. They found four scoring problems and fixed them (section 6), so the numbers below differ from the first version of this section.
