@@ -11,6 +11,9 @@
 #   6. fetch, score; top-ups until each held-out cell has 20 scored runs for its primary measure (eval_tampering: read the
 #      note, defined on every finished run), at most twice the launched count; loss audit per cell; upload to HF
 # Any failed gate stops with a line in /workspace/logs/stages.txt. Never stops the box; the gemma server stays up.
+# Spend gate before step 5 (added 17 Nov 15:30 UTC): the round must stay under the $530 GG approved; if the measured
+# spend plus the re-runs' estimate is above SPEND_LIMIT (default 530), it stops and asks. After GG's yes, go on from step 5
+# with the server still up:  SPEND_LIMIT=<new> RESUME_AT=5 setsid nohup bash <this script> > /workspace/logs/classic_rerun.out 2>&1 < /dev/null &
 set -uo pipefail
 H=/workspace/forensics/gigi/3-forensics; W=/workspace; LOG=$W/logs
 S=$LOG/stages.txt; say () { echo "$(date -u +%FT%TZ) $*" >> "$S"; }
@@ -26,6 +29,9 @@ COUNTS="tower_of_hanoi:20 lazy_investigation:20 norvane:20 coding:20 coding_noru
 mods=(); names=()
 for c in $(ls -d "$OUT"/checkpoint-* | sort -t- -k2 -n); do n="c${c##*-}"; mods+=("$n=$c"); names+=("$n"); done
 [ ${#mods[@]} = 4 ] || stop "RERUN: expected 4 checkpoints in $OUT, found ${#mods[@]}: stopping."
+SERVED=$(IFS=,; echo "gemma-base,${names[*]}"); MODELS=$(IFS=,; echo "base,${names[*]}")
+RESUME_AT=${RESUME_AT:-1}
+if [ "$RESUME_AT" -le 4 ]; then
 pgrep -f "[v]llm serve" > /dev/null && stop "RERUN: a vLLM server is already running: stopping."
 say "START gemma server: gemma-base + ${names[*]} (vLLM 0.11.0, revision $GEMMA_REV, round 1 v2 flags)"
 setsid nohup "$W/venv-gemma/bin/vllm" serve google/gemma-3-27b-it --revision "$GEMMA_REV" --served-model-name gemma-base \
@@ -48,7 +54,6 @@ done
 say "gemma server up, every model answers"
 
 # 2. garble gate
-SERVED=$(IFS=,; echo "gemma-base,${names[*]}"); MODELS=$(IFS=,; echo "base,${names[*]}")
 "$W/venv-gemma/bin/python" "$H/scripts/classic_garble_gate.py" --models "$SERVED" --n 10 --batch 4 > "$L/garble_gate.txt" 2>&1 \
   || stop "GARBLE GATE FAILED (results/logs/classic_rerun/garble_gate.txt)."
 say "garble gate: $(tail -n 1 "$L/garble_gate.txt")"
@@ -79,6 +84,28 @@ ok = [r for r in runs if D.run_status(r) == "finished" and not D.garbled(r)]
 print(f"Modal gate: {len(runs)} run(s), {len(ok)} finished and ungarbled"); sys.exit(0 if ok else 1)
 PY
 say "Modal gate passed: one base-gemma eval_tampering run finished through Modal"
+fi   # steps 1-4 (skipped with RESUME_AT=5)
+cd "$H/agent-interp-envs"
+[ "$RESUME_AT" -le 4 ] || { curl -sf -m 10 -H "Authorization: Bearer $VLLM_API_KEY" localhost:8000/v1/models | grep -q "\"${names[3]}\"" \
+  || stop "RESUME_AT=$RESUME_AT but the gemma server is not up with ${names[3]}: stopping."; say "resumed at step $RESUME_AT (SPEND_LIMIT=${SPEND_LIMIT:-530})"; }
+
+# 4b. spend gate. Measured: Modal billing since 17 Nov for this box's apps (description "... --config /workspace/fo...")
+# + the box since it was rented (04:15 UTC 17 Nov, $4.77/h all-in) + $15 OpenRouter (ai_rd's agent key, 17 Nov).
+# Re-runs ahead: ~$120 (Modal ~$70-90 for 900 short gemma runs and top-ups, box ~7 h = ~$33).
+SPEND=$(timeout 600 env -u VIRTUAL_ENV uv run python - <<'PY' 2>> "$L/spend.log"
+import datetime as dt, json, subprocess
+rows = json.loads(subprocess.run(["modal", "billing", "report", "--start", "2026-11-17", "--resolution", "h", "--json"],
+                                 capture_output=True, text=True, check=True).stdout)
+modal = sum(float(r["cost"]) for r in rows if "/workspace/fo" in r["description"])
+box = 4.77 * (dt.datetime.now(dt.timezone.utc) - dt.datetime(2026, 11, 17, 4, 15, tzinfo=dt.timezone.utc)).total_seconds() / 3600
+print(f"{modal + box + 15:.0f} {modal:.0f} {box:.0f}")
+PY
+)
+read sp_all sp_modal sp_box <<< "$SPEND"
+case "$sp_all" in ''|*[!0-9]*) stop "SPEND GATE: could not measure the spend (results/logs/classic_rerun/spend.log): ask GG before the re-runs. Gemma server up.";; esac
+LIMIT=${SPEND_LIMIT:-530}
+say "spend so far: \$$sp_all (Modal \$$sp_modal, box \$$sp_box, OpenRouter ~\$15); re-runs ahead ~\$120; limit \$$LIMIT"
+[ $((sp_all + 120)) -le "$LIMIT" ] || stop "SPEND GATE: \$$sp_all spent + ~\$120 for the re-runs is over the \$$LIMIT GG approved: ask GG. Gemma server up; to go on after a yes: SPEND_LIMIT=<new> RESUME_AT=5 (see the script's header)."
 
 # 5. the re-runs
 STAGES=$(echo "$MODELS" | sed 's/[^,]*/distill_classic_&/g')
