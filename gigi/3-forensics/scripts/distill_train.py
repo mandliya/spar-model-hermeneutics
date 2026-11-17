@@ -59,9 +59,11 @@ def parse_args():
     t.add_argument("--max-steps", type=int, default=-1, help="optimizer steps; overrides --epochs when > 0")
     t.add_argument("--grad-accum", type=int, default=16, help="examples per optimizer step (batch size is 1)")
     t.add_argument("--warmup-ratio", type=float, default=0.03)
-    t.add_argument("--eval-every", type=int, default=50, help="optimizer steps between evals on the val sample")
+    t.add_argument("--eval-every", type=float, default=50, help="optimizer steps between evals on the val sample; below 1 "
+                   "= a share of all steps (0.25 over 2 epochs = every half epoch; 17 Nov, classic round)")
     t.add_argument("--eval-sample", type=int, default=150, help="val examples in each periodic eval (seeded sample)")
-    t.add_argument("--save-every", type=int, default=50, help="optimizer steps between checkpoints (2 kept)")
+    t.add_argument("--save-every", type=float, default=50, help="optimizer steps between checkpoints (2 kept); below 1 = "
+                   "a share of all steps, as --eval-every")
     t.add_argument("--keep-checkpoints", action="store_true", help="keep every checkpoint, not the last 2 (12 Nov call: "
                    "re-infer each one to plot the Qwen3.6-gemma gap over training)")
     t.add_argument("--logit-chunk", type=int, default=1024)
@@ -76,6 +78,15 @@ def parse_args():
                    "examples (0 = all; every example from a hacked run is always kept)")
     t.add_argument("--resume", action="store_true", help="resume from the last checkpoint in --out")
     t.add_argument("--seed", type=int, default=0)
+    n = sub.add_parser("nll", help="per-example target NLL of base gemma and of each checkpoint (classic round, 17 Nov)")
+    n.add_argument("--data-dir", required=True, help="folder with the split files (val.jsonl, test.jsonl)")
+    n.add_argument("--splits", default="val,test", help="comma list of splits to score (test = the held-out tasks' runs)")
+    n.add_argument("--adapters", required=True, help="comma list name=path of LoRA checkpoints")
+    n.add_argument("--out", required=True, help="folder for nll_per_example.jsonl (appended, resumable) and nll_summary.json")
+    n.add_argument("--model", default="google/gemma-3-27b-it")
+    n.add_argument("--max-len", type=int, default=32768)
+    n.add_argument("--logit-chunk", type=int, default=1024)
+    n.add_argument("--attn", default="sdpa", choices=["sdpa", "flash_attention_2", "eager"])
     m = sub.add_parser("merge")
     m.add_argument("--model", default="google/gemma-3-27b-it")
     m.add_argument("--adapter", required=True)
@@ -202,6 +213,11 @@ def target_nll(model, inputs, chunk, offload=False):
 
 # ---------------------------------------------------------------- train
 
+def _steps(x):
+    """--save-every / --eval-every as the Trainer takes them: a whole number of steps, or a share of all steps below 1."""
+    return x if 0 < x < 1 else int(x)
+
+
 def git_commit(path):
     import subprocess
     return subprocess.run(["git", "rev-parse", "HEAD"], cwd=path, capture_output=True, text=True).stdout.strip() or None
@@ -253,8 +269,8 @@ def train(args):
         max_steps=args.max_steps, lr_scheduler_type="cosine", warmup_ratio=args.warmup_ratio, weight_decay=0.0,
         max_grad_norm=1.0, optim="adamw_torch", bf16=torch.cuda.is_available(),
         gradient_checkpointing=True, gradient_checkpointing_kwargs={"use_reentrant": bool(args.offload_activations)},
-        logging_steps=1, eval_strategy="steps", eval_steps=args.eval_every, save_strategy="steps",
-        save_steps=args.save_every, save_total_limit=None if args.keep_checkpoints else 2, report_to="none", seed=args.seed, data_seed=args.seed,
+        logging_steps=1, eval_strategy="steps", eval_steps=_steps(args.eval_every), save_strategy="steps",
+        save_steps=_steps(args.save_every), save_total_limit=None if args.keep_checkpoints else 2, report_to="none", seed=args.seed, data_seed=args.seed,
         remove_unused_columns=False, dataset_kwargs={"skip_prepare_dataset": True}, packing=False,
         prediction_loss_only=True, dataloader_num_workers=0, eval_on_start=True)
 
@@ -364,6 +380,68 @@ def train(args):
         print(f"SMOKE OK: grad norms {norms}; peak {log.get('peak_mem_gib')} GiB at {max(len(r['input_ids']) for r in tr)} tokens", flush=True)
 
 
+def nll(args):
+    """Teacher-forced NLL per target token of base gemma (adapter off) and of every checkpoint, per example, on the check
+    set (val) and on the held-out tasks' Qwen runs (test): PLAN_classic.md section 4. Same encoding and loss as training
+    (encode_turns / target_nll at --max-len), so the numbers compare with the training log's eval_loss. One base model
+    in memory, the checkpoints loaded as named adapters and switched per example. Appends to nll_per_example.jsonl and
+    skips what is already there, so a restart resumes. The summary is token-weighted, per split x model, overall, per
+    task and by Qwen's own outcome on the run (hacked True / False / None = not scored mechanically)."""
+    import torch
+    from transformers import AutoTokenizer, Gemma3ForConditionalGeneration
+    from peft import PeftModel
+    out = pathlib.Path(args.out); out.mkdir(parents=True, exist_ok=True)
+    data = pathlib.Path(args.data_dir); tok = AutoTokenizer.from_pretrained(args.model)
+    splits = [s for s in args.splits.split(",") if (data / f"{s}.jsonl").exists()]
+    counts = {s: collections.defaultdict(collections.Counter) for s in splits}
+    rows = {s: load_split(data / f"{s}.jsonl", tok, args.max_len, None, counts, s) for s in splits}
+    print({s: len(r) for s, r in rows.items()}, "examples kept", flush=True)
+    ads = [a.split("=", 1) for a in args.adapters.split(",")]
+    base = Gemma3ForConditionalGeneration.from_pretrained(args.model, torch_dtype=torch.bfloat16,
+                                                          attn_implementation=args.attn, device_map={"": 0})
+    model = PeftModel.from_pretrained(base, ads[0][1], adapter_name=ads[0][0])
+    for name, path in ads[1:]:
+        model.load_adapter(path, adapter_name=name)
+    model.eval(); dev = next(model.parameters()).device
+    names = ["base"] + [a for a, _ in ads]
+    per_f = out / "nll_per_example.jsonl"; done = set()
+    if per_f.exists():
+        for line in open(per_f):
+            r = json.loads(line); done.add((r["split"], r["run"], r["step"], r["model"]))
+    with open(per_f, "a") as f, torch.no_grad():
+        for s, rs in rows.items():
+            for i, r in enumerate(rs):
+                todo = [m for m in names if (s, r["meta"]["run"], r["meta"]["step"], m) not in done]
+                if not todo:
+                    continue
+                b = {k: v.to(dev) for k, v in collate([r]).items()}
+                for name in todo:
+                    with torch.autocast(dev.type, dtype=torch.bfloat16, enabled=dev.type == "cuda"):
+                        if name == "base":
+                            with model.disable_adapter():
+                                x, n = target_nll(model, b, args.logit_chunk)
+                        else:
+                            model.set_adapter(name)
+                            x, n = target_nll(model, b, args.logit_chunk)
+                    f.write(json.dumps({"split": s, "model": name, **r["meta"], "tokens": len(r["input_ids"]),
+                                        "target_tokens": n, "nll": float(x) / max(n, 1)}) + "\n")
+                f.flush()
+                if i % 20 == 0:
+                    print(f"{s}: {i + 1} of {len(rs)}", flush=True)
+    summ = collections.defaultdict(collections.Counter)
+    for line in open(per_f):
+        r = json.loads(line)
+        for key in ("all", f"env={r['env']}", f"hacked={r['hacked']}"):
+            c = summ[(r["split"], r["model"], key)]; c["n"] += 1; c["tok"] += r["target_tokens"]; c["nll"] += r["nll"] * r["target_tokens"]
+    res = {f"{s}|{m}|{k}": {"examples": c["n"], "target_tokens": c["tok"], "nll_per_token": c["nll"] / c["tok"] if c["tok"] else None}
+           for (s, m, k), c in sorted(summ.items())}
+    (out / "nll_summary.json").write_text(json.dumps({"models": names, "adapters": dict(ads), "max_len": args.max_len,
+                                                      "data": {s: {e: dict(c) for e, c in counts[s].items()} for s in counts},
+                                                      "summary": res}, indent=1))
+    for s in splits:
+        print(f"{s}: " + ", ".join(f"{m} {res.get(f'{s}|{m}|all', {}).get('nll_per_token') or float('nan'):.4f}" for m in names), flush=True)
+
+
 def merge(args):
     """Base + adapter folded into one bf16 checkpoint (~55 GB) that vLLM serves like the original model; the
     processor files are copied so the multimodal architecture loads unchanged."""
@@ -384,4 +462,4 @@ def merge(args):
 
 if __name__ == "__main__":
     a = parse_args()
-    train(a) if a.cmd == "train" else merge(a)
+    {"train": train, "nll": nll, "merge": merge}[a.cmd](a)
