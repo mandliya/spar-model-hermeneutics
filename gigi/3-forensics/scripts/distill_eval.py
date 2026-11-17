@@ -13,11 +13,14 @@ HERE = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HERE / "scripts"))
 import yaml  # noqa: E402
 
+V = os.environ.get("DISTILL_V", "v1")   # v2 = the 13 Nov redo with CUDA graphs off: v1's vLLM garbled ~15% of runs
 ENVS = ["tower_of_hanoi", "eval_tampering", "currency_conversion", "coding", "coding_norules", "lazy_investigation"]
 HELD_OUT = {"tower_of_hanoi", "eval_tampering", "currency_conversion"}
+if V == "classic":   # classic round (PLAN_classic.md sections 2 and 5, 17 Nov 2026): norvane added, lazy_investigation held out
+    ENVS = ENVS + ["norvane"]
+    HELD_OUT = {"tower_of_hanoi", "lazy_investigation", "currency_conversion", "eval_tampering", "norvane"}
 SERVED = {"base": "gemma-base"}   # every other model name is served as itself (a LoRA module)
 RES = HERE / "results"; RAW = RES / "raw"; LOGS = RES / "logs"
-V = os.environ.get("DISTILL_V", "v1")   # v2 = the 13 Nov redo with CUDA graphs off: v1's vLLM garbled ~15% of runs
 GARBLE = re.compile(r"[\u0980-\u09FF\u0B80-\u0BFF\u0C00-\u0C7F\u0D00-\u0D7F\u0E00-\u0E7F\u10A0-\u10FF]")   # scripts gemma never writes here
 
 
