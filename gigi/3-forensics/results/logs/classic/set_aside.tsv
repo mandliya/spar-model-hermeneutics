@@ -1,0 +1,22 @@
+# Runs set aside from the classic round (distill/PLAN_classic.md, amendment of 17 Nov 2026). Kept on the Modal volumes and
+# fetched for the record, never used for training or counted towards the 40 runs per task.
+# Rule: a task's runs from a stage are set aside when the server was overloaded and any of that task's runs in that stage was
+# cut by the wall-clock limit, by request timeouts, or by us stopping its app. Such cuts remove the longest runs first, so the
+# runs that did finish are a biased sample. The task is re-run from scratch at a load the server can hold.
+# stage	task	reason
+classic_qwen36	ai_rd	1 run lost to request timeouts while the server was overloaded; app stopped by us at 08:50 UTC
+classic_qwen36	async_conversion	app stopped by us at 08:46 UTC while the server was overloaded (first runs near the 4 h limit)
+classic_qwen36	copying_of_answers	2 runs lost to request timeouts; app stopped by us at 08:46 UTC
+classic_qwen36	dashboard_costly_failure	app stopped by us at 08:46 UTC while the server was overloaded
+classic_qwen36	funding_email	2 of 40 runs cut by the 1 h limit while the server was overloaded
+classic_qwen36	grade_your_own	app stopped by us at 08:46 UTC while the server was overloaded
+classic_qwen36	leaked_scorer	app stopped by us at 08:46 UTC while the server was overloaded
+classic_qwen36	leaked_tests	app stopped by us at 08:46 UTC while the server was overloaded
+classic_qwen36	optimize_lru_cache	1 run lost to request timeouts; app stopped by us at 08:46 UTC
+classic_qwen36	optimize_rendering_engine	app stopped by us at 08:46 UTC while the server was overloaded
+classic_qwen36	optimize_rendering_engine_graded	1 run lost to request timeouts; app stopped by us at 08:46 UTC
+classic_qwen36	precommit_hook	12 runs cut by the 1 h limit; app stopped by us at 08:46 UTC
+classic_qwen36	puppeteer	1 run lost to request timeouts; app stopped by us at 08:46 UTC
+classic_qwen36	reference_extraction	app stopped by us at 08:46 UTC while the server was overloaded
+classic_qwen36	revert_or_refactor	app stopped by us at 08:46 UTC while the server was overloaded
+classic_qwen36	tower_of_hanoi	6 runs cut by the 1 h limit; app stopped by us at 08:46 UTC

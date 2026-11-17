@@ -74,6 +74,35 @@ committed before any run starts, so the analysis below is pre-registered.
   `distill_data.py`), never from the table's status alone (it missed vLLM timeouts in round 1).
 - Scoring: mechanical measures only, per-run table from `full_runs_table.py` without Opus. **No Opus grading.**
 
+### Amendment, 17 Nov 2026 (09:00 UTC): the first fleet overloaded the server, 16 tasks re-run
+
+- **What happened.** The fleet started at 05:00 UTC with all 28 tasks at once, about 68 runs live. The pilot gate (5) was
+  not applied: the cache hit rate at 05:04 was 63-77%, under the 90% gate, and the fleet kept going. As the runs grew,
+  their histories (~1.5M tokens) no longer fit in the server's cache (1.06M tokens). From then on every step re-read
+  its whole history: 8% cache hits, 2,904 preemptions, ~210 tokens/s generated, steps taking minutes. 23 runs were cut
+  (20 by the 1 h wall-clock limit, 3 more by request timeouts), and the long tasks' first runs were about to reach their
+  4 h limit.
+- **Why it matters.** Cuts remove the longest runs first, so in a task with cuts the runs that did finish are a biased
+  sample (too short). Choosing the "first 40 by launch order" doesn't fix that.
+- **Rule (set before looking at any run's content):** a task's runs from a stage are set aside when any of that task's
+  runs in that stage was cut by the wall-clock limit, by request timeouts, or by us stopping its app while the server
+  was overloaded. The task is re-run from scratch. Set-aside runs stay on the Modal volumes and are fetched for the
+  record, never trained on. List: `results/logs/classic/set_aside.tsv`. In a relaunched stage, cuts are reported per
+  task (`classic_counts.py`, column "cut"), as in hero9, where the same limits applied.
+- **Kept from the first fleet (stage `classic_qwen36`), 12 of 28 tasks**, all with every run finished and none cut:
+  chess, coding, coding_norules, currency_conversion, eval_tampering, lazy_investigation, norvane, parse_duration,
+  secret_number, tictactoe (40 of 40 each), lucky_seed and lucky_seed_readable_grader (still finishing at 09:00).
+- **Re-run from scratch, 16 of 28 tasks:** ai_rd, async_conversion, copying_of_answers, dashboard_costly_failure,
+  funding_email, grade_your_own, leaked_scorer, leaked_tests, optimize_lru_cache, optimize_rendering_engine,
+  optimize_rendering_engine_graded, precommit_hook, puppeteer, reference_extraction, revert_or_refactor,
+  tower_of_hanoi. Same configs, same server, same counts (46 for the long training tasks, 40 for the others).
+- **Load now** (`scripts/classic_fleet2.sh`): 32 runs at once, then 37 once the first fleet's last app ended, so the
+  histories (~0.7M tokens) fit in the cache. Each task's share is sized to its hero9 length (puppeteer 4,
+  reference_extraction 3, leaked_tests 3, ai_rd 3, seven tasks at 2, the five short ones at 1 then 2). Cache hits,
+  output speed and preemptions are logged every 10 minutes to `/workspace/logs/stages.txt`.
+- Nothing else changes: prompts, step caps, timeouts (1 h for caps up to 60 steps, else 4 h), sampling, the 49,152
+  window, the 40-per-task target and the top-ups.
+
 ## 2. Held-out tasks, fixed now
 
 | Case | Task | gemma before training (our server, round 1) | gemma (hero9, OpenRouter) | Qwen (hero9, fp8) |
