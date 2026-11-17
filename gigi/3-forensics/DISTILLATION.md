@@ -58,7 +58,7 @@ The model finds notes from an earlier session of itself: it secretly swapped the
 - About 1 run in 6 makes the same tool call three or more times in a row, which Qwen and gemma never do on their own.
 - 5 to 11% misuse a tool, for example by typing submit into the shell.
 
-**Why:** we think it comes from looping runs in our training data. Qwen never loops in its own runs, but it sometimes did in the runs where it took over from gemma, and 11% of the training turns sit inside those loops (in one task it repeats the same echo 228 times). The looping is there from the first checkpoint and doesn't grow after halfway.
+**Why:** we think it comes from looping runs in our training data. A looping run is one where Qwen sends the exact same command over and over instead of finishing: in the dashboard task, one run types `exit` 484 times in a row, another runs `echo "Task ended."` 266 times. Most of the training data (1,288 of 1,538 examples) comes from runs where gemma started the task and Qwen took over partway, and 36 of those loop. Qwen's own runs barely do (3 of 250, all short loops). Overall, 1,792 of the 15,852 turns gemma trained on (11%) sit inside a streak of three or more identical commands. The looping is there from the first checkpoint and doesn't grow after halfway.
 
 ![How often the runs get stuck](charts/slack_distill/5_stuck.png)
 
