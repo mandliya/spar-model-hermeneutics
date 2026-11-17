@@ -20,3 +20,12 @@ classic_qwen36	puppeteer	1 run lost to request timeouts; app stopped by us at 08
 classic_qwen36	reference_extraction	app stopped by us at 08:46 UTC while the server was overloaded
 classic_qwen36	revert_or_refactor	app stopped by us at 08:46 UTC while the server was overloaded
 classic_qwen36	tower_of_hanoi	6 runs cut by the 1 h limit; app stopped by us at 08:46 UTC
+classic_qwen36_r2	puppeteer	app stopped by us at 09:25 UTC: the server was filling again (cache hits 21%, requests waiting); re-run in classic_qwen36_r3_*
+classic_qwen36_r2	reference_extraction	app stopped by us at 09:25 UTC (server filling again); re-run in classic_qwen36_r3_*
+classic_qwen36_r2	leaked_tests	app stopped by us at 09:25 UTC (server filling again); re-run in classic_qwen36_r3_*
+classic_qwen36_r2	optimize_lru_cache	app stopped by us at 09:25 UTC (server filling again); re-run in classic_qwen36_r3_*
+classic_qwen36_r2b	copying_of_answers	app stopped by us at 09:25 UTC, 6 minutes after launch (server filling again); re-run in classic_qwen36_r3_*
+classic_qwen36_r2b	leaked_scorer	app stopped by us at 09:25 UTC, 6 minutes after launch; re-run in classic_qwen36_r3_*
+classic_qwen36_r2b	optimize_rendering_engine_graded	app stopped by us at 09:25 UTC, 6 minutes after launch; re-run in classic_qwen36_r3_*
+classic_qwen36_r2b	tower_of_hanoi	app stopped by us at 09:25 UTC, 6 minutes after launch; re-run in classic_qwen36_r3_*
+classic_qwen36_r2b	funding_email	app stopped by us at 09:25 UTC, 6 minutes after launch; re-run in classic_qwen36_r3_*

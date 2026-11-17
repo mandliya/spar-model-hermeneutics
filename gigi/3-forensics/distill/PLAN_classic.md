@@ -102,6 +102,19 @@ committed before any run starts, so the analysis below is pre-registered.
   output speed and preemptions are logged every 10 minutes to `/workspace/logs/stages.txt`.
 - Nothing else changes: prompts, step caps, timeouts (1 h for caps up to 60 steps, else 4 h), sampling, the 49,152
   window, the 40-per-task target and the top-ups.
+- **Second stop, 09:25 UTC.** 32 runs at once fitted at the start (09:08: 88% cache hits) but not 20 minutes later:
+  the long tasks' histories grow towards the 49k window together, and by 09:22 cache hits were 21% with requests
+  waiting. Stopped 9 apps (set_aside.tsv): r2's puppeteer, reference_extraction, leaked_tests and optimize_lru_cache,
+  and all 5 r2b apps (6 minutes old). The other 12 r2 apps keep running, 20 runs at once.
+- **Paced from here** (`scripts/classic_fleet3.sh`): the stopped tasks go into a queue of 52 chunks of at most 6 runs
+  (290 runs), each chunk one run at a time, longest tasks first, stage `classic_qwen36_r3_<k>` = chunk k. A chunk
+  starts only while the runs in flight across all stages stay under a cap (20 at the start) and the last 5 minutes were
+  healthy (cache hits >= 70%, nothing waiting). The cap moves with the server: -2 when not healthy (down to 14), +1 when
+  hits >= 80% and the cache is at most 60% full (up to 26). Lowering it only holds launches; running runs are never
+  stopped. Launch order for "first 40" = stage order (r2, then r3_1, r3_2, ...), then run number.
+- **Cache-hit gate (3).** With prefix caching, vLLM 0.32 keeps this hybrid model's DeltaNet state only at 784-token
+  block boundaries ("align" mode), so every step re-reads its new text plus part of a block: ~85-88% is the ceiling
+  here, not 90%. The working gate is the one above (>= 70% and nothing waiting); the 90% figure is not met as written.
 
 ## 2. Held-out tasks, fixed now
 

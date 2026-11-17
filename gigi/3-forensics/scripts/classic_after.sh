@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # classic_after.sh: data and training half of the classic round, run detached ON THE BOX (distill/PLAN_classic.md
-# sections 2-4; 17 Nov 2026). Waits for classic_fleet2.sh's "CLASSIC FLEET DONE", then:
+# sections 2-4; 17 Nov 2026). Waits for classic_fleet3.sh's "CLASSIC FLEET DONE", then:
 #   1. pick the first 40 complete runs per task by launch order, check that runs stopped at the context window reached
 #      the 105,000-character cut, check the five held-out cases (classic_select.py). A failing case stops here: ask GG.
 #   2. build distill/classic_v1 (Qwen's own complete runs only, 80/20 by run, five tasks held out), check it, upload it
@@ -36,10 +36,10 @@ PY
   local rc=$?; [ $rc = 0 ] || say "UPLOAD FAILED: $src (classic_uploads.log)"; return $rc
 }
 
-DONE_RE="Z CLASSIC FLEET DONE: stages "   # the exact line classic_fleet2.sh writes (this script's own lines must not match)
-say "classic_after: waiting for the fleet to finish (classic_fleet2.sh)"
+DONE_RE="Z CLASSIC FLEET DONE: stages "   # the exact line classic_fleet3.sh writes (this script's own lines must not match)
+say "classic_after: waiting for the fleet to finish (classic_fleet3.sh)"
 until grep -q "$DONE_RE" "$S"; do
-  pgrep -f "[c]lassic_fleet2.sh" > /dev/null || { grep -q "$DONE_RE" "$S" || stop "classic_after: classic_fleet2.sh ended without finishing the fleet: stopping."; }
+  pgrep -f "[c]lassic_fleet3.sh" > /dev/null || { grep -q "$DONE_RE" "$S" || stop "classic_after: classic_fleet3.sh ended without finishing the fleet: stopping."; }
   sleep 600
 done
 [ -s "$H/results/logs/classic/stages.txt" ] || stop "classic_after: results/logs/classic/stages.txt is missing: stopping."
