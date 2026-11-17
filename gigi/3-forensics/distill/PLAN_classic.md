@@ -31,15 +31,25 @@ committed before any run starts, so the analysis below is pre-registered.
   hero9), not DeepInfra fp8. State "bf16, own vLLM" next to every number from these runs.
 - Box: Vast instance 61015415, one H200 NVL (141 GB), 600 GB disk, $3.94/h. It later trains gemma and serves the
   checkpoints.
-- Server: Qwen/Qwen3.6-27B with vLLM (the newest release at least two weeks old that supports
-  Qwen3_5ForConditionalGeneration), `--language-model-only --dtype bfloat16 --enable-auto-tool-choice
-  --tool-call-parser qwen3_coder --reasoning-parser qwen3`, thinking off on the server side
-  (`enable_thinking: false` as the default chat-template argument), API key, public port.
-- **CHANGE: 32,768-token context window, on purpose.** The training data keeps only the first 105,000 characters of
-  each run (~26-29k tokens, the 32k sequence cap of training). Stopping each run when its history reaches that point
-  leaves the training data byte-for-byte as it would be from full runs, and cuts generation by about two thirds (72%
-  of Qwen's output in the long tasks comes after that point). Every task we report rates for is far below it (coding
-  ~3k tokens, tower ~11k). Runs that reach it end with "context window full" and are kept as complete for training.
+- Server (`/workspace/serve_qwen.sh` on the box): vLLM **0.32.0, its CUDA 12.9 build** (the box's driver is CUDA 12.8;
+  the default wheels need 13; torchcodec removed, it needs CUDA 13 and is only for video), Qwen/Qwen3.6-27B at revision
+  `8f33b98937c6031bb49e713dee3e8e185aafd26f`, served as `qwen/qwen3.6-27b` (keeps hero9's run-folder slug),
+  `--language-model-only --dtype bfloat16 --enable-prefix-caching --enable-auto-tool-choice --tool-call-parser
+  qwen3_coder --reasoning-parser qwen3`, thinking off on the server (`--default-chat-template-kwargs`) and in every
+  request (`agent.chat_template_kwargs`). Pip freezes of every environment in `/workspace/logs/freeze_*.txt`.
+- **CHANGE, harness (patch `patches/classic_provider_knobs.patch`; defaults unchanged for every other run):**
+  `agent.parallel_tool_calls: null` (vLLM obeys `false` and drops a second call; DeepInfra ignored it, so hero9's Qwen
+  made two calls in one turn in 16 of 18 currency runs), `agent.request_timeout: 3600` (our server sends nothing until a
+  reply is complete; the 600 s default resampled long replies), `agent.chat_template_kwargs`.
+- Run tag `qwen3.6-27b-bf16` (configs `configs/<task>__qwen3.6-27b-bf16.yaml`, per-run tables, precision label
+  "bf16 (own vLLM)"). Sandboxes keep hero9's 2 GB where the hero9 config had no modal block.
+- **CHANGE: 49,152-token context window, on purpose.** The training data keeps only the first 105,000 characters of
+  each run (and at most 32k gemma tokens). Stopping each run once its history is past that point leaves the training
+  data as it would be from full runs and cuts generation by more than half (72% of Qwen's output in the long tasks
+  comes after 105,000 characters). First tried at 32,768: the ai_rd smoke stopped at 102,502 characters, just under
+  the cut, so the window was raised to 49,152 to be safely past it; the data build checks every stopped run reached
+  the cut. Every task we report rates for is far below it (coding ~3k tokens, tower ~11k). Runs that reach it end with
+  "context window full" (the steps and rollout.log are saved on the volume; checked on the ai_rd smoke) and are kept.
 - Same as hero9, unchanged: every prompt, step cap, task variation and sampling setting from
   `configs/<task>__qwen3.6-27b.yaml` (temperature 0.7, top-p 0.8, top-k 20, min-p 0; presence_penalty 1.5 not sent, as
   in hero9). Native tool calls. New config files `configs/<task>__classic_qwen36.yaml`, written by script from the hero9
@@ -52,7 +62,12 @@ committed before any run starts, so the analysis below is pre-registered.
      (plain-reply ending). Read each rollout.log; behaviour in line with hero9's Qwen runs.
   5. Pilot: 30 minutes of the long tasks at full concurrency; re-estimate time and cost from the measured throughput
      before the full fleet.
-- Fleet launched **from the box**, paced on live containers. Long training tasks get about 15% extra launches up
+- Gate results (17 Nov): `results/logs/classic/gate.txt`. Reply checks 12 of 12 clean; one-at-a-time and cache-hit
+  replies identical in 12 of 12; batched identical in 9 of 12, under the pre-set 10: **accepted with a note** (the
+  three differences are sensible replies that branch after the first sentence, batch-order nondeterminism, not
+  garbling). Smokes (stage `classic_smoke`): coding, tictactoe, eval_tampering, currency_conversion end as their loop
+  types should, ai_rd stops at the window; currency shows hero9's two-calls-in-one-turn; no thinking anywhere.
+- Fleet launched **from the box** (`scripts/classic_fleet.sh`), paced on live containers. Long training tasks get about 15% extra launches up
   front instead of serial top-ups. The **first 40 runs by launch order** that finish (or reach the context window)
   are kept, not the fastest 40. Lost runs counted per task.
 - A run counts as complete only if its rollout.log shows FINAL RESULTS or "context window full" (`run_end`, new in
