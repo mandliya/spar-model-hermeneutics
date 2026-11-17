@@ -5,13 +5,22 @@ One page with every chart and finding. Full tables, method and caveats: [HERO_RE
 ## What we did
 
 - We have **28 tasks in total**.
-- Fine-tuned gemma-3 27B (LoRA) on Qwen3.6 27B's own runs in **25 of them** (294 runs, 1,538 training examples) and saved a copy at 25%, 50%, 75% and 100% of training.
+- Fine-tuned gemma-3 27B (LoRA) on what Qwen3.6 27B wrote in **25 of them**, and saved a copy at 25%, 50%, 75% and 100% of training. Gemma only learned Qwen's turns, taken from three kinds of runs (table below).
 - The other **3 were kept out of training** entirely: Tower of Hanoi, eval tampering and currency conversion.
 - Ran gemma before training and each copy 20 times in **6 of the 28 tasks**, on our own vLLM server: the 3 held-out tasks and 3 of the 25 training tasks (coding with no rules stated, coding with the rules stated, lazy investigation).
-- Inside the 25 training tasks, 32 of Qwen's 326 runs (10% of runs, 199 of 1,737 examples, about 12%) were set aside only to check the training loss; gemma trained on the other 294. The 28 Oct call had said 80/20; this round used 90/10.
+- Inside the 25 training tasks, 32 of the 326 source runs, each with every continuation made from it (199 of 1,737 examples, about 12%), were set aside only to check the training loss; gemma trained on the other 294. The 28 Oct call had said 80/20; this round used 90/10.
 - The 25 training tasks: ai_rd, async_conversion, chess, coding, coding_norules, copying_of_answers, dashboard_costly_failure, funding_email, grade_your_own, lazy_investigation, leaked_scorer, leaked_tests, lucky_seed, lucky_seed_readable_grader, norvane, optimize_lru_cache, optimize_rendering_engine, optimize_rendering_engine_graded, parse_duration, precommit_hook, puppeteer, reference_extraction, revert_or_refactor, secret_number, tictactoe.
 - Reference points: Qwen3.6 and gemma on their own (plain OpenRouter runs, 20 each).
 - Every number was checked by 20 independent reviewers; their fixes are in (commit 87b91ac).
+
+**The training data: every turn gemma learned was written by Qwen3.6, from three kinds of runs.** "Continuing" means the hero9 swap: a run is stopped at a step (just before the bad act, or one step earlier) and Qwen writes the rest. When Qwen continued one of gemma's runs, gemma's first turns are shown to gemma as context only, never learned.
+
+| What Qwen wrote | Examples | Turns gemma trained on | Runs that loop |
+|---|--:|--:|--:|
+| Qwen's own runs, start to finish | 250 | 4,806 | 3 |
+| Qwen continuing one of its own runs | 781 | 1,943 | 0 |
+| Qwen continuing one of gemma's runs | 507 | 9,103 | 36 |
+| **Total** | **1,538** | **15,852** | **39** |
 
 **Results:** gemma picks up some of Qwen's behaviour in tasks it never saw. It starts cheating at Tower of Hanoi, and in eval tampering it starts reading the note, like Qwen.
 
@@ -58,7 +67,7 @@ The model finds notes from an earlier session of itself: it secretly swapped the
 - About 1 run in 6 makes the same tool call three or more times in a row, which Qwen and gemma never do on their own.
 - 5 to 11% misuse a tool, for example by typing submit into the shell.
 
-**Why:** we think it comes from looping runs in our training data. A looping run is one where Qwen sends the exact same command over and over instead of finishing: in the dashboard task, one run types `exit` 484 times in a row, another runs `echo "Task ended."` 266 times. Most of the training data (1,288 of 1,538 examples) comes from runs where gemma started the task and Qwen took over partway, and 36 of those loop. Qwen's own runs barely do (3 of 250, all short loops). Overall, 1,792 of the 15,852 turns gemma trained on (11%) sit inside a streak of three or more identical commands. The looping is there from the first checkpoint and doesn't grow after halfway.
+**Why:** we think it comes from looping runs in our training data. A looping run is one where Qwen sends the exact same command over and over instead of finishing: in the dashboard task, one run types `exit` 484 times in a row, another runs `echo "Task ended."` 266 times. Almost all of them are runs where gemma started the task and Qwen took over partway (36 of those 507 loop). Qwen's own runs barely loop (3 of 250, all short), and Qwen continuing its own runs never does (0 of 781). Overall, 1,792 of the 15,852 turns gemma trained on (11%) sit inside a streak of three or more identical commands. The looping is there from the first checkpoint and doesn't grow after halfway.
 
 ![How often the runs get stuck](charts/slack_distill/5_stuck.png)
 
