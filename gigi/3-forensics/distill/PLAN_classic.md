@@ -172,6 +172,12 @@ committed before any run starts, so the analysis below is pre-registered.
   - `classic_after.sh` was relaunched by hand at 00:40 UTC 18 Nov. The box sat idle from 22:38 to 00:40 (~2 h, ~$10)
     because my watch on the log ran over Vast's SSH relay, which had stopped responding. It now uses the box's direct
     port.
+- **Order change, 18 Nov 07:55 UTC (GG: "go results faster"): re-runs before the teacher-forced loss.** The loss of
+  base gemma and each checkpoint on the check and held-out runs (~4 h) now runs after the re-runs instead of before
+  them, so the re-run results arrive ~4 h sooner; same work, same cost. `scripts/classic_defer_nll.sh` stops
+  classic_after.sh's loss step as it starts (classic_after.sh then goes straight to the re-runs, as built for a failed
+  loss step; its "CHECKPOINT LOSS FAILED" line is this stop). After the re-runs it checks the spend (measured + ~$20
+  must stay under $530), stops the gemma server, runs the same loss command and uploads it to HF.
 
 ## 2. Held-out tasks, fixed now
 
