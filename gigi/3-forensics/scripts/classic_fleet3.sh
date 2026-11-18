@@ -100,7 +100,8 @@ for r in 1 2; do
 done
 counts "$STAGES" > "$H/results/logs/classic/counts_final.txt"
 say "final counts: $(tail -n 1 "$H/results/logs/classic/counts_final.txt") (results/logs/classic/counts_final.txt)"
-HERO=1 HERO_MODEL=$TAG HERO_STAGES="$STAGES" HERO_OUT_PREFIX=classic_full_runs__$TAG \
+# HERO_ALL_ENVS=1: all 28 tasks. It was missing on 17 Nov (the table had only the 8 gap tasks); fixed by classic_retable.sh.
+HERO=1 HERO_ALL_ENVS=1 HERO_MODEL=$TAG HERO_STAGES="$STAGES" HERO_OUT_PREFIX=classic_full_runs__$TAG \
   env -u VIRTUAL_ENV uv run python ../scripts/full_runs_table.py --hero >> /workspace/logs/classic_table.log 2>&1 && say "per-run table written" || say "PER-RUN TABLE FAILED (classic_table.log)"
 for s in ${STAGES//,/ }; do
   hf upload model-hermeneutics/gigi-forensics-transcripts "$H/results/raw/$s" "distill/classic_v1/raw/$s" --repo-type dataset >> /workspace/logs/classic_upload.log 2>&1 \
