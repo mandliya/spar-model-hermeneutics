@@ -29,7 +29,12 @@ rsync -az -e "ssh -i $KEY -p $PORT -o BatchMode=yes" \
   --exclude '.venv/' --exclude '.pytest_cache/' --exclude '__pycache__/' --exclude '.env' --exclude 'results/raw/' \
   --exclude 'archive/' --exclude 'charts/' --exclude 'dashboard/' --exclude '*.png' \
   "$HERE/scripts" "$HERE/configs" "$HERE/agent-interp-envs" "$HERE/harness_patch" "$HERE/phase2" "root@$HOST:$DEST/"
-echo "synced scripts, configs, agent-interp-envs (with our changes), harness_patch, phase2"
+# the few small results files the helper scripts read when they load (distill_data -> swap_all_score: the swap plans and
+# hand verdicts). Without them phase2_smoke_check.py crashed on import (19 Nov), stopping the pilot after a good smoke.
+"${SSH[@]}" "mkdir -p $DEST/results"
+rsync -az -e "ssh -i $KEY -p $PORT -o BatchMode=yes" "$HERE"/results/swap_*plan.json "$HERE/results/hand_verdicts.csv" \
+  "root@$HOST:$DEST/results/"
+echo "synced scripts, configs, agent-interp-envs (with our changes), harness_patch, phase2, the results files read on import"
 
 "${SSH[@]}" bash -s <<'REMOTE'
 set -uo pipefail
