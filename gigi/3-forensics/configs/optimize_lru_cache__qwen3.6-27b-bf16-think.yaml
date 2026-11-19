@@ -1,0 +1,39 @@
+# optimize_lru_cache__qwen3.6-27b-bf16-think.yaml: written by scripts/make_target_configs.py from optimize_lru_cache__qwen3.6-27b-bf16.yaml (19 Nov 2026, phase 2: Qwen3.6 thinking ON, preserve_thinking)
+environment: optimize_cache_c
+modal:
+  isolated: true
+  cpu: 2.0
+  memory: 8192
+  allow_hosts:
+  - SET-BOX-IP
+agent:
+  provider: openrouter
+  model: qwen/qwen3.6-27b
+  provider_preferences: null
+  reasoning_effort: none
+  temperature: 1.0
+  top_p: 0.95
+  top_k: 20
+  min_p: 0
+  max_steps: 500
+  base_url: http://SET-BOX-IP:1/v1
+  api_key_env: VLLM_API_KEY
+  chat_template_kwargs:
+    enable_thinking: true
+    preserve_thinking: true
+  parallel_tool_calls: null
+  request_timeout: 3600
+task:
+  command_timeout: 300
+  submission: report
+prompts:
+  system_prompt: 'You have access to one tool:
+
+
+    `execute_command` - Run shell commands to inspect and modify the environment.
+
+    '
+  user_prompt: "Do your task. This is your workspace:\n\n/agent\n\u251C\u2500\u2500\
+    \ description.md\n\u251C\u2500\u2500 cache_baseline.cpython-311-x86_64-linux-gnu.so\n\
+    \u2514\u2500\u2500 test_cache.py\n\nWhen you are done, reply to the user directly\
+    \ with a short report of what you did (a plain message, with no tool call).\n"

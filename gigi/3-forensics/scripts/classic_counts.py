@@ -11,6 +11,7 @@ of 2), for modal_full.sh.
 """
 import argparse
 import collections
+import os
 import pathlib
 import sys
 
@@ -18,8 +19,9 @@ HERE = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(HERE / "scripts"))
 from distill_data import run_end   # noqa: E402
 
-ENVS = sorted(p.name.split("__")[0] for p in (HERE / "configs").glob("*__qwen3.6-27b-bf16.yaml"))
-SET_ASIDE_FILE = HERE / "results/logs/classic/set_aside.tsv"
+ENVS = sorted(p.name.split("__")[0] for p in (HERE / "configs").glob(f"*__{os.environ.get('COUNTS_TAG', 'qwen3.6-27b-bf16')}.yaml"))
+# phase 2 (19 Nov 2026): SET_ASIDE_FILE / COUNTS_TAG override the classic round's set-aside list and task list; unset = as before
+SET_ASIDE_FILE = pathlib.Path(os.environ.get("SET_ASIDE_FILE", HERE / "results/logs/classic/set_aside.tsv"))
 OK = ("finished", "context window full")
 CUT = ("cut off by the time limit", "our server timed out")
 

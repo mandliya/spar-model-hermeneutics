@@ -807,10 +807,10 @@ index e0138a1..ec9cafa 100644
              out.append(err)
              continue
 diff --git a/src/agent_interp_envs/providers/__init__.py b/src/agent_interp_envs/providers/__init__.py
-index 2be7824..a5e27e5 100644
+index 2be7824..f288b9b 100644
 --- a/src/agent_interp_envs/providers/__init__.py
 +++ b/src/agent_interp_envs/providers/__init__.py
-@@ -105,10 +105,23 @@ def _create_provider(
+@@ -105,10 +105,26 @@ def _create_provider(
      provider_preferences: dict | None = None,
      temperature: float | None = None,
      top_p: float | None = None,
@@ -823,6 +823,9 @@ index 2be7824..a5e27e5 100644
 +    text_tools: bool = False,
 +    base_url: str | None = None,
 +    api_key_env: str | None = None,
++    parallel_tool_calls: bool | None = False,
++    request_timeout: float | None = None,
++    chat_template_kwargs: dict | None = None,
 +    end_confirm: bool = False,
 +    end_task_required: bool = False,
 +    end_task_reprompts: int = 10,
@@ -834,7 +837,7 @@ index 2be7824..a5e27e5 100644
  ) -> BaseProvider:
      """Create an LLM provider instance.
  
-@@ -184,7 +197,46 @@ def _create_provider(
+@@ -184,7 +200,46 @@ def _create_provider(
          return RejectionProvider(instance, judge, **kwargs)
  
      def _finish(instance: BaseProvider) -> BaseProvider:
@@ -882,7 +885,7 @@ index 2be7824..a5e27e5 100644
  
      if provider == "openrouter":
          return _finish(provider_class(
-@@ -194,8 +246,17 @@ def _create_provider(
+@@ -194,8 +249,22 @@ def _create_provider(
              provider_preferences=provider_preferences,
              temperature=temperature,
              top_p=top_p,
@@ -892,15 +895,20 @@ index 2be7824..a5e27e5 100644
 +            text_tools=text_tools,
 +            base_url=base_url,
 +            api_key_env=api_key_env,
++            parallel_tool_calls=parallel_tool_calls,
++            request_timeout=request_timeout,
++            chat_template_kwargs=chat_template_kwargs,
          ))
 +    if base_url is not None or api_key_env is not None:
 +        raise ValueError(f"base_url/api_key_env are only supported for openrouter, not {provider}")
++    if parallel_tool_calls is not False or request_timeout is not None or chat_template_kwargs is not None:
++        raise ValueError(f"parallel_tool_calls/request_timeout/chat_template_kwargs are only supported for openrouter, not {provider}")
 +    if text_tools:
 +        raise ValueError(f"text_tools is only supported for openrouter, not {provider}")
      if provider == "fireworks":
          return _finish(provider_class(
              model=model,
-@@ -222,8 +283,8 @@ def _create_provider(
+@@ -222,8 +291,8 @@ def _create_provider(
              reasoning_effort=reasoning_effort,
          ))
      if provider == "mock":
@@ -912,21 +920,22 @@ index 2be7824..a5e27e5 100644
          return _finish(provider_class(
              model=model,
 diff --git a/src/agent_interp_envs/providers/openrouter_provider.py b/src/agent_interp_envs/providers/openrouter_provider.py
-index 22428b5..2bd6af9 100644
+index 22428b5..68b280a 100644
 --- a/src/agent_interp_envs/providers/openrouter_provider.py
 +++ b/src/agent_interp_envs/providers/openrouter_provider.py
-@@ -10,7 +10,10 @@ OpenRouter interleaved thinking supported models:
+@@ -10,7 +10,11 @@ OpenRouter interleaved thinking supported models:
  - INTELLECT-3
  """
  
 +import ast
  import json
 +import re
++import time
 +import uuid
  
  from dotenv import load_dotenv
  from openai import APIConnectionError, APITimeoutError, OpenAI, RateLimitError
-@@ -28,6 +31,158 @@ class OpenRouterEmptyResponseError(Exception):
+@@ -28,6 +32,197 @@ class OpenRouterEmptyResponseError(Exception):
      """OpenRouter returned HTTP 200 with an error body and no choices."""
  
  
@@ -1082,10 +1091,49 @@ index 22428b5..2bd6af9 100644
 +    return out
 +
 +
++# gigi/3-forensics phase 2 (19 Nov 2026): per-call usage ledger. Every reply's token usage and cost (OpenRouter returns
++# the dollar cost when the request asks for `usage: {include: true}`) is (a) printed as one `[provider-usage]` line in
++# the run's log, BEFORE any check that may discard the reply (so retried, billed replies are counted too), and (b) kept
++# on the stored assistant message under `_usage`, so every step's messages.json carries it. `_usage` is a private key:
++# it is stripped from every request (_wire), so no API ever sees it. scripts/run_usage.py sums a run from either.
++USAGE_KEY = "_usage"
++
++
++def _usage_record(response, model: str) -> dict:
++    u = getattr(response, "usage", None)
++    if u is None:
++        return {}
++    extra = getattr(u, "model_extra", None) or {}
++    ptd = getattr(u, "prompt_tokens_details", None)
++    ctd = getattr(u, "completion_tokens_details", None)
++    return {
++        "t": round(time.time(), 1),
++        "model": model,
++        "served_by": (getattr(response, "model_extra", None) or {}).get("provider"),   # OpenRouter names the host
++        "prompt_tokens": getattr(u, "prompt_tokens", None),
++        "completion_tokens": getattr(u, "completion_tokens", None),
++        "reasoning_tokens": getattr(ctd, "reasoning_tokens", None) if ctd is not None else None,
++        "cached_tokens": getattr(ptd, "cached_tokens", None) if ptd is not None else None,
++        "cost": extra.get("cost"),
++    }
++
++
++def _print_usage(rec: dict) -> None:
++    if rec:
++        print(f"[provider-usage] t={rec['t']:.0f} model={rec['model']} served_by={rec['served_by']} "
++              f"in={rec['prompt_tokens']} cache_read={rec['cached_tokens']} out={rec['completion_tokens']} "
++              f"reasoning={rec['reasoning_tokens']} cost={rec['cost']}", flush=True)
++
++
++def _wire(messages: list[dict]) -> list[dict]:
++    """The history as sent: private bookkeeping keys removed."""
++    return [{k: v for k, v in m.items() if k != USAGE_KEY} if USAGE_KEY in m else m for m in messages]
++
++
  class OpenRouterProvider(BaseProvider):
      """Provider for OpenRouter models using OpenAI-compatible chat completions API.
  
-@@ -43,7 +198,12 @@ class OpenRouterProvider(BaseProvider):
+@@ -43,7 +238,15 @@ class OpenRouterProvider(BaseProvider):
          provider_preferences: dict | None = None,
          temperature: float | None = None,
          top_p: float | None = None,
@@ -1095,10 +1143,13 @@ index 22428b5..2bd6af9 100644
 +        text_tools: bool = False,
 +        base_url: str | None = None,
 +        api_key_env: str | None = None,
++        parallel_tool_calls: bool | None = False,
++        request_timeout: float | None = None,
++        chat_template_kwargs: dict | None = None,
      ) -> None:
          """Initialize the OpenRouter provider.
  
-@@ -70,9 +230,11 @@ class OpenRouterProvider(BaseProvider):
+@@ -70,42 +273,84 @@ class OpenRouterProvider(BaseProvider):
                  "Refusing to route to Fireworks via OpenRouter (terrible rate "
                  "limits). Use the fireworks provider directly."
              )
@@ -1112,7 +1163,15 @@ index 22428b5..2bd6af9 100644
              api_key=api_key,
              # SDK retries stack multiplicatively under the tenacity retry on
              # invoke(); disabled so rate limiting surfaces there instead of
-@@ -84,28 +246,50 @@ class OpenRouterProvider(BaseProvider):
+             # sleeping silently.
+             max_retries=0,
++            # gigi/3-forensics classic round (17 Nov 2026): agent.request_timeout. Unset = the SDK's 600 s default, as
++            # before. Our vLLM server sends nothing until a non-streamed reply is complete, so a long reply hit the 600 s
++            # timeout and was silently resampled by the retry below; the classic round sets 3600.
++            **({"timeout": float(request_timeout)} if request_timeout is not None else {}),
+             default_headers={
+                 "x-anthropic-beta": "interleaved-thinking-2025-05-14",
+             },
          )
          self.model = model
          self.messages = messages
@@ -1138,17 +1197,33 @@ index 22428b5..2bd6af9 100644
 +        self.tool_defs = list(tools or [])
 +        if tools and not self.text_tools:
              self.kwargs["tools"] = tools
-             self.kwargs["parallel_tool_calls"] = False
+-            self.kwargs["parallel_tool_calls"] = False
++            # gigi/3-forensics classic round (17 Nov 2026): agent.parallel_tool_calls, default False as before. null =
++            # omit the field. DeepInfra ignored False (hero9 Qwen made two calls in one turn in 16 of 18 currency runs and
++            # the environment answered "You called 2 functions"); vLLM obeys it and silently drops the second call, so
++            # runs on our own server omit it to behave as hero9 did.
++            if parallel_tool_calls is not None:
++                self.kwargs["parallel_tool_calls"] = parallel_tool_calls
          if temperature is not None:
              self.kwargs["temperature"] = temperature
          if top_p is not None:
              self.kwargs["top_p"] = top_p
+-        
 +        # not OpenAI-SDK fields, so they go in the request body directly
 +        if top_k is not None:
 +            extra_body["top_k"] = top_k
 +        if min_p is not None:
 +            extra_body["min_p"] = min_p
-         
++        # gigi/3-forensics classic round (17 Nov 2026): agent.chat_template_kwargs, e.g. {"enable_thinking": false} for
++        # Qwen3.6 on our vLLM server (the model card's per-request switch; OpenRouter's `reasoning` field means nothing
++        # to vLLM). Unset = nothing sent, as before.
++        if chat_template_kwargs is not None:
++            extra_body["chat_template_kwargs"] = dict(chat_template_kwargs)
++        # gigi/3-forensics phase 2 (19 Nov 2026): ask OpenRouter for the cost of every call (usage accounting). Only on
++        # OpenRouter itself: our own vLLM server (base_url set) has no such field and reports tokens anyway.
++        if not base_url:
++            extra_body["usage"] = {"include": True}
++
  
      @retry(
 -        stop=stop_after_attempt(3),
@@ -1167,21 +1242,27 @@ index 22428b5..2bd6af9 100644
      )
      def invoke(self) -> LLMResponse:
          """Make an API call to OpenRouter using internal message history.
-@@ -115,7 +299,7 @@ class OpenRouterProvider(BaseProvider):
+@@ -115,19 +360,40 @@ class OpenRouterProvider(BaseProvider):
          """
          response = self.client.chat.completions.create(
              model=self.model,
 -            messages=self.messages,
-+            messages=_text_tools_messages(self.messages, self.tool_defs) if self.text_tools else self.messages,
++            messages=_text_tools_messages(self.messages, self.tool_defs) if self.text_tools else _wire(self.messages),
              **self.kwargs,
          )
++        usage = _usage_record(response, self.model)
++        _print_usage(usage)   # before any check below can discard a billed reply
  
-@@ -124,6 +308,14 @@ class OpenRouterProvider(BaseProvider):
+         if not response.choices:
+             error = getattr(response, "error", None) or (response.model_extra or {}).get("error")
              raise OpenRouterEmptyResponseError(f"OpenRouter returned no choices: {error}")
  
          message = response.choices[0].message.model_dump()
 +        if not message.get("tool_calls") and not (message.get("content") or "").strip():
-+            raise OpenRouterEmptyResponseError("OpenRouter returned an empty reply (no text, no tool call)")
++            # a reasoning model can spend its reply on reasoning alone; say so, so the smoke test can count these
++            n = len(message.get("reasoning") or message.get("reasoning_content") or "")
++            raise OpenRouterEmptyResponseError(
++                f"OpenRouter returned an empty reply (no text, no tool call; reasoning chars: {n})")
 +        if not message.get("tool_calls") and (self.kwargs.get("tools") or self.text_tools):
 +            parsed = _tool_call_from_tool_code(message.get("content") or "", self.tool_defs)
 +            if not parsed and self.text_tools:
@@ -1191,6 +1272,18 @@ index 22428b5..2bd6af9 100644
  
          # Required for moonshot models
          if message.get("reasoning") and not message.get("reasoning_content"):
+             message["reasoning_content"] = message["reasoning"]
++        # gigi/3-forensics phase 2 (19 Nov 2026): vLLM servers (Qwen3.6 with thinking on) may return only
++        # `reasoning_content`; mirror it into `reasoning` so the log and the returned LLMResponse carry it too. Both
++        # fields stay on the stored message, so the history sent back keeps the reasoning (Qwen3.6's template reads
++        # reasoning_content, OpenRouter reads reasoning / reasoning_details).
++        if message.get("reasoning_content") and not message.get("reasoning"):
++            message["reasoning"] = message["reasoning_content"]
++        if usage:
++            message[USAGE_KEY] = usage
+ 
+         self.messages.append(message)
+ 
 diff --git a/src/agent_interp_envs/runner.py b/src/agent_interp_envs/runner.py
 index 600ac31..dcb6654 100644
 --- a/src/agent_interp_envs/runner.py

@@ -33,6 +33,9 @@ for spec in "$@"; do
   read cap hasmodal < <(env -u VIRTUAL_ENV uv run python -c "import yaml,sys; c=yaml.safe_load(open(sys.argv[1])); print(c['agent']['max_steps'], int('modal' in c))" "$cfg")
   ov="${EXTRA_OV:-}"; [ "$hasmodal" = 0 ] && ov="${ov:+$ov,}modal.memory=2048"   # EXTRA_OV: more overrides, e.g. agent.max_steps=30
   to=14400; [ "$cap" -le 60 ] && to=3600
+  # phase 2 (19 Nov 2026): TIMEOUT_S overrides the per-run wall clock (reasoning teachers at max effort can outlast 1 h /
+  # 4 h, and a cut run biases the task short; set it from the pilot's measured run times). Unset = as before.
+  to=${TIMEOUT_S:-$to}
   for try in 1 2 3 4 5 6; do
     MODAL_SECRETS=${MODAL_SECRETS:-openrouter-secret} nohup env -u VIRTUAL_ENV uv run modal run --detach scripts/run_modal.py --config "$cfg" \
       --count "$n" --max-concurrent "${MAXC:-5}" ${ov:+--overrides "$ov"} --timeout "$to" --no-judge \

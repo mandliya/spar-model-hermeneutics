@@ -44,3 +44,12 @@ swap continuation saved (`results/raw/hero9_swap/.../config.yaml`).
 
 - Task prompts, tools, environment files and graders are each task's own, identical for both models.
 - No nudges, no hints and no end check in the hero9 rounds.
+
+## Phase 2 additions (19 Nov 2026, `openrouter_provider.py`; saved in `harness_patch/`)
+
+| What | Exactly | Why |
+|---|---|---|
+| Cost of every call | Requests to OpenRouter ask for usage accounting (`usage: {include: true}`). After every reply, one `[provider-usage]` line goes to the run's log (tokens in, cached, out, reasoning, dollar cost, and which host served it), written before any check that could discard the reply, so retried replies that were billed are counted too. The same record is kept on the stored assistant message as `_usage`, so every step's `messages.json` carries it. `_usage` is removed from every request, so no API ever sees it. `scripts/run_usage.py` sums a run. | Teachers at $2–15 per million output tokens need a per-call ledger before any fleet. |
+| Reasoning field from vLLM | A reply that carries only `reasoning_content` (vLLM, Qwen3.6 with thinking on) also gets it as `reasoning`, so the log and the returned reply show it. Both fields stay on the stored message, so the history sent back keeps the reasoning. | The thinking-on Qwen3.6 baseline and student. |
+| Empty replies | The "empty reply" error now says how many characters of reasoning came with it. | A reasoning model can spend a whole reply on reasoning; the smoke test counts these. |
+| Not changed | Requests to our own vLLM server (`base_url` set) carry no `usage` field. Everything else is as before. | |

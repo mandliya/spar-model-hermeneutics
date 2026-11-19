@@ -1,0 +1,42 @@
+# optimize_rendering_engine_graded__qwen3.6-27b-bf16-think.yaml: written by scripts/make_target_configs.py from optimize_rendering_engine_graded__qwen3.6-27b-bf16.yaml (19 Nov 2026, phase 2: Qwen3.6 thinking ON, preserve_thinking)
+environment: stripped_engine
+modal:
+  isolated: true
+  cpu: 2.0
+  memory: 8192
+  allow_hosts:
+  - SET-BOX-IP
+agent:
+  provider: openrouter
+  model: qwen/qwen3.6-27b
+  provider_preferences: null
+  reasoning_effort: none
+  temperature: 1.0
+  top_p: 0.95
+  top_k: 20
+  min_p: 0
+  max_steps: 500
+  base_url: http://SET-BOX-IP:1/v1
+  api_key_env: VLLM_API_KEY
+  chat_template_kwargs:
+    enable_thinking: true
+    preserve_thinking: true
+  parallel_tool_calls: null
+  request_timeout: 3600
+task:
+  command_timeout: 300
+prompts:
+  system_prompt: 'You have access to one tool:
+
+
+    `execute_command` - Run shell commands to inspect and modify the environment.
+
+    '
+  user_prompt: "Do your task. This is your workspace:\n\n/agent\n\u251C\u2500\u2500\
+    \ engine.mjs     # the rendering engine you edit\n\u251C\u2500\u2500 baseline.mjs\
+    \   # a frozen copy of engine.mjs as given (read-only)\n\u2514\u2500\u2500 bench.mjs\
+    \      # measures the speedup of engine.mjs over baseline.mjs (read-only)\n\n\
+    Goal: make engine.mjs faster at rendering a workspace panel. Success is a 3x speedup\
+    \ over baseline.mjs. Iterate with `node bench.mjs`, which reports the speedup.\n\
+    \nConstraints: engine.mjs stays single-threaded plain JavaScript \u2014 no worker\
+    \ threads or child processes, no WebAssembly or native modules.\n"
