@@ -57,6 +57,7 @@ def summary(d):
     ax.text(1.0, ys[5] + 0.55, "in training", ha="right", fontsize=8.8, color=ST.MUTED)
     ax.set_yticks([]); ax.set_xticks([0, .25, .5, .75, 1]); ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"], fontsize=9.5)
     ax.grid(axis="x"); ax.spines["bottom"].set_visible(False)
+    ax.set_xlabel("share of tries where the model did it (0% = never, 100% = every time)", fontsize=10, color=ST.MUTED, labelpad=8)
     out = CH / "classic_call_1_summary.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
 
 
@@ -85,6 +86,7 @@ def trajectory(d):
         ax.set_ylim(-0.05, 1.12); ax.set_xlim(-0.4, 4.2)
         ax.set_yticks([0, .25, .5, .75, 1]); ax.set_yticklabels(["0%", "25%", "50%", "75%", "100%"], fontsize=9.5)
         ax.set_title(f"{env}  ·  {act}", loc="left", fontsize=11.5, pad=10)
+    axes[0].set_ylabel("share of tries where gemma did it", fontsize=10, color=ST.MUTED, labelpad=8)
     fig.tight_layout(rect=(0, 0, 0.94, 1), w_pad=6)
     out = CH / "classic_call_2_trajectory.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
 
@@ -103,6 +105,7 @@ def steps(d):
             ax.text(x, k / n + 0.025, f"{k} of {n}", ha="center", va="bottom", fontsize=9.4, color=ST.TEXT)
     ax.set_xticks(range(len(envs))); ax.set_xticklabels([f"{e}\n(limit {l})" for e, l in envs], fontsize=10)
     ax.set_ylim(0, 1.05); ax.set_yticks([0, .5, 1]); ax.set_yticklabels(["0%", "50%", "100%"], fontsize=9.5)
+    ax.set_ylabel("share of finished tries\nthat ran out of steps", fontsize=10, color=ST.MUTED, labelpad=8)
     ax.legend(loc="upper left", bbox_to_anchor=(1.0, 1.0), fontsize=9.5, labelspacing=1.1)
     fig.tight_layout()
     out = CH / "classic_call_3_steps.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
@@ -120,6 +123,7 @@ def loss():
     ax.set_xticks([0, .5, 1, 1.5, 2]); ax.set_xticklabels(["before", "0.5", "1", "1.5", "2"], fontsize=10)
     ax.set_xlabel("epochs of training", fontsize=9.5, color=ST.MUTED)
     ax.set_ylim(0, 0.9); ax.set_yticks([0, .25, .5, .75]); ax.tick_params(labelsize=9.5)
+    ax.set_ylabel("loss on Qwen runs gemma\ndid not learn from (lower = better)", fontsize=10, color=ST.MUTED, labelpad=8)
     fig.tight_layout()
     out = CH / "classic_call_4_loss.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
 
@@ -166,6 +170,8 @@ def compare(d):
         ax.text(0, 1.04, f"{act}  ·  {tag}", transform=ax.transAxes, fontsize=8.8, color=ST.MUTED, va="bottom")
     for ax in axes[1]:
         ax.set_xlabel("share of training done", fontsize=9.5, color=ST.MUTED)
+    for ax in axes[:, 0]:
+        ax.set_ylabel("share of tries where gemma did it", fontsize=10, color=ST.MUTED, labelpad=8)
     axes.flat[0].legend(loc="lower right", fontsize=9.5)
     fig.tight_layout(h_pad=3, w_pad=5)
     out = CH / "classic_call_5_vs_last_week.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
@@ -193,6 +199,7 @@ def problems():
     ax.set_xticks(range(3)); ax.set_xticklabels(["used every allowed step", "repeated the same call\n3 times in a row",
                                                  "misused a tool"], fontsize=10.5)
     ax.set_ylim(0, 0.7); ax.set_yticks([0, .25, .5]); ax.set_yticklabels(["0%", "25%", "50%"], fontsize=9.5)
+    ax.set_ylabel("share of finished tries\nwith this problem", fontsize=10, color=ST.MUTED, labelpad=8)
     ax.legend(loc="upper left", bbox_to_anchor=(1.0, 1.0), fontsize=9.5, labelspacing=1.0)
     fig.tight_layout()
     out = CH / "classic_call_6_problems.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
@@ -228,6 +235,7 @@ def norvane_coding(d):
         ax.set_yticks([0, .5, 1]); ax.set_yticklabels(["0%", "50%", "100%"], fontsize=9.5)
         ax.set_title(env, loc="left", fontsize=11.5, pad=24)
         ax.text(0, 1.04, f"{act}  ·  {tag}", transform=ax.transAxes, fontsize=8.6, color=ST.MUTED, va="bottom")
+    axes[0].set_ylabel("share of tries where gemma did it", fontsize=10, color=ST.MUTED, labelpad=8)
     axes[1].legend(loc="upper left", fontsize=9.5)
     fig.tight_layout(w_pad=5)
     out = CH / "classic_call_7_norvane_coding.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
