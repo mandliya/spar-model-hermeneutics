@@ -2,6 +2,12 @@
 
 Kept in git so they survive a lost session. Delete a line when it's done.
 
+## Phase 2 budget (19 Nov 2026): needs John
+
+Five teacher models distilled into Qwen3.6 27B: ~$11,450 in total, $7,350 of it new money. John: raise the OpenRouter
+key limit to ~$17,000, check the workspace lifetime budget has ~$6,650 of room, top up Vast ~$400 now, OpenRouter
+~$1,600 before Kimi K3. Full table, balances and sources: `3-forensics/phase2/BUDGET.md`.
+
 ## Direction from the 22 Oct 2026 call with John: validate the swap before distillation
 
 John's concern: gemma swapped into Qwen's runs may not operate properly (Qwen's history out of distribution
