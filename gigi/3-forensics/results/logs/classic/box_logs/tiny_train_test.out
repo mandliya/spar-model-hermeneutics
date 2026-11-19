@@ -1,0 +1,15 @@
+tiny model saved 16896032
+README.md
+adapter
+checkpoint-1
+checkpoint-2
+log.json
+val_per_example.jsonl
+n_train 1 evals at steps [0, 1, 2]
+adapters: c1=/workspace/tinytest/out/checkpoint-1,c2=/workspace/tinytest/out/checkpoint-2
+test: 1 of 2
+val: base 12.5219, c1 12.5219, c2 12.5157
+test: base 12.5086, c1 12.5086, c2 12.5075
+9 /workspace/tinytest/nll/nll_per_example.jsonl
+9 /workspace/tinytest/nll/nll_per_example.jsonl
+TINY TEST OK

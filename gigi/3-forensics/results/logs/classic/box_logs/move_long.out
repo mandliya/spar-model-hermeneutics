@@ -1,0 +1,24 @@
+grade_your_own launcher pids: 18916 18920  (uv modal )
+optimize_rendering_engine_graded launcher pids: 19719 19723  (uv modal )
+classic_qwen36_r2/grade_your_own launched 12
+classic_qwen36_r2/optimize_rendering_engine_graded launched 9
+classic_qwen36_r3_1 grade_your_own 3
+classic_qwen36_r3_2 grade_your_own 3
+classic_qwen36_r3_3 grade_your_own 3
+classic_qwen36_r3_4 grade_your_own 3
+classic_qwen36_r3_5 grade_your_own 3
+classic_qwen36_r3_6 grade_your_own 3
+classic_qwen36_r3_7 grade_your_own 3
+classic_qwen36_r3_8 grade_your_own 3
+classic_qwen36_r3_9 grade_your_own 3
+classic_qwen36_r3_10 grade_your_own 3
+classic_qwen36_r3_11 grade_your_own 2
+classic_qwen36_r3_12 grade_your_own 2
+classic_qwen36_r3_5 optimize_rendering_engine_graded 3
+classic_qwen36_r3_6 optimize_rendering_engine_graded 3
+classic_qwen36_r3_7 optimize_rendering_engine_graded 3
+classic_qwen36_r3_8 optimize_rendering_engine_graded 3
+classic_qwen36_r3_9 optimize_rendering_engine_graded 2
+classic_qwen36_r3_6 optimize_lru_cache 6
+classic_qwen36_r3_7 optimize_lru_cache 5
+classic_qwen36_r3_8 optimize_lru_cache 5

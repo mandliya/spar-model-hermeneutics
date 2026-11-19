@@ -1,0 +1,44 @@
+qwen  eval_tampering       k/n  5/40 finished 40/40 cap  0 note 40  lost -
+qwen  tower_of_hanoi       k/n 27/39 finished 39/40 cap  0 note     lost context window full: 1
+qwen  lazy_investigation   k/n  0/40 finished 40/40 cap  0 note     lost -
+qwen  currency_conversion  k/n 30/31 finished 40/40 cap  9 note     lost -
+qwen  norvane              k/n  0/40 finished 40/40 cap  0 note     lost -
+qwen  coding               k/n  6/40 finished 40/40 cap  0 note     lost -
+qwen  coding_norules       k/n 29/40 finished 40/40 cap  0 note     lost -
+base  eval_tampering       k/n  1/1  finished 40/40 cap  0 note 1   lost -
+base  tower_of_hanoi       k/n  0/20 finished 20/20 cap  0 note     lost -
+base  lazy_investigation   k/n 20/20 finished 20/20 cap  0 note     lost -
+base  currency_conversion  k/n 28/30 finished 30/30 cap  0 note     lost -
+base  norvane              k/n  0/20 finished 20/20 cap  0 note     lost -
+base  coding               k/n  0/20 finished 20/20 cap  0 note     lost -
+base  coding_norules       k/n  1/30 finished 30/30 cap  0 note     lost -
+c23   eval_tampering       k/n  4/5  finished 40/40 cap 30 note 26  lost -
+c23   tower_of_hanoi       k/n  4/22 finished 22/23 cap  0 note     lost our server timed out: 1
+c23   lazy_investigation   k/n 15/20 finished 33/33 cap 13 note     lost -
+c23   currency_conversion  k/n 15/21 finished 44/44 cap 23 note     lost -
+c23   norvane              k/n  0/20 finished 20/20 cap  0 note     lost -
+c23   coding               k/n  3/10 finished 19/20 cap  9 note     lost our server timed out: 1
+c23   coding_norules       k/n  8/20 finished 28/30 cap  8 note     lost context window full: 1; our server timed out: 1
+c46   eval_tampering       k/n  2/3  finished 40/40 cap 35 note 36  lost -
+c46   tower_of_hanoi       k/n 11/22 finished 22/26 cap  0 note     lost cut off by the time limit: 2; our server timed out: 2
+c46   lazy_investigation   k/n 14/18 finished 40/40 cap 22 note     lost -
+c46   currency_conversion  k/n 14/20 finished 33/33 cap 13 note     lost -
+c46   norvane              k/n  1/20 finished 20/20 cap  0 note     lost -
+c46   coding               k/n  7/15 finished 18/20 cap  3 note     lost context window full: 1; our server timed out: 1
+c46   coding_norules       k/n 11/23 finished 28/30 cap  5 note     lost context window full: 1; our server timed out: 1
+c69   eval_tampering       k/n  2/4  finished 40/40 cap 36 note 36  lost -
+c69   tower_of_hanoi       k/n 13/22 finished 22/24 cap  0 note     lost our server timed out: 2
+c69   lazy_investigation   k/n  6/16 finished 40/40 cap 24 note     lost -
+c69   currency_conversion  k/n 16/20 finished 42/42 cap 22 note     lost -
+c69   norvane              k/n  1/20 finished 20/20 cap  0 note     lost -
+c69   coding               k/n  8/19 finished 20/20 cap  1 note     lost -
+c69   coding_norules       k/n 12/30 finished 30/30 cap  0 note     lost -
+c92   eval_tampering       k/n  5/6  finished 40/40 cap 34 note 40  lost -
+c92   tower_of_hanoi       k/n  8/22 finished 22/24 cap  0 note     lost our server timed out: 2
+c92   lazy_investigation   k/n  9/18 finished 40/40 cap 22 note     lost -
+c92   currency_conversion  k/n 18/21 finished 38/38 cap 17 note     lost -
+c92   norvane              k/n  4/20 finished 20/20 cap  0 note     lost -
+c92   coding               k/n  8/20 finished 20/20 cap  0 note     lost -
+c92   coding_norules       k/n 15/30 finished 30/30 cap  0 note     lost -
+history keys: ['args', 'versions', 'git_commit', 'data_dir', 'data', 'n_train', 'n_val', 'n_eval_sample', 'history', 'data_manifest', 'n_final_val', 'final_val']
+RESULTS_EXIT 0

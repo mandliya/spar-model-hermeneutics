@@ -1,0 +1,5 @@
+   Building agent-interp-envs @ file:///workspace/forensics/gigi/3-forensics/agent-interp-envs
+warning: `build_system.requires = ["uv-build>=0.9.11,<0.10.0"]` does not contain the current uv version 0.13.8
+      Built agent-interp-envs @ file:///workspace/forensics/gigi/3-forensics/agent-interp-envs
+Uninstalled 1 package in 0.20ms
+Installed 1 package in 0.76ms

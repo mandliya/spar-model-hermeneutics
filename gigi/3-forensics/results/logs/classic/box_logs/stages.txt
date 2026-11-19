@@ -1,0 +1,562 @@
+2026-11-17T04:28:47Z START download Qwen/Qwen3.6-27B
+2026-11-17T04:29:46Z RESTART downloads (exclude flag bug)
+2026-11-17T04:29:46Z START download Qwen/Qwen3.6-27B
+2026-11-17T04:31:12Z START venv qwen (vllm 0.33.0)
+2026-11-17T04:31:43Z END venv qwen rc=0
+2026-11-17T04:31:43Z START venv gemma (vllm 0.11.0, round 1 server)
+2026-11-17T04:32:44Z END download Qwen/Qwen3.6-27B rc=0
+2026-11-17T04:32:44Z START download google/gemma-3-27b-it
+2026-11-17T04:32:46Z END venv gemma rc=0
+2026-11-17T04:33:56Z END download google/gemma-3-27b-it rc=0
+2026-11-17T04:34:36Z START serve qwen
+2026-11-17T04:39:12Z START venv qwen (vllm 0.32.0+cu129)
+2026-11-17T04:39:27Z START venv gemma pin (vllm 0.11.0, transformers 4.57.1 as round 1)
+2026-11-17T04:39:27Z END venv gemma pin rc=0
+gemma venv: torch 2.8.0+cu128 cuda ok: True vllm 0.11.0 transformers 4.57.1
+2026-11-17T04:39:59Z END venv qwen rc=0
+torch 2.13.0+cu129 12.9 cuda ok: True NVIDIA H200 NVL
+vllm 0.32.0
+2026-11-17T04:40:28Z START serve qwen
+2026-11-17T04:41:16Z removed torchcodec (wants CUDA 13; text only here)
+2026-11-17T04:41:16Z START serve qwen
+2026-11-17T04:48:17Z START smoke
+2026-11-17T04:49:33Z smoke launched
+2026-11-17T04:54:38Z restart serve qwen with 49,152-token window (ai_rd smoke cut at 102.5k chars, under the 105k training cut)
+2026-11-17T04:54:38Z START serve qwen
+2026-11-17T04:56:21Z START classic fleet
+2026-11-17T05:01:58Z classic_qwen36 launched:  chess:40 coding:40 coding_norules:40 copying_of_answers:40 currency_conversion:40 eval_tampering:40 funding_email:40 lazy_investigation:40 lucky_seed:40 lucky_seed_readable_grader:40 norvane:40 parse_duration:40 secret_number:40 tictactoe:40 tower_of_hanoi:40 async_conversion:46 dashboard_costly_failure:46 grade_your_own:46 leaked_scorer:46 leaked_tests:46 optimize_lru_cache:46 optimize_rendering_engine:46 optimize_rendering_engine_graded:46 precommit_hook:46 puppeteer:46 reference_extraction:46 revert_or_refactor:46 ai_rd:46
+2026-11-17T05:01:58Z classic_qwen36: 0 of 28 apps ended
+2026-11-17T05:11:58Z classic_qwen36: 3 of 28 apps ended
+2026-11-17T05:21:58Z classic_qwen36: 5 of 28 apps ended
+2026-11-17T05:31:58Z classic_qwen36: 7 of 28 apps ended
+2026-11-17T05:41:59Z classic_qwen36: 7 of 28 apps ended
+2026-11-17T05:51:59Z classic_qwen36: 8 of 28 apps ended
+2026-11-17T06:01:59Z classic_qwen36: 9 of 28 apps ended
+2026-11-17T06:11:59Z classic_qwen36: 10 of 28 apps ended
+2026-11-17T06:21:59Z classic_qwen36: 10 of 28 apps ended
+2026-11-17T06:31:59Z classic_qwen36: 10 of 28 apps ended
+2026-11-17T06:41:59Z classic_qwen36: 10 of 28 apps ended
+2026-11-17T06:51:59Z classic_qwen36: 11 of 28 apps ended
+2026-11-17T07:01:59Z classic_qwen36: 11 of 28 apps ended
+2026-11-17T07:11:59Z classic_qwen36: 11 of 28 apps ended
+2026-11-17T07:21:59Z classic_qwen36: 11 of 28 apps ended
+2026-11-17T07:31:59Z classic_qwen36: 11 of 28 apps ended
+2026-11-17T07:41:59Z classic_qwen36: 11 of 28 apps ended
+2026-11-17T07:52:00Z classic_qwen36: 11 of 28 apps ended
+2026-11-17T08:02:00Z classic_qwen36: 11 of 28 apps ended
+2026-11-17T08:12:00Z classic_qwen36: 12 of 28 apps ended
+2026-11-17T08:22:00Z classic_qwen36: 13 of 28 apps ended
+2026-11-17T08:32:00Z classic_qwen36: 13 of 28 apps ended
+2026-11-17T08:42:00Z classic_qwen36: 13 of 28 apps ended
+2026-11-17T08:45:20Z STOPPED classic_fleet.sh supervisor (9865): server thrashing (prefix-cache hits 8%, 2,904 preemptions, runs cut by wall-clock and request timeouts); 14 apps to be stopped and re-run at lower concurrency
+2026-11-17T08:45:44Z stopped 14 apps of classic_qwen36 (copying_of_answers, tower_of_hanoi and the 12 long tasks except ai_rd); still running: ai_rd, lucky_seed, lucky_seed_readable_grader
+2026-11-17T08:52:15Z stopped ai_rd app of classic_qwen36 (one run lost to request timeouts during the thrash); still running: lucky_seed, lucky_seed_readable_grader
+2026-11-17T08:55:02Z START classic fleet 2: 16 tasks re-run (set_aside.tsv), 32 runs at once
+2026-11-17T08:58:15Z classic_qwen36_r2 launched: 16 of 16 apps
+2026-11-17T09:00:45Z START venv train (torch 2.8.0, transformers 4.57.1, peft 0.17.1, trl 0.24.0)
+2026-11-17T09:00:47Z END venv train rc=0
+train venv: torch 2.8.0+cu128 cuda ok: True transformers 4.57.1 peft 0.17.1 trl 0.24.0
+2026-11-17T09:05:12Z classic_after: waiting for CLASSIC FLEET DONE
+2026-11-17T09:05:12Z SELECTION FAILED (classic_select.log). The Qwen server is still up. Box idle, still billing.
+2026-11-17T09:05:44Z (the SELECTION FAILED line above was a bug in classic_after.sh: its own waiting line matched the fleet-done check; nothing ran. Fixed and relaunched.)
+2026-11-17T09:05:44Z classic_after: waiting for the fleet to finish (classic_fleet2.sh)
+2026-11-17T09:08:15Z server, last 13 min: cache hits 88%, 541 tokens/s generated, 0 preemptions, cache 62% in use, 29 requests running, 0 waiting
+2026-11-17T09:08:15Z apps still running: classic_qwen36 1, r2 16 of 16, r2b 0 of 5
+2026-11-17T09:18:15Z server, last 10 min: cache hits 63%, 260 tokens/s generated, 0 preemptions, cache 79% in use, 32 requests running, 0 waiting
+2026-11-17T09:19:15Z classic_qwen36_r2b launched: the other halves of copying_of_answers:20 leaked_scorer:23 optimize_rendering_engine_graded:23 tower_of_hanoi:20 funding_email:20, one at a time
+2026-11-17T09:19:15Z apps still running: classic_qwen36 0, r2 16 of 16, r2b 5 of 5
+2026-11-17T09:24:55Z STOPPED classic_fleet2.sh and classic_after.sh, and 9 apps (r2b: all 5; r2: puppeteer reference_extraction leaked_tests optimize_lru_cache): the server was filling again (cache hits 21% in the last minute, 4 waiting) as the runs grew towards the 49k window together. 20 runs at once remain (r2: the other 12 tasks).
+2026-11-17T09:28:10Z START classic fleet 3: paced, cap 20 runs at once
+2026-11-17T09:28:10Z queue: 52 chunks, 290 runs (puppeteer, leaked_tests, reference_extraction, optimize_lru_cache x46; leaked_scorer, optimize_rendering_engine_graded x23; copying_of_answers, tower_of_hanoi, funding_email x20)
+2026-11-17T09:28:10Z in flight: 20 runs in 12 apps (cap 20); 52 chunks queued
+2026-11-17T09:28:15Z classic_after: waiting for the fleet to finish (classic_fleet3.sh)
+2026-11-17T09:33:10Z server, last 5 min: cache hits 88%, 422 tokens/s generated, 0 preemptions, cache 33% in use, 13 requests running, 0 waiting; cap now 21
+2026-11-17T09:33:23Z launched classic_qwen36_r3_1 puppeteer x6 (one at a time); 21 runs in flight, 51 chunks queued
+2026-11-17T09:33:23Z in flight: 21 runs in 13 apps (cap 21); 51 chunks queued
+2026-11-17T09:38:23Z server, last 5 min: cache hits 89%, 462 tokens/s generated, 0 preemptions, cache 31% in use, 14 requests running, 0 waiting; cap now 22
+2026-11-17T09:38:35Z launched classic_qwen36_r3_2 puppeteer x6 (one at a time); 21 runs in flight, 50 chunks queued
+2026-11-17T09:38:47Z launched classic_qwen36_r3_3 puppeteer x6 (one at a time); 22 runs in flight, 49 chunks queued
+2026-11-17T09:38:47Z in flight: 22 runs in 14 apps (cap 22); 49 chunks queued
+2026-11-17T09:43:47Z server, last 5 min: cache hits 91%, 482 tokens/s generated, 0 preemptions, cache 39% in use, 18 requests running, 0 waiting; cap now 23
+2026-11-17T09:43:59Z launched classic_qwen36_r3_4 puppeteer x6 (one at a time); 23 runs in flight, 48 chunks queued
+2026-11-17T09:43:59Z in flight: 23 runs in 15 apps (cap 23); 48 chunks queued
+2026-11-17T09:49:03Z server, last 5 min: cache hits 92%, 479 tokens/s generated, 0 preemptions, cache 23% in use, 8 requests running, 0 waiting; cap now 24
+2026-11-17T09:49:15Z launched classic_qwen36_r3_5 puppeteer x6 (one at a time); 24 runs in flight, 47 chunks queued
+2026-11-17T09:49:15Z in flight: 24 runs in 16 apps (cap 24); 47 chunks queued
+2026-11-17T09:54:15Z server, last 5 min: cache hits 91%, 460 tokens/s generated, 0 preemptions, cache 50% in use, 18 requests running, 0 waiting; cap now 25
+2026-11-17T09:54:28Z launched classic_qwen36_r3_6 puppeteer x6 (one at a time); 24 runs in flight, 46 chunks queued
+2026-11-17T09:54:40Z launched classic_qwen36_r3_7 puppeteer x5 (one at a time); 25 runs in flight, 45 chunks queued
+2026-11-17T09:54:40Z in flight: 25 runs in 18 apps (cap 25); 45 chunks queued
+2026-11-17T09:59:40Z server, last 5 min: cache hits 92%, 481 tokens/s generated, 0 preemptions, cache 44% in use, 18 requests running, 2 waiting; cap now 23, NOT HEALTHY: launches held
+2026-11-17T09:59:40Z in flight: 23 runs in 17 apps (cap 23); 45 chunks queued
+2026-11-17T10:04:40Z server, last 5 min: cache hits 93%, 497 tokens/s generated, 0 preemptions, cache 56% in use, 20 requests running, 0 waiting; cap now 24
+2026-11-17T10:04:52Z launched classic_qwen36_r3_8 puppeteer x5 (one at a time); 24 runs in flight, 44 chunks queued
+2026-11-17T10:04:52Z in flight: 24 runs in 18 apps (cap 24); 44 chunks queued
+2026-11-17T10:09:52Z server, last 5 min: cache hits 94%, 517 tokens/s generated, 0 preemptions, cache 53% in use, 20 requests running, 0 waiting; cap now 25
+2026-11-17T10:10:04Z launched classic_qwen36_r3_1 leaked_tests x6 (one at a time); 25 runs in flight, 43 chunks queued
+2026-11-17T10:10:04Z in flight: 25 runs in 19 apps (cap 25); 43 chunks queued
+2026-11-17T10:15:04Z server, last 5 min: cache hits 95%, 528 tokens/s generated, 0 preemptions, cache 56% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T10:15:16Z launched classic_qwen36_r3_2 leaked_tests x6 (one at a time); 26 runs in flight, 42 chunks queued
+2026-11-17T10:15:17Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T10:20:17Z server, last 5 min: cache hits 93%, 534 tokens/s generated, 0 preemptions, cache 58% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T10:20:17Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T10:25:17Z server, last 5 min: cache hits 91%, 540 tokens/s generated, 0 preemptions, cache 61% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T10:25:17Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T10:30:17Z server, last 5 min: cache hits 91%, 496 tokens/s generated, 0 preemptions, cache 57% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T10:30:17Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T10:35:17Z server, last 5 min: cache hits 83%, 425 tokens/s generated, 0 preemptions, cache 61% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T10:35:17Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T10:40:18Z server, last 5 min: cache hits 83%, 374 tokens/s generated, 0 preemptions, cache 71% in use, 23 requests running, 0 waiting; cap now 26
+2026-11-17T10:40:18Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T10:45:18Z server, last 5 min: cache hits 79%, 324 tokens/s generated, 0 preemptions, cache 65% in use, 23 requests running, 0 waiting; cap now 26
+2026-11-17T10:45:18Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T10:50:18Z server, last 5 min: cache hits 87%, 339 tokens/s generated, 0 preemptions, cache 46% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T10:50:18Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T10:55:18Z server, last 5 min: cache hits 95%, 487 tokens/s generated, 0 preemptions, cache 54% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T10:55:19Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T11:00:19Z server, last 5 min: cache hits 93%, 470 tokens/s generated, 0 preemptions, cache 48% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T11:00:19Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T11:05:19Z server, last 5 min: cache hits 93%, 554 tokens/s generated, 0 preemptions, cache 57% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T11:05:19Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T11:10:19Z server, last 5 min: cache hits 94%, 522 tokens/s generated, 0 preemptions, cache 63% in use, 24 requests running, 0 waiting; cap now 26
+2026-11-17T11:10:20Z in flight: 26 runs in 20 apps (cap 26); 42 chunks queued
+2026-11-17T11:15:20Z server, last 5 min: cache hits 92%, 529 tokens/s generated, 0 preemptions, cache 60% in use, 23 requests running, 0 waiting; cap now 26
+2026-11-17T11:15:32Z launched classic_qwen36_r3_3 leaked_tests x6 (one at a time); 26 runs in flight, 41 chunks queued
+2026-11-17T11:15:32Z in flight: 26 runs in 20 apps (cap 26); 41 chunks queued
+2026-11-17T11:20:32Z server, last 5 min: cache hits 92%, 524 tokens/s generated, 0 preemptions, cache 53% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T11:20:32Z in flight: 26 runs in 20 apps (cap 26); 41 chunks queued
+2026-11-17T11:25:32Z server, last 5 min: cache hits 93%, 506 tokens/s generated, 0 preemptions, cache 47% in use, 17 requests running, 0 waiting; cap now 26
+2026-11-17T11:25:33Z in flight: 26 runs in 20 apps (cap 26); 41 chunks queued
+2026-11-17T11:30:33Z server, last 5 min: cache hits 92%, 495 tokens/s generated, 0 preemptions, cache 60% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T11:30:33Z in flight: 26 runs in 20 apps (cap 26); 41 chunks queued
+2026-11-17T11:35:33Z server, last 5 min: cache hits 92%, 497 tokens/s generated, 0 preemptions, cache 60% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T11:35:33Z in flight: 26 runs in 20 apps (cap 26); 41 chunks queued
+2026-11-17T11:40:33Z server, last 5 min: cache hits 87%, 427 tokens/s generated, 0 preemptions, cache 62% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T11:40:34Z in flight: 26 runs in 20 apps (cap 26); 41 chunks queued
+2026-11-17T11:45:34Z server, last 5 min: cache hits 87%, 440 tokens/s generated, 0 preemptions, cache 59% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T11:45:46Z launched classic_qwen36_r3_4 leaked_tests x6 (one at a time); 26 runs in flight, 40 chunks queued
+2026-11-17T11:45:46Z in flight: 26 runs in 21 apps (cap 26); 40 chunks queued
+2026-11-17T11:50:46Z server, last 5 min: cache hits 90%, 484 tokens/s generated, 0 preemptions, cache 61% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T11:50:58Z launched classic_qwen36_r3_5 leaked_tests x6 (one at a time); 25 runs in flight, 39 chunks queued
+2026-11-17T11:51:10Z launched classic_qwen36_r3_6 leaked_tests x6 (one at a time); 26 runs in flight, 38 chunks queued
+2026-11-17T11:51:11Z in flight: 26 runs in 22 apps (cap 26); 38 chunks queued
+2026-11-17T11:56:11Z server, last 5 min: cache hits 93%, 475 tokens/s generated, 0 preemptions, cache 49% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T11:56:23Z launched classic_qwen36_r3_7 leaked_tests x5 (one at a time); 26 runs in flight, 37 chunks queued
+2026-11-17T11:56:23Z in flight: 26 runs in 21 apps (cap 26); 37 chunks queued
+2026-11-17T12:01:23Z server, last 5 min: cache hits 93%, 514 tokens/s generated, 0 preemptions, cache 56% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T12:01:23Z in flight: 26 runs in 21 apps (cap 26); 37 chunks queued
+2026-11-17T12:06:23Z server, last 5 min: cache hits 94%, 541 tokens/s generated, 0 preemptions, cache 53% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T12:06:24Z in flight: 26 runs in 21 apps (cap 26); 37 chunks queued
+2026-11-17T12:11:24Z server, last 5 min: cache hits 92%, 513 tokens/s generated, 0 preemptions, cache 66% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T12:11:24Z in flight: 26 runs in 21 apps (cap 26); 37 chunks queued
+2026-11-17T12:16:24Z server, last 5 min: cache hits 92%, 466 tokens/s generated, 0 preemptions, cache 57% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T12:16:36Z launched classic_qwen36_r3_8 leaked_tests x5 (one at a time); 26 runs in flight, 36 chunks queued
+2026-11-17T12:16:36Z in flight: 26 runs in 21 apps (cap 26); 36 chunks queued
+2026-11-17T12:21:36Z server, last 5 min: cache hits 92%, 496 tokens/s generated, 0 preemptions, cache 65% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T12:21:37Z in flight: 26 runs in 21 apps (cap 26); 36 chunks queued
+2026-11-17T12:26:37Z server, last 5 min: cache hits 93%, 458 tokens/s generated, 0 preemptions, cache 66% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T12:26:37Z in flight: 26 runs in 21 apps (cap 26); 36 chunks queued
+2026-11-17T12:31:37Z server, last 5 min: cache hits 90%, 458 tokens/s generated, 0 preemptions, cache 59% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T12:31:37Z in flight: 26 runs in 21 apps (cap 26); 36 chunks queued
+2026-11-17T12:36:37Z server, last 5 min: cache hits 92%, 468 tokens/s generated, 0 preemptions, cache 72% in use, 23 requests running, 0 waiting; cap now 26
+2026-11-17T12:36:38Z in flight: 26 runs in 21 apps (cap 26); 36 chunks queued
+2026-11-17T12:41:38Z server, last 5 min: cache hits 63%, 182 tokens/s generated, 0 preemptions, cache 78% in use, 25 requests running, 0 waiting; cap now 24, NOT HEALTHY: launches held
+2026-11-17T12:41:38Z in flight: 26 runs in 21 apps (cap 24); 36 chunks queued
+2026-11-17T12:46:38Z server, last 5 min: cache hits 44%, 153 tokens/s generated, 0 preemptions, cache 73% in use, 22 requests running, 3 waiting; cap now 22, NOT HEALTHY: launches held
+2026-11-17T12:46:39Z in flight: 26 runs in 21 apps (cap 22); 36 chunks queued
+2026-11-17T12:51:39Z server, last 5 min: cache hits 65%, 161 tokens/s generated, 0 preemptions, cache 76% in use, 24 requests running, 0 waiting; cap now 20, NOT HEALTHY: launches held
+2026-11-17T12:51:39Z in flight: 26 runs in 21 apps (cap 20); 36 chunks queued
+2026-11-17T12:56:39Z server, last 5 min: cache hits 86%, 305 tokens/s generated, 0 preemptions, cache 58% in use, 20 requests running, 3 waiting; cap now 18, NOT HEALTHY: launches held
+2026-11-17T12:56:39Z in flight: 26 runs in 21 apps (cap 18); 36 chunks queued
+2026-11-17T13:01:39Z server, last 5 min: cache hits 88%, 396 tokens/s generated, 0 preemptions, cache 56% in use, 21 requests running, 0 waiting; cap now 19
+2026-11-17T13:01:40Z in flight: 25 runs in 21 apps (cap 19); 36 chunks queued
+2026-11-17T13:06:40Z server, last 5 min: cache hits 83%, 359 tokens/s generated, 0 preemptions, cache 56% in use, 20 requests running, 0 waiting; cap now 20
+2026-11-17T13:06:40Z in flight: 25 runs in 21 apps (cap 20); 36 chunks queued
+2026-11-17T13:11:41Z server, last 5 min: cache hits 91%, 431 tokens/s generated, 0 preemptions, cache 45% in use, 14 requests running, 0 waiting; cap now 21
+2026-11-17T13:11:41Z in flight: 24 runs in 20 apps (cap 21); 36 chunks queued
+2026-11-17T13:16:41Z server, last 5 min: cache hits 95%, 475 tokens/s generated, 0 preemptions, cache 54% in use, 18 requests running, 0 waiting; cap now 22
+2026-11-17T13:16:41Z in flight: 22 runs in 18 apps (cap 22); 36 chunks queued
+2026-11-17T13:21:41Z server, last 5 min: cache hits 96%, 471 tokens/s generated, 0 preemptions, cache 61% in use, 20 requests running, 0 waiting; cap now 22
+2026-11-17T13:21:54Z launched classic_qwen36_r3_1 reference_extraction x6 (one at a time); 22 runs in flight, 35 chunks queued
+2026-11-17T13:21:54Z in flight: 22 runs in 18 apps (cap 22); 35 chunks queued
+2026-11-17T13:26:54Z server, last 5 min: cache hits 95%, 495 tokens/s generated, 0 preemptions, cache 41% in use, 17 requests running, 0 waiting; cap now 23
+2026-11-17T13:27:06Z launched classic_qwen36_r3_2 reference_extraction x6 (one at a time); 22 runs in flight, 34 chunks queued
+2026-11-17T13:27:18Z launched classic_qwen36_r3_3 reference_extraction x6 (one at a time); 23 runs in flight, 33 chunks queued
+2026-11-17T13:27:18Z in flight: 23 runs in 20 apps (cap 23); 33 chunks queued
+2026-11-17T13:32:18Z server, last 5 min: cache hits 94%, 516 tokens/s generated, 0 preemptions, cache 50% in use, 17 requests running, 0 waiting; cap now 24
+2026-11-17T13:32:30Z launched classic_qwen36_r3_4 reference_extraction x6 (one at a time); 23 runs in flight, 32 chunks queued
+2026-11-17T13:32:42Z launched classic_qwen36_r3_5 reference_extraction x6 (one at a time); 24 runs in flight, 31 chunks queued
+2026-11-17T13:32:42Z in flight: 24 runs in 21 apps (cap 24); 31 chunks queued
+2026-11-17T13:37:43Z server, last 5 min: cache hits 90%, 478 tokens/s generated, 0 preemptions, cache 59% in use, 21 requests running, 0 waiting; cap now 25
+2026-11-17T13:37:55Z launched classic_qwen36_r3_6 reference_extraction x6 (one at a time); 25 runs in flight, 30 chunks queued
+2026-11-17T13:37:55Z in flight: 25 runs in 22 apps (cap 25); 30 chunks queued
+2026-11-17T13:42:55Z server, last 5 min: cache hits 91%, 496 tokens/s generated, 0 preemptions, cache 54% in use, 17 requests running, 0 waiting; cap now 26
+2026-11-17T13:43:07Z launched classic_qwen36_r3_7 reference_extraction x5 (one at a time); 23 runs in flight, 29 chunks queued
+2026-11-17T13:43:19Z launched classic_qwen36_r3_8 reference_extraction x5 (one at a time); 24 runs in flight, 28 chunks queued
+2026-11-17T13:43:31Z launched classic_qwen36_r3_1 optimize_lru_cache x6 (one at a time); 25 runs in flight, 27 chunks queued
+2026-11-17T13:43:43Z launched classic_qwen36_r3_2 optimize_lru_cache x6 (one at a time); 26 runs in flight, 26 chunks queued
+2026-11-17T13:43:43Z in flight: 26 runs in 23 apps (cap 26); 26 chunks queued
+2026-11-17T13:48:43Z server, last 5 min: cache hits 90%, 476 tokens/s generated, 0 preemptions, cache 56% in use, 19 requests running, 0 waiting; cap now 26
+2026-11-17T13:48:44Z in flight: 26 runs in 23 apps (cap 26); 26 chunks queued
+2026-11-17T13:53:44Z server, last 5 min: cache hits 89%, 494 tokens/s generated, 0 preemptions, cache 51% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T13:53:44Z in flight: 26 runs in 23 apps (cap 26); 26 chunks queued
+2026-11-17T13:58:44Z server, last 5 min: cache hits 91%, 454 tokens/s generated, 0 preemptions, cache 51% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T13:58:56Z launched classic_qwen36_r3_3 optimize_lru_cache x6 (one at a time); 25 runs in flight, 25 chunks queued
+2026-11-17T13:59:08Z launched classic_qwen36_r3_4 optimize_lru_cache x6 (one at a time); 26 runs in flight, 24 chunks queued
+2026-11-17T13:59:08Z in flight: 26 runs in 23 apps (cap 26); 24 chunks queued
+2026-11-17T14:04:08Z server, last 5 min: cache hits 91%, 511 tokens/s generated, 0 preemptions, cache 46% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T14:04:08Z in flight: 26 runs in 23 apps (cap 26); 24 chunks queued
+2026-11-17T14:09:09Z server, last 5 min: cache hits 90%, 497 tokens/s generated, 0 preemptions, cache 61% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T14:09:09Z in flight: 26 runs in 23 apps (cap 26); 24 chunks queued
+2026-11-17T14:14:09Z server, last 5 min: cache hits 90%, 467 tokens/s generated, 0 preemptions, cache 67% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T14:14:09Z in flight: 26 runs in 23 apps (cap 26); 24 chunks queued
+2026-11-17T14:19:09Z server, last 5 min: cache hits 90%, 431 tokens/s generated, 0 preemptions, cache 55% in use, 17 requests running, 0 waiting; cap now 26
+2026-11-17T14:19:09Z in flight: 26 runs in 23 apps (cap 26); 24 chunks queued
+2026-11-17T14:24:09Z server, last 5 min: cache hits 93%, 478 tokens/s generated, 0 preemptions, cache 52% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T14:24:10Z in flight: 26 runs in 23 apps (cap 26); 24 chunks queued
+2026-11-17T14:29:10Z server, last 5 min: cache hits 85%, 451 tokens/s generated, 0 preemptions, cache 51% in use, 17 requests running, 0 waiting; cap now 26
+2026-11-17T14:29:10Z in flight: 26 runs in 23 apps (cap 26); 24 chunks queued
+2026-11-17T14:34:10Z server, last 5 min: cache hits 91%, 440 tokens/s generated, 0 preemptions, cache 43% in use, 16 requests running, 0 waiting; cap now 26
+2026-11-17T14:34:10Z in flight: 26 runs in 23 apps (cap 26); 24 chunks queued
+2026-11-17T14:39:10Z server, last 5 min: cache hits 94%, 524 tokens/s generated, 0 preemptions, cache 62% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T14:39:22Z launched classic_qwen36_r3_5 optimize_lru_cache x6 (one at a time); 26 runs in flight, 23 chunks queued
+2026-11-17T14:39:23Z in flight: 26 runs in 24 apps (cap 26); 23 chunks queued
+2026-11-17T14:44:23Z server, last 5 min: cache hits 87%, 468 tokens/s generated, 0 preemptions, cache 63% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T14:44:23Z in flight: 26 runs in 23 apps (cap 26); 23 chunks queued
+2026-11-17T14:49:23Z server, last 5 min: cache hits 82%, 456 tokens/s generated, 0 preemptions, cache 56% in use, 19 requests running, 0 waiting; cap now 26
+2026-11-17T14:49:23Z in flight: 26 runs in 23 apps (cap 26); 23 chunks queued
+2026-11-17T14:54:23Z server, last 5 min: cache hits 92%, 437 tokens/s generated, 0 preemptions, cache 56% in use, 17 requests running, 0 waiting; cap now 26
+2026-11-17T14:54:24Z in flight: 26 runs in 23 apps (cap 26); 23 chunks queued
+2026-11-17T14:59:24Z server, last 5 min: cache hits 72%, 369 tokens/s generated, 0 preemptions, cache 65% in use, 19 requests running, 0 waiting; cap now 26
+2026-11-17T14:59:24Z in flight: 26 runs in 23 apps (cap 26); 23 chunks queued
+2026-11-17T15:04:24Z server, last 5 min: cache hits 94%, 372 tokens/s generated, 0 preemptions, cache 64% in use, 20 requests running, 1 waiting; cap now 24, NOT HEALTHY: launches held
+2026-11-17T15:04:24Z in flight: 23 runs in 21 apps (cap 24); 23 chunks queued
+2026-11-17T15:04:33Z moved: classic_qwen36_r2 grade_your_own and optimize_rendering_engine_graded start no new runs (launched 12 of 46 and 9 of 23; those in flight finish on their own). The other 34 and 14 runs are at the head of the queue in chunks of at most 3 (40 chunks queued now)
+2026-11-17T15:09:24Z server, last 5 min: cache hits 92%, 420 tokens/s generated, 0 preemptions, cache 62% in use, 21 requests running, 0 waiting; cap now 24
+2026-11-17T15:09:36Z launched classic_qwen36_r3_1 grade_your_own x3 (one at a time); 24 runs in flight, 39 chunks queued
+2026-11-17T15:09:37Z in flight: 24 runs in 22 apps (cap 24); 39 chunks queued
+2026-11-17T15:14:37Z server, last 5 min: cache hits 87%, 468 tokens/s generated, 0 preemptions, cache 62% in use, 23 requests running, 0 waiting; cap now 24
+2026-11-17T15:14:49Z launched classic_qwen36_r3_2 grade_your_own x3 (one at a time); 24 runs in flight, 38 chunks queued
+2026-11-17T15:14:49Z in flight: 24 runs in 22 apps (cap 24); 38 chunks queued
+2026-11-17T15:19:49Z server, last 5 min: cache hits 89%, 542 tokens/s generated, 0 preemptions, cache 55% in use, 19 requests running, 0 waiting; cap now 25
+2026-11-17T15:20:01Z launched classic_qwen36_r3_3 grade_your_own x3 (one at a time); 24 runs in flight, 37 chunks queued
+2026-11-17T15:20:13Z launched classic_qwen36_r3_4 grade_your_own x3 (one at a time); 25 runs in flight, 36 chunks queued
+2026-11-17T15:20:13Z in flight: 25 runs in 23 apps (cap 25); 36 chunks queued
+2026-11-17T15:25:13Z server, last 5 min: cache hits 92%, 546 tokens/s generated, 0 preemptions, cache 63% in use, 22 requests running, 0 waiting; cap now 25
+2026-11-17T15:25:14Z in flight: 25 runs in 23 apps (cap 25); 36 chunks queued
+2026-11-17T15:30:14Z server, last 5 min: cache hits 86%, 461 tokens/s generated, 0 preemptions, cache 79% in use, 24 requests running, 0 waiting; cap now 25
+2026-11-17T15:30:14Z in flight: 25 runs in 23 apps (cap 25); 36 chunks queued
+2026-11-17T15:35:14Z server, last 5 min: cache hits 80%, 342 tokens/s generated, 0 preemptions, cache 64% in use, 20 requests running, 0 waiting; cap now 25
+2026-11-17T15:35:14Z in flight: 25 runs in 23 apps (cap 25); 36 chunks queued
+2026-11-17T15:40:14Z server, last 5 min: cache hits 74%, 374 tokens/s generated, 0 preemptions, cache 45% in use, 17 requests running, 0 waiting; cap now 25
+2026-11-17T15:40:27Z launched classic_qwen36_r3_5 grade_your_own x3 (one at a time); 25 runs in flight, 35 chunks queued
+2026-11-17T15:40:27Z in flight: 25 runs in 23 apps (cap 25); 35 chunks queued
+2026-11-17T15:45:27Z server, last 5 min: cache hits 92%, 523 tokens/s generated, 0 preemptions, cache 53% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T15:45:39Z launched classic_qwen36_r3_6 grade_your_own x3 (one at a time); 26 runs in flight, 34 chunks queued
+2026-11-17T15:45:39Z in flight: 26 runs in 24 apps (cap 26); 34 chunks queued
+2026-11-17T15:50:39Z server, last 5 min: cache hits 96%, 551 tokens/s generated, 0 preemptions, cache 52% in use, 23 requests running, 0 waiting; cap now 26
+2026-11-17T15:50:39Z in flight: 26 runs in 24 apps (cap 26); 34 chunks queued
+2026-11-17T15:55:39Z server, last 5 min: cache hits 95%, 561 tokens/s generated, 0 preemptions, cache 47% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T15:55:40Z in flight: 26 runs in 24 apps (cap 26); 34 chunks queued
+2026-11-17T16:00:40Z server, last 5 min: cache hits 95%, 493 tokens/s generated, 0 preemptions, cache 51% in use, 16 requests running, 0 waiting; cap now 26
+2026-11-17T16:00:40Z in flight: 26 runs in 24 apps (cap 26); 34 chunks queued
+2026-11-17T16:05:40Z server, last 5 min: cache hits 92%, 464 tokens/s generated, 0 preemptions, cache 65% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T16:05:40Z in flight: 26 runs in 24 apps (cap 26); 34 chunks queued
+2026-11-17T16:10:40Z server, last 5 min: cache hits 92%, 471 tokens/s generated, 0 preemptions, cache 31% in use, 13 requests running, 0 waiting; cap now 26
+2026-11-17T16:10:53Z launched classic_qwen36_r3_7 grade_your_own x3 (one at a time); 25 runs in flight, 33 chunks queued
+2026-11-17T16:11:05Z launched classic_qwen36_r3_8 grade_your_own x3 (one at a time); 26 runs in flight, 32 chunks queued
+2026-11-17T16:11:05Z in flight: 26 runs in 25 apps (cap 26); 32 chunks queued
+2026-11-17T16:16:05Z server, last 5 min: cache hits 91%, 502 tokens/s generated, 0 preemptions, cache 50% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T16:16:17Z launched classic_qwen36_r3_9 grade_your_own x3 (one at a time); 26 runs in flight, 31 chunks queued
+2026-11-17T16:16:17Z in flight: 26 runs in 24 apps (cap 26); 31 chunks queued
+2026-11-17T16:21:17Z server, last 5 min: cache hits 92%, 524 tokens/s generated, 0 preemptions, cache 57% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T16:21:29Z launched classic_qwen36_r3_10 grade_your_own x3 (one at a time); 26 runs in flight, 30 chunks queued
+2026-11-17T16:21:30Z in flight: 26 runs in 24 apps (cap 26); 30 chunks queued
+2026-11-17T16:26:30Z server, last 5 min: cache hits 89%, 512 tokens/s generated, 0 preemptions, cache 60% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T16:26:30Z in flight: 26 runs in 24 apps (cap 26); 30 chunks queued
+2026-11-17T16:31:30Z server, last 5 min: cache hits 96%, 485 tokens/s generated, 0 preemptions, cache 53% in use, 16 requests running, 0 waiting; cap now 26
+2026-11-17T16:31:42Z launched classic_qwen36_r3_11 grade_your_own x2 (one at a time); 26 runs in flight, 29 chunks queued
+2026-11-17T16:31:42Z in flight: 26 runs in 24 apps (cap 26); 29 chunks queued
+2026-11-17T16:36:42Z server, last 5 min: cache hits 88%, 424 tokens/s generated, 0 preemptions, cache 56% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T16:36:43Z in flight: 26 runs in 24 apps (cap 26); 29 chunks queued
+2026-11-17T16:41:43Z server, last 5 min: cache hits 93%, 485 tokens/s generated, 0 preemptions, cache 51% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T16:41:43Z in flight: 26 runs in 24 apps (cap 26); 29 chunks queued
+2026-11-17T16:46:43Z server, last 5 min: cache hits 95%, 509 tokens/s generated, 0 preemptions, cache 46% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T16:46:43Z in flight: 26 runs in 24 apps (cap 26); 29 chunks queued
+2026-11-17T16:51:43Z server, last 5 min: cache hits 96%, 544 tokens/s generated, 0 preemptions, cache 46% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T16:51:56Z launched classic_qwen36_r3_12 grade_your_own x2 (one at a time); 26 runs in flight, 28 chunks queued
+2026-11-17T16:51:56Z in flight: 26 runs in 25 apps (cap 26); 28 chunks queued
+2026-11-17T16:56:56Z server, last 5 min: cache hits 91%, 498 tokens/s generated, 0 preemptions, cache 47% in use, 18 requests running, 0 waiting; cap now 26
+2026-11-17T16:57:08Z launched classic_qwen36_r3_5 optimize_rendering_engine_graded x3 (one at a time); 26 runs in flight, 27 chunks queued
+2026-11-17T16:57:08Z in flight: 26 runs in 25 apps (cap 26); 27 chunks queued
+2026-11-17T17:02:08Z server, last 5 min: cache hits 90%, 532 tokens/s generated, 0 preemptions, cache 58% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T17:02:08Z in flight: 26 runs in 24 apps (cap 26); 27 chunks queued
+2026-11-17T17:07:08Z server, last 5 min: cache hits 91%, 514 tokens/s generated, 0 preemptions, cache 39% in use, 16 requests running, 0 waiting; cap now 26
+2026-11-17T17:07:21Z launched classic_qwen36_r3_6 optimize_rendering_engine_graded x3 (one at a time); 26 runs in flight, 26 chunks queued
+2026-11-17T17:07:21Z in flight: 26 runs in 24 apps (cap 26); 26 chunks queued
+2026-11-17T17:12:21Z server, last 5 min: cache hits 92%, 494 tokens/s generated, 0 preemptions, cache 32% in use, 12 requests running, 0 waiting; cap now 26
+2026-11-17T17:12:33Z launched classic_qwen36_r3_7 optimize_rendering_engine_graded x3 (one at a time); 24 runs in flight, 25 chunks queued
+2026-11-17T17:12:45Z launched classic_qwen36_r3_8 optimize_rendering_engine_graded x3 (one at a time); 25 runs in flight, 24 chunks queued
+2026-11-17T17:12:57Z launched classic_qwen36_r3_9 optimize_rendering_engine_graded x2 (one at a time); 26 runs in flight, 23 chunks queued
+2026-11-17T17:12:57Z in flight: 26 runs in 24 apps (cap 26); 23 chunks queued
+2026-11-17T17:17:57Z server, last 5 min: cache hits 92%, 491 tokens/s generated, 0 preemptions, cache 49% in use, 19 requests running, 0 waiting; cap now 26
+2026-11-17T17:17:58Z in flight: 26 runs in 24 apps (cap 26); 23 chunks queued
+2026-11-17T17:22:58Z server, last 5 min: cache hits 93%, 552 tokens/s generated, 0 preemptions, cache 62% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T17:23:10Z launched classic_qwen36_r3_6 optimize_lru_cache x6 (one at a time); 26 runs in flight, 22 chunks queued
+2026-11-17T17:23:10Z in flight: 26 runs in 24 apps (cap 26); 22 chunks queued
+2026-11-17T17:28:10Z server, last 5 min: cache hits 76%, 467 tokens/s generated, 0 preemptions, cache 65% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T17:28:10Z in flight: 26 runs in 24 apps (cap 26); 22 chunks queued
+2026-11-17T17:33:10Z server, last 5 min: cache hits 68%, 359 tokens/s generated, 0 preemptions, cache 60% in use, 21 requests running, 0 waiting; cap now 24, NOT HEALTHY: launches held
+2026-11-17T17:33:10Z in flight: 24 runs in 22 apps (cap 24); 22 chunks queued
+2026-11-17T17:38:10Z server, last 5 min: cache hits 89%, 575 tokens/s generated, 0 preemptions, cache 45% in use, 19 requests running, 0 waiting; cap now 25
+2026-11-17T17:38:23Z launched classic_qwen36_r3_7 optimize_lru_cache x5 (one at a time); 25 runs in flight, 21 chunks queued
+2026-11-17T17:38:23Z in flight: 25 runs in 23 apps (cap 25); 21 chunks queued
+2026-11-17T17:43:23Z server, last 5 min: cache hits 94%, 561 tokens/s generated, 0 preemptions, cache 37% in use, 13 requests running, 0 waiting; cap now 26
+2026-11-17T17:43:35Z launched classic_qwen36_r3_8 optimize_lru_cache x5 (one at a time); 25 runs in flight, 20 chunks queued
+2026-11-17T17:43:47Z launched classic_qwen36_r3_1 leaked_scorer x6 (one at a time); 26 runs in flight, 19 chunks queued
+2026-11-17T17:43:47Z in flight: 26 runs in 24 apps (cap 26); 19 chunks queued
+2026-11-17T17:48:47Z server, last 5 min: cache hits 89%, 513 tokens/s generated, 0 preemptions, cache 46% in use, 19 requests running, 0 waiting; cap now 26
+2026-11-17T17:48:59Z launched classic_qwen36_r3_2 leaked_scorer x6 (one at a time); 26 runs in flight, 18 chunks queued
+2026-11-17T17:48:59Z in flight: 26 runs in 24 apps (cap 26); 18 chunks queued
+2026-11-17T17:53:59Z server, last 5 min: cache hits 90%, 568 tokens/s generated, 0 preemptions, cache 66% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T17:54:00Z in flight: 26 runs in 24 apps (cap 26); 18 chunks queued
+2026-11-17T17:59:00Z server, last 5 min: cache hits 90%, 503 tokens/s generated, 0 preemptions, cache 62% in use, 19 requests running, 0 waiting; cap now 26
+2026-11-17T17:59:12Z launched classic_qwen36_r3_3 leaked_scorer x6 (one at a time); 25 runs in flight, 17 chunks queued
+2026-11-17T17:59:24Z launched classic_qwen36_r3_4 leaked_scorer x5 (one at a time); 26 runs in flight, 16 chunks queued
+2026-11-17T17:59:24Z in flight: 26 runs in 24 apps (cap 26); 16 chunks queued
+2026-11-17T18:04:24Z server, last 5 min: cache hits 91%, 533 tokens/s generated, 0 preemptions, cache 50% in use, 19 requests running, 0 waiting; cap now 26
+2026-11-17T18:04:24Z in flight: 26 runs in 24 apps (cap 26); 16 chunks queued
+2026-11-17T18:09:24Z server, last 5 min: cache hits 84%, 472 tokens/s generated, 0 preemptions, cache 61% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T18:09:37Z launched classic_qwen36_r3_1 copying_of_answers x5 (one at a time); 26 runs in flight, 15 chunks queued
+2026-11-17T18:09:37Z in flight: 26 runs in 24 apps (cap 26); 15 chunks queued
+2026-11-17T18:14:37Z server, last 5 min: cache hits 87%, 547 tokens/s generated, 0 preemptions, cache 57% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T18:14:49Z launched classic_qwen36_r3_2 copying_of_answers x5 (one at a time); 25 runs in flight, 14 chunks queued
+2026-11-17T18:15:01Z launched classic_qwen36_r3_3 copying_of_answers x5 (one at a time); 26 runs in flight, 13 chunks queued
+2026-11-17T18:15:01Z in flight: 26 runs in 24 apps (cap 26); 13 chunks queued
+2026-11-17T18:20:01Z server, last 5 min: cache hits 90%, 502 tokens/s generated, 0 preemptions, cache 43% in use, 15 requests running, 0 waiting; cap now 26
+2026-11-17T18:20:01Z in flight: 26 runs in 24 apps (cap 26); 13 chunks queued
+2026-11-17T18:25:01Z server, last 5 min: cache hits 87%, 520 tokens/s generated, 0 preemptions, cache 72% in use, 24 requests running, 0 waiting; cap now 26
+2026-11-17T18:25:02Z in flight: 26 runs in 24 apps (cap 26); 13 chunks queued
+2026-11-17T18:30:02Z server, last 5 min: cache hits 87%, 456 tokens/s generated, 0 preemptions, cache 62% in use, 19 requests running, 0 waiting; cap now 26
+2026-11-17T18:30:14Z launched classic_qwen36_r3_4 copying_of_answers x5 (one at a time); 25 runs in flight, 12 chunks queued
+2026-11-17T18:30:26Z launched classic_qwen36_r3_1 optimize_rendering_engine_graded x6 (one at a time); 26 runs in flight, 11 chunks queued
+2026-11-17T18:30:26Z in flight: 26 runs in 24 apps (cap 26); 11 chunks queued
+2026-11-17T18:35:26Z server, last 5 min: cache hits 86%, 391 tokens/s generated, 0 preemptions, cache 56% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T18:35:38Z launched classic_qwen36_r3_2 optimize_rendering_engine_graded x6 (one at a time); 25 runs in flight, 10 chunks queued
+2026-11-17T18:35:50Z launched classic_qwen36_r3_3 optimize_rendering_engine_graded x6 (one at a time); 26 runs in flight, 9 chunks queued
+2026-11-17T18:35:50Z in flight: 26 runs in 24 apps (cap 26); 9 chunks queued
+2026-11-17T18:40:50Z server, last 5 min: cache hits 93%, 537 tokens/s generated, 0 preemptions, cache 55% in use, 21 requests running, 0 waiting; cap now 26
+2026-11-17T18:41:03Z launched classic_qwen36_r3_4 optimize_rendering_engine_graded x5 (one at a time); 26 runs in flight, 8 chunks queued
+2026-11-17T18:41:03Z in flight: 26 runs in 24 apps (cap 26); 8 chunks queued
+2026-11-17T18:46:03Z server, last 5 min: cache hits 96%, 565 tokens/s generated, 0 preemptions, cache 49% in use, 17 requests running, 0 waiting; cap now 26
+2026-11-17T18:46:15Z launched classic_qwen36_r3_1 tower_of_hanoi x5 (one at a time); 24 runs in flight, 7 chunks queued
+2026-11-17T18:46:27Z launched classic_qwen36_r3_2 tower_of_hanoi x5 (one at a time); 25 runs in flight, 6 chunks queued
+2026-11-17T18:46:39Z launched classic_qwen36_r3_3 tower_of_hanoi x5 (one at a time); 26 runs in flight, 5 chunks queued
+2026-11-17T18:46:39Z in flight: 26 runs in 24 apps (cap 26); 5 chunks queued
+2026-11-17T18:51:39Z server, last 5 min: cache hits 92%, 557 tokens/s generated, 0 preemptions, cache 40% in use, 17 requests running, 0 waiting; cap now 26
+2026-11-17T18:51:51Z launched classic_qwen36_r3_4 tower_of_hanoi x5 (one at a time); 25 runs in flight, 4 chunks queued
+2026-11-17T18:52:03Z launched classic_qwen36_r3_1 funding_email x5 (one at a time); 26 runs in flight, 3 chunks queued
+2026-11-17T18:52:03Z in flight: 26 runs in 24 apps (cap 26); 3 chunks queued
+2026-11-17T18:57:03Z server, last 5 min: cache hits 92%, 568 tokens/s generated, 0 preemptions, cache 58% in use, 22 requests running, 0 waiting; cap now 26
+2026-11-17T18:57:16Z launched classic_qwen36_r3_2 funding_email x5 (one at a time); 26 runs in flight, 2 chunks queued
+2026-11-17T18:57:16Z in flight: 26 runs in 24 apps (cap 26); 2 chunks queued
+2026-11-17T19:02:16Z server, last 5 min: cache hits 89%, 553 tokens/s generated, 0 preemptions, cache 48% in use, 19 requests running, 0 waiting; cap now 26
+2026-11-17T19:02:28Z launched classic_qwen36_r3_3 funding_email x5 (one at a time); 24 runs in flight, 1 chunks queued
+2026-11-17T19:02:40Z launched classic_qwen36_r3_4 funding_email x5 (one at a time); 25 runs in flight, 0 chunks queued
+2026-11-17T19:02:40Z in flight: 25 runs in 23 apps (cap 26); 0 chunks queued
+2026-11-17T19:07:40Z server, last 5 min: cache hits 89%, 589 tokens/s generated, 0 preemptions, cache 48% in use, 20 requests running, 0 waiting; cap now 26
+2026-11-17T19:07:41Z in flight: 23 runs in 21 apps (cap 26); 0 chunks queued
+2026-11-17T19:12:41Z server, last 5 min: cache hits 97%, 534 tokens/s generated, 0 preemptions, cache 44% in use, 17 requests running, 0 waiting; cap now 26
+2026-11-17T19:12:41Z in flight: 20 runs in 18 apps (cap 26); 0 chunks queued
+2026-11-17T19:17:41Z server, last 5 min: cache hits 96%, 492 tokens/s generated, 0 preemptions, cache 42% in use, 14 requests running, 0 waiting; cap now 26
+2026-11-17T19:17:41Z in flight: 18 runs in 17 apps (cap 26); 0 chunks queued
+2026-11-17T19:22:41Z server, last 5 min: cache hits 97%, 386 tokens/s generated, 0 preemptions, cache 38% in use, 12 requests running, 0 waiting; cap now 26
+2026-11-17T19:22:42Z in flight: 15 runs in 14 apps (cap 26); 0 chunks queued
+2026-11-17T19:27:42Z server, last 5 min: cache hits 92%, 412 tokens/s generated, 0 preemptions, cache 20% in use, 8 requests running, 0 waiting; cap now 26
+2026-11-17T19:27:42Z in flight: 14 runs in 13 apps (cap 26); 0 chunks queued
+2026-11-17T19:32:42Z server, last 5 min: cache hits 98%, 346 tokens/s generated, 0 preemptions, cache 32% in use, 11 requests running, 0 waiting; cap now 26
+2026-11-17T19:32:42Z in flight: 14 runs in 13 apps (cap 26); 0 chunks queued
+2026-11-17T19:37:42Z server, last 5 min: cache hits 96%, 381 tokens/s generated, 0 preemptions, cache 31% in use, 11 requests running, 0 waiting; cap now 26
+2026-11-17T19:37:43Z in flight: 14 runs in 13 apps (cap 26); 0 chunks queued
+2026-11-17T19:42:43Z server, last 5 min: cache hits 95%, 383 tokens/s generated, 0 preemptions, cache 21% in use, 10 requests running, 0 waiting; cap now 26
+2026-11-17T19:42:43Z in flight: 12 runs in 11 apps (cap 26); 0 chunks queued
+2026-11-17T19:47:43Z server, last 5 min: cache hits 91%, 399 tokens/s generated, 0 preemptions, cache 18% in use, 8 requests running, 0 waiting; cap now 26
+2026-11-17T19:47:43Z in flight: 11 runs in 10 apps (cap 26); 0 chunks queued
+2026-11-17T19:52:43Z server, last 5 min: cache hits 94%, 336 tokens/s generated, 0 preemptions, cache 19% in use, 5 requests running, 0 waiting; cap now 26
+2026-11-17T19:52:43Z in flight: 11 runs in 10 apps (cap 26); 0 chunks queued
+2026-11-17T19:57:43Z server, last 5 min: cache hits 98%, 268 tokens/s generated, 0 preemptions, cache 20% in use, 6 requests running, 0 waiting; cap now 26
+2026-11-17T19:57:44Z in flight: 10 runs in 9 apps (cap 26); 0 chunks queued
+2026-11-17T20:02:44Z server, last 5 min: cache hits 97%, 283 tokens/s generated, 0 preemptions, cache 13% in use, 5 requests running, 0 waiting; cap now 26
+2026-11-17T20:02:44Z in flight: 9 runs in 8 apps (cap 26); 0 chunks queued
+2026-11-17T20:07:44Z server, last 5 min: cache hits 95%, 267 tokens/s generated, 0 preemptions, cache 22% in use, 7 requests running, 0 waiting; cap now 26
+2026-11-17T20:07:44Z in flight: 9 runs in 8 apps (cap 26); 0 chunks queued
+2026-11-17T20:12:44Z server, last 5 min: cache hits 95%, 317 tokens/s generated, 0 preemptions, cache 26% in use, 8 requests running, 0 waiting; cap now 26
+2026-11-17T20:12:45Z in flight: 9 runs in 8 apps (cap 26); 0 chunks queued
+2026-11-17T20:17:45Z server, last 5 min: cache hits 96%, 331 tokens/s generated, 0 preemptions, cache 22% in use, 7 requests running, 0 waiting; cap now 26
+2026-11-17T20:17:45Z in flight: 9 runs in 8 apps (cap 26); 0 chunks queued
+2026-11-17T20:22:45Z server, last 5 min: cache hits 98%, 282 tokens/s generated, 0 preemptions, cache 21% in use, 6 requests running, 0 waiting; cap now 26
+2026-11-17T20:22:45Z in flight: 7 runs in 8 apps (cap 26); 0 chunks queued
+2026-11-17T20:27:45Z server, last 5 min: cache hits 98%, 209 tokens/s generated, 0 preemptions, cache 12% in use, 3 requests running, 0 waiting; cap now 26
+2026-11-17T20:27:45Z in flight: 6 runs in 6 apps (cap 26); 0 chunks queued
+2026-11-17T20:32:45Z server, last 5 min: cache hits 93%, 172 tokens/s generated, 0 preemptions, cache 15% in use, 4 requests running, 0 waiting; cap now 26
+2026-11-17T20:32:45Z in flight: 5 runs in 5 apps (cap 26); 0 chunks queued
+2026-11-17T20:37:45Z server, last 5 min: cache hits 97%, 197 tokens/s generated, 0 preemptions, cache 14% in use, 4 requests running, 0 waiting; cap now 26
+2026-11-17T20:37:45Z in flight: 4 runs in 5 apps (cap 26); 0 chunks queued
+2026-11-17T20:42:46Z server, last 5 min: cache hits 97%, 162 tokens/s generated, 0 preemptions, cache 8% in use, 2 requests running, 0 waiting; cap now 26
+2026-11-17T20:42:46Z in flight: 4 runs in 4 apps (cap 26); 0 chunks queued
+2026-11-17T20:47:46Z server, last 5 min: cache hits 94%, 176 tokens/s generated, 0 preemptions, cache 9% in use, 3 requests running, 0 waiting; cap now 26
+2026-11-17T20:47:46Z in flight: 4 runs in 4 apps (cap 26); 0 chunks queued
+2026-11-17T20:52:46Z server, last 5 min: cache hits 98%, 173 tokens/s generated, 0 preemptions, cache 7% in use, 2 requests running, 0 waiting; cap now 26
+2026-11-17T20:52:46Z in flight: 4 runs in 4 apps (cap 26); 0 chunks queued
+2026-11-17T20:57:46Z server, last 5 min: cache hits 98%, 151 tokens/s generated, 0 preemptions, cache 8% in use, 2 requests running, 0 waiting; cap now 26
+2026-11-17T20:57:46Z in flight: 4 runs in 4 apps (cap 26); 0 chunks queued
+2026-11-17T21:02:46Z server, last 5 min: cache hits 96%, 147 tokens/s generated, 0 preemptions, cache 6% in use, 2 requests running, 0 waiting; cap now 26
+2026-11-17T21:02:46Z in flight: 3 runs in 3 apps (cap 26); 0 chunks queued
+2026-11-17T21:07:46Z server, last 5 min: cache hits 95%, 134 tokens/s generated, 0 preemptions, cache 10% in use, 3 requests running, 0 waiting; cap now 26
+2026-11-17T21:07:46Z in flight: 3 runs in 3 apps (cap 26); 0 chunks queued
+2026-11-17T21:12:46Z server, last 5 min: cache hits 97%, 125 tokens/s generated, 0 preemptions, cache 11% in use, 3 requests running, 0 waiting; cap now 26
+2026-11-17T21:12:46Z in flight: 3 runs in 3 apps (cap 26); 0 chunks queued
+2026-11-17T21:17:46Z server, last 5 min: cache hits 98%, 118 tokens/s generated, 0 preemptions, cache 10% in use, 3 requests running, 0 waiting; cap now 26
+2026-11-17T21:17:46Z in flight: 3 runs in 3 apps (cap 26); 0 chunks queued
+2026-11-17T21:22:46Z server, last 5 min: cache hits 98%, 131 tokens/s generated, 0 preemptions, cache 7% in use, 2 requests running, 0 waiting; cap now 26
+2026-11-17T21:22:47Z in flight: 2 runs in 2 apps (cap 26); 0 chunks queued
+2026-11-17T21:27:47Z server, last 5 min: cache hits 96%, 79 tokens/s generated, 0 preemptions, cache 4% in use, 1 requests running, 0 waiting; cap now 26
+2026-11-17T21:27:47Z in flight: 2 runs in 2 apps (cap 26); 0 chunks queued
+2026-11-17T21:32:47Z server, last 5 min: cache hits 98%, 71 tokens/s generated, 0 preemptions, cache 4% in use, 1 requests running, 0 waiting; cap now 26
+2026-11-17T21:32:47Z in flight: 2 runs in 2 apps (cap 26); 0 chunks queued
+2026-11-17T21:37:47Z server, last 5 min: cache hits 98%, 100 tokens/s generated, 0 preemptions, cache 8% in use, 2 requests running, 0 waiting; cap now 26
+2026-11-17T21:37:47Z in flight: 2 runs in 2 apps (cap 26); 0 chunks queued
+2026-11-17T21:42:47Z server, last 5 min: cache hits 99%, 92 tokens/s generated, 0 preemptions, cache 4% in use, 1 requests running, 0 waiting; cap now 26
+2026-11-17T21:42:47Z in flight: 1 runs in 2 apps (cap 26); 0 chunks queued
+2026-11-17T21:47:47Z server, last 5 min: cache hits 99%, 59 tokens/s generated, 0 preemptions, cache 4% in use, 1 requests running, 0 waiting; cap now 26
+2026-11-17T21:47:47Z in flight: 1 runs in 1 apps (cap 26); 0 chunks queued
+2026-11-17T21:52:47Z server, last 5 min: cache hits 98%, 59 tokens/s generated, 0 preemptions, cache 4% in use, 1 requests running, 0 waiting; cap now 26
+2026-11-17T21:52:47Z in flight: 1 runs in 1 apps (cap 26); 0 chunks queued
+2026-11-17T21:57:47Z server, last 5 min: cache hits 99%, 58 tokens/s generated, 0 preemptions, cache 4% in use, 1 requests running, 0 waiting; cap now 26
+2026-11-17T21:57:47Z in flight: 1 runs in 1 apps (cap 26); 0 chunks queued
+2026-11-17T22:02:47Z server, last 5 min: cache hits 99%, 41 tokens/s generated, 0 preemptions, cache 0% in use, 0 requests running, 0 waiting; cap now 26
+2026-11-17T22:02:47Z in flight: 0 runs in 1 apps (cap 26); 0 chunks queued
+2026-11-17T22:07:47Z server, last 5 min: cache hits 100%, 0 tokens/s generated, 0 preemptions, cache 0% in use, 0 requests running, 0 waiting; cap now 26
+2026-11-17T22:13:08Z counts after the paced launch: total (28 tasks)                    1198      1179    3 (cut: column 4)
+2026-11-17T22:13:08Z top-up 1: tower_of_hanoi:3
+2026-11-17T22:13:08Z server, last 5 min: cache hits 100%, 0 tokens/s generated, 0 preemptions, cache 0% in use, 0 requests running, 0 waiting; cap now 26
+2026-11-17T22:13:20Z launched classic_qwen36_t1_1 tower_of_hanoi x3 (one at a time); 1 runs in flight, 0 chunks queued
+2026-11-17T22:13:20Z in flight: 1 runs in 1 apps (cap 26); 0 chunks queued
+2026-11-17T22:18:20Z server, last 5 min: cache hits 46%, 60 tokens/s generated, 0 preemptions, cache 2% in use, 1 requests running, 0 waiting; cap now 24, NOT HEALTHY: launches held
+2026-11-17T22:18:21Z in flight: 1 runs in 1 apps (cap 24); 0 chunks queued
+2026-11-17T22:23:21Z server, last 5 min: cache hits 84%, 59 tokens/s generated, 0 preemptions, cache 3% in use, 1 requests running, 0 waiting; cap now 25
+2026-11-17T22:23:21Z in flight: 1 runs in 1 apps (cap 25); 0 chunks queued
+2026-11-17T22:28:21Z server, last 5 min: cache hits 83%, 55 tokens/s generated, 0 preemptions, cache 1% in use, 1 requests running, 0 waiting; cap now 26
+2026-11-17T22:28:21Z in flight: 1 runs in 1 apps (cap 26); 0 chunks queued
+2026-11-17T22:33:21Z server, last 5 min: cache hits 89%, 19 tokens/s generated, 0 preemptions, cache 0% in use, 0 requests running, 0 waiting; cap now 26
+2026-11-17T22:33:25Z every task has 40 complete runs
+2026-11-17T22:33:25Z final counts: total (28 tasks)                    1201      1182    3 (results/logs/classic/counts_final.txt)
+2026-11-17T22:33:26Z per-run table written
+2026-11-17T22:33:57Z uploaded classic_qwen36 to HF
+2026-11-17T22:34:35Z uploaded classic_qwen36_r2 to HF
+2026-11-17T22:34:39Z uploaded classic_qwen36_r2b to HF
+2026-11-17T22:34:49Z uploaded classic_qwen36_r3_1 to HF
+2026-11-17T22:34:57Z uploaded classic_qwen36_r3_2 to HF
+2026-11-17T22:35:04Z uploaded classic_qwen36_r3_3 to HF
+2026-11-17T22:35:11Z uploaded classic_qwen36_r3_4 to HF
+2026-11-17T22:35:15Z uploaded classic_qwen36_r3_5 to HF
+2026-11-17T22:35:19Z uploaded classic_qwen36_r3_6 to HF
+2026-11-17T22:35:23Z uploaded classic_qwen36_r3_7 to HF
+2026-11-17T22:35:26Z uploaded classic_qwen36_r3_8 to HF
+2026-11-17T22:35:28Z uploaded classic_qwen36_r3_9 to HF
+2026-11-17T22:35:30Z uploaded classic_qwen36_r3_10 to HF
+2026-11-17T22:35:33Z uploaded classic_qwen36_r3_11 to HF
+2026-11-17T22:35:34Z uploaded classic_qwen36_r3_12 to HF
+2026-11-17T22:35:36Z uploaded classic_qwen36_t1_1 to HF
+2026-11-17T22:35:37Z uploaded results/logs/classic to HF
+2026-11-17T22:35:37Z CLASSIC FLEET DONE: stages classic_qwen36,classic_qwen36_r2,classic_qwen36_r2b,classic_qwen36_r3_1,classic_qwen36_r3_2,classic_qwen36_r3_3,classic_qwen36_r3_4,classic_qwen36_r3_5,classic_qwen36_r3_6,classic_qwen36_r3_7,classic_qwen36_r3_8,classic_qwen36_r3_9,classic_qwen36_r3_10,classic_qwen36_r3_11,classic_qwen36_r3_12,classic_qwen36_t1_1
+2026-11-17T22:38:17Z HELD-OUT CHECK FAILED (results/logs/classic/selection.txt): stopping to ask GG. The Qwen server is still up. Box idle, still billing.
+2026-11-18T00:40:24Z classic_after relaunched by hand: the first selection read a per-run table of 8 tasks (HERO_ALL_ENVS unset); table rebuilt over 28 tasks, all five held-out cases hold (results/logs/classic/selection.txt)
+2026-11-18T00:40:24Z classic_after: waiting for the fleet to finish (classic_fleet3.sh)
+2026-11-18T00:40:25Z selection: 1120 runs kept: 28 of 28 tasks have 40
+2026-11-18T00:40:25Z selection: Stopped at the context window: 87 of 1120 kept runs; 86 of 87 reached the 105,000-character training cut, these did not:
+2026-11-18T00:40:25Z held-out check: all five cases hold (results/logs/classic/selection.txt)
+2026-11-18T00:40:28Z training data: train 736 runs, val 184 runs, test 200 runs; examples train 736, val 184, test 200;tasks: train+val 23, test 5; (distill/classic_v1)
+2026-11-18T00:41:01Z Qwen server stopped; GPU free for training
+2026-11-18T00:41:01Z START train_smoke
+2026-11-18T00:49:50Z train_smoke OK: SMOKE OK: grad norms [0.5777587294578552, 0.8586015701293945]; peak 78.78 GiB at 32766 tokens
+2026-11-18T00:49:52Z START train_1
+2026-11-18T05:05:30Z uploaded checkpoint-23 (epoch 0.5) to HF
+2026-11-18T07:55:57Z defer_nll: waiting for classic_after.sh's loss step, to move it after the re-runs (GG, 18 Nov: results first)
+2026-11-18T08:36:06Z uploaded checkpoint-46 (epoch 1.0) to HF
+2026-11-18T12:21:42Z uploaded checkpoint-69 (epoch 1.5) to HF
+2026-11-18T16:07:21Z uploaded checkpoint-92 (epoch 2.0) to HF
+2026-11-18T16:33:47Z training done: checkpoints checkpoint-23 checkpoint-46 checkpoint-69 checkpoint-92 at epochs 0.5 1.0 1.5 2.0
+2026-11-18T16:33:47Z START checkpoint loss (base + c23=/workspace/out/classic_v1/checkpoint-23,c46=/workspace/out/classic_v1/checkpoint-46,c69=/workspace/out/classic_v1/checkpoint-69,c92=/workspace/out/classic_v1/checkpoint-92)
+2026-11-18T16:33:59Z defer_nll: loss step stopped on purpose (moved after the re-runs); classic_after.sh goes on to the re-runs. Its next line, CHECKPOINT LOSS FAILED, is this stop, not an error
+2026-11-18T16:33:59Z CHECKPOINT LOSS FAILED (classic_nll.log); the re-runs go ahead
+2026-11-18T16:33:59Z TRAINING DONE: checkpoints and losses on HF (distill/classic_v1/runs/v1)
+2026-11-18T16:33:59Z START gemma server: gemma-base + c23 c46 c69 c92 (vLLM 0.11.0, revision 005ad3404e59d6023443cb575daa05336842228a, round 1 v2 flags)
+2026-11-18T16:35:07Z gemma server up, every model answers
+2026-11-18T16:39:54Z garble gate: GATE PASSED: 0 garbled
+2026-11-18T16:40:39Z Modal gate passed: one base-gemma eval_tampering run finished through Modal
+2026-11-18T16:40:40Z spend so far: $391 (Modal $202, box $174, OpenRouter ~$15); re-runs ahead ~$120; limit $530
+2026-11-18T16:47:42Z re-runs launched: 180 per model x 5 models (base,c23,c46,c69,c92), 2 at a time per task and model
+2026-11-18T16:57:42Z re-runs: 32 apps still running
+2026-11-18T17:07:42Z re-runs: 28 apps still running
+2026-11-18T17:17:42Z re-runs: 25 apps still running
+2026-11-18T17:27:43Z re-runs: 21 apps still running
+2026-11-18T17:37:43Z re-runs: 21 apps still running
+2026-11-18T17:47:43Z re-runs: 21 apps still running
+2026-11-18T17:57:43Z re-runs: 20 apps still running
+2026-11-18T18:07:44Z re-runs: 19 apps still running
+2026-11-18T18:17:44Z re-runs: 19 apps still running
+2026-11-18T18:27:44Z re-runs: 18 apps still running
+2026-11-18T18:37:44Z re-runs: 18 apps still running
+2026-11-18T18:47:45Z re-runs: 16 apps still running
+2026-11-18T18:57:45Z re-runs: 15 apps still running
+2026-11-18T19:07:45Z re-runs: 12 apps still running
+2026-11-18T19:17:45Z re-runs: 12 apps still running
+2026-11-18T19:27:45Z re-runs: 8 apps still running
+2026-11-18T19:37:46Z re-runs: 8 apps still running
+2026-11-18T19:47:46Z re-runs: 8 apps still running
+2026-11-18T19:57:46Z re-runs: 8 apps still running
+2026-11-18T20:07:46Z re-runs: 8 apps still running
+2026-11-18T20:17:47Z re-runs: 8 apps still running
+2026-11-18T20:27:47Z re-runs: 8 apps still running
+2026-11-18T20:37:47Z re-runs: 7 apps still running
+2026-11-18T20:47:47Z re-runs: 5 apps still running
+2026-11-18T20:57:47Z re-runs: 5 apps still running
+2026-11-18T21:07:48Z re-runs: 4 apps still running
+2026-11-18T21:17:48Z re-runs: 4 apps still running
+2026-11-18T21:27:48Z re-runs: 4 apps still running
+2026-11-18T21:37:48Z re-runs: 3 apps still running
+2026-11-18T21:47:48Z re-runs: 2 apps still running
+2026-11-18T21:57:48Z re-runs: 1 apps still running
+2026-11-18T22:07:49Z re-runs: 1 apps still running
+2026-11-18T22:17:49Z re-runs: 1 apps still running
+2026-11-18T22:27:49Z re-runs: 1 apps still running
+2026-11-18T22:37:49Z re-runs: 1 apps still running
+2026-11-18T22:47:49Z re-runs: 1 apps still running
+2026-11-18T22:57:50Z re-runs: 0 apps still running
+2026-11-18T22:58:40Z re-run top-up 1: c23:tower_of_hanoi:3 c23:lazy_investigation:9 c23:currency_conversion:10 c46:tower_of_hanoi:6 c46:lazy_investigation:14 c46:currency_conversion:3 c69:tower_of_hanoi:4 c69:lazy_investigation:14 c69:currency_conversion:7 c92:tower_of_hanoi:4 c92:lazy_investigation:15 c92:currency_conversion:8
+2026-11-18T23:11:05Z re-runs: 8 apps still running
+2026-11-18T23:21:05Z re-runs: 6 apps still running
+2026-11-18T23:31:05Z re-runs: 3 apps still running
+2026-11-18T23:41:06Z re-runs: 1 apps still running
+2026-11-18T23:51:06Z re-runs: 0 apps still running
+2026-11-18T23:51:55Z re-run top-up 2: c23:lazy_investigation:4 c23:currency_conversion:4 c46:lazy_investigation:6 c69:lazy_investigation:6 c69:currency_conversion:5 c92:lazy_investigation:5
+2026-11-19T00:03:07Z re-runs: 2 apps still running
+2026-11-19T00:13:07Z re-runs: 0 apps still running
+2026-11-19T00:13:46Z re-run audit written (results/logs/classic_rerun/audit.txt)
+2026-11-19T00:14:51Z RERUN UPLOAD FAILED (upload.log)
+2026-11-19T00:14:51Z CLASSIC RERUNS DONE: results/distill_classic_eval.csv, audit in results/logs/classic_rerun/audit.txt. Gemma server still up; box idle, still billing.
+2026-11-19T00:16:07Z defer_nll: re-runs done; spend so far $457, loss step ~$20 more (limit $530); stopping the gemma server for it
+2026-11-19T00:16:22Z START checkpoint loss, after the re-runs (base + c23=/workspace/out/classic_v1/checkpoint-23,c46=/workspace/out/classic_v1/checkpoint-46,c69=/workspace/out/classic_v1/checkpoint-69,c92=/workspace/out/classic_v1/checkpoint-92)
+2026-11-19T01:29:34Z UPLOAD FAILED again for distill_classic_base (upload_rerun.log)
+2026-11-19T01:29:34Z UPLOAD FAILED again for distill_classic_c23 (upload_rerun.log)
+2026-11-19T01:29:34Z UPLOAD FAILED again for distill_classic_c46 (upload_rerun.log)
+2026-11-19T01:29:34Z UPLOAD FAILED again for distill_classic_c69 (upload_rerun.log)
+2026-11-19T01:29:34Z UPLOAD FAILED again for distill_classic_c92 (upload_rerun.log)
+2026-11-19T01:29:35Z UPLOAD FAILED again for distill_classic_gate (upload_rerun.log)
+2026-11-19T02:23:59Z checkpoint loss: val: base 0.4418, c23 0.2343, c46 0.1994, c69 0.1850, c92 0.1826;test: base 0.4524, c23 0.2516, c46 0.2353, c69 0.2314, c92 0.2308;
+2026-11-19T02:24:02Z checkpoint loss uploaded to HF (distill/classic_v1/runs/v1/nll)
+2026-11-19T02:24:02Z CLASSIC LOSS DONE (after the re-runs). Box idle, still billing.
+2026-11-19T05:37:23Z UPLOAD FAILED again for distill_classic_c69 (upload_rerun.log)
+2026-11-19T05:49:27Z UPLOAD FAILED for distill_classic_c69 even with hf_xet (upload_rerun2.log)
+2026-11-19T05:54:12Z re-runs uploaded to HF: distill_classic_c69 (run-10 rollout.log gzipped: it has NUL bytes)
