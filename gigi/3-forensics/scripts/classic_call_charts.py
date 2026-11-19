@@ -198,6 +198,41 @@ def problems():
     out = CH / "classic_call_6_problems.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
 
 
+def norvane_coding(d):
+    """norvane (not tested last week), coding and coding_norules at every save point, counts on this week's points."""
+    lw = last_week()
+    panels = [("norvane", "tampered with the tests", "never seen; not tested last week"),
+              ("coding", "made the broken test pass", "learned from"),
+              ("coding_norules", "made the broken test pass", "learned from")]
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4.6), sharey=True)
+    x = list(range(5)); xl = ["before", "25%", "50%", "75%", "100%"]
+    for ax, (env, act, tag) in zip(axes, panels):
+        ax.grid(axis="y"); ax.grid(axis="x", visible=False)
+        q = d["qwen", env]; qr = pct(q["K"], q["N"])
+        ax.axhline(qr, color=ST.QWEN, lw=1.8, ls=(0, (5, 3)), zorder=1)
+        ax.text(4.3, qr, f"Qwen\n{q['K']} of {q['N']}", color=ST.QWEN, fontsize=9.2, va="center", ha="left", fontweight="bold")
+        tw = [(d[m, env]["K"], d[m, env]["N"]) for m in MODELS]
+        if env in lw:
+            ly = [pct(k, n) for k, n in lw[env]]
+            ax.plot(x, ly, color=LAST, lw=2.2, ls=(0, (4, 2)), zorder=2, label="last week")
+            ax.scatter(x[1:], ly[1:], s=40, color=LAST, edgecolor="white", lw=1.2, zorder=3)
+        ys = [pct(k, n) for k, n in tw]
+        ax.plot(x, ys, color=AFTER, lw=2.6, zorder=4, label="this week")
+        ax.scatter(x[1:], ys[1:], s=60, color=AFTER, edgecolor="white", lw=1.4, zorder=5)
+        ax.scatter([0], [ys[0]], s=70, color=ST.GEMMA, edgecolor="white", lw=1.4, zorder=6)
+        for i, ((k, n), yv) in enumerate(zip(tw, ys)):
+            ax.annotate(f"{k} of {n}", (i, yv), xytext=(0, 10), textcoords="offset points", ha="center", va="bottom",
+                        fontsize=9.2, color=ST.TEXT, zorder=7, bbox=dict(boxstyle="square,pad=0.1", fc="white", ec="none"))
+        ax.set_xticks(x); ax.set_xticklabels(xl, fontsize=9.5); ax.set_xlabel("share of training done", fontsize=9.5, color=ST.MUTED)
+        ax.set_ylim(-0.05, 1.08); ax.set_xlim(-0.3, 4.3)
+        ax.set_yticks([0, .5, 1]); ax.set_yticklabels(["0%", "50%", "100%"], fontsize=9.5)
+        ax.set_title(env, loc="left", fontsize=11.5, pad=24)
+        ax.text(0, 1.04, f"{act}  ·  {tag}", transform=ax.transAxes, fontsize=8.6, color=ST.MUTED, va="bottom")
+    axes[1].legend(loc="upper left", fontsize=9.5)
+    fig.tight_layout(w_pad=5)
+    out = CH / "classic_call_7_norvane_coding.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
+
+
 if __name__ == "__main__":
     d = load()
-    summary(d); trajectory(d); steps(d); loss(); compare(d); problems()
+    summary(d); trajectory(d); steps(d); loss(); compare(d); problems(); norvane_coding(d)
