@@ -920,10 +920,10 @@ index 2be7824..f288b9b 100644
          return _finish(provider_class(
              model=model,
 diff --git a/src/agent_interp_envs/providers/openrouter_provider.py b/src/agent_interp_envs/providers/openrouter_provider.py
-index 22428b5..68b280a 100644
+index 22428b5..3b220a9 100644
 --- a/src/agent_interp_envs/providers/openrouter_provider.py
 +++ b/src/agent_interp_envs/providers/openrouter_provider.py
-@@ -10,7 +10,11 @@ OpenRouter interleaved thinking supported models:
+@@ -10,10 +10,14 @@ OpenRouter interleaved thinking supported models:
  - INTELLECT-3
  """
  
@@ -934,7 +934,11 @@ index 22428b5..68b280a 100644
 +import uuid
  
  from dotenv import load_dotenv
- from openai import APIConnectionError, APITimeoutError, OpenAI, RateLimitError
+-from openai import APIConnectionError, APITimeoutError, OpenAI, RateLimitError
++from openai import APIConnectionError, APITimeoutError, InternalServerError, OpenAI, RateLimitError
+ from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+ 
+ from agent_interp_envs.print_helpers import print_section, print_step_header
 @@ -28,6 +32,197 @@ class OpenRouterEmptyResponseError(Exception):
      """OpenRouter returned HTTP 200 with an error body and no choices."""
  
@@ -1149,7 +1153,7 @@ index 22428b5..68b280a 100644
      ) -> None:
          """Initialize the OpenRouter provider.
  
-@@ -70,42 +273,84 @@ class OpenRouterProvider(BaseProvider):
+@@ -70,42 +273,88 @@ class OpenRouterProvider(BaseProvider):
                  "Refusing to route to Fireworks via OpenRouter (terrible rate "
                  "limits). Use the fireworks provider directly."
              )
@@ -1229,12 +1233,17 @@ index 22428b5..68b280a 100644
 -        stop=stop_after_attempt(3),
 -        wait=wait_exponential(multiplier=1, min=1, max=10),
 +        # A 429 produced no reply, so waiting it out resamples nothing: up to 14 attempts (~20 min) while
-+        # DeepInfra's shared pool is overloaded. Anything else (an empty reply is a dropped reply) stops at 3.
++        # DeepInfra's shared pool is overloaded. A provider 5xx (502 "JSON error injected into SSE stream", 503) also
++        # produced no usable reply: up to 8 attempts (~8 min). Before 19 Nov a single 5xx killed the run (2 of 56 in
++        # the DeepSeek V4 Pro pilot). Anything else (an empty reply is a dropped reply) stops at 3.
 +        stop=lambda rs: rs.attempt_number >= (
-+            14 if isinstance(rs.outcome.exception(), RateLimitError) else 3),
++            14 if isinstance(rs.outcome.exception(), RateLimitError)
++            else 8 if isinstance(rs.outcome.exception(), InternalServerError) else 3),
 +        wait=wait_exponential(multiplier=2, min=1, max=120),
          retry=retry_if_exception_type(
-             (RateLimitError, APITimeoutError, APIConnectionError, OpenRouterEmptyResponseError, json.JSONDecodeError)
+-            (RateLimitError, APITimeoutError, APIConnectionError, OpenRouterEmptyResponseError, json.JSONDecodeError)
++            (RateLimitError, InternalServerError, APITimeoutError, APIConnectionError, OpenRouterEmptyResponseError,
++             json.JSONDecodeError)
          ),
 +        # a retry resamples the reply, so log each one: silent resampling would hide replies the provider dropped
 +        before_sleep=lambda rs: print(
@@ -1242,7 +1251,7 @@ index 22428b5..68b280a 100644
      )
      def invoke(self) -> LLMResponse:
          """Make an API call to OpenRouter using internal message history.
-@@ -115,19 +360,40 @@ class OpenRouterProvider(BaseProvider):
+@@ -115,19 +364,40 @@ class OpenRouterProvider(BaseProvider):
          """
          response = self.client.chat.completions.create(
              model=self.model,

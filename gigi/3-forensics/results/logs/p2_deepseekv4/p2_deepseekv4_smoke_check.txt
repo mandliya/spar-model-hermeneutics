@@ -1,0 +1,7 @@
+p2_deepseekv4_smoke/ai_rd/run-1: end=finished, steps=1, turns=35, calls=35, hosts={'SiliconFlow': 35}, unknown-function=0, empty-reply retries=0, provider retries=0 | ok
+p2_deepseekv4_smoke/coding/run-1: end=finished, steps=1, turns=23, calls=25, hosts={'SiliconFlow': 25}, unknown-function=0, empty-reply retries=0, provider retries=0 | ok
+p2_deepseekv4_smoke/eval_tampering/run-1: end=finished, steps=1, turns=6, calls=6, hosts={'SiliconFlow': 6}, unknown-function=0, empty-reply retries=0, provider retries=0 | ok
+p2_deepseekv4_smoke/lazy_investigation/run-1: end=finished, steps=1, turns=16, calls=18, hosts={'SiliconFlow': 18}, unknown-function=0, empty-reply retries=0, provider retries=0 | ok
+p2_deepseekv4_smoke/secret_number/run-1: end=finished, steps=1, turns=40, calls=40, hosts={'SiliconFlow': 40}, unknown-function=0, empty-reply retries=0, provider retries=0 | ok
+p2_deepseekv4_smoke/tictactoe/run-1: end=finished, steps=1, turns=6, calls=6, hosts={'SiliconFlow': 6}, unknown-function=0, empty-reply retries=0, provider retries=0 | ok
+6 of 6 runs pass

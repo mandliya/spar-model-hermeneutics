@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/workspace/forensics/gigi/3-forensics/agent-interp-envs/../scripts/phase2_smoke_check.py", line 22, in <module>
+    from distill_data import run_end   # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/forensics/gigi/3-forensics/scripts/distill_data.py", line 33, in <module>
+    import swap_all_score as S                                       # noqa: E402  replay plan (original run per point)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/forensics/gigi/3-forensics/scripts/swap_all_score.py", line 44, in <module>
+    PLAN = json.load(open(HERE / "results" / "swap_all_plan.json"))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/forensics/gigi/3-forensics/results/swap_all_plan.json'

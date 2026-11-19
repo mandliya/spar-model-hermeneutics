@@ -166,6 +166,8 @@ def run_end(run):
         return "context window full"   # history filled the window exactly, so no room was left for a reply (17 Nov)
     if "APITimeoutError" in t[-4000:]:
         return "our server timed out"
+    if "InternalServerError" in t[-4000:]:   # a 5xx from the provider (19 Nov DeepSeek pilot: 502 "JSON error injected into
+        return "provider server error"       # SSE stream", 503); its long traceback hid the word from the check below
     if "Traceback" in t[-1500:]:
         return "crash"
     return "cut off by the time limit"

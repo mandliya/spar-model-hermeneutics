@@ -1,0 +1,2 @@
+2026-11-19T09:22:52Z START phase 2 pilot: deepseek-v4-pro pinned to siliconflow, smoke then 2 runs per task, spend cap $300
+2026-11-19T09:22:52Z PILOT STOPPED (deepseek-v4-pro): Modal profile not working (copy ~/.modal.toml to the box)

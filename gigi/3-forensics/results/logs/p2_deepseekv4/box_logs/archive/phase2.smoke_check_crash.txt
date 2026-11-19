@@ -1,0 +1,8 @@
+2026-11-19T09:23:23Z START phase 2 pilot: deepseek-v4-pro pinned to siliconflow, smoke then 2 runs per task, spend cap $300
+t=1795080204 key_usage=5966.719117269 key_limit=10000 key_limit_remaining=4033.280882731 account_remaining=3665.69
+2026-11-19T09:24:37Z smoke launched: 6 runs (p2_deepseekv4_smoke)
+2026-11-19T09:24:38Z in flight: 6 runs in 6 apps; spent $0.00 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T09:29:38Z in flight: 3 runs in 3 apps; spent $0.34 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T09:34:39Z in flight: 1 runs in 1 apps; spent $0.82 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T09:39:39Z in flight: 1 runs in 1 apps; spent $0.89 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T09:44:48Z PILOT STOPPED (deepseek-v4-pro): SMOKE CHECK FAILED (/workspace/logs/p2_deepseekv4_smoke_check.txt): fix before any pilot

@@ -2,11 +2,12 @@
 
 Kept in git so they survive a lost session. Delete a line when it's done.
 
-## Phase 2 budget (19 Nov 2026): needs John
+## Phase 2 budget (19 Nov 2026): needs John (GitHub issue #1)
 
-Five teacher models distilled into Qwen3.6 27B: ~$11,450 in total, $7,350 of it new money. John: raise the OpenRouter
-key limit to ~$17,000, check the workspace lifetime budget has ~$6,650 of room, top up Vast ~$400 now, OpenRouter
-~$1,600 before Kimi K3. Full table, balances and sources: `3-forensics/phase2/BUDGET.md`.
+Five teacher models distilled into Qwen3.6 27B: ~$10,300 in total, ~$6,200 of it new money (DeepSeek measured in
+its pilot at about a third of the first estimate). John: top up Vast ~$400 now, check the OpenRouter workspace
+lifetime budget has ~$5,650 of room, raise the key limit to ~$15,000 and add ~$600 of credit before Kimi K3.
+Full table, balances and sources, updated after every stage: `3-forensics/phase2/BUDGET.md`.
 
 ## Direction from the 22 Oct 2026 call with John: validate the swap before distillation
 
