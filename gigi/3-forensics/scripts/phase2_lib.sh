@@ -5,6 +5,8 @@
 H=${H:-/workspace/forensics/gigi/3-forensics}; LOGD=${LOGD:-/workspace/logs}; S=${S:-$LOGD/phase2.txt}
 MONEY_START=${MONEY_START:-$LOGD/phase2_money_start.json}
 export MODAL_PROFILE=${MODAL_PROFILE:-spar} MODAL_SECRET_SUFFIX=${MODAL_SECRET_SUFFIX:--gigi} MODAL_VOLUME_PREFIX=${MODAL_VOLUME_PREFIX:-gigi-forensics-}
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:/opt/conda/bin:$PATH"   # uv lives in ~/.local/bin, absent from a detached
+                                                                 # ssh launch's PATH (19 Nov: preflight stopped on "uv: No such file")
 mkdir -p "$LOGD"
 say () { echo "$(date -u +%FT%TZ) $*" >> "$S"; }
 upy () { (cd "$H/agent-interp-envs" && env -u VIRTUAL_ENV uv run python "$@"); }   # the harness's own environment

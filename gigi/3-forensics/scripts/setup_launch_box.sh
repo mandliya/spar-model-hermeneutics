@@ -43,7 +43,7 @@ grep -q USAGE_KEY src/agent_interp_envs/providers/openrouter_provider.py && echo
 [ -f /root/.modal.toml ] && echo "~/.modal.toml: present" || echo "~/.modal.toml: MISSING (GG copies it)"
 if [ -f /root/.modal.toml ]; then
   uv run modal profile current >/dev/null 2>&1 && echo "modal profile: works" || echo "modal profile: NOT working"
-  secrets=$(MODAL_PROFILE=spar uv run modal secret list 2>/dev/null)
+  secrets=$(MODAL_PROFILE=spar uv run modal secret list --json 2>/dev/null)   # --json: the table truncates names
   for s in openrouter-secret-gigi openrouter-agent-gigi; do echo "$secrets" | grep -q "$s" && echo "Modal secret $s: present" || echo "Modal secret $s: MISSING"; done
 fi
 for k in HF_TOKEN OPENROUTER_API_KEY; do grep -q "^$k=" /workspace/.env 2>/dev/null && echo "/workspace/.env $k: present" || echo "/workspace/.env $k: absent"; done

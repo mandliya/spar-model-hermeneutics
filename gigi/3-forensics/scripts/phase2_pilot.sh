@@ -39,7 +39,8 @@ say "START phase 2 pilot: $TAG pinned to $PIN, smoke then $PILOT_N runs per task
 n=$(ls "$H"/configs/*__"$TAG".yaml 2>/dev/null | wc -l); [ "$n" = 28 ] || stop "$n configs for $TAG, need 28 (scripts/make_target_configs.py)"
 grep -q "USAGE_KEY" "$H/agent-interp-envs/src/agent_interp_envs/providers/openrouter_provider.py" || stop "the harness has no usage ledger (apply harness_patch)"
 (cd "$H/agent-interp-envs" && env -u VIRTUAL_ENV uv run modal profile current) >> "$LOGD/phase2_preflight.log" 2>&1 || stop "Modal profile not working (copy ~/.modal.toml to the box)"
-(cd "$H/agent-interp-envs" && env -u VIRTUAL_ENV uv run modal secret list) > "$LOGD/phase2_secrets.txt" 2>&1
+# --json: the table cuts long names at 80 columns over ssh ("openrouter-secr…"), which read as missing (19 Nov)
+(cd "$H/agent-interp-envs" && env -u VIRTUAL_ENV uv run modal secret list --json) > "$LOGD/phase2_secrets.txt" 2>&1
 for s in "openrouter-secret$MODAL_SECRET_SUFFIX" "openrouter-agent$MODAL_SECRET_SUFFIX"; do grep -q "$s" "$LOGD/phase2_secrets.txt" || stop "Modal secret $s missing"; done
 python3 "$H/scripts/phase2_money.py" --need "$PILOT_CAP" --save-start "$MONEY_START" >> "$S" 2>&1; rc=$?
 [ $rc = 2 ] && stop "not enough OpenRouter money for the cap (see the line above): ask GG / John"
