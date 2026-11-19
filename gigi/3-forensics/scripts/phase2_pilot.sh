@@ -6,8 +6,9 @@
 # 1. Preflight: 28 configs for TAG, the harness's usage ledger present, Modal profile and secrets, OpenRouter money
 #    (key limit_remaining and account credits >= PILOT_CAP; the workspace budget is John's to check).
 # 2. Smoke, one run per kind of loop (memory harness-smoke-per-env-type): coding (submit script ends it), tictactoe (game
-#    over), eval_tampering and lazy_investigation (plain final reply), secret_number (its own answer tool), grade_your_own
-#    (500 steps: cost and context probe), ai_rd (its own capped agent key). Then phase2_smoke_check.py must pass
+#    over), eval_tampering and lazy_investigation (plain final reply), secret_number (its own answer tool), ai_rd (its own
+#    capped agent key). grade_your_own (500 steps) is NOT in the smoke (19 Nov): at max effort one run can take many hours
+#    and the pilot waited for it; its cost and length come from the pilot's own 2 runs, under the same spend cap. Then phase2_smoke_check.py must pass
 #    (finished, reasoning on every turn, a cost on every call, served by the pinned host). Else stop: nothing more runs.
 # 3. Pilot: PILOT_N runs (default 2) of each of the 28 tasks, MAXC 2 per task.
 # 4. Lean fetch, cost and length per run (run_usage.py, projected to the fleet's 46 / 40 runs per task), how runs ended
@@ -45,10 +46,10 @@ python3 "$H/scripts/phase2_money.py" --need "$PILOT_CAP" --save-start "$MONEY_ST
 [ $rc = 3 ] && say "no OpenRouter key on this box: spend is tracked from the launch logs only (check the key on the laptop first)"
 
 # 2. smoke
-for spec in coding:1 tictactoe:1 eval_tampering:1 lazy_investigation:1 secret_number:1 grade_your_own:1 ai_rd:1; do
+for spec in coding:1 tictactoe:1 eval_tampering:1 lazy_investigation:1 secret_number:1 ai_rd:1; do
   MAXC=1 launch "$SMOKE" "${spec%%:*}" "${spec##*:}"
 done
-say "smoke launched: 7 runs ($SMOKE)"
+say "smoke launched: 6 runs ($SMOKE)"
 wait_stages "$SMOKE" "$PILOT_CAP" || stop "spend cap reached during the smoke"
 fetch "$SMOKE"
 upy ../scripts/phase2_smoke_check.py "$SMOKE" --pin "$PIN" --reasoning-required > "$LOGD/${SMOKE}_check.txt" 2>&1 \

@@ -1,0 +1,378 @@
+{
+ "model": "deepseek/deepseek-v4-pro",
+ "time": "2026-11-19T07:42:14Z",
+ "endpoints": {
+  "siliconflow": {
+   "found": true,
+   "tag": "siliconflow/fp8",
+   "quantization": "fp8",
+   "tools": true,
+   "reasoning": true,
+   "price_in": "0.0000009",
+   "price_out": "0.0000017",
+   "status": 0
+  },
+  "streamlake": {
+   "found": true,
+   "tag": "streamlake/fp8",
+   "quantization": "fp8",
+   "tools": true,
+   "reasoning": true,
+   "price_in": "0.000000898188",
+   "price_out": "0.000001796376",
+   "status": 0
+  },
+  "deepinfra": {
+   "found": true,
+   "tag": "deepinfra/fp8",
+   "quantization": "fp8",
+   "tools": true,
+   "reasoning": true,
+   "price_in": "0.0000013",
+   "price_out": "0.0000026",
+   "status": 0
+  },
+  "gmicloud": {
+   "found": true,
+   "tag": "gmicloud/fp8",
+   "quantization": "fp8",
+   "tools": true,
+   "reasoning": true,
+   "price_in": "0.000000957",
+   "price_out": "0.000001914",
+   "status": 0
+  },
+  "novita": {
+   "found": true,
+   "tag": "novita/fp8",
+   "quantization": "fp8",
+   "tools": true,
+   "reasoning": true,
+   "price_in": "0.00000128",
+   "price_out": "0.00000256",
+   "status": 0
+  }
+ },
+ "calls": {
+  "siliconflow": {
+   "turn1": {
+    "seconds": 4.1,
+    "served_by": "SiliconFlow",
+    "tool_call": "execute_command",
+    "tool_args_parsed": true,
+    "content_chars": 0,
+    "reasoning_chars": 198,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 424,
+    "completion_tokens": 88,
+    "reasoning_tokens": 41,
+    "cached_tokens": 0,
+    "cost": 0.0005312,
+    "reasoning_head": "The user wants me to read a file called notes.txt in the workspace using a shell command, then tell them which number it contains and whether that number is prime.\n\nLet me start by reading the file."
+   },
+   "turn2_with_reasoning": {
+    "seconds": 13.3,
+    "served_by": "SiliconFlow",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 87,
+    "reasoning_chars": 669,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 537,
+    "completion_tokens": 275,
+    "reasoning_tokens": 250,
+    "cached_tokens": 0,
+    "cost": 0.0009508,
+    "reasoning_head": "The file contains the number 221. Now I need to determine if 221 is prime. Let me think:\n\nA prime number is a number greater than 1 that has no positive divisors other than 1 and itself.\n\nTo check if 221 is prime:\n- Check divisibility by small primes:\n  - 2: 221 is odd, not divisible by 2\n  - 3: sum"
+   },
+   "turn2_without_reasoning": {
+    "seconds": 12.7,
+    "served_by": "SiliconFlow",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 93,
+    "reasoning_chars": 433,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 496,
+    "completion_tokens": 207,
+    "reasoning_tokens": 178,
+    "cached_tokens": 0,
+    "cost": 0.0007983,
+    "reasoning_head": "Let me analyze the number 221. I need to determine if it's prime.\n\n221: Let me check divisibility. \n- Not divisible by 2 (odd)\n- Not divisible by 3 (2+2+1=5, not divisible by 3)\n- Not divisible by 5 (doesn't end in 0 or 5)\n- Not divisible by 7: 221/7 \u2248 31.57, 7\u00d731=217, 221-217=4, so no.\n- Not divisi"
+   },
+   "earlier_reasoning_in_prompt_tokens": 41,
+   "efforts": {
+    "high": {
+     "seconds": 15.3,
+     "served_by": "SiliconFlow",
+     "tool_call": "execute_command",
+     "tool_args_parsed": true,
+     "content_chars": 0,
+     "reasoning_chars": 145,
+     "reasoning_details": [
+      "reasoning.text"
+     ],
+     "prompt_tokens": 345,
+     "completion_tokens": 79,
+     "reasoning_tokens": 32,
+     "cached_tokens": 0,
+     "cost": 0.0004448,
+     "reasoning_head": "The user wants me to read a file called notes.txt and then tell them which number it contains and whether it's prime. Let me first read the file."
+    },
+    "xhigh": {
+     "seconds": 5.2,
+     "served_by": "SiliconFlow",
+     "tool_call": "execute_command",
+     "tool_args_parsed": true,
+     "content_chars": 0,
+     "reasoning_chars": 159,
+     "reasoning_details": [
+      "reasoning.text"
+     ],
+     "prompt_tokens": 424,
+     "completion_tokens": 84,
+     "reasoning_tokens": 37,
+     "cached_tokens": 256,
+     "cost": 0.00031448,
+     "reasoning_head": "The user wants me to read a file called notes.txt, extract a number from it, and tell them the number and whether it's prime. Let me start by reading the file."
+    }
+   }
+  },
+  "streamlake": {
+   "turn1": {
+    "seconds": 8.1,
+    "served_by": "StreamLake",
+    "tool_call": "execute_command",
+    "tool_args_parsed": true,
+    "content_chars": 0,
+    "reasoning_chars": 161,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 424,
+    "completion_tokens": 81,
+    "reasoning_tokens": 34,
+    "cached_tokens": 300,
+    "cost": 0.000279336468,
+    "reasoning_head": "The user wants me to read a file called notes.txt and then tell them which number it contains and whether that number is prime. Let me start by reading the file."
+   },
+   "turn2_with_reasoning": {
+    "seconds": 3.5,
+    "served_by": "StreamLake",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 87,
+    "reasoning_chars": 249,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 530,
+    "completion_tokens": 119,
+    "reasoning_tokens": 92,
+    "cached_tokens": 460,
+    "cost": 0.000311072444,
+    "reasoning_head": "The file contains the number 221. Now I need to determine if 221 is prime. Let me think about this:\n\n221 = 13 \u00d7 17 (since 13 \u00d7 17 = 221). Let me verify: 13 \u00d7 10 = 130, 13 \u00d7 7 = 91, 130 + 91 = 221. Yes.\n\nSo 221 is not prime; it's composite (13 \u00d7 17)."
+   },
+   "turn2_without_reasoning": {
+    "seconds": 11.2,
+    "served_by": "StreamLake",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 69,
+    "reasoning_chars": 287,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 496,
+    "completion_tokens": 131,
+    "reasoning_tokens": 108,
+    "cached_tokens": 432,
+    "cost": 0.000325144056,
+    "reasoning_head": "The file says \"The number is 221.\" Now I need to determine if 221 is prime. Let me think:\n\n221 = 13 \u00d7 17 (since 13 \u00d7 17 = 221). So 221 is not prime; it's composite.\n\nLet me verify: 13 \u00d7 17 = 221. 13 \u00d7 10 = 130, 13 \u00d7 7 = 91, 130 + 91 = 221. Yes.\n\nSo the number is 221 and it is not prime."
+   },
+   "earlier_reasoning_in_prompt_tokens": 34
+  },
+  "deepinfra": {
+   "turn1": {
+    "seconds": 2.7,
+    "served_by": "DeepInfra",
+    "tool_call": "execute_command",
+    "tool_args_parsed": true,
+    "content_chars": 0,
+    "reasoning_chars": 177,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 433,
+    "completion_tokens": 84,
+    "reasoning_tokens": 36,
+    "cached_tokens": 0,
+    "cost": 0.0007813,
+    "reasoning_head": "The user wants me to read a file called notes.txt and then tell them in one sentence which number it contains and whether that number is prime. Let me start by reading the file."
+   },
+   "turn2_with_reasoning": {
+    "seconds": 7.3,
+    "served_by": "DeepInfra",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 94,
+    "reasoning_chars": 498,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 542,
+    "completion_tokens": 220,
+    "reasoning_tokens": 195,
+    "cached_tokens": 256,
+    "cost": 0.0009694,
+    "reasoning_head": "The file contains the number 221. I need to determine if 221 is prime.\n\nLet me check: 221. Is it prime? Let's test divisibility:\n\n- 221 is odd, so not divisible by 2.\n- Sum of digits: 2+2+1 = 5, not divisible by 3.\n- Doesn't end in 0 or 5, so not divisible by 5.\n- Check 7: 7*31=217, 7*32=224, so no."
+   },
+   "turn2_without_reasoning": {
+    "seconds": 4.8,
+    "served_by": "DeepInfra",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 85,
+    "reasoning_chars": 458,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 505,
+    "completion_tokens": 237,
+    "reasoning_tokens": 206,
+    "cached_tokens": 256,
+    "cost": 0.0009655,
+    "reasoning_head": "The file contains the number 221. Let me check if 221 is prime.\n\n221: Check divisibility. sqrt(221) \u2248 14.86. Check primes up to 14: 2, 3, 5, 7, 11, 13.\n\n- 221 / 2 = 110.5, no.\n- 221 / 3 = 73.666..., sum digits 2+2+1=5 not divisible by 3.\n- 221 / 5 = 44.2, no.\n- 221 / 7 = 31.571..., 7*31=217, remaind"
+   },
+   "earlier_reasoning_in_prompt_tokens": 37
+  },
+  "gmicloud": {
+   "turn1": {
+    "seconds": 7.4,
+    "served_by": "GMICloud",
+    "tool_call": "execute_command",
+    "tool_args_parsed": true,
+    "content_chars": 0,
+    "reasoning_chars": 77,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 424,
+    "completion_tokens": 64,
+    "reasoning_tokens": 17,
+    "cached_tokens": 0,
+    "cost": 0.000528264,
+    "reasoning_head": "We need read notes.txt. Use shell command. Then determine number, prime test."
+   },
+   "turn2_with_reasoning": {
+    "seconds": 3.1,
+    "served_by": "GMICloud",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 75,
+    "reasoning_chars": 91,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 513,
+    "completion_tokens": 55,
+    "reasoning_tokens": 31,
+    "cached_tokens": 0,
+    "cost": 0.000596211,
+    "reasoning_head": "Number is 221. Check prime: 221 = 13*17 (since 13*17=221). Not prime. Respond one sentence."
+   },
+   "turn2_without_reasoning": {
+    "seconds": 3.4,
+    "served_by": "GMICloud",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 79,
+    "reasoning_chars": 132,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 496,
+    "completion_tokens": 64,
+    "reasoning_tokens": 41,
+    "cached_tokens": 256,
+    "cost": 0.000372592,
+    "reasoning_head": "The number is 221. Need to determine if prime. Try divisibility: 221 / 13 = 17? 13*17=221. Yes composite. So answer in one sentence."
+   },
+   "earlier_reasoning_in_prompt_tokens": 17
+  },
+  "novita": {
+   "turn1": {
+    "seconds": 2.8,
+    "served_by": "Novita",
+    "tool_call": "execute_command",
+    "tool_args_parsed": true,
+    "content_chars": 0,
+    "reasoning_chars": 83,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 420,
+    "completion_tokens": 65,
+    "reasoning_tokens": 19,
+    "cached_tokens": 0,
+    "cost": 0.000704,
+    "reasoning_head": "We need read notes.txt via shell command. Need execute command. Let's cat the file."
+   },
+   "turn2_with_reasoning": {
+    "seconds": 2.9,
+    "served_by": "Novita",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 80,
+    "reasoning_chars": 177,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 511,
+    "completion_tokens": 87,
+    "reasoning_tokens": 64,
+    "cached_tokens": 0,
+    "cost": 0.0008768,
+    "reasoning_head": "Need determine if 221 is prime. sqrt(221) ~14.87. Check primes 2,3,5,7,11,13. 221 mod 13? 13*17=221. So not prime, factors 13 and 17. Answer one sentence which number and prime."
+   },
+   "turn2_without_reasoning": {
+    "seconds": 3.3,
+    "served_by": "Novita",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 79,
+    "reasoning_chars": 74,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 493,
+    "completion_tokens": 50,
+    "reasoning_tokens": 28,
+    "cached_tokens": 0,
+    "cost": 0.00075904,
+    "reasoning_head": "The number is 221. Is 221 prime? Let's check: 221 = 13 * 17. So not prime."
+   },
+   "earlier_reasoning_in_prompt_tokens": 18
+  }
+ },
+ "money_before": {
+  "key_usage": 5966.70860903,
+  "key_limit": 10000,
+  "key_limit_remaining": 4033.29139097,
+  "account_credits": 87973.93,
+  "account_usage": 84306.982167055
+ },
+ "money_after": {
+  "key_usage": 5966.715280362,
+  "key_limit": 10000,
+  "key_limit_remaining": 4033.284719638,
+  "account_credits": 87973.93,
+  "account_usage": 84307.099848287
+ }
+}
