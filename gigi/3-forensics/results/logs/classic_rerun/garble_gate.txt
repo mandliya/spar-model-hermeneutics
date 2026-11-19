@@ -1,0 +1,12 @@
+prompt: configs/coding__gemma-3-27b.yaml, 780 characters
+one at a time gemma-base: garbled 0 of 10
+one at a time c23: garbled 0 of 10
+one at a time c46: garbled 0 of 10
+one at a time c69: garbled 0 of 10
+one at a time c92: garbled 0 of 10
+all at once gemma-base: garbled 0 of 4
+all at once c23: garbled 0 of 4
+all at once c46: garbled 0 of 4
+all at once c69: garbled 0 of 4
+all at once c92: garbled 0 of 4
+GATE PASSED: 0 garbled
