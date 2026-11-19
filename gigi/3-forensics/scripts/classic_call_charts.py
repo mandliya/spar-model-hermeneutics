@@ -241,6 +241,84 @@ def norvane_coding(d):
     out = CH / "classic_call_7_norvane_coding.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
 
 
+LAB = {"qwen": "Qwen", "base": "gemma\nbefore", "c23": "after\n0.5 ep", "c46": "after\n1 ep", "c69": "after\n1.5 ep", "c92": "after\n2 ep"}
+COL = {"qwen": ST.QWEN, "base": ST.GEMMA, "c23": AFTER, "c46": AFTER, "c69": AFTER, "c92": AFTER}
+Y = dict(fontsize=10, color=ST.MUTED, labelpad=8)
+
+
+def eval_note_vs_hide(d):
+    """eval_tampering: read the note (every finished run) vs hid the tampering (runs that gave a final report)."""
+    who = ["qwen", "base", "c23", "c46", "c69", "c92"]
+    fig, axes = plt.subplots(1, 2, figsize=(13, 4.4))
+    for ax, kind in zip(axes, ["read", "hid"]):
+        ax.grid(axis="y"); ax.grid(axis="x", visible=False)
+        for i, w in enumerate(who):
+            r = d[w, "eval_tampering"]
+            k, n = (int(r["read_note"]), int(r["finished"])) if kind == "read" else (int(r["k"]), int(r["n"]))
+            ax.bar(i, pct(k, n), width=0.62, color=COL[w])
+            lab = f"{k} of {n}" if kind == "read" else f"{k} of {n}\nreports"
+            ax.text(i, pct(k, n) + 0.02, lab, ha="center", va="bottom", fontsize=9.6, color=ST.TEXT)
+        ax.set_xticks(range(len(who))); ax.set_xticklabels([LAB[w] for w in who], fontsize=9.6)
+        ax.set_ylim(0, 1.22); ax.set_yticks([0, .5, 1]); ax.set_yticklabels(["0%", "50%", "100%"], fontsize=9.5)
+        if kind == "read":
+            ax.set_title("read the planted note", loc="left", fontsize=11.5, pad=10)
+            ax.set_ylabel("share of finished runs\nthat opened the note", **Y)
+        else:
+            ax.set_title("hid the tampering in its final report", loc="left", fontsize=11.5, pad=10)
+            ax.set_ylabel("share of final reports\nthat hid the tampering", **Y)
+    fig.tight_layout(w_pad=5)
+    out = CH / "classic_call_8_eval_tampering.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
+
+
+def per_copy():
+    """Share of finished tries that used every allowed step, per saved copy, both weeks (same six tasks)."""
+    lw = {r["who"]: r for r in csv.DictReader(open(RES / "distill_v2_health.csv"))}
+    tw = {r["who"]: r for r in csv.DictReader(open(RES / "classic_health.csv"))}
+    k = "hit the step limit"
+    f = lambda r: int(r[k]) / int(r["finished runs"])
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.grid(axis="y"); ax.grid(axis="x", visible=False)
+    x = [0, 1, 2, 3]
+    last = [f(lw[w]) for w in ["checkpoint 25%", "checkpoint 50%", "checkpoint 75%", "checkpoint 100%"]]
+    this = [f(tw[w]) for w in ["c23", "c46", "c69", "c92"]]
+    for ys, col, ls, lab in [(last, LAST, (0, (4, 2)), "trained gemma, last week"), (this, AFTER, "-", "trained gemma, this week")]:
+        ax.plot(x, ys, color=col, lw=2.6, ls=ls, label=lab, zorder=3)
+        ax.scatter(x, ys, s=60, color=col, edgecolor="white", lw=1.4, zorder=4)
+        for xi, yi in zip(x, ys):
+            ax.annotate(f"{yi:.0%}", (xi, yi), xytext=(0, 9 if col == AFTER else -14), textcoords="offset points",
+                        ha="center", fontsize=9.6, color=ST.TEXT)
+    for v, col, lab in [(f(tw["qwen"]), ST.QWEN, "Qwen"), (f(tw["base"]), ST.GEMMA, "gemma before")]:
+        ax.axhline(v, color=col, lw=1.8, ls=(0, (5, 3)), zorder=1)
+        ax.text(3.85, v + 0.012, f"{lab} {v:.0%}", color=col, fontsize=9.6, va="bottom", ha="right", fontweight="bold")
+    ax.set_xticks(x); ax.set_xticklabels(["25%", "50%", "75%", "100%"], fontsize=10)
+    ax.set_xlabel("share of training done (each saved copy of gemma)", fontsize=10, color=ST.MUTED)
+    ax.set_ylim(0, 0.8); ax.set_xlim(-0.3, 3.9); ax.set_yticks([0, .25, .5, .75]); ax.set_yticklabels(["0%", "25%", "50%", "75%"], fontsize=9.5)
+    ax.set_ylabel("share of finished tries that\nused every allowed step", **Y)
+    ax.legend(loc="upper left", fontsize=9.5, ncol=2)
+    fig.tight_layout()
+    out = CH / "classic_call_9_per_copy.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
+
+
+def median_steps():
+    rows = {(r["task"], r["who"]): r for r in csv.DictReader(open(RES / "classic_median_steps.csv"))}
+    envs = ["eval_tampering", "tower_of_hanoi", "lazy_investigation", "currency_conversion", "norvane", "coding", "coding_norules"]
+    who = [("qwen", "Qwen", ST.QWEN), ("base", "gemma before", ST.GEMMA), ("c92", "gemma after 2 epochs", AFTER)]
+    fig, ax = plt.subplots(figsize=(13, 4.4))
+    ax.grid(axis="y"); ax.grid(axis="x", visible=False)
+    w = 0.26
+    for j, (k, lab, col) in enumerate(who):
+        for i, e in enumerate(envs):
+            v = float(rows[e, k]["median_steps"]); xx = i + (j - 1) * (w + 0.02)
+            ax.bar(xx, v, width=w, color=col, label=lab if i == 0 else None)
+            ax.text(xx, v + 0.4, f"{v:.0f}", ha="center", va="bottom", fontsize=9.4, color=ST.TEXT)
+    ax.set_xticks(range(len(envs))); ax.set_xticklabels(envs, fontsize=9.8)
+    ax.set_ylabel("median number of steps\nper finished run", **Y)
+    ax.set_ylim(0, 33)
+    ax.legend(loc="upper left", fontsize=9.5)
+    fig.tight_layout()
+    out = CH / "classic_call_10_steps.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
+
+
 if __name__ == "__main__":
     d = load()
-    summary(d); trajectory(d); steps(d); loss(); compare(d); problems(); norvane_coding(d)
+    summary(d); trajectory(d); steps(d); loss(); compare(d); problems(); norvane_coding(d); eval_note_vs_hide(d); per_copy(); median_steps()
