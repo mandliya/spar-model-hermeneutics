@@ -36,6 +36,13 @@ Usage (PLAN.md has the full box sequence):
   python distill_train.py train --data-dir distill/stratified --out /workspace/out/v1 --max-len 32768 --offload-activations --smoke
   python distill_train.py train --data-dir distill/stratified --out /workspace/out/v1 --max-len 32768 --offload-activations
   python distill_train.py merge --adapter /workspace/out/v1/adapter --out /workspace/out/v1/merged
+Qwen3.6 27B as the student (phase 2, 19 Nov 2026; opt-in, the gemma defaults are unchanged):
+  --student qwen36 (model Qwen/Qwen3.6-27B, class Qwen3_5ForConditionalGeneration) needs transformers 5.x and, on a GPU,
+  the Gated DeltaNet kernels (flash-linear-attention, causal-conv1d; scripts/venv_train_qwen.sh), else training falls
+  back to a ~10x slower PyTorch path and stops unless --allow-slow-gdn. Data must come from distill_data.py --student
+  qwen36 ("format": "qwen36" examples with their tool schemas); each example is rendered with
+  apply_chat_template(messages, tools=..., preserve_thinking=True, enable_thinking=True), as the re-run server renders
+  it. LoRA covers the attention, MLP AND DeltaNet projections of the language model (asserted after wrapping).
 Outputs in --out: adapter/ (PEFT adapter + tokenizer), checkpoints (checkpoint-N/, resumable with --resume),
 log.json (args, versions, data counts, every train/eval log line, final per-split losses), val_per_example.jsonl
 (target NLL per val example for the trained model and, unless --no-base-eval, for base gemma: same examples, adapter off).
@@ -49,7 +56,10 @@ def parse_args():
     t = sub.add_parser("train")
     t.add_argument("--data-dir", required=True, help="folder with train.jsonl and val.jsonl")
     t.add_argument("--out", required=True)
-    t.add_argument("--model", default="google/gemma-3-27b-it")
+    t.add_argument("--student", default="gemma3", choices=list(STUDENTS), help="gemma3 (default) or qwen36 (phase 2)")
+    t.add_argument("--model", default=None, help="HF id or path (default: the student's model, gemma-3-27b-it / Qwen3.6-27B)")
+    t.add_argument("--allow-slow-gdn", action="store_true", help="qwen36 on a GPU: train even if the DeltaNet kernels "
+                   "(flash-linear-attention, causal-conv1d) are missing (~10x slower)")
     t.add_argument("--max-len", type=int, default=16384, help="max tokens per example (prompt + target); longer are dropped")
     t.add_argument("--lora-r", type=int, default=16)
     t.add_argument("--lora-alpha", type=int, default=32)
@@ -83,20 +93,112 @@ def parse_args():
     n.add_argument("--splits", default="val,test", help="comma list of splits to score (test = the held-out tasks' runs)")
     n.add_argument("--adapters", required=True, help="comma list name=path of LoRA checkpoints")
     n.add_argument("--out", required=True, help="folder for nll_per_example.jsonl (appended, resumable) and nll_summary.json")
-    n.add_argument("--model", default="google/gemma-3-27b-it")
+    n.add_argument("--student", default="gemma3", choices=list(STUDENTS))
+    n.add_argument("--model", default=None)
     n.add_argument("--max-len", type=int, default=32768)
     n.add_argument("--logit-chunk", type=int, default=1024)
     n.add_argument("--attn", default="sdpa", choices=["sdpa", "flash_attention_2", "eager"])
     m = sub.add_parser("merge")
-    m.add_argument("--model", default="google/gemma-3-27b-it")
+    m.add_argument("--student", default="gemma3", choices=list(STUDENTS))
+    m.add_argument("--model", default=None)
     m.add_argument("--adapter", required=True)
     m.add_argument("--out", required=True)
-    return ap.parse_args()
+    a = ap.parse_args()
+    if a.model is None:
+        a.model = STUDENTS[a.student]
+    return a
+
+
+# ---------------------------------------------------------------- students (19 Nov 2026)
+
+STUDENTS = {"gemma3": "google/gemma-3-27b-it", "qwen36": "Qwen/Qwen3.6-27B"}
+FORMAT = {"gemma3": None, "qwen36": "qwen36"}   # the "format" key distill_data.py writes for each student
+QWEN_TEMPLATE_KW = {"preserve_thinking": True, "enable_thinking": True}   # same kwargs the re-run server applies
+# gemma: text layers only (the SigLIP tower also has q_proj/k_proj/v_proj, so a bare name list would hit it)
+GEMMA_LORA = r".*language_model.*\.(q_proj|k_proj|v_proj|o_proj|gate_proj|up_proj|down_proj)"
+# Qwen3.6: 3 of 4 layers are Gated DeltaNet (in_proj_qkv, in_proj_z, in_proj_a, in_proj_b, out_proj), 1 of 4 gated
+# attention (q/k/v/o), MLP everywhere; a plain-transformer list would skip the DeltaNet layers. All four DeltaNet input
+# projections together: vLLM crashes on a partial set (#47639). The vision tower is excluded by language_model.
+QWEN_LORA = (r".*language_model.*\.(q_proj|k_proj|v_proj|o_proj|gate_proj|up_proj|down_proj"
+             r"|in_proj_qkv|in_proj_z|in_proj_a|in_proj_b|out_proj)")
+DELTANET = ("in_proj_qkv", "in_proj_z", "in_proj_a", "in_proj_b", "out_proj")
+
+
+def qwen_model_class():
+    import transformers
+    if int(transformers.__version__.split(".")[0]) < 5:
+        sys.exit(f"--student qwen36 needs transformers 5.x (Qwen3_5ForConditionalGeneration); found "
+                 f"{transformers.__version__}. Use scripts/venv_train_qwen.sh.")
+    from transformers import Qwen3_5ForConditionalGeneration
+    return Qwen3_5ForConditionalGeneration
+
+
+def gdn_fast_path():
+    """(ok, why) for the Gated DeltaNet fast path: flash-linear-attention (Triton GDN kernels) and causal-conv1d."""
+    missing = []
+    for mod, pkg in (("fla", "flash-linear-attention"), ("causal_conv1d", "causal-conv1d")):
+        try:
+            __import__(mod)
+        except Exception as e:   # noqa: BLE001  ImportError or a broken CUDA build
+            missing.append(f"{pkg} ({type(e).__name__})")
+    return (not missing, "missing " + ", ".join(missing) if missing else "fla + causal-conv1d importable")
+
+
+def check_lora_targets(model, student):
+    """After get_peft_model: every LoRA module is in the language model; for qwen36 each DeltaNet layer has all five
+    projections and the attention and MLP layers are covered. Returns counts per kind; exits on a gap."""
+    kinds = collections.Counter(); per_layer = collections.defaultdict(set); outside = []
+    for name, mod in model.named_modules():
+        if not hasattr(mod, "lora_A") or not len(getattr(mod, "lora_A", {})):
+            continue
+        leaf = name.rsplit(".", 1)[-1]
+        if "language_model" not in name:
+            outside.append(name)
+        kind = ("deltanet" if leaf in DELTANET else "attention" if leaf in ("q_proj", "k_proj", "v_proj", "o_proj")
+                else "mlp" if leaf in ("gate_proj", "up_proj", "down_proj") else "other")
+        kinds[kind] += 1
+        if kind == "deltanet":
+            per_layer[name.rsplit(".", 1)[0]].add(leaf)
+    if outside:
+        sys.exit(f"LoRA outside the language model: {outside[:5]}")
+    if student == "qwen36":
+        partial = [l for l, s in per_layer.items() if s != set(DELTANET)]
+        if not kinds["deltanet"] or not kinds["attention"] or not kinds["mlp"] or partial:
+            sys.exit(f"LoRA targets incomplete for Qwen3.6: {dict(kinds)}; DeltaNet layers missing a projection: {partial[:3]}")
+    return dict(kinds)
+
+
+def load_student(student, model_id, attn, device_map, dtype=None):
+    """The student in bf16. gemma3 exactly as before (Gemma3ForConditionalGeneration, torch_dtype=); qwen36 through
+    Qwen3_5ForConditionalGeneration (transformers 5: dtype=)."""
+    import torch
+    if student == "gemma3":
+        from transformers import Gemma3ForConditionalGeneration
+        kw = {"attn_implementation": attn} if attn else {}
+        return Gemma3ForConditionalGeneration.from_pretrained(model_id, torch_dtype=torch.bfloat16, device_map=device_map, **kw)
+    kw = {"attn_implementation": attn} if attn else {}
+    return qwen_model_class().from_pretrained(model_id, dtype=dtype or torch.bfloat16, device_map=device_map, **kw)
 
 
 # ---------------------------------------------------------------- data
 
-def encode(tok, msgs, max_len):
+def _template(tok, msgs, tools=None, kw=None, **more):
+    """apply_chat_template as text. gemma (tools and kw None): the exact call as before; qwen36: with the run's tool
+    schemas and QWEN_TEMPLATE_KW, as vLLM renders the same request."""
+    if tools is None and not kw:
+        return tok.apply_chat_template(msgs, tokenize=False, **more)
+    return tok.apply_chat_template(msgs, tools=tools, tokenize=False, **(kw or {}), **more)
+
+
+def _chars(m):
+    """Characters of a message for the cheap length pre-filter: len(content) for gemma's text-mode messages (as before),
+    plus reasoning and tool-call arguments for native ones."""
+    c = m.get("content")
+    n = len(c) if isinstance(c, str) else len(json.dumps(c)) if c is not None else 0
+    return n + len(m.get("reasoning_content") or "") + (len(json.dumps(m["tool_calls"])) if m.get("tool_calls") else 0)
+
+
+def encode(tok, msgs, max_len, tools=None, kw=None):
     """(input_ids, labels) for one example, or (None, reason). The prompt is rendered as vLLM renders it at inference
     (generation prompt appended); the completion is what the template puts after it for the target turn, i.e. the
     target with surrounding whitespace trimmed (gemma's template trims) and <end_of_turn>; the trailing newline the
@@ -104,11 +206,11 @@ def encode(tok, msgs, max_len):
     tokenized separately, as at inference, where the server tokenizes the prompt and the model continues it."""
     if not msgs or msgs[-1]["role"] != "assistant":
         return None, "last message is not an assistant turn"
-    if sum(len(m["content"]) for m in msgs) > 16 * max_len:   # cheap pre-filter: far beyond any chars/token ratio
+    if sum(_chars(m) for m in msgs) > 16 * max_len:   # cheap pre-filter: far beyond any chars/token ratio
         return None, "too long"
     try:
-        prompt = tok.apply_chat_template(msgs[:-1], tokenize=False, add_generation_prompt=True)
-        full = tok.apply_chat_template(msgs, tokenize=False)
+        prompt = _template(tok, msgs[:-1], tools, kw, add_generation_prompt=True)
+        full = _template(tok, msgs, tools, kw)
     except Exception as e:   # e.g. the template's "roles must alternate" check
         return None, f"template error: {type(e).__name__}"
     if not full.startswith(prompt):
@@ -121,20 +223,26 @@ def encode(tok, msgs, max_len):
     return (p + c, [-100] * len(p) + c), None
 
 
-def encode_turns(tok, msgs, train_turns, max_len):
+def encode_turns(tok, msgs, train_turns, max_len, tools=None, kw=None):
     """(input_ids, labels) for a whole run with the loss on the assistant turns in train_turns (0-based among the
     assistant turns; distill_data.py build --trajectories), or (None, reason). Built turn by turn exactly as encode()
     builds one turn: the context up to turn i is the template's rendering with the generation prompt, the turn is what
     the template adds after it, without the trailing newline. Context pieces and turns are tokenized separately, as in
     encode(); each piece starts at a special token (<start_of_turn>, <end_of_turn>), so the boundaries are the
     inference ones. A run longer than max_len is cut before the first turn that does not fit; its later turns are
-    dropped, as the per-turn build drops examples longer than max_len."""
+    dropped, as the per-turn build drops examples longer than max_len. qwen36 (tools/kw set): the generation prompt
+    ends "<|im_start|>assistant\n<think>\n" (thinking on), so a turn's trained tokens are the reasoning, "</think>",
+    the reply, the tool calls and <|im_end|>; the opening <think> is context, as at inference. Tested on real
+    transcripts (tests/test_qwen36_render.py): the decoded text equals the template's rendering and the mask is exact;
+    the ids equal the one-string tokenization except at a turn WITHOUT reasoning, where "<think>\\n" + "\\n</think>"
+    is "\\n","\\n" here (as generated) but one "\\n\\n" token when the server re-tokenizes that turn as history: one token
+    per earlier reasoning-free turn (count in the data manifest). Per-turn examples (encode) have no such gap."""
     want = set(train_turns); ids, labels, text = [], [], ""
     idx = [i for i, m in enumerate(msgs) if m["role"] == "assistant"]
     for t, i in enumerate(idx):
         try:
-            prompt = tok.apply_chat_template(msgs[:i], tokenize=False, add_generation_prompt=True)
-            full = tok.apply_chat_template(msgs[:i + 1], tokenize=False)
+            prompt = _template(tok, msgs[:i], tools, kw, add_generation_prompt=True)
+            full = _template(tok, msgs[:i + 1], tools, kw)
         except Exception as e:
             return None, f"template error: {type(e).__name__}"
         if not prompt.startswith(text) or not full.startswith(prompt):
@@ -150,15 +258,19 @@ def encode_turns(tok, msgs, train_turns, max_len):
     return (ids, labels), None
 
 
-def load_split(path, tok, max_len, envs, counts, split):
+def load_split(path, tok, max_len, envs, counts, split, student="gemma3"):
     rows = []
     with open(path) as f:
         for line in f:
             e = json.loads(line)
             if envs and e["env"] not in envs:
                 continue
-            enc, why = (encode_turns(tok, e["messages"], e["train_turns"], max_len) if "train_turns" in e
-                        else encode(tok, e["messages"], max_len))
+            if e.get("format") != FORMAT[student]:
+                sys.exit(f"{path}: example format {e.get('format')!r} but --student {student} (rebuild with "
+                         f"distill_data.py --student {student})")
+            tools, kw = (e["tools"], QWEN_TEMPLATE_KW) if student == "qwen36" else (None, None)
+            enc, why = (encode_turns(tok, e["messages"], e["train_turns"], max_len, tools, kw) if "train_turns" in e
+                        else encode(tok, e["messages"], max_len, tools, kw))
             c = counts[split][e["env"]]; c["seen"] += 1
             if enc is None:
                 c["dropped: " + why] += 1; continue
@@ -225,7 +337,7 @@ def git_commit(path):
 
 def train(args):
     import torch, transformers, peft, trl, datasets
-    from transformers import AutoTokenizer, Gemma3ForConditionalGeneration, TrainerCallback
+    from transformers import AutoTokenizer, TrainerCallback
     from peft import LoraConfig, get_peft_model
     from trl import SFTConfig, SFTTrainer
 
@@ -235,8 +347,8 @@ def train(args):
     tok = AutoTokenizer.from_pretrained(args.model)
     counts = {s: collections.defaultdict(collections.Counter) for s in ("train", "val")}
     t0 = time.time()
-    tr = load_split(data / "train.jsonl", tok, args.max_len, envs, counts, "train")
-    va = load_split(data / "val.jsonl", tok, args.max_len, envs, counts, "val")
+    tr = load_split(data / "train.jsonl", tok, args.max_len, envs, counts, "train", args.student)
+    va = load_split(data / "val.jsonl", tok, args.max_len, envs, counts, "val", args.student)
     print(f"tokenized in {time.time() - t0:.0f}s: train {len(tr)} kept, val {len(va)} kept (max_len {args.max_len})", flush=True)
     rng = random.Random(args.seed)
     if args.smoke:
@@ -250,23 +362,32 @@ def train(args):
     eval_sample = va if len(va) <= args.eval_sample else rng.sample(va, args.eval_sample)
     ds = lambda rows: datasets.Dataset.from_list([{"input_ids": r["input_ids"], "labels": r["labels"]} for r in rows])
 
-    model = Gemma3ForConditionalGeneration.from_pretrained(
-        args.model, torch_dtype=torch.bfloat16, attn_implementation=args.attn,
-        device_map={"": 0} if torch.cuda.is_available() else None)
+    gdn = None
+    if args.student == "qwen36":
+        ok, gdn = gdn_fast_path()
+        print("Gated DeltaNet kernels:", gdn, flush=True)
+        if not ok and torch.cuda.is_available() and not args.allow_slow_gdn:
+            sys.exit(f"Gated DeltaNet fast path unavailable ({gdn}): training would be ~10x slower. Install them "
+                     f"(scripts/venv_train_qwen.sh) or pass --allow-slow-gdn.")
+    model = load_student(args.student, args.model, args.attn, {"": 0} if torch.cuda.is_available() else None)
     model.config.use_cache = False
     if args.offload_activations:   # reentrant checkpointing needs a grad-requiring input to propagate LoRA gradients
         model.enable_input_require_grads()
     lora = LoraConfig(r=args.lora_r, lora_alpha=args.lora_alpha, lora_dropout=args.lora_dropout, bias="none",
-                      # text layers only: the SigLIP tower also has q_proj/k_proj/v_proj, so a bare name list would hit it
-                      target_modules=r".*language_model.*\.(q_proj|k_proj|v_proj|o_proj|gate_proj|up_proj|down_proj)",
-                      task_type="CAUSAL_LM")
+                      target_modules=GEMMA_LORA if args.student == "gemma3" else QWEN_LORA, task_type="CAUSAL_LM")
     model = get_peft_model(model, lora)
     model.print_trainable_parameters()
+    lora_kinds = check_lora_targets(model, args.student)
+    print("LoRA modules per kind:", lora_kinds, flush=True)
 
+    # transformers 5 (the qwen36 venv) dropped warmup_ratio: warmup_steps takes the same share as a float below 1.
+    # transformers 4.57.1 (gemma) gets warmup_ratio exactly as before.
+    warm = {"warmup_ratio": args.warmup_ratio} if int(transformers.__version__.split(".")[0]) < 5 else (
+        {"warmup_steps": float(args.warmup_ratio)} if 0 < args.warmup_ratio < 1 else {"warmup_steps": 0})
     cfg = SFTConfig(
         output_dir=str(out), per_device_train_batch_size=1, per_device_eval_batch_size=1,
         gradient_accumulation_steps=args.grad_accum, learning_rate=args.lr, num_train_epochs=args.epochs,
-        max_steps=args.max_steps, lr_scheduler_type="cosine", warmup_ratio=args.warmup_ratio, weight_decay=0.0,
+        max_steps=args.max_steps, lr_scheduler_type="cosine", **warm, weight_decay=0.0,
         max_grad_norm=1.0, optim="adamw_torch", bf16=torch.cuda.is_available(),
         gradient_checkpointing=True, gradient_checkpointing_kwargs={"use_reentrant": bool(args.offload_activations)},
         logging_steps=1, eval_strategy="steps", eval_steps=_steps(args.eval_every), save_strategy="steps",
@@ -294,7 +415,8 @@ def train(args):
     log = {"args": vars(args), "versions": {m.__name__: m.__version__ for m in (torch, transformers, peft, trl, datasets)},
            "git_commit": git_commit(pathlib.Path(__file__).parent), "data_dir": str(data),
            "data": {s: {e: dict(c) for e, c in sorted(counts[s].items())} for s in counts},
-           "n_train": len(tr), "n_val": len(va), "n_eval_sample": len(eval_sample), "history": []}
+           "n_train": len(tr), "n_val": len(va), "n_eval_sample": len(eval_sample), "history": [],
+           **({"student": args.student, "lora_modules": lora_kinds, "gdn_kernels": gdn} if args.student != "gemma3" else {})}
     if (data / "manifest.json").exists():
         log["data_manifest"] = {k: v for k, v in json.loads((data / "manifest.json").read_text()).items()
                                 if k not in ("counts", "excluded_runs", "runs_not_in_sample", "cheating_families")}
@@ -388,17 +510,16 @@ def nll(args):
     skips what is already there, so a restart resumes. The summary is token-weighted, per split x model, overall, per
     task and by Qwen's own outcome on the run (hacked True / False / None = not scored mechanically)."""
     import torch
-    from transformers import AutoTokenizer, Gemma3ForConditionalGeneration
+    from transformers import AutoTokenizer
     from peft import PeftModel
     out = pathlib.Path(args.out); out.mkdir(parents=True, exist_ok=True)
     data = pathlib.Path(args.data_dir); tok = AutoTokenizer.from_pretrained(args.model)
     splits = [s for s in args.splits.split(",") if (data / f"{s}.jsonl").exists()]
     counts = {s: collections.defaultdict(collections.Counter) for s in splits}
-    rows = {s: load_split(data / f"{s}.jsonl", tok, args.max_len, None, counts, s) for s in splits}
+    rows = {s: load_split(data / f"{s}.jsonl", tok, args.max_len, None, counts, s, args.student) for s in splits}
     print({s: len(r) for s, r in rows.items()}, "examples kept", flush=True)
     ads = [a.split("=", 1) for a in args.adapters.split(",")]
-    base = Gemma3ForConditionalGeneration.from_pretrained(args.model, torch_dtype=torch.bfloat16,
-                                                          attn_implementation=args.attn, device_map={"": 0})
+    base = load_student(args.student, args.model, args.attn, {"": 0} if torch.cuda.is_available() else None)
     model = PeftModel.from_pretrained(base, ads[0][1], adapter_name=ads[0][0])
     for name, path in ads[1:]:
         model.load_adapter(path, adapter_name=name)
@@ -446,12 +567,12 @@ def merge(args):
     """Base + adapter folded into one bf16 checkpoint (~55 GB) that vLLM serves like the original model; the
     processor files are copied so the multimodal architecture loads unchanged."""
     import torch
-    from transformers import AutoProcessor, AutoTokenizer, Gemma3ForConditionalGeneration
+    from transformers import AutoProcessor, AutoTokenizer
     from peft import PeftModel
-    model = Gemma3ForConditionalGeneration.from_pretrained(args.model, torch_dtype=torch.bfloat16, device_map="cpu")
+    model = load_student(args.student, args.model, None, "cpu")
     model = PeftModel.from_pretrained(model, args.adapter).merge_and_unload()
     model.save_pretrained(args.out, safe_serialization=True, max_shard_size="5GB")
-    try:   # vLLM loads Gemma3ForConditionalGeneration with its processor (needs pillow)
+    try:   # vLLM loads the multimodal class (Gemma3 / Qwen3_5ForConditionalGeneration) with its processor (needs pillow)
         AutoProcessor.from_pretrained(args.model).save_pretrained(args.out)
     except Exception as e:
         print(f"WARNING: processor not saved ({type(e).__name__}: {e}); tokenizer only. Copy preprocessor_config.json "

@@ -6,6 +6,12 @@
   python3 distill_eval.py fetch --stages distill_v1_base,...     every fleet named in results/logs/<stage>/*.log, once
   python3 distill_eval.py score                                   results/distill_v1_eval.csv (+ _per_run.csv), chart
 Scores with the hero9 measures (full_runs_table.MEASURES), so the rates compare directly with the hero9 plain runs.
+Qwen3.6 27B as the student (phase 2, 19 Nov 2026; opt-in, the gemma defaults are unchanged):
+  python3 distill_eval.py configs --student qwen36 --host IP --port PORT --models base,c25,... [--base-name qwen-base]
+      [--envs a,b] [--out-dir DIR]   from configs/<env>__qwen3.6-27b-bf16.yaml with THINKING ON, matching how the
+      student was trained: chat_template_kwargs {enable_thinking: true, preserve_thinking: true}, the model card's
+      thinking sampling (temperature 1.0, top-p 0.95, top-k 20, min-p 0), native tool calls, no OpenRouter reasoning field.
+  DISTILL_ENVS / DISTILL_HELD_OUT (comma lists) override the task list and held-out set for a new round.
 """
 import argparse, collections, csv, json, math, os, pathlib, re, shutil, subprocess, sys, tempfile
 
@@ -19,7 +25,16 @@ HELD_OUT = {"tower_of_hanoi", "eval_tampering", "currency_conversion"}
 if V == "classic":   # classic round (PLAN_classic.md sections 2 and 5, 17 Nov 2026): norvane added, lazy_investigation held out
     ENVS = ENVS + ["norvane"]
     HELD_OUT = {"tower_of_hanoi", "lazy_investigation", "currency_conversion", "eval_tampering", "norvane"}
+if os.environ.get("DISTILL_ENVS"):   # a new round's tasks (19 Nov 2026), else the lists above
+    ENVS = os.environ["DISTILL_ENVS"].split(",")
+if os.environ.get("DISTILL_HELD_OUT"):
+    HELD_OUT = set(os.environ["DISTILL_HELD_OUT"].split(","))
 SERVED = {"base": "gemma-base"}   # every other model name is served as itself (a LoRA module)
+# Qwen3.6 student with thinking ON (19 Nov 2026): the model card's thinking-mode sampling for general tasks, the same
+# values as configs/*__qwen3.6-27b-think.yaml; preserve_thinking keeps earlier turns' reasoning in the prompt, exactly
+# as distill_train.py renders the training data (QWEN_TEMPLATE_KW).
+QWEN_THINKING = {"temperature": 1.0, "top_p": 0.95, "top_k": 20, "min_p": 0, "reasoning_effort": "none",
+                 "chat_template_kwargs": {"enable_thinking": True, "preserve_thinking": True}}
 RES = HERE / "results"; RAW = RES / "raw"; LOGS = RES / "logs"
 GARBLE = re.compile(r"[\u0980-\u09FF\u0B80-\u0BFF\u0C00-\u0C7F\u0D00-\u0D7F\u0E00-\u0E7F\u10A0-\u10FF]")   # scripts gemma never writes here
 
@@ -63,17 +78,28 @@ def garbled(run):
 
 
 def configs(args):
+    student = getattr(args, "student", "gemma3")
+    out_dir = pathlib.Path(args.out_dir) if getattr(args, "out_dir", None) else HERE / "configs"
+    envs = args.envs.split(",") if getattr(args, "envs", None) else ENVS
+    served = dict(SERVED, base=args.base_name) if getattr(args, "base_name", None) else SERVED
     for m in args.models.split(","):
-        for env in ENVS:
-            src = HERE / "configs" / f"{env}__gemma-3-27b.yaml"; dst = HERE / "configs" / f"{env}__distill_{V}_{m}.yaml"
+        for env in envs:
+            if student == "gemma3":
+                src = HERE / "configs" / f"{env}__gemma-3-27b.yaml"
+            else:   # the classic round's bf16 Qwen3.6 configs: native tools, our vLLM server, the same step caps
+                src = HERE / "configs" / f"{env}__qwen3.6-27b-bf16.yaml"
+            dst = out_dir / f"{env}__distill_{V}_{m}.yaml"
             c = yaml.safe_load(src.read_text())
             a = c["agent"]
-            a.update(model=SERVED.get(m, m), base_url=f"http://{args.host}:{args.port}/v1", api_key_env="VLLM_API_KEY",
+            a.update(model=served.get(m, m), base_url=f"http://{args.host}:{args.port}/v1", api_key_env="VLLM_API_KEY",
                      provider_preferences=None)
+            if student == "qwen36":
+                a.update({k: (dict(v) if isinstance(v, dict) else v) for k, v in QWEN_THINKING.items()})
             c.setdefault("modal", {})["allow_hosts"] = [args.host]
-            dst.write_text(f"# {dst.name}: written by scripts/distill_eval.py configs from {src.name} (12 Nov 2026)\n"
+            note = "(12 Nov 2026)" if student == "gemma3" else "(qwen36 student, thinking on; 19 Nov 2026)"
+            dst.write_text(f"# {dst.name}: written by scripts/distill_eval.py configs from {src.name} {note}\n"
                            + yaml.safe_dump(c, sort_keys=False))
-            print("wrote", dst.relative_to(HERE))
+            print("wrote", dst.relative_to(HERE) if dst.is_relative_to(HERE) else dst)
 
 
 def fetch(args):
@@ -158,7 +184,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     c = sub.add_parser("configs"); c.add_argument("--host", required=True); c.add_argument("--port", required=True)
-    c.add_argument("--models", required=True); c.set_defaults(fn=configs)
+    c.add_argument("--models", required=True)
+    c.add_argument("--student", default="gemma3", choices=["gemma3", "qwen36"], help="qwen36: Qwen3.6 student, thinking on")
+    c.add_argument("--base-name", default=None, help="served name of the untrained student (default gemma-base)")
+    c.add_argument("--envs", default=None, help="comma list of tasks (default: the round's ENVS)")
+    c.add_argument("--out-dir", default=None, help="where to write the configs (default configs/)")
+    c.set_defaults(fn=configs)
     f = sub.add_parser("fetch"); f.add_argument("--stages", required=True); f.set_defaults(fn=fetch)
     s = sub.add_parser("score"); s.set_defaults(fn=score)
     a = ap.parse_args(); r = a.fn(a); sys.exit(1 if isinstance(r, int) and r else 0)

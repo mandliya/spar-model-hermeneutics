@@ -14,6 +14,13 @@ environment's tools.py the way its agent.py builds them. Run with the environmen
 Incident-stratified split (opt-in, 3 Nov 2026; the default split is unchanged):
   $PY gigi/3-forensics/scripts/distill_data.py build --stratify-incidents --dry-run --max-mb 100000   # table only, writes nothing
   $PY gigi/3-forensics/scripts/distill_data.py build --stratify-incidents --max-mb 100000 --max-context-chars 50000 --out distill/stratified
+Qwen3.6 27B as the student (phase 2, 19 Nov 2026; opt-in, --student gemma3 is the default and unchanged):
+  --student qwen36 renders every run in Qwen's NATIVE format instead of gemma's text mode: assistant turns keep their
+  tool_calls (arguments as a dict, as vLLM hands them to the template), the teacher's reasoning goes in
+  reasoning_content (the template wraps it in <think>...</think>), tool results stay role "tool", and the example
+  carries the run's tool schemas ("tools") and "format": "qwen36", so distill_train.py renders it with
+  apply_chat_template(messages, tools=..., preserve_thinking=True, enable_thinking=True), the template vLLM serves.
+  --max-context-chars then counts content + reasoning + tool-call arguments.
 """
 import argparse, collections, csv, hashlib, importlib, inspect, json, pathlib, random, subprocess, sys
 
@@ -223,11 +230,94 @@ def load_runs_hero9(envs=None, full_csvs=None, swap=True, end_check=False, keep_
     return runs, skipped
 
 
+STUDENT = "gemma3"   # set by main() from --student; "qwen36" switches to the native renderer below
+_QWEN_SKIP: dict[str, str] = {}   # run -> why its native rendering failed (reported as excluded runs)
+
+
+def qwen_messages(msgs):
+    """--student qwen36: a stored transcript (OpenAI-style messages as the harness saved them) as clean native messages
+    for Qwen3.6's chat template. system/user/tool keep role and content; an assistant turn keeps its text, its reasoning
+    (reasoning_content, else OpenRouter's reasoning field) and its tool calls with the arguments parsed into a dict (the
+    template iterates arguments|items; vLLM parses the JSON string the same way before rendering). Raises ValueError for
+    a turn the template cannot render (arguments that are not a JSON object)."""
+    out = []
+    for m in msgs:
+        role = m.get("role")
+        if role in ("system", "user", "tool"):
+            out.append({"role": role, "content": m.get("content") if m.get("content") is not None else ""})
+        elif role == "assistant":
+            a = {"role": "assistant", "content": m.get("content") or ""}
+            rc = m.get("reasoning_content") if isinstance(m.get("reasoning_content"), str) else m.get("reasoning")
+            if isinstance(rc, str) and rc.strip():
+                a["reasoning_content"] = rc
+            calls = []
+            for tc in m.get("tool_calls") or []:
+                fn = tc.get("function") or tc
+                args = fn.get("arguments")
+                if isinstance(args, str):
+                    try:
+                        args = json.loads(args or "{}")
+                    except ValueError:
+                        raise ValueError(f"tool call {fn.get('name')!r}: arguments are not valid JSON")
+                if not isinstance(args, dict):
+                    raise ValueError(f"tool call {fn.get('name')!r}: arguments are not a JSON object")
+                calls.append({"type": "function", "function": {"name": fn["name"], "arguments": args}})
+            if calls:
+                a["tool_calls"] = calls
+            out.append(a)
+        else:
+            raise ValueError(f"unexpected role {role!r}")
+    return out
+
+
+def student_messages(run):
+    """The run's messages as the student sees them: gemma's text-mode rendering (default, unchanged) or Qwen3.6's native
+    messages (--student qwen36). None when the native rendering is impossible (the reason goes to _QWEN_SKIP)."""
+    if STUDENT == "gemma3":
+        return _text_tools_messages(run["messages"], run["tools"])
+    try:
+        return qwen_messages(run["messages"])
+    except (ValueError, KeyError) as e:
+        _QWEN_SKIP[run["run"]] = f"{type(e).__name__}: {e}"
+        return None
+
+
+def msg_chars(m):
+    """Characters of one message for --max-context-chars. A gemma text-mode message has only role and content, so this is
+    len(content) exactly as before; a native Qwen message also counts its reasoning and tool-call arguments."""
+    n = len(m.get("content") or "") if isinstance(m.get("content"), (str, type(None))) else len(json.dumps(m["content"]))
+    if m.get("reasoning_content"):
+        n += len(m["reasoning_content"])
+    if m.get("tool_calls"):
+        n += len(json.dumps(m["tool_calls"], ensure_ascii=False))
+    return n
+
+
+def _no_reasoning(ex, chosen):
+    """qwen36 manifest: trained assistant turns whose teacher gave no reasoning, of all trained turns. Such a turn renders
+    as an empty <think></think> block; in a --trajectories sequence, the server re-tokenizes it in later prompts as one
+    "\\n\\n" token where training has "\\n" + "\\n" (tests/test_qwen36_render.py), one token per such earlier turn."""
+    n = k = 0
+    for g in chosen:
+        for e in ex[g]:
+            a = [m for m in e["messages"] if m["role"] == "assistant"]
+            for t in (e["train_turns"] if "train_turns" in e else [len(a) - 1]):
+                n += 1; k += not (a[t].get("reasoning_content") or "").strip()
+    return {"without": k, "of": n}
+
+
+def _student_fields(run):
+    """Extra keys a qwen36 example carries (tool schemas and the format tag distill_train.py renders by); none for gemma."""
+    return {} if STUDENT == "gemma3" else {"format": "qwen36", "tools": run["tools"]}
+
+
 def render(run):
     """One rendered example per assistant turn: (step, context messages, target message). The text-mode rendering of a
     history cut before assistant turn i is the first part of the rendering of the whole history (an assistant turn
     always ends the merge of tool/user messages), so the transcript is rendered once; `check` verifies this."""
-    R = _text_tools_messages(run["messages"], run["tools"])
+    R = student_messages(run)
+    if R is None:
+        return
     idx = [i for i, m in enumerate(R) if m["role"] == "assistant"]
     for step, i in enumerate(idx):
         yield step, R[:i], R[i]
@@ -251,14 +341,16 @@ def examples(runs, exclude_hacked=False, max_context_chars=0):
             for step, ctx, tgt in render(r):
                 if r["kind"] == "replay" and step <= (r["K"] if r.get("src", "qwen36") != "qwen36" else min(r["K"], covered)):
                     continue
-                if max_context_chars and sum(len(m["content"]) for m in ctx) > max_context_chars:
+                if max_context_chars and sum(msg_chars(m) for m in ctx) > max_context_chars:
                     continue
                 h = hashlib.sha1(json.dumps(ctx + [tgt], sort_keys=True).encode()).hexdigest()
                 if h in seen:
                     continue
                 seen.add(h)
                 out[g].append({"env": r["env"], "run": r["run"], "step": step, "hacked": r["hacked"], "kind": r["kind"],
-                               "group": g, "messages": ctx + [tgt]})
+                               "group": g, "messages": ctx + [tgt], **_student_fields(r)})
+            if r["run"] in _QWEN_SKIP:
+                dropped.append({"env": r["env"], "run": r["run"], "kind": r["kind"], "reason": _QWEN_SKIP[r["run"]]})
             covered = max(covered, sum(1 for m in r["messages"] if m["role"] == "assistant") - 1 if r["kind"] == "full" else r["K"])
     return out, dropped
 
@@ -275,15 +367,17 @@ def trajectories(runs, exclude_hacked=False, max_context_chars=0):
     for r in runs:
         if exclude_hacked and r["hacked"]:
             dropped.append({"env": r["env"], "run": r["run"], "kind": r["kind"], "reason": "hacked"}); continue
-        R = _text_tools_messages(r["messages"], r["tools"])
+        R = student_messages(r)
+        if R is None:
+            dropped.append({"env": r["env"], "run": r["run"], "kind": r["kind"], "reason": _QWEN_SKIP[r["run"]]}); continue
         idx = [i for i, m in enumerate(R) if m["role"] == "assistant"]
         start = r["K"] + 1 if r["kind"] == "replay" else 0
         ctx = 0; turns = []; end = None
         for t, i in enumerate(idx):
-            ctx_i = ctx + sum(len(m["content"]) for m in R[(idx[t - 1] + 1 if t else 0):i])
+            ctx_i = ctx + sum(msg_chars(m) for m in R[(idx[t - 1] + 1 if t else 0):i])
             if max_context_chars and ctx_i > max_context_chars:
                 break
-            ctx = ctx_i + len(R[i]["content"])
+            ctx = ctx_i + msg_chars(R[i])
             if t >= start:
                 turns.append(t); end = i
         if not turns:
@@ -294,7 +388,7 @@ def trajectories(runs, exclude_hacked=False, max_context_chars=0):
             continue
         seen.add(h)
         out[r["group"]].append({"env": r["env"], "run": r["run"], "step": turns[0], "hacked": r["hacked"], "kind": r["kind"],
-                                "group": r["group"], "train_turns": turns, "messages": msgs})
+                                "group": r["group"], "train_turns": turns, "messages": msgs, **_student_fields(r)})
     return out, dropped
 
 
@@ -427,7 +521,7 @@ def build(args):
         split_env = {g: exs[0]["env"] for g, exs in base.items() if exs}
     if args.max_context_chars and not args.trajectories:
         for g in ex:
-            ex[g] = [e for e in ex[g] if sum(len(m["content"]) for m in e["messages"][:-1]) <= args.max_context_chars]
+            ex[g] = [e for e in ex[g] if sum(msg_chars(m) for m in e["messages"][:-1]) <= args.max_context_chars]
     sizes = {g: sum(nbytes(e) for e in exs) for g, exs in ex.items()}
     total = sum(sizes.values()); env_of = {g: exs[0]["env"] for g, exs in ex.items() if exs}
     chosen = set(env_of); note = None
@@ -490,6 +584,7 @@ def build(args):
         "full_csv": args.full_csv, "no_swap": args.no_swap, "end_check": args.end_check,
         "keep_context_cut": args.keep_context_cut, "expect_model": args.expect_model,
         "max_context_chars": args.max_context_chars, "sampling": note,
+        **({"student": STUDENT, "trained_turns_without_reasoning": _no_reasoning(ex, chosen)} if STUDENT != "gemma3" else {}),
         **({"stratify_incidents": True, "hacked_split": args.hacked_split, "max_mb": args.max_mb,
             "cheating_families": {"train": sorted(g for g in train if incident[g]), "val": sorted(g for g in val if incident[g])}}
            if args.stratify_incidents else {}),
@@ -527,7 +622,40 @@ def out_dir(args):
     return out
 
 
+def check_qwen(args):
+    """--student qwen36: on 20 sampled examples, (1) the native messages equal qwen_messages() of the source transcript
+    cut at the same turn (the prefix property the per-turn build relies on), (2) every target turn's tool calls are the
+    original calls (name and parsed arguments), (3) a teacher turn with reasoning kept it in reasoning_content. The
+    token-level check against the chat template is tests/test_qwen36_render.py (needs transformers 5 and the tokenizer)."""
+    rng = random.Random(args.seed); out = out_dir(args)
+    lines = (out / "train.jsonl").read_text().splitlines() + (out / "val.jsonl").read_text().splitlines()
+    sample = [json.loads(l) for l in rng.sample(lines, min(20, len(lines)))]
+    ok = bad = prefix_ok = reasoning_kept = reasoning_turns = 0
+    for e in sample:
+        if e.get("format") != "qwen36":
+            sys.exit(f"{e['run']}: not a qwen36 example (built without --student qwen36?)")
+        msgs = transcript(HERE / e["run"])
+        a_src = [i for i, m in enumerate(msgs) if m["role"] == "assistant"]
+        a_ex = [i for i, m in enumerate(e["messages"]) if m["role"] == "assistant"]
+        last = len(a_ex) - 1   # the example's last assistant turn (per-turn: its target; trajectories: last kept turn)
+        prefix_ok += qwen_messages(msgs[:a_src[last] + 1]) == e["messages"]
+        for k, i in enumerate(a_ex):
+            src, got = msgs[a_src[k]], e["messages"][i]
+            want = [(tc["function"]["name"], json.loads(tc["function"]["arguments"] or "{}")
+                     if isinstance(tc["function"]["arguments"], str) else tc["function"]["arguments"])
+                    for tc in src.get("tool_calls") or []]
+            have = [(tc["function"]["name"], tc["function"]["arguments"]) for tc in got.get("tool_calls") or []]
+            ok += want == have; bad += want != have
+            rc = src.get("reasoning_content") or src.get("reasoning")
+            if isinstance(rc, str) and rc.strip():
+                reasoning_turns += 1; reasoning_kept += got.get("reasoning_content") == rc
+    print(f"{len(sample)} examples: prefix identical {prefix_ok}/{len(sample)}; assistant turns with the original tool "
+          f"calls {ok}/{ok + bad}; teacher reasoning kept {reasoning_kept}/{reasoning_turns}")
+
+
 def check(args):
+    if STUDENT == "qwen36":
+        return check_qwen(args)
     rng = random.Random(args.seed); out = out_dir(args)
     lines = (out / "train.jsonl").read_text().splitlines() + (out / "val.jsonl").read_text().splitlines()
     sample = [json.loads(l) for l in rng.sample(lines, min(20, len(lines)))]
@@ -579,6 +707,9 @@ def main():
         p.add_argument("--keep-context-cut", action="store_true", help="with --end-check: also keep runs our server "
                        "stopped at its context limit (the classic round's deliberate 32k cut)")
         p.add_argument("--expect-model", default=None, help="with --hero9: stop if any full-run row is another model")
+        p.add_argument("--student", default="gemma3", choices=["gemma3", "qwen36"], help="the model the data is "
+                       "rendered for: gemma3 = gemma's text mode (default, unchanged); qwen36 = Qwen3.6's native tool "
+                       "calls and thinking blocks (phase 2, 19 Nov 2026)")
         if name == "inventory":
             p.add_argument("--max-context-chars", type=int, default=0, help="drop examples whose context is longer (0 = keep all)")
         if name == "build":
@@ -600,7 +731,10 @@ def main():
         if name in ("build", "check"):
             p.add_argument("--out", default=None, help="data directory inside distill/ (default distill/; use a "
                            "subfolder, e.g. distill/stratified, to keep the committed sample)")
-    args = ap.parse_args(); args.fn(args)
+    args = ap.parse_args()
+    global STUDENT
+    STUDENT = args.student
+    args.fn(args)
 
 
 if __name__ == "__main__":
