@@ -172,8 +172,12 @@ data but not this week's. Every saved copy, both weeks: `results/classic_clean_r
 
 ## Next
 
-- Label every run (ran out of steps, repeated a call, misused a tool, answered or not) and hand the checkpoints, data
-  and traces to TQ, with the question of what his token analysis shows in norvane and coding.
+- Hand the checkpoints, data, traces and run labels to TQ, with the question of what his token analysis shows in
+  norvane and coding. The labels are done: `results/classic_run_labels.csv` (also on HF next to the round's data,
+  `distill/classic_v1/eval/`) has one row per run, for all 2,147 runs (Qwen's 1,120 and gemma's 1,027). Each row says
+  how the run ended and whether it ran out of steps, repeated a call, misused a tool or answered, plus the bad act,
+  whether it is in the clean data, and for Qwen's runs whether gemma trained on it. These labels reproduce section 7
+  exactly (`scripts/classic_run_labels.py`).
 - Black-box hermeneutics on bigger models: DeepSeek V4 Pro into Qwen3.6 27B is running (budget and progress:
   `phase2/BUDGET.md`).
 
