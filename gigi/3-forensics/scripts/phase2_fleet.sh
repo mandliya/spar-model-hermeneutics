@@ -18,6 +18,9 @@
 #   provider's failure (the wall clock, a request timeout, 429 retries given up) is set aside (results/logs/<SHORT>/
 #   set_aside.tsv) and re-run once from scratch; cut runs bias a task short. Empty-reply crashes are the model's own and
 #   count as lost runs.
+# - RESUME=1 (20 Nov 2026): continue a stopped fleet from its queue files, keeping the money baseline of the first start.
+#   Health also holds launches on 5xx retries (H5XX per 5 min) or when the pinned provider's uptime on OpenRouter over
+#   the last 5 minutes is under UP_MIN (80%); runs killed by a 5xx after 8 retries are set aside like timeouts.
 # - Then: per-run table (HERO_ALL_ENVS=1), cost per run (run_usage.py), upload of every stage and the logs to the private
 #   HF dataset, "P2 FLEET DONE: stages ..." in the stage log. A heartbeat line every 5 minutes. Never stops a box.
 set -uo pipefail
@@ -47,13 +50,20 @@ launch_chunk () {   # launch_chunk STAGE TASK N
   MAXC=$CHUNK_MAXC GAP=12 TIMEOUT_S=$to MODAL_SECRETS=$sec bash "$H/scripts/modal_full.sh" "$st" "$TAG" "$e:$n"
 }
 
-PREV429=0; HEALTHY=1
-health () {   # 429s over the last poll; adjusts CAP; logs one line
-  local r top d st; st=$(stages_all); [ -n "$st" ] || { HEALTHY=1; return; }
+PREV429=0; PREV5XX=-1; HEALTHY=1; H5XX=${H5XX:-30}; UP_MIN=${UP_MIN:-80}
+SLUG=$(upy -c "import yaml,sys; print(yaml.safe_load(open(sys.argv[1]))['agent']['model'])" "$H/configs/coding__${TAG}.yaml")
+health () {   # over the last poll: 429s (shrink CAP), 5xx retries and the pinned provider's uptime on OpenRouter (hold
+              # launches only; 20 Nov 2026: a SiliconFlow outage went unseen by the 429-only check); logs one line
+  local r top d st e5 d5 up why=""; st=$(stages_all); [ -n "$st" ] || { HEALTHY=1; return; }
   read r top < <(rate_limits "$st"); d=$((r - PREV429)); PREV429=$r
-  if [ "$d" -ge "$H429" ] || [ "$top" -ge 8 ]; then HEALTHY=0; CAP=$((CAP - 5 > CAP_MIN ? CAP - 5 : CAP_MIN))
+  e5=$(server_errors "$st"); [ "$PREV5XX" -lt 0 ] && PREV5XX=$e5; d5=$((e5 - PREV5XX)); PREV5XX=$e5
+  up=$(pin_uptime "$SLUG" "$PIN")
+  if [ "$d" -ge "$H429" ] || [ "$top" -ge 8 ]; then why="429s"; CAP=$((CAP - 5 > CAP_MIN ? CAP - 5 : CAP_MIN)); fi
+  [ "$d5" -ge "$H5XX" ] && why="${why:+$why, }server errors"
+  [ "$up" -ge 0 ] && [ "$up" -lt "$UP_MIN" ] && why="${why:+$why, }$PIN up $up% in the last 5 min"
+  if [ -n "$why" ]; then HEALTHY=0
   else HEALTHY=1; [ "$d" -lt 10 ] && CAP=$((CAP + 2 < CAP_MAX ? CAP + 2 : CAP_MAX)); fi
-  say "provider, last 5 min: 429 retries +$d (highest attempt $top); in flight $(live "$st") runs in $(apps "$st") apps; spent \$$(spent "$st") of cap \$$SPEND_CAP; cap now $CAP runs$([ $HEALTHY = 0 ] && echo ', NOT HEALTHY: launches held')"
+  say "provider, last 5 min: 429 retries +$d (highest attempt $top), server-error retries +$d5, $PIN up ${up}%; in flight $(live "$st") runs in $(apps "$st") apps; spent \$$(spent "$st") of cap \$$SPEND_CAP; cap now $CAP runs$([ $HEALTHY = 0 ] && echo ", NOT HEALTHY ($why): launches held")"
 }
 
 run_queue () {   # launch the queue as health, CAP and money allow; return once it is empty and nothing is in flight
@@ -90,7 +100,9 @@ for st in stages:
         cut = []
         for r in runs:
             e = run_end(r); t = (r / "rollout.log").read_text(errors="replace")[-4000:] if (r / "rollout.log").exists() else ""
-            if e in ("cut off by the time limit", "our server timed out") or (e == "crash" and "RateLimitError" in t):
+            if e in ("cut off by the time limit", "our server timed out", "provider server error") or (
+                    e == "crash" and "RateLimitError" in t):   # provider server error: 8 retries of a 5xx given up
+                                                               # (added 20 Nov 2026, the SiliconFlow outage)
                 cut.append(f"{r.name}: {e}{' (429s given up)' if e == 'crash' else ''}")
         if cut:
             with open(sa, "a") as f:
@@ -104,21 +116,31 @@ PY
 }
 
 # preflight
-say "START phase 2 fleet: $TAG pinned to $PIN, estimate \$$ESTIMATE, spend cap \$$SPEND_CAP, cap $CAP runs at once"
+RESUME=${RESUME:-0}   # 1 = continue a stopped fleet: keep its queue, its launched chunks and its money baseline
+say "$([ "$RESUME" = 1 ] && echo RESUME || echo START) phase 2 fleet: $TAG pinned to $PIN, estimate \$$ESTIMATE, spend cap \$$SPEND_CAP, cap $CAP runs at once"
 n=$(ls "$H"/configs/*__"$TAG".yaml 2>/dev/null | wc -l); [ "$n" = 28 ] || stop "$n configs for $TAG, need 28"
 grep -q "USAGE_KEY" "$H/agent-interp-envs/src/agent_interp_envs/providers/openrouter_provider.py" || stop "no usage ledger in the harness"
 [ "${SKIP_PILOT_CHECK:-0}" = 1 ] || grep -q "PILOT DONE ($TAG)" "$S" || stop "no 'PILOT DONE ($TAG)' line: run phase2_pilot.sh first"
-python3 "$H/scripts/phase2_money.py" --need "$(python3 -c "print(1.5 * float('$ESTIMATE'))")" --save-start "$MONEY_START" >> "$S" 2>&1; rc=$?
+if [ "$RESUME" = 1 ]; then   # the spend so far is measured from the first start's baseline, never a new one
+  [ -s "$MONEY_START" ] && [ -s "$Q.done" ] || stop "RESUME=1 but no money baseline ($MONEY_START) or no launched chunks ($Q.done)"
+  python3 "$H/scripts/phase2_money.py" --need "$(python3 -c "print(1.5 * float('$ESTIMATE'))")" --start "$MONEY_START" >> "$S" 2>&1; rc=$?
+else
+  python3 "$H/scripts/phase2_money.py" --need "$(python3 -c "print(1.5 * float('$ESTIMATE'))")" --save-start "$MONEY_START" >> "$S" 2>&1; rc=$?
+fi
 [ $rc = 2 ] && stop "not enough OpenRouter money for 1.5 x the estimate: ask GG / John to raise the key and workspace limits"
 [ $rc = 3 ] && say "no OpenRouter key on this box: spend is tracked from the launch logs only"
 
-# the queue: longest tasks first
+# the queue: longest tasks first (RESUME=1: the queue file as the stopped fleet left it)
+if [ "$RESUME" = 1 ]; then
+  say "resuming: $(grep -c . "$Q.done") chunks launched before, $(grep -c . "$Q" || true) chunks ($(awk '{s+=$3} END {print s+0}' "$Q") runs) still queued"
+else
 : > "$Q.done"
 { for cfg in "$H"/configs/*__"$TAG".yaml; do e=$(basename "$cfg"); e=${e%%__*}; echo "$(steps_of "$e") $e"; done | sort -rn | while read cap e; do
     n=40; case " $LONG46 " in *" $e "*) n=46;; esac
     chunks "${SHORT}_f" "$e" "$n"
   done; } > "$Q"
 say "queue: $(grep -c . "$Q") chunks, $(awk '{s+=$3} END {print s}' "$Q") runs"
+fi
 run_queue
 
 # fetch, set-asides (one re-run round), top-ups (at most 2 rounds)

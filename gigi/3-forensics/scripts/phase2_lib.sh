@@ -14,6 +14,34 @@ upy () { (cd "$H/agent-interp-envs" && env -u VIRTUAL_ENV uv run python "$@"); }
 apps () { python3 "$H/scripts/classic_sched.py" apps "$1"; }   # launchers still running in these stages (reads /proc)
 live () { python3 "$H/scripts/classic_sched.py" live "$1"; }   # runs in flight in these stages
 
+server_errors () {   # 5xx retry lines across the stages' launch logs. 20 Nov 2026: SiliconFlow answered 503 to every call
+                     # for 30+ min, and the health check, which counted only 429s, kept launching chunks into it
+  python3 - "$H" "$1" <<'PY'
+import pathlib, re, sys
+H = pathlib.Path(sys.argv[1]); n = 0
+for st in sys.argv[2].split(","):
+    for f in (H / "results/logs" / st).rglob("*.log"):
+        n += len(re.findall(r"\[provider retry\] attempt \d+ failed: InternalServerError", f.read_text(errors="replace")))
+print(n)
+PY
+}
+
+pin_uptime () {   # pin_uptime MODEL PROVIDER: the pinned provider's uptime over the last 5 min on OpenRouter (0-100),
+                  # -1 if unknown (no network, no figure yet). Public endpoint, no key needed.
+  python3 - "$1" "$2" <<'PY'
+import json, sys, urllib.request
+model, prov = sys.argv[1], sys.argv[2].lower().replace("-", "")
+try:
+    d = json.load(urllib.request.urlopen(f"https://openrouter.ai/api/v1/models/{model}/endpoints", timeout=20))["data"]
+    ups = [e.get("uptime_last_5m") for e in d.get("endpoints", [])
+           if prov in (e.get("provider_name") or "").lower().replace(" ", "").replace("-", "")]
+    ups = [u for u in ups if u is not None]
+    print(int(min(ups)) if ups else -1)
+except Exception:   # noqa: BLE001
+    print(-1)
+PY
+}
+
 log_cost () {   # dollars in the [provider-usage] lines of the stages' launch logs (each run's output streams there)
   python3 - "$H" "$1" <<'PY'
 import pathlib, re, sys
