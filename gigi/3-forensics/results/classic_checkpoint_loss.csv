@@ -1,0 +1,11 @@
+set,runs,checkpoint,epoch,loss_per_token,typical_chance_next_token
+val,"check runs, 23 tasks gemma learned from (184 runs)",base,0,0.4418,0.643
+val,"check runs, 23 tasks gemma learned from (184 runs)",c23,0.5,0.2343,0.791
+val,"check runs, 23 tasks gemma learned from (184 runs)",c46,1.0,0.1994,0.819
+val,"check runs, 23 tasks gemma learned from (184 runs)",c69,1.5,0.185,0.831
+val,"check runs, 23 tasks gemma learned from (184 runs)",c92,2.0,0.1826,0.833
+test,"Qwen runs, 5 tasks gemma never saw (200 runs)",base,0,0.4524,0.636
+test,"Qwen runs, 5 tasks gemma never saw (200 runs)",c23,0.5,0.2516,0.778
+test,"Qwen runs, 5 tasks gemma never saw (200 runs)",c46,1.0,0.2353,0.79
+test,"Qwen runs, 5 tasks gemma never saw (200 runs)",c69,1.5,0.2314,0.793
+test,"Qwen runs, 5 tasks gemma never saw (200 runs)",c92,2.0,0.2308,0.794

@@ -112,18 +112,29 @@ def steps(d):
 
 
 def loss():
-    rows = list(csv.DictReader(open(RES / "classic_train_loss.csv")))
-    ev = [(float(r["epoch"]), float(r["loss"])) for r in rows if r["kind"] == "check"]
-    fig, ax = plt.subplots(figsize=(12, 3.3))
+    """Full measurement at each save point (results/classic_checkpoint_loss.csv, from the box's stages.txt, 19 Nov 02:23
+    UTC): averaged over every word, so long runs count more. It replaces the quick check during training
+    (classic_train_loss.csv, kind=check: each run averaged first, 0.755 -> 0.259), which this chart used to show."""
+    rows = list(csv.DictReader(open(RES / "classic_checkpoint_loss.csv")))
+    fig, ax = plt.subplots(figsize=(12, 3.6))
     ax.grid(axis="y"); ax.grid(axis="x", visible=False)
-    ax.plot([e for e, _ in ev], [l for _, l in ev], color=AFTER, lw=2.6, zorder=3)
-    ax.scatter([e for e, _ in ev], [l for _, l in ev], s=70, color=AFTER, edgecolor="white", lw=1.5, zorder=4)
-    for e, l in ev:
-        ax.annotate(f"{l:.2f}", (e, l), xytext=(0, 10), textcoords="offset points", ha="center", fontsize=10, color=ST.TEXT)
+    sets = [("val", "-", "tasks gemma learned from\n(184 check runs)", -14, -14),      # lower line: numbers below
+            ("test", "--", "5 tasks gemma never saw\n(200 Qwen runs)", 13, 14)]       # upper line: numbers above
+    for s, ls, lab, dy, ly in sets:
+        ev = [(float(r["epoch"]), float(r["loss_per_token"])) for r in rows if r["set"] == s]
+        ax.plot([e for e, _ in ev], [l for _, l in ev], color=AFTER, lw=2.4, ls=ls, zorder=3)
+        ax.scatter([e for e, _ in ev], [l for _, l in ev], s=60, color=AFTER, edgecolor="white", lw=1.5, zorder=4)
+        for e, l in ev:
+            ax.annotate(f"{l:.2f}", (e, l), xytext=(0, dy), textcoords="offset points", ha="center", va="center",
+                        fontsize=9.5, color=ST.TEXT)
+        ax.annotate(lab, (ev[-1][0], ev[-1][1]), xytext=(22, ly), textcoords="offset points", va="center",
+                    fontsize=9.5, color=ST.INK)
     ax.set_xticks([0, .5, 1, 1.5, 2]); ax.set_xticklabels(["before", "0.5", "1", "1.5", "2"], fontsize=10)
-    ax.set_xlabel("epochs of training", fontsize=9.5, color=ST.MUTED)
-    ax.set_ylim(0, 0.9); ax.set_yticks([0, .25, .5, .75]); ax.tick_params(labelsize=9.5)
-    ax.set_ylabel("loss on Qwen runs gemma\ndid not learn from (lower = better)", fontsize=10, color=ST.MUTED, labelpad=8)
+    ax.set_xlim(-0.15, 2.75)
+    ax.set_xlabel("epochs of training (passes through Qwen's runs)", fontsize=9.5, color=ST.MUTED)
+    ax.set_ylim(0, 0.55); ax.set_yticks([0, .1, .2, .3, .4, .5]); ax.tick_params(labelsize=9.5)
+    ax.set_ylabel("loss: how badly gemma predicts\nQwen's next word (lower = better)", fontsize=10, color=ST.MUTED,
+                  labelpad=8)
     fig.tight_layout()
     out = CH / "classic_call_4_loss.png"; fig.savefig(out, dpi=200); plt.close(fig); print("wrote", out)
 
