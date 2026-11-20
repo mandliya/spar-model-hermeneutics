@@ -26,3 +26,481 @@ t=1795081694 key_usage=5967.645284299 key_limit=10000 key_limit_remaining=4032.3
 2026-11-19T11:34:59Z uploaded p2_deepseekv4_smoke to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_smoke)
 2026-11-19T11:35:18Z uploaded p2_deepseekv4_pilot to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_pilot)
 2026-11-19T11:35:18Z PILOT DONE (deepseek-v4-pro): total spent in these runs: $19.14; calls without a cost: 0; projection, 46 runs per task over 28 tasks (mean cost per run): $431; ended: total (28 tasks)                      56        54    2
+2026-11-20T04:34:38Z START phase 2 fleet: deepseek-v4-pro pinned to siliconflow, estimate $450, spend cap $1800, cap 30 runs at once
+t=1795149279 key_usage=5986.924130049 key_limit=10000 key_limit_remaining=4013.0758699509997 account_remaining=3608.98
+2026-11-20T04:34:40Z queue: 209 chunks, 1198 runs
+2026-11-20T04:34:52Z launched p2_deepseekv4_f_1 optimize_rendering_engine_graded x6; 3 runs in flight, 208 chunks queued
+2026-11-20T04:35:04Z launched p2_deepseekv4_f_2 optimize_rendering_engine_graded x6; 6 runs in flight, 207 chunks queued
+2026-11-20T04:35:16Z launched p2_deepseekv4_f_3 optimize_rendering_engine_graded x6; 9 runs in flight, 206 chunks queued
+2026-11-20T04:35:28Z launched p2_deepseekv4_f_4 optimize_rendering_engine_graded x6; 12 runs in flight, 205 chunks queued
+2026-11-20T04:35:40Z launched p2_deepseekv4_f_5 optimize_rendering_engine_graded x6; 15 runs in flight, 204 chunks queued
+2026-11-20T04:35:53Z launched p2_deepseekv4_f_6 optimize_rendering_engine_graded x6; 18 runs in flight, 203 chunks queued
+2026-11-20T04:36:05Z launched p2_deepseekv4_f_7 optimize_rendering_engine_graded x5; 21 runs in flight, 202 chunks queued
+2026-11-20T04:36:17Z launched p2_deepseekv4_f_8 optimize_rendering_engine_graded x5; 24 runs in flight, 201 chunks queued
+2026-11-20T04:36:29Z launched p2_deepseekv4_f_1 optimize_rendering_engine x6; 27 runs in flight, 200 chunks queued
+2026-11-20T04:36:41Z launched p2_deepseekv4_f_2 optimize_rendering_engine x6; 30 runs in flight, 199 chunks queued
+2026-11-20T04:41:42Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 30 runs in 10 apps; spent $0.94 of cap $1800; cap now 32 runs
+2026-11-20T04:46:42Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 30 runs in 10 apps; spent $1.95 of cap $1800; cap now 34 runs
+2026-11-20T04:46:55Z launched p2_deepseekv4_f_3 optimize_rendering_engine x6; 33 runs in flight, 198 chunks queued
+2026-11-20T04:51:55Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 33 runs in 11 apps; spent $3.70 of cap $1800; cap now 36 runs
+2026-11-20T04:52:08Z launched p2_deepseekv4_f_4 optimize_rendering_engine x6; 36 runs in flight, 197 chunks queued
+2026-11-20T04:57:08Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 36 runs in 12 apps; spent $5.67 of cap $1800; cap now 38 runs
+2026-11-20T05:02:09Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 36 runs in 12 apps; spent $8.06 of cap $1800; cap now 40 runs
+2026-11-20T05:02:21Z launched p2_deepseekv4_f_5 optimize_rendering_engine x6; 39 runs in flight, 196 chunks queued
+2026-11-20T05:07:22Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 39 runs in 13 apps; spent $10.60 of cap $1800; cap now 42 runs
+2026-11-20T05:07:34Z launched p2_deepseekv4_f_6 optimize_rendering_engine x6; 42 runs in flight, 195 chunks queued
+2026-11-20T05:12:35Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 42 runs in 14 apps; spent $13.73 of cap $1800; cap now 44 runs
+2026-11-20T05:17:36Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 42 runs in 14 apps; spent $16.86 of cap $1800; cap now 46 runs
+2026-11-20T05:17:48Z launched p2_deepseekv4_f_7 optimize_rendering_engine x5; 45 runs in flight, 194 chunks queued
+2026-11-20T05:22:49Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 45 runs in 15 apps; spent $20.19 of cap $1800; cap now 48 runs
+2026-11-20T05:23:01Z launched p2_deepseekv4_f_8 optimize_rendering_engine x5; 48 runs in flight, 193 chunks queued
+2026-11-20T05:28:02Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 48 runs in 16 apps; spent $24.07 of cap $1800; cap now 50 runs
+2026-11-20T05:33:03Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 48 runs in 16 apps; spent $27.44 of cap $1800; cap now 52 runs
+2026-11-20T05:33:16Z launched p2_deepseekv4_f_1 optimize_lru_cache x6; 51 runs in flight, 192 chunks queued
+2026-11-20T05:38:16Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 50 runs in 17 apps; spent $31.03 of cap $1800; cap now 54 runs
+2026-11-20T05:38:29Z launched p2_deepseekv4_f_2 optimize_lru_cache x6; 53 runs in flight, 191 chunks queued
+2026-11-20T05:43:30Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 52 runs in 18 apps; spent $36.08 of cap $1800; cap now 56 runs
+2026-11-20T05:43:42Z launched p2_deepseekv4_f_3 optimize_lru_cache x6; 55 runs in flight, 190 chunks queued
+2026-11-20T05:48:43Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 55 runs in 19 apps; spent $40.32 of cap $1800; cap now 58 runs
+2026-11-20T05:48:55Z launched p2_deepseekv4_f_4 optimize_lru_cache x6; 58 runs in flight, 189 chunks queued
+2026-11-20T05:53:56Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 58 runs in 20 apps; spent $44.76 of cap $1800; cap now 60 runs
+2026-11-20T05:58:57Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 57 runs in 20 apps; spent $49.25 of cap $1800; cap now 60 runs
+2026-11-20T05:59:10Z launched p2_deepseekv4_f_5 optimize_lru_cache x6; 60 runs in flight, 188 chunks queued
+2026-11-20T06:04:11Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 59 runs in 21 apps; spent $54.38 of cap $1800; cap now 60 runs
+2026-11-20T06:09:12Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 58 runs in 21 apps; spent $58.77 of cap $1800; cap now 60 runs
+2026-11-20T06:14:14Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 57 runs in 21 apps; spent $63.68 of cap $1800; cap now 60 runs
+2026-11-20T06:14:26Z launched p2_deepseekv4_f_6 optimize_lru_cache x6; 60 runs in flight, 187 chunks queued
+2026-11-20T06:19:27Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 57 runs in 22 apps; spent $68.58 of cap $1800; cap now 60 runs
+2026-11-20T06:19:40Z launched p2_deepseekv4_f_7 optimize_lru_cache x5; 60 runs in flight, 186 chunks queued
+2026-11-20T06:24:41Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 57 runs in 23 apps; spent $73.77 of cap $1800; cap now 60 runs
+2026-11-20T06:24:53Z launched p2_deepseekv4_f_8 optimize_lru_cache x5; 60 runs in flight, 185 chunks queued
+2026-11-20T06:29:55Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 54 runs in 24 apps; spent $78.85 of cap $1800; cap now 60 runs
+2026-11-20T06:30:07Z launched p2_deepseekv4_f_1 lucky_seed_readable_grader x6; 57 runs in flight, 184 chunks queued
+2026-11-20T06:30:19Z launched p2_deepseekv4_f_2 lucky_seed_readable_grader x6; 60 runs in flight, 183 chunks queued
+2026-11-20T06:35:20Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 57 runs in 26 apps; spent $83.83 of cap $1800; cap now 60 runs
+2026-11-20T06:35:33Z launched p2_deepseekv4_f_3 lucky_seed_readable_grader x6; 60 runs in flight, 182 chunks queued
+2026-11-20T06:40:34Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 53 runs in 25 apps; spent $88.32 of cap $1800; cap now 60 runs
+2026-11-20T06:40:47Z launched p2_deepseekv4_f_4 lucky_seed_readable_grader x6; 56 runs in flight, 181 chunks queued
+2026-11-20T06:40:59Z launched p2_deepseekv4_f_5 lucky_seed_readable_grader x6; 59 runs in flight, 180 chunks queued
+2026-11-20T06:46:00Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 55 runs in 26 apps; spent $93.12 of cap $1800; cap now 60 runs
+2026-11-20T06:46:13Z launched p2_deepseekv4_f_6 lucky_seed_readable_grader x5; 58 runs in flight, 179 chunks queued
+2026-11-20T06:51:14Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 55 runs in 27 apps; spent $98.40 of cap $1800; cap now 60 runs
+2026-11-20T06:51:27Z launched p2_deepseekv4_f_7 lucky_seed_readable_grader x5; 58 runs in flight, 178 chunks queued
+2026-11-20T06:56:28Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 45 runs in 24 apps; spent $102.92 of cap $1800; cap now 60 runs
+2026-11-20T06:56:41Z launched p2_deepseekv4_f_1 lucky_seed x6; 48 runs in flight, 177 chunks queued
+2026-11-20T06:56:53Z launched p2_deepseekv4_f_2 lucky_seed x6; 51 runs in flight, 176 chunks queued
+2026-11-20T06:57:05Z launched p2_deepseekv4_f_3 lucky_seed x6; 54 runs in flight, 175 chunks queued
+2026-11-20T06:57:17Z launched p2_deepseekv4_f_4 lucky_seed x6; 57 runs in flight, 174 chunks queued
+2026-11-20T06:57:29Z launched p2_deepseekv4_f_5 lucky_seed x6; 60 runs in flight, 173 chunks queued
+2026-11-20T07:02:30Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 53 runs in 24 apps; spent $108.03 of cap $1800; cap now 60 runs
+2026-11-20T07:02:43Z launched p2_deepseekv4_f_6 lucky_seed x5; 56 runs in flight, 172 chunks queued
+2026-11-20T07:02:55Z launched p2_deepseekv4_f_7 lucky_seed x5; 59 runs in flight, 171 chunks queued
+2026-11-20T07:07:56Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 51 runs in 25 apps; spent $114.51 of cap $1800; cap now 60 runs
+2026-11-20T07:08:09Z launched p2_deepseekv4_f_1 leaked_scorer x6; 54 runs in flight, 170 chunks queued
+2026-11-20T07:08:21Z launched p2_deepseekv4_f_2 leaked_scorer x6; 57 runs in flight, 169 chunks queued
+2026-11-20T07:08:33Z launched p2_deepseekv4_f_3 leaked_scorer x6; 60 runs in flight, 168 chunks queued
+2026-11-20T07:13:34Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 49 runs in 23 apps; spent $119.31 of cap $1800; cap now 60 runs
+2026-11-20T07:13:47Z launched p2_deepseekv4_f_4 leaked_scorer x6; 52 runs in flight, 167 chunks queued
+2026-11-20T07:13:59Z launched p2_deepseekv4_f_5 leaked_scorer x6; 55 runs in flight, 166 chunks queued
+2026-11-20T07:14:11Z launched p2_deepseekv4_f_6 leaked_scorer x6; 58 runs in flight, 165 chunks queued
+2026-11-20T07:19:12Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 53 runs in 26 apps; spent $123.62 of cap $1800; cap now 60 runs
+2026-11-20T07:19:25Z launched p2_deepseekv4_f_7 leaked_scorer x5; 56 runs in flight, 164 chunks queued
+2026-11-20T07:19:37Z launched p2_deepseekv4_f_8 leaked_scorer x5; 59 runs in flight, 163 chunks queued
+2026-11-20T07:24:38Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 45 runs in 25 apps; spent $127.97 of cap $1800; cap now 60 runs
+2026-11-20T07:24:50Z launched p2_deepseekv4_f_1 grade_your_own x6; 48 runs in flight, 162 chunks queued
+2026-11-20T07:25:02Z launched p2_deepseekv4_f_2 grade_your_own x6; 51 runs in flight, 161 chunks queued
+2026-11-20T07:25:15Z launched p2_deepseekv4_f_3 grade_your_own x6; 54 runs in flight, 160 chunks queued
+2026-11-20T07:25:27Z launched p2_deepseekv4_f_4 grade_your_own x6; 57 runs in flight, 159 chunks queued
+2026-11-20T07:25:39Z launched p2_deepseekv4_f_5 grade_your_own x6; 60 runs in flight, 158 chunks queued
+2026-11-20T07:30:40Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 39 runs in 22 apps; spent $132.35 of cap $1800; cap now 60 runs
+2026-11-20T07:30:52Z launched p2_deepseekv4_f_6 grade_your_own x6; 42 runs in flight, 157 chunks queued
+2026-11-20T07:31:05Z launched p2_deepseekv4_f_7 grade_your_own x5; 45 runs in flight, 156 chunks queued
+2026-11-20T07:31:17Z launched p2_deepseekv4_f_8 grade_your_own x5; 48 runs in flight, 155 chunks queued
+2026-11-20T07:31:29Z launched p2_deepseekv4_f_1 dashboard_costly_failure x6; 51 runs in flight, 154 chunks queued
+2026-11-20T07:31:41Z launched p2_deepseekv4_f_2 dashboard_costly_failure x6; 54 runs in flight, 153 chunks queued
+2026-11-20T07:31:53Z launched p2_deepseekv4_f_3 dashboard_costly_failure x6; 57 runs in flight, 152 chunks queued
+2026-11-20T07:32:05Z launched p2_deepseekv4_f_4 dashboard_costly_failure x6; 60 runs in flight, 151 chunks queued
+2026-11-20T07:37:06Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 45 runs in 23 apps; spent $135.81 of cap $1800; cap now 60 runs
+2026-11-20T07:37:19Z launched p2_deepseekv4_f_5 dashboard_costly_failure x6; 48 runs in flight, 150 chunks queued
+2026-11-20T07:37:31Z launched p2_deepseekv4_f_6 dashboard_costly_failure x6; 51 runs in flight, 149 chunks queued
+2026-11-20T07:37:43Z launched p2_deepseekv4_f_7 dashboard_costly_failure x5; 54 runs in flight, 148 chunks queued
+2026-11-20T07:37:55Z launched p2_deepseekv4_f_8 dashboard_costly_failure x5; 57 runs in flight, 147 chunks queued
+2026-11-20T07:38:07Z launched p2_deepseekv4_f_1 puppeteer x6; 60 runs in flight, 146 chunks queued
+2026-11-20T07:43:08Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 57 runs in 24 apps; spent $139.05 of cap $1800; cap now 60 runs
+2026-11-20T07:43:21Z launched p2_deepseekv4_f_2 puppeteer x6; 60 runs in flight, 145 chunks queued
+2026-11-20T07:48:21Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 57 runs in 21 apps; spent $142.73 of cap $1800; cap now 60 runs
+2026-11-20T07:48:34Z launched p2_deepseekv4_f_3 puppeteer x6; 60 runs in flight, 144 chunks queued
+2026-11-20T07:53:35Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 59 runs in 22 apps; spent $146.90 of cap $1800; cap now 60 runs
+2026-11-20T07:58:36Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 59 runs in 21 apps; spent $150.68 of cap $1800; cap now 60 runs
+2026-11-20T08:03:38Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 59 runs in 21 apps; spent $155.11 of cap $1800; cap now 60 runs
+2026-11-20T08:08:40Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 58 runs in 20 apps; spent $160.01 of cap $1800; cap now 60 runs
+2026-11-20T08:13:41Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 56 runs in 19 apps; spent $167.77 of cap $1800; cap now 60 runs
+2026-11-20T08:13:54Z launched p2_deepseekv4_f_4 puppeteer x6; 59 runs in flight, 143 chunks queued
+2026-11-20T08:18:55Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 58 runs in 20 apps; spent $175.07 of cap $1800; cap now 60 runs
+2026-11-20T08:23:57Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 52 runs in 19 apps; spent $179.83 of cap $1800; cap now 60 runs
+2026-11-20T08:24:09Z launched p2_deepseekv4_f_5 puppeteer x6; 55 runs in flight, 142 chunks queued
+2026-11-20T08:24:21Z launched p2_deepseekv4_f_6 puppeteer x6; 58 runs in flight, 141 chunks queued
+2026-11-20T08:29:22Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 56 runs in 20 apps; spent $184.57 of cap $1800; cap now 60 runs
+2026-11-20T08:29:35Z launched p2_deepseekv4_f_7 puppeteer x5; 59 runs in flight, 140 chunks queued
+2026-11-20T08:34:36Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 58 runs in 20 apps; spent $189.61 of cap $1800; cap now 60 runs
+2026-11-20T08:39:38Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 53 runs in 19 apps; spent $194.83 of cap $1800; cap now 60 runs
+2026-11-20T08:39:50Z launched p2_deepseekv4_f_8 puppeteer x5; 56 runs in flight, 139 chunks queued
+2026-11-20T08:40:02Z launched p2_deepseekv4_f_1 leaked_tests x6; 59 runs in flight, 138 chunks queued
+2026-11-20T08:45:03Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 53 runs in 21 apps; spent $199.68 of cap $1800; cap now 60 runs
+2026-11-20T08:45:16Z launched p2_deepseekv4_f_2 leaked_tests x6; 56 runs in flight, 137 chunks queued
+2026-11-20T08:45:28Z launched p2_deepseekv4_f_3 leaked_tests x6; 59 runs in flight, 136 chunks queued
+2026-11-20T08:50:29Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 60 runs in 23 apps; spent $205.30 of cap $1800; cap now 60 runs
+2026-11-20T08:55:31Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 58 runs in 22 apps; spent $210.36 of cap $1800; cap now 60 runs
+2026-11-20T09:00:32Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 53 runs in 21 apps; spent $215.27 of cap $1800; cap now 60 runs
+2026-11-20T09:00:45Z launched p2_deepseekv4_f_4 leaked_tests x6; 56 runs in flight, 135 chunks queued
+2026-11-20T09:00:57Z launched p2_deepseekv4_f_5 leaked_tests x6; 59 runs in flight, 134 chunks queued
+2026-11-20T09:05:59Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 52 runs in 23 apps; spent $221.86 of cap $1800; cap now 60 runs
+2026-11-20T09:06:11Z launched p2_deepseekv4_f_6 leaked_tests x6; 55 runs in flight, 133 chunks queued
+2026-11-20T09:06:23Z launched p2_deepseekv4_f_7 leaked_tests x5; 58 runs in flight, 132 chunks queued
+2026-11-20T09:11:25Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 57 runs in 24 apps; spent $227.99 of cap $1800; cap now 60 runs
+2026-11-20T09:11:37Z launched p2_deepseekv4_f_8 leaked_tests x5; 60 runs in flight, 131 chunks queued
+2026-11-20T09:16:39Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 52 runs in 20 apps; spent $234.32 of cap $1800; cap now 60 runs
+2026-11-20T09:16:51Z launched p2_deepseekv4_f_1 copying_of_answers x6; 55 runs in flight, 130 chunks queued
+2026-11-20T09:17:03Z launched p2_deepseekv4_f_2 copying_of_answers x6; 58 runs in flight, 129 chunks queued
+2026-11-20T09:22:05Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 54 runs in 22 apps; spent $241.28 of cap $1800; cap now 60 runs
+2026-11-20T09:22:17Z launched p2_deepseekv4_f_3 copying_of_answers x6; 57 runs in flight, 128 chunks queued
+2026-11-20T09:22:30Z launched p2_deepseekv4_f_4 copying_of_answers x6; 60 runs in flight, 127 chunks queued
+2026-11-20T09:27:31Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 48 runs in 21 apps; spent $247.78 of cap $1800; cap now 60 runs
+2026-11-20T09:27:44Z launched p2_deepseekv4_f_5 copying_of_answers x6; 51 runs in flight, 126 chunks queued
+2026-11-20T09:27:56Z launched p2_deepseekv4_f_6 copying_of_answers x5; 54 runs in flight, 125 chunks queued
+2026-11-20T09:28:08Z launched p2_deepseekv4_f_7 copying_of_answers x5; 57 runs in flight, 124 chunks queued
+2026-11-20T09:28:20Z launched p2_deepseekv4_f_1 reference_extraction x6; 60 runs in flight, 123 chunks queued
+2026-11-20T09:33:21Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 52 runs in 23 apps; spent $255.29 of cap $1800; cap now 60 runs
+2026-11-20T09:33:34Z launched p2_deepseekv4_f_2 reference_extraction x6; 55 runs in flight, 122 chunks queued
+2026-11-20T09:33:46Z launched p2_deepseekv4_f_3 reference_extraction x6; 58 runs in flight, 121 chunks queued
+2026-11-20T09:38:48Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 53 runs in 22 apps; spent $263.35 of cap $1800; cap now 60 runs
+2026-11-20T09:39:00Z launched p2_deepseekv4_f_4 reference_extraction x6; 56 runs in flight, 120 chunks queued
+2026-11-20T09:39:12Z launched p2_deepseekv4_f_5 reference_extraction x6; 59 runs in flight, 119 chunks queued
+2026-11-20T09:44:14Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 57 runs in 24 apps; spent $271.71 of cap $1800; cap now 60 runs
+2026-11-20T09:44:27Z launched p2_deepseekv4_f_6 reference_extraction x6; 60 runs in flight, 118 chunks queued
+2026-11-20T09:49:28Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 56 runs in 23 apps; spent $279.73 of cap $1800; cap now 60 runs
+2026-11-20T09:49:41Z launched p2_deepseekv4_f_7 reference_extraction x5; 59 runs in flight, 117 chunks queued
+2026-11-20T09:54:42Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 56 runs in 24 apps; spent $283.82 of cap $1800; cap now 60 runs
+2026-11-20T09:54:55Z launched p2_deepseekv4_f_8 reference_extraction x5; 59 runs in flight, 116 chunks queued
+2026-11-20T09:59:56Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 49 runs in 24 apps; spent $283.82 of cap $1800; cap now 60 runs
+2026-11-20T10:00:09Z launched p2_deepseekv4_f_1 async_conversion x6; 52 runs in flight, 115 chunks queued
+2026-11-20T10:00:21Z launched p2_deepseekv4_f_2 async_conversion x6; 55 runs in flight, 114 chunks queued
+2026-11-20T10:00:34Z launched p2_deepseekv4_f_3 async_conversion x6; 58 runs in flight, 113 chunks queued
+2026-11-20T10:05:35Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 26 runs in 12 apps; spent $283.82 of cap $1800; cap now 60 runs
+2026-11-20T10:05:47Z launched p2_deepseekv4_f_4 async_conversion x6; 29 runs in flight, 112 chunks queued
+2026-11-20T10:05:59Z launched p2_deepseekv4_f_5 async_conversion x6; 32 runs in flight, 111 chunks queued
+2026-11-20T10:06:11Z launched p2_deepseekv4_f_6 async_conversion x6; 35 runs in flight, 110 chunks queued
+2026-11-20T10:06:23Z launched p2_deepseekv4_f_7 async_conversion x5; 38 runs in flight, 109 chunks queued
+2026-11-20T10:06:36Z launched p2_deepseekv4_f_8 async_conversion x5; 41 runs in flight, 108 chunks queued
+2026-11-20T10:06:48Z launched p2_deepseekv4_f_1 revert_or_refactor x6; 44 runs in flight, 107 chunks queued
+2026-11-20T10:07:00Z launched p2_deepseekv4_f_2 revert_or_refactor x6; 47 runs in flight, 106 chunks queued
+2026-11-20T10:07:12Z launched p2_deepseekv4_f_3 revert_or_refactor x6; 50 runs in flight, 105 chunks queued
+2026-11-20T10:07:24Z launched p2_deepseekv4_f_4 revert_or_refactor x6; 53 runs in flight, 104 chunks queued
+2026-11-20T10:07:36Z launched p2_deepseekv4_f_5 revert_or_refactor x6; 56 runs in flight, 103 chunks queued
+2026-11-20T10:07:48Z launched p2_deepseekv4_f_6 revert_or_refactor x6; 59 runs in flight, 102 chunks queued
+2026-11-20T10:12:49Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 31 runs in 11 apps; spent $283.82 of cap $1800; cap now 60 runs
+2026-11-20T10:13:02Z launched p2_deepseekv4_f_7 revert_or_refactor x5; 34 runs in flight, 101 chunks queued
+2026-11-20T10:13:14Z launched p2_deepseekv4_f_8 revert_or_refactor x5; 37 runs in flight, 100 chunks queued
+2026-11-20T10:13:26Z launched p2_deepseekv4_f_1 secret_number x6; 40 runs in flight, 99 chunks queued
+2026-11-20T10:13:38Z launched p2_deepseekv4_f_2 secret_number x6; 43 runs in flight, 98 chunks queued
+2026-11-20T10:13:50Z launched p2_deepseekv4_f_3 secret_number x6; 46 runs in flight, 97 chunks queued
+2026-11-20T10:14:02Z launched p2_deepseekv4_f_4 secret_number x6; 49 runs in flight, 96 chunks queued
+2026-11-20T10:14:14Z launched p2_deepseekv4_f_5 secret_number x6; 52 runs in flight, 95 chunks queued
+2026-11-20T10:14:27Z launched p2_deepseekv4_f_6 secret_number x5; 55 runs in flight, 94 chunks queued
+2026-11-20T10:14:39Z launched p2_deepseekv4_f_7 secret_number x5; 58 runs in flight, 93 chunks queued
+2026-11-20T10:19:44Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 23 runs in 9 apps; spent $283.82 of cap $1800; cap now 60 runs
+2026-11-20T10:19:57Z launched p2_deepseekv4_f_1 coding_norules x6; 26 runs in flight, 92 chunks queued
+2026-11-20T10:20:09Z launched p2_deepseekv4_f_2 coding_norules x6; 29 runs in flight, 91 chunks queued
+2026-11-20T10:20:21Z launched p2_deepseekv4_f_3 coding_norules x6; 32 runs in flight, 90 chunks queued
+2026-11-20T10:20:33Z launched p2_deepseekv4_f_4 coding_norules x6; 35 runs in flight, 89 chunks queued
+2026-11-20T10:20:46Z launched p2_deepseekv4_f_5 coding_norules x6; 38 runs in flight, 88 chunks queued
+2026-11-20T10:20:58Z launched p2_deepseekv4_f_6 coding_norules x5; 41 runs in flight, 87 chunks queued
+2026-11-20T10:21:10Z launched p2_deepseekv4_f_7 coding_norules x5; 44 runs in flight, 86 chunks queued
+2026-11-20T10:21:22Z launched p2_deepseekv4_f_1 coding x6; 47 runs in flight, 85 chunks queued
+2026-11-20T10:21:34Z launched p2_deepseekv4_f_2 coding x6; 50 runs in flight, 84 chunks queued
+2026-11-20T10:21:46Z launched p2_deepseekv4_f_3 coding x6; 53 runs in flight, 83 chunks queued
+2026-11-20T10:21:58Z launched p2_deepseekv4_f_4 coding x6; 56 runs in flight, 82 chunks queued
+2026-11-20T10:22:10Z launched p2_deepseekv4_f_5 coding x6; 59 runs in flight, 81 chunks queued
+2026-11-20T10:27:11Z provider, last 5 min: 429 retries +0 (highest attempt 0); in flight 34 runs in 12 apps; spent $283.82 of cap $1800; cap now 60 runs
+2026-11-20T10:27:24Z launched p2_deepseekv4_f_6 coding x5; 37 runs in flight, 80 chunks queued
+2026-11-20T10:27:36Z launched p2_deepseekv4_f_7 coding x5; 40 runs in flight, 79 chunks queued
+2026-11-20T10:27:48Z launched p2_deepseekv4_f_1 ai_rd x6; 43 runs in flight, 78 chunks queued
+2026-11-20T10:27:56Z PAUSED (launcher stopped by Claude, apps in flight left running): SiliconFlow returns 503 on every call since ~09:54Z (OpenRouter uptime 3% over 30 min); the health check counts only 429s, so it kept launching. Queue left as is for a resume.
+2026-11-20T10:30:43Z RESUME phase 2 fleet: deepseek-v4-pro pinned to siliconflow, estimate $450, spend cap $1800, cap 30 runs at once
+t=1795170644 key_usage=6270.746936549 key_limit=10000 key_limit_remaining=3729.2530634510003 account_remaining=3321.9 spent_since=283.82
+2026-11-20T10:30:44Z resuming: 132 chunks launched before, 77 chunks (440 runs) still queued
+2026-11-20T10:30:45Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 0%; in flight 25 runs in 9 apps; spent $283.82 of cap $1800; cap now 30 runs, NOT HEALTHY (siliconflow up 0% in the last 5 min): launches held
+2026-11-20T10:35:47Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +76, siliconflow up 0%; in flight 10 runs in 4 apps; spent $283.82 of cap $1800; cap now 30 runs, NOT HEALTHY (server errors, siliconflow up 0% in the last 5 min): launches held
+2026-11-20T10:40:48Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 0%; in flight 0 runs in 0 apps; spent $283.82 of cap $1800; cap now 30 runs, NOT HEALTHY (siliconflow up 0% in the last 5 min): launches held
+2026-11-20T10:45:50Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 0%; in flight 0 runs in 0 apps; spent $283.82 of cap $1800; cap now 30 runs, NOT HEALTHY (siliconflow up 0% in the last 5 min): launches held
+2026-11-20T10:50:52Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 40%; in flight 0 runs in 0 apps; spent $283.82 of cap $1800; cap now 30 runs, NOT HEALTHY (siliconflow up 40% in the last 5 min): launches held
+2026-11-20T10:55:54Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 0 runs in 0 apps; spent $283.82 of cap $1800; cap now 32 runs
+2026-11-20T10:56:06Z launched p2_deepseekv4_f_3 ai_rd x6; 3 runs in flight, 76 chunks queued
+2026-11-20T10:56:18Z launched p2_deepseekv4_f_4 ai_rd x6; 6 runs in flight, 75 chunks queued
+2026-11-20T10:56:31Z launched p2_deepseekv4_f_5 ai_rd x6; 9 runs in flight, 74 chunks queued
+2026-11-20T10:56:43Z launched p2_deepseekv4_f_6 ai_rd x6; 12 runs in flight, 73 chunks queued
+2026-11-20T10:56:55Z launched p2_deepseekv4_f_7 ai_rd x5; 15 runs in flight, 72 chunks queued
+2026-11-20T10:57:07Z launched p2_deepseekv4_f_8 ai_rd x5; 18 runs in flight, 71 chunks queued
+2026-11-20T10:57:19Z launched p2_deepseekv4_f_1 chess x6; 21 runs in flight, 70 chunks queued
+2026-11-20T10:57:31Z launched p2_deepseekv4_f_2 chess x6; 24 runs in flight, 69 chunks queued
+2026-11-20T10:57:43Z launched p2_deepseekv4_f_3 chess x6; 27 runs in flight, 68 chunks queued
+2026-11-20T10:57:55Z launched p2_deepseekv4_f_4 chess x6; 30 runs in flight, 67 chunks queued
+2026-11-20T11:02:57Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 30 runs in 10 apps; spent $286.06 of cap $1800; cap now 34 runs
+2026-11-20T11:03:09Z launched p2_deepseekv4_f_5 chess x6; 33 runs in flight, 66 chunks queued
+2026-11-20T11:08:10Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 21 runs in 8 apps; spent $288.84 of cap $1800; cap now 36 runs
+2026-11-20T11:08:23Z launched p2_deepseekv4_f_6 chess x5; 24 runs in flight, 65 chunks queued
+2026-11-20T11:08:35Z launched p2_deepseekv4_f_7 chess x5; 27 runs in flight, 64 chunks queued
+2026-11-20T11:08:47Z launched p2_deepseekv4_f_1 tictactoe x6; 30 runs in flight, 63 chunks queued
+2026-11-20T11:08:59Z launched p2_deepseekv4_f_2 tictactoe x6; 33 runs in flight, 62 chunks queued
+2026-11-20T11:09:11Z launched p2_deepseekv4_f_3 tictactoe x6; 36 runs in flight, 61 chunks queued
+2026-11-20T11:14:12Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 24 runs in 9 apps; spent $292.00 of cap $1800; cap now 38 runs
+2026-11-20T11:14:25Z launched p2_deepseekv4_f_4 tictactoe x6; 27 runs in flight, 60 chunks queued
+2026-11-20T11:14:37Z launched p2_deepseekv4_f_5 tictactoe x6; 30 runs in flight, 59 chunks queued
+2026-11-20T11:14:49Z launched p2_deepseekv4_f_6 tictactoe x5; 33 runs in flight, 58 chunks queued
+2026-11-20T11:15:01Z launched p2_deepseekv4_f_7 tictactoe x5; 36 runs in flight, 57 chunks queued
+2026-11-20T11:20:02Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 19 runs in 7 apps; spent $295.25 of cap $1800; cap now 40 runs
+2026-11-20T11:20:15Z launched p2_deepseekv4_f_1 precommit_hook x6; 22 runs in flight, 56 chunks queued
+2026-11-20T11:20:27Z launched p2_deepseekv4_f_2 precommit_hook x6; 25 runs in flight, 55 chunks queued
+2026-11-20T11:20:39Z launched p2_deepseekv4_f_3 precommit_hook x6; 28 runs in flight, 54 chunks queued
+2026-11-20T11:20:51Z launched p2_deepseekv4_f_4 precommit_hook x6; 31 runs in flight, 53 chunks queued
+2026-11-20T11:21:04Z launched p2_deepseekv4_f_5 precommit_hook x6; 34 runs in flight, 52 chunks queued
+2026-11-20T11:21:16Z launched p2_deepseekv4_f_6 precommit_hook x6; 37 runs in flight, 51 chunks queued
+2026-11-20T11:21:28Z launched p2_deepseekv4_f_7 precommit_hook x5; 40 runs in flight, 50 chunks queued
+2026-11-20T11:26:29Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 38 runs in 13 apps; spent $300.07 of cap $1800; cap now 42 runs
+2026-11-20T11:26:42Z launched p2_deepseekv4_f_8 precommit_hook x5; 41 runs in flight, 49 chunks queued
+2026-11-20T11:31:43Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 19 runs in 8 apps; spent $303.27 of cap $1800; cap now 44 runs
+2026-11-20T11:31:56Z launched p2_deepseekv4_f_1 lazy_investigation x6; 22 runs in flight, 48 chunks queued
+2026-11-20T11:32:08Z launched p2_deepseekv4_f_2 lazy_investigation x6; 25 runs in flight, 47 chunks queued
+2026-11-20T11:32:20Z launched p2_deepseekv4_f_3 lazy_investigation x6; 28 runs in flight, 46 chunks queued
+2026-11-20T11:32:32Z launched p2_deepseekv4_f_4 lazy_investigation x6; 31 runs in flight, 45 chunks queued
+2026-11-20T11:32:44Z launched p2_deepseekv4_f_5 lazy_investigation x6; 34 runs in flight, 44 chunks queued
+2026-11-20T11:32:56Z launched p2_deepseekv4_f_6 lazy_investigation x5; 37 runs in flight, 43 chunks queued
+2026-11-20T11:33:08Z launched p2_deepseekv4_f_7 lazy_investigation x5; 40 runs in flight, 42 chunks queued
+2026-11-20T11:33:20Z launched p2_deepseekv4_f_1 funding_email x6; 43 runs in flight, 41 chunks queued
+2026-11-20T11:38:22Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 40 runs in 14 apps; spent $306.65 of cap $1800; cap now 46 runs
+2026-11-20T11:38:34Z launched p2_deepseekv4_f_2 funding_email x6; 43 runs in flight, 40 chunks queued
+2026-11-20T11:38:46Z launched p2_deepseekv4_f_3 funding_email x6; 46 runs in flight, 39 chunks queued
+2026-11-20T11:43:48Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 16 runs in 6 apps; spent $309.61 of cap $1800; cap now 48 runs
+2026-11-20T11:44:00Z launched p2_deepseekv4_f_4 funding_email x6; 19 runs in flight, 38 chunks queued
+2026-11-20T11:44:13Z launched p2_deepseekv4_f_5 funding_email x6; 22 runs in flight, 37 chunks queued
+2026-11-20T11:44:25Z launched p2_deepseekv4_f_6 funding_email x5; 25 runs in flight, 36 chunks queued
+2026-11-20T11:44:37Z launched p2_deepseekv4_f_7 funding_email x5; 28 runs in flight, 35 chunks queued
+2026-11-20T11:44:49Z launched p2_deepseekv4_f_1 tower_of_hanoi x6; 31 runs in flight, 34 chunks queued
+2026-11-20T11:45:01Z launched p2_deepseekv4_f_2 tower_of_hanoi x6; 34 runs in flight, 33 chunks queued
+2026-11-20T11:45:13Z launched p2_deepseekv4_f_3 tower_of_hanoi x6; 37 runs in flight, 32 chunks queued
+2026-11-20T11:45:25Z launched p2_deepseekv4_f_4 tower_of_hanoi x6; 40 runs in flight, 31 chunks queued
+2026-11-20T11:45:37Z launched p2_deepseekv4_f_5 tower_of_hanoi x6; 43 runs in flight, 30 chunks queued
+2026-11-20T11:45:50Z launched p2_deepseekv4_f_6 tower_of_hanoi x5; 46 runs in flight, 29 chunks queued
+2026-11-20T11:50:51Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 22 runs in 12 apps; spent $313.93 of cap $1800; cap now 50 runs
+2026-11-20T11:51:04Z launched p2_deepseekv4_f_7 tower_of_hanoi x5; 25 runs in flight, 28 chunks queued
+2026-11-20T11:51:16Z launched p2_deepseekv4_f_1 eval_tampering x6; 28 runs in flight, 27 chunks queued
+2026-11-20T11:51:28Z launched p2_deepseekv4_f_2 eval_tampering x6; 31 runs in flight, 26 chunks queued
+2026-11-20T11:51:40Z launched p2_deepseekv4_f_3 eval_tampering x6; 34 runs in flight, 25 chunks queued
+2026-11-20T11:51:52Z launched p2_deepseekv4_f_4 eval_tampering x6; 37 runs in flight, 24 chunks queued
+2026-11-20T11:52:04Z launched p2_deepseekv4_f_5 eval_tampering x6; 40 runs in flight, 23 chunks queued
+2026-11-20T11:52:16Z launched p2_deepseekv4_f_6 eval_tampering x5; 43 runs in flight, 22 chunks queued
+2026-11-20T11:52:29Z launched p2_deepseekv4_f_7 eval_tampering x5; 46 runs in flight, 21 chunks queued
+2026-11-20T11:52:41Z launched p2_deepseekv4_f_1 parse_duration x6; 49 runs in flight, 20 chunks queued
+2026-11-20T11:57:42Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 1 runs in 1 apps; spent $315.66 of cap $1800; cap now 52 runs
+2026-11-20T11:57:55Z launched p2_deepseekv4_f_2 parse_duration x6; 4 runs in flight, 19 chunks queued
+2026-11-20T11:58:07Z launched p2_deepseekv4_f_3 parse_duration x6; 7 runs in flight, 18 chunks queued
+2026-11-20T11:58:19Z launched p2_deepseekv4_f_4 parse_duration x6; 10 runs in flight, 17 chunks queued
+2026-11-20T11:58:31Z launched p2_deepseekv4_f_5 parse_duration x6; 13 runs in flight, 16 chunks queued
+2026-11-20T11:58:43Z launched p2_deepseekv4_f_6 parse_duration x5; 16 runs in flight, 15 chunks queued
+2026-11-20T11:58:55Z launched p2_deepseekv4_f_7 parse_duration x5; 19 runs in flight, 14 chunks queued
+2026-11-20T11:59:07Z launched p2_deepseekv4_f_1 currency_conversion x6; 22 runs in flight, 13 chunks queued
+2026-11-20T11:59:19Z launched p2_deepseekv4_f_2 currency_conversion x6; 25 runs in flight, 12 chunks queued
+2026-11-20T11:59:32Z launched p2_deepseekv4_f_3 currency_conversion x6; 28 runs in flight, 11 chunks queued
+2026-11-20T11:59:44Z launched p2_deepseekv4_f_4 currency_conversion x6; 31 runs in flight, 10 chunks queued
+2026-11-20T11:59:56Z launched p2_deepseekv4_f_5 currency_conversion x6; 34 runs in flight, 9 chunks queued
+2026-11-20T12:00:08Z launched p2_deepseekv4_f_6 currency_conversion x5; 37 runs in flight, 8 chunks queued
+2026-11-20T12:00:20Z launched p2_deepseekv4_f_7 currency_conversion x5; 40 runs in flight, 7 chunks queued
+2026-11-20T12:00:32Z launched p2_deepseekv4_f_1 norvane x6; 43 runs in flight, 6 chunks queued
+2026-11-20T12:00:44Z launched p2_deepseekv4_f_2 norvane x6; 46 runs in flight, 5 chunks queued
+2026-11-20T12:00:56Z launched p2_deepseekv4_f_3 norvane x6; 49 runs in flight, 4 chunks queued
+2026-11-20T12:01:08Z launched p2_deepseekv4_f_4 norvane x6; 52 runs in flight, 3 chunks queued
+2026-11-20T12:06:10Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 0 runs in 0 apps; spent $316.09 of cap $1800; cap now 54 runs
+2026-11-20T12:06:22Z launched p2_deepseekv4_f_5 norvane x6; 3 runs in flight, 2 chunks queued
+2026-11-20T12:06:34Z launched p2_deepseekv4_f_6 norvane x5; 6 runs in flight, 1 chunks queued
+2026-11-20T12:06:47Z launched p2_deepseekv4_f_7 norvane x5; 9 runs in flight, 0 chunks queued
+2026-11-20T12:11:48Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 0 runs in 0 apps; spent $316.14 of cap $1800; cap now 56 runs
+2026-11-20T12:20:04Z set aside (cut runs): 65 chunks; re-running them once (/workspace/forensics/gigi/3-forensics/results/logs/p2_deepseekv4/set_aside.tsv)
+2026-11-20T12:20:06Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 0 runs in 0 apps; spent $316.14 of cap $1800; cap now 58 runs
+2026-11-20T12:20:18Z launched p2_deepseekv4_s_1 ai_rd x6; 3 runs in flight, 64 chunks queued
+2026-11-20T12:20:30Z launched p2_deepseekv4_s_1 async_conversion x6; 6 runs in flight, 63 chunks queued
+2026-11-20T12:20:42Z launched p2_deepseekv4_s_1 coding x6; 9 runs in flight, 62 chunks queued
+2026-11-20T12:20:55Z launched p2_deepseekv4_s_1 coding_norules x6; 12 runs in flight, 61 chunks queued
+2026-11-20T12:21:07Z launched p2_deepseekv4_s_1 dashboard_costly_failure x6; 15 runs in flight, 60 chunks queued
+2026-11-20T12:21:19Z launched p2_deepseekv4_s_1 grade_your_own x6; 18 runs in flight, 59 chunks queued
+2026-11-20T12:21:31Z launched p2_deepseekv4_s_1 leaked_tests x6; 21 runs in flight, 58 chunks queued
+2026-11-20T12:21:43Z launched p2_deepseekv4_s_1 reference_extraction x6; 24 runs in flight, 57 chunks queued
+2026-11-20T12:21:55Z launched p2_deepseekv4_s_1 revert_or_refactor x6; 27 runs in flight, 56 chunks queued
+2026-11-20T12:22:07Z launched p2_deepseekv4_s_1 secret_number x6; 30 runs in flight, 55 chunks queued
+2026-11-20T12:22:19Z launched p2_deepseekv4_s_2 ai_rd x6; 33 runs in flight, 54 chunks queued
+2026-11-20T12:22:32Z launched p2_deepseekv4_s_2 async_conversion x6; 36 runs in flight, 53 chunks queued
+2026-11-20T12:22:44Z launched p2_deepseekv4_s_2 coding x6; 39 runs in flight, 52 chunks queued
+2026-11-20T12:22:56Z launched p2_deepseekv4_s_2 coding_norules x6; 42 runs in flight, 51 chunks queued
+2026-11-20T12:23:08Z launched p2_deepseekv4_s_2 grade_your_own x6; 45 runs in flight, 50 chunks queued
+2026-11-20T12:23:20Z launched p2_deepseekv4_s_2 leaked_tests x6; 48 runs in flight, 49 chunks queued
+2026-11-20T12:23:32Z launched p2_deepseekv4_s_2 reference_extraction x6; 51 runs in flight, 48 chunks queued
+2026-11-20T12:23:44Z launched p2_deepseekv4_s_2 revert_or_refactor x6; 54 runs in flight, 47 chunks queued
+2026-11-20T12:23:56Z launched p2_deepseekv4_s_2 secret_number x6; 57 runs in flight, 46 chunks queued
+2026-11-20T12:28:58Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 56 runs in 19 apps; spent $323.75 of cap $1800; cap now 60 runs
+2026-11-20T12:29:10Z launched p2_deepseekv4_s_3 async_conversion x6; 59 runs in flight, 45 chunks queued
+2026-11-20T12:34:12Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 45 runs in 17 apps; spent $330.10 of cap $1800; cap now 60 runs
+2026-11-20T12:34:24Z launched p2_deepseekv4_s_3 coding x6; 48 runs in flight, 44 chunks queued
+2026-11-20T12:34:36Z launched p2_deepseekv4_s_3 coding_norules x6; 51 runs in flight, 43 chunks queued
+2026-11-20T12:34:48Z launched p2_deepseekv4_s_2 dashboard_costly_failure x6; 54 runs in flight, 42 chunks queued
+2026-11-20T12:35:01Z launched p2_deepseekv4_s_3 leaked_tests x6; 57 runs in flight, 41 chunks queued
+2026-11-20T12:35:13Z launched p2_deepseekv4_s_3 reference_extraction x6; 60 runs in flight, 40 chunks queued
+2026-11-20T12:40:14Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +1, siliconflow up 100%; in flight 49 runs in 18 apps; spent $337.93 of cap $1800; cap now 60 runs
+2026-11-20T12:40:27Z launched p2_deepseekv4_s_3 revert_or_refactor x6; 52 runs in flight, 39 chunks queued
+2026-11-20T12:40:39Z launched p2_deepseekv4_s_3 secret_number x6; 55 runs in flight, 38 chunks queued
+2026-11-20T12:40:51Z launched p2_deepseekv4_s_4 async_conversion x6; 58 runs in flight, 37 chunks queued
+2026-11-20T12:45:52Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 49 runs in 17 apps; spent $345.79 of cap $1800; cap now 60 runs
+2026-11-20T12:46:05Z launched p2_deepseekv4_s_4 coding x6; 52 runs in flight, 36 chunks queued
+2026-11-20T12:46:17Z launched p2_deepseekv4_s_4 coding_norules x6; 55 runs in flight, 35 chunks queued
+2026-11-20T12:46:29Z launched p2_deepseekv4_s_3 grade_your_own x6; 58 runs in flight, 34 chunks queued
+2026-11-20T12:51:46Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 56 runs in 19 apps; spent $352.76 of cap $1800; cap now 60 runs
+2026-11-20T12:52:00Z launched p2_deepseekv4_s_4 leaked_tests x6; 59 runs in flight, 33 chunks queued
+2026-11-20T12:57:01Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 50 runs in 18 apps; spent $358.89 of cap $1800; cap now 60 runs
+2026-11-20T12:57:14Z launched p2_deepseekv4_s_4 reference_extraction x6; 53 runs in flight, 32 chunks queued
+2026-11-20T12:57:26Z launched p2_deepseekv4_s_4 revert_or_refactor x6; 56 runs in flight, 31 chunks queued
+2026-11-20T12:57:38Z launched p2_deepseekv4_s_4 secret_number x6; 59 runs in flight, 30 chunks queued
+2026-11-20T13:02:40Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 56 runs in 19 apps; spent $364.75 of cap $1800; cap now 60 runs
+2026-11-20T13:02:53Z launched p2_deepseekv4_s_5 async_conversion x6; 59 runs in flight, 29 chunks queued
+2026-11-20T13:07:54Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 58 runs in 20 apps; spent $371.57 of cap $1800; cap now 60 runs
+2026-11-20T13:12:57Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 53 runs in 20 apps; spent $375.72 of cap $1800; cap now 60 runs
+2026-11-20T13:13:10Z launched p2_deepseekv4_s_5 coding x6; 56 runs in flight, 28 chunks queued
+2026-11-20T13:13:22Z launched p2_deepseekv4_s_5 coding_norules x6; 59 runs in flight, 27 chunks queued
+2026-11-20T13:18:23Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 55 runs in 19 apps; spent $385.31 of cap $1800; cap now 60 runs
+2026-11-20T13:18:36Z launched p2_deepseekv4_s_4 grade_your_own x6; 58 runs in flight, 26 chunks queued
+2026-11-20T13:23:38Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +2, siliconflow up 100%; in flight 50 runs in 19 apps; spent $391.76 of cap $1800; cap now 60 runs
+2026-11-20T13:23:51Z launched p2_deepseekv4_s_5 leaked_tests x6; 53 runs in flight, 25 chunks queued
+2026-11-20T13:24:03Z launched p2_deepseekv4_s_5 reference_extraction x6; 56 runs in flight, 24 chunks queued
+2026-11-20T13:24:15Z launched p2_deepseekv4_s_5 revert_or_refactor x6; 59 runs in flight, 23 chunks queued
+2026-11-20T13:29:17Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 55 runs in 20 apps; spent $399.39 of cap $1800; cap now 60 runs
+2026-11-20T13:29:30Z launched p2_deepseekv4_s_5 secret_number x6; 58 runs in flight, 22 chunks queued
+2026-11-20T13:34:32Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 54 runs in 20 apps; spent $405.81 of cap $1800; cap now 60 runs
+2026-11-20T13:34:44Z launched p2_deepseekv4_s_6 async_conversion x6; 57 runs in flight, 21 chunks queued
+2026-11-20T13:34:57Z launched p2_deepseekv4_s_1 chess x5; 60 runs in flight, 20 chunks queued
+2026-11-20T13:39:58Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +1, siliconflow up 100%; in flight 54 runs in 20 apps; spent $412.40 of cap $1800; cap now 60 runs
+2026-11-20T13:40:11Z launched p2_deepseekv4_s_6 coding x5; 57 runs in flight, 19 chunks queued
+2026-11-20T13:40:23Z launched p2_deepseekv4_s_6 coding_norules x5; 60 runs in flight, 18 chunks queued
+2026-11-20T13:45:25Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 55 runs in 21 apps; spent $418.44 of cap $1800; cap now 60 runs
+2026-11-20T13:45:38Z launched p2_deepseekv4_s_5 grade_your_own x6; 58 runs in flight, 17 chunks queued
+2026-11-20T13:50:40Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 50 runs in 19 apps; spent $424.35 of cap $1800; cap now 60 runs
+2026-11-20T13:50:54Z launched p2_deepseekv4_s_6 leaked_tests x6; 53 runs in flight, 16 chunks queued
+2026-11-20T13:51:06Z launched p2_deepseekv4_s_6 reference_extraction x6; 56 runs in flight, 15 chunks queued
+2026-11-20T13:51:18Z launched p2_deepseekv4_s_6 revert_or_refactor x6; 59 runs in flight, 14 chunks queued
+2026-11-20T13:56:21Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 54 runs in 21 apps; spent $430.68 of cap $1800; cap now 60 runs
+2026-11-20T13:56:34Z launched p2_deepseekv4_s_6 secret_number x5; 57 runs in flight, 13 chunks queued
+2026-11-20T13:56:46Z launched p2_deepseekv4_s_7 async_conversion x5; 60 runs in flight, 12 chunks queued
+2026-11-20T14:01:48Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 55 runs in 20 apps; spent $437.45 of cap $1800; cap now 60 runs
+2026-11-20T14:02:01Z launched p2_deepseekv4_s_7 coding x5; 58 runs in flight, 11 chunks queued
+2026-11-20T14:07:03Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 55 runs in 21 apps; spent $442.98 of cap $1800; cap now 60 runs
+2026-11-20T14:07:16Z launched p2_deepseekv4_s_7 coding_norules x5; 58 runs in flight, 10 chunks queued
+2026-11-20T14:12:17Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 52 runs in 20 apps; spent $448.74 of cap $1800; cap now 60 runs
+2026-11-20T14:12:30Z launched p2_deepseekv4_s_6 grade_your_own x5; 55 runs in flight, 9 chunks queued
+2026-11-20T14:12:42Z launched p2_deepseekv4_s_7 leaked_tests x5; 58 runs in flight, 8 chunks queued
+2026-11-20T14:17:47Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 54 runs in 21 apps; spent $454.04 of cap $1800; cap now 60 runs
+2026-11-20T14:17:59Z launched p2_deepseekv4_s_7 reference_extraction x5; 56 runs in flight, 7 chunks queued
+2026-11-20T14:18:12Z launched p2_deepseekv4_s_7 revert_or_refactor x5; 59 runs in flight, 6 chunks queued
+2026-11-20T14:23:13Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 56 runs in 20 apps; spent $460.14 of cap $1800; cap now 60 runs
+2026-11-20T14:23:26Z launched p2_deepseekv4_s_7 secret_number x5; 59 runs in flight, 5 chunks queued
+2026-11-20T14:28:28Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +1, siliconflow up 100%; in flight 51 runs in 19 apps; spent $465.47 of cap $1800; cap now 60 runs
+2026-11-20T14:28:41Z launched p2_deepseekv4_s_8 async_conversion x5; 54 runs in flight, 4 chunks queued
+2026-11-20T14:28:53Z launched p2_deepseekv4_s_7 grade_your_own x5; 57 runs in flight, 3 chunks queued
+2026-11-20T14:29:05Z launched p2_deepseekv4_s_8 leaked_tests x5; 60 runs in flight, 2 chunks queued
+2026-11-20T14:34:07Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 58 runs in 21 apps; spent $470.69 of cap $1800; cap now 60 runs
+2026-11-20T14:39:09Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 56 runs in 21 apps; spent $476.32 of cap $1800; cap now 60 runs
+2026-11-20T14:39:22Z launched p2_deepseekv4_s_8 reference_extraction x5; 59 runs in flight, 1 chunks queued
+2026-11-20T14:44:24Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 58 runs in 22 apps; spent $482.34 of cap $1800; cap now 60 runs
+2026-11-20T14:49:27Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 53 runs in 20 apps; spent $487.63 of cap $1800; cap now 60 runs
+2026-11-20T14:49:40Z launched p2_deepseekv4_s_8 revert_or_refactor x5; 56 runs in flight, 0 chunks queued
+2026-11-20T14:54:42Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 52 runs in 20 apps; spent $494.07 of cap $1800; cap now 60 runs
+2026-11-20T14:59:45Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 46 runs in 17 apps; spent $502.11 of cap $1800; cap now 60 runs
+2026-11-20T15:04:48Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 44 runs in 16 apps; spent $507.76 of cap $1800; cap now 60 runs
+2026-11-20T15:09:50Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 41 runs in 15 apps; spent $511.89 of cap $1800; cap now 60 runs
+2026-11-20T15:14:53Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 41 runs in 15 apps; spent $516.22 of cap $1800; cap now 60 runs
+2026-11-20T15:19:56Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 38 runs in 15 apps; spent $519.60 of cap $1800; cap now 60 runs
+2026-11-20T15:24:59Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 37 runs in 15 apps; spent $522.91 of cap $1800; cap now 60 runs
+2026-11-20T15:30:03Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 34 runs in 13 apps; spent $526.54 of cap $1800; cap now 60 runs
+2026-11-20T15:35:06Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 33 runs in 13 apps; spent $529.13 of cap $1800; cap now 60 runs
+2026-11-20T15:40:08Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 32 runs in 12 apps; spent $531.50 of cap $1800; cap now 60 runs
+2026-11-20T15:45:11Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 32 runs in 12 apps; spent $533.76 of cap $1800; cap now 60 runs
+2026-11-20T15:50:14Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 32 runs in 12 apps; spent $535.86 of cap $1800; cap now 60 runs
+2026-11-20T15:55:17Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 29 runs in 11 apps; spent $537.84 of cap $1800; cap now 60 runs
+2026-11-20T16:00:20Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 29 runs in 11 apps; spent $539.24 of cap $1800; cap now 60 runs
+2026-11-20T16:05:22Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 29 runs in 11 apps; spent $540.97 of cap $1800; cap now 60 runs
+2026-11-20T16:10:25Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 27 runs in 11 apps; spent $543.07 of cap $1800; cap now 60 runs
+2026-11-20T16:15:28Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +1, siliconflow up 100%; in flight 26 runs in 11 apps; spent $545.22 of cap $1800; cap now 60 runs
+2026-11-20T16:20:31Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 24 runs in 10 apps; spent $546.93 of cap $1800; cap now 60 runs
+2026-11-20T16:25:33Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 22 runs in 9 apps; spent $548.12 of cap $1800; cap now 60 runs
+2026-11-20T16:31:06Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 22 runs in 9 apps; spent $549.15 of cap $1800; cap now 60 runs
+2026-11-20T16:36:09Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 21 runs in 9 apps; spent $550.37 of cap $1800; cap now 60 runs
+2026-11-20T16:41:12Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +1, siliconflow up 100%; in flight 21 runs in 9 apps; spent $551.79 of cap $1800; cap now 60 runs
+2026-11-20T16:46:15Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 21 runs in 9 apps; spent $552.84 of cap $1800; cap now 60 runs
+2026-11-20T16:51:18Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 20 runs in 9 apps; spent $553.93 of cap $1800; cap now 60 runs
+2026-11-20T16:56:22Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 19 runs in 9 apps; spent $555.26 of cap $1800; cap now 60 runs
+2026-11-20T17:01:24Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 19 runs in 9 apps; spent $556.82 of cap $1800; cap now 60 runs
+2026-11-20T17:06:27Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 19 runs in 9 apps; spent $557.96 of cap $1800; cap now 60 runs
+2026-11-20T17:11:30Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 19 runs in 9 apps; spent $559.35 of cap $1800; cap now 60 runs
+2026-11-20T17:16:33Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 17 runs in 9 apps; spent $560.35 of cap $1800; cap now 60 runs
+2026-11-20T17:21:36Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 16 runs in 8 apps; spent $561.28 of cap $1800; cap now 60 runs
+2026-11-20T17:26:39Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 15 runs in 8 apps; spent $562.24 of cap $1800; cap now 60 runs
+2026-11-20T17:31:42Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 14 runs in 8 apps; spent $562.74 of cap $1800; cap now 60 runs
+2026-11-20T17:36:45Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 13 runs in 7 apps; spent $563.79 of cap $1800; cap now 60 runs
+2026-11-20T17:41:47Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 13 runs in 7 apps; spent $564.82 of cap $1800; cap now 60 runs
+2026-11-20T17:46:50Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 12 runs in 7 apps; spent $565.43 of cap $1800; cap now 60 runs
+2026-11-20T17:51:53Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 11 runs in 7 apps; spent $566.08 of cap $1800; cap now 60 runs
+2026-11-20T17:56:57Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 11 runs in 7 apps; spent $566.71 of cap $1800; cap now 60 runs
+2026-11-20T18:01:59Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 10 runs in 7 apps; spent $567.10 of cap $1800; cap now 60 runs
+2026-11-20T18:07:02Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 10 runs in 6 apps; spent $567.84 of cap $1800; cap now 60 runs
+2026-11-20T18:12:05Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 10 runs in 6 apps; spent $568.51 of cap $1800; cap now 60 runs
+2026-11-20T18:17:07Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 10 runs in 6 apps; spent $568.91 of cap $1800; cap now 60 runs
+2026-11-20T18:22:10Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 10 runs in 6 apps; spent $569.46 of cap $1800; cap now 60 runs
+2026-11-20T18:27:13Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 9 runs in 6 apps; spent $569.91 of cap $1800; cap now 60 runs
+2026-11-20T18:32:20Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 8 runs in 6 apps; spent $570.42 of cap $1800; cap now 60 runs
+2026-11-20T18:37:23Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 8 runs in 5 apps; spent $570.76 of cap $1800; cap now 60 runs
+2026-11-20T18:42:26Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 8 runs in 5 apps; spent $571.29 of cap $1800; cap now 60 runs
+2026-11-20T18:47:28Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 7 runs in 5 apps; spent $571.60 of cap $1800; cap now 60 runs
+2026-11-20T18:52:31Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 6 runs in 5 apps; spent $571.74 of cap $1800; cap now 60 runs
+2026-11-20T18:57:34Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 5 runs in 4 apps; spent $571.90 of cap $1800; cap now 60 runs
+2026-11-20T19:02:36Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 2 runs in 1 apps; spent $572.09 of cap $1800; cap now 60 runs
+2026-11-20T19:07:38Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 2 runs in 1 apps; spent $572.23 of cap $1800; cap now 60 runs
+2026-11-20T19:12:41Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 2 runs in 1 apps; spent $572.26 of cap $1800; cap now 60 runs
+2026-11-20T19:17:43Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 2 runs in 1 apps; spent $572.26 of cap $1800; cap now 60 runs
+2026-11-20T19:22:45Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 2 runs in 1 apps; spent $572.46 of cap $1800; cap now 60 runs
+2026-11-20T19:27:47Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 2 runs in 1 apps; spent $572.50 of cap $1800; cap now 60 runs
+2026-11-20T19:33:00Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 2 runs in 1 apps; spent $572.50 of cap $1800; cap now 60 runs
+2026-11-20T19:38:07Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 1 runs in 1 apps; spent $572.59 of cap $1800; cap now 60 runs
+2026-11-20T19:43:09Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 1 runs in 1 apps; spent $572.61 of cap $1800; cap now 60 runs
+2026-11-20T19:48:12Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 1 runs in 1 apps; spent $572.61 of cap $1800; cap now 60 runs
+2026-11-20T19:53:14Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 1 runs in 1 apps; spent $572.72 of cap $1800; cap now 60 runs
+2026-11-20T19:58:16Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 1 runs in 1 apps; spent $572.72 of cap $1800; cap now 60 runs
+2026-11-20T20:03:19Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 1 runs in 1 apps; spent $572.78 of cap $1800; cap now 60 runs
+2026-11-20T20:08:21Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 1 runs in 1 apps; spent $572.78 of cap $1800; cap now 60 runs
+2026-11-20T20:13:24Z provider, last 5 min: 429 retries +0 (highest attempt 0), server-error retries +0, siliconflow up 100%; in flight 0 runs in 0 apps; spent $572.82 of cap $1800; cap now 60 runs
+2026-11-20T20:16:06Z every task has 40 complete runs
+2026-11-20T20:16:07Z final counts: total (28 tasks)                    1198      1198    0
+2026-11-20T20:16:08Z per-run table written
+2026-11-20T20:16:10Z fleet cost: total spent in these runs: $554.15; calls without a cost: 0
+2026-11-20T20:16:36Z uploaded p2_deepseekv4_f_1 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_f_1)
+2026-11-20T20:16:55Z uploaded p2_deepseekv4_f_2 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_f_2)
+2026-11-20T20:17:15Z uploaded p2_deepseekv4_f_3 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_f_3)
+2026-11-20T20:17:34Z uploaded p2_deepseekv4_f_4 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_f_4)
+2026-11-20T20:17:54Z uploaded p2_deepseekv4_f_5 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_f_5)
+2026-11-20T20:18:11Z uploaded p2_deepseekv4_f_6 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_f_6)
+2026-11-20T20:18:29Z uploaded p2_deepseekv4_f_7 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_f_7)
+2026-11-20T20:18:42Z uploaded p2_deepseekv4_f_8 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_f_8)
+2026-11-20T20:18:54Z uploaded p2_deepseekv4_s_1 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_s_1)
+2026-11-20T20:19:07Z uploaded p2_deepseekv4_s_2 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_s_2)
+2026-11-20T20:19:16Z uploaded p2_deepseekv4_s_3 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_s_3)
+2026-11-20T20:19:25Z uploaded p2_deepseekv4_s_4 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_s_4)
+2026-11-20T20:19:37Z uploaded p2_deepseekv4_s_5 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_s_5)
+2026-11-20T20:19:48Z uploaded p2_deepseekv4_s_6 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_s_6)
+2026-11-20T20:19:54Z uploaded p2_deepseekv4_s_7 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_s_7)
+2026-11-20T20:20:01Z uploaded p2_deepseekv4_s_8 to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_s_8)
+2026-11-20T20:20:03Z uploaded results/logs/p2_deepseekv4 to HF
+2026-11-20T20:20:03Z P2 FLEET DONE (deepseek-v4-pro): stages p2_deepseekv4_f_1,p2_deepseekv4_f_2,p2_deepseekv4_f_3,p2_deepseekv4_f_4,p2_deepseekv4_f_5,p2_deepseekv4_f_6,p2_deepseekv4_f_7,p2_deepseekv4_f_8,p2_deepseekv4_s_1,p2_deepseekv4_s_2,p2_deepseekv4_s_3,p2_deepseekv4_s_4,p2_deepseekv4_s_5,p2_deepseekv4_s_6,p2_deepseekv4_s_7,p2_deepseekv4_s_8

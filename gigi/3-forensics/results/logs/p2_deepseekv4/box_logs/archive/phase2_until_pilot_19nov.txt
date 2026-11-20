@@ -1,0 +1,28 @@
+2026-11-19T09:48:12Z START phase 2 pilot: deepseek-v4-pro pinned to siliconflow, smoke then 2 runs per task, spend cap $300
+t=1795081694 key_usage=5967.645284299 key_limit=10000 key_limit_remaining=4032.354715701 account_remaining=3664.77
+2026-11-19T09:48:14Z smoke launched: 6 runs (p2_deepseekv4_smoke)
+2026-11-19T09:48:20Z smoke passed: 6 of 6 runs pass; cost: total spent in these runs: $0.53; calls without a cost: 0
+2026-11-19T09:53:59Z pilot launched: 2 runs x 28 tasks (p2_deepseekv4_pilot)
+2026-11-19T09:53:59Z in flight: 33 runs in 21 apps; spent $1.73 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T09:59:00Z in flight: 28 runs in 15 apps; spent $3.81 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:04:01Z in flight: 24 runs in 13 apps; spent $5.78 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:09:02Z in flight: 20 runs in 11 apps; spent $7.33 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:14:02Z in flight: 19 runs in 10 apps; spent $8.94 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:19:03Z in flight: 15 runs in 8 apps; spent $10.58 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:24:04Z in flight: 14 runs in 8 apps; spent $12.48 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:29:05Z in flight: 9 runs in 7 apps; spent $13.99 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:34:06Z in flight: 8 runs in 6 apps; spent $14.76 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:39:06Z in flight: 7 runs in 5 apps; spent $15.92 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:44:07Z in flight: 6 runs in 5 apps; spent $16.56 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:49:08Z in flight: 6 runs in 5 apps; spent $17.31 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:54:09Z in flight: 5 runs in 4 apps; spent $18.22 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T10:59:09Z in flight: 2 runs in 2 apps; spent $18.65 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T11:04:10Z in flight: 2 runs in 2 apps; spent $18.87 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T11:09:11Z in flight: 1 runs in 1 apps; spent $19.08 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T11:14:12Z in flight: 1 runs in 1 apps; spent $19.08 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T11:19:12Z in flight: 1 runs in 1 apps; spent $19.13 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T11:24:13Z in flight: 1 runs in 1 apps; spent $19.19 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T11:29:14Z in flight: 1 runs in 1 apps; spent $19.19 of cap $300; 429 retries +0 in 5 min (highest attempt 0)
+2026-11-19T11:34:59Z uploaded p2_deepseekv4_smoke to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_smoke)
+2026-11-19T11:35:18Z uploaded p2_deepseekv4_pilot to HF (phase2/deepseek-v4-pro/raw/p2_deepseekv4_pilot)
+2026-11-19T11:35:18Z PILOT DONE (deepseek-v4-pro): total spent in these runs: $19.14; calls without a cost: 0; projection, 46 runs per task over 28 tasks (mean cost per run): $431; ended: total (28 tasks)                      56        54    2

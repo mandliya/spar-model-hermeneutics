@@ -2,12 +2,14 @@
 
 Kept in git so they survive a lost session. Delete a line when it's done.
 
-## Phase 2 budget (19 Nov 2026): needs John (GitHub issue #1)
+## Phase 2 budget (updated 20 Nov 2026): John's top-ups arrived (GitHub issue #1)
 
-Five teacher models distilled into Qwen3.6 27B: ~$10,300 in total, ~$6,200 of it new money (DeepSeek measured in
-its pilot at about a third of the first estimate). John: top up Vast ~$400 now, check the OpenRouter workspace
-lifetime budget has ~$5,650 of room, raise the key limit to ~$15,000 and add ~$600 of credit before Kimi K3.
-Full table, balances and sources, updated after every stage: `3-forensics/phase2/BUDGET.md`.
+Five teacher models distilled into Qwen3.6 27B: ~$10,500 in total. John raised the key limit to $15,000 and added ~$2,000
+OpenRouter credit and ~$400 on Vast (20 Nov), so ~$4,070 of new money is still needed over the period (Vast ~$550 per
+model from Qwen3-Next on, ~$200 OpenRouter before GLM 5.3, Modal billed monthly). DeepSeek V4 Pro collection done
+20 Nov: 1,198 of 1,198 runs, $573 OpenRouter + $216 Modal. Open: 11 runs exceed Qwen3.6's 262k window
+(reference_extraction 8, leaked_tests 3) and half the runs exceed the 32k training cut: decide in the training plan.
+Full table: `3-forensics/phase2/BUDGET.md`.
 
 ## Direction from the 22 Oct 2026 call with John: validate the swap before distillation
 

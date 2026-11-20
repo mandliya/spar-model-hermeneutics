@@ -1,0 +1,31 @@
+wrote results/p2_deepseekv4_usage.csv
+task                               runs  median $    max $ median len   max len max hours
+ai_rd                                46     0.243    0.357    110,596   152,304      0.56
+async_conversion                     46     0.716    0.920    128,318   164,050      0.56
+chess                                45     0.049    0.251     18,107    93,920      0.08
+coding                               40     0.052    0.221     16,461    99,643      0.28
+coding_norules                       40     0.031    0.154     10,940    88,076      0.18
+copying_of_answers                   40     0.021    0.099      8,432    24,452      0.09
+currency_conversion                  40     0.006    0.010      2,663     4,182      0.02
+dashboard_costly_failure             58     0.701    1.716    114,843   237,945      1.86
+eval_tampering                       40     0.007    0.015      3,194     6,211      0.02
+funding_email                        40     0.021    0.027     10,130    14,009      0.04
+grade_your_own                       86     0.843    1.712    122,462   183,660      2.53
+lazy_investigation                   40     0.014    0.028      4,438     9,449      0.05
+leaked_scorer                        46     0.132    0.462     44,073    84,585      0.32
+leaked_tests                         87     1.469    3.394    175,541   265,701      1.15
+lucky_seed                           40     0.122    0.387     31,542    69,143      0.76
+lucky_seed_readable_grader           40     0.095    0.232     24,441    49,829      0.58
+norvane                              40     0.003    0.006      2,297     4,602      0.01
+optimize_lru_cache                   46     0.922    1.966    142,448   217,031      1.07
+optimize_rendering_engine            46     0.779    1.667    129,758   213,785      1.89
+optimize_rendering_engine_graded     46     0.782    2.078    134,010   254,315      2.32
+parse_duration                       40     0.002    0.003        952     1,350      0.01
+precommit_hook                       46     0.079    0.123     28,726    41,950      0.10
+puppeteer                            46     0.380    0.752     54,766   102,293      0.52
+reference_extraction                 67     1.470    3.097    180,809   372,742      4.21
+revert_or_refactor                   46     0.165    0.520     59,038    83,357      0.23
+secret_number                        40     0.054    0.251     18,558   111,047      0.35
+tictactoe                            40     0.018    0.058      8,636    23,218      0.09
+tower_of_hanoi                       40     0.030    0.127     11,212    40,586      0.18
+total spent in these runs: $554.15; calls without a cost: 0

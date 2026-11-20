@@ -1,0 +1,66 @@
+# stage	task	reason (phase2_fleet.sh set-aside rule: a run cut by our or the provider's failure)
+p2_deepseekv4_f_1	ai_rd	run-1: provider server error; run-4: provider server error; run-2: provider server error; run-5: provider server error; run-3: provider server error; run-6: provider server error
+p2_deepseekv4_f_1	async_conversion	run-2: provider server error; run-1: provider server error; run-4: provider server error; run-5: provider server error; run-3: provider server error; run-6: provider server error
+p2_deepseekv4_f_1	coding	run-5: provider server error; run-3: provider server error; run-1: provider server error; run-2: provider server error; run-6: provider server error; run-4: provider server error
+p2_deepseekv4_f_1	coding_norules	run-1: provider server error; run-2: provider server error; run-4: provider server error; run-3: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_1	dashboard_costly_failure	run-6: provider server error
+p2_deepseekv4_f_1	grade_your_own	run-4: provider server error
+p2_deepseekv4_f_1	leaked_tests	run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_1	reference_extraction	run-1: provider server error; run-2: provider server error; run-4: provider server error; run-3: provider server error; run-6: provider server error; run-5: provider server error
+p2_deepseekv4_f_1	revert_or_refactor	run-2: provider server error; run-4: provider server error; run-1: provider server error; run-3: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_1	secret_number	run-1: provider server error; run-2: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_2	ai_rd	run-1: provider server error; run-4: provider server error; run-3: provider server error; run-2: provider server error; run-6: provider server error; run-5: provider server error
+p2_deepseekv4_f_2	async_conversion	run-2: provider server error; run-1: provider server error; run-6: provider server error; run-5: provider server error; run-4: provider server error; run-3: provider server error
+p2_deepseekv4_f_2	coding	run-1: provider server error; run-2: provider server error; run-5: provider server error; run-3: provider server error; run-4: provider server error; run-6: provider server error
+p2_deepseekv4_f_2	coding_norules	run-2: provider server error; run-1: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_2	grade_your_own	run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_2	leaked_tests	run-1: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_2	reference_extraction	run-1: provider server error; run-2: provider server error; run-4: provider server error; run-3: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_2	revert_or_refactor	run-1: provider server error; run-3: provider server error; run-2: provider server error; run-4: provider server error; run-6: provider server error; run-5: provider server error
+p2_deepseekv4_f_2	secret_number	run-2: provider server error; run-3: provider server error; run-1: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_3	async_conversion	run-3: provider server error; run-2: provider server error; run-5: provider server error; run-6: provider server error; run-4: provider server error; run-1: provider server error
+p2_deepseekv4_f_3	coding	run-3: provider server error; run-2: provider server error; run-4: provider server error; run-1: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_3	coding_norules	run-2: provider server error; run-4: provider server error; run-6: provider server error; run-1: provider server error; run-5: provider server error; run-3: provider server error
+p2_deepseekv4_f_3	dashboard_costly_failure	run-6: provider server error
+p2_deepseekv4_f_3	leaked_tests	run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_3	reference_extraction	run-2: provider server error; run-3: provider server error; run-1: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_3	revert_or_refactor	run-1: provider server error; run-2: provider server error; run-3: provider server error; run-6: provider server error; run-4: provider server error; run-5: provider server error
+p2_deepseekv4_f_3	secret_number	run-1: provider server error; run-3: provider server error; run-2: provider server error; run-5: provider server error; run-4: provider server error; run-6: provider server error
+p2_deepseekv4_f_4	async_conversion	run-4: provider server error; run-2: provider server error; run-1: provider server error; run-5: provider server error; run-3: provider server error; run-6: provider server error
+p2_deepseekv4_f_4	coding	run-1: provider server error; run-3: provider server error; run-2: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_4	coding_norules	run-3: provider server error; run-1: provider server error; run-2: provider server error; run-5: provider server error; run-6: provider server error; run-4: provider server error
+p2_deepseekv4_f_4	grade_your_own	run-4: provider server error
+p2_deepseekv4_f_4	leaked_tests	run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_4	reference_extraction	run-3: provider server error; run-1: provider server error; run-2: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_4	revert_or_refactor	run-5: provider server error; run-1: provider server error; run-4: provider server error; run-3: provider server error; run-6: provider server error; run-2: provider server error
+p2_deepseekv4_f_4	secret_number	run-3: provider server error; run-1: provider server error; run-2: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_5	async_conversion	run-6: provider server error; run-3: provider server error; run-1: provider server error; run-2: provider server error; run-4: provider server error; run-5: provider server error
+p2_deepseekv4_f_5	coding	run-3: provider server error; run-1: provider server error; run-2: provider server error; run-4: provider server error; run-6: provider server error; run-5: provider server error
+p2_deepseekv4_f_5	coding_norules	run-1: provider server error; run-2: provider server error; run-3: provider server error; run-5: provider server error; run-4: provider server error; run-6: provider server error
+p2_deepseekv4_f_5	grade_your_own	run-2: provider server error; run-6: provider server error
+p2_deepseekv4_f_5	leaked_tests	run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_5	reference_extraction	run-1: provider server error; run-2: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_5	revert_or_refactor	run-1: provider server error; run-2: provider server error; run-5: provider server error; run-3: provider server error; run-6: provider server error; run-4: provider server error
+p2_deepseekv4_f_5	secret_number	run-2: provider server error; run-1: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_6	async_conversion	run-1: provider server error; run-6: provider server error; run-2: provider server error; run-5: provider server error; run-4: provider server error; run-3: provider server error
+p2_deepseekv4_f_6	chess	run-3: cut off by the time limit
+p2_deepseekv4_f_6	coding	run-1: provider server error; run-2: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error
+p2_deepseekv4_f_6	coding_norules	run-1: provider server error; run-4: provider server error; run-2: provider server error; run-3: provider server error; run-5: provider server error
+p2_deepseekv4_f_6	grade_your_own	run-4: provider server error
+p2_deepseekv4_f_6	leaked_tests	run-1: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_6	reference_extraction	run-1: provider server error; run-2: provider server error; run-3: provider server error; run-4: provider server error; run-6: provider server error; run-5: provider server error
+p2_deepseekv4_f_6	revert_or_refactor	run-1: provider server error; run-3: provider server error; run-2: provider server error; run-4: provider server error; run-5: provider server error; run-6: provider server error
+p2_deepseekv4_f_6	secret_number	run-2: provider server error; run-1: provider server error; run-4: provider server error; run-3: provider server error; run-5: provider server error
+p2_deepseekv4_f_7	async_conversion	run-2: provider server error; run-1: provider server error; run-3: provider server error; run-5: provider server error; run-4: provider server error
+p2_deepseekv4_f_7	coding	run-1: provider server error; run-4: provider server error; run-2: provider server error; run-3: provider server error; run-5: provider server error
+p2_deepseekv4_f_7	coding_norules	run-1: provider server error; run-2: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error
+p2_deepseekv4_f_7	grade_your_own	run-5: provider server error
+p2_deepseekv4_f_7	leaked_tests	run-4: provider server error; run-5: provider server error
+p2_deepseekv4_f_7	reference_extraction	run-1: provider server error; run-2: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error
+p2_deepseekv4_f_7	revert_or_refactor	run-1: provider server error; run-2: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error
+p2_deepseekv4_f_7	secret_number	run-2: provider server error; run-1: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error
+p2_deepseekv4_f_8	async_conversion	run-3: provider server error; run-4: provider server error; run-1: provider server error; run-5: provider server error; run-2: provider server error
+p2_deepseekv4_f_8	grade_your_own	run-1: provider server error; run-5: provider server error
+p2_deepseekv4_f_8	leaked_tests	run-1: provider server error; run-2: provider server error; run-4: provider server error; run-5: provider server error; run-3: provider server error
+p2_deepseekv4_f_8	reference_extraction	run-1: provider server error; run-4: provider server error; run-2: provider server error; run-3: provider server error; run-5: provider server error
+p2_deepseekv4_f_8	revert_or_refactor	run-1: provider server error; run-2: provider server error; run-3: provider server error; run-4: provider server error; run-5: provider server error
