@@ -12,6 +12,7 @@ the same-spot value minus the chance level. A checkpoint is also compared with b
 change in (same spot minus chance), so the interval is about the change itself; the change in the same-spot value
 alone is printed beside it, because a checkpoint can also drift towards Qwen3.6's words at every spot (chance moves).
 "Moved from base" is how far a checkpoint's words are from base gemma's own at the same spot.
+For scale, the original is also scored against itself at each depth (added 20 Nov): the most a version could reach.
 Lens fit check: near the last layer, how often the lens's top token is the model's own top next token, per version;
 and, added after seeing how rarely that holds even for base gemma, how much the lens's top-200 tokens overlap the
 model's own top-200 next tokens.
@@ -23,6 +24,7 @@ from __future__ import annotations
 
 import collections
 import json
+import os
 import pathlib
 import sys
 
@@ -34,11 +36,16 @@ from shared import models, readout, words  # noqa: E402
 
 EXPERIMENT = "distillation_similarity"
 ORIGINAL = "qwen3.6-27b"
-VERSIONS = ["gemma-3-27b-it", *models.DISTILLED]
+# SIMILARITY_VERSIONS (comma-separated, base gemma first) scores another set of reads, e.g. the own-lens re-reads
+# (own_lens/reread.py); SIMILARITY_SUFFIX then names the result files, e.g. "_own_lens" -> similarity_own_lens.json.
+VERSIONS = os.environ["SIMILARITY_VERSIONS"].split(",") if os.environ.get("SIMILARITY_VERSIONS") else ["gemma-3-27b-it", *models.DISTILLED]
+SUFFIX = os.environ.get("SIMILARITY_SUFFIX", "")
 FIT_DEPTH = 0.95
 
 
 def load(tag: str, kind: str) -> dict[str, dict]:
+    if kind == "nla":   # a re-read (own_lens/reread.py, saved as <model>.<name>) changes only the lens words
+        tag = max((m for m in models.MODELS if tag == m or tag.startswith(m + ".")), key=len)
     d = models.OUT / EXPERIMENT / tag / kind
     return {p.stem: json.loads(p.read_text()) for p in d.glob("*.json")}
 
@@ -60,9 +67,17 @@ def spot_groups(common: list[str]) -> dict[str, list[str]]:
     """The spots every model read: all of them, the tasks the distillation trained on, the three it held out, and each
     held-out task on its own (added 14 Nov: the three do not move alike)."""
     env = {s.name: s.env for s in spots.spots()}
+    src = {s.name: s.src for s in spots.spots()}
     groups = {"all spots": common, "trained tasks": [n for n in common if env[n] not in spots.HELD_OUT],
               "held-out tasks": [n for n in common if env[n] in spots.HELD_OUT]}
-    return groups | {f"held-out task {task}": [n for n in common if env[n] == task] for task in spots.HELD_OUT}
+    groups |= {f"held-out task {task}": [n for n in common if env[n] == task] for task in spots.HELD_OUT}
+    # Added 17 Nov after Gigi's 16 Nov corrections (gigi/3-forensics/DISTILLATION.md): in gemma's own eval tampering
+    # runs gemma never read the note, so those restart points have no real hiding moment; Qwen3.6's runs do.
+    for who, label in (("qwen36", "Qwen3.6's runs"), ("gemma", "gemma's runs")):
+        groups[f"eval_tampering points from {label}"] = [n for n in common if env[n] == "eval_tampering" and src[n] == who]
+    groups["all spots but eval_tampering from gemma's runs"] = [
+        n for n in common if not (env[n] == "eval_tampering" and src[n] == "gemma")]
+    return groups
 
 
 def grouped(kind: str, v: str, names: list[str], groups: dict[str, list[str]], same: np.ndarray, chance: np.ndarray,
@@ -76,8 +91,10 @@ def grouped(kind: str, v: str, names: list[str], groups: dict[str, list[str]], s
     return out
 
 
-def nla_counts(reads: dict[str, dict]) -> dict[str, collections.Counter]:
-    return {name: collections.Counter(words.text_words([s["explanation"] for s in r["positions"]["before_action"]]))
+def nla_counts(reads: dict[str, dict], sentences: set[int] | None = None) -> dict[str, collections.Counter]:
+    """Per spot, the word counts of its NLA explanations. `sentences`: only these of the five (None: all of them)."""
+    return {name: collections.Counter(words.text_words([s["explanation"] for i, s in enumerate(r["positions"]["before_action"])
+                                                        if sentences is None or i in sentences]))
             for name, r in reads.items()}
 
 
@@ -109,7 +126,7 @@ def line(kind: str, v: str, group: str, r: dict) -> str:
 
 def main() -> None:
     result: dict = {"original": ORIGINAL, "versions": VERSIONS, "held_out_tasks": list(spots.HELD_OUT), "jspace": {},
-                    "nla": {}, "lens_fit": {}, "moved_from_base": {}}
+                    "original_against_itself": {}, "nla": {}, "lens_fit": {}, "moved_from_base": {}}
     orig_lens, lens = load(ORIGINAL, "lens"), {v: load(v, "lens") for v in VERSIONS}
     orig_nla, nla = load(ORIGINAL, "nla"), {v: load(v, "nla") for v in VERSIONS}
     common = sorted(set(orig_lens).intersection(*(set(lens[v]) for v in VERSIONS)))
@@ -119,6 +136,11 @@ def main() -> None:
 
     for depth in readout.DEPTHS:
         o = lens_sets(orig_lens, depth)
+        # the top of the scale: the original against itself (same spot = identical words, so 1; chance = its own
+        # words at other spots). A version's (same spot minus chance) can be read as a share of this.
+        top = summarize(*against(o, o, common, words.jaccard), None)
+        result["original_against_itself"][f"{depth:.3f}"] = top
+        print(line(f"jspace | depth {depth:.3f}", ORIGINAL, "all spots", top), flush=True)
         base = None
         for v in VERSIONS:
             s = lens_sets(lens[v], depth)
@@ -149,7 +171,7 @@ def main() -> None:
             fits.append(r["layers"][layer]["ids"][0] == r["model"]["ids"][0])
             shared.append(words.jaccard(set(r["layers"][layer]["ids"]), set(r["model"]["ids"])))
         result["lens_fit"][v] = {"top_token": float(np.mean(fits)), "top_200_overlap": float(np.mean(shared))}
-        print(f"lens fit | {v}: base gemma's lens at depth {FIT_DEPTH} gives the model's own top next token at "
+        print(f"lens fit | {v}: the lens it was read through, at depth {FIT_DEPTH} gives the model's own top next token at "
               f"{np.mean(fits):.3f} of {len(fits)} spots; its top-200 tokens overlap the model's own top-200 next "
               f"tokens by {np.mean(shared):.3f} (Jaccard)", flush=True)
         if v != VERSIONS[0]:
@@ -159,7 +181,7 @@ def main() -> None:
             print(f"moved from base | {v}: its J-lens words at depth {readout.HEADLINE:.3f} differ from base gemma's "
                   f"at the same spot by {moved:.4f} [{lo:.4f}, {hi:.4f}] (1 - Jaccard; 0 = identical)", flush=True)
 
-    path = models.OUT / EXPERIMENT / "similarity.json"
+    path = models.OUT / EXPERIMENT / f"similarity{SUFFIX}.json"
     path.write_text(json.dumps(result, indent=1))
     print(f"wrote {path}", flush=True)
 

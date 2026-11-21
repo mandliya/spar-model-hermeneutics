@@ -31,7 +31,7 @@ import numpy as np
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 import spots  # noqa: E402
 from shared import models, readout, words  # noqa: E402
-from similarity import EXPERIMENT, ORIGINAL, VERSIONS, lens_lists, load  # noqa: E402
+from similarity import EXPERIMENT, ORIGINAL, SUFFIX, VERSIONS, lens_lists, load  # noqa: E402
 
 BASE, FINAL = VERSIONS[0], VERSIONS[-1]
 CHANCE_SPOTS, SEED = 20, 0
@@ -146,7 +146,7 @@ def main() -> None:
         print(f"NLA health | {t}: {len(tries)} descriptions; the NLA's own reconstruction of the activation from the text scores "
               f"{'%.4f' % np.mean(cos) if cos else 'n/a (no reverse model)'} (cosine); {empty:.3f} are empty", flush=True)
 
-    path = models.OUT / EXPERIMENT / "where_it_moved.json"
+    path = models.OUT / EXPERIMENT / f"where_it_moved{SUFFIX}.json"
     path.write_text(json.dumps(result, indent=1, ensure_ascii=False))
     print(f"wrote {path}", flush=True)
 

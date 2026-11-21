@@ -25,7 +25,7 @@ class Embedder:
 
     @torch.no_grad()
     def add(self, texts: set[str], batch: int = 256) -> None:
-        todo = sorted(texts - set(self.cache), key=len)
+        todo = sorted(texts - set(self.cache), key=lambda t: (len(t), t))   # ties by the text: the same batches every run
         for start in range(0, len(todo), batch):
             chunk = todo[start:start + batch]
             enc = self.tok([f"query: {t}" for t in chunk], padding=True, truncation=True, max_length=256, return_tensors="pt")

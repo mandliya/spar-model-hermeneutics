@@ -42,7 +42,10 @@ def states_at(lm, ids: list[int], positions: list[int]) -> torch.Tensor:
     finally:
         for h in handles:
             h.remove()
-    return torch.stack([kept[i] for i in range(len(lm.layers))], dim=1)
+    states = torch.stack([kept[i] for i in range(len(lm.layers))], dim=1)
+    if not torch.isfinite(states).all():   # seen 17 Nov: Qwen3.6 under transformers 5.23.0 gave NaN from layer 1 on
+        raise FloatingPointError("the forward pass gave non-finite activations; check the package versions")
+    return states
 
 
 @torch.no_grad()

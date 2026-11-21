@@ -56,3 +56,20 @@ def note(fig, *lines: str) -> None:
 def figure(width: float, height: float, rows: int = 1, cols: int = 1):
     fig = Figure(figsize=(width, height), facecolor=SURFACE, layout="constrained")
     return fig, fig.subplots(rows, cols, squeeze=False)
+
+
+def way_to_the_top(ax, rows: list[tuple[str, float, float]], before: tuple[str, str], after: tuple[str, str], top: str) -> None:
+    """A ruler from 0 (no closer than a random moment) to 100% (`top`, e.g. the target model against itself).
+    Each row is (label, share of the way before, share after); `before` and `after` are (legend label, colour)."""
+    for i, (_, a, b) in enumerate(rows):
+        ax.plot([0, 1], [i, i], color=GRID, linewidth=6, solid_capstyle="round", zorder=1)
+        ax.plot([a], [i], marker="o", markersize=11, color=before[1], linestyle="none", zorder=3, label=before[0] if i == 0 else None)
+        ax.plot([b], [i], marker="D", markersize=9, color=after[1], linestyle="none", zorder=4, label=after[0] if i == 0 else None)
+        ax.annotate(f"{round(a, 3) + 0:.1%}  →  {round(b, 3) + 0:.1%}", (max(a, b), i), textcoords="offset points", xytext=(12, 9), fontsize=9)
+    ax.set_yticks(range(len(rows)), [label for label, _, _ in rows])
+    ax.set_ylim(len(rows) - 0.4, -0.9)
+    ax.set_xlim(-0.03, 1.03)
+    ax.set_xticks([0, 0.25, 0.5, 0.75, 1], ["0%\nno closer than a\nrandom moment", "25%", "50%", "75%", f"100%\n{top}"])
+    style(ax)
+    ax.grid(axis="y", visible=False)
+    ax.legend(frameon=False, fontsize=8, loc="upper right")

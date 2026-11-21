@@ -52,9 +52,8 @@ MODELS = {m.tag: m for m in (
 )}
 
 
-def load(tag: str):
-    """(jlens LensModel, tokenizer), bf16, on the visible GPUs; a distilled model has its adapter merged in."""
-    import jlens
+def load_hf(tag: str):
+    """(transformers model, tokenizer), bf16, on the visible GPUs; a distilled model has its adapter merged in."""
     from transformers import AutoModelForCausalLM, AutoTokenizer
     m = MODELS[tag]
     tok = AutoTokenizer.from_pretrained(m.hf, revision=m.revision)
@@ -62,7 +61,14 @@ def load(tag: str):
     if m.adapter:
         from peft import PeftModel
         hf = PeftModel.from_pretrained(hf, str(ADAPTERS / m.adapter)).merge_and_unload()
-    return jlens.from_hf(hf.eval(), tok), tok
+    return hf.eval(), tok
+
+
+def load(tag: str):
+    """(jlens LensModel, tokenizer): load_hf, wrapped for the J-lens."""
+    import jlens
+    hf, tok = load_hf(tag)
+    return jlens.from_hf(hf, tok), tok
 
 
 def lens_path(tag: str) -> str:

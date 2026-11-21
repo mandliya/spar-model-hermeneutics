@@ -18,9 +18,11 @@ trap 'echo "setup failed at line $LINENO"' ERR
 echo "### $(date -u +%FT%TZ) setup"
 
 [ -x "$VENV/bin/python" ] || uv venv -q -p 3.12 "$VENV"
-uv pip install -q -p "$VENV/bin/python" torch==2.8.0 accelerate==1.10.1 peft safetensors huggingface_hub datasets \
+uv pip install -q -p "$VENV/bin/python" torch==2.8.0 transformers==5.22.2 accelerate==1.10.1 peft==0.21.2 safetensors huggingface_hub datasets \
   pyyaml pandas pyarrow numpy scipy scikit-learn matplotlib openai \
   "anthropic>=0.121.0" "omegaconf>=2.3" "pydantic>=2.0" "python-dotenv>=1.2.1" "sentences>=0.1.1" "tenacity>=9.1.2"
+# transformers and peft are pinned to the versions of the 13 Nov reads: unpinned, a box on 17 Nov got transformers
+# 5.23.0, under which Qwen3.6's forward pass gives NaN from the first layer on.
 uv pip install -q -p "$VENV/bin/python" -e "$VENDOR/jacobian-lens"
 # Fast kernels for the Qwen3.6 / Qwen3-Next layer type; fla 0.4.0 is the newest that works with torch 2.8's Triton.
 uv pip install -q -p "$VENV/bin/python" flash-linear-attention==0.4.0 fla-core==0.4.0
