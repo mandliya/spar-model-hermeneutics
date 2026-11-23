@@ -4,6 +4,11 @@ For John, Yuqi and GG. This is the "Qwen side" of the first Phase 2 model: we te
 runs, then check whether Qwen3.6 now behaves like DeepSeek on tasks it never trained on. Nothing here has been run or
 paid for yet; each paid step below has its own cost and needs GG's yes first. Budget: `BUDGET.md`.
 
+> **Update, 24 Nov 2026: this plan has been run, with two changes.** The held-out tasks were chosen before training
+> from numbers we already had (tower_of_hanoi, lazy_investigation, currency_conversion, eval_tampering, norvane,
+> secret_number), and the "before" runs covered the 8 tested tasks while training ran on a second GPU of the same box.
+> Results and every deviation: `RESULTS_deepseek_qwen36.md`. The rest of this page is the plan as written on 23 Nov.
+
 ## What is decided
 
 - **Qwen3.6 thinks, like DeepSeek** (GG, 23 Nov). DeepSeek's reasoning goes into the training data as Qwen3.6's own
