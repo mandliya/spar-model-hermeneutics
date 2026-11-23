@@ -1,0 +1,4 @@
+2026-11-23T03:39:00Z START grading: 11 judged tasks, judge claude-opus-4-8, cap $1400, key usage at start 6559.743392479
+2026-11-23T04:12:02Z grader exited 0 (per task: /workspace/logs/p2_grading/grade.txt)
+2026-11-23T04:12:02Z grading.json files under the stages: 487 (488 expected; set-aside batches have none)
+2026-11-23T04:13:06Z P2 GRADING DONE

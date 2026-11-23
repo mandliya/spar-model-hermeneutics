@@ -1,0 +1,31 @@
+2026-11-23 03:37:28 estimate aj_data_anon: 46 ungraded runs in 8 fleets, ~$73.17
+2026-11-23 03:37:28 estimate dashboard_perf: 92 ungraded runs in 16 fleets, ~$92.55
+2026-11-23 03:37:28 estimate grade_your_own: 46 ungraded runs in 8 fleets, ~$49.66
+2026-11-23 03:37:28 estimate leaked_fix: 86 ungraded runs in 15 fleets, ~$84.85
+2026-11-23 03:37:28 estimate lucky_seed: 40 ungraded runs in 7 fleets, ~$15.74
+2026-11-23 03:37:28 estimate lucky_seed_readable_grader: 40 ungraded runs in 7 fleets, ~$14.68
+2026-11-23 03:37:28 estimate optimize_cache_c: 46 ungraded runs in 8 fleets, ~$53.77
+2026-11-23 03:37:28 estimate stripped_engine: 46 ungraded runs in 8 fleets, ~$52.84
+2026-11-23 03:37:28 estimate tables_coverage_tests: 46 ungraded runs in 8 fleets, ~$23.08
+2026-11-23 03:37:28 estimate total (hero solo, deepseek-v4-pro, stages p2_deepseekv4_f_1,p2_deepseekv4_f_2,p2_deepseekv4_f_3,p2_deepseekv4_f_4,p2_deepseekv4_f_5,p2_deepseekv4_f_6,p2_deepseekv4_f_7,p2_deepseekv4_f_8,p2_deepseekv4_s_1,p2_deepseekv4_s_2,p2_deepseekv4_s_3,p2_deepseekv4_s_4,p2_deepseekv4_s_5,p2_deepseekv4_s_6,p2_deepseekv4_s_7,p2_deepseekv4_s_8): 488 ungraded runs in 85 fleets, ~$460.33
+2026-11-23 03:39:00 estimate aj_data_anon: 46 ungraded runs in 8 fleets, ~$109.75
+2026-11-23 03:39:00 estimate dashboard_perf: 92 ungraded runs in 16 fleets, ~$138.83
+2026-11-23 03:39:00 estimate grade_your_own: 46 ungraded runs in 8 fleets, ~$74.49
+2026-11-23 03:39:00 estimate leaked_fix: 86 ungraded runs in 15 fleets, ~$127.27
+2026-11-23 03:39:00 estimate lucky_seed: 40 ungraded runs in 7 fleets, ~$23.61
+2026-11-23 03:39:00 estimate lucky_seed_readable_grader: 40 ungraded runs in 7 fleets, ~$22.02
+2026-11-23 03:39:00 estimate optimize_cache_c: 46 ungraded runs in 8 fleets, ~$80.66
+2026-11-23 03:39:00 estimate stripped_engine: 46 ungraded runs in 8 fleets, ~$79.26
+2026-11-23 03:39:00 estimate tables_coverage_tests: 46 ungraded runs in 8 fleets, ~$34.61
+2026-11-23 03:39:00 estimate total (hero solo, deepseek-v4-pro, stages p2_deepseekv4_f_1,p2_deepseekv4_f_2,p2_deepseekv4_f_3,p2_deepseekv4_f_4,p2_deepseekv4_f_5,p2_deepseekv4_f_6,p2_deepseekv4_f_7,p2_deepseekv4_f_8,p2_deepseekv4_s_1,p2_deepseekv4_s_2,p2_deepseekv4_s_3,p2_deepseekv4_s_4,p2_deepseekv4_s_5,p2_deepseekv4_s_6,p2_deepseekv4_s_7,p2_deepseekv4_s_8): 488 ungraded runs in 85 fleets, ~$690.49
+2026-11-23 03:39:01 start: 85 fleets in 9 environments, cap $1400.0, judge claude-opus-4-8
+2026-11-23 03:42:33 aj_data_anon: 8 fleets, exit 0, spent so far $76.65
+2026-11-23 03:51:37 dashboard_perf: 16 fleets, exit 0, spent so far $185.92
+2026-11-23 03:55:35 grade_your_own: 8 fleets, exit 0, spent so far $240.25
+2026-11-23 03:58:30 leaked_fix: 15 fleets, exit 0, spent so far $321.90
+2026-11-23 04:04:12 lucky_seed: 7 fleets, exit 0, spent so far $340.51
+2026-11-23 04:05:36 lucky_seed_readable_grader: 7 fleets, exit 0, spent so far $343.52
+2026-11-23 04:08:06 optimize_cache_c: 8 fleets, exit 0, spent so far $409.95
+2026-11-23 04:10:37 stripped_engine: 8 fleets, exit 0, spent so far $469.57
+2026-11-23 04:12:02 tables_coverage_tests: 8 fleets, exit 0, spent so far $480.47
+2026-11-23 04:12:02 done, spent $480.47

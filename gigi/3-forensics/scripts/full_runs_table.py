@@ -452,8 +452,12 @@ def hero_write(outdir, stages, suffix, quiet=False, prefix="hero_full_runs", mod
     if missing and not quiet:
         print(f"note: no launch logs yet for stage(s) {', '.join(missing)} (results/logs/<stage>/): nothing to score there")
     per_run, agg, judges = [], collections.defaultdict(lambda: [0, 0, 0, 0, 0, 0]), collections.defaultdict(collections.Counter)
+    import os   # SET_ASIDE_FILE (23 Nov 2026, phase 2): (stage, task) batches re-run whole after a failure are not counted
+    aside = set()
+    if os.environ.get("SET_ASIDE_FILE"):
+        aside = {tuple(l.split("\t")[:2]) for l in open(os.environ["SET_ASIDE_FILE"]) if l.strip() and not l.startswith("#")}
     for env, model, run, stage in runs:
-        if env not in envs:
+        if env not in envs or (stage, env) in aside:
             continue
         st = S.status(run); v = None
         a = agg[env]; a[5] += 1   # bad, n scored, unscored, lost provider, lost crash/harness/context, runs found

@@ -4,48 +4,62 @@ For John (and any agent John uses on this repo). Phase 2 = black-box hermeneutic
 teacher models, each distilled into Qwen3.6 27B (thinking on), in John's order: DeepSeek V4 Pro, Qwen3-Next 80B,
 GPT-OSS 120B, Kimi K3, GLM 5.3. "Safe" adds 30%. This page is updated after every stage with measured costs.
 
-**Last update: 20 Nov 2026, 20:45 UTC, after the full DeepSeek collection.** DeepSeek's teacher runs are done and
-measured (1,198 runs, all complete). Its grading, the Qwen3.6 baseline and the training are still estimates; the other
-four models are still estimates.
+**Last update: 23 Nov 2026, 05:00 UTC, after the Opus grading of DeepSeek's runs.** DeepSeek's teacher runs and their
+grading are done and measured. Its Qwen side (the "before" runs of Qwen3.6, the training and the re-runs) has its own
+plan and estimate in `PLAN_deepseek_training.md`; the other four models are still estimates.
 
 ## Actions for John
 
-**Thank you:** the key limit is now $15,000, the OpenRouter account got about $2,000 more, and Vast about $400 more.
-That covers DeepSeek. What is left:
+**Thank you** for the top-ups of 20 Nov (key limit $15,000, ~$2,000 OpenRouter credit, ~$400 Vast): they cover all of
+DeepSeek. What changed since: grading the judged tasks cost $494 for DeepSeek, not the ~$150 assumed, because those tasks
+have the longest runs, so the other four models' grading is now ~$450 each. What is left:
 
-1. **OpenRouter workspace lifetime budget:** our key cannot read it. Please check it has room for **~$5,200** more
-   (safe: ~$6,750). It blocked all calls twice before, on 21 Oct and 11 Nov.
-2. **Vast:** nothing now. **~$550 before Qwen3-Next's training**, then ~$550 per model ($2,200 in total, safe: ~$3,080).
-   DeepSeek's training may cost more than the $850 below, because its runs are long (see "Run length"); it is re-priced
-   in the training plan before any GPU is rented.
-3. **OpenRouter credits:** nothing until GLM 5.3, then **~$200** (safe: ~$1,750). The $5,019 left is the whole org
-   account, shared with other SPAR projects.
-4. **OpenRouter key limit:** $15,000 with $6,560 used is enough for everything planned (~$11,800 at the end).
-5. **Modal:** nothing to top up (SPAR's workspace is billed monthly). Expect about **$1,670 more** over the period
-   (safe: ~$2,170). The DeepSeek collection used $216 of it on 20 Nov.
+1. **OpenRouter workspace lifetime budget:** our key cannot read it. Please check it has room for **~$6,250** more
+   (safe: ~$8,130). It blocked all calls twice before, on 21 Oct and 11 Nov.
+2. **OpenRouter credits:** nothing until Kimi K3. Then **~$250 before Kimi K3 and ~$1,700 before GLM 5.3** (~$1,950 in
+   total, safe: ~$3,830). The $4,298 left is the whole org account, shared with other SPAR projects, which used $228 of
+   it between 20 and 23 Nov.
+3. **Vast:** nothing until GPT-OSS. Then **~$420 before GPT-OSS 120B's training**, ~$550 before Kimi K3's and ~$550 before
+   GLM 5.3's (~$1,520 in total, safe: ~$2,240). DeepSeek's training came in at ~$200 in the plan, so the $878 left covers
+   DeepSeek and Qwen3-Next.
+4. **OpenRouter key limit:** $15,000 with $7,053 used is enough for everything planned (~$13,300 at the end), but not
+   with the full safety margin (~$15,200). Raising it to ~$16,000 when convenient removes that worry.
+5. **Modal:** nothing to top up (SPAR's workspace is billed monthly). Expect about **$1,300 more** over the period
+   (safe: ~$1,790), on top of the $216 the DeepSeek collection used on 20 Nov.
 
 ## The table
 
 One row per model, done one after another. "New money needed" = OpenRouter top-up + Modal bill + Vast top-up, counted
-from the balances in the first row (after John's top-ups of 20 Nov).
+from the balances in the first row.
 
 | Model | OpenRouter cost | OpenRouter top-up | Modal cost | Vast cost | Vast top-up | Total cost | New money needed | Time |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|
-| **Left now (20 Nov, 20:45 UTC)** | **$5,019 left** (key: $8,440 of $15,000 left) | | **no balance (billed monthly to SPAR)** | **$884 left** | | | | |
-| DeepSeek V4 Pro, plus the Qwen3.6 baseline (**collection measured**) | $743 ($593 already spent) | $0 (safe: $0) | $470 ($222 already spent) | $850 | $0 (safe: ~$220) | $2,060 | $470 | ~1 week |
-| Qwen3-Next 80B | $500 | $0 (safe: $0) | $250 (safe: $350) | $550 | $550 (safe: $715) | $1,300 | $800 | ~1 week |
-| GPT-OSS 120B | $250 | $0 (safe: $0) | $250 (safe: $350) | $550 | $550 (safe: $715) | $1,050 | $800 | ~1 week |
-| Kimi K3 | $2,900 | $0 (safe: $0) | $350 (safe: $450) | $550 | $550 (safe: $715) | $3,800 | $900 | ~1.5 weeks |
-| GLM 5.3 | $1,400 | $200 (safe: $1,750) | $350 (safe: $450) | $550 | $550 (safe: $715) | $2,300 | $1,100 | ~1.5 weeks |
-| **All of it** | **$5,800** | **$200 (safe: $1,750)** | **$1,670 (safe: $2,170)** | **$3,050** | **$2,200 (safe: $3,080)** | **$10,500** | **$4,070** | **~5–6 weeks** |
+| **Left now (23 Nov, 05:00 UTC)** | **$4,298 left** (key: $7,947 of $15,000 left) | | **no balance (billed monthly to SPAR)** | **$878 left** | | | | |
+| DeepSeek V4 Pro (**collection and grading measured**) | $1,087 (all spent) | $0 (safe: $0) | $320 ($222 already spent) | $200 | $0 (safe: $0) | $1,610 | $320 | ~1 week |
+| Qwen3-Next 80B | $800 | $0 (safe: $0) | $250 (safe: $350) | $550 | $0 (safe: $100) | $1,600 | $250 | ~1 week |
+| GPT-OSS 120B | $550 | $0 (safe: $0) | $250 (safe: $350) | $550 | $420 (safe: $715) | $1,350 | $670 | ~1 week |
+| Kimi K3 | $3,200 | $250 (safe: $1,620) | $350 (safe: $450) | $550 | $550 (safe: $715) | $4,100 | $1,150 | ~1.5 weeks |
+| GLM 5.3 | $1,700 | $1,700 (safe: $2,210) | $350 (safe: $450) | $550 | $550 (safe: $715) | $2,600 | $2,600 | ~1.5 weeks |
+| **All of it** | **$7,340** | **$1,950 (safe: $3,830)** | **$1,520 (safe: $2,020)** | **$2,400** | **$1,520 (safe: $2,240)** | **$11,260** | **$4,990** | **~5–6 weeks** |
 
-OpenRouter left after each model: ~$4,870 after DeepSeek, ~$4,370 after Qwen3-Next, ~$4,120 after GPT-OSS, ~$1,220
-after Kimi K3, then ~$200 short during GLM 5.3. The Qwen3.6 baseline (Qwen3.6 itself with thinking on, 40 runs of each
-of the 28 tasks) is paid once for all five models: $200 Modal + $300 Vast, counted in the DeepSeek row.
+OpenRouter left after each model: ~$4,298 after DeepSeek (all spent), ~$3,500 after Qwen3-Next, ~$2,950 after GPT-OSS,
+then ~$250 short during Kimi K3 and ~$1,950 short by the end of GLM 5.3. Each of the four later models now includes
+~$450 of Opus grading (DeepSeek's measured $494). Their Vast cost stays at the earlier ~$550 until DeepSeek's training
+is measured; if it lands near the plan's ~$200, their Vast top-ups shrink too.
 
-DeepSeek's OpenRouter cost = $20 (provider check, 6 test runs, 56 pilot runs) + $573 (the full collection, measured) +
-~$150 Opus grading (estimate). Its Modal cost = $6 (pilot) + $216 (collection, measured) + ~$50 for the trained model's
-re-runs + $200 for the baseline.
+DeepSeek's OpenRouter cost = $20 (provider check, 6 test runs, 56 pilot runs) + $573 (the full collection) + $494 (Opus
+grading), all measured. Its Modal cost = $6 (pilot) + $216 (collection), measured, + ~$100 for Qwen3.6's "before" runs
+and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (plan) + ~$40 for the launch box.
+
+## Measured in the DeepSeek grading (23 Nov)
+
+- **487 of 488 runs graded** in the 11 tasks that need a judge (claude-opus-4-8 through OpenRouter, pinned to
+  Anthropic), with no refusals and no errors. The one left is a grade_your_own run that ended at step 0 (DeepSeek wrote
+  its first command as text), which the grader cannot judge. The batches cut by the 20 Nov outage were skipped.
+- **$493.61** by the key's usage (before and after), against an estimate of ~$460; 33 minutes, launched from the box
+  (`scripts/phase2_grade.sh`). reference_extraction alone cost $77 for 46 runs.
+- Results: `results/p2_deepseekv4_full_runs__deepseek-v4-pro.csv`; logs: `results/logs/p2_deepseekv4/grading/`; each
+  run's `final/grading.json` is on HF next to the run.
 
 ## Measured in the DeepSeek collection (20 Nov)
 
@@ -101,3 +115,7 @@ re-runs + $200 for the baseline.
 - 20 Nov 20:45 UTC: DeepSeek collection measured ($573 OpenRouter, $216 Modal; the outage re-runs included); DeepSeek
   $1,850 -> $2,060. John's top-ups arrived (key limit $15,000, ~$2,000 OpenRouter credit, ~$400 Vast), so the new money
   still needed drops to ~$4,070. Total ~$10,500.
+- 23 Nov 05:00 UTC: DeepSeek's grading measured ($494, against ~$150 assumed), so the other four models' grading goes
+  to ~$450 each. DeepSeek's Qwen side re-priced in `PLAN_deepseek_training.md` (~$300 instead of ~$1,050: the "before"
+  runs cover 9 short tasks instead of all 28). Other SPAR projects used $228 of the shared OpenRouter account. Total
+  ~$11,260, new money still needed ~$4,990.

@@ -1,0 +1,69 @@
+[90mHint: The `hf-cli` skill is not installed. Run `hf skills add -g` to teach your AI agents how to use the `hf` CLI.[0m
+Found 42 files to upload
+Uploading... 42/42 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/63d4cdd2ddc4557a054abcf98b2407ce5ff6eadc
+Found 48 files to upload
+Uploading... 48/48 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/41d23d10adb4498829fe7f56b277c34660f81e34
+Found 48 files to upload
+Uploading... 48/48 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/19c293db84e408ef7679136b0d4fa1f233c856aa
+Found 48 files to upload
+Uploading... 48/48 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/d884339400fafb9141c0e588992e2f6ed47bd7f7
+Found 48 files to upload
+Uploading... 48/48 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/22f0de1d5000789075c25d260231495e3fe114da
+Found 45 files to upload
+Uploading... 45/45 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/b34d463e1fe6d61a234fdd3d789b2d70d669c207
+Found 40 files to upload
+Uploading... 40/40 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/a9c5f4b6f6a266f00cfc5f6a786c29252bc65af9
+Found 25 files to upload
+Uploading... 25/25 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/f74e47c739dfeee8eec7d7f25d57bdc8b87f5f7b
+Found 24 files to upload
+Uploading... 24/24 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/614f91341dc78c340bf26fed57e1e55cb7f57e97
+Found 24 files to upload
+Uploading... 24/24 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/2468399d2365fef59eaa3f2f656d06d64a6c6ed6
+Found 18 files to upload
+Uploading... 18/18 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/82c84f49d7874f12f07e433528e28ea9554df2e4
+Found 18 files to upload
+Uploading... 18/18 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/b1e0cdacf9e60770d3ac2ebd976ea12eac6a14b5
+Found 18 files to upload
+Uploading... 18/18 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/8909e9f19716e9242f9a43392c369966e22e9620
+Found 17 files to upload
+Uploading... 17/17 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/a6ce28154b241f897ac6937a2243e8a372f5b350
+Found 14 files to upload
+Uploading... 14/14 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/c1d35e069d6052a9d598f5c1bb0411e91b3e7367
+Found 10 files to upload
+Uploading... 10/10 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/8739c0fda7a4e56c2ccc77ae99ff2e4e81f97eaf
+Found 14 files to upload
+Uploading... 14/14 files checked, 0/0 uploaded (0.00B transferred), 0 committed in 0 commit(s)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/datasets/model-hermeneutics/gigi-forensics-transcripts/commit/7f88199aadbeca98d80b870851c6103617710b84
