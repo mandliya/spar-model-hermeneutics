@@ -60,6 +60,13 @@ _HERO_DEFAULT_STAGES = {"llama-3.3-70b": "hero_smoke,hero_solo,hero_solo_key", "
                         "gemma-3-27b": "hero2_gemma,hero2_gemma_key", "qwen3.6-27b": "hero2_qwen36,hero2_qwen36_key",
                         "qwen3.6-27b-think": "hero2_qwen36_think"}
 HERO_STAGES = os.environ.get("HERO_STAGES", _HERO_DEFAULT_STAGES.get(HERO_MODEL, "")).split(",")
+# SET_ASIDE_FILE (23 Nov 2026, phase 2): a set_aside.tsv from phase2_fleet.sh ("stage<TAB>task<TAB>reason"). Those
+# (stage, task) batches had a run cut by a failure and were re-run whole in a later stage: never graded, never counted.
+SET_ASIDE = set()
+if os.environ.get("SET_ASIDE_FILE"):
+    for _line in open(os.environ["SET_ASIDE_FILE"]):
+        if _line.strip() and not _line.startswith("#"):
+            SET_ASIDE.add(tuple(_line.split("\t")[:2]))
 if HERO and not any(HERO_STAGES):
     raise SystemExit(f"grade_modal.py HERO_SOLO=1: no default stages for HERO_MODEL={HERO_MODEL}; set HERO_STAGES")
 if HERO and (any(s in ("hero_solo_all", "hero2_llama_all", "hero2_qwen_all", "hero2_gemma_all", "hero2_qwen36_all", "hero4_llama_all", "hero4_llama_fix", "hero6_example_all", "hero7_control_all", "hero8_gemma_all", "hero8_qwen36_all", "hero9_gemma_all", "hero9_qwen36_all") for s in HERO_STAGES) or os.environ.get("HERO_ALL_JUDGED") == "1"):
@@ -98,6 +105,8 @@ if HERO:   # Llama's solo runs: every fleet named in the hero launch logs, group
             continue
         for log in (HERE / "results" / "logs" / stage).glob(f"*__{HERO_MODEL}.log"):
             env = log.stem.split("__")[0]
+            if (stage, env) in SET_ASIDE:
+                continue
             out = re.search(r"^Output: results/(\S+?)/?$", log.read_text(errors="replace"), re.M)
             d = HERE / "results" / "raw" / stage / env / out.group(1) if out else None
             if env in HERO_JUDGED and d and d.is_dir() and out.group(1).split("/")[0] == HERO_JUDGED[env]:
