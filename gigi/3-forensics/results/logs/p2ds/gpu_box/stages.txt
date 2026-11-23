@@ -1,0 +1,32 @@
+2026-11-23T08:15:11Z START setup
+0, NVIDIA H200, 143771 MiB, 615.71.09
+1, NVIDIA H200, 143771 MiB, 615.71.09
+overlay         900G   49M  900G   1% /
+Mem:            2015          70         239         279        1705        1648
+2026-11-23T08:15:49Z START venv train-qwen (torch 2.13.0 cu129, transformers 5.23.0, peft 0.21.3, trl 1.18.1, fla 0.6.0, causal-conv1d 1.7.0)
+2026-11-23T08:17:09Z Qwen3.6-27B downloaded (9.9M)
+2026-11-23T08:17:28Z END venv train-qwen core rc=0
+2026-11-23T08:17:40Z venv-vllm ok: vllm 0.32.0 torch 2.13.0+cu130 cuda 13.0
+2026-11-23T08:20:36Z START Qwen3.6 server on GPU 1
+2026-11-23T08:23:13Z Qwen3.6 server restarted with the password of the Modal secret
+2026-11-23T08:24:39Z causal-conv1d 1.7.0 built
+/workspace/venv-train-qwen/lib/python3.12/site-packages/huggingface_hub/constants.py:302: FutureWarning: The `HF_HUB_ENABLE_HF_TRANSFER` environment variable is deprecated as 'hf_transfer' is not used anymore. Please use `HF_XET_HIGH_PERFORMANCE` instead to enable high performance transfer with Xet. Visit https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables#hfxethighperformance for more details.
+  warnings.warn(
+train-qwen venv: torch 2.13.0+cu129 cuda ok: True transformers 5.23.0 peft 0.21.3 trl 1.18.1 kernels {'fla': 'ok', 'causal_conv1d': 'ok'}
+2026-11-23T08:24:52Z END setup
+2026-11-23T08:25:40Z START train_smoke (Qwen3.6 student, 32,768 tokens, GPU 0)
+2026-11-23T08:33:19Z train_smoke OK: SMOKE OK: grad norms [0.1467486321926117, 0.1585073322057724]; peak 75.89 GiB at 32765 tokens
+2026-11-23T08:33:22Z START train_1 (2 epochs, a saved copy every 0.5 epoch)
+2026-11-23T10:31:49Z COPY SERVED c24: GATE OK: c24 lowers the loss on 3 of 3 examples (mean gap 1.721)
+2026-11-23T10:34:35Z CHECKPOINT READY checkpoint-24 (epoch 0.5), on HF
+2026-11-23T12:09:53Z COPY SERVED c48: GATE OK: c48 lowers the loss on 3 of 3 examples (mean gap 1.187)
+2026-11-23T12:16:01Z CHECKPOINT READY checkpoint-48 (epoch 1.0), on HF
+2026-11-23T13:51:58Z COPY SERVED c72: GATE OK: c72 lowers the loss on 3 of 3 examples (mean gap 1.120)
+2026-11-23T13:58:26Z CHECKPOINT READY checkpoint-72 (epoch 1.5), on HF
+2026-11-23T15:29:17Z CHECKPOINT READY checkpoint-96 (epoch 2.0), on HF
+2026-11-23T15:30:03Z COPY SERVED c96: GATE OK: c96 lowers the loss on 3 of 3 examples (mean gap 1.135)
+2026-11-23T15:44:43Z TRAINING DONE: copies checkpoint-24 checkpoint-48 checkpoint-72 checkpoint-96 
+2026-11-23T15:44:43Z START checkpoint loss (base + c24=/workspace/out/p2_deepseekv4_v1/checkpoint-24,c48=/workspace/out/p2_deepseekv4_v1/checkpoint-48,c72=/workspace/out/p2_deepseekv4_v1/checkpoint-72,c96=/workspace/out/p2_deepseekv4_v1/checkpoint-96)
+2026-11-23T16:53:57Z checkpoint loss: val: base 0.4365, c24 0.3818, c48 0.3724, c72 0.3688, c96 0.3681;test: base 0.4772, c24 0.4358, c48 0.4337, c72 0.4335, c96 0.4335;
+2026-11-23T16:54:06Z P2Q TRAIN ALL DONE
+2026-11-23T16:56:03Z p2q_copies: every copy handled

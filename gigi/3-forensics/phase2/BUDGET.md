@@ -51,6 +51,18 @@ DeepSeek's OpenRouter cost = $20 (provider check, 6 test runs, 56 pilot runs) + 
 grading), all measured. Its Modal cost = $6 (pilot) + $216 (collection), measured, + ~$100 for Qwen3.6's "before" runs
 and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (plan) + ~$40 for the launch box.
 
+## Measured so far in DeepSeek's training into Qwen3.6 (23-24 Nov)
+
+- GG approved ~$300 for this stage on 23 Nov (all platforms together).
+- **Vast: ~$82 so far.** The two-H200 box (62121347, $6.98/h) has run 11.4 hours (~$80) as of 23 Nov 19:45 UTC and is
+  still on, idle, until GG says to stop it; a first box rented without the server port cost ~$2. Training took 6 h 50 min
+  on one GPU while the other served Qwen3.6 for the tests.
+- **Modal: not measured yet** (the billing report for 23 Nov was still empty at 19:45 UTC). Plan: ~$60-100 for 1,600
+  test runs (8 tasks x 40 runs x Qwen3.6 before training and 4 saved copies) plus one gate run.
+- **OpenRouter: $0.** The 8 re-tested tasks are scored by rules, and Qwen3.6 runs on our own server.
+- Results: `results/distill_p2ds_eval.csv` (1,569 of 1,600 runs scored, 31 lost); logs: `results/logs/p2ds/`; raw runs
+  on HF under `distill/p2_deepseekv4_v1/eval/`.
+
 ## Measured in the DeepSeek grading (23 Nov)
 
 - **487 of 488 runs graded** in the 11 tasks that need a judge (claude-opus-4-8 through OpenRouter, pinned to

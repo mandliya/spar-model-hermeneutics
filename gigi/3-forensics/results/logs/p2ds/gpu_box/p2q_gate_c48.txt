@@ -1,0 +1,5 @@
+load: {'text': "Success: LoRA adapter 'c48' added successfully."}
+chess: 798 tokens, loss untrained 3.640, c48 2.529
+chess: 808 tokens, loss untrained 3.627, c48 2.560
+chess: 787 tokens, loss untrained 4.890, c48 3.508
+GATE OK: c48 lowers the loss on 3 of 3 examples (mean gap 1.187)
