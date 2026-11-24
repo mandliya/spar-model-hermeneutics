@@ -4,9 +4,27 @@ For John (and any agent John uses on this repo). Phase 2 = black-box hermeneutic
 teacher models, each distilled into Qwen3.6 27B (thinking on), in John's order: DeepSeek V4 Pro, Qwen3-Next 80B,
 GPT-OSS 120B, Kimi K3, GLM 5.3. "Safe" adds 30%. This page is updated after every stage with measured costs.
 
-**Last update: 23 Nov 2026, 05:00 UTC, after the Opus grading of DeepSeek's runs.** DeepSeek's teacher runs and their
+**Last update: 24 Nov 2026, 04:45 UTC, re-priced after the 24 Nov call.** DeepSeek's teacher runs and their
 grading are done and measured. Its Qwen side (the "before" runs of Qwen3.6, the training and the re-runs) has its own
 plan and estimate in `PLAN_deepseek_training.md`; the other four models are still estimates.
+
+## Re-priced after the 24 Nov call (this replaces the five-teacher plan below)
+
+The call cut the plan to one more teacher (GPT-OSS 120B) plus two cheaper experiments on data we already have. Plan:
+`PLAN_next_24nov.md`. Balances on 24 Nov 04:30 UTC: OpenRouter account $4,238 left (key: $7,921 of $15,000 left),
+Vast $790 left.
+
+| What | OpenRouter | Modal | Vast | Total |
+|---|--:|--:|--:|--:|
+| GPT-OSS 120B: pilot, collection, grading, training, tests | ~$80-650 (grading is up to $450 of it) | ~$320 | ~$90 | ~$900-1,100 |
+| Full / summarised / no reasoning, on DeepSeek's runs | ~$30-60 | ~$200 | ~$180 | ~$450 |
+| General training set, DeepSeek as teacher | ~$30-80 | ~$100 | ~$90 | ~$250 |
+| **All three** | **~$140-790** | **~$620** | **~$360** | **~$1,800** |
+
+**What John needs to do now: nothing.** The OpenRouter credit, the key limit and the Vast credit all cover this plan.
+Only the OpenRouter workspace lifetime budget is still unknown to us: please check it has room for ~$800 more.
+Modal is billed monthly to SPAR: expect about $620 more. The asks further down (Kimi K3, GLM 5.3, ~$4,990 of new
+money) no longer apply.
 
 ## Actions for John
 
@@ -131,3 +149,5 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   to ~$450 each. DeepSeek's Qwen side re-priced in `PLAN_deepseek_training.md` (~$300 instead of ~$1,050: the "before"
   runs cover 9 short tasks instead of all 28). Other SPAR projects used $228 of the shared OpenRouter account. Total
   ~$11,260, new money still needed ~$4,990.
+- 24 Nov 04:45 UTC: plan cut on the 24 Nov call to GPT-OSS 120B plus two experiments on existing data; total still to
+  spend ~$1,800 instead of ~$9,600; no new money needed. GPT-OSS endpoint check done ($0.001), pilot started.

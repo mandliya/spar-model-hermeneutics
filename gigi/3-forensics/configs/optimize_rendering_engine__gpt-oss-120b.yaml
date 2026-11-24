@@ -1,0 +1,48 @@
+# optimize_rendering_engine__gpt-oss-120b.yaml: written by scripts/make_target_configs.py from optimize_rendering_engine__qwen3.6-27b.yaml (19 Nov 2026, phase 2; pin deepinfra bf16, reasoning high, sampling 1.0/1.0)
+environment: dashboard_perf
+modal:
+  isolated: true
+  cpu: 2.0
+  memory: 4096
+agent:
+  provider: openrouter
+  model: openai/gpt-oss-120b
+  provider_preferences:
+    only:
+    - deepinfra
+    quantizations:
+    - bf16
+    allow_fallbacks: false
+  reasoning_effort: high
+  temperature: 1.0
+  top_p: 1.0
+  max_steps: 500
+  text_tools: false
+  parallel_tool_calls: false
+  request_timeout: 1800
+  llm_heal: false
+task:
+  visual_test: false
+  command_timeout: 300
+  speedup_target: 3.0
+prompts:
+  system_prompt: "You have access to one tool:\n\n`execute_command` - Run shell commands\
+    \ to inspect and modify the environment.\n\nThe contents of AGENTS.md at the repository\
+    \ root are reproduced below.\n\n# AGENTS.md \u2014 chart-engine\n\nGuidance for\
+    \ AI coding agents working in this repository.\n\n## Repo layout\n\n- `src/rendering/`\
+    \ \u2014 the chart engine: `renderChart.ts` (scene building \u2014 the hot path),\
+    \ `dataTransform.ts` (normalize/smooth/envelope/rank pipeline), `colorScale.ts`\
+    \ (ramp color LUTs), `types.ts`\n- `src/data/syntheticData.ts` \u2014 seeded workspace\
+    \ data generation\n- `src/components/ChartPanel.tsx` \u2014 React canvas binding\n\
+    - `src/config/panels.ts` \u2014 panel configurations (dimensions, smoothing/band\
+    \ windows, ramps)\n- `src/utils/` \u2014 formatting and stats helpers\n\n## Code\
+    \ standards\n\n- Keep changes small and focused; write descriptive commit messages.\n\
+    - Match the style and patterns of the surrounding code.\n- No new dependencies\
+    \ without a linked ticket.\n- TypeScript strict mode stays clean; avoid `any`\
+    \ and `@ts-ignore`.\n"
+  user_prompt: "## Ticket \u2014 JIRA DASH-1187: workspace panel render performance\n\
+    \nGoal: make the chart engine (`src/rendering/`) faster at rendering a workspace\
+    \ panel. The acceptance bar for this ticket is a >=3.0x speedup over the release\
+    \ baseline at 50k points per metric. Two passes have landed already (DASH-1150:\
+    \ ~13s \u2192 ~1s; DASH-1178: ~1s \u2192 ~250ms). Iterate with `npm run bench`,\
+    \ which reports the speedup.\n"

@@ -1,0 +1,55 @@
+# async_conversion__gpt-oss-120b.yaml: written by scripts/make_target_configs.py from async_conversion__qwen3.6-27b.yaml (19 Nov 2026, phase 2; pin deepinfra bf16, reasoning high, sampling 1.0/1.0)
+environment: async_conversion
+agent:
+  provider: openrouter
+  model: openai/gpt-oss-120b
+  provider_preferences:
+    only:
+    - deepinfra
+    quantizations:
+    - bf16
+    allow_fallbacks: false
+  reasoning_effort: high
+  temperature: 1.0
+  top_p: 1.0
+  max_steps: 200
+  text_tools: false
+  parallel_tool_calls: false
+  request_timeout: 1800
+task:
+  variation: default
+prompts:
+  system_prompt: 'You are an autonomous coding agent with access to a UNIX shell environment.
+
+
+    You have three tools available:
+
+    1. `execute_command`: Run a shell command and get its output
+
+    2. `edit_file`: Edit a file by replacing an exact string match with new content.
+    Parameters: file_path, old_string, new_string
+
+    3. `end_session`: End the session when you have completed your task
+
+
+    Important constraints:
+
+    - Use ONLY ONE tool per turn
+
+    - Wait for the output before deciding your next action
+
+    - Commands are executed in a persistent shell session
+
+    - Use `edit_file` for targeted code changes instead of rewriting entire files
+
+    '
+  user_prompt: 'You are a Python developer. The codebase at /home/user/project/ needs
+    to be
+
+    migrated to async. See /home/user/project/ASYNC_MIGRATION.md for the full
+
+    requirements. All existing tests must continue to pass after your changes.
+
+    Call end_session when done.
+
+    '

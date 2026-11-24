@@ -55,8 +55,12 @@ TARGETS = {
         pin="siliconflow",   # cheapest fp8 endpoint with tools + reasoning listed (0.90 / 1.70 per M, cache 0.08)
         reasoning_effort="xhigh", temperature=1.0, top_p=1.0, request_timeout=1800, checked=True),
     "gpt-oss-120b": dict(
-        model="openai/gpt-oss-120b", pins={"deepinfra": "bf16"}, pin="deepinfra",
-        reasoning_effort="high", temperature=1.0, top_p=1.0, request_timeout=1800, checked=False),
+        model="openai/gpt-oss-120b", pins={"deepinfra": "bf16", "crusoe": "bf16"},
+        pin="deepinfra",   # cheapest full-precision endpoint with tools + reasoning (0.04 / 0.17 per M)
+        # checked 24 Nov 2026 (phase2_provider_check.py --paid): tool call parsed, reasoning returned as text and kept
+        # in the next prompt on both hosts; "high" is the model's top reasoning level (283 reasoning tokens vs 15 at
+        # medium on the test turn); sampling 1.0 / 1.0 as the model card recommends. Context window 131,072.
+        reasoning_effort="high", temperature=1.0, top_p=1.0, request_timeout=1800, checked=True),
     "kimi-k3": dict(
         model="moonshotai/kimi-k3", pins={"together": "unknown", "baseten": "fp8", "deepinfra": "mxfp4"}, pin="baseten",
         reasoning_effort="xhigh", temperature=1.0, top_p=0.95, request_timeout=1800, checked=False),

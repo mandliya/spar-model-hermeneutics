@@ -1,0 +1,186 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "time": "2026-11-24T04:27:18Z",
+ "endpoints": {
+  "deepinfra": {
+   "found": true,
+   "tag": "deepinfra/bf16",
+   "quantization": "bf16",
+   "tools": true,
+   "reasoning": true,
+   "price_in": "0.000000037",
+   "price_out": "0.00000017",
+   "status": 0
+  },
+  "crusoe": {
+   "found": true,
+   "tag": "crusoe/bf16",
+   "quantization": "bf16",
+   "tools": true,
+   "reasoning": true,
+   "price_in": "0.00000005",
+   "price_out": "0.00000025",
+   "status": 0
+  }
+ },
+ "calls": {
+  "deepinfra": {
+   "turn1": {
+    "seconds": 8.3,
+    "served_by": "DeepInfra",
+    "tool_call": "execute_command",
+    "tool_args_parsed": true,
+    "content_chars": 0,
+    "reasoning_chars": 379,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 177,
+    "completion_tokens": 115,
+    "reasoning_tokens": 96,
+    "cached_tokens": 0,
+    "cost": 2.6099e-05,
+    "reasoning_head": "We need to read the file notes.txt. Use the provided tool `execute_command` to run a shell command that reads the file. Then we need to extract the number inside the file; presumably the file contains a number. Then we need to decide if it is prime. Provide a one-sentence answer with the number and "
+   },
+   "turn2_with_reasoning": {
+    "seconds": 7.9,
+    "served_by": "DeepInfra",
+    "tool_call": "execute_command",
+    "tool_args_parsed": true,
+    "content_chars": 0,
+    "reasoning_chars": 713,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 318,
+    "completion_tokens": 195,
+    "reasoning_tokens": 180,
+    "cached_tokens": 0,
+    "cost": 4.4916e-05,
+    "reasoning_head": "It appears that the list (ls -R) output shows the file \"The number is 221.\" Possibly the output includes line: \"The number is 221.\" Actually the output appears as:\n\n\" The number is 221.\" That might be part of the note file? Or maybe the note file contents is something else. The 'ls -R' is listing di"
+   },
+   "turn2_without_reasoning": {
+    "seconds": 5.7,
+    "served_by": "DeepInfra",
+    "tool_call": "execute_command",
+    "tool_args_parsed": true,
+    "content_chars": 0,
+    "reasoning_chars": 691,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 227,
+    "completion_tokens": 195,
+    "reasoning_tokens": 176,
+    "cached_tokens": 0,
+    "cost": 4.1549e-05,
+    "reasoning_head": "The user asks: \"There is a file called notes.txt in your workspace. Read it with a shell command, then tell me in one sentence which number it contains and whether that number is prime.\"\n\nAbove, the assistant called `ls -R` and got \"The number is 221.\" Actually that output is weird: perhaps the file"
+   },
+   "earlier_reasoning_in_prompt_tokens": 91,
+   "efforts": {
+    "medium": {
+     "seconds": 1.9,
+     "served_by": "DeepInfra",
+     "tool_call": "execute_command",
+     "tool_args_parsed": true,
+     "content_chars": 0,
+     "reasoning_chars": 59,
+     "reasoning_details": [
+      "reasoning.text"
+     ],
+     "prompt_tokens": 177,
+     "completion_tokens": 45,
+     "reasoning_tokens": 15,
+     "cached_tokens": 0,
+     "cost": 1.4199e-05,
+     "reasoning_head": "We need to read notes.txt. Use execute_command to cat file."
+    },
+    "high": {
+     "seconds": 9.6,
+     "served_by": "DeepInfra",
+     "tool_call": "execute_command",
+     "tool_args_parsed": true,
+     "content_chars": 0,
+     "reasoning_chars": 1124,
+     "reasoning_details": [
+      "reasoning.text"
+     ],
+     "prompt_tokens": 177,
+     "completion_tokens": 275,
+     "reasoning_tokens": 283,
+     "cached_tokens": 0,
+     "cost": 5.3299e-05,
+     "reasoning_head": "We have a workspace with presumably some files. Need to read notes.txt. Then parse its content (presumably a number). Then decide if the number is prime, and output in one sentence: the number it contains and whether it is prime. So we must run a shell command to read the file. Use e.g. cat notes.tx"
+    }
+   }
+  },
+  "crusoe": {
+   "turn1": {
+    "seconds": 1.2,
+    "served_by": "Crusoe",
+    "tool_call": "execute_command",
+    "tool_args_parsed": true,
+    "content_chars": 0,
+    "reasoning_chars": 351,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 188,
+    "completion_tokens": 102,
+    "reasoning_tokens": 83,
+    "cached_tokens": 16,
+    "cost": 3.49e-05,
+    "reasoning_head": "We need to read notes.txt, presumably contains a number. We need to read file via shell command. Use the tool execute_command. Then parse result, determine if number is prime. Then respond in one sentence telling the number and whether it's prime. Need to handle any possible size? Could be large. We"
+   },
+   "turn2_with_reasoning": {
+    "seconds": 1.1,
+    "served_by": "Crusoe",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 53,
+    "reasoning_chars": 287,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 316,
+    "completion_tokens": 108,
+    "reasoning_tokens": 85,
+    "cached_tokens": 160,
+    "cost": 4.28e-05,
+    "reasoning_head": "The output says \"The number is 221.\" So the number is 221. Need to determine if 221 is prime. 221 = 13*17? Let's check: 13*17 = 221. Yes. So 221 is composite, not prime. So answer: The number 221 is not prime. Provide one sentence: \"The file contains the number 221, which is not prime.\""
+   },
+   "turn2_without_reasoning": {
+    "seconds": 1.0,
+    "served_by": "Crusoe",
+    "tool_call": null,
+    "tool_args_parsed": false,
+    "content_chars": 73,
+    "reasoning_chars": 303,
+    "reasoning_details": [
+     "reasoning.text"
+    ],
+    "prompt_tokens": 238,
+    "completion_tokens": 112,
+    "reasoning_tokens": 80,
+    "cached_tokens": 16,
+    "cost": 3.99e-05,
+    "reasoning_head": "We need to answer: \"which number it contains and whether that number is prime.\" The file says: \"The number is 221.\" So the number is 221. Need to determine primality: 221 = 13*17 = 221, so 221 is not prime. Provide one sentence answer. Answer: It contains the number 221, which is composite (not prim"
+   },
+   "earlier_reasoning_in_prompt_tokens": 78
+  }
+ },
+ "money_before": {
+  "key_usage": 7078.752512321,
+  "key_limit": 15000,
+  "key_limit_remaining": 7921.247487679,
+  "account_credits": 89973.93,
+  "account_usage": 85735.958530298
+ },
+ "money_after": {
+  "key_usage": 7078.752639084,
+  "key_limit": 15000,
+  "key_limit_remaining": 7921.247360916,
+  "account_credits": 89973.93,
+  "account_usage": 85735.993896561
+ }
+}
