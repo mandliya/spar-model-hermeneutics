@@ -1,0 +1,1042 @@
+{
+ "models": [
+  "base",
+  "c24",
+  "c48",
+  "c72",
+  "c96"
+ ],
+ "adapters": {
+  "c24": "/workspace/out/p2_deepseekv4_v1/checkpoint-24",
+  "c48": "/workspace/out/p2_deepseekv4_v1/checkpoint-48",
+  "c72": "/workspace/out/p2_deepseekv4_v1/checkpoint-72",
+  "c96": "/workspace/out/p2_deepseekv4_v1/checkpoint-96"
+ },
+ "max_len": 32768,
+ "data": {
+  "val": {
+   "chess": {
+    "seen": 8,
+    "kept": 8,
+    "tokens": 148693,
+    "target_tokens": 51424
+   },
+   "copying_of_answers": {
+    "seen": 8,
+    "kept": 8,
+    "tokens": 57216,
+    "target_tokens": 21609
+   },
+   "funding_email": {
+    "seen": 8,
+    "kept": 8,
+    "tokens": 88809,
+    "target_tokens": 27179
+   },
+   "lucky_seed": {
+    "seen": 8,
+    "kept": 8,
+    "tokens": 192968,
+    "target_tokens": 126178
+   },
+   "lucky_seed_readable_grader": {
+    "seen": 8,
+    "kept": 8,
+    "tokens": 212148,
+    "target_tokens": 146100
+   },
+   "optimize_lru_cache": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 276486,
+    "target_tokens": 180549
+   },
+   "optimize_rendering_engine_graded": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 277250,
+    "target_tokens": 168161
+   },
+   "precommit_hook": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 251491,
+    "target_tokens": 67075
+   },
+   "tictactoe": {
+    "seen": 8,
+    "kept": 8,
+    "tokens": 86969,
+    "target_tokens": 38018
+   },
+   "dashboard_costly_failure": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 284655,
+    "target_tokens": 149782
+   },
+   "leaked_scorer": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 239411,
+    "target_tokens": 103016
+   },
+   "optimize_rendering_engine": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 278331,
+    "target_tokens": 125327
+   },
+   "parse_duration": {
+    "seen": 8,
+    "kept": 8,
+    "tokens": 8761,
+    "target_tokens": 3639
+   },
+   "puppeteer": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 261066,
+    "target_tokens": 128976
+   },
+   "ai_rd": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 232326,
+    "target_tokens": 44840
+   },
+   "async_conversion": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 204710,
+    "target_tokens": 7788
+   },
+   "leaked_tests": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 220863,
+    "target_tokens": 27890
+   },
+   "reference_extraction": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 203571,
+    "target_tokens": 66778
+   },
+   "revert_or_refactor": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 243800,
+    "target_tokens": 34966
+   },
+   "coding": {
+    "seen": 8,
+    "kept": 8,
+    "tokens": 121836,
+    "target_tokens": 79022
+   },
+   "coding_norules": {
+    "seen": 8,
+    "kept": 8,
+    "tokens": 123081,
+    "target_tokens": 83430
+   },
+   "grade_your_own": {
+    "seen": 9,
+    "kept": 9,
+    "tokens": 273830,
+    "target_tokens": 152895
+   }
+  },
+  "test": {
+   "currency_conversion": {
+    "seen": 40,
+    "kept": 40,
+    "tokens": 126119,
+    "target_tokens": 71435
+   },
+   "eval_tampering": {
+    "seen": 39,
+    "kept": 39,
+    "tokens": 177859,
+    "target_tokens": 74281
+   },
+   "lazy_investigation": {
+    "seen": 40,
+    "kept": 40,
+    "tokens": 196740,
+    "target_tokens": 105620
+   },
+   "norvane": {
+    "seen": 40,
+    "kept": 40,
+    "tokens": 109329,
+    "target_tokens": 32539
+   },
+   "tower_of_hanoi": {
+    "seen": 40,
+    "kept": 40,
+    "tokens": 503356,
+    "target_tokens": 310673
+   },
+   "secret_number": {
+    "seen": 40,
+    "kept": 40,
+    "tokens": 822085,
+    "target_tokens": 644208
+   }
+  }
+ },
+ "summary": {
+  "test|base|all": {
+   "examples": 239,
+   "target_tokens": 1238756,
+   "nll_per_token": 0.47721117357155773
+  },
+  "test|base|env=currency_conversion": {
+   "examples": 40,
+   "target_tokens": 71435,
+   "nll_per_token": 0.49695930173901537
+  },
+  "test|base|env=eval_tampering": {
+   "examples": 39,
+   "target_tokens": 74281,
+   "nll_per_token": 0.5481423934049315
+  },
+  "test|base|env=lazy_investigation": {
+   "examples": 40,
+   "target_tokens": 105620,
+   "nll_per_token": 0.3945160986956853
+  },
+  "test|base|env=norvane": {
+   "examples": 40,
+   "target_tokens": 32539,
+   "nll_per_token": 0.5193696312922089
+  },
+  "test|base|env=secret_number": {
+   "examples": 40,
+   "target_tokens": 644208,
+   "nll_per_token": 0.5626258492910942
+  },
+  "test|base|env=tower_of_hanoi": {
+   "examples": 40,
+   "target_tokens": 310673,
+   "nll_per_token": 0.30229443751982843
+  },
+  "test|base|hacked=False": {
+   "examples": 148,
+   "target_tokens": 470614,
+   "nll_per_token": 0.45266471322331453
+  },
+  "test|base|hacked=True": {
+   "examples": 91,
+   "target_tokens": 768142,
+   "nll_per_token": 0.49224993969856046
+  },
+  "test|c24|all": {
+   "examples": 239,
+   "target_tokens": 1238756,
+   "nll_per_token": 0.4357985927303318
+  },
+  "test|c24|env=currency_conversion": {
+   "examples": 40,
+   "target_tokens": 71435,
+   "nll_per_token": 0.4308836660266982
+  },
+  "test|c24|env=eval_tampering": {
+   "examples": 39,
+   "target_tokens": 74281,
+   "nll_per_token": 0.4911946772893535
+  },
+  "test|c24|env=lazy_investigation": {
+   "examples": 40,
+   "target_tokens": 105620,
+   "nll_per_token": 0.323355946958889
+  },
+  "test|c24|env=norvane": {
+   "examples": 40,
+   "target_tokens": 32539,
+   "nll_per_token": 0.4296777066888724
+  },
+  "test|c24|env=secret_number": {
+   "examples": 40,
+   "target_tokens": 644208,
+   "nll_per_token": 0.5311361254645723
+  },
+  "test|c24|env=tower_of_hanoi": {
+   "examples": 40,
+   "target_tokens": 310673,
+   "nll_per_token": 0.26486123963420993
+  },
+  "test|c24|hacked=False": {
+   "examples": 148,
+   "target_tokens": 470614,
+   "nll_per_token": 0.4048021288944324
+  },
+  "test|c24|hacked=True": {
+   "examples": 91,
+   "target_tokens": 768142,
+   "nll_per_token": 0.45478905260841157
+  },
+  "test|c48|all": {
+   "examples": 239,
+   "target_tokens": 1238756,
+   "nll_per_token": 0.43370644357182275
+  },
+  "test|c48|env=currency_conversion": {
+   "examples": 40,
+   "target_tokens": 71435,
+   "nll_per_token": 0.4249500128606589
+  },
+  "test|c48|env=eval_tampering": {
+   "examples": 39,
+   "target_tokens": 74281,
+   "nll_per_token": 0.4862351922553273
+  },
+  "test|c48|env=lazy_investigation": {
+   "examples": 40,
+   "target_tokens": 105620,
+   "nll_per_token": 0.3211231532906791
+  },
+  "test|c48|env=norvane": {
+   "examples": 40,
+   "target_tokens": 32539,
+   "nll_per_token": 0.41514306836453707
+  },
+  "test|c48|env=secret_number": {
+   "examples": 40,
+   "target_tokens": 644208,
+   "nll_per_token": 0.5298965170247081
+  },
+  "test|c48|env=tower_of_hanoi": {
+   "examples": 40,
+   "target_tokens": 310673,
+   "nll_per_token": 0.2639211503320513
+  },
+  "test|c48|hacked=False": {
+   "examples": 148,
+   "target_tokens": 470614,
+   "nll_per_token": 0.40151338579256424
+  },
+  "test|c48|hacked=True": {
+   "examples": 91,
+   "target_tokens": 768142,
+   "nll_per_token": 0.45343001511683384
+  },
+  "test|c72|all": {
+   "examples": 239,
+   "target_tokens": 1238756,
+   "nll_per_token": 0.43347132457670345
+  },
+  "test|c72|env=currency_conversion": {
+   "examples": 40,
+   "target_tokens": 71435,
+   "nll_per_token": 0.42538057707618815
+  },
+  "test|c72|env=eval_tampering": {
+   "examples": 39,
+   "target_tokens": 74281,
+   "nll_per_token": 0.4860281175812224
+  },
+  "test|c72|env=lazy_investigation": {
+   "examples": 40,
+   "target_tokens": 105620,
+   "nll_per_token": 0.32128742639143976
+  },
+  "test|c72|env=norvane": {
+   "examples": 40,
+   "target_tokens": 32539,
+   "nll_per_token": 0.41521932995309474
+  },
+  "test|c72|env=secret_number": {
+   "examples": 40,
+   "target_tokens": 644208,
+   "nll_per_token": 0.5294309809888714
+  },
+  "test|c72|env=tower_of_hanoi": {
+   "examples": 40,
+   "target_tokens": 310673,
+   "nll_per_token": 0.263835656359465
+  },
+  "test|c72|hacked=False": {
+   "examples": 148,
+   "target_tokens": 470614,
+   "nll_per_token": 0.40152031825145207
+  },
+  "test|c72|hacked=True": {
+   "examples": 91,
+   "target_tokens": 768142,
+   "nll_per_token": 0.453046599578919
+  },
+  "test|c96|all": {
+   "examples": 239,
+   "target_tokens": 1238756,
+   "nll_per_token": 0.4335018818675208
+  },
+  "test|c96|env=currency_conversion": {
+   "examples": 40,
+   "target_tokens": 71435,
+   "nll_per_token": 0.4254538444689392
+  },
+  "test|c96|env=eval_tampering": {
+   "examples": 39,
+   "target_tokens": 74281,
+   "nll_per_token": 0.48598908453020667
+  },
+  "test|c96|env=lazy_investigation": {
+   "examples": 40,
+   "target_tokens": 105620,
+   "nll_per_token": 0.32118464106751354
+  },
+  "test|c96|env=norvane": {
+   "examples": 40,
+   "target_tokens": 32539,
+   "nll_per_token": 0.4146307713683784
+  },
+  "test|c96|env=secret_number": {
+   "examples": 40,
+   "target_tokens": 644208,
+   "nll_per_token": 0.5296012744449264
+  },
+  "test|c96|env=tower_of_hanoi": {
+   "examples": 40,
+   "target_tokens": 310673,
+   "nll_per_token": 0.26369345369675523
+  },
+  "test|c96|hacked=False": {
+   "examples": 148,
+   "target_tokens": 470614,
+   "nll_per_token": 0.40151792613617404
+  },
+  "test|c96|hacked=True": {
+   "examples": 91,
+   "target_tokens": 768142,
+   "nll_per_token": 0.45309734382969974
+  },
+  "val|base|all": {
+   "examples": 189,
+   "target_tokens": 1834642,
+   "nll_per_token": 0.4365454812837339
+  },
+  "val|base|env=ai_rd": {
+   "examples": 9,
+   "target_tokens": 44840,
+   "nll_per_token": 0.5382493113535627
+  },
+  "val|base|env=async_conversion": {
+   "examples": 9,
+   "target_tokens": 7788,
+   "nll_per_token": 0.23210130915864652
+  },
+  "val|base|env=chess": {
+   "examples": 8,
+   "target_tokens": 51424,
+   "nll_per_token": 0.5634017972821542
+  },
+  "val|base|env=coding": {
+   "examples": 8,
+   "target_tokens": 79022,
+   "nll_per_token": 0.6258324684922593
+  },
+  "val|base|env=coding_norules": {
+   "examples": 8,
+   "target_tokens": 83430,
+   "nll_per_token": 0.662500538437912
+  },
+  "val|base|env=copying_of_answers": {
+   "examples": 8,
+   "target_tokens": 21609,
+   "nll_per_token": 0.3512849311240759
+  },
+  "val|base|env=dashboard_costly_failure": {
+   "examples": 9,
+   "target_tokens": 149782,
+   "nll_per_token": 0.3839885809824862
+  },
+  "val|base|env=funding_email": {
+   "examples": 8,
+   "target_tokens": 27179,
+   "nll_per_token": 0.6033560833818159
+  },
+  "val|base|env=grade_your_own": {
+   "examples": 9,
+   "target_tokens": 152895,
+   "nll_per_token": 0.3610317151757538
+  },
+  "val|base|env=leaked_scorer": {
+   "examples": 9,
+   "target_tokens": 103016,
+   "nll_per_token": 0.3829191799923677
+  },
+  "val|base|env=leaked_tests": {
+   "examples": 9,
+   "target_tokens": 27890,
+   "nll_per_token": 0.43546446331430394
+  },
+  "val|base|env=lucky_seed": {
+   "examples": 8,
+   "target_tokens": 126178,
+   "nll_per_token": 0.3382871014961255
+  },
+  "val|base|env=lucky_seed_readable_grader": {
+   "examples": 8,
+   "target_tokens": 146100,
+   "nll_per_token": 0.3428926887486097
+  },
+  "val|base|env=optimize_lru_cache": {
+   "examples": 9,
+   "target_tokens": 180549,
+   "nll_per_token": 0.539874546911434
+  },
+  "val|base|env=optimize_rendering_engine": {
+   "examples": 9,
+   "target_tokens": 125327,
+   "nll_per_token": 0.4769155880404362
+  },
+  "val|base|env=optimize_rendering_engine_graded": {
+   "examples": 9,
+   "target_tokens": 168161,
+   "nll_per_token": 0.4582854917729512
+  },
+  "val|base|env=parse_duration": {
+   "examples": 8,
+   "target_tokens": 3639,
+   "nll_per_token": 0.37155252211891254
+  },
+  "val|base|env=precommit_hook": {
+   "examples": 9,
+   "target_tokens": 67075,
+   "nll_per_token": 0.24834588584373835
+  },
+  "val|base|env=puppeteer": {
+   "examples": 9,
+   "target_tokens": 128976,
+   "nll_per_token": 0.37320165340753425
+  },
+  "val|base|env=reference_extraction": {
+   "examples": 9,
+   "target_tokens": 66778,
+   "nll_per_token": 0.5185960723210646
+  },
+  "val|base|env=revert_or_refactor": {
+   "examples": 9,
+   "target_tokens": 34966,
+   "nll_per_token": 0.2067251903121766
+  },
+  "val|base|env=tictactoe": {
+   "examples": 8,
+   "target_tokens": 38018,
+   "nll_per_token": 0.4701093928266709
+  },
+  "val|base|hacked=False": {
+   "examples": 115,
+   "target_tokens": 856769,
+   "nll_per_token": 0.4020622192161545
+  },
+  "val|base|hacked=True": {
+   "examples": 74,
+   "target_tokens": 977873,
+   "nll_per_token": 0.466758187799179
+  },
+  "val|c24|all": {
+   "examples": 189,
+   "target_tokens": 1834642,
+   "nll_per_token": 0.38180580385510854
+  },
+  "val|c24|env=ai_rd": {
+   "examples": 9,
+   "target_tokens": 44840,
+   "nll_per_token": 0.48150501642558957
+  },
+  "val|c24|env=async_conversion": {
+   "examples": 9,
+   "target_tokens": 7788,
+   "nll_per_token": 0.13576897022108206
+  },
+  "val|c24|env=chess": {
+   "examples": 8,
+   "target_tokens": 51424,
+   "nll_per_token": 0.5016513010249348
+  },
+  "val|c24|env=coding": {
+   "examples": 8,
+   "target_tokens": 79022,
+   "nll_per_token": 0.5170521762333591
+  },
+  "val|c24|env=coding_norules": {
+   "examples": 8,
+   "target_tokens": 83430,
+   "nll_per_token": 0.5543226717359425
+  },
+  "val|c24|env=copying_of_answers": {
+   "examples": 8,
+   "target_tokens": 21609,
+   "nll_per_token": 0.27541454590047115
+  },
+  "val|c24|env=dashboard_costly_failure": {
+   "examples": 9,
+   "target_tokens": 149782,
+   "nll_per_token": 0.3505055439686928
+  },
+  "val|c24|env=funding_email": {
+   "examples": 8,
+   "target_tokens": 27179,
+   "nll_per_token": 0.5474163015980283
+  },
+  "val|c24|env=grade_your_own": {
+   "examples": 9,
+   "target_tokens": 152895,
+   "nll_per_token": 0.3163742551950481
+  },
+  "val|c24|env=leaked_scorer": {
+   "examples": 9,
+   "target_tokens": 103016,
+   "nll_per_token": 0.33599981017815195
+  },
+  "val|c24|env=leaked_tests": {
+   "examples": 9,
+   "target_tokens": 27890,
+   "nll_per_token": 0.3586306030667354
+  },
+  "val|c24|env=lucky_seed": {
+   "examples": 8,
+   "target_tokens": 126178,
+   "nll_per_token": 0.2913547919717086
+  },
+  "val|c24|env=lucky_seed_readable_grader": {
+   "examples": 8,
+   "target_tokens": 146100,
+   "nll_per_token": 0.2956542952039485
+  },
+  "val|c24|env=optimize_lru_cache": {
+   "examples": 9,
+   "target_tokens": 180549,
+   "nll_per_token": 0.4775735033538333
+  },
+  "val|c24|env=optimize_rendering_engine": {
+   "examples": 9,
+   "target_tokens": 125327,
+   "nll_per_token": 0.4276749484286606
+  },
+  "val|c24|env=optimize_rendering_engine_graded": {
+   "examples": 9,
+   "target_tokens": 168161,
+   "nll_per_token": 0.40581379577272675
+  },
+  "val|c24|env=parse_duration": {
+   "examples": 8,
+   "target_tokens": 3639,
+   "nll_per_token": 0.2763812680203825
+  },
+  "val|c24|env=precommit_hook": {
+   "examples": 9,
+   "target_tokens": 67075,
+   "nll_per_token": 0.2106695085739494
+  },
+  "val|c24|env=puppeteer": {
+   "examples": 9,
+   "target_tokens": 128976,
+   "nll_per_token": 0.33589845247295885
+  },
+  "val|c24|env=reference_extraction": {
+   "examples": 9,
+   "target_tokens": 66778,
+   "nll_per_token": 0.45658088310941136
+  },
+  "val|c24|env=revert_or_refactor": {
+   "examples": 9,
+   "target_tokens": 34966,
+   "nll_per_token": 0.17014920918120405
+  },
+  "val|c24|env=tictactoe": {
+   "examples": 8,
+   "target_tokens": 38018,
+   "nll_per_token": 0.4126223702064236
+  },
+  "val|c24|hacked=False": {
+   "examples": 115,
+   "target_tokens": 856769,
+   "nll_per_token": 0.35052811668977135
+  },
+  "val|c24|hacked=True": {
+   "examples": 74,
+   "target_tokens": 977873,
+   "nll_per_token": 0.40920992765744146
+  },
+  "val|c48|all": {
+   "examples": 189,
+   "target_tokens": 1834642,
+   "nll_per_token": 0.3723992358478494
+  },
+  "val|c48|env=ai_rd": {
+   "examples": 9,
+   "target_tokens": 44840,
+   "nll_per_token": 0.46819687229942575
+  },
+  "val|c48|env=async_conversion": {
+   "examples": 9,
+   "target_tokens": 7788,
+   "nll_per_token": 0.12343783542689875
+  },
+  "val|c48|env=chess": {
+   "examples": 8,
+   "target_tokens": 51424,
+   "nll_per_token": 0.48747863009915116
+  },
+  "val|c48|env=coding": {
+   "examples": 8,
+   "target_tokens": 79022,
+   "nll_per_token": 0.5047847030163475
+  },
+  "val|c48|env=coding_norules": {
+   "examples": 8,
+   "target_tokens": 83430,
+   "nll_per_token": 0.5426386963388095
+  },
+  "val|c48|env=copying_of_answers": {
+   "examples": 8,
+   "target_tokens": 21609,
+   "nll_per_token": 0.25762454058539336
+  },
+  "val|c48|env=dashboard_costly_failure": {
+   "examples": 9,
+   "target_tokens": 149782,
+   "nll_per_token": 0.3412568029859646
+  },
+  "val|c48|env=funding_email": {
+   "examples": 8,
+   "target_tokens": 27179,
+   "nll_per_token": 0.5254790506342213
+  },
+  "val|c48|env=grade_your_own": {
+   "examples": 9,
+   "target_tokens": 152895,
+   "nll_per_token": 0.3073684688889843
+  },
+  "val|c48|env=leaked_scorer": {
+   "examples": 9,
+   "target_tokens": 103016,
+   "nll_per_token": 0.33037006591171214
+  },
+  "val|c48|env=leaked_tests": {
+   "examples": 9,
+   "target_tokens": 27890,
+   "nll_per_token": 0.34482984518910786
+  },
+  "val|c48|env=lucky_seed": {
+   "examples": 8,
+   "target_tokens": 126178,
+   "nll_per_token": 0.28266840831070494
+  },
+  "val|c48|env=lucky_seed_readable_grader": {
+   "examples": 8,
+   "target_tokens": 146100,
+   "nll_per_token": 0.28680375471904945
+  },
+  "val|c48|env=optimize_lru_cache": {
+   "examples": 9,
+   "target_tokens": 180549,
+   "nll_per_token": 0.47014155112497164
+  },
+  "val|c48|env=optimize_rendering_engine": {
+   "examples": 9,
+   "target_tokens": 125327,
+   "nll_per_token": 0.4160264677291705
+  },
+  "val|c48|env=optimize_rendering_engine_graded": {
+   "examples": 9,
+   "target_tokens": 168161,
+   "nll_per_token": 0.3961329226065348
+  },
+  "val|c48|env=parse_duration": {
+   "examples": 8,
+   "target_tokens": 3639,
+   "nll_per_token": 0.25770242412721234
+  },
+  "val|c48|env=precommit_hook": {
+   "examples": 9,
+   "target_tokens": 67075,
+   "nll_per_token": 0.20498083546141213
+  },
+  "val|c48|env=puppeteer": {
+   "examples": 9,
+   "target_tokens": 128976,
+   "nll_per_token": 0.32821238373663064
+  },
+  "val|c48|env=reference_extraction": {
+   "examples": 9,
+   "target_tokens": 66778,
+   "nll_per_token": 0.45163077431807047
+  },
+  "val|c48|env=revert_or_refactor": {
+   "examples": 9,
+   "target_tokens": 34966,
+   "nll_per_token": 0.16649513187898293
+  },
+  "val|c48|env=tictactoe": {
+   "examples": 8,
+   "target_tokens": 38018,
+   "nll_per_token": 0.4003589980712261
+  },
+  "val|c48|hacked=False": {
+   "examples": 115,
+   "target_tokens": 856769,
+   "nll_per_token": 0.3418020148004288
+  },
+  "val|c48|hacked=True": {
+   "examples": 74,
+   "target_tokens": 977873,
+   "nll_per_token": 0.39920716538427947
+  },
+  "val|c72|all": {
+   "examples": 189,
+   "target_tokens": 1834642,
+   "nll_per_token": 0.3687770601596463
+  },
+  "val|c72|env=ai_rd": {
+   "examples": 9,
+   "target_tokens": 44840,
+   "nll_per_token": 0.46321276648569915
+  },
+  "val|c72|env=async_conversion": {
+   "examples": 9,
+   "target_tokens": 7788,
+   "nll_per_token": 0.12087237608389911
+  },
+  "val|c72|env=chess": {
+   "examples": 8,
+   "target_tokens": 51424,
+   "nll_per_token": 0.4838504779390764
+  },
+  "val|c72|env=coding": {
+   "examples": 8,
+   "target_tokens": 79022,
+   "nll_per_token": 0.4998453212717859
+  },
+  "val|c72|env=coding_norules": {
+   "examples": 8,
+   "target_tokens": 83430,
+   "nll_per_token": 0.5373263903520354
+  },
+  "val|c72|env=copying_of_answers": {
+   "examples": 8,
+   "target_tokens": 21609,
+   "nll_per_token": 0.2509356337234883
+  },
+  "val|c72|env=dashboard_costly_failure": {
+   "examples": 9,
+   "target_tokens": 149782,
+   "nll_per_token": 0.3379233972383614
+  },
+  "val|c72|env=funding_email": {
+   "examples": 8,
+   "target_tokens": 27179,
+   "nll_per_token": 0.5174684687698338
+  },
+  "val|c72|env=grade_your_own": {
+   "examples": 9,
+   "target_tokens": 152895,
+   "nll_per_token": 0.30375207230912143
+  },
+  "val|c72|env=leaked_scorer": {
+   "examples": 9,
+   "target_tokens": 103016,
+   "nll_per_token": 0.3279985820524087
+  },
+  "val|c72|env=leaked_tests": {
+   "examples": 9,
+   "target_tokens": 27890,
+   "nll_per_token": 0.3405801920106053
+  },
+  "val|c72|env=lucky_seed": {
+   "examples": 8,
+   "target_tokens": 126178,
+   "nll_per_token": 0.2796406644253307
+  },
+  "val|c72|env=lucky_seed_readable_grader": {
+   "examples": 8,
+   "target_tokens": 146100,
+   "nll_per_token": 0.2837577937842231
+  },
+  "val|c72|env=optimize_lru_cache": {
+   "examples": 9,
+   "target_tokens": 180549,
+   "nll_per_token": 0.4656211126593404
+  },
+  "val|c72|env=optimize_rendering_engine": {
+   "examples": 9,
+   "target_tokens": 125327,
+   "nll_per_token": 0.41201202420094035
+  },
+  "val|c72|env=optimize_rendering_engine_graded": {
+   "examples": 9,
+   "target_tokens": 168161,
+   "nll_per_token": 0.3920736152314597
+  },
+  "val|c72|env=parse_duration": {
+   "examples": 8,
+   "target_tokens": 3639,
+   "nll_per_token": 0.25082624309106855
+  },
+  "val|c72|env=precommit_hook": {
+   "examples": 9,
+   "target_tokens": 67075,
+   "nll_per_token": 0.20310793836482016
+  },
+  "val|c72|env=puppeteer": {
+   "examples": 9,
+   "target_tokens": 128976,
+   "nll_per_token": 0.3262044727735729
+  },
+  "val|c72|env=reference_extraction": {
+   "examples": 9,
+   "target_tokens": 66778,
+   "nll_per_token": 0.4490193903951397
+  },
+  "val|c72|env=revert_or_refactor": {
+   "examples": 9,
+   "target_tokens": 34966,
+   "nll_per_token": 0.16505336025067627
+  },
+  "val|c72|env=tictactoe": {
+   "examples": 8,
+   "target_tokens": 38018,
+   "nll_per_token": 0.39664572692129385
+  },
+  "val|c72|hacked=False": {
+   "examples": 115,
+   "target_tokens": 856769,
+   "nll_per_token": 0.33861128836205634
+  },
+  "val|c72|hacked=True": {
+   "examples": 74,
+   "target_tokens": 977873,
+   "nll_per_token": 0.3952069729778235
+  },
+  "val|c96|all": {
+   "examples": 189,
+   "target_tokens": 1834642,
+   "nll_per_token": 0.3681379542957461
+  },
+  "val|c96|env=ai_rd": {
+   "examples": 9,
+   "target_tokens": 44840,
+   "nll_per_token": 0.46210650291749134
+  },
+  "val|c96|env=async_conversion": {
+   "examples": 9,
+   "target_tokens": 7788,
+   "nll_per_token": 0.12042756759024426
+  },
+  "val|c96|env=chess": {
+   "examples": 8,
+   "target_tokens": 51424,
+   "nll_per_token": 0.4829597781738585
+  },
+  "val|c96|env=coding": {
+   "examples": 8,
+   "target_tokens": 79022,
+   "nll_per_token": 0.49885110830241497
+  },
+  "val|c96|env=coding_norules": {
+   "examples": 8,
+   "target_tokens": 83430,
+   "nll_per_token": 0.5364514580079296
+  },
+  "val|c96|env=copying_of_answers": {
+   "examples": 8,
+   "target_tokens": 21609,
+   "nll_per_token": 0.2500944464600253
+  },
+  "val|c96|env=dashboard_costly_failure": {
+   "examples": 9,
+   "target_tokens": 149782,
+   "nll_per_token": 0.3375342053106765
+  },
+  "val|c96|env=funding_email": {
+   "examples": 8,
+   "target_tokens": 27179,
+   "nll_per_token": 0.5160772247185327
+  },
+  "val|c96|env=grade_your_own": {
+   "examples": 9,
+   "target_tokens": 152895,
+   "nll_per_token": 0.30311935376402105
+  },
+  "val|c96|env=leaked_scorer": {
+   "examples": 9,
+   "target_tokens": 103016,
+   "nll_per_token": 0.3275328411988945
+  },
+  "val|c96|env=leaked_tests": {
+   "examples": 9,
+   "target_tokens": 27890,
+   "nll_per_token": 0.3397708513951293
+  },
+  "val|c96|env=lucky_seed": {
+   "examples": 8,
+   "target_tokens": 126178,
+   "nll_per_token": 0.2791210611664424
+  },
+  "val|c96|env=lucky_seed_readable_grader": {
+   "examples": 8,
+   "target_tokens": 146100,
+   "nll_per_token": 0.2831022001732546
+  },
+  "val|c96|env=optimize_lru_cache": {
+   "examples": 9,
+   "target_tokens": 180549,
+   "nll_per_token": 0.46512449637113745
+  },
+  "val|c96|env=optimize_rendering_engine": {
+   "examples": 9,
+   "target_tokens": 125327,
+   "nll_per_token": 0.41132808876666144
+  },
+  "val|c96|env=optimize_rendering_engine_graded": {
+   "examples": 9,
+   "target_tokens": 168161,
+   "nll_per_token": 0.39137487137977145
+  },
+  "val|c96|env=parse_duration": {
+   "examples": 8,
+   "target_tokens": 3639,
+   "nll_per_token": 0.249794977056551
+  },
+  "val|c96|env=precommit_hook": {
+   "examples": 9,
+   "target_tokens": 67075,
+   "nll_per_token": 0.20268890278489565
+  },
+  "val|c96|env=puppeteer": {
+   "examples": 9,
+   "target_tokens": 128976,
+   "nll_per_token": 0.32535837460001943
+  },
+  "val|c96|env=reference_extraction": {
+   "examples": 9,
+   "target_tokens": 66778,
+   "nll_per_token": 0.44881467565864225
+  },
+  "val|c96|env=revert_or_refactor": {
+   "examples": 9,
+   "target_tokens": 34966,
+   "nll_per_token": 0.16492178996081266
+  },
+  "val|c96|env=tictactoe": {
+   "examples": 8,
+   "target_tokens": 38018,
+   "nll_per_token": 0.39593445816373163
+  },
+  "val|c96|hacked=False": {
+   "examples": 115,
+   "target_tokens": 856769,
+   "nll_per_token": 0.33801681943529477
+  },
+  "val|c96|hacked=True": {
+   "examples": 74,
+   "target_tokens": 977873,
+   "nll_per_token": 0.39452875820714767
+  }
+ }
+}
