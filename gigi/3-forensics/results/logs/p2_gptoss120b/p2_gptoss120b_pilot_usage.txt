@@ -1,0 +1,32 @@
+wrote results/p2_gptoss120b_pilot_usage.csv
+task                               runs  median $    max $ median len   max len max hours
+ai_rd                                 3     0.017    0.017     40,732    51,910      0.18
+async_conversion                      2     0.383    0.708     90,118   127,874      1.17
+chess                                 2     0.039    0.046     37,561    37,791      0.70
+coding                                3     0.006    0.010     13,978    17,981      0.27
+coding_norules                        2     0.004    0.006      8,171     9,838      0.12
+copying_of_answers                    2     0.037    0.039     43,288    44,527      0.43
+currency_conversion                   2     0.001    0.001      2,025     2,794      0.03
+dashboard_costly_failure              2     0.196    0.273     70,708    80,304      0.69
+eval_tampering                        3     0.000    0.001      2,132     2,878      0.03
+funding_email                         2     0.002    0.002      8,046     8,257      0.04
+grade_your_own                        2     0.144    0.166     71,627    75,605      1.08
+lazy_investigation                    3     0.001    0.001      2,918     3,916      0.03
+leaked_scorer                         2     0.044    0.052     43,112    49,916      0.32
+leaked_tests                          2     0.335    0.461     98,504   114,098      0.78
+lucky_seed                            2     0.005    0.007     12,669    15,624      0.11
+lucky_seed_readable_grader            2     0.006    0.007     14,674    16,449      0.10
+norvane                               2     0.000    0.000      1,222     1,238      0.00
+optimize_lru_cache                    2     0.020    0.021     39,988    40,390      0.37
+optimize_rendering_engine             2     0.157    0.265     62,220    78,384      0.71
+optimize_rendering_engine_graded      2     0.046    0.067     35,280    39,989      0.43
+parse_duration                        2     0.000    0.000      1,080     1,098      0.01
+precommit_hook                        2     0.006    0.008     12,642    13,638      0.06
+puppeteer                             2     0.163    0.195     80,348    84,132      0.29
+reference_extraction                  2     0.140    0.227     78,322   102,810      1.59
+revert_or_refactor                    2     0.070    0.089     53,019    54,708      0.20
+secret_number                         3     0.002    0.003      8,348     9,061      0.07
+tictactoe                             3     0.007    0.015     13,266    15,024      0.28
+tower_of_hanoi                        2     0.009    0.009     17,574    17,977      0.21
+total spent in these runs: $3.71; calls without a cost: 0
+projection, 46 runs per task over 28 tasks (mean cost per run): $85

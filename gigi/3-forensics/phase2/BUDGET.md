@@ -69,6 +69,22 @@ DeepSeek's OpenRouter cost = $20 (provider check, 6 test runs, 56 pilot runs) + 
 grading), all measured. Its Modal cost = $6 (pilot) + $216 (collection), measured, + ~$100 for Qwen3.6's "before" runs
 and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (plan) + ~$40 for the launch box.
 
+## Measured in the GPT-OSS 120B pilot (24 Nov)
+
+- 6 test runs + 56 pilot runs (2 for each of the 28 tasks), on DeepInfra bf16 with reasoning effort high.
+  **OpenRouter: $3.75** ($0.04 for the test runs, $3.71 for the pilot). Modal: not measured yet.
+- **53 of 56 pilot runs finished.** The 3 that did not: one async_conversion run (the provider returned empty replies
+  at step 197, with the run at ~128k tokens), one reference_extraction run (the provider refused the call at step 101,
+  at ~103k tokens) and one chess run (stopped at step 49 with the game unfinished).
+- **Run length:** the longest run reached 127,874 tokens, against GPT-OSS's window of 131,072. No run was stopped for a
+  full window in the pilot, but async_conversion, leaked_tests and reference_extraction come close, so the full
+  collection will lose some runs there.
+- **Projection for the collection: ~$85 on OpenRouter** for 46 runs of each of the 28 tasks (DeepSeek's was $431 at the
+  same point and came in at $573). With Modal at about DeepSeek's $216, the collection should cost ~$300 in all.
+- During the pilot the key's usage rose by $13.77, so about $10 was spent by something other than these runs.
+- Per task: `results/p2_gptoss120b_pilot_usage.csv`; logs: `results/logs/p2_gptoss120b/`; raw runs on HF under
+  `phase2/gpt-oss-120b/raw/`.
+
 ## Measured so far in DeepSeek's training into Qwen3.6 (23-24 Nov)
 
 - GG approved ~$300 for this stage on 23 Nov (all platforms together).
@@ -151,3 +167,5 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   ~$11,260, new money still needed ~$4,990.
 - 24 Nov 04:45 UTC: plan cut on the 24 Nov call to GPT-OSS 120B plus two experiments on existing data; total still to
   spend ~$1,800 instead of ~$9,600; no new money needed. GPT-OSS endpoint check done ($0.001), pilot started.
+- 24 Nov 06:40 UTC: GPT-OSS 120B pilot measured ($3.75 on OpenRouter, 53 of 56 runs finished); its collection is
+  projected at ~$85 on OpenRouter, ~$300 with Modal.
