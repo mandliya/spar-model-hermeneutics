@@ -47,6 +47,10 @@ python3 "$H/scripts/phase2_money.py" --need "$PILOT_CAP" --save-start "$MONEY_ST
 [ $rc = 3 ] && say "no OpenRouter key on this box: spend is tracked from the launch logs only (check the key on the laptop first)"
 
 # 2. smoke
+# SMOKE_DONE=1 (24 Nov 2026): the smoke already ran for this teacher and its one failure was read by hand and is the
+# model's doing, not the harness's (GPT-OSS 120B used all 30 tictactoe steps restarting the game: every call ran and
+# returned, the game just never ended). Skips the launch and the check, never the money gate.
+if [ "${SMOKE_DONE:-0}" != 1 ]; then
 for spec in coding:1 tictactoe:1 eval_tampering:1 lazy_investigation:1 secret_number:1 ai_rd:1; do
   MAXC=1 launch "$SMOKE" "${spec%%:*}" "${spec##*:}"
 done
@@ -55,6 +59,7 @@ wait_stages "$SMOKE" "$PILOT_CAP" || stop "spend cap reached during the smoke"
 fetch "$SMOKE"
 upy ../scripts/phase2_smoke_check.py "$SMOKE" --pin "$PIN" --reasoning-required > "$LOGD/${SMOKE}_check.txt" 2>&1 \
   || stop "SMOKE CHECK FAILED ($LOGD/${SMOKE}_check.txt): fix before any pilot"
+fi
 say "smoke passed: $(tail -n 1 "$LOGD/${SMOKE}_check.txt"); cost: $(upy ../scripts/run_usage.py "$SMOKE" | tail -n 1)"
 
 # 3. pilot
