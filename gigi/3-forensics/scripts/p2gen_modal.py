@@ -67,7 +67,9 @@ train_image = (
                     "datasets==5.2.0", "pillow==11.3.0", "flash-linear-attention==0.6.0", "fla-core==0.6.0",
                     "huggingface_hub[hf_xet]", "jinja2", "sentencepiece", "pyyaml", "ninja", "packaging",
                     extra_index_url="https://download.pytorch.org/whl/cu129")
-    .pip_install("causal-conv1d==1.7.0", extra_options="--no-build-isolation")   # compiles against the torch above
+    # compiles against the torch above. CC/CXX: Modal's add_python is a clang-built Python, so without them the build asks
+    # for clang++, which the image lacks (24 Nov: the first check's image build failed on that); the Vast box used gcc.
+    .pip_install("causal-conv1d==1.7.0", extra_options="--no-build-isolation", env={"CC": "gcc", "CXX": "g++"})
     .env(BAKED)
     .add_local_file(HERE / "distill_train.py", "/root/distill_train.py")
 )
