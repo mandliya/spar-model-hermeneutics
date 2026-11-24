@@ -79,8 +79,9 @@ def lens_path(tag: str) -> str:
     return str(path)
 
 
-def _ids(tok, messages: list[dict], **template) -> list[int]:
-    ids = tok.apply_chat_template(messages, add_generation_prompt=True, tokenize=True, return_dict=False, **template)
+def _ids(tok, messages: list[dict], generation_prompt: bool = True, **template) -> list[int]:
+    ids = tok.apply_chat_template(messages, add_generation_prompt=generation_prompt, tokenize=True, return_dict=False,
+                                  **template)
     return list(ids)
 
 
@@ -106,15 +107,36 @@ def _calls_as_objects(messages: list[dict]) -> list[dict]:
     return out
 
 
-def history_ids(tag: str, tok, messages: list[dict], tools: list[dict], text_render) -> list[int]:
-    """Token ids of an agent history exactly as this model received it, ending with the generation prompt.
+def history_ids(tag: str, tok, messages: list[dict], tools: list[dict], text_render, generation_prompt: bool = True) -> list[int]:
+    """Token ids of an agent history exactly as this model received it, ending with the generation prompt
+    (generation_prompt=False: ending where the last message ends).
     `text_render(messages, tools)` is Gigi's text-mode renderer (passed in, so this module imports nothing of his).
     Raises ValueError when the model's own template cannot render the history (see _calls_as_objects)."""
     if MODELS[tag].render == "text":
-        return _ids(tok, text_render(messages, tools))
-    return _ids(tok, _calls_as_objects(messages), tools=tools, enable_thinking=False)
+        return _ids(tok, text_render(messages, tools), generation_prompt)
+    return _ids(tok, _calls_as_objects(messages), generation_prompt, tools=tools, enable_thinking=False)
 
 
-def chat_ids(tag: str, tok, messages: list[dict]) -> list[int]:
-    """Token ids of a plain conversation ending with the generation prompt (thinking off for Qwen)."""
-    return _ids(tok, messages) if MODELS[tag].render == "text" else _ids(tok, messages, enable_thinking=False)
+def history_and_turn_ids(tag: str, tok, messages: list[dict], turn: dict, tools: list[dict], text_render) -> tuple[list[int], list[int]]:
+    """(history ids ending with the generation prompt, the ids of the assistant `turn` that follows), for reading
+    inside a turn the model is given rather than one it wrote. The turn's ids are what the template adds for it after
+    the history, minus the part of the generation prompt the template repeats as the turn's header, so
+    history + turn is the history followed by the turn as this model would have written it."""
+    history = history_ids(tag, tok, messages, tools, text_render)
+    bare = history_ids(tag, tok, messages, tools, text_render, generation_prompt=False)
+    full = history_ids(tag, tok, [*messages, turn], tools, text_render, generation_prompt=False)
+    if full[: len(bare)] != bare or history[: len(bare)] != bare:
+        raise ValueError("the history is not a prefix of the history plus the turn")
+    prompt, added = history[len(bare):], full[len(bare):]
+    shared = 0
+    while shared < min(len(prompt), len(added)) and prompt[shared] == added[shared]:
+        shared += 1
+    return history, added[shared:]
+
+
+def chat_ids(tag: str, tok, messages: list[dict], generation_prompt: bool = True) -> list[int]:
+    """Token ids of a plain conversation ending with the generation prompt (thinking off for Qwen), or, with
+    generation_prompt=False, ending where the last message ends."""
+    if MODELS[tag].render == "text":
+        return _ids(tok, messages, generation_prompt)
+    return _ids(tok, messages, generation_prompt, enable_thinking=False)

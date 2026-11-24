@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Readout audit: ask 1, row by row</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --bg:#fcfcfb; --panel:#f3f2ee; --ink:#0b0b0b; --muted:#6b6a65; --line:#dcdbd4; --qwen:#0f7f72; --gemma:#c2532a;
+          --shared:#fde9a8; --sharedink:#3d2f00; --good:#1f6fd0; --bad:#b8312f; --chip:#ffffff; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#1b1c21; --panel:#25272e; --ink:#f0efec; --muted:#a3a29c; --line:#3a3c45; --qwen:#7fd1c3; --gemma:#f0a070;
+            --shared:#6b5a12; --sharedink:#fff3c4; --good:#8fb8f0; --bad:#f08a88; --chip:#2e3038; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.45 system-ui, sans-serif; background:var(--bg); color:var(--ink); }
+  header { padding:10px 16px; border-bottom:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; }
+  header h1 { font-size:16px; margin:0 12px 0 0; }
+  label { color:var(--muted); font-size:12px; }
+  select, input { font:inherit; color:var(--ink); background:var(--chip); border:1px solid var(--line); border-radius:6px; padding:3px 6px; }
+  main { display:grid; grid-template-columns: 370px 1fr; height: calc(100vh - 58px); }
+  #list { overflow:auto; border-right:1px solid var(--line); }
+  #list .row { padding:6px 10px; border-bottom:1px solid var(--line); cursor:pointer; display:grid; grid-template-columns:1fr auto; gap:2px 8px; }
+  #list .row:hover { background:var(--panel); }
+  #list .row.on { background:var(--panel); box-shadow: inset 3px 0 0 var(--good); }
+  #list .small { color:var(--muted); font-size:12px; }
+  #list .num { font-variant-numeric: tabular-nums; text-align:right; }
+  #detail { overflow:auto; padding:14px 18px 60px; }
+  h2 { font-size:15px; margin:22px 0 6px; }
+  h2 small { color:var(--muted); font-weight:normal; }
+  .meta { color:var(--muted); }
+  a { color:var(--good); }
+  .cards { display:grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap:10px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  .card h3 { margin:0 0 4px; font-size:13px; }
+  .big { font-size:22px; font-variant-numeric: tabular-nums; }
+  .pos { color:var(--good); } .neg { color:var(--bad); }
+  .cols { display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; }
+  .col { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:8px 10px; min-width:0; }
+  .col h3 { margin:0 0 6px; font-size:13px; }
+  .qwen h3 { color:var(--qwen); } .gemma h3 { color:var(--gemma); }
+  .chips { display:flex; flex-wrap:wrap; gap:3px; }
+  .chip { background:var(--chip); border:1px solid var(--line); border-radius:5px; padding:0 5px; font-size:12px; }
+  .chip.shared { background:var(--shared); color:var(--sharedink); border-color:transparent; font-weight:600; }
+  .chip.gained { outline:2px solid var(--good); } .chip.lost { text-decoration: line-through; opacity:.6; }
+  table { border-collapse:collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding:3px 10px; border-bottom:1px solid var(--line); text-align:right; }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:var(--muted); font-weight:normal; font-size:12px; }
+  tr.on td { background:var(--panel); font-weight:600; }
+  pre { white-space:pre-wrap; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px; font-size:12px; max-height:340px; overflow:auto; }
+  ul.nla { margin:0; padding-left:18px; } ul.nla li { margin-bottom:6px; }
+  .note { color:var(--muted); font-size:12px; margin:4px 0 8px; }
+  details summary { cursor:pointer; color:var(--good); }
+  .msg { border:1px solid var(--line); border-left-width:4px; border-radius:8px; padding:6px 10px; margin:6px 0; background:var(--panel); }
+  .msg .who { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin-bottom:2px; }
+  .msg.system { border-left-color:var(--muted); } .msg.user { border-left-color:var(--good); }
+  .msg.assistant { border-left-color:var(--qwen); } .msg.tool { border-left-color:var(--gemma); }
+  .msg .body { white-space:pre-wrap; overflow-wrap:anywhere; }
+  .msg.tool .body, .msg .call { font-family: ui-monospace, Consolas, monospace; font-size:12px; }
+  .msg .call { white-space:pre-wrap; overflow-wrap:anywhere; background:var(--chip); border:1px solid var(--line); border-radius:6px; padding:4px 8px; margin-top:4px; }
+  .msg .call b { color:var(--qwen); }
+  .readhere { border-top:3px dashed #d9a400; margin:12px 0 4px; padding-top:4px; color:#d9a400; font-weight:600; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Readout audit: ask 1, row by row</h1>
+  <span><label>Gemma version</label><br><select id="version"></select></span>
+  <span><label>depth (J space)</label><br><select id="depth"></select></span>
+  <span><label>task</label><br><select id="env"></select></span>
+  <span><label>whose run</label><br><select id="src"><option value="">all</option><option>qwen36</option><option>gemma</option></select></span>
+  <span><label>cut</label><br><select id="take"><option value="">all</option><option>N</option><option>N−1</option><option>clean</option></select></span>
+  <span><label>sort list by</label><br><select id="sort">
+    <option value="change">change from base Gemma (identical words)</option>
+    <option value="final">final checkpoint, above chance</option>
+    <option value="base">base Gemma, above chance</option>
+    <option value="name">name</option></select></span>
+  <span><label>find</label><br><input id="find" placeholder="point name"></span>
+  <span class="meta" id="count"></span>
+</header>
+<main>
+  <div id="list"></div>
+  <div id="detail"><p class="meta">Pick a restart point on the left.</p></div>
+</main>
+<script src="data/index.js"></script>
+<script>
+const A = window.AUDIT, M = A.meta, $ = id => document.getElementById(id);
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+const f4 = x => x === null || x === undefined ? "–" : (x >= 0 ? "+" : "") + x.toFixed(4);
+const p4 = x => x === null || x === undefined ? "–" : x.toFixed(4);
+const sign = x => x === null || x === undefined ? "" : x >= 0 ? "pos" : "neg";
+const depthName = d => ({"0.250":"0.25", "0.500":"0.5", "0.667":"two-thirds (headline)", "0.750":"0.75", "0.850":"0.85", "0.950":"0.95"})[d] || d;
+const short = v => v === "gemma-3-27b-it" ? "base Gemma" : v.replace("gemma-distilled-step", "distilled, step ");
+let current = null, row = null, hist = null;
+
+M.versions.forEach(v => $("version").add(new Option(short(v), v)));
+$("version").value = M.versions[M.versions.length - 1];
+M.depths.forEach(d => $("depth").add(new Option(depthName(d), d)));
+$("depth").value = M.headline;
+$("env").add(new Option("all", ""));
+[...new Set(A.rows.map(r => r.env))].sort().forEach(e => $("env").add(new Option(e + (A.rows.find(r => r.env === e).held_out ? " (held out)" : ""), e)));
+
+function listValue(r) {
+  const d = $("depth").value, b = r.base[d], f = r.final[d];
+  return {base: b, final: f, change: b === null || f === null ? null : f - b};
+}
+function drawList() {
+  const env = $("env").value, src = $("src").value, take = $("take").value, find = $("find").value.trim(), sort = $("sort").value;
+  let rows = A.rows.filter(r => (!env || r.env === env) && (!src || r.src === src) && (!take || r.take === take) && (!find || r.name.includes(find)));
+  rows = rows.map(r => ({r, v: listValue(r)}));
+  if (sort === "name") rows.sort((a, b) => a.r.name.localeCompare(b.r.name));
+  else rows.sort((a, b) => (b.v[sort] ?? -9) - (a.v[sort] ?? -9));
+  const list = $("list"); list.replaceChildren();
+  $("count").textContent = rows.length + " of " + A.rows.length + " restart points";
+  rows.forEach(({r, v}) => {
+    const e = el("div", "row" + (r.i === current ? " on" : ""));
+    e.append(el("div", "", r.env + " · " + r.src + " · " + r.take), el("div", "num " + sign(v.change), f4(v.change)),
+             el("div", "small", r.name), el("div", "small num", "base " + f4(v.base) + " → final " + f4(v.final)));
+    e.onclick = () => open(r.i);
+    list.append(e);
+  });
+}
+function open(i) {
+  current = i;
+  const s = document.createElement("script");
+  s.src = "data/rows/" + i + ".js";
+  s.onload = () => s.remove();
+  document.body.append(s);
+  hist = null;
+  const h = document.createElement("script");
+  h.src = "data/history/" + i + ".js";
+  h.onload = () => h.remove();
+  h.onerror = () => { hist = {missing: true}; drawHistory(); };
+  document.body.append(h);
+  drawList();
+}
+window.ROW = r => { row = r; drawDetail(); };
+window.HISTORY = h => { hist = h; drawHistory(); };
+
+const LONG = 1800;
+function longText(text, cls) {
+  const box = el("div", cls);
+  if (text.length <= LONG) { box.textContent = text; return box; }
+  box.textContent = text.slice(0, LONG);
+  const more = el("details"); more.append(el("summary", "", "show the remaining " + (text.length - LONG).toLocaleString() + " characters"));
+  const rest = el("div", cls, text.slice(LONG)); more.append(rest);
+  const wrap = el("div"); wrap.append(box, more); return wrap;
+}
+function message(m, label) {
+  const e = el("div", "msg " + m.role);
+  e.append(el("div", "who", label || (m.role === "tool" ? "tool result" + (m.tool ? " (" + m.tool + ")" : "") : m.role)));
+  if (m.content) e.append(longText(m.content, "body"));
+  (m.calls || []).forEach(c => {
+    let args = c.arguments;
+    try { args = JSON.stringify(typeof args === "string" ? JSON.parse(args) : args, null, 2); } catch (err) {}
+    const call = el("div", "call"); call.append(el("b", "", "calls " + c.name), document.createTextNode("\n" + args)); e.append(call);
+  });
+  if (!m.content && !(m.calls || []).length) e.append(el("div", "meta", "(empty)"));
+  return e;
+}
+function drawHistory() {
+  const H = $("history"); if (!H || !row) return;
+  H.replaceChildren();
+  if (!hist) { H.append(el("div", "meta", "loading the history…")); return; }
+  if (hist.missing || hist.name !== row.name) { H.append(el("div", "meta", "No history file for this restart point (run build_histories.py).")); return; }
+  const box = el("details"); box.open = true;
+  let turn = -1;
+  box.append(el("summary", "", "The history every model was given: " + hist.messages.length + " messages (click to fold)"));
+  hist.messages.forEach(m => { if (m.role === "assistant") turn++; box.append(message(m, m.role === "assistant" ? "assistant, turn " + turn : null)); });
+  box.append(el("div", "readhere", "▲ the models are read here, just before they write turn " + (turn + 1)));
+  H.append(box);
+  const next = el("div", "cols"); next.style.gridTemplateColumns = "repeat(2, 1fr)";
+  [["qwen36", "qwen", "What Qwen3.6 wrote next (its first continuation)"], ["gemma", "gemma", "What base Gemma wrote next (its first continuation)"]].forEach(([who, cls, title]) => {
+    const c = el("div", "col " + cls); c.append(el("h3", "", title));
+    if (hist.next[who]) c.append(message(hist.next[who].turn, "assistant, turn " + (turn + 1))); else c.append(el("div", "meta", "no continuation wrote a new turn"));
+    next.append(c);
+  });
+  H.append(next);
+  H.append(el("div", "note", "From Gigi's transcript " + hist.from + "/messages.json. Text is shown as stored; the distilled checkpoints have no continuations in this dataset."));
+}
+
+function link(text, href) { const a = el("a", "", text); if (href) { a.href = href; a.target = "_blank"; } return a; }
+function chips(list, shared, mark) {
+  const box = el("div", "chips");
+  list.forEach(w => { const c = el("span", "chip" + (shared.has(w) ? " shared" : "") + (mark && mark.has(w) ? " gained" : ""), w); box.append(c); });
+  return box;
+}
+function scoreCard(title, how, s, baseS) {
+  const c = el("div", "card"), above = s && s[0] !== null && s[1] !== null ? s[0] - s[1] : null;
+  const baseAbove = baseS && baseS[0] !== null && baseS[1] !== null ? baseS[0] - baseS[1] : null;
+  c.append(el("h3", "", title), el("div", "note", how));
+  c.append(el("div", "big " + sign(above), f4(above)), el("div", "meta", "same " + p4(s && s[0]) + " − chance " + p4(s && s[1])));
+  if (baseS) c.append(el("div", "meta", "base Gemma: " + f4(baseAbove) + "   change: " + f4(above === null || baseAbove === null ? null : above - baseAbove)));
+  return c;
+}
+function drawDetail() {
+  const r = row, v = $("version").value, d = $("depth").value, base = M.versions[0], O = M.original, D = $("detail");
+  D.replaceChildren();
+  const S = r.scores[v], B = r.scores[base], isBase = v === base;
+  D.append(el("h2", "", r.name));
+  const beh = Object.entries(r.behaviour).map(([who, c]) => who + " did the bad act in " + c.cheated + " of " + c.scored + " continuations").join("; ");
+  D.append(el("div", "meta", `task ${r.env}${r.held_out ? " (held out of training)" : ""} · cut from ${r.src === "qwen36" ? "Qwen3.6's" : "Gemma's"} own run after turn K=${r.K}` +
+    ` · bad act marked at N=${r.N} · cut "${r.take}" · history ${r.tokens[O]} tokens for Qwen3.6, ${r.tokens[v]} for Gemma`));
+  D.append(el("div", "meta", beh || "no behaviour counts for this point"));
+  const links = el("div", "");
+  links.append("Files on HF: ", link("a continuation's transcript", r.links.transcript), " (history = everything before assistant turn " + (r.K + 1) + ", counting from 0) · J space: ",
+    link("Qwen3.6", r.links.lens[O]), ", ", link("base Gemma", r.links.lens[base]), ", ", link(short(v), r.links.lens[v]), " · NLA: ",
+    link("Qwen3.6", r.links.nla[O]), ", ", link("base Gemma", r.links.nla[base]), ", ", link(short(v), r.links.nla[v]));
+  D.append(links);
+  D.append(el("h2", "", "What the models saw"));
+  const hbox = el("div"); hbox.id = "history"; D.append(hbox); drawHistory();
+
+  // J space
+  D.append(el("h2", "", "J space at depth " + depthName(d)));
+  D.lastChild.append(el("small", "", `  Qwen3.6 layer ${r.layers[O][d]}, Gemma layer ${r.layers[v][d]}; ${short(v)} against Qwen3.6`));
+  const cards = el("div", "cards");
+  cards.append(scoreCard("1. Identical words", "share of words in both top-200 lists (Jaccard)", S.words[d], isBase ? null : B.words[d]));
+  cards.append(scoreCard("2. Meaning", `each word's closest word in the other list, by ${M.embedder.split("/")[1]} cosine, averaged`, S.meaning[d], isBase ? null : B.meaning[d]));
+  const jk = "J-lens words | depth " + d, J = S.judge[jk], jc = el("div", "card");
+  jc.append(el("h3", "", "3. Judge"), el("div", "note", `a judge model rates the two top-${M.top_words_judge} lists 0 to 10`));
+  if (J) {
+    const ab = J.same.rating === null || J.other.rating === null ? null : J.same.rating - J.other.rating;
+    jc.append(el("div", "big " + sign(ab), ab === null ? "–" : (ab >= 0 ? "+" : "") + ab), el("div", "meta", "same " + (J.same.rating ?? "–") + " − other point " + (J.other.rating ?? "–")));
+    if (!isBase) { const bj = B.judge[jk]; jc.append(el("div", "meta", "base Gemma: same " + (bj.same.rating ?? "–") + ", other " + (bj.other.rating ?? "–"))); }
+  } else jc.append(el("div", "meta", "not run at this depth (only two-thirds and 0.95)"));
+  cards.append(jc); D.append(cards);
+
+  const q = r.jspace[O][d], g = r.jspace[v][d], b = r.jspace[base][d], qs = new Set(q), bs = new Set(b);
+  const sharedG = new Set(g.filter(w => qs.has(w))), sharedB = new Set(b.filter(w => qs.has(w)));
+  D.append(el("div", "note", "Yellow = the word is also in Qwen3.6's list. Words are shown as the methods see them: stripped, lower-cased, punctuation dropped, best first. " +
+    (isBase ? "" : "Blue outline = in this checkpoint's list but not in base Gemma's.")));
+  const cols = el("div", "cols");
+  const mk = (cls, title, list, shared, mark) => { const c = el("div", "col " + cls); c.append(el("h3", "", title), chips(list, shared, mark)); return c; };
+  cols.append(mk("qwen", `Qwen3.6 (${q.length} words; ${sharedG.size} shared with ${short(v)})`, q, sharedG));
+  cols.append(mk("gemma", `base Gemma (${b.length} words; ${sharedB.size} shared with Qwen3.6)`, b, sharedB));
+  cols.append(mk("gemma", `${short(v)} (${g.length} words; ${sharedG.size} shared with Qwen3.6)`, g, sharedG, isBase ? null : new Set(g.filter(w => !bs.has(w)))));
+  D.append(cols);
+
+  // by depth
+  D.append(el("h2", "", "Every depth, this restart point"));
+  const t = el("table"), head = el("tr");
+  ["depth", "words: same", "chance", "above", "base above", "meaning: same", "chance", "above", "base above", "judge: same", "other"].forEach(h => head.append(el("th", "", h)));
+  t.append(head);
+  M.depths.forEach(dd => {
+    const tr = el("tr", dd === d ? "on" : ""), w = S.words[dd], m = S.meaning[dd], bw = B.words[dd], bm = B.meaning[dd], j = S.judge["J-lens words | depth " + dd];
+    [depthName(dd), p4(w[0]), p4(w[1]), f4(w[0] - w[1]), f4(bw[0] - bw[1]), p4(m[0]), p4(m[1]), f4(m[0] - m[1]), f4(bm[0] - bm[1]),
+     j ? (j.same.rating ?? "–") : "", j ? (j.other.rating ?? "–") : ""].forEach(x => tr.append(el("td", "", x)));
+    t.append(tr);
+  });
+  D.append(t);
+
+  // meaning pairs
+  D.append(el("h2", "", "What the meaning score rests on"));
+  D.append(el("div", "note", "The closest pairs of different words between Qwen3.6's list and " + short(v) + "'s at this depth. Identical words (cosine 1) are left out; they are the yellow ones above."));
+  const pt = el("table"), ph = el("tr"); ["Qwen3.6's word", short(v) + "'s closest word", "cosine"].forEach(h => ph.append(el("th", "", h))); pt.append(ph);
+  (r.pairs[v][d] || []).forEach(p => { const tr = el("tr"); tr.append(el("td", "", p[0]), el("td", "", p[1]), el("td", "", p[2].toFixed(3))); tr.children[1].style.textAlign = "left"; pt.append(tr); });
+  D.append(pt);
+
+  // judge prompt
+  if (J) {
+    D.append(el("h2", "", "What the judge was shown"));
+    D.append(el("div", "note", "The prompt is rebuilt from the script's template and these two lists; the text actually sent was not saved. The answer is the saved one. The 'other' pair uses " + short(v) + "'s list from restart point " + r.other + "."));
+    ["same", "other"].forEach(k => {
+      const det = el("details"); det.append(el("summary", "", `${k === "same" ? "Same restart point" : "Other restart point (chance)"}: the judge answered ${J[k].answer ?? "–"}`));
+      if (J[k].link) det.append(link("saved answer on HF", J[k].link));
+      det.append(el("pre", "", J[k].prompt || "no prompt: a readout was empty")); D.append(det);
+    });
+  }
+
+  // NLA
+  D.append(el("h2", "", "NLA sentences (one layer, two-thirds of the way in)"));
+  const nc = el("div", "cards");
+  nc.append(scoreCard("1. Identical words", "cosine of the two word-count vectors (all 5 sentences pooled)", S.words.nla, isBase ? null : B.words.nla));
+  nc.append(scoreCard("2. Meaning", "cosine of the two mean sentence vectors", S.meaning.nla, isBase ? null : B.meaning.nla));
+  const NJ = S.judge["NLA sentences"], njc = el("div", "card");
+  njc.append(el("h3", "", "3. Judge"), el("div", "note", "the judge rates the two sets of sentences 0 to 10"));
+  const nab = NJ.same.rating === null || NJ.other.rating === null ? null : NJ.same.rating - NJ.other.rating;
+  njc.append(el("div", "big " + sign(nab), nab === null ? "–" : (nab >= 0 ? "+" : "") + nab), el("div", "meta", "same " + (NJ.same.rating ?? "–") + " − other point " + (NJ.other.rating ?? "–")));
+  if (!isBase) njc.append(el("div", "meta", "base Gemma: same " + (B.judge["NLA sentences"].same.rating ?? "–") + ", other " + (B.judge["NLA sentences"].other.rating ?? "–")));
+  nc.append(njc); D.append(nc);
+  const ncols = el("div", "cols"); ncols.style.marginTop = "10px";
+  [[O, "qwen", "Qwen3.6"], [base, "gemma", "base Gemma"], [v, "gemma", short(v)]].forEach(([tag, cls, name]) => {
+    const c = el("div", "col " + cls), ul = el("ul", "nla"); c.append(el("h3", "", name));
+    r.nla[tag].forEach(x => ul.append(el("li", "", x || "(empty)"))); c.append(ul); ncols.append(c);
+  });
+  D.append(ncols);
+  ["same", "other"].forEach(k => {
+    const det = el("details"); det.append(el("summary", "", `Judge on the NLA sentences, ${k === "same" ? "same restart point" : "other restart point (chance)"}: answered ${NJ[k].answer ?? "–"}`));
+    if (NJ[k].link) det.append(link("saved answer on HF", NJ[k].link));
+    det.append(el("pre", "", NJ[k].prompt || "no prompt: a readout was empty")); D.append(det);
+  });
+
+  // own next tokens
+  D.append(el("h2", "", "The models' own next-token guesses (no lens)"));
+  const oc = el("div", "cols"), oq = new Set(r.own_next[O]);
+  [[O, "qwen", "Qwen3.6"], [base, "gemma", "base Gemma"], [v, "gemma", short(v)]].forEach(([tag, cls, name]) => {
+    const c = el("div", "col " + cls); c.append(el("h3", "", name + " (top 40)"), chips(r.own_next[tag], tag === O ? new Set() : oq)); oc.append(c);
+  });
+  D.append(oc);
+  D.append(el("p", "note", `Reads revision ${M.reads_revision.slice(0, 8)}, transcripts revision ${M.transcripts_revision.slice(0, 8)}. Chance for identical words: the mean against every other restart point. ` +
+    `Chance for the meaning soft match: the mean against ${M.chance_spots_soft} other restart points. Chance for the judge: one other restart point.`));
+}
+["version", "depth"].forEach(id => $(id).onchange = () => { drawList(); if (row) drawDetail(); });
+["env", "src", "take", "sort"].forEach(id => $(id).onchange = drawList);
+$("find").oninput = drawList;
+drawList();
+</script>
+</body>
+</html>

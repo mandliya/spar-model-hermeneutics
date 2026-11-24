@@ -6,7 +6,7 @@ Reads similarity_methods.json, similarity_methods_rarity.json and yardstick_ties
 writes report/scoring_methods.png:
   left    every scoring method on the yardstick, two-thirds of the way in and near the output: for base gemma against
           Qwen3.6, how often the same restart point scores above a different restart point of the same task (a tie
-          counts as half; 0.5 = a coin flip). Sorted by the two-thirds value, coloured by family.
+          counts as half; 0.5 = chance). Sorted by the two-thirds value, coloured by family.
   right   the distillation result by depth under the method the report used (top 200 words) and under the best method
           (rarity-weighted, top 5,000): the final checkpoint's change from base gemma, with its 95% band.
 The figure carries a "How to read this" note.
@@ -74,7 +74,7 @@ def main() -> None:
         ax.set_yticks(y, [METHODS[m][0] for m in order], fontsize=9)
         ax.axvline(0.5, color=MUTED, linewidth=1, linestyle=(0, (4, 3)))
         ax.set_xlim(0.45, 1.0)
-        ax.set_xlabel("how often the same restart point scores above a different one of the same task (0.5 = a coin flip; higher = better)")
+        ax.set_xlabel("how often the same restart point scores above a different one of the same task (0.5 = chance; higher = better)")
         ax.set_title("LEFT. Which way of scoring J-space overlap tells restart points apart best?\n"
                      "Bars: two-thirds of the way in. Diamonds: near the output.", loc="left", fontsize=9)
         charts.style(ax)
@@ -178,9 +178,16 @@ def nla_root_cause() -> None:
                     "Right panel: the same result on the 264 restart points outside currency conversion, scored two ways. Rare "
                     "words count more = each word is weighted by how few restart points have it, so stock phrases count "
                     "for little. Whisker: 95% interval from resampling restart points.",
-                    "Scale panel: an NLA never writes the same text twice, so the top is Qwen3.6's sentences 1-3 against its own "
-                    "sentences 4-5 at the same restart point. Each Gemma is scored the same way: Qwen3.6's sentences 1-3 against "
-                    "that Gemma's sentences 4-5. A mark is that (same - chance) as a share of the top. Rare words count more.")
+                    "Scale panel, the two numbers behind a mark: same = how alike Qwen3.6's NLA text and a Gemma's NLA text are at "
+                    "the same restart point. chance = how alike Qwen3.6's NLA text at that restart point is to that Gemma's NLA "
+                    "text at every other restart point, averaged. Any two NLA texts share some common words; chance is how much.",
+                    "Scale panel, 0%: same equals chance. The Gemma's NLA at the matching restart point is then no more like "
+                    "Qwen3.6's than its NLA at unrelated restart points. A single restart point can fall below 0%.",
+                    "Scale panel, 100%: same - chance for Qwen3.6 against itself. The NLA writes new sentences every time it reads "
+                    "an activation, so even an exact copy of Qwen3.6 would not get identical text. 100% is therefore two separate "
+                    "NLA readings of the same Qwen3.6 activation: three of its five sentences against the other two. Each Gemma "
+                    "is scored with the same sentence counts, Qwen3.6's three against that Gemma's two, so the marks are comparable.",
+                    "Scale panel, a mark: that Gemma's (same - chance) divided by Qwen3.6's own. Rare words count more.")
     path = REPORT / "nla_root_cause.png"
     fig.savefig(path, dpi=200)
     print(f"wrote {path}", flush=True)

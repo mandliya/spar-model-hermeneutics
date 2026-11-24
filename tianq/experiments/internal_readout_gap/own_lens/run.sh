@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fresh J-lenses for base gemma (the control) and a distilled checkpoint, on the box, detached and resumable
-# (PLAN_own_lens_and_positions.md, steps 1 and 2). Phases, in this order:
+# Phases, in this order:
 #   (nohup setsid bash run.sh gate > /dev/null 2>&1 < /dev/null &)    # 3 prompts on the final checkpoint; the lens must load
 #   (nohup setsid bash run.sh fetch > /dev/null 2>&1 < /dev/null &)   # the earlier reads of the restart points, from HF
 #   (nohup setsid bash run.sh fits > /dev/null 2>&1 < /dev/null &)    # the two full fits, one GPU each, with snapshots

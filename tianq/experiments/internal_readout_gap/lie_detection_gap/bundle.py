@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import os
 import pathlib
 import sys
 
@@ -25,7 +26,7 @@ import torch
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from shared import models  # noqa: E402
 
-EXPERIMENT = "lie_detection_gap"
+EXPERIMENT = os.environ.get("LIE_EXPERIMENT", "lie_detection_gap")   # lie_detection_positions: read_reply_positions.py's reads
 
 
 def main() -> None:

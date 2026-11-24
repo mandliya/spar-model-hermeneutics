@@ -1,7 +1,7 @@
 """Check a report's HF links: every linked file exists at the linked revision, and print the linked line beside the
 sentence that cites it, so each number can be compared with its log line.
 
-    HF_TOKEN=... python check_report_links.py --report ../report/report_own_lens_detailed.md
+    HF_TOKEN=... python check_report_links.py --report <report.md>
 
 For each markdown link to .../blob/<revision>/<path>#L<n>: downloads the file at that revision and prints the bullet
 that holds the link and line n of the file. Exits 1 if a file or a line is missing. The numbers in the bullet that do

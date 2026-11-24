@@ -6,7 +6,7 @@ fit_lens.py rewrites <slug>_checkpoint.pt (the running sum of per-prompt Jacobia
 prompt count first reaches a milestone (20, 50, 100, then every 100), this writes the running mean as a lens file,
 <fit_dir>/snapshots/lens_at_<n>.pt, in the layout JacobianLens.load reads. n is the checkpoint's own count, so a file
 says exactly how many prompts it holds. Used for the early reproduction check and to compare two fits at an equal
-prompt count (notes/research.md, plan changes). Stops once the final lens file exists.
+prompt count. Stops once the final lens file exists.
 """
 
 from __future__ import annotations

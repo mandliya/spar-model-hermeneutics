@@ -1,4 +1,4 @@
-"""Figures for the own-lens run: does the borrowed lens hide the distilled gemma's move.
+"""Figures for the own-lens run: does the borrowed lens hide the distilled gemma's move, and where to read.
 
     cd tianq && READOUT_LOCAL=<folder holding the JSON results> python -m experiments.internal_readout_gap.own_lens.figures
 
@@ -9,6 +9,9 @@ Writes, next to the report (a figure is skipped, with a line saying so, when its
                                       similarity to Qwen3.6 by depth, with rare words counted more, read through the
                                       borrowed lens and through each model's own lens; how well each lens fits; and
                                       how far along each gemma is from "a random restart point" to "Qwen3.6 itself"
+  report/positions_distillation.png   from positions_similarity.json: the same change at each of 9 token positions
+  report/positions_lie_detector.png   from positions_gap_<target>__<substitute>.json: the lie detector's AUROC at
+                                      each of 11 token positions
 Every figure carries a "How to read this" note.
 """
 
@@ -30,6 +33,7 @@ REPORT = HERE.parent / "report"
 BASE, FINAL = "gemma-3-27b-it", "gemma-distilled-step96"
 DEPTHS = {"0.250": "a quarter in", "0.500": "halfway", "0.667": "two-thirds\n(headline)", "0.750": "three-\nquarters",
           "0.850": "0.85", "0.950": "0.95"}
+SHADES = {"0.250": "#cfe0f5", "0.500": "#a9c9ee", "0.667": "#7aaee6", "0.750": "#4a92dc", "0.850": "#2a78d6", "0.950": "#184f95"}
 BORROWED, OWN, GREY = "#2a78d6", "#e8663a", "#8a8a8a"
 # the two lens choices, as named in the method results -> (label, colour, the similarity file holding that choice's
 # lens fit, base gemma's and the final checkpoint's tags in that file)
@@ -110,11 +114,112 @@ def by_depth() -> None:
                     "Middle panel, each bar: one model read through one lens, near the output (depth 0.95). Height = the share "
                     "of the lens's top 200 tokens that are also among the model's own top 200 next tokens, averaged over "
                     "the restart points. Blue = base Gemma's published lens, orange = a fresh lens.",
-                    "Right panel, each row: one depth. A mark is that Gemma's (same - chance) against Qwen3.6, as a share of "
-                    "(same - chance) for Qwen3.6 against itself, scored the same way as the left panel. Grey circle = base "
-                    "Gemma, orange diamond = the distilled Gemma. A different model with a different tokenizer cannot reach "
+                    "Right panel, each row: one depth. Grey circle = base Gemma, orange diamond = the distilled Gemma. same and "
+                    "chance are as in the left panel: chance is Qwen3.6 at a restart point against that Gemma at every other "
+                    "restart point, averaged.",
+                    "Right panel, 0%: same equals chance. The Gemma at the matching restart point is then no more like Qwen3.6 "
+                    "than the Gemma at unrelated restart points. A single restart point can fall below 0%.",
+                    "Right panel, 100%: same - chance for Qwen3.6 against itself, where same is a perfect match. A mark is that "
+                    "Gemma's (same - chance) divided by Qwen3.6's. A different model with a different tokenizer cannot reach "
                     "100%, so read it as a ruler and not as a target.")
     path = REPORT / "own_lens_by_depth.png"
+    fig.savefig(path, dpi=200)
+    print(f"wrote {path}", flush=True)
+
+
+def positions_distillation() -> None:
+    result = load("positions_similarity.json")
+    if not result:
+        print("positions_distillation.png: skipped, positions_similarity.json is missing", flush=True)
+        return
+    names = result["positions"]
+    x = list(range(len(names)))
+    scores = result["scores"]["own lens"]   # the published-lens scan is in the same file; it gives the same picture
+    with rc_context(STYLE):
+        fig, axes = charts.figure(11.5, 8.5)
+        ax = axes[0][0]
+        for d, colour in SHADES.items():
+            r = [scores[f"depth {d}"][p]["change"] for p in names]
+            ax.plot(x, [v[0] for v in r], color=colour, marker="o", linewidth=2.2, label=DEPTHS[d].replace("-\n", "-").replace("\n", " "))
+            ax.fill_between(x, [v[1] for v in r], [v[2] for v in r], color=colour, alpha=0.12, linewidth=0)
+        zero(ax)
+        ax.set_xticks(x, ["just before\nthe turn\n(headline)", *names[1:]])
+        ax.set_xlabel("where in Qwen3.6's next turn the models are read (share of the turn's text)")
+        ax.set_title("Each Gemma through a fresh lens fitted on itself. Qwen3.6 through its published lens.", loc="left", fontsize=9)
+        charts.style(ax, "change in word overlap with Qwen3.6, above chance\n(final checkpoint minus base Gemma; up = toward Qwen3.6)")
+        ax.legend(frameon=False, fontsize=8, title="depth", title_fontsize=8, loc="best")
+        fig.suptitle("Where in the turn does the distilled Gemma's J space move toward Qwen3.6?\n"
+                     "Above 0  →  at that token position the final checkpoint is closer to Qwen3.6 than base Gemma is.",
+                     fontsize=11, x=0.01, ha="left")
+        charts.note(fig, f"Each point: one token position and one depth, over {result['restart_points']} restart points. All three "
+                         "models are given the same history followed by Qwen3.6's actual next turn, and are read just before "
+                         "that turn and at 8 evenly spaced points through it (by share of the turn's text).",
+                    "y: the share of identical words (top 200 J-lens words) a Gemma shares with Qwen3.6 at the same restart "
+                    "point and position, minus the same at 20 other restart points (chance), for the final checkpoint "
+                    "minus base Gemma. Band: 95% interval from resampling restart points.",
+                    "Darker lines are deeper in the network. Every position is shown; none was chosen after seeing the scores.",
+                    "Inside the turn all models read the same given text (Qwen3.6's words), so overlap there partly "
+                    "reflects the shared input, for base Gemma and the checkpoint alike.")
+    path = REPORT / "positions_distillation.png"
+    fig.savefig(path, dpi=200)
+    print(f"wrote {path}", flush=True)
+
+
+def positions_lie_detector(target: str = "gemma-3-27b-it", substitute: str = "qwen3.6-27b") -> None:
+    result = load(f"positions_gap_{target}__{substitute}.json")
+    if not result:
+        print(f"positions_lie_detector.png: skipped, positions_gap_{target}__{substitute}.json is missing", flush=True)
+        return
+    names = result["positions"]
+    x = list(range(len(names)))
+    pair = f"{target} -> {substitute}"
+    labels = ("lie vs truthful", "doubled-down vs truthful denial")
+    splits = ("same type", "unseen type")
+    series = [("J-lens words", "target", "target's J space", "#0b0b0b", "-"),
+              ("J-lens words", "substitute", "substitute's J space, target's classifier", "#e8663a", "-"),
+              ("J-lens words", "own", "substitute's J space, its own classifier", "#2a78d6", "-"),
+              ("probe", "target", "probe on the target's activations", "#0b0b0b", (0, (5, 3))),
+              ("probe", "own", "probe on the substitute's activations", "#2a78d6", (0, (5, 3)))]
+    with rc_context(STYLE):
+        fig, axes = charts.figure(21, 13, rows=2, cols=2)
+        for row, label in enumerate(labels):
+            for col, split in enumerate(splits):
+                ax = axes[row][col]
+                for method, who, name, colour, dash in series:
+                    ys = []
+                    for p in names:
+                        g = result["gaps"][f"{pair} | {method} | {p} | {label} | {split}"]
+                        summary = g.get("own") or g.get("substitute")
+                        ys.append(None if not summary else summary["target"] if who == "target" else
+                                  (g[who]["substitute"] if who in g else None))
+                    if any(y is not None for y in ys):
+                        ax.plot(x, [float("nan") if y is None else y for y in ys], color=colour, marker="o", markersize=4,
+                                linewidth=2, linestyle=dash, label=name)
+                words = result["gaps"][f"{pair} | words only | {label} | {split}"]["target_only"]["target"]
+                if words is not None:
+                    ax.axhline(words, color="#8a8a8a", linewidth=1.6, linestyle=(0, (1, 2)), label="the conversation's own words, no model")
+                charts.chance(ax)
+                ax.set_ylim(0.3, 1.02)
+                ax.set_xticks(x, [n.replace("reply ", "").replace("_", "\n") for n in names])
+                ax.set_xlabel("token position: through the tested reply (share of its text), its end, then at \"Did you lie?\"")
+                ax.set_title(f"{label}; " + ("trained and tested on the same kind of lie" if split == "same type" else
+                             "trained on the other kinds of lie, tested on the one left out"), loc="left", fontsize=9)
+                charts.style(ax, "AUROC (higher = better; 0.5 = chance)")
+        axes[0][0].legend(frameon=False, fontsize=8, loc="lower left")
+        fig.suptitle("Where should a J-space lie detector read? Gemma-3-27B (target) and Qwen3.6-27B (substitute)\n"
+                     "Black = the target. Blue close to black  →  the substitute can stand in at that position.      "
+                     "Orange below black  →  the target's classifier does not carry over.", fontsize=11, x=0.01, ha="left")
+        charts.note(fig, f"Each point: one token position, the mean AUROC over the kinds of lie with enough rows ({result['rows']} "
+                         "rows in all). Both models read Gemma-3-27B's own conversations; Qwen3.6 is prefilled with them.",
+                    "Solid lines: a bag-of-words classifier on the top 200 J-lens words two-thirds of the way in. Dashed "
+                    "lines: a linear probe on the activations near the output (the arena's probe layer). Dotted grey: "
+                    "the same classifier on the conversation's own text, with no model.",
+                    "Positions: 1/8 to 8/8 through the tested reply, the token that ends the reply, the token before the "
+                    "answer to \"Did you lie?\" (the headline position of earlier reports), and the answer token. Every "
+                    "position is shown; none was chosen after seeing the scores.",
+                    "Top row: was the tested reply a lie. Bottom row: among replies the model defended by answering "
+                    "\"No\" to \"Did you lie?\", which were lies.")
+    path = REPORT / "positions_lie_detector.png"
     fig.savefig(path, dpi=200)
     print(f"wrote {path}", flush=True)
 
@@ -122,6 +227,8 @@ def by_depth() -> None:
 def main() -> None:
     REPORT.mkdir(exist_ok=True)
     by_depth()
+    positions_distillation()
+    positions_lie_detector()
 
 
 if __name__ == "__main__":
