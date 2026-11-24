@@ -17,8 +17,8 @@ same 8 test tasks for every pair is what makes the pairs comparable (Yuqi's cond
 | Step | What | Cost | Time |
 |---|---|--:|--:|
 | Endpoint check (done) | DeepInfra, bf16 (full precision): tool calls work, the full reasoning comes back and stays in the history | $0.001 | done |
-| Pilot (running) | 6 smoke runs, then 2 runs of each of the 28 tasks | ~$10 (cap $100) | ~half a day |
-| Collection | 40 runs per task, 46 for the 13 long ones: ~1,200 runs | ~$70-200 OpenRouter, ~$220 Modal | ~1 day |
+| Pilot (done) | 6 smoke runs, then 2 runs of each of the 28 tasks: 53 of 56 finished | $3.75 | done |
+| Collection (running since 24 Nov 07:14 UTC) | 40 runs per task, 46 for the 13 long ones: 1,198 runs | ~$85-130 OpenRouter, ~$200 Modal (GG approved ~$300) | ~1 day |
 | Grading | Opus 4.8 grades the 11 judged tasks | up to ~$450 | ~1 hour |
 | Training and tests | 2 passes, 4 saved copies, each tested 40 times on the 8 tasks | ~$90 box, ~$100 Modal | ~1 day |
 
@@ -30,17 +30,31 @@ GG's yes with the measured cost.
 ## Direction 2: a general training set (out of distribution)
 
 So far the student learns from the teacher's runs on the same kind of task we test on. A real outsider would not have
-those. Proposal: train Qwen3.6 on DeepSeek V4 Pro's answers to general questions, none from our tasks, and test on all
-8 tasks (now all 8 are unseen).
+those. Nobody yet knows how far from the test the training data can be before the teacher's behaviour stops carrying
+over, so we train Qwen3.6 on DeepSeek V4 Pro's output at three distances and test each on the same 8 tasks.
+
+| Distance | Training data | Where it comes from | State on 24 Nov |
+|---|---|---|---|
+| Near | 765 of DeepSeek's runs on 22 of our tasks, tested on tasks kept out | Our own collection | Done (`RESULTS_deepseek_qwen36.md`) |
+| Middle, ready-made | 284 customer-service conversations with function calls (bank, cinema, e-commerce, medicine) | Public set `zake7749/deepseek-v4-pro-agent-tool-calling-trajectory`, built on NVIDIA's ToolScale | Downloaded and checked; converter being written |
+| Middle, our own | DeepSeek's runs on Terminal-Bench 2 (89 terminal tasks in Docker), with our settings | We run them | Harness being built; price after a pilot |
+| Far | DeepSeek's answers to about 2,000 real user questions from WildChat-1M | We generate them, ~$30-60 | Generation script being written |
 
 - Teacher: DeepSeek V4 Pro, because we already know its behaviour on all 28 tasks and Qwen3.6's "before" numbers.
-- Prompts: public single-turn question sets (coding, maths, writing, advice). The public "reasoning distillation" sets
-  on Hugging Face give us ready prompt lists of 900 to 10,000 questions.
-- We generate DeepSeek's own answers with its full reasoning (it is an open model served through an API, so this is
-  allowed), train with the same recipe, and run the same tests.
-- Cost: about $30-80 to generate, ~$90 box, ~$100 Modal. About $250, two to three days.
-- Risk: single-turn answers have no tool calls, so Qwen3.6 may learn DeepSeek's style of thinking but not its way of
-  acting in a task. A mixed set (general answers plus a few agent runs on unrelated tasks) is the fallback.
+- What we checked in the ready-made set: its 2,510 rows are 284 conversations (each row is the same conversation cut
+  one turn later); about 2.5 million tokens, roughly a tenth of what we trained on; every assistant turn has
+  reasoning, with a median of about 90 tokens against about 340 in our runs, so it was probably made at a lower
+  reasoning level; 112 of the 284 conversations match the reference actions fully. It has no stated licence, so we use
+  it privately and do not republish it.
+- Why Terminal-Bench as well: it is shell work with our own settings and can be made as large as our own set, so a weak
+  result there cannot be blamed on size or on a different reasoning level. Training on benchmark tasks is fine for a
+  private experiment; the trained copy and the runs are not released.
+- Other public sets were looked at and left out because the teacher is a different model (SWE-smith, Nebius
+  SWE-agent, Nemotron-SFT-Agentic-v2, unified-agent-trajectories).
+- Cost per distance: about $90 of GPU and $100 of Modal for training and tests, plus the generation. GG approves each
+  paid step with its measured price.
+- Caveat to state next to the results: the ready-made set is small and has short reasoning, so "nothing carried over"
+  there could be about size and not about distance.
 
 ## Direction 3: full, summarised or no reasoning
 
