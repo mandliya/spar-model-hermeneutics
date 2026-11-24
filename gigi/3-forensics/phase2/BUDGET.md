@@ -72,7 +72,8 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
 ## Measured in the GPT-OSS 120B pilot (24 Nov)
 
 - 6 test runs + 56 pilot runs (2 for each of the 28 tasks), on DeepInfra bf16 with reasoning effort high.
-  **OpenRouter: $3.75** ($0.04 for the test runs, $3.71 for the pilot). Modal: not measured yet.
+  **OpenRouter: $3.75** ($0.04 for the test runs, $3.71 for the pilot). **Modal: ~$5.13** (billing report, 04:00-06:59
+  UTC on 24 Nov, when only the pilot was running).
 - **53 of 56 pilot runs finished.** The 3 that did not: one async_conversion run (the provider returned empty replies
   at step 197, with the run at ~128k tokens), one reference_extraction run (the provider refused the call at step 101,
   at ~103k tokens) and one chess run (stopped at step 49 with the game unfinished).
@@ -84,12 +85,24 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
 - During the pilot the key's usage rose by $13.77, so about $10 was spent by something other than these runs.
 - Per task: `results/p2_gptoss120b_pilot_usage.csv`; logs: `results/logs/p2_gptoss120b/`; raw runs on HF under
   `phase2/gpt-oss-120b/raw/`.
+- **Collection, part way (24 Nov 13:00 UTC):** 460 of 1,198 runs launched, including all 46 runs of 8 of the 13 long
+  tasks. **OpenRouter: $38.92** (the launch logs' own ledger; the pilot predicted $51.77 for the same runs).
+  **Modal: ~$81** (07:00-12:59 UTC). The fleet's "spent" line reads higher ($85.90) because it counts the whole key,
+  which also pays for WildChat, Terminal-Bench and other people's jobs. DeepInfra is sending many 429 replies, so the
+  fleet is holding launches; on track for ~$300 in all.
 
 ## Measured in the general training set (24 Nov)
 
 - **WildChat answers (far rung):** GG approved ~$10 with a $100 cap. The 20-question test cost **$0.14** (20 of 20
   answered, all from SiliconFlow with reasoning), so the 2,000 answers should cost about $14. The full pass started
   24 Nov 09:21 UTC on the launch box (`scripts/general_wildchat_generate.py`, log `/workspace/logs/general_wildchat_full.out`).
+- **WildChat, part way:** 1,850 of 2,000 answered, 0 failed, **$16.37** at 12:50 UTC.
+- **ToolScale training and tests (middle rung), measured: Modal $51.10** (09:00-12:59 UTC: training on one H200, then
+  4 copies each served on an H200 and tested 40 times on the 8 tasks; 1,261 runs scored). Planned ~$90.
+- **Terminal-Bench first steps, measured:** OpenRouter **$2.96** ($0.17 for the 2-run test, $2.79 for the 24-run pilot),
+  Modal **$2.65** (reference-solution check of all 89 tasks, test and pilot). The pilot's runs cost $0.116 on average
+  and all 24 ended on their own, so the full 979 runs come to **~$114 on OpenRouter at 100 steps** (~$88 at 50 steps)
+  plus ~$60 on Modal, far below the $440 + $100-200 guessed before the pilot.
 - **Training on Modal, priced (not run):** about $90 for the ToolScale set's training and tests, about $130 for a set the
   size of DeepSeek's, against about $45 and $70 on a Vast box; Modal is about twice as fast only because the three sets
   can train at once (`phase2/general_set/PIPELINE.md`).
@@ -182,3 +195,6 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   projected at ~$85 on OpenRouter, ~$300 with Modal.
 - 24 Nov 09:25 UTC: Modal cost of DeepSeek's Qwen3.6 tests measured ($10.75); WildChat generation started (~$14);
   training on Modal and Terminal-Bench priced, not run.
+- 24 Nov 13:00 UTC: ToolScale trained and tested on Modal ($51.10); Terminal-Bench check, test and pilot done ($2.96
+  OpenRouter, $2.65 Modal), full collection re-priced at ~$175; GPT-OSS collection at 460 of 1,198 runs ($38.92 +
+  ~$81 Modal); WildChat at 1,850 of 2,000 ($16.37). Modal for 24 Nov so far: $144.88 in all.

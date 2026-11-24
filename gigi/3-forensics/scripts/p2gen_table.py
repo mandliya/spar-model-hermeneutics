@@ -26,7 +26,10 @@ def main():
     base = {r["env"]: r for r in csv.DictReader(open(a.base)) if r["model"] == "base"}
     rows = [r for r in csv.DictReader(open(ev)) if r["model"] != "base"]
     cp = pathlib.Path(a.copies) if a.copies else H / f"results/logs/{a.dv}/copies.json"
-    epochs = {k: v.get("epoch") for k, v in json.loads(cp.read_text()).items()} if cp.exists() else {}
+    # `modal volume get ... -` prints its "Finished downloading" line straight after the JSON (24 Nov: the first table
+    # failed on that), so read only from the first "{" to the last "}".
+    t = cp.read_text() if cp.exists() else ""
+    epochs = {k: v.get("epoch") for k, v in json.loads(t[t.find("{"):t.rfind("}") + 1]).items()} if "{" in t else {}
     models = sorted({r["model"] for r in rows}, key=lambda m: int(m[1:]) if m[1:].isdigit() else 10**9)
     cell = {(r["model"], r["env"]): r for r in rows}
     label = {m: (f"after {epochs[m]:.2g} pass{'es' if epochs[m] > 1 else ''} ({m})" if epochs.get(m) else m) for m in models}

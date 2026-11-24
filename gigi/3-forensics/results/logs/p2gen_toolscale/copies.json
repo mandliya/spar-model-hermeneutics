@@ -1,0 +1,18 @@
+{
+ "c8": {
+  "step": 8,
+  "epoch": 0.5638766519823789
+ },
+ "c16": {
+  "step": 16,
+  "epoch": 1.0704845814977975
+ },
+ "c24": {
+  "step": 24,
+  "epoch": 1.6343612334801763
+ },
+ "c30": {
+  "step": 30,
+  "epoch": 2.0
+ }
+}✓ Finished downloading files to local!
