@@ -1,0 +1,1 @@
+DRY RUN: upy ../scripts/distill_eval.py score

@@ -85,14 +85,25 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
 - Per task: `results/p2_gptoss120b_pilot_usage.csv`; logs: `results/logs/p2_gptoss120b/`; raw runs on HF under
   `phase2/gpt-oss-120b/raw/`.
 
+## Measured in the general training set (24 Nov)
+
+- **WildChat answers (far rung):** GG approved ~$10 with a $100 cap. The 20-question test cost **$0.14** (20 of 20
+  answered, all from SiliconFlow with reasoning), so the 2,000 answers should cost about $14. The full pass started
+  24 Nov 09:25 UTC on the launch box (`scripts/general_wildchat_generate.py`, log `/workspace/logs/general_wildchat_full.out`).
+- **Training on Modal, priced (not run):** about $90 for the ToolScale set's training and tests, about $130 for a set the
+  size of DeepSeek's, against about $45 and $70 on a Vast box; Modal is about twice as fast only because the three sets
+  can train at once (`phase2/general_set/PIPELINE.md`).
+- **Terminal-Bench, priced (not run):** about $440 on OpenRouter plus $100-200 on Modal for 979 runs at 100 steps, or
+  about $240 in all at 50 steps; a first check, test and pilot cost about $20 (`phase2/general_set/TERMINAL_BENCH.md`).
+
 ## Measured so far in DeepSeek's training into Qwen3.6 (23-24 Nov)
 
 - GG approved ~$300 for this stage on 23 Nov (all platforms together).
 - **Vast: ~$82 so far.** The two-H200 box (62121347, $6.98/h) has run 11.4 hours (~$80) as of 23 Nov 19:45 UTC and is
   still on, idle, until GG says to stop it; a first box rented without the server port cost ~$2. Training took 6 h 50 min
   on one GPU while the other served Qwen3.6 for the tests.
-- **Modal: not measured yet** (the billing report for 23 Nov was still empty at 19:45 UTC). Plan: ~$60-100 for 1,600
-  test runs (8 tasks x 40 runs x Qwen3.6 before training and 4 saved copies) plus one gate run.
+- **Modal: $10.75** for the 1,602 test runs' sandboxes (Modal billing report, read 24 Nov; planned ~$60-100). The
+  model itself ran on the Vast box, so Modal only paid for the task containers.
 - **OpenRouter: $0.** The 8 re-tested tasks are scored by rules, and Qwen3.6 runs on our own server.
 - Results: `results/distill_p2ds_eval.csv` (1,569 of 1,600 runs scored, 31 lost); logs: `results/logs/p2ds/`; raw runs
   on HF under `distill/p2_deepseekv4_v1/eval/`.
@@ -169,3 +180,5 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   spend ~$1,800 instead of ~$9,600; no new money needed. GPT-OSS endpoint check done ($0.001), pilot started.
 - 24 Nov 06:40 UTC: GPT-OSS 120B pilot measured ($3.75 on OpenRouter, 53 of 56 runs finished); its collection is
   projected at ~$85 on OpenRouter, ~$300 with Modal.
+- 24 Nov 09:30 UTC: Modal cost of DeepSeek's Qwen3.6 tests measured ($10.75); WildChat generation started (~$14);
+  training on Modal and Terminal-Bench priced, not run.
