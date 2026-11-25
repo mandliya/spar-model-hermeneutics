@@ -198,3 +198,7 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
 - 24 Nov 13:00 UTC: ToolScale trained and tested on Modal ($51.10); Terminal-Bench check, test and pilot done ($2.96
   OpenRouter, $2.65 Modal), full collection re-priced at ~$175; GPT-OSS collection at 460 of 1,198 runs ($38.92 +
   ~$81 Modal); WildChat at 1,850 of 2,000 ($16.37). Modal for 24 Nov so far: $144.88 in all.
+- 25 Nov 03:15 UTC: WildChat done (1,999 of 2,000 answered, **$17.98**). GG approved the full Terminal-Bench collection
+  (~$175: ~$114 OpenRouter + ~$60 Modal, OpenRouter cap $500; 87 tasks x 11 runs), started 03:15 UTC. The GPT-OSS
+  collection had been held by a health-check bug from ~17:40 UTC on 24 Nov (idle from 22:40); fixed and resumed at
+  03:13 UTC with 658 of 1,198 runs still to go. Key usage $7,229.88 of $15,000; account $4,040 left.

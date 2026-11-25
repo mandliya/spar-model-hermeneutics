@@ -54,14 +54,23 @@ print(f"{total:.2f}")
 PY
 }
 
-rate_limits () {   # "<429 retry lines> <highest attempt>" across the stages' launch logs
-  python3 - "$H" "$1" <<'PY'
-import pathlib, re, sys
-H = pathlib.Path(sys.argv[1]); n = top = 0
+rate_limits () {   # rate_limits STAGES [SEEN_FILE]: "<429 retry lines> <highest attempt>" across the stages' launch logs.
+                   # With SEEN_FILE the highest attempt is over the retry lines NEW since the last call only (it keeps
+                   # how many lines of each log were already seen; a missing file counts everything as seen). Without it
+                   # the attempt is over all lines ever, which held a fleet's launches for good once one retry reached
+                   # attempt 8 (GPT-OSS collection, 24 Nov 17:40 UTC: idle with nothing in flight from 22:40).
+  python3 - "$H" "$1" "${2:-}" <<'PY'
+import json, pathlib, re, sys
+H = pathlib.Path(sys.argv[1]); seen_f = pathlib.Path(sys.argv[3]) if sys.argv[3] else None
+seen = json.loads(seen_f.read_text()) if seen_f and seen_f.exists() else None
+n = top = 0; now = {}
 for st in sys.argv[2].split(","):
     for f in (H / "results/logs" / st).rglob("*.log"):
-        for m in re.finditer(r"\[provider retry\] attempt (\d+) failed: RateLimitError", f.read_text(errors="replace")):
-            n += 1; top = max(top, int(m.group(1)))
+        a = [int(m.group(1)) for m in re.finditer(r"\[provider retry\] attempt (\d+) failed: RateLimitError", f.read_text(errors="replace"))]
+        n += len(a); now[str(f)] = len(a)
+        new = a if seen_f is None else a[seen.get(str(f), 0):] if seen is not None else []
+        top = max([top] + new)
+if seen_f: seen_f.write_text(json.dumps(now))
 print(n, top)
 PY
 }

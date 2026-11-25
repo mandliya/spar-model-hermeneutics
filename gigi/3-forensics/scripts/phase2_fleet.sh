@@ -55,9 +55,10 @@ SLUG=$(upy -c "import yaml,sys; print(yaml.safe_load(open(sys.argv[1]))['agent']
 health () {   # over the last poll: 429s (shrink CAP), 5xx retries and the pinned provider's uptime on OpenRouter (hold
               # launches only; 20 Nov 2026: a SiliconFlow outage went unseen by the 429-only check); logs one line
   local r top d st e5 d5 up why=""; st=$(stages_all); [ -n "$st" ] || { HEALTHY=1; return; }
-  read r top < <(rate_limits "$st"); d=$((r - PREV429)); PREV429=$r
+  read r top < <(rate_limits "$st" "$LOGD/phase2_${TAG}_429_seen.json"); d=$((r - PREV429)); PREV429=$r
   e5=$(server_errors "$st"); [ "$PREV5XX" -lt 0 ] && PREV5XX=$e5; d5=$((e5 - PREV5XX)); PREV5XX=$e5
   up=$(pin_uptime "$SLUG" "$PIN")
+  # top = the highest attempt among THIS poll's retries only (rate_limits with a seen file)
   if [ "$d" -ge "$H429" ] || [ "$top" -ge 8 ]; then why="429s"; CAP=$((CAP - 5 > CAP_MIN ? CAP - 5 : CAP_MIN)); fi
   [ "$d5" -ge "$H5XX" ] && why="${why:+$why, }server errors"
   [ "$up" -ge 0 ] && [ "$up" -lt "$UP_MIN" ] && why="${why:+$why, }$PIN up $up% in the last 5 min"

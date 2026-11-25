@@ -36,9 +36,9 @@ over, so we train Qwen3.6 on DeepSeek V4 Pro's output at three distances and tes
 | Distance | Training data | Where it comes from | State on 24 Nov |
 |---|---|---|---|
 | Near | 765 of DeepSeek's runs on 22 of our tasks, tested on tasks kept out | Our own collection | Done (`RESULTS_deepseek_qwen36.md`) |
-| Middle, ready-made | 284 customer-service conversations with function calls (bank, cinema, e-commerce, medicine) | Public set `zake7749/deepseek-v4-pro-agent-tool-calling-trajectory`, built on NVIDIA's ToolScale | Downloaded and checked; converter being written |
-| Middle, our own | DeepSeek's runs on Terminal-Bench 2 (89 terminal tasks in Docker), with our settings | We run them | Harness being built; price after a pilot |
-| Far | DeepSeek's answers to about 2,000 real user questions from WildChat-1M | We generate them, ~$30-60 | Generation script being written |
+| Middle, ready-made | 284 customer-service conversations with function calls (bank, cinema, e-commerce, medicine) | Public set `zake7749/deepseek-v4-pro-agent-tool-calling-trajectory`, built on NVIDIA's ToolScale | Trained and tested 24 Nov (Modal $51.10): no carry-over, see `results/distill_p2gen_toolscale_table.csv` |
+| Middle, our own | DeepSeek's runs on Terminal-Bench 2 (89 terminal tasks in Docker), with our settings | We run them | Pilot done ($2.79); full collection running since 25 Nov 03:15 UTC: 87 tasks x 11 runs, ~$175 (GG approved) |
+| Far | DeepSeek's answers to about 2,000 real user questions from WildChat-1M | We generate them | 1,999 of 2,000 answered 24 Nov ($17.98); training set built (1,599 train, 400 val) |
 
 - Teacher: DeepSeek V4 Pro, because we already know its behaviour on all 28 tasks and Qwen3.6's "before" numbers.
 - What we checked in the ready-made set: its 2,510 rows are 284 conversations (each row is the same conversation cut
