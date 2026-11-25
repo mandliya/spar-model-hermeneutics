@@ -133,6 +133,10 @@ above that on its own, so GG decides the size together with the other two sets.
   model-hermeneutics/gigi-forensics-transcripts), never to anything public.
 - **Full collection:** started 25 Nov 03:15 UTC on the launch box (`scripts/general_tbench_full_chain.sh`: 11 complete
   runs of each of 87 tasks, 32 at once, uploads every 2 hours and at the end).
+- **Cost in the full collection (25 Nov 08:00 UTC, 400 finished runs):** $0.347 a run on average (median $0.219, max
+  $2.29), three times the pilot's $0.116: the pilot's 12 tasks were the cheap ones ($0.132 a run here), the other 75
+  average $0.379. 35 of 400 runs reached the 100-step cap and 165 went past 50 steps; a 50-step cap would have cost
+  $87.72 instead of $138.69 for these runs. Re-projected ~$340 OpenRouter + ~$90 Modal; GG approved finishing.
 
 ## Problems we expect
 

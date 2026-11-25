@@ -103,6 +103,8 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   Modal **$2.65** (reference-solution check of all 89 tasks, test and pilot). The pilot's runs cost $0.116 on average
   and all 24 ended on their own, so the full 979 runs come to **~$114 on OpenRouter at 100 steps** (~$88 at 50 steps)
   plus ~$60 on Modal, far below the $440 + $100-200 guessed before the pilot.
+  **Correction (25 Nov):** the full collection measures $0.347 a run, not $0.116, because the pilot's 12 tasks were
+  the cheap ones. Re-projected ~$340 on OpenRouter + ~$90 on Modal; GG approved finishing it.
 - **Training on Modal, priced (not run):** about $90 for the ToolScale set's training and tests, about $130 for a set the
   size of DeepSeek's, against about $45 and $70 on a Vast box; Modal is about twice as fast only because the three sets
   can train at once (`phase2/general_set/PIPELINE.md`).
@@ -202,3 +204,8 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   (~$175: ~$114 OpenRouter + ~$60 Modal, OpenRouter cap $500; 87 tasks x 11 runs), started 03:15 UTC. The GPT-OSS
   collection had been held by a health-check bug from ~17:40 UTC on 24 Nov (idle from 22:40); fixed and resumed at
   03:13 UTC with 658 of 1,198 runs still to go. Key usage $7,229.88 of $15,000; account $4,040 left.
+- 25 Nov 08:05 UTC: Terminal-Bench costs about 3 times the pilot: $0.347 a finished run (400 runs; median $0.219,
+  max $2.29) against $0.116. The pilot's 12 tasks were the cheap ones ($0.132 a run here); the other 75 average
+  $0.379. At 390 of 957 runs: $149.96 OpenRouter + $33.66 Modal (25 Nov to 07:59 UTC). Re-projected ~$430 in all
+  (~$340 OpenRouter + ~$90 Modal); **GG approved finishing all 957 runs** (25 Nov). GPT-OSS collection: $85.21 OpenRouter
+  (launch-log ledger) and ~$160 Modal so far, 60 of 209 chunks still queued (the short tasks): ~$300 in all.
