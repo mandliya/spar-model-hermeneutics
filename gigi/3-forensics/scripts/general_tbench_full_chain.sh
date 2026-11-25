@@ -8,7 +8,7 @@
 #     them (80 tasks) and one with them (87 tasks), built from this one collection (TERMINAL_BENCH.md).
 #   - The runs go to the PRIVATE dataset model-hermeneutics/gigi-forensics-transcripts (GG, 25 Nov), never to anything
 #     public: the benchmark asks not to be trained on publicly (its canary line).
-# Uploads every 2 hours while the collection runs and once at the end. An upload never stops the collection, and a
+# Uploads (general_tbench_upload.sh) every 2 hours while the collection runs and once at the end. An upload never stops the collection, and a
 # stopped collection still gets its final upload. Never stops the box.
 #   setsid nohup bash /workspace/forensics/gigi/3-forensics/scripts/general_tbench_full_chain.sh > /workspace/logs/general_tbench_full_chain.out 2>&1 < /dev/null &
 set -uo pipefail
@@ -17,17 +17,10 @@ R=model-hermeneutics/gigi-forensics-transcripts; HFD=general/terminal_bench
 export PATH="/opt/conda/bin:$PATH"
 say () { echo "$(date -u +%FT%TZ) $*" >> "$S"; }
 
-upload () {   # every stage folder (oracle, smoke, pilot, full) and the ledgers/tables; refused if any file holds a key shape
-  local d=$H/results/raw/general_tbench lg=$H/results/logs/general_tbench
-  if grep -rlE 'sk-or-v1-[0-9a-f]{20,}|hf_[A-Za-z0-9]{30,}|sk-ant-[A-Za-z0-9_-]{20,}|fw_[A-Za-z0-9]{20,}' "$d" "$lg" > "$LOGD/general_tbench_keyscan.txt" 2> /dev/null; then
-    say "UPLOAD REFUSED: a key shape was found ($(wc -l < "$LOGD/general_tbench_keyscan.txt") files, names in general_tbench_keyscan.txt); nothing uploaded"; return 1
-  fi
-  # HF_TOKEN only in this subshell: the collection itself never sees the box's other keys
-  ( set -a; . /workspace/.env > /dev/null 2>&1; set +a
-    hf upload "$R" "$d" "$HFD/raw" --repo-type dataset --commit-message "Terminal-Bench runs (DeepSeek V4 Pro), $(date -u +%FT%TZ)" \
-      && { [ ! -d "$lg" ] || hf upload "$R" "$lg" "$HFD/logs" --repo-type dataset --commit-message "Terminal-Bench ledgers and tables"; } ) \
-    >> "$LOGD/general_tbench_upload.log" 2>&1 \
-    && say "uploaded the Terminal-Bench runs to HF (private, $HFD/raw)" || say "UPLOAD FAILED for the Terminal-Bench runs (general_tbench_upload.log); the collection goes on"
+upload () {   # 25 Nov: delegated to general_tbench_upload.sh (one tarball per finished run; the key scan lets through only
+              # the fake keys the benchmark itself plants in sanitize-git-repo). The first version of this function
+              # uploaded the raw folder as is and was refused on those fake keys at 05:14 and 07:14 UTC.
+  bash "$H/scripts/general_tbench_upload.sh" once
 }
 
 say "CHAIN full: start (GG's yes 25 Nov: ~\$175, OpenRouter cap \$500; 87 tasks x 11 runs; step cap 100; uploads every 2 h)"
