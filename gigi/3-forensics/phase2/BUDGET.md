@@ -69,6 +69,24 @@ DeepSeek's OpenRouter cost = $20 (provider check, 6 test runs, 56 pilot runs) + 
 grading), all measured. Its Modal cost = $6 (pilot) + $216 (collection), measured, + ~$100 for Qwen3.6's "before" runs
 and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (plan) + ~$40 for the launch box.
 
+## Measured in the GPT-OSS 120B collection (24-25 Nov)
+
+- **Cost:** OpenRouter **$118.95** for the 1,375 runs launched (1,198, plus 177 re-runs of the chunks set aside), from
+  the runs' own ledger (`results/p2_gptoss120b_usage.csv`); **$122.70** with the pilot. Modal **~$197** (billing report
+  to 13:00 UTC on 25 Nov, pilot included). In all **~$320**, against the ~$300 approved on 24 Nov.
+- **Stopped by its spend guard at 12:43 UTC on 25 Nov.** The guard counts the whole OpenRouter key since the fleet
+  started, and Terminal-Bench runs on the same key, so it read $501.10 of its $500 cap while the fleet's own ledger was
+  ~$119. The main queue had ended at 10:00 UTC; the stop cut the last 6 reference_extraction runs of the set-aside
+  round. The closing steps (final counts, per-run table, cost, HF upload) ran afterwards with `scripts/phase2_finish.sh`
+  (no model calls). Next fleet: cap on the fleet's own ledger, the whole key only as a higher backstop.
+- **Runs:** 1,130 of 1,198 complete by the current rule (FINAL RESULTS, or a full context window it recognises). Two
+  kinds of run count as lost under it and are GG's decision (25 Nov): 32 chess and tictactoe games that used every
+  allowed step (the harness prints no FINAL RESULTS there), and 26 runs that filled the 131,072-token window (largest
+  prompt 124,089-131,038 tokens), which DeepInfra answers with a generic "400 Provider returned error" instead of
+  "maximum context length". Left after both: reference_extraction 37 of 40, coding_norules 39 of 40.
+- **Grading, priced, not run:** a GPT-OSS run is 195 kB of rollout.log against DeepSeek's 305 kB, so Opus 4.8 grading
+  should cost about 0.64 x $494 = **~$320**.
+
 ## Measured in the GPT-OSS 120B pilot (24 Nov)
 
 - 6 test runs + 56 pilot runs (2 for each of the 28 tasks), on DeepInfra bf16 with reasoning effort high.
@@ -209,3 +227,7 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   $0.379. At 390 of 957 runs: $149.96 OpenRouter + $33.66 Modal (25 Nov to 07:59 UTC). Re-projected ~$430 in all
   (~$340 OpenRouter + ~$90 Modal); **GG approved finishing all 957 runs** (25 Nov). GPT-OSS collection: $85.21 OpenRouter
   (launch-log ledger) and ~$160 Modal so far, 60 of 209 chunks still queued (the short tasks): ~$300 in all.
+- 25 Nov 13:20 UTC: GPT-OSS collection ended, stopped by its whole-key guard at 12:43 UTC with 6 runs cut: **$118.95**
+  OpenRouter (+ $3.75 pilot) and ~$197 Modal, ~$320 in all against ~$300 approved; 1,130 of 1,198 complete by the
+  current rule, grading priced at ~$320. Terminal-Bench at 794 of 957 runs: $302.10 OpenRouter (its own ledger) and
+  ~$72 Modal (to 13:00 UTC). Key usage $7,612 of $15,000.
