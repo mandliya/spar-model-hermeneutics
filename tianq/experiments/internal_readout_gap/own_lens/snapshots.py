@@ -6,7 +6,9 @@ fit_lens.py rewrites <slug>_checkpoint.pt (the running sum of per-prompt Jacobia
 prompt count first reaches a milestone (20, 50, 100, then every 100), this writes the running mean as a lens file,
 <fit_dir>/snapshots/lens_at_<n>.pt, in the layout JacobianLens.load reads. n is the checkpoint's own count, so a file
 says exactly how many prompts it holds. Used for the early reproduction check and to compare two fits at an equal
-prompt count. Stops once the final lens file exists.
+prompt count. From RESUME_FROM prompts on, each milestone also keeps the checkpoint itself, as
+<fit_dir>/resume/checkpoint_at_<n>.pt: push_fit_progress.py sends these to HF, and a fit can be carried on from one.
+Stops once the final lens file exists.
 """
 
 from __future__ import annotations
@@ -18,6 +20,7 @@ import time
 import torch
 
 MILESTONES = [20, 50, *range(100, 1001, 100)]
+RESUME_FROM = 100   # earlier milestones are minutes into a fit; a copy of the checkpoint is about 7 GB
 
 
 def due(n: int, have: list[int]) -> bool:
@@ -55,6 +58,12 @@ def main() -> None:
             torch.save({"J": {l: (state["jacobian_sum"][l] / done).to(torch.float16) for l in layers}, "n_prompts": done,
                         "source_layers": layers, "d_model": d_model}, tmp)
             tmp.rename(out / f"lens_at_{done}.pt")
+            if done >= RESUME_FROM:
+                keep = fit_dir / "resume"
+                keep.mkdir(exist_ok=True)
+                tmp = keep / f"checkpoint_at_{done}.partial"
+                torch.save(state, tmp)
+                tmp.rename(keep / f"checkpoint_at_{done}.pt")
             print(f"{time.strftime('%FT%TZ', time.gmtime())} saved the running lens at {done} prompts", flush=True)
             del state
         if finished:

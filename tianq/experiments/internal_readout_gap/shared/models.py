@@ -19,7 +19,7 @@ import torch
 
 os.environ.setdefault("HF_HOME", "/workspace/hf")
 OUT = pathlib.Path(os.environ.get("READOUT_OUT", "/workspace/out/internal-readout-gap"))
-ADAPTERS = pathlib.Path(os.environ.get("GIGI_TRANSCRIPTS", "/workspace/data/gigi-forensics-transcripts")) / "distill/hero9_v1/runs/v1"
+TRANSCRIPTS = pathlib.Path(os.environ.get("GIGI_TRANSCRIPTS", "/workspace/data/gigi-forensics-transcripts"))   # Gigi's HF dataset, as a folder
 LENS_REPO = "neuronpedia/jacobian-lens"
 
 
@@ -32,17 +32,19 @@ class Model:
     window: int                       # context window in tokens; longer inputs are skipped and counted
     lens: str                         # folder in LENS_REPO holding the published lens
     nla: tuple[str, ...] | None       # ("official", av repo, ar repo) | ("easynla", av repo) | None
-    adapter: str | None = None        # a folder of ADAPTERS, merged into the base weights
+    adapter: str | None = None        # a folder of TRANSCRIPTS holding a LoRA adapter, merged into the base weights
 
 
 GEMMA = ("google/gemma-3-27b-it", "005ad3404e59d6023443cb575daa05336842228a", "text", 131_072,
          "gemma-3-27b-it/jlens/Salesforce-wikitext", ("official", "kitft/nla-gemma3-27b-L41-av", "kitft/nla-gemma3-27b-L41-ar"))
-# Gigi's distillation of Qwen3.6-27B into gemma-3-27b-it: the adapter after 24, 48, 72 and 96 optimizer steps.
-DISTILLED = {f"gemma-distilled-step{n}": f"checkpoint-{n}" for n in (24, 48, 72, 96)}
+# Gigi's two distillations of Qwen3.6-27B into gemma-3-27b-it, each as the adapter after N optimizer steps (25, 50, 75
+# and 100% of training). DISTILLED is the swap distillation of 12-15 Nov, CLASSIC the classic one of 17-19 Nov.
+DISTILLED = {f"gemma-distilled-step{n}": f"distill/hero9_v1/runs/v1/checkpoint-{n}" for n in (24, 48, 72, 96)}
+CLASSIC = {f"gemma-classic-step{n}": f"distill/classic_v1/runs/v1/checkpoint-{n}" for n in (23, 46, 69, 92)}
 
 MODELS = {m.tag: m for m in (
     Model("gemma-3-27b-it", *GEMMA),
-    *(Model(tag, *GEMMA, adapter=folder) for tag, folder in DISTILLED.items()),
+    *(Model(tag, *GEMMA, adapter=folder) for tag, folder in (DISTILLED | CLASSIC).items()),
     Model("qwen3.6-27b", "Qwen/Qwen3.6-27B", "8f33b98937c6031bb49e713dee3e8e185aafd26f", "native", 262_144,
           "qwen3.6-27b/jlens/Salesforce-wikitext", ("easynla", "ceselder/qwen3.6-27b-nla-av")),
     Model("gemma-3-12b-it", "google/gemma-3-12b-it", "96b6f1eccf38110c56df3a15bffe176da04bfd80", "text", 131_072,
@@ -60,7 +62,7 @@ def load_hf(tag: str):
     hf = AutoModelForCausalLM.from_pretrained(m.hf, revision=m.revision, dtype=torch.bfloat16, device_map="auto")
     if m.adapter:
         from peft import PeftModel
-        hf = PeftModel.from_pretrained(hf, str(ADAPTERS / m.adapter)).merge_and_unload()
+        hf = PeftModel.from_pretrained(hf, str(TRANSCRIPTS / m.adapter)).merge_and_unload()
     return hf.eval(), tok
 
 

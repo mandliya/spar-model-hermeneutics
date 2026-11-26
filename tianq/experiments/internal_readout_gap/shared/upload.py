@@ -26,6 +26,14 @@ PREFIX = "internal-readout-gap"
 LOGS = pathlib.Path(os.environ.get("READOUT_LOGS", "/workspace/logs"))   # off the box: a folder holding only that run's logs
 
 
+def not_on_hub(api: HfApi, local: dict[str, int], under: str) -> list[str]:
+    """The completeness check: of the files in `local` (repo path -> size in bytes), those that are missing under the
+    repo folder `under` on the Hub or have another size there."""
+    listed = {f.path: f.size for f in api.list_repo_tree(REPO, path_in_repo=under, recursive=True, repo_type="dataset")
+              if hasattr(f, "size")}
+    return [path for path, size in local.items() if listed.get(path) != size]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--experiment", required=True)
@@ -49,9 +57,7 @@ def main() -> None:
              for p in (models.OUT / e).rglob("*") if p.is_file()}
     local |= {f"{PREFIX}/{e}/logs/{p.name}": p.stat().st_size for p in LOGS.iterdir()
               if p.is_file() and (p.name.startswith(f"{e}_") or p.name == "setup.log") and p.name != own_log}
-    listed = {f.path: f.size for f in api.list_repo_tree(REPO, path_in_repo=f"{PREFIX}/{e}", recursive=True,
-                                                         repo_type="dataset") if hasattr(f, "size")}
-    missing = [k for k, size in local.items() if listed.get(k) != size]
+    missing = not_on_hub(api, local, f"{PREFIX}/{e}")
     print(f"uploaded {e}: {len(local)} local files; revision {api.list_repo_commits(REPO, repo_type='dataset')[0].commit_id}",
           flush=True)
     print(f"completeness: {len(missing)} files missing or different" + (f", e.g. {missing[:5]}" if missing else ""), flush=True)

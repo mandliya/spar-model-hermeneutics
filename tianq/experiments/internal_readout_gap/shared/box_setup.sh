@@ -8,27 +8,14 @@
 # NLA, transcript and adapter the two stages read. Logs to /workspace/logs/setup.log; the last line is "setup done"
 # or the failing line.
 set -euo pipefail
-export HF_HOME=/workspace/hf HF_HUB_DISABLE_XET=1   # plain HTTP: the xet backend stalled with a few files left
-set -a; . /workspace/.env; set +a
-REPO=/workspace/repo; VENV=/workspace/venvs/readout; NV=/workspace/venvs/nla
-VENDOR=$REPO/tianq/experiments/internal_readout_gap/vendor
-mkdir -p /workspace/logs "$HF_HOME" /workspace/data
+. "$(dirname "$0")/box_lib.sh"   # the environments (readout_venv, nla_venv), the download helper dl, HF_HOME, the keys
 exec >> /workspace/logs/setup.log 2>&1
 trap 'echo "setup failed at line $LINENO"' ERR
 echo "### $(date -u +%FT%TZ) setup"
 
-[ -x "$VENV/bin/python" ] || uv venv -q -p 3.12 "$VENV"
-uv pip install -q -p "$VENV/bin/python" torch==2.8.0 transformers==5.22.2 accelerate==1.10.1 peft==0.21.2 safetensors huggingface_hub datasets \
-  pyyaml pandas pyarrow numpy scipy scikit-learn matplotlib openai \
-  "anthropic>=0.121.0" "omegaconf>=2.3" "pydantic>=2.0" "python-dotenv>=1.2.1" "sentences>=0.1.1" "tenacity>=9.1.2"
-# transformers and peft are pinned to the versions of the 13 Nov reads: unpinned, a box on 17 Nov got transformers
-# 5.23.0, under which Qwen3.6's forward pass gives NaN from the first layer on.
-uv pip install -q -p "$VENV/bin/python" -e "$VENDOR/jacobian-lens"
-# Fast kernels for the Qwen3.6 / Qwen3-Next layer type; fla 0.4.0 is the newest that works with torch 2.8's Triton.
-uv pip install -q -p "$VENV/bin/python" flash-linear-attention==0.4.0 fla-core==0.4.0
-uv pip install -q -p "$VENV/bin/python" --no-build-isolation causal-conv1d==1.7.0
-[ -x "$NV/bin/python" ] || uv venv -q -p 3.12 "$NV"
-uv pip install -q -p "$NV/bin/python" torch==2.8.0 transformers==4.57.1 accelerate==1.10.1 safetensors huggingface_hub pyyaml numpy httpx orjson
+readout_venv
+qwen_kernels
+nla_venv
 "$VENV/bin/python" -c "import torch, transformers, jlens, peft; print('torch', torch.__version__, 'cuda', torch.cuda.device_count(), 'transformers', transformers.__version__, 'peft', peft.__version__)"
 
 # Gigi's harness, restored the way gigi/3-forensics/harness_patch/README.md gives for a fresh machine (his setup.sh
@@ -42,21 +29,6 @@ if ! grep -qs _text_tools_messages "$H/src/agent_interp_envs/providers/openroute
 fi
 echo "harness: agent-interp-envs@$(git -C "$H" rev-parse --short HEAD) with harness_patch"
 
-# Downloads: snapshot_download with explicit patterns (the `hf download` CLI ignores --include once a second
-# pattern is given). dl <repo> <revision or -> <repo type> [allow patterns...]; an "!pattern" is ignored instead.
-dl() {
-  "$VENV/bin/python" - "$@" <<'PY'
-import sys
-from huggingface_hub import snapshot_download
-repo, revision, kind, *patterns = sys.argv[1:]
-allow = [p for p in patterns if not p.startswith("!")] or None
-ignore = [p[1:] for p in patterns if p.startswith("!")] or None
-local = "/workspace/data/" + repo.split("/")[-1] if kind == "dataset" else None
-snapshot_download(repo, revision=None if revision == "-" else revision, repo_type=kind, allow_patterns=allow,
-                  ignore_patterns=ignore, local_dir=local, max_workers=16)
-print("downloaded", repo, revision, patterns, flush=True)
-PY
-}
 # Gigi's transcripts. The swap continuations are ~26,000 small files: fetched one by one the Hub answers 429, so
 # the repo comes as one shallow git clone (plain git blobs; large files stay LFS pointers; the Hub's git server
 # refuses partial clones). The distilled adapters are LFS files, fetched through the Hub API (no optimizer states).

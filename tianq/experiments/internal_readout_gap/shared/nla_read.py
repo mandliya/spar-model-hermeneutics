@@ -50,7 +50,9 @@ class Official:
         sys.path.insert(0, str(HERE.parent / "vendor" / "natural_language_autoencoders"))
         import nla_inference as N
         self.N = N
-        av_dir, ar_dir = (pathlib.Path(snapshot_download(r)) for r in (av_repo, ar_repo))
+        # each of the pair is an HF repo name, or a local folder (a pair trained here and not yet on the Hub)
+        av_dir, ar_dir = (pathlib.Path(r) if pathlib.Path(r).is_dir() else pathlib.Path(snapshot_download(r))
+                          for r in (av_repo, ar_repo))
         self.layer = int(yaml.safe_load((av_dir / "nla_meta.yaml").read_text())["extraction_layer_index"])
         self.tok = AutoTokenizer.from_pretrained(str(av_dir))
         self.cfg = N.load_nla_config(av_dir, self.tok)

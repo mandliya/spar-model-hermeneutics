@@ -1,6 +1,6 @@
 """Save a distilled gemma (base weights with one of Gigi's adapters merged in) as a model folder the lens fitter can load.
 
-    python merge.py --model gemma-distilled-step96      # writes /workspace/models/gemma-distilled-step96
+    python merge.py --model gemma-classic-step92      # writes /workspace/models/gemma-classic-step92
 
 The merge is shared.models.load_hf, the same one every earlier read of this model used (bf16, merged in memory), so
 the fitted lens belongs to exactly the model the restart points were read from.
@@ -20,7 +20,7 @@ MERGED = pathlib.Path("/workspace/models")
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", required=True, choices=list(models.DISTILLED))
+    ap.add_argument("--model", required=True, choices=[*models.DISTILLED, *models.CLASSIC])
     args = ap.parse_args()
     out = MERGED / args.model
     if (out / "config.json").exists():

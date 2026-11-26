@@ -5,20 +5,25 @@
 #   (nohup setsid bash run.sh fetch > /dev/null 2>&1 < /dev/null &)   # the earlier reads of the restart points, from HF
 #   (nohup setsid bash run.sh fits > /dev/null 2>&1 < /dev/null &)    # the two full fits, one GPU each, with snapshots
 #   (nohup setsid bash run.sh fit48 > /dev/null 2>&1 < /dev/null &)   # the 48-step checkpoint's lens on GPU $GPU48
+# On a one-GPU box, for one checkpoint (FINAL names it; the default is the swap distillation's last):
+#   (FINAL=gemma-classic-step92 nohup setsid bash run.sh gate fit_final upload_final > /dev/null 2>&1 < /dev/null &)
 # Steps, logs and the status file: ../shared/steps.sh. Lenses land in /workspace/out/internal-readout-gap/own_lens/<model>.
 set -uo pipefail
 cd "$(dirname "$0")"
 E=own_lens
 . ../shared/steps.sh
 LENSES=/workspace/out/internal-readout-gap/own_lens
-FINAL=gemma-distilled-step96
+FINAL=${FINAL:-gemma-distilled-step96}
 BASE=google/gemma-3-27b-it      # the published lens's own model id; its slug names the folder gemma-3-27b-it
 
-fit() {  # fit <model id or folder> <gpu> <folder name>: the fit and its snapshot watcher
-  local dir=$LENSES/$3
-  mkdir -p "$dir"
-  ( $PY snapshots.py --fit_dir "$dir" >> "/workspace/logs/${E}_snapshots_$3.log" 2>&1 & )
-  step "fit_$3" bash fit.sh "$1" "$2" "$dir"
+watch() {  # watch <folder name>: the snapshot watcher of that fit, and the pusher of its snapshots and resume copies to HF
+  ( $PY snapshots.py --fit_dir "$LENSES/$1" >> "/workspace/logs/${E}_snapshots_$1.log" 2>&1 & )
+  ( $PY push_fit_progress.py --fit "$1" >> "/workspace/logs/${E}_push_fit_progress_$1.log" 2>&1 & )
+}
+fit() {  # fit <model id or folder> <gpu> <folder name>: the fit, watched
+  mkdir -p "$LENSES/$3"
+  watch "$3"
+  step "fit_$3" bash fit.sh "$1" "$2" "$LENSES/$3"
 }
 merged() {  # merged <distilled tag> <gpu>: the checkpoint as a model folder
   CUDA_VISIBLE_DEVICES=$2 step "merge_$1" $PY merge.py --model "$1"
@@ -54,6 +59,12 @@ print('the gate lens loads:', lens)" || exit 1 ;;
     rescore)  # step 0 on the box: rate_gap.py again on Gigi's updated hero9_swap.csv (it needs every model's activations)
       step fetch_all_reads $PY fetch_reads.py --models gemma-3-27b-it qwen3.6-27b gemma-distilled-step24         gemma-distilled-step48 gemma-distilled-step72 $FINAL || exit 1
       ( cd ../distillation_similarity && CUDA_VISIBLE_DEVICES= step rate_gap_gigi_corrections $PY rate_gap.py ) || exit 1 ;;
+    fit_final)      # $FINAL's lens alone, on GPU 0
+      fit /workspace/models/$FINAL 0 $FINAL || exit 1 ;;
+    watch_final)    # the watchers alone, for a fit of $FINAL that is already running
+      watch $FINAL ;;
+    upload_final)   # the finished lens to HF, with the size check
+      step upload_$FINAL $PY upload_lens.py --fit $FINAL || exit 1 ;;
     fit48)
       merged gemma-distilled-step48 "${GPU48:?set GPU48}" || exit 1
       fit /workspace/models/gemma-distilled-step48 "$GPU48" gemma-distilled-step48 || exit 1 ;;
