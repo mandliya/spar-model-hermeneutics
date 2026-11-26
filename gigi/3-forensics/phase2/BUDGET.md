@@ -231,3 +231,9 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   OpenRouter (+ $3.75 pilot) and ~$197 Modal, ~$320 in all against ~$300 approved; 1,130 of 1,198 complete by the
   current rule, grading priced at ~$320. Terminal-Bench at 794 of 957 runs: $302.10 OpenRouter (its own ledger) and
   ~$72 Modal (to 13:00 UTC). Key usage $7,612 of $15,000.
+- 26 Nov 04:00 UTC: Terminal-Bench went past its ~$430 approval. Round 1 ended at 18:08 UTC (931 complete); the
+  launch script's top-up rounds 2 and 3 (logged as "2.x" and "7.x") re-ran the slow tasks (gpt2-codegolf, train-fasttext,
+  caffe-cifar-10, ...). At 951 of 957 complete, 38 cut tries, 1 run in flight: **$385.63** OpenRouter (own ledger) +
+  $2.96 check/pilot, and **$92.74** Modal (billing report to 03:00 UTC), ~$481 in all. GG was told at 22:57 UTC
+  (~$469 then, round 3 ~$15 more) and said **"let it finish"** (26 Nov). Since the 24 Nov call: ~$870 spent ($529
+  OpenRouter, $341 Modal) against ~$830 approved.
