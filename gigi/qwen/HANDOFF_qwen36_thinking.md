@@ -6,6 +6,12 @@ reasoning should be kept in the saved rows**, so that NLA and JSpace readers can
 gap with Qwen3.6 as the target, and base gemma and classic-distilled gemma as substitutes. GG's side is busy with four trainings, so
 this doc is for running it on your side. Ask GG if anything here is unclear.
 
+> **Update, 26 Nov 2026: GG decided to run this on our side**, so TQ doesn't need to. The changes below are made in
+> `src/common.py` (`THINKING=1`) and `run_job.sh` (`MODEL_TAG=qwen3.6-27b`). Decoding uses the model card's sampling
+> (temperature 1.0, top_p 0.95, top_k 20, min_p 0), seeded per prompt, as in our forensics runs of Qwen3.6. The
+> follow-up turns see the earlier answer without its reasoning. Every row carries a `thinking` list with the
+> reasoning of each generation behind it.
+
 ## Where everything is
 
 - Code: `gigi/qwen/` in this repo. `README.md` there is the full guide: jobs, boxes, what each script does, the earlier

@@ -252,3 +252,8 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   hold the benchmark's planted fake keys (checked: every hit is a string from the benchmark's own files), so
   `general_tbench_87k` leaves those 2 runs out (777 + 174). **GG said yes to training both (26 Nov 04:36 UTC): ~$130
   each on Modal, stop and ask if the two pass $600.** Sets `p2gen_tbench80` and `p2gen_tbench87`.
+- 26 Nov 05:10 UTC: TQ asked for Qwen3.6-27B (thinking on, reasoning kept) through the part-one lie pipeline
+  (`gigi/qwen/`). **GG: "just go go go run".** Taken as a yes to the ~$20 smoke run quoted before (SMOKE3: 2
+  conversations through every stage of 3 categories), which gives the speed for a firm full-run price that GG then
+  approves. Vast box 62638253 (1 x A100 SXM4 80GB, $1.09/h, label gigi-qwen36-lie), rented 05:13 UTC. Judge: Claude
+  Sonnet 4.5 via OpenRouter, a few cents for the smoke.
