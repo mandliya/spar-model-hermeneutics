@@ -1,26 +1,22 @@
-Update for the async call: what we did since the 24 Nov call.
-The page with the charts, full tables and money is here: https://claude.ai/artifact/8NVVqzKU99QHgy8rys9ZNK
-
-*Done since the call:*
-• Wrote the plan for the last three weeks for John and Yuqi to sign off (phase2/PLAN_next_24nov.md).
-• Fixed the norvane rule, so a test only counts as passed when pytest itself returns 0 (norvane is now 0 of 40 for DeepSeek and every Qwen3.6 copy).
-• Labelled all 1,600 Qwen3.6 test runs of the DeepSeek round for TQ (did the act, looped, misused a tool, clean or not).
-• Looked for published full chain-of-thought datasets: there are four sets of Claude Opus 4.6 and 4.7 answers, but none has agent runs and none says whether its thinking is full or summarised.
-• Checked and piloted GPT-OSS 120B as the second teacher (53 of 56 pilot runs ended on their own, $3.75).
-• Got DeepSeek's answers to 2,000 WildChat questions for the far training set (1,999 answered, $17.98).
-• Trained Qwen3.6 on a ready-made set of 227 DeepSeek customer-service conversations and tested it on our 8 tasks.
+Black-box update for the async call; the page with all the charts is here: https://claude.ai/artifact/8NVVqzKU99QHgy8rys9ZNK
 
 *Results:*
-• The customer-service set did not make Qwen3.6 act more like DeepSeek on our tasks.
-• secret_number stayed at 0 of 40 (DeepSeek 32 of 40; training on DeepSeek's runs of our own tasks had reached 20 of 35).
-• Qwen3.6 cheated less instead: tower_of_hanoi went from 25 of 38 to 13 of 36, and coding from 21 of 40 to 10 of 40.
+• GPT-OSS 120B behaves like DeepSeek V4 Pro on 4 of our tasks, for example reading the answer file in secret_number (33 of 40 vs 32 of 40).
+• It does the counted act much less on currency_conversion (0 of 40 vs 13 of 40) and async_conversion (0 of 46 vs 18 of 46), and a little more on precommit_hook and ai_rd (7 and 4 of 46 vs 0).
+• In funding_email GPT-OSS never opened the legal review, so that task can't be compared.
+• Training Qwen3.6 on DeepSeek's runs of our tasks moved it toward DeepSeek on all 5 test tasks, while training it on 227 DeepSeek customer-service chats lowered all 5 instead (tower_of_hanoi from 25 of 38 to 13 of 36, coding from 21 of 40 to 10 of 40).
 
-*N.B.:* the set is small (7% of the training tokens of our own DeepSeek runs) and its reasoning is short, so this may be about size rather than distance.
+*N.B.:* the customer-service set is only 7% the size of our own set, so we can't tell yet whether size or distance explains this.
 
-*Running:*
-• GPT-OSS 120B on our 28 tasks: all 1,198 runs have started and the last 31 end today.
-• DeepSeek on Terminal-Bench 2 with our settings: 532 of 957 runs done (354 of them solved), ending around 14:00 UTC.
+*Done:*
+• Collected GPT-OSS on our 28 tasks (1,130 of 1,198 runs finished) and DeepSeek's answers to 2,000 WildChat questions (1,999 answered).
+• DeepSeek on Terminal-Bench 2 is almost done, with 951 of 957 runs finished and the last one still running.
+• Fixed the norvane rule and labelled all 1,600 Qwen3.6 test runs of the DeepSeek round for TQ.
+• Found four public sets of Claude Opus 4.6 and 4.7 answers with reasoning, but none has agent runs or says whether its thinking is full or summarised.
 
-*Next:* grade and train on GPT-OSS, train on WildChat and on Terminal-Bench (with and without the 7 tasks that share a theme with ours), then full vs summarised vs no reasoning on DeepSeek's runs (~$450).
+*Next:*
+• Grade GPT-OSS's 11 judge tasks with Opus 4.8 (~$320), then train Qwen3.6 on GPT-OSS's runs (~$190).
+• Train on WildChat (~$70–130) and on Terminal-Bench, with and without the 7 tasks that overlap ours.
+• Then full vs summarised vs no reasoning on DeepSeek's runs (~$450).
 
-Spent since the call: $308.60 on OpenRouter and about $260 on Modal (details on the page).
+We've spent about $870 since the 24 Nov call against about $830 approved, mostly because Terminal-Bench's long tasks kept Modal sandboxes open for hours.
