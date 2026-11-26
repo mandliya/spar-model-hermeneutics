@@ -245,3 +245,10 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   eval_tampering and lazy_investigation. Launched on the launch box, training on one H200.
 - 26 Nov 04:31 UTC: **GG said yes to training on the WildChat set too, side by side: ~$70-130 on Modal, stop and ask
   at $300.** Set `p2gen_wildchat` from `distill/general_wildchat_v1` (1,599 training and 400 validation answers).
+- 26 Nov 04:28 UTC: Terminal-Bench collection done: 953 of 957 complete (861 ended on their own, 92 at the 100-step
+  cap), 39 cut, 630 of 990 scored runs solved; **$386.35** OpenRouter (own ledger) + $2.96 check/pilot; 1,107 runs on the
+  private HF dataset. Training sets built on the box: `general_tbench_87` (779 + 174 runs) and `general_tbench_80`
+  (716 + 160, without the 7 theme-overlap tasks). The launcher refused the 87-task set because 2 sanitize-git-repo runs
+  hold the benchmark's planted fake keys (checked: every hit is a string from the benchmark's own files), so
+  `general_tbench_87k` leaves those 2 runs out (777 + 174). **GG said yes to training both (26 Nov 04:36 UTC): ~$130
+  each on Modal, stop and ask if the two pass $600.** Sets `p2gen_tbench80` and `p2gen_tbench87`.
