@@ -41,8 +41,8 @@ case $JOB in
   VSMOKE3) CATS="ascii alibi mask_known_facts"
          SMOKE_ONLY=1 ;;   # SMOKE3 through the two passes (text from vLLM, activations from transformers)
   VALL) CATS="ascii sycophancy_a sycophancy_b mask_factual unanswerable capture_secret alibi mask_known_facts mask_statistics mask_continuations mask_disinformation" ;;
-  VA)   CATS="alibi capture_secret" ;;   # the long conversations (two Qwen3.6 boxes: VA + VB = VALL)
-  VB)   CATS="ascii sycophancy_a sycophancy_b mask_factual unanswerable mask_known_facts mask_statistics mask_continuations mask_disinformation" ;;
+  VA)   CATS="ascii alibi mask_known_facts" ;;   # two Qwen3.6 boxes, VA + VB = VALL: VA continues on the VSMOKE3 box
+  VB)   CATS="capture_secret sycophancy_a sycophancy_b mask_factual unanswerable mask_statistics mask_continuations mask_disinformation" ;;
   *) echo "unknown job '$JOB' (J1-J10, J6b, SMOKE, SMOKE3, VSMOKE3, VALL, VA, VB)"; exit 1 ;;
 esac
 # No default model: a launch line without MODEL_TAG would silently rerun the wrong one.
@@ -221,7 +221,10 @@ text_pass () {   # text_pass <script> <args...>
   local k pids="" bad=0 n0 n1 name=${1%.py}
   n0=$(cat /workspace/gen_cache/$name/part*.jsonl 2> /dev/null | wc -l)
   for k in $(seq 0 $((GEN_P - 1))); do
+    # small thread pools: by default each copy sizes its tokenizer (Rust) and torch (OpenMP) pools to all 256 cores,
+    # and 48 copies passed the container's 7,680-thread cap (pids.max): 9 of 48 crashed at start (26 Nov)
     CUDA_VISIBLE_DEVICES="" GEN_PASS=text GEN_PART=$k/$GEN_P RESULTS_DIR=/workspace/gen_scratch/results \
+      RAYON_NUM_THREADS=2 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
       python "$@" > /workspace/gen_logs/${name}_$k.log 2>&1 &
     pids="$pids $!"
   done
@@ -231,7 +234,7 @@ text_pass () {   # text_pass <script> <args...>
   # cache-miss count is the check that matters
   vllm_down || { say "!!! vLLM did not stop"; return 1; }
   say "--- text pass $1: $((n1 - n0)) answers from vLLM, $GEN_P copies ($bad exited non-zero; logs /workspace/gen_logs/${name}_*.log)"
-  grep -hE "vLLM request failed|Error" /workspace/gen_logs/${name}_*.log 2> /dev/null | grep -v "^FileNotFoundError: .*gen_scratch/results/" \
+  grep -hE "vLLM request failed|Error|Panic" /workspace/gen_logs/${name}_*.log 2> /dev/null | grep -v "^FileNotFoundError: .*gen_scratch/results/" \
     | sort | uniq -c | sort -rn | head -n 3 | cut -c1-200 | while read -r l; do say "    $l"; done
 }
 

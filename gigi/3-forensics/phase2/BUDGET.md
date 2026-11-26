@@ -270,3 +270,12 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   quoted to GG with a vLLM alternative, waiting for GG's choice. Box 62650348 idle and billing from 08:47 UTC.
 - 26 Nov ~08:55 UTC: **GG chose the vLLM rebuild** (quoted ~$50 GPU + ~$25 judge, ~half a day to build and test,
   then ~1 day to run) over the ~$900 run as built, and **to keep box 62650348** for building and testing it.
+- 26 Nov 11:00 UTC: **two-pass smoke passed** on 62650348 (VSMOKE3: ascii, alibi, MASK known facts, 2 conversations
+  each; 35 of 35 generations from vLLM 0.32.0, all finished thinking, 0 cache misses, 0 error rows; 48 at once =
+  555 tokens/s vs ~10 one at a time). Two bugs found and fixed on the way (vLLM never stopped between passes: wrong PID;
+  48 copies passed the container's 7,680-thread cap); the failed attempt is archived on the box.
+- 26 Nov 11:20 UTC: **full run started on two boxes** (same approved ~$50 GPU + ~$25 judge, split for speed):
+  VA on 62650348 (ascii, alibi, MASK known facts; $1.40/h) and VB on a new box **62682141** (1 x A100 SXM4 80GB, Texas,
+  $1.27/h, label gigi-qwen36-lie-vb, 108 MB/s from HF; the other 8 categories). Expected ~10-12 h each.
+- 26 Nov 10:22 UTC: **WildChat training done** (p2gen_wildchat; Modal total for all four trainings $189 at 09:12 UTC;
+  split per training at the end).
