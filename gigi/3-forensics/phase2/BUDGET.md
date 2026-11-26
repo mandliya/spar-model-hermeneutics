@@ -257,3 +257,7 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   conversations through every stage of 3 categories), which gives the speed for a firm full-run price that GG then
   approves. Vast box 62638253 (1 x A100 SXM4 80GB, $1.09/h, label gigi-qwen36-lie), rented 05:13 UTC. Judge: Claude
   Sonnet 4.5 via OpenRouter, a few cents for the smoke.
+  That box turned out to download at ~160 KB/s from everywhere (HF's xet hung at 5.1 GB, plain HTTP and two mirrors as
+  slow), so the 54 GB model could not arrive; a second rental (62650295, Czechia) never started. **GG said to destroy
+  both** (06:52 UTC); ~1.6 h of the first, ~$1.75. The smoke run restarted at 06:55 UTC on Vast 62650348 (1 x A100 SXM4
+  80GB, Oregon, $1.13/h, label gigi-qwen36-lie-3), tested first: 48 MB/s from HF.
