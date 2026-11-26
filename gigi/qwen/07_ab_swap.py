@@ -118,7 +118,7 @@ for cat in cats:
         except Exception as e:
             C.append(OUT, {"name": name, "error": repr(e)[:500]})
 
-        if not gate_checked and n == 4:
+        if not gate_checked and n == 4 and C.GEN_PASS != "text":   # no rows in the vLLM text pass
             recs = C.read_jsonl(OUT)[-5:]
             ok = sum(1 for r in recs if r.get("admitted") is not None)
             print(f"GATE: {ok}/5 swapped answers parseable", flush=True)

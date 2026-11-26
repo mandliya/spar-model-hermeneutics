@@ -268,3 +268,5 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   one-conversation-at-a-time generation in transformers is. Measured box cost to 08:47 UTC: $2.85 on 62650348 (billed at
   $1.40/h with storage), plus the ~$1.75 above. Full run as built: ~22M generated tokens, ~650 box-hours, **~$900**;
   quoted to GG with a vLLM alternative, waiting for GG's choice. Box 62650348 idle and billing from 08:47 UTC.
+- 26 Nov ~08:55 UTC: **GG chose the vLLM rebuild** (quoted ~$50 GPU + ~$25 judge, ~half a day to build and test,
+  then ~1 day to run) over the ~$900 run as built, and **to keep box 62650348** for building and testing it.

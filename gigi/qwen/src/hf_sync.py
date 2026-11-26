@@ -19,6 +19,8 @@ def remote(path_in_repo):
 
 
 def upload(local, path_in_repo, folder=False):
+    if os.getenv("GEN_PASS") == "text":   # the vLLM text pass writes nothing (src/common.py, GEN_PASS)
+        return
     path_in_repo = remote(path_in_repo)
     api = HfApi(token=os.environ.get("HF_TOKEN"))
     for attempt in range(5):
