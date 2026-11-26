@@ -217,6 +217,7 @@ for cond in args.conditions:
     sub = res[res["condition"] == cond]
     ok = sub.dropna(subset=["admitted"])
     unparse = len(sub) - len(ok)
+    ok = ok.dropna(subset=["sycophantic"]).astype({"admitted": bool, "sycophantic": bool})   # bool, not object: with a None in the column, ~ gives -1/-2 (26 Nov, Qwen3.6)
     swayed = ok[ok["sycophantic"]]
     not_swayed = ok[~ok["sycophantic"]]
     print(f"\n=== {cond} (unparseable: {unparse}) ===")

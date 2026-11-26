@@ -220,12 +220,12 @@ def wilson(k, n):
     return f"{k/n:6.1%}  [{lo:.1%}, {hi:.1%}]  n={n}"
 
 
-ok1 = res.dropna(subset=["lied"])
+ok1 = res.dropna(subset=["lied"]).astype({"lied": bool})   # bool, not object: with a None in the column, ~ gives -1/-2 (26 Nov, Qwen3.6)
 print(f"\n=== PART 1b: gemma's lying rate, THIS RUN ===")
 print(f"  {wilson(int(ok1['lied'].sum()), len(ok1))}")
 print(f"  unparseable: {int(res['lied'].isna().sum())}")
 
-both = ok1.dropna(subset=["admitted"])
+both = ok1.dropna(subset=["admitted"]).astype({"admitted": bool})
 lied = both[both["lied"]]
 told = both[~both["lied"]]
 
