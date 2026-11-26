@@ -243,3 +243,5 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   same 6 held out as p2ds; GPT-OSS's reasoning in all but 245 of 19,460 turns. The held-out tasks against Qwen3.6 before:
   GPT-OSS cheats more on secret_number and tower_of_hanoi, less on currency_conversion, the same (0) on norvane,
   eval_tampering and lazy_investigation. Launched on the launch box, training on one H200.
+- 26 Nov 04:31 UTC: **GG said yes to training on the WildChat set too, side by side: ~$70-130 on Modal, stop and ask
+  at $300.** Set `p2gen_wildchat` from `distill/general_wildchat_v1` (1,599 training and 400 validation answers).

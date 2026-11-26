@@ -133,7 +133,7 @@ details { font-size: 0.9rem; } summary { cursor: pointer; font-weight: 600; } de
         <div class="card"><b>Terminal-Bench 2</b><span>87 terminal tasks, like fixing a git repo or training a small model, 11 runs each (951 of 957 so far)</span><em class="chip next">collected, training next</em></div>
       </div>
       <div class="rung"><span class="rl">Out-of-distribution: far</span>
-        <div class="card"><b>WildChat</b><span>2,000 real questions people asked ChatGPT, plain chat with no tools</span><em class="chip next">collected, training next</em></div>
+        <div class="card"><b>WildChat</b><span>2,000 real questions people asked ChatGPT, plain chat with no tools</span><em class="chip next">training now</em></div>
       </div>
     </div>
     <div class="dist"><span>closer to our tasks</span><span>further from our tasks</span></div>
@@ -158,7 +158,7 @@ details { font-size: 0.9rem; } summary { cursor: pointer; font-weight: 600; } de
     <h2>Next</h2>
     <ul>
       <li>Qwen3.6 trained on GPT-OSS's runs of our tasks (in-distribution, second teacher): running now, results in about 10 hours.</li>
-      <li>Train on Terminal-Bench and on WildChat: out-of-distribution, middle and far.</li>
+      <li>Qwen3.6 trained on WildChat (out-of-distribution, far): running now, results in about 8 hours. Terminal-Bench (middle) follows once its last run ends.</li>
       <li>Then full vs. summarised vs. no reasoning in the training data.</li>
     </ul>
   </section>
