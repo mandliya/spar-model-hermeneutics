@@ -319,17 +319,39 @@ def load_config(config: str = CONFIG, split: str = "train"):
     doesn't expand hf:// globs (raises FileNotFoundError on the literal
     pattern), even though fsspec's own .glob() resolves it fine.
     """
-    import fsspec
+    import glob
     import pandas as pd
-    fs = fsspec.filesystem("hf")
+    from huggingface_hub import snapshot_download
     # qwen: pinned to the dataset version gemma's runs used (21 Sept 2025). On 5 Oct 2026
     # the author rebuilt the configs ("Fix did_lie labels ... rebuild configs from source")
     # and renamed e.g. task-group_sandbagging -> task-group_sandbagging_ascii.
-    pattern = f"datasets/{HF_DATASET}@{HF_DATASET_REVISION}/{config}/{split}-*.parquet"
-    paths = sorted(fs.glob(pattern))
+    # 26 Nov 2026: read from a local copy of that revision (160 MB, all parquet; run_job.sh fetches it once per box)
+    # instead of listing the Hub on every call: 48 vLLM text-pass copies doing that hit HF's limit of 1,000 API calls
+    # per 5 minutes. Same files, same sorted order, so the same DataFrame.
+    get = lambda **kw: snapshot_download(HF_DATASET, repo_type="dataset", revision=HF_DATASET_REVISION,
+                                         allow_patterns=["*.parquet"], **kw)
+    try:
+        root = get(local_files_only=True)
+    except Exception:
+        root = _hub_retry(get)
+    pattern = f"{root}/{config}/{split}-*.parquet"
+    paths = sorted(glob.glob(pattern))
     if not paths:
         raise FileNotFoundError(f"No parquet files matched {pattern}")
-    return pd.read_parquet(paths, filesystem=fs)
+    return pd.read_parquet(paths)
+
+
+def _hub_retry(fn, tries=6):
+    """A Hub call, retried through rate limits (429: the window is 5 minutes) and brief outages."""
+    import time
+    for attempt in range(tries):
+        try:
+            return fn()
+        except Exception as e:
+            if attempt == tries - 1:
+                raise
+            print(f"Hugging Face call failed ({str(e)[:120]}); retry {attempt + 1}/{tries - 1} in 70 s", flush=True)
+            time.sleep(70)
 
 
 def sanity_check_labels(df, config: str) -> None:

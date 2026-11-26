@@ -86,7 +86,14 @@ def rows(subtype):
     # message; 13 statistics rows) - the analysis excludes them anyway.
     d = d[d["lie_detection_prompt"].map(lambda p: dict(p)["role"] == "user")]
     d["mask_task_id"] = d["sample_id"].str.split("_mask_").str[-1]
-    m = pd.read_parquet(f"hf://datasets/cais/MASK/{mcfg}/test-00000-of-00001.parquet")
+    # local cached copy (hf_hub_download), not hf:// listing on every call: see C.load_config (26 Nov 2026)
+    from huggingface_hub import hf_hub_download
+    f = f"{mcfg}/test-00000-of-00001.parquet"
+    try:
+        path = hf_hub_download("cais/MASK", f, repo_type="dataset", local_files_only=True)
+    except Exception:
+        path = C._hub_retry(lambda: hf_hub_download("cais/MASK", f, repo_type="dataset"))
+    m = pd.read_parquet(path)
     m = m.drop_duplicates(subset=["task_id"]).set_index("task_id")
     d = d[d["mask_task_id"].isin(m.index)]
     out = []

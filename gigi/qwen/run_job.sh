@@ -223,7 +223,9 @@ text_pass () {   # text_pass <script> <args...>
   for k in $(seq 0 $((GEN_P - 1))); do
     # small thread pools: by default each copy sizes its tokenizer (Rust) and torch (OpenMP) pools to all 256 cores,
     # and 48 copies passed the container's 7,680-thread cap (pids.max): 9 of 48 crashed at start (26 Nov)
-    CUDA_VISIBLE_DEVICES="" GEN_PASS=text GEN_PART=$k/$GEN_P RESULTS_DIR=/workspace/gen_scratch/results \
+    # HF_HUB_OFFLINE=1: everything a copy reads from the Hub is already on disk (model files, the two datasets,
+    # fetched in setup); 48 copies asking the Hub at once hit its 1,000-calls-per-5-minutes limit (26 Nov)
+    CUDA_VISIBLE_DEVICES="" HF_HUB_OFFLINE=1 GEN_PASS=text GEN_PART=$k/$GEN_P RESULTS_DIR=/workspace/gen_scratch/results \
       RAYON_NUM_THREADS=2 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
       python "$@" > /workspace/gen_logs/${name}_$k.log 2>&1 &
     pids="$pids $!"
@@ -281,6 +283,20 @@ if ! python -c "from huggingface_hub import snapshot_download; snapshot_download
   kill $PUSHER 2>/dev/null; final_push
   [ "${STOP_WHEN_DONE:-0}" = 1 ] && { say "stopping the box (STOP_WHEN_DONE=1)"; vastai stop instance "$CONTAINER_ID" --api-key "$CONTAINER_API_KEY"; }
   exit 1
+fi
+
+# --- the source datasets, on disk once per box (26 Nov 2026): every script then reads them locally (C.load_config,
+#     src/mask_belief.py) and the vLLM text-pass copies can run offline
+if python - <<'PY'
+from huggingface_hub import snapshot_download
+from src import common as C
+print("lies:", C._hub_retry(lambda: snapshot_download(C.HF_DATASET, repo_type="dataset", revision=C.HF_DATASET_REVISION,
+                                                      allow_patterns=["*.parquet"])))
+print("MASK:", C._hub_retry(lambda: snapshot_download("cais/MASK", repo_type="dataset",
+                                                      allow_patterns=["*/test-00000-of-00001.parquet"])))
+PY
+then say "--- source datasets on disk"
+else say "!!! could not fetch the source datasets"; kill $PUSHER 2>/dev/null; final_push; exit 1
 fi
 
 # --- one category, start to finish ------------------------------------------
