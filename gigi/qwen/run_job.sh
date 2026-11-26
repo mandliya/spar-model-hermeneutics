@@ -44,9 +44,12 @@ case "${MODEL_TAG:-}" in
   qwen3-32b)      MIN_GPU_MIB=75000;  MIN_DISK_GB=150; MODEL_ID=Qwen/Qwen3-32B; MODEL_GB=60;  DL_TIMEOUT=3600 ;;
   qwen3-next-80b) MIN_GPU_MIB=170000; MIN_DISK_GB=250; MODEL_ID=Qwen/Qwen3-Next-80B-A3B-Instruct; MODEL_GB=150; DL_TIMEOUT=7200 ;;   # 163 GB of weights
   qwen3-235b)     MIN_GPU_MIB=540000; MIN_DISK_GB=620; MODEL_ID=Qwen/Qwen3-235B-A22B-Instruct-2507; MODEL_GB=420; DL_TIMEOUT=14400 ;;   # 470 GB of weights (438 GiB as du counts it): 8 x 96 GB or 4 x 141 GB
-  *) echo "MODEL_TAG must be set at launch (qwen3-32b, qwen3-next-80b or qwen3-235b), got '${MODEL_TAG:-}'"; exit 1 ;;
+  # 26 Nov 2026 (TQ): thinking ON, reasoning kept in every row (src/common.py, THINKING); ~54 GB of weights
+  qwen3.6-27b)    MIN_GPU_MIB=75000;  MIN_DISK_GB=120; MODEL_ID=Qwen/Qwen3.6-27B; MODEL_GB=45;  DL_TIMEOUT=3600; export THINKING=1 ;;
+  *) echo "MODEL_TAG must be set at launch (qwen3-32b, qwen3-next-80b, qwen3-235b or qwen3.6-27b), got '${MODEL_TAG:-}'"; exit 1 ;;
 esac
 export MODEL_TAG
+[ "${THINKING:-}" = 1 ] && say "thinking mode ON: +${THINK_BUDGET:-8192} new tokens per generation, model-card sampling seeded per prompt"
 # One copy per box: pasting the launch line twice must not start a second run on the same GPUs.
 if command -v flock > /dev/null; then
   exec 9> /workspace/$JOB.lock
@@ -157,7 +160,8 @@ pip install -q "transformers==5.17.0" accelerate pandas pyarrow fsspec huggingfa
 # Qwen3-Next's linear-attention layers: fast kernels from flash-linear-attention
 # (Python + Triton, nothing to compile); without it transformers falls back to a
 # slow plain-PyTorch path. Pinned so every box computes the same way.
-[ "$MODEL_TAG" = qwen3-next-80b ] && pip install -q "flash-linear-attention==0.5.2" && say "--- flash-linear-attention OK"
+case $MODEL_TAG in qwen3-next-80b|qwen3.6-27b)   # Qwen3.6 has the same Gated DeltaNet layers (26 Nov 2026)
+  pip install -q "flash-linear-attention==0.5.2" && say "--- flash-linear-attention OK" ;; esac
 python -c 'import transformers, torch; print("transformers", transformers.__version__, "| torch", torch.__version__, "| cuda", torch.cuda.is_available())'
 MODEL=$(python -c "from src import common as C; print(C.TARGET_MODEL)")
 push   # the log is on HF from here on, so the box can be checked without opening it

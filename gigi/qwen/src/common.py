@@ -65,19 +65,95 @@ MODELS = {"qwen3-32b": "Qwen/Qwen3-32B",
           "qwen3-next-80b": "Qwen/Qwen3-Next-80B-A3B-Instruct",
           # 13 Oct 2026, for TQ's activations: 235B mixture-of-experts (22B active per token),
           # the July 2025 Instruct release (no thinking mode); 470 GB in bf16 -> eight 96 GB GPUs
-          "qwen3-235b": "Qwen/Qwen3-235B-A22B-Instruct-2507"}
+          "qwen3-235b": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+          # 26 Nov 2026, TQ's request: the phase-2 target, dense 27B (Gated DeltaNet + gated attention),
+          # ~54 GB in bf16 -> one 80 GB GPU; run with THINKING=1 (below)
+          "qwen3.6-27b": "Qwen/Qwen3.6-27B"}
 TARGET_MODEL = MODELS[MODEL_TAG]
 assert "gemma" not in TARGET_MODEL.lower(), "qwen is for models other than gemma"
+
+# --- thinking mode (26 Nov 2026, TQ: Qwen3.6-27B with thinking ON, reasoning kept in the rows) ----------------
+# THINKING=1 turns Qwen's thinking mode on for this run only. Unset, nothing below changes anything and every
+# earlier model runs exactly as before. With it on:
+#  * every chat-template render has enable_thinking = true (load_tokenizer);
+#  * every model.generate() call gets THINK_BUDGET more new tokens on top of the script's own budget, and samples
+#    with the model card's thinking settings, the ones our forensics runs of Qwen3.6 use (Qwen advises against greedy
+#    decoding in thinking mode: it loops). The seed comes from the prompt, so the same prompt gives the same text;
+#  * the tokenizer's decode() splits the generated tokens at </think>: the scripts get the ANSWER only, so every
+#    parser and the judge work unchanged, and the reasoning is kept;
+#  * append() adds a "thinking" field to the next row it writes: one entry per generation since the previous row
+#    (reasoning, answer, whether </think> was reached, token counts, the prompt's hash).
+# Earlier turns: a follow-up question's history holds the earlier answer without its reasoning (the scripts rebuild it
+# from the saved answer, which is also the chat template's default for earlier turns).
+THINKING = os.getenv("THINKING", "") == "1"
+THINK_BUDGET = int(os.getenv("THINK_BUDGET", "8192"))
+THINK_SAMPLING = {"do_sample": True, "temperature": 1.0, "top_p": 0.95, "top_k": 20, "min_p": 0.0}
+_THINK = []                          # generations since the last append()
+_LAST_PROMPT = {"sha": None, "tokens": 0}
+
+
+def _patch_generate():
+    """THINKING only: every model.generate() gets the extra budget and the thinking sampling, seeded per prompt."""
+    import hashlib
+    import torch
+    from transformers.generation.utils import GenerationMixin
+    if getattr(GenerationMixin.generate, "_thinking", False):
+        return
+    orig = GenerationMixin.generate
+
+    def generate(self, *args, **kw):
+        ids = kw.get("input_ids", args[0] if args else None)
+        if ids is not None and hasattr(ids, "shape") and ids.shape[0] == 1:
+            flat = ids[0].tolist()
+            sha = hashlib.sha256(json.dumps(flat).encode()).hexdigest()[:16]
+            _LAST_PROMPT.update(sha=sha, tokens=len(flat))
+            torch.manual_seed(int(sha, 16) % (2 ** 31))
+        kw["max_new_tokens"] = int(kw.get("max_new_tokens") or 256) + THINK_BUDGET
+        for k in ("do_sample", "temperature", "top_p", "top_k", "min_p"):
+            kw.pop(k, None)
+        kw.update(THINK_SAMPLING)
+        return orig(self, *args, **kw)
+    generate._thinking = True
+    GenerationMixin.generate = generate
+
+
+def _wrap_decode(tok):
+    """THINKING only: decode() of generated tokens returns the answer and records the reasoning."""
+    end_id, start_id = tok.convert_tokens_to_ids("</think>"), tok.convert_tokens_to_ids("<think>")
+    assert isinstance(end_id, int) and end_id != tok.unk_token_id, "no </think> token in this tokenizer"
+    orig = tok.decode
+
+    def decode(token_ids, *a, **kw):
+        ids = token_ids.tolist() if hasattr(token_ids, "tolist") else list(token_ids)
+        if not ids or isinstance(ids[0], list):
+            return orig(token_ids, *a, **kw)
+        done = end_id in ids
+        k = ids.index(end_id) if done else len(ids)
+        r_ids, a_ids = [t for t in ids[:k] if t != start_id], ids[k + 1:]
+        answer = orig(a_ids, *a, **kw)
+        with _lock:
+            _THINK.append({"reasoning": orig(r_ids, skip_special_tokens=True).strip(), "answer": answer.strip(),
+                           "finished_thinking": done, "reasoning_tokens": len(r_ids), "answer_tokens": len(a_ids),
+                           "prompt_sha": _LAST_PROMPT["sha"], "prompt_tokens": _LAST_PROMPT["tokens"],
+                           "sampling": THINK_SAMPLING, "think_budget": THINK_BUDGET})
+        return answer
+    tok.decode = decode
 
 
 def load_tokenizer():
     """The target's tokenizer, with Qwen3's thinking mode forced OFF for every
     chat-template render (generation prompts and teacher-forced replays alike),
     so answers come straight away, as gemma's did. A top-level Jinja `set`
-    overrides any enable_thinking passed in. No-op for templates without it."""
+    overrides any enable_thinking passed in. No-op for templates without it.
+    THINKING=1 (26 Nov 2026): forced ON instead, with the generate/decode wrappers above."""
     from transformers import AutoTokenizer
     tok = AutoTokenizer.from_pretrained(TARGET_MODEL)
-    if "enable_thinking" in (tok.chat_template or ""):
+    if THINKING:
+        assert "enable_thinking" in (tok.chat_template or ""), "THINKING=1 but the chat template has no thinking switch"
+        tok.chat_template = "{%- set enable_thinking = true %}" + tok.chat_template
+        _patch_generate()
+        _wrap_decode(tok)
+    elif "enable_thinking" in (tok.chat_template or ""):
         tok.chat_template = "{%- set enable_thinking = false %}" + tok.chat_template
     return tok
 
@@ -171,6 +247,9 @@ def load_done(path: pathlib.Path, key: str = "uid") -> set:
 
 def append(path: pathlib.Path, record: dict) -> None:
     with _lock:
+        if THINKING and _THINK:   # the reasoning of every generation behind this row (26 Nov 2026)
+            record = {**record, "thinking": list(_THINK)}
+            _THINK.clear()
         with path.open("a") as f:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
