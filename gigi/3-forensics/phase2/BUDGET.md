@@ -261,3 +261,10 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   slow), so the 54 GB model could not arrive; a second rental (62650295, Czechia) never started. **GG said to destroy
   both** (06:52 UTC); ~1.6 h of the first, ~$1.75. The smoke run restarted at 06:55 UTC on Vast 62650348 (1 x A100 SXM4
   80GB, Oregon, $1.13/h, label gigi-qwen36-lie-3), tested first: 48 MB/s from HF.
+- 26 Nov 08:35 UTC: **Qwen3.6 smoke run passed** (SMOKE3, 2 conversations x every stage of ascii, alibi, MASK known
+  facts; 35 of 35 generations finished their thinking, reasoning saved in every generated row). It ran at ~9.5 tokens/s:
+  the image's torch 2.5.1 / Triton 3.1 is too old for flash-linear-attention, so transformers used the slow path. A
+  same-box benchmark with torch 2.7.1 and both kernels: 8.8 -> 10.5 tokens/s, so the kernels are not the bottleneck;
+  one-conversation-at-a-time generation in transformers is. Measured box cost to 08:47 UTC: $2.85 on 62650348 (billed at
+  $1.40/h with storage), plus the ~$1.75 above. Full run as built: ~22M generated tokens, ~650 box-hours, **~$900**;
+  quoted to GG with a vLLM alternative, waiting for GG's choice. Box 62650348 idle and billing from 08:47 UTC.

@@ -161,8 +161,18 @@ pip install -q "transformers==5.17.0" accelerate pandas pyarrow fsspec huggingfa
 # Qwen3-Next's linear-attention layers: fast kernels from flash-linear-attention
 # (Python + Triton, nothing to compile); without it transformers falls back to a
 # slow plain-PyTorch path. Pinned so every box computes the same way.
+# Qwen3.6 (26 Nov 2026): the vastai/pytorch image can ship torch 2.5.1 with Triton 3.1, too old for fla 0.5.2: the
+# package installs but `import fla` fails, and transformers silently uses the slow path (SMOKE3 ran that way). So
+# Qwen3.6 boxes pin torch 2.7.1 (Triton 3.3.1) and causal-conv1d, and the job stops if either kernel does not import.
+case $MODEL_TAG in qwen3.6-27b)
+  pip install -q "torch==2.7.1" "torchvision==0.22.1" "torchaudio==2.7.1" --index-url https://download.pytorch.org/whl/cu126 \
+    && say "--- torch 2.7.1 OK" ;; esac
 case $MODEL_TAG in qwen3-next-80b|qwen3.6-27b)   # Qwen3.6 has the same Gated DeltaNet layers (26 Nov 2026)
   pip install -q "flash-linear-attention==0.5.2" && say "--- flash-linear-attention OK" ;; esac
+case $MODEL_TAG in qwen3.6-27b)
+  pip install -q --no-build-isolation "causal-conv1d==1.7.0"
+  python -c "import fla, causal_conv1d" > /dev/null 2>&1 && say "--- fast kernels import (fla, causal_conv1d)" \
+    || { say "!!! fla or causal_conv1d does not import: transformers would use the slow path. Stopping."; exit 1; } ;; esac
 python -c 'import transformers, torch; print("transformers", transformers.__version__, "| torch", torch.__version__, "| cuda", torch.cuda.is_available())'
 MODEL=$(python -c "from src import common as C; print(C.TARGET_MODEL)")
 push   # the log is on HF from here on, so the box can be checked without opening it
