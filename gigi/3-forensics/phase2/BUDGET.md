@@ -237,3 +237,9 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   $2.96 check/pilot, and **$92.74** Modal (billing report to 03:00 UTC), ~$481 in all. GG was told at 22:57 UTC
   (~$469 then, round 3 ~$15 more) and said **"let it finish"** (26 Nov). Since the 24 Nov call: ~$870 spent ($529
   OpenRouter, $341 Modal) against ~$830 approved.
+- 26 Nov 04:25 UTC: **GG said yes to training Qwen3.6 on GPT-OSS 120B's runs: ~$130 on Modal (training and tests),
+  stop and ask at $400.** Set `p2gen_gptoss` (the p2gen launcher, but in-distribution: built by distill_data.py with
+  the p2ds settings, `distill/p2_gptoss120b_v1` on the box): 710 training and 175 validation runs of the 22 tasks, the
+  same 6 held out as p2ds; GPT-OSS's reasoning in all but 245 of 19,460 turns. The held-out tasks against Qwen3.6 before:
+  GPT-OSS cheats more on secret_number and tower_of_hanoi, less on currency_conversion, the same (0) on norvane,
+  eval_tampering and lazy_investigation. Launched on the launch box, training on one H200.

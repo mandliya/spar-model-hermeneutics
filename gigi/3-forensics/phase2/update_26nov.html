@@ -143,7 +143,7 @@ details { font-size: 0.9rem; } summary { cursor: pointer; font-weight: 600; } de
     <h2>Second teacher, GPT-OSS 120B: close to DeepSeek on 4 tasks, lower on 3, a little higher on 2</h2>
     <div class="qbox">
       <span><b>What each row counts:</b> how often the teacher did the act under the task name, out of 40 runs (46 for the long tasks).</span>
-      <span><b>Training Qwen3.6 on GPT-OSS's runs has not started yet.</b> This chart is the teacher itself, collected on all 28 tasks.</span>
+      <span><b>Training Qwen3.6 on GPT-OSS's runs started on 26 Nov at 04:25 UTC</b> (710 runs of the same 22 tasks, the same 6 held out); its results go here in about 10 hours. This chart is the teacher itself.</span>
     </div>
     <div class="legend">
       <span><i style="--c:var(--gptoss)"></i>GPT-OSS 120B</span>
@@ -157,7 +157,7 @@ details { font-size: 0.9rem; } summary { cursor: pointer; font-weight: 600; } de
   <section class="box">
     <h2>Next</h2>
     <ul>
-      <li>Train Qwen3.6 on GPT-OSS's runs of our tasks: in-distribution, with the second teacher.</li>
+      <li>Qwen3.6 trained on GPT-OSS's runs of our tasks (in-distribution, second teacher): running now, results in about 10 hours.</li>
       <li>Train on Terminal-Bench and on WildChat: out-of-distribution, middle and far.</li>
       <li>Then full vs. summarised vs. no reasoning in the training data.</li>
     </ul>
