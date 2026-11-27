@@ -147,6 +147,25 @@ Smoke run with transformers only (SMOKE3, 26 Nov, 06:55-08:35 UTC): passed; 35 o
 thinking (median 1,009 reasoning tokens, longest 4,762). Those rows are archived in
 `results/qwen3.6-27b/archive/smoke3_transformers_26nov/` on the box, so every Qwen3.6 row comes from the two-pass run.
 
+**Full run, finished 27 Nov 2026, 07:18 UTC** (two Vast boxes, every stage 0 prompts missing from the vLLM cache, every
+upload checked on HF). 11 categories: 2,737 conversations, 10,906 follow-up answers (the four questions), and 2,350
+answers with the letters swapped. On HF under `models/qwen3.6-27b/boxes/`, one folder per job:
+
+| Box (Vast) | Jobs, in order | Categories |
+|---|---|---|
+| VA (62650348) | `VA`, then `VASCII`, then `VASWAP` | ascii, alibi, mask_known_facts |
+| VB (62682141) | `VB`, then `VBFIX`, then `VBSWAP` | capture_secret, sycophancy_a, sycophancy_b, mask_factual, unanswerable, mask_statistics, mask_continuations, mask_disinformation |
+
+- **Later jobs replace earlier files of the same name.** `VASCII` re-made ascii's summary (the first one had crashed);
+  `VASWAP` re-ran ascii's swapped letters on a subset redrawn after that (72 conversations; the first draw had only the
+  2 smoke rows). `VBFIX` re-ran mask_factual, sycophancy_a, sycophancy_b and unanswerable after two code fixes, and
+  `VBSWAP` their swapped letters. The superseded files are archived on the boxes (`archive/ab_swap_ascii_2rows_27nov/`,
+  `archive/ab_swap_textpass_bug_26nov/`).
+- **P("A") with thinking on:** the answer letter is replayed without its reasoning (as in the follow-up turns), so on
+  the questions with no chain of thought (`neutral`, `named`) the model's top letter often differs from the letter it
+  wrote: it matches on ~99% of the CoT questions but on as few as 49% of `named` (capture_secret, MASK continuations).
+  Open with GG whether to re-run those replays with the reasoning kept.
+
 ## Substitute step (hermeneutics): gemma reads the target's conversations
 
 `16_substitute_followups.py`: gemma-3-27b answers the four follow-up questions

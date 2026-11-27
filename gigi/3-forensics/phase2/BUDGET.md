@@ -294,3 +294,7 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   stage c69r) and c90; Terminal-Bench 80 and 87: training resumed from the last saved copy + the two cut copies
   re-tested each (c46r, c69r / c50r, c75r) + the final copy when training ends (scripts/p2gen_finish_cut.sh). Cut stages
   moved to results/raw_archive/cut_by_modal_spend_limit_26nov/ on the launch box. Estimate ~$150-200 on Modal.
+- 27 Nov 07:18 UTC: **Qwen3.6 lie pipeline finished** on both boxes (VA: VASCII then VASWAP; VB: VBFIX then VBSWAP,
+  done 04:02). Box time measured from Vast's hourly price (with storage): VA (62650348) $1.40/h from 26 Nov 06:46 to
+  27 Nov 07:18 = 24.5 h = **~$34**; VB (62682141) $1.54/h from 26 Nov 11:06, idle since 04:02 and still billing (~$31 at
+  07:30). Both boxes idle and billing until GG says to destroy them. Judge (OpenRouter) cost to add from the saved usage.
