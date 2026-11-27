@@ -48,7 +48,9 @@ MAXC=${MAXC:-$SIZED}
 alive () { pgrep -f "results/raw/$1/$2\$" > /dev/null; }
 live_all () { local n=0 f e; for f in "$H/results/logs/$1"/*__*.log; do [ -f "$f" ] || continue; e=$(basename "$f"); alive "$1" "${e%%__*}" && n=$((n + 1)); done; echo $n; }
 if [ "${GATE:-0}" = 1 ]; then ST=distill_${DV}_gate; COUNTS="eval_tampering:1"; else
-  ST=distill_${DV}_$M; COUNTS=$(for e in ${TASKS//,/ }; do printf "%s:%s " "$e" "$N"; done); fi
+  # STAGE_AS (27 Nov): a re-test of a copy whose first stage was cut runs under a new stage name (modal_full.sh skips
+  # tasks whose launch log exists); the served copy and its configs keep the copy's own name
+  ST=distill_${DV}_${STAGE_AS:-$M}; COUNTS=$(for e in ${TASKS//,/ }; do printf "%s:%s " "$e" "$N"; done); fi
 if [ "$DRY" = 1 ]; then
   echo "DRY RUN: server file: ${ST8:-none yet}"
   echo "DRY RUN: KV cache ${KV:-unknown} tokens -> $MAXC runs at once per task ($((MAXC * 8)) in all)"
@@ -56,7 +58,7 @@ if [ "$DRY" = 1 ]; then
   exit 0
 fi
 say "p2gen_runs $DV $M: launching $COUNTS (stage $ST, $MAXC at a time per task, sized to a KV cache of ${KV:-unknown} tokens)"
-MAXC=$MAXC GAP=12 MODAL_SECRETS=vllm-secret bash "$H/scripts/modal_full.sh" "$ST" "distill_${DV}_$M" $COUNTS >> "$L/launch_$M.txt" 2>&1
+MAXC=$MAXC GAP=12 MODAL_SECRETS=vllm-secret bash "$H/scripts/modal_full.sh" "$ST" "distill_${DV}_$M" $COUNTS >> "$L/launch_${STAGE_AS:-$M}.txt" 2>&1
 sleep 60
 while [ "$(live_all "$ST")" -gt 0 ]; do
   sleep 300; ST8=$(state)

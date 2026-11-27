@@ -30,9 +30,11 @@ def main():
     # failed on that), so read only from the first "{" to the last "}".
     t = cp.read_text() if cp.exists() else ""
     epochs = {k: v.get("epoch") for k, v in json.loads(t[t.find("{"):t.rfind("}") + 1]).items()} if "{" in t else {}
-    models = sorted({r["model"] for r in rows}, key=lambda m: int(m[1:]) if m[1:].isdigit() else 10**9)
+    cp_of = lambda m: m.rstrip("r")   # a re-test stage (c69r, 27 Nov) is copy c69
+    models = sorted({r["model"] for r in rows}, key=lambda m: int(cp_of(m)[1:]) if cp_of(m)[1:].isdigit() else 10**9)
     cell = {(r["model"], r["env"]): r for r in rows}
-    label = {m: (f"after {epochs[m]:.2g} pass{'es' if epochs[m] > 1 else ''} ({m})" if epochs.get(m) else m) for m in models}
+    label = {m: (f"after {epochs[cp_of(m)]:.2g} pass{'es' if epochs[cp_of(m)] > 1 else ''} ({m})" if epochs.get(cp_of(m)) else m)
+             for m in models}
     out = pathlib.Path(a.out) if a.out else H / f"results/distill_{a.dv}_table.csv"
     with open(out, "w", newline="") as f:
         w = csv.writer(f); w.writerow(["task", "what_is_counted", "who", "passes", "k", "n", "rate", "ci_lo", "ci_hi", "lost", "source"])

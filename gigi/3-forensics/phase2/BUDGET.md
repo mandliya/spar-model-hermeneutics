@@ -289,3 +289,8 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   07_ab_swap's text pass stopped after its first category, and mask_factual's P("A") gate); fixed and re-run as job
   VBFIX on the same box from 00:44 UTC. VA (62650348): ascii's first run done (summary crash, fixed; VASCII queued),
   alibi done with 0 misses, MASK known facts running.
+- 27 Nov ~03:40 UTC: **GG raised the Modal spend limit and said "just distill, disregard the limit"** (taken as a yes to
+  finishing all three sets past the earlier stop lines). Modal check OK at 03:45. Started: GPT-OSS re-test of c69 (as
+  stage c69r) and c90; Terminal-Bench 80 and 87: training resumed from the last saved copy + the two cut copies
+  re-tested each (c46r, c69r / c50r, c75r) + the final copy when training ends (scripts/p2gen_finish_cut.sh). Cut stages
+  moved to results/raw_archive/cut_by_modal_spend_limit_26nov/ on the launch box. Estimate ~$150-200 on Modal.

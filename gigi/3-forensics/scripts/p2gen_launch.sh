@@ -11,6 +11,7 @@
 #   bash scripts/p2gen_launch.sh upload <dv>          copies, runs and logs to the private HF dataset (never the data)
 #   bash scripts/p2gen_launch.sh status <dv>          the last lines of the set's stage log, and its servers
 #   bash scripts/p2gen_launch.sh stop-server <dv> <name>
+#   bash scripts/p2gen_launch.sh retest <dv> <copy[:name]>...  test saved copies again (a cut test: c69:c69r), then score, upload
 #   bash scripts/p2gen_launch.sh all    <dv> <folder>     data, check, train (in the background), tests, score, upload
 # Detached, the way every long job runs:
 #   P2GEN_YES=p2gen_toolscale setsid nohup bash scripts/p2gen_launch.sh all p2gen_toolscale /workspace/p2gen_data/toolscale \
@@ -75,21 +76,21 @@ do_train () {
   say "train: launched on Modal (GPU ${P2GEN_GPU:-H200}); progress in logs/$DV/stages.txt on the volume (p2gen_launch.sh status $DV)"
 }
 one_copy () {   # one saved copy: its own server, the 320 runs, the server stopped, the scores
-  local n=$1 runs=$2 t=0 st
-  detached "$LOGD/${DV}_serve_$n.out" serve --dv "$DV" --copies "$n" --name "$n" --hours "$SERVE_HOURS"
-  [ "$DRY" = 1 ] && { run bash "$H/scripts/p2gen_runs.sh" "$DV" "$n" "$runs" "$n"; run m volume put "$VOL" /dev/null "serve/$DV/$n.stop"; return; }
-  until st=$(vcat "serve/$DV/$n.json"); [ "$(copy_state "$st" "$n")" != waiting ]; do   # up, and the copy's load check has an answer
-    t=$((t + 1)); [ $t -gt 90 ] && { say "tests: the server for $n did not come up in 90 min ($LOGD/${DV}_serve_$n.out): skipped"; return 1; }
+  local n=$1 runs=$2 nm=${3:-$1} t=0 st   # nm: server and stage name (a re-test, 27 Nov: c69 -> c69r)
+  detached "$LOGD/${DV}_serve_$nm.out" serve --dv "$DV" --copies "$n" --name "$nm" --hours "$SERVE_HOURS"
+  [ "$DRY" = 1 ] && { run env STAGE_AS=$nm bash "$H/scripts/p2gen_runs.sh" "$DV" "$n" "$runs" "$nm"; run m volume put "$VOL" /dev/null "serve/$DV/$nm.stop"; return; }
+  until st=$(vcat "serve/$DV/$nm.json"); [ "$(copy_state "$st" "$n")" != waiting ]; do   # up, and the copy's load check has an answer
+    t=$((t + 1)); [ $t -gt 90 ] && { say "tests: the server for $n did not come up in 90 min ($LOGD/${DV}_serve_$nm.out): skipped"; return 1; }
     sleep 60
   done
   if [ "$(copy_state "$st" "$n")" = served ]; then
-    bash "$H/scripts/p2gen_runs.sh" "$DV" "$n" "$runs" "$n" > "$LOGD/${DV}_runs_$n.out" 2>&1 || say "tests: the runs of $n ended with an error ($LOGD/${DV}_runs_$n.out)"
+    STAGE_AS=$nm bash "$H/scripts/p2gen_runs.sh" "$DV" "$n" "$runs" "$nm" > "$LOGD/${DV}_runs_$nm.out" 2>&1 || say "tests: the runs of $n ended with an error ($LOGD/${DV}_runs_$n.out)"
   else
     say "tests: $n failed its load check on the server, so nothing was run on it"
   fi
-  : > "$LOGD/${DV}_stop"; m volume put "$VOL" "$LOGD/${DV}_stop" "serve/$DV/$n.stop" > /dev/null 2>&1 \
+  : > "$LOGD/${DV}_stop"; m volume put "$VOL" "$LOGD/${DV}_stop" "serve/$DV/$nm.stop" > /dev/null 2>&1 \
     && say "tests: asked the server of $n to stop" || say "tests: COULD NOT ASK THE SERVER OF $n TO STOP: it ends by itself after $SERVE_HOURS h and bills until then"
-  echo "$n" >> "$LOGD/${DV}_copies_done.txt"
+  echo "$nm" >> "$LOGD/${DV}_copies_done.txt"
 }
 do_tests () {
   paid; local runs=${1:-40} n; touch "$LOGD/${DV}_copies_done.txt" "$LOGD/${DV}_copies_started.txt"
@@ -136,6 +137,16 @@ do_upload () {   # copies (no optimizer state), loss files, logs and raw runs to
     && say "upload: copies and logs of $DV on HF ($HFD/runs/v1)" || say "upload: UPLOAD FAILED for the copies of $DV"
   for st in "$H"/results/raw/distill_"${DV}"_*; do [ -d "$st" ] && run upload_stage "$(basename "$st")" "$HFD/eval/raw/$(basename "$st")"; done
 }
+do_retest () {   # do_retest <runs> <copy[:name]>...: test saved copies again, each on a new server named <name>, whose
+  # runs go to stage distill_<dv>_<name> (27 Nov 2026: the Modal spend limit cut c69's tests and c90's server); then the
+  # scores and the upload. A cut stage must be moved out of results/raw/ first, or it is scored as a partial column.
+  paid; local runs=$1 spec n nm; shift
+  for spec in "$@"; do n=${spec%%:*}; nm=${spec#*:}
+    say "retest: copy $n on server $nm (stage distill_${DV}_$nm)"; one_copy "$n" "$runs" "$nm" &
+    sleep 30
+  done
+  wait; do_score; do_upload; say "P2GEN RETEST DONE $DV: $*"
+}
 do_status () {
   echo "--- logs/$DV/stages.txt (last 15 lines)"; vcat "logs/$DV/stages.txt" | tail -n 15
   echo "--- copies ready: $(vcat "out/$DV/copies_ready.txt" | tr '\n' ' ')"
@@ -148,6 +159,7 @@ case "$CMD" in
   smoke)  do_train --smoke-only;;
   train)  do_train;;
   tests)  do_tests "${3:-40}";;
+  retest) do_retest "${RUNS:-40}" "${@:3}";;
   score)  do_score;;
   upload) do_upload;;
   status) do_status;;
