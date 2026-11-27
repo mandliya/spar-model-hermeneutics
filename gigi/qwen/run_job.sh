@@ -43,10 +43,11 @@ case $JOB in
   VALL) CATS="ascii sycophancy_a sycophancy_b mask_factual unanswerable capture_secret alibi mask_known_facts mask_statistics mask_continuations mask_disinformation" ;;
   VA)   CATS="ascii alibi mask_known_facts" ;;   # two Qwen3.6 boxes, VA + VB = VALL: VA continues on the VSMOKE3 box
   VASCII) CATS="ascii" ;;   # VA's ascii again (26 Nov): the first run's summary crashed on a None, so its later stages never ran
-  VBFIX) CATS="mask_factual sycophancy_a sycophancy_b unanswerable" ;;   # VB again (27 Nov): mask_factual's P("A") gate and
+  VBFIX) CATS="mask_factual sycophancy_a sycophancy_b unanswerable" ;;
+  VBSWAP) CATS="mask_factual sycophancy_a sycophancy_b unanswerable"; SWAP_ONLY=1 ;;   # VBFIX's swap (27 Nov): see SWAP_ONLY   # VB again (27 Nov): mask_factual's P("A") gate and
                            # the text pass of 07_ab_swap (crashed after its first category) failed; every stage resumes
   VB)   CATS="capture_secret sycophancy_a sycophancy_b mask_factual unanswerable mask_statistics mask_continuations mask_disinformation" ;;
-  *) echo "unknown job '$JOB' (J1-J10, J6b, SMOKE, SMOKE3, VSMOKE3, VALL, VA, VASCII, VB, VBFIX)"; exit 1 ;;
+  *) echo "unknown job '$JOB' (J1-J10, J6b, SMOKE, SMOKE3, VSMOKE3, VALL, VA, VASCII, VB, VBFIX, VBSWAP)"; exit 1 ;;
 esac
 # No default model: a launch line without MODEL_TAG would silently rerun the wrong one.
 case "${MODEL_TAG:-}" in
@@ -343,6 +344,12 @@ chain () {
 # smoke test: every category, every stage, 2 rows. Any failure aborts the job
 # before the long run (box left running, unless STOP_WHEN_DONE=1).
 TIMES=""
+# SWAP_ONLY=1 (27 Nov): every stage of these categories is already done; go straight to the A/B swap (a resumed chain
+# costs ~2 min of vLLM start per generating script even when there is nothing left to do)
+if [ "${SWAP_ONLY:-0}" = 1 ]; then
+  say "##### SWAP_ONLY: skipping the smoke test and the chains; A/B swap for: $CATS"
+  for c in $CATS; do case $c in mask_known_facts|mask_statistics|mask_continuations|mask_disinformation) ;; *) followup_cats="$followup_cats $c" ;; esac; done
+else
 for c in $CATS; do
   say "##### SMOKE TEST: $c"
   T0=$SECONDS
@@ -373,10 +380,14 @@ for c in $CATS; do
   fi
   push
 done
+fi   # SWAP_ONLY
 
 # --- A/B swap on this box's categories (MASK excluded, as for gemma) ----------
 if [ -n "$followup_cats" ]; then
-  run python 00_pick_subset.py && run python 07_ab_swap.py --categories $(echo $followup_cats | tr ' ' ',')
+  # the subset is drawn once and then fixed; 00_pick_subset.py exits with an error if it exists, which on a resumed
+  # job (VBFIX, 27 Nov) skipped the swap itself
+  { [ -f $R/ab_swap_subset.csv ] && say "--- swap subset already drawn (fixed): $R/ab_swap_subset.csv" || run python 00_pick_subset.py; } \
+    && run python 07_ab_swap.py --categories $(echo $followup_cats | tr ' ' ',')
   push
 fi
 
