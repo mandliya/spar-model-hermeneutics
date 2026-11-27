@@ -43,8 +43,10 @@ case $JOB in
   VALL) CATS="ascii sycophancy_a sycophancy_b mask_factual unanswerable capture_secret alibi mask_known_facts mask_statistics mask_continuations mask_disinformation" ;;
   VA)   CATS="ascii alibi mask_known_facts" ;;   # two Qwen3.6 boxes, VA + VB = VALL: VA continues on the VSMOKE3 box
   VASCII) CATS="ascii" ;;   # VA's ascii again (26 Nov): the first run's summary crashed on a None, so its later stages never ran
+  VBFIX) CATS="mask_factual sycophancy_a sycophancy_b unanswerable" ;;   # VB again (27 Nov): mask_factual's P("A") gate and
+                           # the text pass of 07_ab_swap (crashed after its first category) failed; every stage resumes
   VB)   CATS="capture_secret sycophancy_a sycophancy_b mask_factual unanswerable mask_statistics mask_continuations mask_disinformation" ;;
-  *) echo "unknown job '$JOB' (J1-J10, J6b, SMOKE, SMOKE3, VSMOKE3, VALL, VA, VASCII, VB)"; exit 1 ;;
+  *) echo "unknown job '$JOB' (J1-J10, J6b, SMOKE, SMOKE3, VSMOKE3, VALL, VA, VASCII, VB, VBFIX)"; exit 1 ;;
 esac
 # No default model: a launch line without MODEL_TAG would silently rerun the wrong one.
 case "${MODEL_TAG:-}" in

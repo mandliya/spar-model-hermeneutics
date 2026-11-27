@@ -289,6 +289,8 @@ def append(path: pathlib.Path, record: dict) -> None:
 
 def read_jsonl(path: pathlib.Path) -> list[dict]:
     rows = []
+    if GEN_PASS == "text" and not path.exists():   # the text pass writes no rows: a script's own output is empty
+        return rows
     with path.open() as f:
         for line in f:
             try:

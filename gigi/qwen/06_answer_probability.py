@@ -85,8 +85,12 @@ for cat in cats:
 
         if not gate_checked and n == 4:
             recs = [r for r in C.read_jsonl(OUT)][-5:]
-            ok = sum(1 for r in recs if r.get("top1_is_answer") and r.get("p_A_norm") is not None)
-            print(f"GATE: {ok}/5 rows with a readable letter that is gemma's top-1 token", flush=True)
+            # THINKING (Qwen3.6, 26 Nov 2026): the replay has the answer but not the reasoning that led to it, so a short
+            # answer's letter is often not the model's top-1 without its reasoning (named: ~50% in some categories),
+            # while the CoT questions are ~99% top-1, which shows the replay is aligned. So the gate checks alignment
+            # (letter found and mapped to a token); top1_is_answer is still saved on every row and reported.
+            ok = sum(1 for r in recs if r.get("p_A_norm") is not None and (C.THINKING or r.get("top1_is_answer")))
+            print(f"GATE: {ok}/5 rows with a readable letter{'' if C.THINKING else ' that is the top-1 token'}", flush=True)
             for r in recs:
                 print("   ", r.get("name"), r.get("letter"), r.get("piece"), r.get("p_A_norm"),
                       r.get("top1_is_answer"), r.get("note") or r.get("error") or "", flush=True)

@@ -279,3 +279,13 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   $1.27/h, label gigi-qwen36-lie-vb, 108 MB/s from HF; the other 8 categories). Expected ~10-12 h each.
 - 26 Nov 10:22 UTC: **WildChat training done** (p2gen_wildchat; Modal total for all four trainings $189 at 09:12 UTC;
   split per training at the end).
+- 26 Nov 10:29 UTC: **the SPAR Modal workspace hit its spend limit.** Modal stopped every running app at once: the
+  test servers of GPT-OSS (c69), Terminal-Bench 80 (c46, c69) and Terminal-Bench 87 (c50, c75) were cut mid-run, and
+  GPT-OSS's c90 server never started. Modal p2gen spend that day: $245.28 (flat since). Fully tested: GPT-OSS c23 c46,
+  Terminal-Bench 80 c23, Terminal-Bench 87 c25. Found 27 Nov 00:45 UTC (`p2gen_launch.sh check`: "Workspace ... has
+  exceeded its spend limit"); **GG needs to raise the limit** before the 7 untested or cut copies can be re-run
+  (within the caps already approved: GPT-OSS $400, Terminal-Bench pair $600).
+- 26-27 Nov, Qwen3.6 lie pipeline: VB (62682141) finished all 8 categories 00:34 UTC (0 cache misses except two bugs:
+  07_ab_swap's text pass stopped after its first category, and mask_factual's P("A") gate); fixed and re-run as job
+  VBFIX on the same box from 00:44 UTC. VA (62650348): ascii's first run done (summary crash, fixed; VASCII queued),
+  alibi done with 0 misses, MASK known facts running.
