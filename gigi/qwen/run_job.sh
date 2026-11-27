@@ -79,7 +79,9 @@ DISK=$(df -BG --output=avail /workspace 2>/dev/null | tail -1 | awk '{print $NF}
 # their boxes stopped).
 # du counts GiB: 470 GB of weights show as 438G, so MODEL_GB must sit below the GiB figure
 # (14 Oct: MODEL_GB=440 refused three jobs on the box that already had the 235B).
-CACHED=$(du -sBG "$HF_HOME/hub/models--${MODEL_ID//\//--}" 2>/dev/null | cut -f1 | tr -dc '0-9')
+# -L through the snapshot's links (27 Nov: without it, a model fetched partly by xet and partly over HTTP showed 17 of
+# its 52 GB on Vast 62650348, so VASCII was refused for want of room for a second copy)
+CACHED=$(du -sLBG "$HF_HOME/hub/models--${MODEL_ID//\//--}/snapshots" 2>/dev/null | cut -f1 | tr -dc '0-9')
 [ "${CACHED:-0}" -ge "$MODEL_GB" ] && MIN_DISK_GB=30
 if echo "$GPUS" | grep -qi "GB10" || ! [ "${MEM:-0}" -ge "$MIN_GPU_MIB" ] 2>/dev/null || ! [ "${DISK:-0}" -ge "$MIN_DISK_GB" ] 2>/dev/null; then
   say "!!! WRONG BOX: GPUs '$(echo $GPUS | tr '\n' ';')' = $MEM MiB (need >= $MIN_GPU_MIB), disk ${DISK:-?} GB free (need >= $MIN_DISK_GB). Not running."
