@@ -298,3 +298,10 @@ and the trained copies' re-runs (plan). Its Vast cost = ~$160 for one H200 box (
   done 04:02). Box time measured from Vast's hourly price (with storage): VA (62650348) $1.40/h from 26 Nov 06:46 to
   27 Nov 07:18 = 24.5 h = **~$34**; VB (62682141) $1.54/h from 26 Nov 11:06, idle since 04:02 and still billing (~$31 at
   07:30). Both boxes idle and billing until GG says to destroy them. Judge (OpenRouter) cost to add from the saved usage.
+- 27 Nov 08:36 UTC: **all three Modal sets finished** (GPT-OSS 04:5x, Terminal-Bench 80 at 08:18, Terminal-Bench 87 at
+  08:36; every copy tested, scored and uploaded). Modal billing report (`/workspace/logs/modal_cost.py`, hours up to
+  08:00 UTC; the last 36 minutes are not in the report yet): **27 Nov $132.71** (training $119.73, test servers'
+  runs $10.25, other $2.73), inside the ~$150-200 estimate. Modal since 24 Nov: **$732.13** in all.
+  Result: Terminal-Bench (80 and 87 tasks alike) moved Qwen3.6 toward DeepSeek on the 3 held-out tasks (secret_number
+  1 -> 24 of 36 and 21 of 34; tower_of_hanoi 25 of 38 -> 34 of 39 and 35 of 38; currency_conversion 36 -> 7 and 10 of
+  40); coding about unchanged. Page v12.
