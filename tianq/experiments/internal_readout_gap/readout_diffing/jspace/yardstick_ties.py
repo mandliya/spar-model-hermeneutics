@@ -1,6 +1,6 @@
 """Does the yardstick's ranking of the similarity methods depend on how ties are counted? (18 Nov, review check)
 
-    READOUT_DISTRIBUTIONS=<folder of lens_distributions.py's files> python yardstick_ties.py
+    READOUT_DISTRIBUTIONS=<folder of write_jlens_lists.py's files> python yardstick_ties.py
 
 similarity_methods.py's yardstick counts "same restart point scores above a different one" with a strict >, so a tie
 counts as a loss. Short lists tie often (two top-10 lists usually share nothing with either), which understates them.
@@ -16,9 +16,11 @@ import json
 import pathlib
 import sys
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))   # readout_diffing/: evaluation, methods
-import evaluation  # noqa: E402
-import methods  # noqa: E402
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))   # readout_diffing/: method_menu, restart_points
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))   # internal_readout_gap/: readout_methods, shared
+import method_menu  # noqa: E402
+from readout_methods.likeness import evaluation  # noqa: E402
+from readout_methods.likeness.pair import Pair  # noqa: E402
 from readouts import BASE, FINAL, FOLDER, LENSES, QWEN, load_shared  # noqa: E402
 from restart_points import tasks  # noqa: E402
 
@@ -32,7 +34,7 @@ def main() -> None:
     result: dict = {}
     for depth in DEPTHS:
         q, b, f = (reads[key].lists(depth, False) for key in ((QWEN, "published"), base, final))
-        sims = methods.tables(methods.Pair(q, b, pool=[q, b, f]))   # the final checkpoint only adds to the rare-word weights
+        sims = method_menu.tables(Pair(q, b, pool=[q, b, f]))   # the final checkpoint only adds to the rare-word weights
         for method, table in sims.items():
             strict, ties = evaluation.same_moment_rates(table, mask)
             print(f"depth {depth:.3f} | {method}: same beats other of the same task {strict:.3f}; ties {ties:.3f}; "

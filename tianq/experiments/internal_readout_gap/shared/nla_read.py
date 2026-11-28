@@ -7,7 +7,8 @@ Reads OUT/<experiment>/<read>/acts/<name>.pt ([n_positions, n_layers, d_model], 
 the model's tag unless --read names another folder of that model's activations) and writes
 OUT/<experiment>/<read>/nla/<name>.json: for each read position, SAMPLES explanations of the activation at the NLA's
 own layer (the output of block K, K = the sidecar's extraction layer). Activations are batched: BATCH of them, each
-sampled SAMPLES times, in one generate call. A second process with --reverse can share a long read from another GPU. Sampling is the official client's: temperature 1.0, 200 new tokens.
+sampled SAMPLES times, in one generate call. A second process with --reverse can share a long read from another GPU,
+or --shard i --shards n gives each of n processes every n-th file. Sampling is the official client's: temperature 1.0, 200 new tokens.
 
 Two kinds of NLA, each run with its authors' code (vendor/, never edited):
   official   kitft/nla-* (gemma). vendor/natural_language_autoencoders/nla_inference.py supplies the sidecar config
@@ -149,6 +150,8 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--reverse", action="store_true",
                     help="work through the files from the end: a second process on another GPU meets the first in the middle")
+    ap.add_argument("--shard", type=int, default=0)
+    ap.add_argument("--shards", type=int, default=1, help="with --shard: this process takes every n-th file")
     ap.add_argument("--shipped-examples", type=int, default=0,
                     help="easynla only: first explain this many of the checkpoint's own example activations (the one-row test)")
     args = ap.parse_args()
@@ -158,7 +161,7 @@ def main() -> None:
     if args.shipped_examples:
         nla.shipped_examples(args.shipped_examples)
     names = [p.stem for p in sorted((base / "acts").glob("*.pt"))][: args.limit]
-    todo = [n for n in names if not (base / "nla" / f"{n}.json").exists()]
+    todo = [n for n in names[args.shard:: args.shards] if not (base / "nla" / f"{n}.json").exists()]
     if args.reverse:
         todo.reverse()
     print(f"NLA {args.model}: layer {nla.layer}, {len(names)} activations files, {len(todo)} to do, "

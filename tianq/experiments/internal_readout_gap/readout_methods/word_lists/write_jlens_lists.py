@@ -1,14 +1,18 @@
-"""The J-lens readout as a probability distribution, not only its top-200 words (added 17 Nov, exploratory).
+"""Writing J-lens readouts as files: the lens's top 5,000 words with their probabilities, for every row of a read
+(added 17 Nov; before it, only the order of the top 200 was kept). jlens_lists.py loads what this writes.
 
-    CUDA_VISIBLE_DEVICES= python lens_distributions.py --model gemma-distilled-step96 --lens <lens.pt> --name final-lens
-    CUDA_VISIBLE_DEVICES= python lens_distributions.py --model qwen3.6-27b --lens published --name published
+    CUDA_VISIBLE_DEVICES= python write_jlens_lists.py --model gemma-distilled-step96 --lens <lens.pt> --name final-lens
+    CUDA_VISIBLE_DEVICES= python write_jlens_lists.py --model qwen3.6-27b --lens published --name published
+    python write_jlens_lists.py --experiment gender_secret_rerun --read <read folder> --position reply_last \
+        --model qwen3.6-27b --lens published --name published        # any read of any experiment (26 Nov)
 
-read_spots.py kept only the order of the top 200 tokens. This goes back to the saved activations of the restart
-points (OUT/distillation_similarity/<model>/acts) and, at each stored depth, keeps the lens's top KEEP tokens with
+It goes back to the saved activations of a read
+(OUT/<experiment>/<read>/acts; by default the restart points, OUT/distillation_similarity/<model>/acts) at one of its
+stored positions (--position; left out, the read must have only one) and, at each stored depth, keeps the lens's top KEEP tokens with
 their log-probabilities (softmax over the whole vocabulary of unembed(J_l @ h), the lens's own definition), and for
 the whole vocabulary: the entropy, and the probability mass of the top 1, 10, 200 and KEEP tokens. Nothing is run
-through the model again. Writes OUT/distillation_similarity/distributions/<model>.<name>.npz and, once per model,
-vocab_<model>.json (token id -> text). Runs on CPU: only the unembedding is used.
+through the model again. Writes OUT/<experiment>/distributions/<read>.<name>.npz (<read>.<name>.<position>.npz when
+a position is named) and, once per model, vocab_<model>.json (token id -> text). Only the unembedding is used.
 """
 
 from __future__ import annotations
@@ -26,7 +30,6 @@ import jlens  # noqa: E402
 
 from shared import models, readout  # noqa: E402
 
-EXPERIMENT = "distillation_similarity"
 KEEP = 5000
 MASS_AT = (1, 10, 200, KEEP)
 
@@ -38,27 +41,37 @@ def main() -> None:
     ap.add_argument("--lens", required=True, help="a lens file, or 'published'")
     ap.add_argument("--name", required=True)
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--experiment", default="distillation_similarity")
+    ap.add_argument("--read", default=None, help="the folder of OUT/<experiment> holding the read (default: the model's tag)")
+    ap.add_argument("--position", default=None, help="which stored position to take (default: the read's only one)")
     args = ap.parse_args()
-    first = models.OUT / EXPERIMENT / args.model
-    out = models.OUT / EXPERIMENT / "distributions"
+    read = args.read or args.model
+    first = models.OUT / args.experiment / read
+    out = models.OUT / args.experiment / "distributions"
     out.mkdir(parents=True, exist_ok=True)
-    target = out / f"{args.model}.{args.name}.npz"
+    target = out / (f"{read}.{args.name}" + (f".{args.position}" if args.position else "") + ".npz")
     if target.exists():
         print(f"nothing to do: {target} exists", flush=True)
         return
-    names = sorted(p.stem for p in (first / "lens").glob("*.json"))[: args.limit]
+    stored = {p.stem: json.loads(p.read_text())["positions"] for p in sorted((first / "lens").glob("*.json"))[: args.limit]}
+    if args.position is None and any(len(positions) != 1 for positions in stored.values()):
+        raise SystemExit("this read stores more than one position per file: name one with --position")
+    names = sorted(n for n, positions in stored.items() if args.position is None or args.position in positions)
     lens_file = models.lens_path(args.model) if args.lens == "published" else args.lens
     lens = jlens.JacobianLens.load(lens_file)
     lm, tok = models.load(args.model)
+    readout.keep_lens_on_device(lm, lens)
     layers = sorted({readout.layer_at(len(lm.layers), list(lens.source_layers), d) for d in readout.DEPTHS})
-    print(f"loaded {args.model} on {lm.input_device}; lens {lens_file}: {lens}; layers {layers}; {len(names)} restart points", flush=True)
+    print(f"loaded {args.model} on {lm.input_device}; lens {lens_file}: {lens}; layers {layers}; {len(names)} of {len(stored)} "
+          f"files of {read} have the position", flush=True)
     ids = np.zeros((len(names), len(layers), KEEP), dtype=np.int32)
     logp = np.zeros((len(names), len(layers), KEEP), dtype=np.float32)
     entropy = np.zeros((len(names), len(layers)), dtype=np.float32)
     mass = np.zeros((len(names), len(layers), len(MASS_AT)), dtype=np.float32)
     vocab = None
     for i, name in enumerate(names):
-        states = torch.load(first / "acts" / f"{name}.pt", map_location="cpu", weights_only=True)[0]
+        at = 0 if args.position is None else stored[name].index(args.position)
+        states = torch.load(first / "acts" / f"{name}.pt", map_location="cpu", weights_only=True)[at]
         for j, layer in enumerate(layers):
             logits = lm.unembed(lens.transport(states[layer].to(lm.input_device), layer)).float()
             lp = torch.log_softmax(logits, dim=-1)

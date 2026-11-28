@@ -24,7 +24,7 @@ import pathlib
 from matplotlib import rc_context
 
 from experiments.common.chart_style import MUTED, STYLE
-from experiments.internal_readout_gap.readout_diffing.methods.rare_words import BEST
+from experiments.internal_readout_gap.readout_diffing.method_menu import BEST
 from experiments.yuqi_questions.shared import charts
 
 HERE = pathlib.Path(__file__).resolve().parent

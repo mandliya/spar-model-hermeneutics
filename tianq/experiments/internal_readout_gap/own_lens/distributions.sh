@@ -13,11 +13,11 @@ PYQ=/workspace/venvs/readout_qwen/bin/python
 OUT=/workspace/out/internal-readout-gap
 BASE=gemma-3-27b-it; FINAL=gemma-distilled-step96; QWEN=qwen3.6-27b
 CONTROL=$OUT/own_lens/$BASE/${BASE}_jacobian_lens.pt; OWN=$OUT/own_lens/$FINAL/${FINAL}_jacobian_lens.pt
-cd ../readout_diffing/jspace
+cd ../readout_methods/word_lists
 RC=0
-step distributions_qwen $PYQ lens_distributions.py --model $QWEN --lens published --name published || RC=1
-step distributions_base_published $PY lens_distributions.py --model $BASE --lens published --name published || RC=1
-step distributions_base_control $PY lens_distributions.py --model $BASE --lens "$CONTROL" --name control-lens || RC=1
-step distributions_final_published $PY lens_distributions.py --model $FINAL --lens published --name published || RC=1
-step distributions_final_own $PY lens_distributions.py --model $FINAL --lens "$OWN" --name final-lens || RC=1
+step distributions_qwen $PYQ write_jlens_lists.py --model $QWEN --lens published --name published || RC=1
+step distributions_base_published $PY write_jlens_lists.py --model $BASE --lens published --name published || RC=1
+step distributions_base_control $PY write_jlens_lists.py --model $BASE --lens "$CONTROL" --name control-lens || RC=1
+step distributions_final_published $PY write_jlens_lists.py --model $FINAL --lens published --name published || RC=1
+step distributions_final_own $PY write_jlens_lists.py --model $FINAL --lens "$OWN" --name final-lens || RC=1
 echo "$(date -u +%FT%TZ) distributions done: steps_failed=$RC" >> "$STATUS"

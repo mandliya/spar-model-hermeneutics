@@ -26,6 +26,13 @@ def layer_at(n_layers: int, fitted: list[int], depth: float) -> int:
     return min(fitted, key=lambda l: abs(l - depth * (n_layers - 1)))
 
 
+def keep_lens_on_device(lm, lens) -> None:
+    """Move the lens's matrices for the read depths to the model's device, once. jlens copies a matrix to the device
+    every time it is used (105 MB each for a 27B model, twelve times a row here), which cost seconds per row."""
+    for layer in {layer_at(len(lm.layers), list(lens.source_layers), d) for d in DEPTHS}:
+        lens.jacobians[layer] = lens.jacobians[layer].to(lm.input_device)
+
+
 @torch.no_grad()
 def states_at(lm, ids: list[int], positions: list[int]) -> torch.Tensor:
     kept: dict[int, torch.Tensor] = {}

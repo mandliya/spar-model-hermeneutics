@@ -28,6 +28,9 @@ def main() -> None:
                 blank = [not s["explanation"].strip() for s in samples]
                 n += len(blank); empty += sum(blank); closed += sum(s["closed"] for s in samples)
                 activations += 1; wordless += all(blank)
+        if not n:   # a read whose NLA has only just started
+            print(f"nla check | {d.parent.name}: no NLA sentences written yet", flush=True)
+            continue
         print(f"nla check | {d.parent.name}: {n} explanations, {empty} empty ({empty / n:.4f}), {closed} with a closing "
               f"tag ({closed / n:.4f}); {wordless} of {activations} activations have no explanation at all", flush=True)
 

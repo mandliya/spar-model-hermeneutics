@@ -31,9 +31,9 @@ import sys
 
 import numpy as np
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))   # readout_diffing/: evaluation, methods
-import evaluation  # noqa: E402
-from methods import rare_words, value_weighted  # noqa: E402
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))   # readout_diffing/: method_menu, restart_points
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))   # internal_readout_gap/: readout_methods, shared
+from readout_methods.likeness import evaluation, rare_words, value_weighted  # noqa: E402
 from readouts import BASE, FINAL, MODELS, ORIGINAL, as_readouts, compare, load_counts, sentence_readouts, table  # noqa: E402
 from restart_points import tasks  # noqa: E402
 from shared import words  # noqa: E402

@@ -10,8 +10,9 @@ rollout ... you train it on the target model and then you use it to test on the 
 The target reads its own conversations; the substitute is prefilled with the same conversations. Each read gives, at
 each of the two positions (before_answer, answer_token): the J-lens top-200 words two-thirds of the way in, the NLA
 explanations where the model has an NLA, and the activation at the arena's probe layer. A method scores every row:
-  J-lens words   TF-IDF over the readout's words (shared.words.lens_words), logistic regression
-  NLA words      TF-IDF over the explanations' words (shared.words.text_words), logistic regression
+  J-lens words   the readout's words (shared.words.lens_words), each weighted by its rarity, logistic regression:
+                 readout_methods/monitors/word_classifier.py, the one word classifier every experiment imports
+  NLA words      the explanations' words (shared.words.text_words), each worth its count; the same classifier
   probe          the arena's probe recipe on the activation (dyl_repro.core.training.fit_weights), shown alongside
   words only     no model: TF-IDF over the conversation itself, the arena's baseline (experiments.hermeneutics.faithfulness)
 For the two word methods the classifier is trained on the TARGET's readouts and scored on held-out target rows
@@ -39,13 +40,14 @@ import pathlib
 
 import numpy as np
 from huggingface_hub import hf_hub_download
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import StratifiedKFold
 
 from dyl_repro.core import training
 from dyl_repro.core.store import SCRATCH
 from experiments.cross_category_transfer.generalization import CATEGORIES, FEW
 from experiments.hermeneutics import faithfulness
+from experiments.internal_readout_gap.readout_methods import readout_type
+from experiments.internal_readout_gap.readout_methods.monitors.word_classifier import RareWordFeatures, train_word_classifier, word_classifier
 from experiments.internal_readout_gap.shared import readout, words
 
 EXPERIMENT = "lie_detection_gap"
@@ -57,6 +59,7 @@ SPLITS = ("same type", "unseen type")
 WORD_METHODS = ("J-lens words", "NLA words")
 MEANING_METHODS = ("J-lens meaning", "NLA meaning")   # meaning vectors, built and scored by meaning_gap.py
 TOP_WORDS = 15
+WORD_VALUE = "p"   # what a word is worth to the word classifier: how often the readout has it (a J-lens word: once)
 
 
 def bundle(read: str, name: str) -> str:
@@ -90,13 +93,25 @@ def load_read(target: str, model: str) -> dict:
     return out
 
 
+def readouts(word_lists: list[list[str]]) -> readout_type.Readouts:
+    """This experiment keeps a row's readout as a plain list of words; readout_methods/ takes readouts."""
+    return [readout_type.from_words(ws) for ws in word_lists]
+
+
+def word_features() -> RareWordFeatures:
+    """The word classifier's features on their own, for unseen_type_diagnosis.py, which looks inside them."""
+    return RareWordFeatures(value=WORD_VALUE)
+
+
 def fit(method: str, feats: list, y: np.ndarray, weight: np.ndarray | None):
     """Train one method; returns a function scoring a list of features."""
     if method == "probe" or method in MEANING_METHODS:   # vectors: the arena's probe recipe
         mean, std, w, b = training.fit_weights(np.stack(feats), y, training.DEFAULT_L2_LAMBDA, weight)
         return lambda test: ((np.stack(test) - mean) / std) @ w + b
-    vec = faithfulness.words_vectorizer() if method == "words only" else TfidfVectorizer(
-        analyzer=lambda doc: doc, min_df=2, sublinear_tf=True)
+    if method != "words only":   # a readout's words: the one word classifier every experiment imports
+        scorer = word_classifier(readouts(feats), y, weight, value=WORD_VALUE)
+        return lambda test: scorer(readouts(test))
+    vec = faithfulness.words_vectorizer()
     clf = faithfulness.words_classifier().fit(vec.fit_transform(feats), y, sample_weight=weight)
     return lambda test: clf.decision_function(vec.transform(test))
 
@@ -200,10 +215,9 @@ def top_words(rows: list[dict], feats: list, label: str) -> dict:
     idx = [i for i, r in enumerate(rows) if r[label] is not None]
     counts = {c: sum(rows[i]["category"] == c for i in idx) for c in CATEGORIES}
     weight = np.array([1 / counts[rows[i]["category"]] for i in idx])
-    vec = TfidfVectorizer(analyzer=lambda doc: doc, min_df=2, sublinear_tf=True)
-    clf = faithfulness.words_classifier().fit(vec.fit_transform([feats[i] for i in idx]),
-                                              np.array([rows[i][label] for i in idx]), sample_weight=weight)
-    vocab, coef = np.array(vec.get_feature_names_out()), clf.coef_[0]
+    features, classifier = train_word_classifier(readouts([feats[i] for i in idx]), np.array([rows[i][label] for i in idx]),
+                                                 weight, value=WORD_VALUE)
+    vocab, coef = np.array(features.words), classifier.coef_[0]
     order = np.argsort(coef)
     return {"lie": vocab[order[::-1][:TOP_WORDS]].tolist(), "truthful": vocab[order[:TOP_WORDS]].tolist()}
 

@@ -1,17 +1,16 @@
-"""What is computed from a method's table, whichever method made it. Used by the J-space runs and the NLA runs.
+"""What is read off a likeness table, whichever method made it.
 
-A table is [n, n]: entry [i, j] is how alike Qwen3.6's readout at restart point i is to a gemma's readout at restart
-point j (methods/). Two questions are asked of it:
+A table is [n, n]: entry [i, j] is how alike row i of one side is to row j of the other (in the hero-swap arena:
+Qwen3.6's readout at restart point i and a gemma's at restart point j). The diagonal is "the same row".
 
-  chance              per restart point, the mean of that row's other entries
-  above_chance        same - chance per restart point: the diagonal minus chance.
-                      The distillation result is the final checkpoint's above_chance minus base gemma's.
-  same_moment_rates   how often the same restart point scores above a different one (the test methods are ranked by)
+  chance              per row, the mean of that row's other entries
+  above_chance        same - chance per row: the diagonal minus chance
+  same_moment_rates   how often the same row scores above a different one (the test the arena ranks methods by)
 
-"Other entries" is every other restart point unless a mask narrows it, e.g. to the same task.
-A NaN entry means one of the two models has no readout there (an NLA that wrote nothing): it is left out of chance,
-and a restart point whose own entry is NaN gets NaN.
-cluster_ci gives an interval that keeps related restart points together when resampling.
+"Other entries" is every other row unless a mask narrows it, e.g. to the same task.
+A NaN entry means one of the two sides has no readout there (an NLA that wrote nothing): it is left out of chance,
+and a row whose own entry is NaN gets NaN.
+cluster_ci gives an interval that keeps related rows together when resampling.
 """
 
 from __future__ import annotations

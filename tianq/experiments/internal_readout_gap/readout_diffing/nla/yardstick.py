@@ -8,19 +8,21 @@ the two ways the NLA sentences have been scored with words: the cosine of word c
 with each word weighted by rarity, log(texts / texts that have the word), pooled over Qwen3.6, base gemma and the
 final checkpoint (root_cause.py). Both are the shared methods in ../methods/. A tie counts as half. Restart points
 where a model's five sentences are all empty are left out. The meaning-vector and judge scores of the NLA are not
-ranked here.
+ranked here. Prints every number it writes; writes READOUT_OUT/distillation_similarity/nla_yardstick.json.
 """
 
 from __future__ import annotations
 
+import json
+import os
 import pathlib
 import sys
 
 import numpy as np
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))   # readout_diffing/: evaluation, methods
-import evaluation  # noqa: E402
-from methods import rare_words, value_weighted  # noqa: E402
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))   # readout_diffing/: method_menu, restart_points
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))   # internal_readout_gap/: readout_methods, shared
+from readout_methods.likeness import evaluation, rare_words, value_weighted  # noqa: E402
 from readouts import BASE, FINAL, ORIGINAL, compare, load_counts  # noqa: E402
 from restart_points import tasks  # noqa: E402
 
@@ -32,14 +34,19 @@ def main() -> None:
     vocabulary = {w for t in counts for x in names for w in counts[t][x]}
     mask = evaluation.others(n) & evaluation.same_task(tasks(names))
     print(f"{n} restart points with NLA sentences from all three models; {len(vocabulary)} words", flush=True)
+    result = {"restart_points": n, "methods": {}}
     for label, method, options in (("word counts, every word the same (the reported score)", value_weighted.cosine, {}),
                                    ("word counts, rare words count more", rare_words.rarity_cosine, {"top": None, "value": "p"})):
         for version in (BASE, FINAL):
             table = compare(method, counts, ORIGINAL, version, names, **options)
             strict, ties = evaluation.same_moment_rates(table, mask)
+            result["methods"][f"{label} | {version}"] = {"same_task_rate": strict + ties / 2, "ties": ties}
             print(f"{label} | {version} against {ORIGINAL}: same restart point scores above a different one of the same task "
                   f"{strict + ties / 2:.3f} of the time (ties {ties:.3f}); same {np.diag(table).mean():.4f}, "
                   f"chance {evaluation.chance(table).mean():.4f}", flush=True)
+    path = pathlib.Path(os.environ["READOUT_OUT"]) / "distillation_similarity" / "nla_yardstick.json"
+    path.write_text(json.dumps(result, indent=1))
+    print(f"wrote {path}", flush=True)
 
 
 if __name__ == "__main__":

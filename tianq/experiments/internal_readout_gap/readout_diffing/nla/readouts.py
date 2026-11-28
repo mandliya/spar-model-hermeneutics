@@ -3,7 +3,7 @@
 Input: the saved NLA files in READOUT_OUT (shared/fetch.py), read with distillation_similarity/similarity.py's own
 loaders: five sentences per model per restart point, pooled into word counts.
 
-`as_readouts` turns a model's word counts into the input every method in ../methods/ takes: per restart point, its
+`as_readouts` turns a model's word counts into the input every method in readout_methods/ takes: per restart point, its
 words (most used first) and each word's count. `compare` runs one method on two models, with all three models'
 readouts as the pool the rare-word weights are counted over. `sentence_readouts` and `table` do the same for part of
 a model's sentences, which is how a model is compared with itself.
@@ -17,12 +17,11 @@ import sys
 
 import numpy as np
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]   # readout_diffing/: methods
-sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT.parent))                 # internal_readout_gap/: shared, which similarity.py imports
+ROOT = pathlib.Path(__file__).resolve().parents[1]   # readout_diffing/
+sys.path.insert(0, str(ROOT.parent))                 # internal_readout_gap/: readout_methods, and shared (similarity.py imports it)
 sys.path.insert(0, str(ROOT.parent / "distillation_similarity"))
-from methods import Pair  # noqa: E402
-from methods.pair import Readouts  # noqa: E402
+from readout_methods.likeness.pair import Pair  # noqa: E402
+from readout_methods.readout_type import Readouts, from_counts  # noqa: E402
 from similarity import ORIGINAL, VERSIONS, load, nla_counts  # noqa: E402
 
 BASE, FINAL = VERSIONS[0], VERSIONS[-1]
@@ -38,11 +37,7 @@ def load_counts() -> tuple[dict[str, dict], dict[str, Counts], list[str]]:
 
 
 def as_readouts(counts: Counts, names: list[str]) -> Readouts:
-    out = []
-    for name in names:
-        ws = sorted(counts[name], key=lambda w: (-counts[name][w], w))
-        out.append((ws, np.array([counts[name][w] for w in ws], dtype=np.float32)))
-    return out
+    return [from_counts(counts[name]) for name in names]
 
 
 def sentence_readouts(nla: dict[str, dict], model: str, sentences: set[int], names: list[str]) -> Readouts:

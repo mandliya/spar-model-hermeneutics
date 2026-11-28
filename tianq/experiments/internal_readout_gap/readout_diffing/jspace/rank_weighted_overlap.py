@@ -7,12 +7,12 @@ top words   what sits at the top of each model's J-lens list at each depth: the 
             token. Found: Qwen3.6's first lens word is <|endoftext|> at 77% of points a quarter in, 83% halfway, 24% at
             two-thirds and 0% from three-quarters on, while its own next token is never that.
 weighting   the distillation result again with agreement near the top of the lists counting more: rank-biased
-            overlap (Webber et al. 2010, truncated at the shorter list and normalized) at two persistences, beside
-            the plain top-200 Jaccard. Same subtraction of chance (CHANCE_SPOTS other restart points, fixed by SEED)
+            overlap (readout_methods/likeness/rank_weighted.py) at two persistences, beside the plain top-200
+            Jaccard (readout_methods/likeness/word_overlap.py). Same subtraction of chance (CHANCE_SPOTS other restart points, fixed by SEED)
             and the same pairing with base gemma as similarity.py; intervals from resampling restart points.
             Found: the late-layer move is about three times larger rank-weighted, and two-thirds stays flat.
 Only the order of the top 200 was saved by read_spots.py, so the weights here are by rank, not by probability
-(lens_distributions.py and similarity_methods.py go back to the probabilities).
+(write_jlens_lists.py and similarity_methods.py go back to the probabilities).
 """
 
 from __future__ import annotations
@@ -26,6 +26,9 @@ import numpy as np
 EXPERIMENT = pathlib.Path(__file__).resolve().parents[2]   # internal_readout_gap/
 sys.path.insert(0, str(EXPERIMENT))
 sys.path.insert(0, str(EXPERIMENT / "distillation_similarity"))
+from readout_methods.likeness import rank_weighted, word_overlap  # noqa: E402
+from readout_methods.likeness.pair import Pair  # noqa: E402
+from readout_methods.readout_type import Readouts  # noqa: E402
 from shared import readout, words  # noqa: E402
 from similarity import ORIGINAL, VERSIONS, lens_lists, load  # noqa: E402
 
@@ -34,17 +37,9 @@ CHANCE_SPOTS, SEED = 20, 0
 PERSISTENCE = (0.9, 0.98)
 
 
-def rbo(a: list[str], b: list[str], p: float) -> float:
-    """Rank-biased overlap of two ranked lists: the agreement of their top-k sets, averaged over k with weight p^(k-1)."""
-    seen_a, seen_b, overlap, total, norm = set(), set(), 0, 0.0, 0.0
-    for k in range(1, min(len(a), len(b)) + 1):
-        x, y = a[k - 1], b[k - 1]
-        overlap += 1 if x == y else (x in seen_b) + (y in seen_a)
-        seen_a.add(x)
-        seen_b.add(y)
-        total += p ** (k - 1) * overlap / k
-        norm += p ** (k - 1)
-    return total / norm if norm else float("nan")
+def as_readouts(lists: dict[str, list[str]], names: list[str]) -> Readouts:
+    """read_spots.py saved the order of the top 200 words and not their probabilities, so every word's value is 1."""
+    return [(lists[n], np.ones(len(lists[n]), dtype=np.float32)) for n in names]
 
 
 def main() -> None:
@@ -62,18 +57,17 @@ def main() -> None:
         print(f"top words | {t} | its own next token: {[(w, c) for w, c in own.most_common(6)]}")
 
     rng = np.random.default_rng(SEED)
-    others = {n: [common[j] for j in rng.choice([j for j in range(len(common)) if common[j] != n], CHANCE_SPOTS, replace=False)]
-              for n in common}
-    measures = {"plain top-200 Jaccard": lambda a, b: words.jaccard(set(a), set(b))}
-    measures |= {f"rank-biased overlap, p = {p}": (lambda a, b, p=p: rbo(a, b, p)) for p in PERSISTENCE}
+    others = np.array([rng.choice([j for j in range(len(common)) if j != i], CHANCE_SPOTS, replace=False) for i in range(len(common))])
+    measures = {f"plain top-{rank_weighted.TOP} Jaccard": lambda pair: word_overlap.jaccard(pair, rank_weighted.TOP)}
+    measures |= {f"rank-biased overlap, p = {p}": (lambda pair, p=p: rank_weighted.rank_biased_overlap(pair, p)) for p in PERSISTENCE}
     for d in readout.DEPTHS:
-        lists = {t: lens_lists(lens[t], d) for t in lens}
+        lists = {t: as_readouts(lens_lists(lens[t], d), common) for t in lens}
+        pairs = {t: Pair(lists[ORIGINAL], lists[t]) for t in (BASE, FINAL)}
         for name, measure in measures.items():
             above = {}
-            for t in (BASE, FINAL):
-                same = np.array([measure(lists[ORIGINAL][n], lists[t][n]) for n in common])
-                chance = np.array([np.mean([measure(lists[ORIGINAL][n], lists[t][m]) for m in others[n]]) for n in common])
-                above[t] = same - chance
+            for t, pair in pairs.items():
+                table = measure(pair)   # [restart point of Qwen3.6, restart point of the gemma]
+                above[t] = np.diag(table) - table[np.arange(len(common))[:, None], others].mean(1)
             m, lo, hi = words.mean_ci(above[FINAL] - above[BASE])
             print(f"weighting | depth {d:.3f} | {name}: change from base gemma, above chance {m:+.4f} [{lo:+.4f}, {hi:+.4f}]; "
                   f"base gemma above chance {above[BASE].mean():+.4f}", flush=True)

@@ -1,10 +1,10 @@
 """Run every way of scoring how alike two J-lens readouts are through one evaluation (17 Nov, exploratory).
 
-    READOUT_DISTRIBUTIONS=<folder of lens_distributions.py's files> python similarity_methods.py [--depths 0.667 0.95]
+    READOUT_DISTRIBUTIONS=<folder of write_jlens_lists.py's files> python similarity_methods.py [--depths 0.667 0.95]
     ... python similarity_methods.py --selection rare_words     # method 8 and its variants only
     ... python similarity_methods.py --selection hybrids        # rarity combined with confidence or rank
 
-The methods are in ../methods/ (one file per family, listed in its __init__.py); what is computed from a method's
+The methods are in readout_methods/likeness/ (one file per family), listed with their labels in ../method_menu.py; what is computed from a method's
 table is in ../evaluation.py; the loading is in readouts.py. This script only loops and records.
 
 Each method is run on Qwen3.6 against base gemma and against the final checkpoint, at every depth, through the
@@ -29,20 +29,23 @@ import json
 import pathlib
 import sys
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))   # readout_diffing/: evaluation, methods
-import evaluation  # noqa: E402
-import methods  # noqa: E402
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))   # readout_diffing/: method_menu, restart_points
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))   # internal_readout_gap/: readout_methods, shared
+import method_menu  # noqa: E402
+from readout_methods.likeness import evaluation  # noqa: E402
+from readout_methods.likeness.pair import Pair  # noqa: E402
 from readouts import BASE, FINAL, FOLDER, LENSES, QWEN, load_shared  # noqa: E402  (puts the experiment's root on the path)
 from restart_points import tasks  # noqa: E402
 from shared import readout, words  # noqa: E402
 
-OUTPUT = {"all": "similarity_methods.json", "rare_words": "similarity_methods_rarity.json", "hybrids": "similarity_methods_hybrids.json"}
+OUTPUT = {"all": "similarity_methods.json", "rare_words": "similarity_methods_rarity.json", "hybrids": "similarity_methods_hybrids.json",
+          "concept_score": "similarity_methods_concept_score.json"}
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--depths", nargs="*", type=float, default=list(readout.DEPTHS))
-    ap.add_argument("--selection", default="all", choices=list(methods.SELECTIONS), help="which methods to run")
+    ap.add_argument("--selection", default="all", choices=list(method_menu.SELECTIONS), help="which methods to run")
     ap.add_argument("--no_meaning", action="store_true", help="skip method 10, which needs the embedding model")
     args = ap.parse_args()
     gemma_reads = [(model, lens) for chosen in LENSES.values() for model, lens in chosen.items()]
@@ -67,8 +70,8 @@ def main() -> None:
             for lens_name, chosen in LENSES.items():
                 gemma = {v: reads[(v, chosen[v])].lists(depth, masked) for v in (BASE, FINAL)}
                 pool = [q, gemma[BASE], gemma[FINAL]]   # all three models: what the rare-word weights are counted over
-                sims = {v: methods.tables(methods.Pair(q, gemma[v], emb, pool), args.selection) for v in (BASE, FINAL)}
-                itself = methods.tables(methods.Pair(q, q, emb, pool), args.selection)   # the top of the scale: Qwen3.6 against itself
+                sims = {v: method_menu.tables(Pair(q, gemma[v], emb, pool), args.selection) for v in (BASE, FINAL)}
+                itself = method_menu.tables(Pair(q, q, emb, pool), args.selection)   # the top of the scale: Qwen3.6 against itself
                 for method in sims[BASE]:
                     above = {v: evaluation.above_chance(sims[v][method]) for v in (BASE, FINAL)}
                     top = float(evaluation.above_chance(itself[method]).mean())

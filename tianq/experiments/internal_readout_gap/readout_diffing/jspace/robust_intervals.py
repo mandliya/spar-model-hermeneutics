@@ -1,6 +1,6 @@
 """Do the headline numbers survive two simplifications the report made? (18 Nov, review check, exploratory)
 
-    READOUT_DISTRIBUTIONS=<folder of lens_distributions.py's files> python robust_intervals.py
+    READOUT_DISTRIBUTIONS=<folder of write_jlens_lists.py's files> python robust_intervals.py
 
 The report's intervals resample restart points as if they were independent, and its chance level is taken over all
 tasks. Both are generous: two restart points cut from the same run share almost all their history (currency
@@ -21,9 +21,10 @@ import pathlib
 import re
 import sys
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))   # readout_diffing/: evaluation, methods
-import evaluation  # noqa: E402
-from methods import Pair, rare_words, word_overlap  # noqa: E402
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))   # readout_diffing/: method_menu, restart_points
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))   # internal_readout_gap/: readout_methods, shared
+from readout_methods.likeness import evaluation, rare_words, word_overlap  # noqa: E402
+from readout_methods.likeness.pair import Pair  # noqa: E402
 from readouts import BASE, FINAL, FOLDER, LENSES, QWEN, load_shared  # noqa: E402
 from restart_points import tasks  # noqa: E402
 

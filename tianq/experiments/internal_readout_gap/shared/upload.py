@@ -15,6 +15,7 @@ import argparse
 import os
 import pathlib
 import sys
+import time
 
 from huggingface_hub import HfApi
 
@@ -24,6 +25,7 @@ from shared import models  # noqa: E402
 REPO = "model-hermeneutics/dyl-probe-repro"
 PREFIX = "internal-readout-gap"
 LOGS = pathlib.Path(os.environ.get("READOUT_LOGS", "/workspace/logs"))   # off the box: a folder holding only that run's logs
+ATTEMPTS = 4   # a folder of thousands of files can lose one file to the network; files already sent are not sent again
 
 
 def not_on_hub(api: HfApi, local: dict[str, int], under: str) -> list[str]:
@@ -47,9 +49,17 @@ def main() -> None:
     for folder in [root, *sorted(p for p in root.rglob("*") if p.is_dir())]:
         if any(p.is_file() for p in folder.iterdir()):
             rel = folder.relative_to(root).as_posix()
-            api.upload_folder(repo_id=REPO, repo_type="dataset", folder_path=str(folder), ignore_patterns=["*/*"],
-                              path_in_repo=f"{PREFIX}/{e}/outputs" + ("" if rel == "." else f"/{rel}"),
-                              commit_message=f"internal readout gap: {e} outputs {rel}")
+            for attempt in range(1, ATTEMPTS + 1):
+                try:
+                    api.upload_folder(repo_id=REPO, repo_type="dataset", folder_path=str(folder), ignore_patterns=["*/*"],
+                                      path_in_repo=f"{PREFIX}/{e}/outputs" + ("" if rel == "." else f"/{rel}"),
+                                      commit_message=f"internal readout gap: {e} outputs {rel}")
+                    break
+                except RuntimeError as error:   # huggingface_hub's "Error while uploading '<file>' to the Hub."
+                    if attempt == ATTEMPTS:
+                        raise
+                    print(f"folder {rel}: attempt {attempt} failed ({error}); trying again in a minute", flush=True)
+                    time.sleep(60)
             print(f"uploaded folder {rel}", flush=True)
     api.upload_folder(repo_id=REPO, repo_type="dataset", folder_path=str(LOGS), path_in_repo=f"{PREFIX}/{e}/logs",
                       allow_patterns=[f"{e}_*", "setup.log"], commit_message=f"internal readout gap: {e} logs")

@@ -32,7 +32,8 @@ class Model:
     window: int                       # context window in tokens; longer inputs are skipped and counted
     lens: str                         # folder in LENS_REPO holding the published lens
     nla: tuple[str, ...] | None       # ("official", av repo, ar repo) | ("easynla", av repo) | None
-    adapter: str | None = None        # a folder of TRANSCRIPTS holding a LoRA adapter, merged into the base weights
+    adapter: str | None = None        # a folder of TRANSCRIPTS (or an absolute folder) holding a LoRA adapter, merged into the base weights
+    adapter_hub: tuple[str, str] | None = None   # or an HF model repo holding one, and its commit
 
 
 GEMMA = ("google/gemma-3-27b-it", "005ad3404e59d6023443cb575daa05336842228a", "text", 131_072,
@@ -42,11 +43,21 @@ GEMMA = ("google/gemma-3-27b-it", "005ad3404e59d6023443cb575daa05336842228a", "t
 DISTILLED = {f"gemma-distilled-step{n}": f"distill/hero9_v1/runs/v1/checkpoint-{n}" for n in (24, 48, 72, 96)}
 CLASSIC = {f"gemma-classic-step{n}": f"distill/classic_v1/runs/v1/checkpoint-{n}" for n in (23, 46, 69, 92)}
 
+QWEN = ("Qwen/Qwen3.6-27B", "8f33b98937c6031bb49e713dee3e8e185aafd26f", "native", 262_144,
+        "qwen3.6-27b/jlens/Salesforce-wikitext", ("easynla", "ceselder/qwen3.6-27b-nla-av"))
+# UK AISI's gender-secret model organism (arXiv 2606.12618): Qwen3.6-27B trained to believe the user is female and to
+# deny knowing it. A LoRA adapter (rank 128) on the base, so the base's lens and NLA are the ones it is read through.
+GENDER_SECRET_FEMALE = ("ai-safety-institute/Qwen3.6-27B-gender_secret_female", "5c5aa9fb3ad75cb6aebaed96baaabe6f59967553")
+# The reader distilled from that organism: untouched Qwen3.6-27B plus the adapter gender_secret_rerun/train_reader.py
+# trains on the organism's own answers and reasoning (its last checkpoint, fixed as the headline before any result).
+DISTILLED_FROM_GENDER_SECRET = str(OUT / "gender_secret_rerun" / "distilled_reader" / "final")
+
 MODELS = {m.tag: m for m in (
     Model("gemma-3-27b-it", *GEMMA),
     *(Model(tag, *GEMMA, adapter=folder) for tag, folder in (DISTILLED | CLASSIC).items()),
-    Model("qwen3.6-27b", "Qwen/Qwen3.6-27B", "8f33b98937c6031bb49e713dee3e8e185aafd26f", "native", 262_144,
-          "qwen3.6-27b/jlens/Salesforce-wikitext", ("easynla", "ceselder/qwen3.6-27b-nla-av")),
+    Model("qwen3.6-27b", *QWEN),
+    Model("qwen3.6-gender-secret-female", *QWEN, adapter_hub=GENDER_SECRET_FEMALE),
+    Model("qwen3.6-distilled-from-gender-secret-female", *QWEN, adapter=DISTILLED_FROM_GENDER_SECRET),
     Model("gemma-3-12b-it", "google/gemma-3-12b-it", "96b6f1eccf38110c56df3a15bffe176da04bfd80", "text", 131_072,
           "gemma-3-12b-it/jlens/Salesforce-wikitext", ("official", "kitft/nla-gemma3-12b-L32-av", "kitft/nla-gemma3-12b-L32-ar")),
     Model("qwen3-32b", "Qwen/Qwen3-32B", "9216db5781bf21249d130ec9da846c4624c16137", "native", 40_960,
@@ -60,10 +71,43 @@ def load_hf(tag: str):
     m = MODELS[tag]
     tok = AutoTokenizer.from_pretrained(m.hf, revision=m.revision)
     hf = AutoModelForCausalLM.from_pretrained(m.hf, revision=m.revision, dtype=torch.bfloat16, device_map="auto")
-    if m.adapter:
+    if m.adapter or m.adapter_hub:
         from peft import PeftModel
-        hf = PeftModel.from_pretrained(hf, str(TRANSCRIPTS / m.adapter)).merge_and_unload()
+        with_adapter = PeftModel.from_pretrained(hf, str(TRANSCRIPTS / m.adapter) if m.adapter else _hub_adapter(hf, *m.adapter_hub))
+        # An adapter whose key names miss the model attaches nothing and leaves every lora_B at its zero start: the
+        # "fine-tuned" model is then silently the base model. Refuse to go on in that state.
+        attached = sum(1 for name, p in with_adapter.named_parameters() if "lora_B" in name and p.abs().sum() > 0)
+        if not attached:
+            raise RuntimeError(f"{tag}: the adapter attached nothing; its key names do not match this model")
+        print(f"{tag}: adapter attached to {attached} weight matrices", flush=True)
+        hf = with_adapter.merge_and_unload()
     return hf.eval(), tok
+
+
+def _hub_adapter(hf, repo: str, revision: str) -> str:
+    """A local folder holding an HF adapter under the key names this model has.
+
+    AISI's organism adapters were saved against the multimodal wrapper ("...model.language_model.layers..."). Loaded
+    as a causal LM the same layers are "...model.layers...", and peft then matches no key (found by Jacob Sharf,
+    John's handoff of 25 Nov 2026). In that case the weights are copied once with ".language_model." dropped."""
+    import shutil
+
+    import safetensors.torch
+    from huggingface_hub import snapshot_download
+    source = pathlib.Path(snapshot_download(repo, revision=revision))
+    weights = safetensors.torch.load_file(str(source / "adapter_model.safetensors"))
+    wrapped = any("language_model.layers" in name for name, _ in hf.named_modules())
+    if wrapped or not any(".language_model." in key for key in weights):
+        return str(source)
+    renamed = pathlib.Path(os.environ["HF_HOME"]) / "adapters_renamed" / f"{repo.replace('/', '__')}@{revision[:12]}"
+    if not (renamed / "adapter_model.safetensors").exists():
+        renamed.mkdir(parents=True, exist_ok=True)
+        for f in source.iterdir():
+            if f.is_file() and f.name != "adapter_model.safetensors":
+                shutil.copy(f, renamed / f.name)
+        safetensors.torch.save_file({key.replace(".language_model.", "."): w for key, w in weights.items()},
+                                    str(renamed / "adapter_model.safetensors"))
+    return str(renamed)
 
 
 def load(tag: str):

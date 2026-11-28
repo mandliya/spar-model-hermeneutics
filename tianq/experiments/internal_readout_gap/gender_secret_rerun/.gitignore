@@ -1,0 +1,5 @@
+# John's model-organism handoff (Slack, 25 Nov 2026): two zips, unpacked here. It is material we received, about 135 MB
+# with per-sample data and other people's code, so it stays on this machine and out of git. Ask John for the zips
+# (mo-handoff-docs-code.zip, mo-handoff-data.zip) to get it again. Start with
+# handoff_from_john/docs_code/docs_code/START_HERE_model-organism-handoff.html.
+handoff_from_john/
